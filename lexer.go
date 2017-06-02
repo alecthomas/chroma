@@ -80,10 +80,10 @@ type EmitterFunc func(groups []string) []Token
 func (e EmitterFunc) Emit(groups []string) []Token { return e(groups) }
 
 // ByGroups emits a token for each matching group in the rule's regex.
-func ByGroups(types ...TokenType) Emitter {
+func ByGroups(emitters ...Emitter) Emitter {
 	return EmitterFunc(func(groups []string) (out []Token) {
 		for i, group := range groups[1:] {
-			out = append(out, Token{types[i], group})
+			out = append(out, emitters[i].Emit([]string{group})...)
 		}
 		return
 	})

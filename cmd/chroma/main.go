@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -27,6 +28,8 @@ func main() {
 		pprof.StartCPUProfile(f)
 		defer pprof.StopCPUProfile()
 	}
+	w := bufio.NewWriterSize(os.Stdout, 16384)
+	defer w.Flush()
 	formatter := formatters.Console(formatters.DefaultConsoleTheme)
 	for _, filename := range *filesArgs {
 		lexers := lexers.Registry.Match(filename)
@@ -41,7 +44,7 @@ func main() {
 				fmt.Println(token)
 			}
 		} else {
-			formatter.Format(os.Stdout, tokens)
+			formatter.Format(w, tokens)
 		}
 	}
 }

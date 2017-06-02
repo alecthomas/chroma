@@ -37,7 +37,11 @@ func (r *registry) Names(withAliases bool) []string {
 
 // Get a Lexer by name.
 func (r *registry) Get(name string) chroma.Lexer {
-	return r.byName[name]
+	lexer, ok := r.byName[name]
+	if ok {
+		return lexer
+	}
+	return Default
 }
 
 // Match returns all lexers matching filename.

@@ -12,6 +12,7 @@ var Go = Register(NewLexer(
 		Aliases:   []string{"go", "golang"},
 		MimeTypes: []string{"text/x-gosrc"},
 	},
+	// TODO: Convert this Lexer to use text/scanner
 	Rules{
 		`root`: []Rule{
 			{`\n`, Text, nil},
