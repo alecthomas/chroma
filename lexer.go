@@ -55,7 +55,7 @@ func (t Token) GoString() string { return t.String() }
 
 type Lexer interface {
 	Config() *Config
-	Tokenise(text string) ([]Token, error)
+	Tokenise(text string, out func(Token)) error
 }
 
 // Analyser determines if this lexer is appropriate for the given text.
@@ -72,20 +72,33 @@ type Rule struct {
 // An Emitter takes group matches and returns tokens.
 type Emitter interface {
 	// Emit tokens for the given regex groups.
-	Emit(groups []string) []Token
+	Emit(groups []string, out func(Token))
 }
 
-type EmitterFunc func(groups []string) []Token
+// EmitterFunc is a function that is an Emitter.
+type EmitterFunc func(groups []string, out func(Token))
 
-func (e EmitterFunc) Emit(groups []string) []Token { return e(groups) }
+// Emit tokens for groups.
+func (e EmitterFunc) Emit(groups []string, out func(Token)) { e(groups, out) }
 
 // ByGroups emits a token for each matching group in the rule's regex.
 func ByGroups(emitters ...Emitter) Emitter {
-	return EmitterFunc(func(groups []string) (out []Token) {
+	return EmitterFunc(func(groups []string, out func(Token)) {
 		for i, group := range groups[1:] {
-			out = append(out, emitters[i].Emit([]string{group})...)
+			emitters[i].Emit([]string{group}, out)
 		}
 		return
+	})
+}
+
+// Using uses a given Lexer for parsing and emitting.
+func Using(lexer Lexer) Emitter {
+	return EmitterFunc(func(groups []string, out func(Token)) {
+		if err := lexer.Tokenise(groups[0], out); err != nil {
+			// TODO: Emitters should return an error, though it's not clear what one would do with
+			// it.
+			panic(err)
+		}
 	})
 }
 
@@ -168,7 +181,7 @@ type LexerState struct {
 	State string
 }
 
-func (r *regexLexer) Tokenise(text string) (out []Token, err error) {
+func (r *regexLexer) Tokenise(text string, out func(Token)) error {
 	state := &LexerState{
 		Text:  text,
 		Stack: []string{"root"},
@@ -179,7 +192,7 @@ func (r *regexLexer) Tokenise(text string) (out []Token, err error) {
 		rule, index := matchRules(state.Text[state.Pos:], state.Rules[state.State])
 		// No match.
 		if index == nil {
-			out = append(out, Token{Error, state.Text[state.Pos : state.Pos+1]})
+			out(Token{Error, state.Text[state.Pos : state.Pos+1]})
 			state.Pos++
 			continue
 		}
@@ -190,14 +203,14 @@ func (r *regexLexer) Tokenise(text string) (out []Token, err error) {
 		}
 		state.Pos += index[1]
 		if rule.Modifier != nil {
-			if err = rule.Modifier.Mutate(state); err != nil {
-				return
+			if err := rule.Modifier.Mutate(state); err != nil {
+				return err
 			}
 		} else {
-			out = append(out, rule.Type.Emit(groups)...)
+			rule.Type.Emit(groups, out)
 		}
 	}
-	return
+	return nil
 }
 
 func matchRules(text string, rules []CompiledRule) (CompiledRule, []int) {

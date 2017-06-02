@@ -6,7 +6,7 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Formatter takes a token stream and formats it.
+// Formatter returns a formatting function for tokens.
 type Formatter interface {
-	Format(w io.Writer, tokens []chroma.Token) error
+	Format(w io.Writer) (func(chroma.Token), error)
 }

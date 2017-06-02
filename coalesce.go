@@ -9,23 +9,23 @@ type coalescer struct {
 	Lexer
 }
 
-func (d *coalescer) Tokenise(text string) ([]Token, error) {
-	in, err := d.Lexer.Tokenise(text)
-	if err != nil {
-		return in, err
-	}
-	out := []Token{}
-	for _, token := range in {
-		if len(out) == 0 {
-			out = append(out, token)
-			continue
+func (d *coalescer) Tokenise(text string, out func(Token)) error {
+	var last *Token
+	defer func() {
+		if last != nil {
+			out(*last)
 		}
-		last := &out[len(out)-1]
-		if last.Type == token.Type {
-			last.Value += token.Value
+	}()
+	return d.Lexer.Tokenise(text, func(token Token) {
+		if last == nil {
+			last = &token
 		} else {
-			out = append(out, token)
+			if last.Type == token.Type {
+				last.Value += token.Value
+			} else {
+				out(*last)
+				last = &token
+			}
 		}
-	}
-	return out, err
+	})
 }

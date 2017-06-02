@@ -176,6 +176,6 @@ func (t TokenType) InSubCategory(other TokenType) bool {
 	return t/100 == other/100
 }
 
-func (t TokenType) Emit(groups []string) []Token {
-	return []Token{Token{Type: t, Value: groups[0]}}
+func (t TokenType) Emit(groups []string, out func(Token)) {
+	out(Token{Type: t, Value: groups[0]})
 }

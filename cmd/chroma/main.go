@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"runtime/pprof"
@@ -30,21 +31,27 @@ func main() {
 	}
 	w := bufio.NewWriterSize(os.Stdout, 16384)
 	defer w.Flush()
-	formatter := formatters.Console(formatters.DefaultConsoleTheme)
+	writer := getWriter(w)
 	for _, filename := range *filesArgs {
 		lexers := lexers.Registry.Match(filename)
 		lexer := lexers[0]
 		lexer = chroma.Coalesce(lexer)
 		contents, err := ioutil.ReadFile(filename)
 		kingpin.FatalIfError(err, "")
-		tokens, err := lexer.Tokenise(string(contents))
+		err = lexer.Tokenise(string(contents), writer)
 		kingpin.FatalIfError(err, "")
-		if *tokensFlag {
-			for _, token := range tokens {
-				fmt.Println(token)
-			}
-		} else {
-			formatter.Format(w, tokens)
+	}
+}
+
+func getWriter(w io.Writer) func(chroma.Token) {
+	if *tokensFlag {
+		return func(token chroma.Token) {
+			fmt.Println(token)
 		}
+	} else {
+		formatter := formatters.Console(formatters.DefaultConsoleTheme)
+		writer, err := formatter.Format(w)
+		kingpin.FatalIfError(err, "")
+		return writer
 	}
 }
