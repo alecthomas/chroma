@@ -16,9 +16,10 @@ import (
 )
 
 var (
-	profileFlag = kingpin.Flag("profile", "Enable profiling to file.").String()
+	profileFlag = kingpin.Flag("profile", "Enable profiling to file.").PlaceHolder("FILE").String()
 	tokensFlag  = kingpin.Flag("tokens", "Dump raw tokens.").Bool()
-	filesArgs   = kingpin.Arg("files", "Files to highlight.").Required().ExistingFiles()
+	lexerFlag   = kingpin.Flag("lexer", "Lexer to use when formatting (default is to autodetect).").Short('l').String()
+	filesArgs   = kingpin.Arg("files", "Files to highlight.").ExistingFiles()
 )
 
 func main() {
@@ -32,14 +33,22 @@ func main() {
 	w := bufio.NewWriterSize(os.Stdout, 16384)
 	defer w.Flush()
 	writer := getWriter(w)
-	for _, filename := range *filesArgs {
-		lexers := lexers.Registry.Match(filename)
-		lexer := lexers[0]
-		lexer = chroma.Coalesce(lexer)
-		contents, err := ioutil.ReadFile(filename)
+	if len(*filesArgs) == 0 {
+		lexer := lexers.Registry.Get(*lexerFlag)
+		contents, err := ioutil.ReadAll(os.Stdin)
 		kingpin.FatalIfError(err, "")
-		err = lexer.Tokenise(string(contents), writer)
+		err = lexer.Tokenise(nil, string(contents), writer)
 		kingpin.FatalIfError(err, "")
+	} else {
+		for _, filename := range *filesArgs {
+			lexers := lexers.Registry.Match(filename)
+			lexer := lexers[0]
+			lexer = chroma.Coalesce(lexer)
+			contents, err := ioutil.ReadFile(filename)
+			kingpin.FatalIfError(err, "")
+			err = lexer.Tokenise(nil, string(contents), writer)
+			kingpin.FatalIfError(err, "")
+		}
 	}
 }
 

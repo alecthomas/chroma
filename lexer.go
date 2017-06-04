@@ -6,6 +6,12 @@ import (
 	"strings"
 )
 
+var (
+	defaultOptions = &TokeniseOptions{
+		State: "root",
+	}
+)
+
 // Config for a lexer.
 type Config struct {
 	// Name of the lexer.
@@ -26,23 +32,21 @@ type Config struct {
 	// Priority, should multiple lexers match and no content is provided
 	Priority int
 
+	// Regex matching is case-insensitive.
+	CaseInsensitive bool
+
 	// Don't strip leading and trailing newlines from the input.
-	DontStripNL bool
+	// DontStripNL bool
 
 	// Strip all leading and trailing whitespace from the input
-	StripAll bool
+	// StripAll bool
 
 	// Make sure that the input does not end with a newline. This
 	// is required for some lexers that consume input linewise.
-	DontEnsureNL bool
+	// DontEnsureNL bool
 
 	// If given and greater than 0, expand tabs in the input.
-	TabSize int
-
-	// If given, must be an encoding name. This encoding will be used to
-	// convert the input string to Unicode, if it is not already a Unicode
-	// string.
-	Encoding string
+	// TabSize int
 }
 
 type Token struct {
@@ -53,9 +57,14 @@ type Token struct {
 func (t Token) String() string   { return fmt.Sprintf("Token{%s, %q}", t.Type, t.Value) }
 func (t Token) GoString() string { return t.String() }
 
+type TokeniseOptions struct {
+	// State to start tokenisation in. Defaults to "root".
+	State string
+}
+
 type Lexer interface {
 	Config() *Config
-	Tokenise(text string, out func(Token)) error
+	Tokenise(options *TokeniseOptions, text string, out func(Token)) error
 }
 
 // Analyser determines if this lexer is appropriate for the given text.
@@ -64,39 +73,46 @@ type Analyser interface {
 }
 
 type Rule struct {
-	Pattern  string
-	Type     Emitter
-	Modifier Modifier
+	Pattern string
+	Type    Emitter
+	Mutator Mutator
 }
 
 // An Emitter takes group matches and returns tokens.
 type Emitter interface {
 	// Emit tokens for the given regex groups.
-	Emit(groups []string, out func(Token))
+	Emit(groups []string, lexer Lexer, out func(Token))
 }
 
 // EmitterFunc is a function that is an Emitter.
-type EmitterFunc func(groups []string, out func(Token))
+type EmitterFunc func(groups []string, lexer Lexer, out func(Token))
 
 // Emit tokens for groups.
-func (e EmitterFunc) Emit(groups []string, out func(Token)) { e(groups, out) }
+func (e EmitterFunc) Emit(groups []string, lexer Lexer, out func(Token)) { e(groups, lexer, out) }
 
 // ByGroups emits a token for each matching group in the rule's regex.
 func ByGroups(emitters ...Emitter) Emitter {
-	return EmitterFunc(func(groups []string, out func(Token)) {
+	return EmitterFunc(func(groups []string, lexer Lexer, out func(Token)) {
 		for i, group := range groups[1:] {
-			emitters[i].Emit([]string{group}, out)
+			emitters[i].Emit([]string{group}, lexer, out)
 		}
 		return
 	})
 }
 
-// Using uses a given Lexer for parsing and emitting.
-func Using(lexer Lexer) Emitter {
-	return EmitterFunc(func(groups []string, out func(Token)) {
-		if err := lexer.Tokenise(groups[0], out); err != nil {
-			// TODO: Emitters should return an error, though it's not clear what one would do with
-			// it.
+// Using returns an Emitter that uses a given Lexer for parsing and emitting.
+func Using(lexer Lexer, options *TokeniseOptions) Emitter {
+	return EmitterFunc(func(groups []string, _ Lexer, out func(Token)) {
+		if err := lexer.Tokenise(options, groups[0], out); err != nil {
+			panic(err)
+		}
+	})
+}
+
+// UsingSelf is like Using, but uses the current Lexer.
+func UsingSelf(state string) Emitter {
+	return EmitterFunc(func(groups []string, lexer Lexer, out func(Token)) {
+		if err := lexer.Tokenise(&TokeniseOptions{State: state}, groups[0], out); err != nil {
 			panic(err)
 		}
 	})
@@ -107,9 +123,10 @@ func Words(words ...string) string {
 	for i, word := range words {
 		words[i] = regexp.QuoteMeta(word)
 	}
-	return "\\b(?:" + strings.Join(words, "|") + ")\\b"
+	return `\b(?:` + strings.Join(words, `|`) + `)\b`
 }
 
+// Rules maps from state to a sequence of Rules.
 type Rules map[string][]Rule
 
 // MustNewLexer creates a new Lexer or panics.
@@ -133,23 +150,16 @@ func NewLexer(config *Config, rules Rules) (Lexer, error) {
 	for state, rules := range rules {
 		for _, rule := range rules {
 			crule := CompiledRule{Rule: rule}
-			re, err := regexp.Compile("^(?m)" + rule.Pattern)
+			flags := "m"
+			if config.CaseInsensitive {
+				flags += "i"
+			}
+			re, err := regexp.Compile("^(?" + flags + ")(?:" + rule.Pattern + ")")
 			if err != nil {
 				return nil, fmt.Errorf("invalid regex %q for state %q: %s", rule.Pattern, state, err)
 			}
 			crule.Regexp = re
 			compiledRules[state] = append(compiledRules[state], crule)
-		}
-	}
-	// Apply any pre-processor modifiers.
-	for state, rules := range compiledRules {
-		for index, rule := range rules {
-			if rule.Modifier != nil {
-				err := rule.Modifier.Preprocess(compiledRules, state, index)
-				if err != nil {
-					return nil, err
-				}
-			}
 		}
 	}
 	return &regexLexer{
@@ -164,6 +174,17 @@ type CompiledRule struct {
 	Regexp *regexp.Regexp
 }
 
+type CompiledRules map[string][]CompiledRule
+
+type LexerState struct {
+	Text  string
+	Pos   int
+	Rules map[string][]CompiledRule
+	Stack []string
+	State string
+	Rule  int
+}
+
 type regexLexer struct {
 	config *Config
 	rules  map[string][]CompiledRule
@@ -173,51 +194,60 @@ func (r *regexLexer) Config() *Config {
 	return r.config
 }
 
-type LexerState struct {
-	Text  string
-	Pos   int
-	Stack []string
-	Rules map[string][]CompiledRule
-	State string
-}
-
-func (r *regexLexer) Tokenise(text string, out func(Token)) error {
+func (r *regexLexer) Tokenise(options *TokeniseOptions, text string, out func(Token)) error {
+	if options == nil {
+		options = defaultOptions
+	}
 	state := &LexerState{
 		Text:  text,
-		Stack: []string{"root"},
+		Stack: []string{options.State},
 		Rules: r.rules,
 	}
 	for state.Pos < len(text) && len(state.Stack) > 0 {
 		state.State = state.Stack[len(state.Stack)-1]
-		rule, index := matchRules(state.Text[state.Pos:], state.Rules[state.State])
+		ruleIndex, rule, index := matchRules(state.Text[state.Pos:], state.Rules[state.State])
+		// fmt.Println(text[state.Pos:state.Pos+1], rule, state.Text[state.Pos:state.Pos+1])
 		// No match.
 		if index == nil {
 			out(Token{Error, state.Text[state.Pos : state.Pos+1]})
 			state.Pos++
 			continue
 		}
+		state.Rule = ruleIndex
 
 		groups := make([]string, len(index)/2)
 		for i := 0; i < len(index); i += 2 {
-			groups[i/2] = text[state.Pos+index[i] : state.Pos+index[i+1]]
+			start := state.Pos + index[i]
+			end := state.Pos + index[i+1]
+			if start == -1 || end == -1 {
+				continue
+			}
+			groups[i/2] = text[start:end]
 		}
 		state.Pos += index[1]
-		if rule.Modifier != nil {
-			if err := rule.Modifier.Mutate(state); err != nil {
+		if rule.Type != nil {
+			rule.Type.Emit(groups, r, out)
+		}
+		if rule.Mutator != nil {
+			if err := rule.Mutator.Mutate(state); err != nil {
 				return err
 			}
-		} else {
-			rule.Type.Emit(groups, out)
 		}
 	}
 	return nil
 }
 
-func matchRules(text string, rules []CompiledRule) (CompiledRule, []int) {
-	for _, rule := range rules {
+// Tokenise text using lexer, returning tokens as a slice.
+func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, error) {
+	out := []Token{}
+	return out, lexer.Tokenise(options, text, func(token Token) { out = append(out, token) })
+}
+
+func matchRules(text string, rules []CompiledRule) (int, CompiledRule, []int) {
+	for i, rule := range rules {
 		if index := rule.Regexp.FindStringSubmatchIndex(text); index != nil {
-			return rule, index
+			return i, rule, index
 		}
 	}
-	return CompiledRule{}, nil
+	return 0, CompiledRule{}, nil
 }

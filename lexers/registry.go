@@ -41,7 +41,7 @@ func (r *registry) Get(name string) chroma.Lexer {
 	if ok {
 		return lexer
 	}
-	return Default
+	return Fallback
 }
 
 // Match returns all lexers matching filename.

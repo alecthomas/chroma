@@ -19,13 +19,13 @@ var Markdown = Register(NewLexer(
 			{`^(#{2,6})(.+\n)`, ByGroups(GenericSubheading, Text), nil},
 			// task list
 			{`^(\s*)([*-] )(\[[ xX]\])( .+\n)`,
-				ByGroups(Text, Keyword, Keyword, Text), nil},
+				ByGroups(Text, Keyword, Keyword, UsingSelf("inline")), nil},
 			// bulleted lists
 			{`^(\s*)([*-])(\s)(.+\n)`,
-				ByGroups(Text, Keyword, Text, Text), nil},
+				ByGroups(Text, Keyword, Text, UsingSelf("inline")), nil},
 			// numbered lists
 			{`^(\s*)([0-9]+\.)( .+\n)`,
-				ByGroups(Text, Keyword, Text), nil},
+				ByGroups(Text, Keyword, UsingSelf("inline")), nil},
 			// quote
 			{`^(\s*>\s)(.+\n)`, ByGroups(Keyword, GenericEmph), nil},
 			// text block
@@ -39,6 +39,8 @@ var Markdown = Register(NewLexer(
 			{`\\.`, Text, nil},
 			// italics
 			{`(\s)([*_][^*_]+[*_])(\W|\n)`, ByGroups(Text, GenericEmph, Text), nil},
+			// underline
+			{`(\s)(__.*?__)`, ByGroups(Whitespace, GenericUnderline), nil},
 			// bold
 			// warning: the following rule eats internal tags. eg. **foo _bar_ baz** bar is not italics
 			{`(\s)(\*\*.*\*\*)`, ByGroups(Text, GenericStrong), nil},
@@ -58,12 +60,12 @@ var Markdown = Register(NewLexer(
 	},
 ))
 
-func handleCodeblock(groups []string, out func(Token)) {
+func handleCodeblock(groups []string, lexer Lexer, out func(Token)) {
 	out(Token{String, groups[1]})
 	out(Token{String, groups[2]})
 	out(Token{Text, groups[3]})
 	code := groups[4]
-	lexer := Registry.Get(groups[2])
-	lexer.Tokenise(code, out)
+	lexer = Registry.Get(groups[2])
+	lexer.Tokenise(nil, code, out)
 	out(Token{String, groups[5]})
 }

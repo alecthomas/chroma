@@ -74,6 +74,7 @@ const (
 	LiteralStringRegex
 	LiteralStringSingle
 	LiteralStringSymbol
+	LiteralStringName
 )
 
 // Literals.
@@ -103,10 +104,14 @@ const (
 	Comment TokenType = 6000 + iota
 	CommentHashbang
 	CommentMultiline
-	CommentPreproc
-	CommentPreprocFile
 	CommentSingle
 	CommentSpecial
+)
+
+// Preprocessor "comments".
+const (
+	CommentPreproc TokenType = 6100 + iota
+	CommentPreprocFile
 )
 
 // Generic tokens.
@@ -122,6 +127,7 @@ const (
 	GenericStrong
 	GenericSubheading
 	GenericTraceback
+	GenericUnderline
 )
 
 // Text.
@@ -176,6 +182,6 @@ func (t TokenType) InSubCategory(other TokenType) bool {
 	return t/100 == other/100
 }
 
-func (t TokenType) Emit(groups []string, out func(Token)) {
+func (t TokenType) Emit(groups []string, lexer Lexer, out func(Token)) {
 	out(Token{Type: t, Value: groups[0]})
 }

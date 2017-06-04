@@ -7,13 +7,12 @@ import (
 )
 
 func TestCoalesce(t *testing.T) {
-	lexer, err := Coalesce(MustNewLexer(nil, Rules{
+	lexer := Coalesce(MustNewLexer(nil, Rules{
 		"root": []Rule{
 			Rule{`[[:punct:]]`, Punctuation, nil},
 		},
 	}))
-	require.NoError(t, err)
-	actual, err := lexer.Tokenise("!@#$%")
+	actual, err := Tokenise(lexer, nil, "!@#$%")
 	require.NoError(t, err)
 	expected := []Token{
 		Token{Punctuation, "!@#$%"},

@@ -20,7 +20,7 @@ func TestSimpleLexer(t *testing.T) {
 			Filenames: []string{"*.ini", "*.cfg"},
 		},
 		map[string][]Rule{
-			"root": []Rule{
+			"root": {
 				{`\s+`, Whitespace, nil},
 				{`;.*?$`, Comment, nil},
 				{`\[.*?\]$`, Keyword, nil},
@@ -29,24 +29,24 @@ func TestSimpleLexer(t *testing.T) {
 		},
 	)
 	require.NoError(t, err)
-	actual, err := lexer.Tokenise(`
+	actual, err := Tokenise(lexer, nil, `
 	; this is a comment
 	[section]
 	a = 10
 `)
 	require.NoError(t, err)
 	expected := []Token{
-		Token{Whitespace, "\n\t"},
-		Token{Comment, "; this is a comment"},
-		Token{Whitespace, "\n\t"},
-		Token{Keyword, "[section]"},
-		Token{Whitespace, "\n\t"},
-		Token{Name, "a"},
-		Token{Whitespace, " "},
-		Token{Operator, "="},
-		Token{Whitespace, " "},
-		Token{LiteralString, "10"},
-		Token{Whitespace, "\n"},
+		{Whitespace, "\n\t"},
+		{Comment, "; this is a comment"},
+		{Whitespace, "\n\t"},
+		{Keyword, "[section]"},
+		{Whitespace, "\n\t"},
+		{Name, "a"},
+		{Whitespace, " "},
+		{Operator, "="},
+		{Whitespace, " "},
+		{LiteralString, "10"},
+		{Whitespace, "\n"},
 	}
 	require.Equal(t, expected, actual)
 }
