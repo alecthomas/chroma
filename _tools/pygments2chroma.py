@@ -1,3 +1,5 @@
+import re
+import os
 import importlib
 import sys
 import types
@@ -145,6 +147,7 @@ def main():
 
     print(pystache.render(TEMPLATE, {
         'name': lexer_cls.name,
+        'options': lexer_cls.flags,
         'upper_name': to_camel_case(lexer_cls.name),
         'aliases': lexer_cls.aliases,
         'filenames': lexer_cls.filenames,

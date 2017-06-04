@@ -35,6 +35,14 @@ type Config struct {
 	// Regex matching is case-insensitive.
 	CaseInsensitive bool
 
+	// Regex matches all characters.
+	DotAll bool
+
+	// Regex does not match across lines ($ matches EOL).
+	//
+	// Defaults to multiline.
+	NotMultiline bool
+
 	// Don't strip leading and trailing newlines from the input.
 	// DontStripNL bool
 
@@ -150,9 +158,15 @@ func NewLexer(config *Config, rules Rules) (Lexer, error) {
 	for state, rules := range rules {
 		for _, rule := range rules {
 			crule := CompiledRule{Rule: rule}
-			flags := "m"
+			flags := ""
+			if !config.NotMultiline {
+				flags += "m"
+			}
 			if config.CaseInsensitive {
 				flags += "i"
+			}
+			if config.DotAll {
+				flags += "s"
 			}
 			re, err := regexp.Compile("^(?" + flags + ")(?:" + rule.Pattern + ")")
 			if err != nil {
