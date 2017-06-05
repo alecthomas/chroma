@@ -35,7 +35,7 @@ func TestSimpleLexer(t *testing.T) {
 	a = 10
 `)
 	require.NoError(t, err)
-	expected := []Token{
+	expected := []*Token{
 		{Whitespace, "\n\t"},
 		{Comment, "; this is a comment"},
 		{Whitespace, "\n\t"},

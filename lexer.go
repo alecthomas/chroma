@@ -57,13 +57,14 @@ type Config struct {
 	// TabSize int
 }
 
+// Token output to formatter.
 type Token struct {
 	Type  TokenType
 	Value string
 }
 
-func (t Token) String() string   { return fmt.Sprintf("Token{%s, %q}", t.Type, t.Value) }
-func (t Token) GoString() string { return t.String() }
+func (t *Token) String() string   { return t.Value }
+func (t *Token) GoString() string { return fmt.Sprintf("Token{%s, %q}", t.Type, t.Value) }
 
 type TokeniseOptions struct {
 	// State to start tokenisation in. Defaults to "root".
@@ -72,7 +73,7 @@ type TokeniseOptions struct {
 
 type Lexer interface {
 	Config() *Config
-	Tokenise(options *TokeniseOptions, text string, out func(Token)) error
+	Tokenise(options *TokeniseOptions, text string, out func(*Token)) error
 }
 
 // Analyser determines if this lexer is appropriate for the given text.
@@ -89,18 +90,18 @@ type Rule struct {
 // An Emitter takes group matches and returns tokens.
 type Emitter interface {
 	// Emit tokens for the given regex groups.
-	Emit(groups []string, lexer Lexer, out func(Token))
+	Emit(groups []string, lexer Lexer, out func(*Token))
 }
 
 // EmitterFunc is a function that is an Emitter.
-type EmitterFunc func(groups []string, lexer Lexer, out func(Token))
+type EmitterFunc func(groups []string, lexer Lexer, out func(*Token))
 
 // Emit tokens for groups.
-func (e EmitterFunc) Emit(groups []string, lexer Lexer, out func(Token)) { e(groups, lexer, out) }
+func (e EmitterFunc) Emit(groups []string, lexer Lexer, out func(*Token)) { e(groups, lexer, out) }
 
 // ByGroups emits a token for each matching group in the rule's regex.
 func ByGroups(emitters ...Emitter) Emitter {
-	return EmitterFunc(func(groups []string, lexer Lexer, out func(Token)) {
+	return EmitterFunc(func(groups []string, lexer Lexer, out func(*Token)) {
 		for i, group := range groups[1:] {
 			emitters[i].Emit([]string{group}, lexer, out)
 		}
@@ -110,7 +111,7 @@ func ByGroups(emitters ...Emitter) Emitter {
 
 // Using returns an Emitter that uses a given Lexer for parsing and emitting.
 func Using(lexer Lexer, options *TokeniseOptions) Emitter {
-	return EmitterFunc(func(groups []string, _ Lexer, out func(Token)) {
+	return EmitterFunc(func(groups []string, _ Lexer, out func(*Token)) {
 		if err := lexer.Tokenise(options, groups[0], out); err != nil {
 			panic(err)
 		}
@@ -119,7 +120,7 @@ func Using(lexer Lexer, options *TokeniseOptions) Emitter {
 
 // UsingSelf is like Using, but uses the current Lexer.
 func UsingSelf(state string) Emitter {
-	return EmitterFunc(func(groups []string, lexer Lexer, out func(Token)) {
+	return EmitterFunc(func(groups []string, lexer Lexer, out func(*Token)) {
 		if err := lexer.Tokenise(&TokeniseOptions{State: state}, groups[0], out); err != nil {
 			panic(err)
 		}
@@ -151,6 +152,9 @@ func MustNewLexer(config *Config, rules Rules) Lexer {
 // "rules" is a state machine transitition map. Each key is a state. Values are sets of rules
 // that match input, optionally modify lexer state, and output tokens.
 func NewLexer(config *Config, rules Rules) (Lexer, error) {
+	if config == nil {
+		config = &Config{}
+	}
 	if _, ok := rules["root"]; !ok {
 		return nil, fmt.Errorf("no \"root\" state")
 	}
@@ -208,7 +212,7 @@ func (r *regexLexer) Config() *Config {
 	return r.config
 }
 
-func (r *regexLexer) Tokenise(options *TokeniseOptions, text string, out func(Token)) error {
+func (r *regexLexer) Tokenise(options *TokeniseOptions, text string, out func(*Token)) error {
 	if options == nil {
 		options = defaultOptions
 	}
@@ -223,7 +227,7 @@ func (r *regexLexer) Tokenise(options *TokeniseOptions, text string, out func(To
 		// fmt.Println(text[state.Pos:state.Pos+1], rule, state.Text[state.Pos:state.Pos+1])
 		// No match.
 		if index == nil {
-			out(Token{Error, state.Text[state.Pos : state.Pos+1]})
+			out(&Token{Error, state.Text[state.Pos : state.Pos+1]})
 			state.Pos++
 			continue
 		}
@@ -252,9 +256,9 @@ func (r *regexLexer) Tokenise(options *TokeniseOptions, text string, out func(To
 }
 
 // Tokenise text using lexer, returning tokens as a slice.
-func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, error) {
-	out := []Token{}
-	return out, lexer.Tokenise(options, text, func(token Token) { out = append(out, token) })
+func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]*Token, error) {
+	out := []*Token{}
+	return out, lexer.Tokenise(options, text, func(token *Token) { out = append(out, token) })
 }
 
 func matchRules(text string, rules []CompiledRule) (int, CompiledRule, []int) {

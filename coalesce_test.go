@@ -12,10 +12,10 @@ func TestCoalesce(t *testing.T) {
 			Rule{`[[:punct:]]`, Punctuation, nil},
 		},
 	}))
-	actual, err := Tokenise(lexer, nil, "!@#$%")
+	actual, err := Tokenise(lexer, nil, "!@#$")
 	require.NoError(t, err)
-	expected := []Token{
-		Token{Punctuation, "!@#$%"},
+	expected := []*Token{
+		&Token{Punctuation, "!@#$"},
 	}
 	require.Equal(t, expected, actual)
 }

@@ -60,12 +60,12 @@ var Markdown = Register(NewLexer(
 	},
 ))
 
-func handleCodeblock(groups []string, lexer Lexer, out func(Token)) {
-	out(Token{String, groups[1]})
-	out(Token{String, groups[2]})
-	out(Token{Text, groups[3]})
+func handleCodeblock(groups []string, lexer Lexer, out func(*Token)) {
+	out(&Token{String, groups[1]})
+	out(&Token{String, groups[2]})
+	out(&Token{Text, groups[3]})
 	code := groups[4]
 	lexer = Registry.Get(groups[2])
 	lexer.Tokenise(nil, code, out)
-	out(Token{String, groups[5]})
+	out(&Token{String, groups[5]})
 }

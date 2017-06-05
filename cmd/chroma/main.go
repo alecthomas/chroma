@@ -52,15 +52,14 @@ func main() {
 	}
 }
 
-func getWriter(w io.Writer) func(chroma.Token) {
+func getWriter(w io.Writer) func(*chroma.Token) {
 	if *tokensFlag {
-		return func(token chroma.Token) {
+		return func(token *chroma.Token) {
 			fmt.Println(token)
 		}
-	} else {
-		formatter := formatters.Console(formatters.DefaultConsoleTheme)
-		writer, err := formatter.Format(w)
-		kingpin.FatalIfError(err, "")
-		return writer
 	}
+	formatter := formatters.Console(formatters.DefaultConsoleTheme)
+	writer, err := formatter.Format(w)
+	kingpin.FatalIfError(err, "")
+	return writer
 }

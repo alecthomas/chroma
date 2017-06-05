@@ -34,8 +34,8 @@ type consoleFormatter struct {
 	theme map[TokenType]string
 }
 
-func (c *consoleFormatter) Format(w io.Writer) (func(Token), error) {
-	return func(token Token) {
+func (c *consoleFormatter) Format(w io.Writer) (func(*Token), error) {
+	return func(token *Token) {
 		clr, ok := c.theme[token.Type]
 		if !ok {
 			clr, ok = c.theme[token.Type.SubCategory()]
@@ -46,8 +46,12 @@ func (c *consoleFormatter) Format(w io.Writer) (func(Token), error) {
 				}
 			}
 		}
-		fmt.Fprint(w, clr)
+		if clr != "" {
+			fmt.Fprint(w, clr)
+		}
 		fmt.Fprint(w, token.Value)
-		fmt.Fprintf(w, "\033[0m")
+		if clr != "" {
+			fmt.Fprintf(w, "\033[0m")
+		}
 	}, nil
 }

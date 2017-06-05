@@ -8,5 +8,5 @@ import (
 
 // Formatter returns a formatting function for tokens.
 type Formatter interface {
-	Format(w io.Writer) (func(chroma.Token), error)
+	Format(w io.Writer) (func(*chroma.Token), error)
 }

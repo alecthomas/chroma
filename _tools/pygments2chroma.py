@@ -24,6 +24,15 @@ var {{upper_name}} = Register(NewLexer(
         Aliases:   []string{ {{#aliases}}"{{.}}", {{/aliases}} },
         Filenames: []string{ {{#filenames}}"{{.}}", {{/filenames}} },
         MimeTypes: []string{ {{#mimetypes}}"{{.}}", {{/mimetypes}} },
+{{#re_not_multiline}}
+        NotMultiline: true,
+{{/re_not_multiline}}
+{{#re_dotall}}
+        DotAll: true,
+{{/re_dotall}}
+{{#re_ignorecase}}
+        CaseInsensitive: true,
+{{/re_ignorecase}}
     },
     Rules{
 {{#tokens}}
@@ -136,6 +145,21 @@ def translate_rules(rules):
     return out
 
 
+class TemplateView(object):
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def re_not_multiline(self):
+        return not (self.regex_flags & re.MULTILINE)
+
+    def re_dotall(self):
+        return self.regex_flags & re.DOTALL
+
+    def re_ignorecase(self):
+        return self.regex_flags & re.IGNORECASE
+
+
 def main():
     package_name, symbol_name = sys.argv[1].rsplit(sep=".", maxsplit=1)
 
@@ -145,15 +169,15 @@ def main():
 
     assert issubclass(lexer_cls, pygments_lexer.RegexLexer), 'can only translate from RegexLexer'
 
-    print(pystache.render(TEMPLATE, {
-        'name': lexer_cls.name,
-        'options': lexer_cls.flags,
-        'upper_name': to_camel_case(lexer_cls.name),
-        'aliases': lexer_cls.aliases,
-        'filenames': lexer_cls.filenames,
-        'mimetypes': lexer_cls.mimetypes,
-        'tokens': [{'state': state, 'rules': translate_rules(rules)} for (state, rules) in lexer_cls.get_tokendefs().items()],
-    }))
+    print(pystache.render(TEMPLATE, TemplateView(
+        name=lexer_cls.name,
+        regex_flags=lexer_cls.flags,
+        upper_name=to_camel_case(lexer_cls.name),
+        aliases=lexer_cls.aliases,
+        filenames=lexer_cls.filenames,
+        mimetypes=lexer_cls.mimetypes,
+        tokens=[{'state': state, 'rules': translate_rules(rules)} for (state, rules) in lexer_cls.get_tokendefs().items()],
+    )))
 
 
 if __name__ == '__main__':
