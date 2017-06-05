@@ -55,7 +55,7 @@ func main() {
 func getWriter(w io.Writer) func(*chroma.Token) {
 	if *tokensFlag {
 		return func(token *chroma.Token) {
-			fmt.Println(token)
+			fmt.Printf("%#v\n", token)
 		}
 	}
 	formatter := formatters.Console(formatters.DefaultConsoleTheme)

@@ -4,8 +4,8 @@ import (
     . "github.com/alecthomas/chroma" // nolint
 )
 
-// Javascript lexer.
-var Javascript = Register(NewLexer(
+// JavaScript lexer.
+var JavaScript = Register(NewLexer(
     &Config{
         Name:      "JavaScript",
         Aliases:   []string{"js", "javascript"},

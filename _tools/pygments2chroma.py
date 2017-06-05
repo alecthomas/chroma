@@ -48,6 +48,10 @@ var {{upper_name}} = Register(NewLexer(
 
 
 def go_string(s):
+    # TODO: Search for substring ranges and convert them to character classes.
+    #
+    # This seems to commonly occur with Unicode character classes, which presumably
+    # aren't supported by Python's regex engine.
     if '(?<' in s:
         warning('perl regex found in %r' % s)
     if '`' not in s:
@@ -100,8 +104,10 @@ def resolve_emitter(emitter):
 def process_state_action(action):
     if action.startswith('#'):
         action = action[1:]
-        if action == 'pop':
+        if action== 'pop':
             action = 'Pop(1)'
+        elif action.startswith('pop:'):
+            action = 'Pop(%s)' % action[4:]
         elif action == 'push':
             action = 'Push()'
         elif action.startswith('push:'):
