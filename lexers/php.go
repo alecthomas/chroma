@@ -22,7 +22,7 @@ var Php = Register(NewLexer(
 		},
 		"php": {
 			{`\?>`, CommentPreproc, Pop(1)},
-			{`(<<<)([\'"]?)((?:[\\_a-z]|[^\x00-\x7f])(?:[\\\w]|[^\x00-\x7f])*)(\2\n.*?\n\s*)(\3)(;?)(\n)`, ByGroups(LiteralString, LiteralString, LiteralStringDelimiter, LiteralString, LiteralStringDelimiter, Punctuation, Text), nil},
+			// {`(<<<)([\'"]?)((?:[\\_a-z]|[^\x00-\x7f])(?:[\\\w]|[^\x00-\x7f])*)(\2\n.*?\n\s*)(\3)(;?)(\n)`, ByGroups(LiteralString, LiteralString, LiteralStringDelimiter, LiteralString, LiteralStringDelimiter, Punctuation, Text), nil},
 			{`\s+`, Text, nil},
 			{`#.*?\n`, CommentSingle, nil},
 			{`//.*?\n`, CommentSingle, nil},
@@ -34,7 +34,7 @@ var Php = Register(NewLexer(
 			{`\?`, Operator, nil},
 			{`[\[\]{}();,]+`, Punctuation, nil},
 			{`(class)(\s+)`, ByGroups(Keyword, Text), Push("classname")},
-			{`(function)(\s*)(?=\()`, ByGroups(Keyword, Text), nil},
+			{`(function)(\s*)`, ByGroups(Keyword, Text), nil},
 			{`(function)(\s+)(&?)(\s*)`, ByGroups(Keyword, Text, Operator, Text), Push("functionname")},
 			{`(const)(\s+)((?:[\\_a-z]|[^\x00-\x7f])(?:[\\\w]|[^\x00-\x7f])*)`, ByGroups(Keyword, Text, NameConstant), nil},
 			{`(and|E_PARSE|old_function|E_ERROR|or|as|E_WARNING|parent|eval|PHP_OS|break|exit|case|extends|PHP_VERSION|cfunction|FALSE|print|for|require|continue|foreach|require_once|declare|return|default|static|do|switch|die|stdClass|echo|else|TRUE|elseif|var|empty|if|xor|enddeclare|include|virtual|endfor|include_once|while|endforeach|global|endif|list|endswitch|new|endwhile|not|array|E_ALL|NULL|final|php_user_filter|interface|implements|public|private|protected|abstract|clone|try|catch|throw|this|use|namespace|trait|yield|finally)\b`, Keyword, nil},

@@ -83,7 +83,10 @@ def resolve_emitter(emitter):
                 assert args == {}, args
                 emitter = 'UsingSelf("%s")' % state
             elif issubclass(args, pygments_lexer.Lexer):
-                emitter = 'Using(%s, nil)' % args.__name__
+                name = args.__name__
+                if name.endswith('Lexer'):
+                    name = name[:-5]
+                emitter = 'Using(%s, nil)' % name
             else:
                 raise ValueError('only support "using" with lexer classes, not %r' % args)
         else:

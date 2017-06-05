@@ -4,8 +4,8 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-// Css lexer.
-var Css = Register(NewLexer(
+// CSS lexer.
+var CSS = Register(NewLexer(
 	&Config{
 		Name:      "CSS",
 		Aliases:   []string{"css"},

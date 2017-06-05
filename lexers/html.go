@@ -4,8 +4,8 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-// Html lexer.
-var Html = Register(NewLexer(
+// HTML lexer.
+var HTML = Register(NewLexer(
 	&Config{
 		Name:            "HTML",
 		Aliases:         []string{"html"},
@@ -41,11 +41,11 @@ var Html = Register(NewLexer(
 		},
 		"script-content": {
 			{`(<)(\s*)(/)(\s*)(script)(\s*)(>)`, ByGroups(Punctuation, Text, Punctuation, Text, NameTag, Text, Punctuation), Pop(1)},
-			{`.+?(?=<\s*/\s*script\s*>)`, Using(JavascriptLexer, nil), nil},
+			{`.+?`, Using(JavaScript, nil), nil},
 		},
 		"style-content": {
 			{`(<)(\s*)(/)(\s*)(style)(\s*)(>)`, ByGroups(Punctuation, Text, Punctuation, Text, NameTag, Text, Punctuation), Pop(1)},
-			{`.+?(?=<\s*/\s*style\s*>)`, Using(CssLexer, nil), nil},
+			{`.+?`, Using(CSS, nil), nil},
 		},
 		"attr": {
 			{`".*?"`, LiteralString, Pop(1)},
