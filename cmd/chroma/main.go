@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"runtime/pprof"
+	"strings"
 
 	"gopkg.in/alecthomas/kingpin.v3-unstable"
 
@@ -42,21 +43,30 @@ func main() {
 	defer w.Flush()
 	writer := getWriter(w)
 	if len(*filesArgs) == 0 {
-		lex("", os.Stdin, writer)
+		contents, err := ioutil.ReadAll(os.Stdin)
+		kingpin.FatalIfError(err, "")
+		lex("", string(contents), writer)
 	} else {
 		for _, filename := range *filesArgs {
-			r, err := os.Open(filename)
+			contents, err := ioutil.ReadFile(filename)
 			kingpin.FatalIfError(err, "")
-			lex(filename, r, writer)
-			r.Close()
+			lex(filename, string(contents), writer)
 		}
 	}
 }
 
 func listAll() {
-	fmt.Printf("lexers:")
+	fmt.Println("lexers:")
 	for _, l := range lexers.Registry.Lexers {
-		fmt.Printf(" %s", l.Config().Name)
+		config := l.Config()
+		fmt.Printf("  %s\n", config.Name)
+		filenames := []string{}
+		filenames = append(filenames, config.Filenames...)
+		filenames = append(filenames, config.AliasFilenames...)
+		fmt.Printf("    aliases: %s\n", strings.Join(config.Aliases, " "))
+		fmt.Printf("    filenames: %s\n", strings.Join(filenames, " "))
+		fmt.Printf("    mimetypes: %s\n", strings.Join(config.MimeTypes, " "))
+		fmt.Printf("    priority: %d\n", config.Priority)
 	}
 	fmt.Println()
 	fmt.Printf("styles:")
@@ -71,12 +81,9 @@ func listAll() {
 	fmt.Println()
 }
 
-func lex(path string, r io.Reader, writer func(*chroma.Token)) {
-	contents, err := ioutil.ReadAll(r)
-	kingpin.FatalIfError(err, "")
-	kingpin.FatalIfError(err, "")
+func lex(path string, contents string, writer func(*chroma.Token)) {
 	lexer := chroma.Coalesce(selexer(path))
-	err = lexer.Tokenise(nil, string(contents), writer)
+	err := lexer.Tokenise(nil, string(contents), writer)
 	kingpin.FatalIfError(err, "")
 }
 
