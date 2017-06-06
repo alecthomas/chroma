@@ -44,7 +44,7 @@ func handleCodeblock(groups []string, lexer Lexer, out func(*Token)) {
 	out(&Token{String, groups[2]})
 	out(&Token{Text, groups[3]})
 	code := groups[4]
-	lexer = Registry.Get(groups[2])
+	lexer = Get(groups[2])
 	lexer.Tokenise(nil, code, out)
 	out(&Token{String, groups[5]})
 }

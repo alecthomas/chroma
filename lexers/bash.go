@@ -7,9 +7,12 @@ import (
 // Bash lexer.
 var Bash = Register(NewLexer(
     &Config{
-        Name:      "Bash",
-        Aliases:   []string{"bash", "sh", "ksh", "zsh", "shell"},
-        Filenames: []string{"*.sh", "*.ksh", "*.bash", "*.ebuild", "*.eclass", "*.exheres-0", "*.exlib", "*.zsh", ".bashrc", "bashrc", ".bash_*", "bash_*", "zshrc", ".zshrc", "PKGBUILD"},
+        Name:    "Bash",
+        Aliases: []string{"bash", "sh", "ksh", "zsh", "shell"},
+        Filenames: []string{
+            "*.sh", "*.ksh", "*.bash", "*.ebuild", "*.eclass", "*.exheres-0", "*.exlib",
+            "*.zsh", ".bashrc", "bashrc", ".bash_*", "bash_*", "zshrc", ".zshrc", "PKGBUILD",
+        },
         MimeTypes: []string{"application/x-sh", "application/x-shellscript"},
     },
     Rules{

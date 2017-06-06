@@ -201,6 +201,8 @@ type LexerState struct {
 	Stack []string
 	State string
 	Rule  int
+	// Group matches.
+	Groups []string
 }
 
 type regexLexer struct {
@@ -233,23 +235,23 @@ func (r *regexLexer) Tokenise(options *TokeniseOptions, text string, out func(*T
 		}
 		state.Rule = ruleIndex
 
-		groups := make([]string, len(index)/2)
+		state.Groups = make([]string, len(index)/2)
 		for i := 0; i < len(index); i += 2 {
 			start := state.Pos + index[i]
 			end := state.Pos + index[i+1]
 			if start == -1 || end == -1 {
 				continue
 			}
-			groups[i/2] = text[start:end]
+			state.Groups[i/2] = text[start:end]
 		}
 		state.Pos += index[1]
-		if rule.Type != nil {
-			rule.Type.Emit(groups, r, out)
-		}
 		if rule.Mutator != nil {
 			if err := rule.Mutator.Mutate(state); err != nil {
 				return err
 			}
+		}
+		if rule.Type != nil {
+			rule.Type.Emit(state.Groups, r, out)
 		}
 	}
 	return nil

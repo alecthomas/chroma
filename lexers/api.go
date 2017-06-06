@@ -1,6 +1,7 @@
 package lexers
 
 import (
+	"path/filepath"
 	"sort"
 
 	"github.com/danwakefield/fnmatch"
@@ -14,18 +15,18 @@ func (p prioritisedLexers) Len() int           { return len(p) }
 func (p prioritisedLexers) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
 func (p prioritisedLexers) Less(i, j int) bool { return p[i].Config().Priority < p[j].Config().Priority }
 
-// Registry is the global Lexer registry.
-var Registry = registry{byName: map[string]chroma.Lexer{}}
-
-type registry struct {
+// Registry of Lexers.
+var Registry = struct {
 	Lexers []chroma.Lexer
 	byName map[string]chroma.Lexer
+}{
+	byName: map[string]chroma.Lexer{},
 }
 
 // Names of all lexers, optionally including aliases.
-func (r *registry) Names(withAliases bool) []string {
+func Names(withAliases bool) []string {
 	out := []string{}
-	for _, lexer := range r.Lexers {
+	for _, lexer := range Registry.Lexers {
 		config := lexer.Config()
 		out = append(out, config.Name)
 		if withAliases {
@@ -36,8 +37,8 @@ func (r *registry) Names(withAliases bool) []string {
 }
 
 // Get a Lexer by name.
-func (r *registry) Get(name string) chroma.Lexer {
-	lexer, ok := r.byName[name]
+func Get(name string) chroma.Lexer {
+	lexer, ok := Registry.byName[name]
 	if ok {
 		return lexer
 	}
@@ -45,9 +46,10 @@ func (r *registry) Get(name string) chroma.Lexer {
 }
 
 // Match returns all lexers matching filename.
-func (r *registry) Match(filename string) []chroma.Lexer {
+func Match(filename string) []chroma.Lexer {
+	filename = filepath.Base(filename)
 	lexers := prioritisedLexers{}
-	for _, lexer := range r.Lexers {
+	for _, lexer := range Registry.Lexers {
 		config := lexer.Config()
 		for _, glob := range config.Filenames {
 			if fnmatch.Match(glob, filename, 0) {

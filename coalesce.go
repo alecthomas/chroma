@@ -16,7 +16,7 @@ func (d *coalescer) Tokenise(options *TokeniseOptions, text string, out func(*To
 		if last == nil {
 			last = token
 		} else {
-			if last.Type == token.Type {
+			if last.Type == token.Type && len(last.Value) < 8192 {
 				last.Value += token.Value
 			} else {
 				out(last)

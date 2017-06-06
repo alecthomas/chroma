@@ -28,6 +28,24 @@ func Mutators(modifiers ...Mutator) MutatorFunc {
 	}
 }
 
+// Rewind rewinds the cursor to before the last match group.
+//
+// This is typically used to replace lookahead assertions.
+//
+// eg. this {`([a-z]+)(?=\()`, Name, nil} would become {`([a-z]+)(\()`, Name, Rewind()}
+func Rewind() MutatorFunc {
+	return func(state *LexerState) error {
+		if len(state.Groups) <= 2 {
+			return fmt.Errorf("Rewind() needs more than one capture group")
+		}
+		tail := len(state.Groups[len(state.Groups)-1])
+		state.Groups[0] = state.Groups[0][:len(state.Groups[0])-tail]
+		state.Groups = state.Groups[:len(state.Groups)-1]
+		state.Pos -= tail
+		return nil
+	}
+}
+
 // Include the given state.
 func Include(state string) Rule {
 	return Rule{
