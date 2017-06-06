@@ -5,8 +5,6 @@ import (
 	"io"
 	"math"
 
-	"github.com/lucasb-eyer/go-colorful"
-
 	"github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/styles"
 )
@@ -14,7 +12,6 @@ import (
 type ttyTable struct {
 	foreground map[styles.Colour]string
 	background map[styles.Colour]string
-	distance   map[styles.Colour]colorful.Color
 }
 
 var c = styles.ParseColour
@@ -170,28 +167,6 @@ var ttyTables = map[int]*ttyTable{
 	},
 }
 
-func computeDistance(table map[styles.Colour]string) map[styles.Colour]colorful.Color {
-	out := map[styles.Colour]colorful.Color{}
-	for colour := range table {
-		out[colour] = toColourful(colour)
-	}
-	return out
-}
-
-func init() {
-	for _, table := range ttyTables {
-		table.distance = computeDistance(table.foreground)
-	}
-}
-
-func toColourful(colour styles.Colour) colorful.Color {
-	return colorful.Color{
-		float64(colour.Red()) / 256.0,
-		float64(colour.Green()) / 256.0,
-		float64(colour.Blue()) / 256.0,
-	}
-}
-
 func entryToEscapeSequence(table *ttyTable, entry *styles.Entry) string {
 	out := ""
 	if entry.Bold {
@@ -211,10 +186,9 @@ func entryToEscapeSequence(table *ttyTable, entry *styles.Entry) string {
 
 func findClosest(table *ttyTable, colour styles.Colour) styles.Colour {
 	closestColour := styles.Colour(0)
-	seeking := toColourful(colour)
-	closest := float64(math.MaxFloat64)
-	for styleColour, colour := range table.distance {
-		distance := colour.DistanceCIE76(seeking)
+	closest := math.MaxInt32
+	for styleColour := range table.foreground {
+		distance := styleColour.Distance(colour)
 		if distance < closest {
 			closest = distance
 			closestColour = styleColour
