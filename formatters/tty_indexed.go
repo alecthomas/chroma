@@ -5,26 +5,25 @@ import (
 	"io"
 	"math"
 
-	"github.com/alecthomas/chroma" // nolint
-	"github.com/alecthomas/chroma/styles"
+	"github.com/alecthomas/chroma"
 )
 
 type ttyTable struct {
-	foreground map[styles.Colour]string
-	background map[styles.Colour]string
+	foreground map[chroma.Colour]string
+	background map[chroma.Colour]string
 }
 
-var c = styles.ParseColour
+var c = chroma.ParseColour
 
 var ttyTables = map[int]*ttyTable{
 	8: &ttyTable{
-		foreground: map[styles.Colour]string{
+		foreground: map[chroma.Colour]string{
 			c("#000000"): "\033[30m", c("#7f0000"): "\033[31m", c("#007f00"): "\033[32m", c("#7f7fe0"): "\033[33m",
 			c("#00007f"): "\033[34m", c("#7f007f"): "\033[35m", c("#007f7f"): "\033[36m", c("#e5e5e5"): "\033[37m",
 			c("#555555"): "\033[90m", c("#ff0000"): "\033[91m", c("#00ff00"): "\033[92m", c("#ffff00"): "\033[93m",
 			c("#0000ff"): "\033[94m", c("#ff00ff"): "\033[95m", c("#00ffff"): "\033[96m", c("#ffffff"): "\033[97m",
 		},
-		background: map[styles.Colour]string{
+		background: map[chroma.Colour]string{
 			c("#000000"): "\033[40m", c("#7f0000"): "\033[41m", c("#007f00"): "\033[42m", c("#7f7fe0"): "\033[43m",
 			c("#00007f"): "\033[44m", c("#7f007f"): "\033[45m", c("#007f7f"): "\033[46m", c("#e5e5e5"): "\033[47m",
 			c("#555555"): "\033[100m", c("#ff0000"): "\033[101m", c("#00ff00"): "\033[102m", c("#ffff00"): "\033[103m",
@@ -32,7 +31,7 @@ var ttyTables = map[int]*ttyTable{
 		},
 	},
 	256: &ttyTable{
-		foreground: map[styles.Colour]string{
+		foreground: map[chroma.Colour]string{
 			c("#000000"): "\033[38;5;0m", c("#800000"): "\033[38;5;1m", c("#008000"): "\033[38;5;2m", c("#808000"): "\033[38;5;3m",
 			c("#000080"): "\033[38;5;4m", c("#800080"): "\033[38;5;5m", c("#008080"): "\033[38;5;6m", c("#c0c0c0"): "\033[38;5;7m",
 			c("#808080"): "\033[38;5;8m", c("#ff0000"): "\033[38;5;9m", c("#00ff00"): "\033[38;5;10m", c("#ffff00"): "\033[38;5;11m",
@@ -98,7 +97,7 @@ var ttyTables = map[int]*ttyTable{
 			c("#a8a8a8"): "\033[38;5;248m", c("#b2b2b2"): "\033[38;5;249m", c("#bcbcbc"): "\033[38;5;250m", c("#c6c6c6"): "\033[38;5;251m",
 			c("#d0d0d0"): "\033[38;5;252m", c("#dadada"): "\033[38;5;253m", c("#e4e4e4"): "\033[38;5;254m", c("#eeeeee"): "\033[38;5;255m",
 		},
-		background: map[styles.Colour]string{
+		background: map[chroma.Colour]string{
 			c("#000000"): "\033[48;5;0m", c("#800000"): "\033[48;5;1m", c("#008000"): "\033[48;5;2m", c("#808000"): "\033[48;5;3m",
 			c("#000080"): "\033[48;5;4m", c("#800080"): "\033[48;5;5m", c("#008080"): "\033[48;5;6m", c("#c0c0c0"): "\033[48;5;7m",
 			c("#808080"): "\033[48;5;8m", c("#ff0000"): "\033[48;5;9m", c("#00ff00"): "\033[48;5;10m", c("#ffff00"): "\033[48;5;11m",
@@ -167,7 +166,7 @@ var ttyTables = map[int]*ttyTable{
 	},
 }
 
-func entryToEscapeSequence(table *ttyTable, entry *styles.Entry) string {
+func entryToEscapeSequence(table *ttyTable, entry *chroma.StyleEntry) string {
 	out := ""
 	if entry.Bold {
 		out += "\033[1m"
@@ -184,8 +183,8 @@ func entryToEscapeSequence(table *ttyTable, entry *styles.Entry) string {
 	return out
 }
 
-func findClosest(table *ttyTable, colour styles.Colour) styles.Colour {
-	closestColour := styles.Colour(0)
+func findClosest(table *ttyTable, colour chroma.Colour) chroma.Colour {
+	closestColour := chroma.Colour(0)
 	closest := math.MaxInt32
 	for styleColour := range table.foreground {
 		distance := styleColour.Distance(colour)
@@ -197,7 +196,7 @@ func findClosest(table *ttyTable, colour styles.Colour) styles.Colour {
 	return closestColour
 }
 
-func styleToEscapeSequence(table *ttyTable, style *styles.Style) map[chroma.TokenType]string {
+func styleToEscapeSequence(table *ttyTable, style *chroma.Style) map[chroma.TokenType]string {
 	out := map[chroma.TokenType]string{}
 	for ttype, entry := range style.Entries {
 		out[ttype] = entryToEscapeSequence(table, entry)
@@ -209,7 +208,7 @@ type indexedTTYFormatter struct {
 	table *ttyTable
 }
 
-func (c *indexedTTYFormatter) Format(w io.Writer, style *styles.Style) (func(*chroma.Token), error) {
+func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
 	theme := styleToEscapeSequence(c.table, style)
 	return func(token *chroma.Token) {
 		// TODO: Cache token lookups?
@@ -219,7 +218,7 @@ func (c *indexedTTYFormatter) Format(w io.Writer, style *styles.Style) (func(*ch
 			if !ok {
 				clr, ok = theme[token.Type.Category()]
 				if !ok {
-					clr = theme[styles.Inherit]
+					clr = theme[chroma.InheritStyle]
 				}
 			}
 		}

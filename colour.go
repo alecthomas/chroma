@@ -1,4 +1,4 @@
-package styles
+package chroma
 
 import (
 	"fmt"

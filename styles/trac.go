@@ -5,7 +5,7 @@ import (
 )
 
 // Trac colour scheme.
-var Trac = Register(New("trac", map[chroma.TokenType]string{
+var Trac = Register(chroma.NewStyle("trac", map[chroma.TokenType]string{
 	chroma.Whitespace:        "#bbbbbb",
 	chroma.Comment:           "italic #999988",
 	chroma.CommentPreproc:    "bold noitalic #999999",

@@ -5,13 +5,12 @@ import (
 	"io"
 
 	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/styles"
 )
 
 // TTY16m is a true-colour terminal formatter.
-var TTY16m = Register("terminal16m", FormatterFunc(trueColourFormatter))
+var TTY16m = Register("terminal16m", chroma.FormatterFunc(trueColourFormatter))
 
-func trueColourFormatter(w io.Writer, style *styles.Style) (func(*chroma.Token), error) {
+func trueColourFormatter(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
 	return func(token *chroma.Token) {
 		entry := style.Get(token.Type)
 		if !entry.IsZero() {
