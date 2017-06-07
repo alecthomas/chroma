@@ -5,7 +5,7 @@ import (
 )
 
 // JavaScript lexer.
-var JavaScript = Register(NewLexer(
+var JavaScript = Register(MustNewLexer(
     &Config{
         Name:      "JavaScript",
         Aliases:   []string{"js", "javascript"},

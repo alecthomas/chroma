@@ -1,17 +1,16 @@
 package lexers
 
 import (
-	. "github.com/alecthomas/chroma" // nolint
+	"github.com/alecthomas/chroma"
 )
 
 // Fallback lexer if no other is found.
-var Fallback = Register(NewLexer(&Config{
+var Fallback chroma.Lexer = chroma.MustNewLexer(&chroma.Config{
 	Name:      "fallback",
 	Filenames: []string{"*"},
-	Priority:  99,
-}, Rules{
-	"root": []Rule{
-		{`.+`, Text, nil},
-		{`\n`, Text, nil},
+}, chroma.Rules{
+	"root": []chroma.Rule{
+		{`.+`, chroma.Text, nil},
+		{`\n`, chroma.Text, nil},
 	},
-}))
+})

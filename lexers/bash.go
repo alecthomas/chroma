@@ -1,11 +1,13 @@
 package lexers
 
 import (
+    "strings"
+
     . "github.com/alecthomas/chroma" // nolint
 )
 
 // Bash lexer.
-var Bash = Register(NewLexer(
+var Bash = Register(MustNewLexer(
     &Config{
         Name:    "Bash",
         Aliases: []string{"bash", "sh", "ksh", "zsh", "shell"},
@@ -85,4 +87,11 @@ var Bash = Register(NewLexer(
             Include("root"),
         },
     },
-))
+).SetAnalyser(func(content string) float32 {
+    if strings.HasPrefix(content, "#!/bin/sh") ||
+        strings.HasPrefix(content, "#!/bin/bash") ||
+        strings.HasPrefix(content, "#!/bin/zsh") {
+        return 1.0
+    }
+    return 0.0
+}))

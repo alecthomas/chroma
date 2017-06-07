@@ -5,7 +5,7 @@ import (
 )
 
 // Makefile lexer.
-var Makefile = Register(NewLexer(
+var Makefile = Register(MustNewLexer(
 	&Config{
 		Name:      "Makefile",
 		Aliases:   []string{"make", "makefile", "mf", "bsdmake"},

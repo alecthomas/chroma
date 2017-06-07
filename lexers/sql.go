@@ -5,7 +5,7 @@ import (
 )
 
 // SQL lexer.
-var SQL = Register(NewLexer(
+var SQL = Register(MustNewLexer(
     &Config{
         Name:            "SQL",
         Aliases:         []string{"sql", "mysql", "postgresql", "postgres", "mssql"},

@@ -5,7 +5,7 @@ import (
 )
 
 // C lexer.
-var C = Register(NewLexer(
+var C = Register(MustNewLexer(
     &Config{
         Name:      "C",
         Aliases:   []string{"c"},

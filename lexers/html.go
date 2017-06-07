@@ -5,7 +5,7 @@ import (
 )
 
 // HTML lexer.
-var HTML = Register(NewLexer(
+var HTML = Register(MustNewLexer(
 	&Config{
 		Name:            "HTML",
 		Aliases:         []string{"html"},

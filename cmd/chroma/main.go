@@ -67,7 +67,6 @@ func listAll() {
 		fmt.Printf("    aliases: %s\n", strings.Join(config.Aliases, " "))
 		fmt.Printf("    filenames: %s\n", strings.Join(filenames, " "))
 		fmt.Printf("    mimetypes: %s\n", strings.Join(config.MimeTypes, " "))
-		fmt.Printf("    priority: %d\n", config.Priority)
 	}
 	fmt.Println()
 	fmt.Printf("styles:")
@@ -83,16 +82,26 @@ func listAll() {
 }
 
 func lex(path string, contents string, writer func(*chroma.Token)) {
-	lexer := chroma.Coalesce(selexer(path))
+	lexer := selexer(path, contents)
+	if lexer == nil {
+		lexer = lexers.Fallback
+	}
+	lexer = chroma.Coalesce(lexer)
 	err := lexer.Tokenise(nil, string(contents), writer)
 	kingpin.FatalIfError(err, "")
 }
 
-func selexer(path string) chroma.Lexer {
+func selexer(path, contents string) (lexer chroma.Lexer) {
 	if *lexerFlag != "autodetect" {
 		return lexers.Get(*lexerFlag)
 	}
-	return lexers.Match(path)[0]
+	if path != "" {
+		lexer := lexers.Match(path)
+		if lexer != nil {
+			return lexer
+		}
+	}
+	return lexers.Analyse(contents)
 }
 
 func getWriter(w io.Writer) func(*chroma.Token) {

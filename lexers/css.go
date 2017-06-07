@@ -5,7 +5,7 @@ import (
 )
 
 // CSS lexer.
-var CSS = Register(NewLexer(
+var CSS = Register(MustNewLexer(
 	&Config{
 		Name:      "CSS",
 		Aliases:   []string{"css"},

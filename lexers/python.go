@@ -5,7 +5,7 @@ import (
 )
 
 // Python lexer.
-var Python = Register(NewLexer(
+var Python = Register(MustNewLexer(
     &Config{
         Name:      "Python",
         Aliases:   []string{"python", "py", "sage"},

@@ -5,7 +5,7 @@ import (
 )
 
 // Php lexer.
-var Php = Register(NewLexer(
+var Php = Register(MustNewLexer(
 	&Config{
 		Name:            "PHP",
 		Aliases:         []string{"php", "php3", "php4", "php5"},

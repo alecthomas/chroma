@@ -2,18 +2,11 @@ package lexers
 
 import (
 	"path/filepath"
-	"sort"
 
 	"github.com/danwakefield/fnmatch"
 
 	"github.com/alecthomas/chroma"
 )
-
-type prioritisedLexers []chroma.Lexer
-
-func (p prioritisedLexers) Len() int           { return len(p) }
-func (p prioritisedLexers) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
-func (p prioritisedLexers) Less(i, j int) bool { return p[i].Config().Priority < p[j].Config().Priority }
 
 // Registry of Lexers.
 var Registry = struct {
@@ -42,31 +35,41 @@ func Get(name string) chroma.Lexer {
 	if ok {
 		return lexer
 	}
-	return Fallback
+	return nil
 }
 
 // Match returns all lexers matching filename.
-func Match(filename string) []chroma.Lexer {
+func Match(filename string) chroma.Lexer {
 	filename = filepath.Base(filename)
-	lexers := prioritisedLexers{}
 	for _, lexer := range Registry.Lexers {
 		config := lexer.Config()
 		for _, glob := range config.Filenames {
 			if fnmatch.Match(glob, filename, 0) {
-				lexers = append(lexers, lexer)
-				break
+				return lexer
 			}
 		}
 	}
-	sort.Sort(lexers)
-	return lexers
+	return nil
+}
+
+// Analyse text content and return the "best" lexer..
+func Analyse(text string) chroma.Lexer {
+	var picked chroma.Lexer
+	highest := float32(0.0)
+	for _, lexer := range Registry.Lexers {
+		if analyser, ok := lexer.(chroma.Analyser); ok {
+			weight := analyser.AnalyseText(text)
+			if weight > highest {
+				picked = lexer
+				highest = weight
+			}
+		}
+	}
+	return picked
 }
 
 // Register a Lexer with the global registry.
-func Register(lexer chroma.Lexer, err error) chroma.Lexer {
-	if err != nil {
-		panic(err)
-	}
+func Register(lexer chroma.Lexer) chroma.Lexer {
 	config := lexer.Config()
 	Registry.byName[config.Name] = lexer
 	for _, alias := range config.Aliases {

@@ -5,7 +5,7 @@ import (
 )
 
 // Markdown lexer.
-var Markdown = Register(NewLexer(
+var Markdown = Register(MustNewLexer(
 	&Config{
 		Name:      "markdown",
 		Aliases:   []string{"md"},

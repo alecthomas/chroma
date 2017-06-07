@@ -5,7 +5,7 @@ import (
 )
 
 // CPP is a C++ lexer.
-var CPP = Register(NewLexer(
+var CPP = Register(MustNewLexer(
     &Config{
         Name:      "C++",
         Aliases:   []string{"cpp", "c++"},

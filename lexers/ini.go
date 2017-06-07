@@ -4,7 +4,7 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-var INI = Register(NewLexer(
+var INI = Register(MustNewLexer(
 	&Config{
 		Name:      "INI",
 		Aliases:   []string{"ini", "cfg", "dosini"},

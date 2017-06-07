@@ -29,9 +29,6 @@ type Config struct {
 	// MIME types
 	MimeTypes []string
 
-	// Priority, should multiple lexers match and no content is provided
-	Priority int
-
 	// Regex matching is case-insensitive.
 	CaseInsensitive bool
 
@@ -74,6 +71,28 @@ type TokeniseOptions struct {
 type Lexer interface {
 	Config() *Config
 	Tokenise(options *TokeniseOptions, text string, out func(*Token)) error
+}
+
+type Lexers []Lexer
+
+// Pick attempts to pick the best Lexer for a piece of source code. May return nil.
+func (l Lexers) Pick(text string) Lexer {
+	if len(l) == 0 {
+		return nil
+	}
+	var picked Lexer
+	highest := float32(-1)
+	for _, lexer := range l {
+		if analyser, ok := lexer.(Analyser); ok {
+			score := analyser.AnalyseText(text)
+			if score > highest {
+				highest = score
+				picked = lexer
+				continue
+			}
+		}
+	}
+	return picked
 }
 
 // Analyser determines if this lexer is appropriate for the given text.
@@ -139,7 +158,7 @@ func Words(words ...string) string {
 type Rules map[string][]Rule
 
 // MustNewLexer creates a new Lexer or panics.
-func MustNewLexer(config *Config, rules Rules) Lexer {
+func MustNewLexer(config *Config, rules Rules) *RegexLexer {
 	lexer, err := NewLexer(config, rules)
 	if err != nil {
 		panic(err)
@@ -151,7 +170,7 @@ func MustNewLexer(config *Config, rules Rules) Lexer {
 //
 // "rules" is a state machine transitition map. Each key is a state. Values are sets of rules
 // that match input, optionally modify lexer state, and output tokens.
-func NewLexer(config *Config, rules Rules) (Lexer, error) {
+func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 	if config == nil {
 		config = &Config{}
 	}
@@ -180,7 +199,7 @@ func NewLexer(config *Config, rules Rules) (Lexer, error) {
 			compiledRules[state] = append(compiledRules[state], crule)
 		}
 	}
-	return &regexLexer{
+	return &RegexLexer{
 		config: config,
 		rules:  compiledRules,
 	}, nil
@@ -205,16 +224,30 @@ type LexerState struct {
 	Groups []string
 }
 
-type regexLexer struct {
-	config *Config
-	rules  map[string][]CompiledRule
+type RegexLexer struct {
+	config   *Config
+	rules    map[string][]CompiledRule
+	analyser func(text string) float32
 }
 
-func (r *regexLexer) Config() *Config {
+// SetAnalyser sets the analyser function used to perform content inspection.
+func (r *RegexLexer) SetAnalyser(analyser func(text string) float32) *RegexLexer {
+	r.analyser = analyser
+	return r
+}
+
+func (r *RegexLexer) AnalyseText(text string) float32 {
+	if r.analyser != nil {
+		return r.analyser(text)
+	}
+	return 0.0
+}
+
+func (r *RegexLexer) Config() *Config {
 	return r.config
 }
 
-func (r *regexLexer) Tokenise(options *TokeniseOptions, text string, out func(*Token)) error {
+func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string, out func(*Token)) error {
 	if options == nil {
 		options = defaultOptions
 	}

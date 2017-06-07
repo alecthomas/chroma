@@ -1,11 +1,13 @@
 package lexers
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint: golint
 )
 
 // Go lexer.
-var Go = Register(NewLexer(
+var Go = Register(MustNewLexer(
 	&Config{
 		Name:      "Go",
 		Filenames: []string{"*.go"},
@@ -65,4 +67,12 @@ var Go = Register(NewLexer(
 			{`[^\W\d]\w*`, NameOther, nil},
 		},
 	},
-))
+).SetAnalyser(func(text string) float32 {
+	if strings.Contains(text, "fmt.") {
+		return 0.5
+	}
+	if strings.Contains(text, "package ") {
+		return 0.1
+	}
+	return 0.0
+}))
