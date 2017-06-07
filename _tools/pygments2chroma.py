@@ -18,7 +18,7 @@ import (
 )
 
 // {{upper_name}} lexer.
-var {{upper_name}} = Register(NewLexer(
+var {{upper_name}} = Register(MustNewLexer(
     &Config{
         Name:      "{{name}}",
         Aliases:   []string{ {{#aliases}}"{{.}}", {{/aliases}} },

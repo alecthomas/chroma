@@ -17,4 +17,5 @@ var SwapOff = Register(chroma.NewStyle("swapoff", map[chroma.TokenType]string{
 	chroma.GenericUnderline:  "underline",
 	chroma.NameTag:           "bold",
 	chroma.NameAttribute:     "#ansiteal",
+	chroma.Error:             "#ansired",
 }))
