@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/signal"
 	"runtime/pprof"
 	"strings"
 
@@ -38,6 +39,13 @@ func main() {
 		f, err := os.Create(*profileFlag)
 		kingpin.FatalIfError(err, "")
 		pprof.StartCPUProfile(f)
+		signals := make(chan os.Signal, 1)
+		signal.Notify(signals, os.Interrupt)
+		go func() {
+			<-signals
+			pprof.StopCPUProfile()
+			os.Exit(128 + 3)
+		}()
 		defer pprof.StopCPUProfile()
 	}
 	w := bufio.NewWriterSize(os.Stdout, 16384)
