@@ -4,18 +4,31 @@ import (
 	"io"
 
 	"github.com/alecthomas/chroma"
+	"github.com/alecthomas/chroma/formatters/html"
 )
 
 // NoOp formatter.
-var NoOp = Register("noop", chroma.FormatterFunc(func(w io.Writer, s *chroma.Style) (func(*chroma.Token), error) {
-	return func(t *chroma.Token) { io.WriteString(w, t.Value) }, nil
-}))
+var (
+	NoOp = Register("noop", chroma.FormatterFunc(func(w io.Writer, s *chroma.Style) (func(*chroma.Token), error) {
+		return func(t *chroma.Token) { io.WriteString(w, t.Value) }, nil
+	}))
+	htmlFull = Register("html", html.New(html.Standalone(), html.WithClasses()))
+)
 
 // Fallback formatter.
 var Fallback = NoOp
 
 // Registry of Formatters.
 var Registry = map[string]chroma.Formatter{}
+
+// Names of registered formatters.
+func Names() []string {
+	out := []string{}
+	for name := range Registry {
+		out = append(out, name)
+	}
+	return out
+}
 
 // Get formatter by name.
 //

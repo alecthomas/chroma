@@ -91,7 +91,7 @@ def resolve_emitter(emitter):
                 raise ValueError('only support "using" with lexer classes, not %r' % args)
         else:
             warning('unsupported emitter function %r' % emitter)
-            emitter = '??'
+            emitter = '?? %r ??' % emitter
     elif isinstance(emitter, _TokenType):
         emitter = str(emitter).replace('.', '')[5:]
     elif emitter is None:
@@ -130,7 +130,7 @@ def translate_rules(rules):
             if isinstance(regex, str):
                 regex = go_string(regex)
             elif isinstance(regex, pygments_lexer.words):
-                regex = '`%s(?:%s)%s`' % (regex.prefix, '|'.join(regex.words), regex.suffix)
+                regex = go_string('`%s(?:%s)%s`' % (regex.prefix, '|'.join(regex.words), regex.suffix))
             else:
                 raise ValueError('expected regex string but got %r' % regex)
             emitter = resolve_emitter(rule[1])

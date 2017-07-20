@@ -10,18 +10,20 @@ type coalescer struct {
 }
 
 func (d *coalescer) Tokenise(options *TokeniseOptions, text string, out func(*Token)) error {
-	var last *Token
-	defer func() { out(last) }()
+	var prev *Token
 	return d.Lexer.Tokenise(options, text, func(token *Token) {
-		if last == nil {
-			last = token
+		if prev == nil {
+			prev = token
 		} else {
-			if last.Type == token.Type && len(last.Value) < 8192 {
-				last.Value += token.Value
+			if prev.Type == token.Type && len(prev.Value) < 8192 {
+				prev.Value += token.Value
 			} else {
-				out(last)
-				last = token
+				out(prev)
+				prev = token
 			}
+		}
+		if token.Type == EOF {
+			out(token)
 		}
 	})
 }

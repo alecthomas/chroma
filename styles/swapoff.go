@@ -6,10 +6,11 @@ import (
 
 // SwapOff theme.
 var SwapOff = Register(chroma.NewStyle("swapoff", map[chroma.TokenType]string{
+	chroma.Background:        "#lightgray bg:#black",
 	chroma.Number:            "bold #ansiyellow",
 	chroma.Comment:           "#ansiteal",
 	chroma.CommentPreproc:    "bold #ansigreen",
-	chroma.String:            "bold #ansiteal",
+	chroma.String:            "bold #ansiturquoise",
 	chroma.Keyword:           "bold #ansiwhite",
 	chroma.GenericHeading:    "bold",
 	chroma.GenericSubheading: "bold",

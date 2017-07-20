@@ -242,10 +242,10 @@ func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style) (func(*ch
 		if !ok {
 			clr, ok = theme[token.Type.SubCategory()]
 			if !ok {
-				clr, ok = theme[token.Type.Category()]
-				if !ok {
-					clr = theme[chroma.InheritStyle]
-				}
+				clr = theme[token.Type.Category()]
+				// if !ok {
+				// 	clr = theme[chroma.InheritStyle]
+				// }
 			}
 		}
 		if clr != "" {

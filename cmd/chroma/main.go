@@ -14,6 +14,7 @@ import (
 
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
+	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
 )
@@ -22,9 +23,14 @@ var (
 	profileFlag = kingpin.Flag("profile", "Enable profiling to file.").Hidden().String()
 	listFlag    = kingpin.Flag("list", "List lexers, styles and formatters.").Bool()
 
-	lexerFlag     = kingpin.Flag("lexer", "Lexer to use when formatting.").Default("autodetect").Short('l').String()
-	styleFlag     = kingpin.Flag("style", "Style to use for formatting.").Short('s').Default("swapoff").String()
-	formatterFlag = kingpin.Flag("formatter", "Formatter to use.").Default("terminal").Short('f').String()
+	lexerFlag     = kingpin.Flag("lexer", "Lexer to use when formatting.").PlaceHolder("autodetect").Short('l').Enum(lexers.Names(true)...)
+	styleFlag     = kingpin.Flag("style", "Style to use for formatting.").Short('s').Default("swapoff").Enum(styles.Names()...)
+	formatterFlag = kingpin.Flag("formatter", "Formatter to use.").Default("terminal").Short('f').Enum(formatters.Names()...)
+
+	htmlPrefixFlag      = kingpin.Flag("html-prefix", "HTML CSS class prefix.").PlaceHolder("PREFIX").String()
+	htmlStylesFlag      = kingpin.Flag("html-styles", "Output HTML CSS styles.").Bool()
+	htmlOnlyFlag        = kingpin.Flag("html-only", "Output HTML fragment.").Bool()
+	htmlInlineStyleFlag = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
 
 	filesArgs = kingpin.Arg("files", "Files to highlight.").ExistingFiles()
 )
@@ -50,6 +56,24 @@ func main() {
 	}
 	w := bufio.NewWriterSize(os.Stdout, 16384)
 	defer w.Flush()
+	if *formatterFlag == "html" {
+		options := []html.Option{}
+		if *htmlPrefixFlag != "" {
+			options = append(options, html.ClassPrefix(*htmlPrefixFlag))
+		}
+		if !*htmlOnlyFlag {
+			options = append(options, html.Standalone())
+		}
+		if !*htmlInlineStyleFlag {
+			options = append(options, html.WithClasses())
+		}
+		if *htmlStylesFlag {
+			formatter := html.New(html.WithClasses())
+			formatter.WriteStyles(w, styles.Get(*styleFlag))
+			return
+		}
+		formatters.Register("html", html.New(options...))
+	}
 	writer := getWriter(w)
 	if len(*filesArgs) == 0 {
 		contents, err := ioutil.ReadAll(os.Stdin)
@@ -100,7 +124,7 @@ func lex(path string, contents string, writer func(*chroma.Token)) {
 }
 
 func selexer(path, contents string) (lexer chroma.Lexer) {
-	if *lexerFlag != "autodetect" {
+	if *lexerFlag != "" {
 		return lexers.Get(*lexerFlag)
 	}
 	if path != "" {

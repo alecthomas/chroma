@@ -68,8 +68,12 @@ type TokeniseOptions struct {
 	State string
 }
 
+// A Lexer for tokenising source code.
 type Lexer interface {
+	// Config describing the features of the Lexer.
 	Config() *Config
+	// Tokenise text and call out for each generated token.
+	// nil will be passed to out to signify the end of the stream.
 	Tokenise(options *TokeniseOptions, text string, out func(*Token)) error
 }
 
@@ -95,7 +99,7 @@ func (l Lexers) Pick(text string) Lexer {
 	return picked
 }
 
-// Analyser determines if this lexer is appropriate for the given text.
+// Analyser determines how appropriate this lexer is for the given text.
 type Analyser interface {
 	AnalyseText(text string) float32
 }
@@ -287,6 +291,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string, out func(*T
 			rule.Type.Emit(state.Groups, r, out)
 		}
 	}
+	out(&Token{Type: EOF})
 	return nil
 }
 

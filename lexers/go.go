@@ -68,7 +68,7 @@ var Go = Register(MustNewLexer(
 		},
 	},
 ).SetAnalyser(func(text string) float32 {
-	if strings.Contains(text, "fmt.") {
+	if strings.Contains(text, "fmt.") && strings.Contains(text, "package ") {
 		return 0.5
 	}
 	if strings.Contains(text, "package ") {

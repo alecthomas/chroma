@@ -16,6 +16,7 @@ func TestCoalesce(t *testing.T) {
 	require.NoError(t, err)
 	expected := []*Token{
 		&Token{Punctuation, "!@#$"},
+		&Token{EOF, ""},
 	}
 	require.Equal(t, expected, actual)
 }

@@ -1,5 +1,16 @@
 package chroma
 
+// Scheme is either dark or light.
+type Scheme int
+
+// Theme types.
+const (
+	DarkScheme Scheme = iota
+	LightScheme
+)
+
+//go:generate stringer -type TokenType
+
 // TokenType is the type of token to highlight.
 //
 // It is also an Emitter, emitting a single token of itself
@@ -10,10 +21,14 @@ type TokenType int
 // Categories of types are grouped in ranges of 1000, while sub-categories are in ranges of 100. For
 // example, the literal category is in the range 3000-3999. The sub-category for literal strings is
 // in the range 3100-3199.
+
+// Meta token types.
 const (
-	Escape TokenType = iota
+	Background TokenType = -1 - iota
+	Escape
 	Error
 	Other
+	EOF
 )
 
 // Keywords.
@@ -44,6 +59,7 @@ const (
 	NameLabel
 	NameNamespace
 	NameOther
+	NameOperator
 	NameTag
 	NameVariable
 	NameVariableClass

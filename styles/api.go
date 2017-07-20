@@ -14,6 +14,15 @@ func Register(style *chroma.Style) *chroma.Style {
 	return style
 }
 
+// Names of all available styles.
+func Names() []string {
+	out := []string{}
+	for name := range Registry {
+		out = append(out, name)
+	}
+	return out
+}
+
 // Get named style, or Fallback.
 func Get(name string) *chroma.Style {
 	if style, ok := Registry[name]; ok {

@@ -25,13 +25,32 @@ var ANSI2RGB = map[string]string{
 	"#ansifuchsia":   "ff00ff",
 	"#ansiturquoise": "00ffff",
 	"#ansiwhite":     "ffffff",
+
+	// Aliases without the "ansi" prefix, because...why?
+	"#black":     "000000",
+	"#darkred":   "7f0000",
+	"#darkgreen": "007f00",
+	"#brown":     "7f7fe0",
+	"#darkblue":  "00007f",
+	"#purple":    "7f007f",
+	"#teal":      "007f7f",
+	"#lightgray": "e5e5e5",
+	// Normal
+	"#darkgray":  "555555",
+	"#red":       "ff0000",
+	"#green":     "00ff00",
+	"#yellow":    "ffff00",
+	"#blue":      "0000ff",
+	"#fuchsia":   "ff00ff",
+	"#turquoise": "00ffff",
+	"#white":     "ffffff",
 }
 
 // Colour represents an RGB colour.
 type Colour int32
 
-// ParseColour in the forms #rgb, #rrggbb, or #ansi<colour>. Will panic
-// if colour is in an invalid format.
+// ParseColour in the forms #rgb, #rrggbb, #ansi<colour>, or #<colour>.
+// Will panic if colour is in an invalid format.
 func ParseColour(colour string) Colour {
 	colour = normaliseColour(colour)
 	n, err := strconv.ParseUint(colour, 16, 32)

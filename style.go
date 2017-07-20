@@ -1,9 +1,9 @@
 package chroma
 
-import "strings"
-
-// InheritStyle from entry with this key.
-const InheritStyle TokenType = -1
+import (
+	"sort"
+	"strings"
+)
 
 // A StyleEntry in the Style map.
 type StyleEntry struct {
@@ -17,31 +17,54 @@ type StyleEntry struct {
 	Underline bool
 }
 
-func (e *StyleEntry) String() string {
+func (s *StyleEntry) String() string {
 	out := []string{}
-	if e.Bold {
+	if s.Bold {
 		out = append(out, "bold")
 	}
-	if e.Italic {
+	if s.Italic {
 		out = append(out, "italic")
 	}
-	if e.Underline {
+	if s.Underline {
 		out = append(out, "underline")
 	}
-	if e.Colour.IsSet() {
-		out = append(out, e.Colour.String())
+	if s.Colour.IsSet() {
+		out = append(out, s.Colour.String())
 	}
-	if e.Background.IsSet() {
-		out = append(out, "bg:"+e.Background.String())
+	if s.Background.IsSet() {
+		out = append(out, "bg:"+s.Background.String())
 	}
-	if e.Border.IsSet() {
-		out = append(out, "border:"+e.Border.String())
+	if s.Border.IsSet() {
+		out = append(out, "border:"+s.Border.String())
 	}
 	return strings.Join(out, " ")
 }
 
-func (e *StyleEntry) IsZero() bool {
-	return e.Colour == 0 && e.Background == 0 && e.Border == 0 && !e.Bold && !e.Italic && !e.Underline
+func (s *StyleEntry) IsZero() bool {
+	return s.Colour == 0 && s.Background == 0 && s.Border == 0 && !s.Bold && !s.Italic && !s.Underline
+}
+
+func (s *StyleEntry) Sub(e *StyleEntry) *StyleEntry {
+	out := &StyleEntry{}
+	if e.Colour != s.Colour {
+		out.Colour = s.Colour
+	}
+	if e.Background != s.Background {
+		out.Background = s.Background
+	}
+	if e.Bold != s.Bold {
+		out.Bold = s.Bold
+	}
+	if e.Italic != s.Italic {
+		out.Italic = s.Italic
+	}
+	if e.Underline != s.Underline {
+		out.Underline = s.Underline
+	}
+	if e.Border != s.Border {
+		out.Border = s.Border
+	}
+	return out
 }
 
 // StyleEntries mapping TokenType to colour definition.
@@ -50,14 +73,11 @@ type StyleEntries map[TokenType]string
 // NewStyle creates a new style definition.
 func NewStyle(name string, entries StyleEntries) *Style {
 	s := &Style{
-		Name: name,
-		Entries: map[TokenType]*StyleEntry{
-			InheritStyle: &StyleEntry{},
-		},
+		Name:    name,
+		Entries: map[TokenType]*StyleEntry{},
 	}
-	for tt, entry := range entries {
-		s.Add(tt, entry)
-	}
+	s.Add(Background, "")
+	s.AddAll(entries)
 	return s
 }
 
@@ -66,6 +86,7 @@ func NewStyle(name string, entries StyleEntries) *Style {
 // See http://pygments.org/docs/styles/ for details. Semantics are intended to be identical.
 type Style struct {
 	Name    string
+	Scheme  Scheme
 	Entries map[TokenType]*StyleEntry
 }
 
@@ -78,29 +99,66 @@ func (s *Style) Get(ttype TokenType) *StyleEntry {
 		if out == nil {
 			out = s.Entries[ttype.Category()]
 			if out == nil {
-				out = s.Entries[InheritStyle]
+				out = s.Entries[Background]
 			}
 		}
 	}
 	return out
 }
 
-// Add an StyleEntry to the Style map.
+func (s *Style) AddAll(entries StyleEntries) *Style {
+	tis := []int{}
+	for tt := range entries {
+		tis = append(tis, int(tt))
+	}
+	sort.Ints(tis)
+	for _, ti := range tis {
+		tt := TokenType(ti)
+		entry := entries[tt]
+		s.Add(tt, entry)
+	}
+	return s
+}
+
+// Add a StyleEntry to the Style map.
 //
 // See http://pygments.org/docs/styles/#style-rules for details.
 func (s *Style) Add(ttype TokenType, entry string) *Style { // nolint: gocyclo
-	out := &StyleEntry{}
 	dupl := s.Entries[ttype.SubCategory()]
 	if dupl == nil {
 		dupl = s.Entries[ttype.Category()]
 		if dupl == nil {
-			dupl = s.Entries[InheritStyle]
+			dupl = s.Entries[Background]
+			if dupl == nil {
+				dupl = &StyleEntry{}
+			}
 		}
 	}
 	parent := &StyleEntry{}
 	// Duplicate ancestor node.
 	*parent = *dupl
-	for _, part := range strings.Fields(entry) {
+	s.Entries[ttype] = ParseStyleEntry(parent, entry)
+	return s
+}
+
+// ParseStyleEntry parses a Pygments style entry.
+func ParseStyleEntry(parent *StyleEntry, entry string) *StyleEntry { // nolint: gocyclo
+	out := &StyleEntry{}
+	parts := strings.Fields(entry)
+	// Check if parent style should be inherited...
+	if parent != nil {
+		inherit := true
+		for _, part := range parts {
+			if part == "noinherit" {
+				inherit = false
+				break
+			}
+		}
+		if inherit {
+			*out = *parent
+		}
+	}
+	for _, part := range parts {
 		switch {
 		case part == "italic":
 			out.Italic = true
@@ -114,8 +172,8 @@ func (s *Style) Add(ttype TokenType, entry string) *Style { // nolint: gocyclo
 			out.Underline = true
 		case part == "nounderline":
 			out.Underline = false
-		case part == "noinherit":
-			parent = &StyleEntry{}
+		case part == "bg:":
+			out.Background = 0
 		case strings.HasPrefix(part, "bg:#"):
 			out.Background = ParseColour(part[3:])
 		case strings.HasPrefix(part, "border:#"):
@@ -126,24 +184,5 @@ func (s *Style) Add(ttype TokenType, entry string) *Style { // nolint: gocyclo
 			panic("unsupported style entry " + part)
 		}
 	}
-	if parent.Colour != 0 && out.Colour == 0 {
-		out.Colour = parent.Colour
-	}
-	if parent.Background != 0 && out.Background == 0 {
-		out.Background = parent.Background
-	}
-	if parent.Border != 0 && out.Border == 0 {
-		out.Border = parent.Border
-	}
-	if parent.Bold && !out.Bold {
-		out.Bold = true
-	}
-	if parent.Italic && !out.Italic {
-		out.Italic = true
-	}
-	if parent.Underline && !out.Underline {
-		out.Underline = true
-	}
-	s.Entries[ttype] = out
-	return s
+	return out
 }
