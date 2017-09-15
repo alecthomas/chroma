@@ -6,14 +6,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestStyleAddNoInherit(t *testing.T) {
-	s := NewStyle("test", StyleEntries{
-		Name:         "bold #f00",
-		NameVariable: "noinherit #fff",
-	})
-	require.Equal(t, &StyleEntry{Colour: 0x1000000}, s.Get(NameVariable))
-}
-
 func TestStyleInherit(t *testing.T) {
 	s := NewStyle("test", StyleEntries{
 		Name:         "bold #f00",

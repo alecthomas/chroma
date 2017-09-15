@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/dlclark/regexp2"
 )
 
 var (
@@ -195,7 +197,7 @@ func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 			if config.DotAll {
 				flags += "s"
 			}
-			re, err := regexp.Compile("^(?" + flags + ")(?:" + rule.Pattern + ")")
+			re, err := regexp2.Compile("^(?"+flags+")(?:"+rule.Pattern+")", 0)
 			if err != nil {
 				return nil, fmt.Errorf("invalid regex %q for state %q: %s", rule.Pattern, state, err)
 			}
@@ -212,7 +214,7 @@ func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 // A CompiledRule is a Rule with a pre-compiled regex.
 type CompiledRule struct {
 	Rule
-	Regexp *regexp.Regexp
+	Regexp *regexp2.Regexp
 }
 
 type CompiledRules map[string][]CompiledRule
@@ -262,26 +264,17 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string, out func(*T
 	}
 	for state.Pos < len(text) && len(state.Stack) > 0 {
 		state.State = state.Stack[len(state.Stack)-1]
-		ruleIndex, rule, index := matchRules(state.Text[state.Pos:], state.Rules[state.State])
-		// fmt.Println(text[state.Pos:state.Pos+1], rule, state.Text[state.Pos:state.Pos+1])
+		ruleIndex, rule, groups := matchRules(state.Text[state.Pos:], state.Rules[state.State])
 		// No match.
-		if index == nil {
+		if groups == nil {
 			out(&Token{Error, state.Text[state.Pos : state.Pos+1]})
 			state.Pos++
 			continue
 		}
 		state.Rule = ruleIndex
 
-		state.Groups = make([]string, len(index)/2)
-		for i := 0; i < len(index); i += 2 {
-			start := state.Pos + index[i]
-			end := state.Pos + index[i+1]
-			if start == -1 || end == -1 {
-				continue
-			}
-			state.Groups[i/2] = text[start:end]
-		}
-		state.Pos += index[1]
+		state.Groups = groups
+		state.Pos += len(groups[0])
 		if rule.Mutator != nil {
 			if err := rule.Mutator.Mutate(state); err != nil {
 				return err
@@ -301,10 +294,15 @@ func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]*Token, err
 	return out, lexer.Tokenise(options, text, func(token *Token) { out = append(out, token) })
 }
 
-func matchRules(text string, rules []CompiledRule) (int, CompiledRule, []int) {
+func matchRules(text string, rules []CompiledRule) (int, CompiledRule, []string) {
 	for i, rule := range rules {
-		if index := rule.Regexp.FindStringSubmatchIndex(text); index != nil {
-			return i, rule, index
+		match, err := rule.Regexp.FindStringMatch(text)
+		if match != nil && err == nil {
+			groups := []string{}
+			for _, g := range match.Groups() {
+				groups = append(groups, g.String())
+			}
+			return i, rule, groups
 		}
 	}
 	return 0, CompiledRule{}, nil

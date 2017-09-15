@@ -136,7 +136,7 @@ func (h *HTMLFormatter) formatWithClasses(w io.Writer, style *chroma.Style) (fun
 	}, nil
 }
 
-// WriteStyles writes style definitions.
+// WriteStyles writes style definitions (without any surrounding HTML).
 func (h *HTMLFormatter) WriteStyles(w io.Writer, style *chroma.Style) {
 	classes := h.typeStyles(style)
 	fmt.Fprintf(w, "/* %s */ .chroma { %s }\n", chroma.Background, classes[chroma.Background])
@@ -156,7 +156,6 @@ func (h *HTMLFormatter) WriteStyles(w io.Writer, style *chroma.Style) {
 }
 
 func (h *HTMLFormatter) typeStyles(style *chroma.Style) map[chroma.TokenType]string {
-	// Generate maps.
 	bg := style.Get(chroma.Background)
 	classes := map[chroma.TokenType]string{}
 	for t := range style.Entries {
