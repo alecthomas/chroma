@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/signal"
+	"runtime"
 	"runtime/pprof"
 	"strings"
 
@@ -17,6 +18,8 @@ import (
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
+	"github.com/mattn/go-colorable"
+	"github.com/mattn/go-isatty"
 )
 
 var (
@@ -59,7 +62,11 @@ command, for Go.
 		}()
 		defer pprof.StopCPUProfile()
 	}
-	w := bufio.NewWriterSize(os.Stdout, 16384)
+	var out io.Writer = os.Stdout
+	if runtime.GOOS == "windows" && isatty.IsTerminal(os.Stdout.Fd()) {
+		out = colorable.NewColorableStdout()
+	}
+	w := bufio.NewWriterSize(out, 16384)
 	defer w.Flush()
 	if *htmlFlag {
 		*formatterFlag = "html"
