@@ -7,8 +7,8 @@ import (
 )
 
 func TestCompressStyle(t *testing.T) {
-	style := "color: #888888; background-color: #ffffff"
+	style := "color: #888888; background-color: #faffff"
 	actual := compressStyle(style)
-	expected := "color:#888;background-color:#fff"
+	expected := "color:#888;background-color:#faffff"
 	require.Equal(t, expected, actual)
 }

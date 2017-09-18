@@ -1,14 +1,5 @@
 package chroma
 
-// Scheme is either dark or light.
-type Scheme int
-
-// Theme types.
-const (
-	DarkScheme Scheme = iota
-	LightScheme
-)
-
 //go:generate stringer -type TokenType
 
 // TokenType is the type of token to highlight.

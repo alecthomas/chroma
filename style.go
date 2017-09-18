@@ -86,7 +86,6 @@ func NewStyle(name string, entries StyleEntries) *Style {
 // See http://pygments.org/docs/styles/ for details. Semantics are intended to be identical.
 type Style struct {
 	Name    string
-	Scheme  Scheme
 	Entries map[TokenType]*StyleEntry
 }
 
