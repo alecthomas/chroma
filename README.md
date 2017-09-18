@@ -1,5 +1,8 @@
 # Chroma - A general purpose syntax highlighter for Go
 
+Chroma takes source code and other structured text and converts it into syntax
+highlighted output, as HTML, ANSI-coloured text, etc.
+
 Chroma is based heavily on [Pygments](http://pygments.org/), and includes
 translaters for Pygments lexers and styles.
 
