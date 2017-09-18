@@ -7,6 +7,7 @@ perl6:
 
 kotlin:
   invalid unicode escape sequences
+  FIXED: Have to disable wide Unicode characters in unistring.py
 
 pygments.lexers.ambient.AmbientTalkLexer
 pygments.lexers.ampl.AmplLexer
