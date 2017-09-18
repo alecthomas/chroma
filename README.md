@@ -1,4 +1,4 @@
-# Chroma - A general purpose syntax highlighter for Go
+# Chroma - A general purpose syntax highlighter for Go [![](https://godoc.org/github.com/alecthomas/chroma?status.svg)](http://godoc.org/github.com/alecthomas/chroma) [![Build Status](https://travis-ci.org/alecthomas/chroma.png)](https://travis-ci.org/alecthomas/chroma)
 
 Chroma takes source code and other structured text and converts it into syntax
 highlighted HTML, ANSI-coloured text, etc.
@@ -11,7 +11,7 @@ translaters for Pygments lexers and styles.
 <!-- MarkdownTOC -->
 
 - [Using the library](#using-the-library)
-- [Quick start](#quick-start)
+  - [Quick start](#quick-start)
   - [Identifying the language](#identifying-the-language)
   - [Formatting the output](#formatting-the-output)
   - [The HTML formatter](#the-html-formatter)
@@ -44,7 +44,7 @@ In all cases, if a lexer, formatter or style can not be determined, `nil` will
 be returned. In this situation you may want to default to the `Fallback`
 value in each respective package, which provides sane defaults.
 
-## Quick start
+### Quick start
 
 A convenience function exists that can be used to simply format some source
 text, without any effort:
