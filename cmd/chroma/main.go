@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -26,6 +27,7 @@ var (
 	styleFlag     = kingpin.Flag("style", "Style to use for formatting.").Short('s').Default("swapoff").Enum(styles.Names()...)
 	formatterFlag = kingpin.Flag("formatter", "Formatter to use.").Default("terminal").Short('f').Enum(formatters.Names()...)
 
+	htmlFlag            = kingpin.Flag("html", "Enable HTML mode (equivalent to '--formatter html').").Bool()
 	htmlPrefixFlag      = kingpin.Flag("html-prefix", "HTML CSS class prefix.").PlaceHolder("PREFIX").String()
 	htmlStylesFlag      = kingpin.Flag("html-styles", "Output HTML CSS styles.").Bool()
 	htmlOnlyFlag        = kingpin.Flag("html-only", "Output HTML fragment.").Bool()
@@ -35,6 +37,10 @@ var (
 )
 
 func main() {
+	kingpin.CommandLine.Help = `
+Chroma is a general purpose syntax highlighting library and corresponding
+command, for Go.
+`
 	kingpin.Parse()
 	if *listFlag {
 		listAll()
@@ -53,9 +59,11 @@ func main() {
 		}()
 		defer pprof.StopCPUProfile()
 	}
-	// w := bufio.NewWriterSize(os.Stdout, 16384)
-	w := os.Stdout
-	// defer w.Flush()
+	w := bufio.NewWriterSize(os.Stdout, 16384)
+	defer w.Flush()
+	if *htmlFlag {
+		*formatterFlag = "html"
+	}
 	if *formatterFlag == "html" {
 		options := []html.Option{}
 		if *htmlPrefixFlag != "" {

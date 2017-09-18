@@ -7,11 +7,12 @@ import (
 	"github.com/alecthomas/chroma/formatters/html"
 )
 
-// NoOp formatter.
 var (
+	// NoOp formatter.
 	NoOp = Register("noop", chroma.FormatterFunc(func(w io.Writer, s *chroma.Style) (func(*chroma.Token), error) {
 		return func(t *chroma.Token) { io.WriteString(w, t.Value) }, nil
 	}))
+	// Default HTML formatter outputs self-contained HTML.
 	htmlFull = Register("html", html.New(html.Standalone(), html.WithClasses()))
 )
 

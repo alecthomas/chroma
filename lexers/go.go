@@ -10,7 +10,7 @@ import (
 var Go = Register(MustNewLexer(
 	&Config{
 		Name:      "Go",
-		Aliases:   []string{"go"},
+		Aliases:   []string{"go", "golang"},
 		Filenames: []string{"*.go"},
 		MimeTypes: []string{"text/x-gosrc"},
 	},

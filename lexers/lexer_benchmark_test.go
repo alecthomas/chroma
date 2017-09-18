@@ -27,6 +27,7 @@ func (f FormatterFunc) Format(w io.Writer, s *Style) (func(*Token), error) {
 `
 
 func Benchmark(b *testing.B) {
+	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		Go.Tokenise(nil, lexerBenchSource, func(t *chroma.Token) {})
 	}

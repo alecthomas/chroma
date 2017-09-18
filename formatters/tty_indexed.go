@@ -259,7 +259,11 @@ func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style) (func(*ch
 }
 
 // TTY8 is an 8-colour terminal formatter.
+//
+// The Lab colour space is used to map RGB values to the most appropriate index colour.
 var TTY8 = Register("terminal", &indexedTTYFormatter{ttyTables[8]})
 
 // TTY256 is a 256-colour terminal formatter.
+//
+// The Lab colour space is used to map RGB values to the most appropriate index colour.
 var TTY256 = Register("terminal256", &indexedTTYFormatter{ttyTables[256]})

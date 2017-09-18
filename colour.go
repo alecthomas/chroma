@@ -74,14 +74,6 @@ func (c Colour) Green() uint8 { return uint8(((c - 1) >> 8) & 0xff) }
 // Blue component of colour.
 func (c Colour) Blue() uint8 { return uint8((c - 1) & 0xff) }
 
-// Distance squared between two colours.
-func (c Colour) Distance(other Colour) int {
-	rd := int(c.Red() - other.Red())
-	gd := int(c.Green() - other.Green())
-	bd := int(c.Blue() - other.Blue())
-	return rd*rd + gd*gd + bd*bd
-}
-
 // Colours is an orderable set of colours.
 type Colours []Colour
 

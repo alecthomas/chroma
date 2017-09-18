@@ -4,8 +4,8 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-// Php lexer.
-var Php = Register(MustNewLexer(
+// PHP lexer.
+var PHP = Register(MustNewLexer(
 	&Config{
 		Name:            "PHP",
 		Aliases:         []string{"php", "php3", "php4", "php5"},
