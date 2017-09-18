@@ -10,6 +10,7 @@ translaters for Pygments lexers and styles.
 
 <!-- MarkdownTOC -->
 
+- [Supported languages](#supported-languages)
 - [Using the library](#using-the-library)
   - [Quick start](#quick-start)
   - [Identifying the language](#identifying-the-language)
@@ -23,6 +24,28 @@ translaters for Pygments lexers and styles.
 - [What's missing compared to Pygments?](#whats-missing-compared-to-pygments)
 
 <!-- /MarkdownTOC -->
+
+## Supported languages
+
+ABNF, ActionScript, ActionScript 3, Ada, Angular2, ANTLR, ApacheConf, APL,
+AppleScript, Awk, Bash, Batchfile, BlitzBasic, BNF, Brainfuck, C, Cap'n
+Proto, Ceylon, CFEngine3, ChaiScript, Python, Cheetah, Common Lisp, Clojure,
+COBOL, CoffeeScript, cfstatement, Coq, C++, Crystal, CSS, Cython, Dart, Diff,
+Django/Jinja, Docker, DTD, EBNF, Elixir, Elm, EmacsLisp, Erlang, Factor, Fish,
+Forth, Fortran, FSharp, GAS, Genshi Text, GLSL, Gnuplot, Go, Groovy,
+Handlebars, Haskell, Haxe, JavaScript, HTML, Hy, Idris, INI, Io, Java, JSON,
+Julia, Kotlin, Lighttpd configuration file, LLVM, Lua, Base Makefile, Mako,
+markdown, Perl, Mason, Mathematica, Modula-2, Myghty, MySQL, NASM, Newspeak,
+Nginx configuration file, Nimrod, OCaml, Octave, PacmanConf, PHP, Pig,
+PkgConfig, PL/pgSQL, PostgreSQL SQL dialect, PostScript, POVRay, PowerShell,
+Prolog, Protocol Buffer, Puppet, Python 3, QBasic, Racket, Ragel, reg, Rexx,
+Ruby, Rust, Sass, Scala, Scheme, Scilab, Smalltalk, Smarty, Snobol, SPARQL,
+SQL, SquidConf, Swift, TASM, Tcl, Tcsh, Termcap, Terminfo, Terraform, Thrift,
+Transact-SQL, Turtle, Twig, TypeScript, TypoScript, verilog, vhdl, VimL, XML,
+Xorg
+
+_I will attempt to keep this section up to date, but an authoritative list can be
+displayed with `chroma --list`._
 
 ## Using the library
 
