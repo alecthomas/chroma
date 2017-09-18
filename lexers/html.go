@@ -41,11 +41,11 @@ var HTML = Register(MustNewLexer(
 		},
 		"script-content": {
 			{`(<)(\s*)(/)(\s*)(script)(\s*)(>)`, ByGroups(Punctuation, Text, Punctuation, Text, NameTag, Text, Punctuation), Pop(1)},
-			{`(.+?)(<\s*/\s*script\s*>)`, Using(JavaScript, nil), Rewind()},
+			{`.+?(?=<\s*/\s*script\s*>)`, Using(Javascript, nil), nil},
 		},
 		"style-content": {
 			{`(<)(\s*)(/)(\s*)(style)(\s*)(>)`, ByGroups(Punctuation, Text, Punctuation, Text, NameTag, Text, Punctuation), Pop(1)},
-			{`(.+?)(<\s*/\s*style\s*>)`, Using(CSS, nil), Rewind()},
+			{`.+?(?=<\s*/\s*style\s*>)`, Using(CSS, nil), nil},
 		},
 		"attr": {
 			{`".*?"`, LiteralString, Pop(1)},

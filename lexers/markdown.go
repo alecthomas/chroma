@@ -12,25 +12,24 @@ var Markdown = Register(MustNewLexer(
 		Filenames: []string{"*.md"},
 		MimeTypes: []string{"text/x-markdown"},
 	},
-	map[string][]Rule{
-		"root": []Rule{
+	Rules{
+		"root": {
 			{`^(#)([^#].+\n)`, ByGroups(GenericHeading, Text), nil},
 			{`^(#{2,6})(.+\n)`, ByGroups(GenericSubheading, Text), nil},
 			{`^(\s*)([*-] )(\[[ xX]\])( .+\n)`, ByGroups(Text, Keyword, Keyword, UsingSelf("inline")), nil},
 			{`^(\s*)([*-])(\s)(.+\n)`, ByGroups(Text, Keyword, Text, UsingSelf("inline")), nil},
 			{`^(\s*)([0-9]+\.)( .+\n)`, ByGroups(Text, Keyword, UsingSelf("inline")), nil},
 			{`^(\s*>\s)(.+\n)`, ByGroups(Keyword, GenericEmph), nil},
-			{"^(```\n)([\\w\\W]*?)(^```$)", ByGroups(String, Text, String), nil},
-			{"^(```)(\\w+)(\n)([\\w\\W]*?)(^```$)", EmitterFunc(handleCodeblock), nil},
-			Include(`inline`),
+			{"^(```\\n)([\\w\\W]*?)(^```$)", ByGroups(LiteralString, Text, LiteralString), nil},
+			{"^(```)(\\w+)(\\n)([\\w\\W]*?)(^```$)", EmitterFunc(handleCodeblock), nil},
+			Include("inline"),
 		},
-		`inline`: []Rule{
+		"inline": {
 			{`\\.`, Text, nil},
 			{`(\s)([*_][^*_]+[*_])(\W|\n)`, ByGroups(Text, GenericEmph, Text), nil},
-			{`(\s)(__.*?__)`, ByGroups(Whitespace, GenericUnderline), nil},
-			{`(\s)(\*\*.*\*\*)`, ByGroups(Text, GenericStrong), nil},
-			{`(\s)(~~[^~]+~~)`, ByGroups(Text, GenericDeleted), nil},
-			{"`[^`]+`", StringBacktick, nil},
+			{`(\s)((\*\*|__).*\3)((?=\W|\n))`, ByGroups(Text, GenericStrong, None, Text), nil},
+			{`(\s)(~~[^~]+~~)((?=\W|\n))`, ByGroups(Text, GenericDeleted, Text), nil},
+			{"`[^`]+`", LiteralStringBacktick, nil},
 			{`[@#][\w/:]+`, NameEntity, nil},
 			{`(!?\[)([^]]+)(\])(\()([^)]+)(\))`, ByGroups(Text, NameTag, Text, Text, NameAttribute, Text), nil},
 			{`[^\\\s]+`, Text, nil},
@@ -45,6 +44,10 @@ func handleCodeblock(groups []string, lexer Lexer, out func(*Token)) {
 	out(&Token{Text, groups[3]})
 	code := groups[4]
 	lexer = Get(groups[2])
-	lexer.Tokenise(nil, code, out)
+	if lexer == nil {
+		out(&Token{String, code})
+	} else {
+		lexer.Tokenise(nil, code, out)
+	}
 	out(&Token{String, groups[5]})
 }

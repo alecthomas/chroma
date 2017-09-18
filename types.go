@@ -28,6 +28,7 @@ const (
 	Escape
 	Error
 	Other
+	None
 	EOF
 )
 
@@ -55,13 +56,16 @@ const (
 	NameException
 	NameFunction
 	NameFunctionMagic
-	NameProperty
+	NameKeyword
 	NameLabel
 	NameNamespace
-	NameOther
 	NameOperator
+	NameOther
+	NamePseudo
+	NameProperty
 	NameTag
 	NameVariable
+	NameVariableAnonymous
 	NameVariableClass
 	NameVariableGlobal
 	NameVariableInstance
@@ -72,13 +76,16 @@ const (
 const (
 	Literal TokenType = 3000 + iota
 	LiteralDate
+	LiteralOther
 )
 
 // Strings.
 const (
 	LiteralString TokenType = 3100 + iota
 	LiteralStringAffix
+	LiteralStringAtom
 	LiteralStringBacktick
+	LiteralStringBoolean
 	LiteralStringChar
 	LiteralStringDelimiter
 	LiteralStringDoc
@@ -86,11 +93,11 @@ const (
 	LiteralStringEscape
 	LiteralStringHeredoc
 	LiteralStringInterpol
+	LiteralStringName
 	LiteralStringOther
 	LiteralStringRegex
 	LiteralStringSingle
 	LiteralStringSymbol
-	LiteralStringName
 )
 
 // Literals.
@@ -150,6 +157,8 @@ const (
 const (
 	Text TokenType = 8000 + iota
 	TextWhitespace
+	TextSymbol
+	TextPunctuation
 )
 
 // Aliases.

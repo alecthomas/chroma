@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -54,8 +53,9 @@ func main() {
 		}()
 		defer pprof.StopCPUProfile()
 	}
-	w := bufio.NewWriterSize(os.Stdout, 16384)
-	defer w.Flush()
+	// w := bufio.NewWriterSize(os.Stdout, 16384)
+	w := os.Stdout
+	// defer w.Flush()
 	if *formatterFlag == "html" {
 		options := []html.Option{}
 		if *htmlPrefixFlag != "" {

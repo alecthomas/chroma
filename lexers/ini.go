@@ -4,20 +4,20 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-var INI = Register(MustNewLexer(
+// Ini lexer.
+var Ini = Register(MustNewLexer(
 	&Config{
 		Name:      "INI",
 		Aliases:   []string{"ini", "cfg", "dosini"},
 		Filenames: []string{"*.ini", "*.cfg", "*.inf"},
 		MimeTypes: []string{"text/x-ini", "text/inf"},
 	},
-	map[string][]Rule{
-		"root": []Rule{
-			{`\s+`, Whitespace, nil},
-			{`;.*?$`, Comment, nil},
+	Rules{
+		"root": {
+			{`\s+`, Text, nil},
+			{`[;#].*`, CommentSingle, nil},
 			{`\[.*?\]$`, Keyword, nil},
-			{`(.*?)(\s*)(=)(\s*)(.*?)$`, ByGroups(Name, Whitespace, Operator, Whitespace, String), nil},
-			// standalone option, supported by some INI parsers
+			{`(.*?)([ \t]*)(=)([ \t]*)(.*(?:\n[ \t].+)*)`, ByGroups(NameAttribute, Text, Operator, Text, LiteralString), nil},
 			{`(.+?)$`, NameAttribute, nil},
 		},
 	},

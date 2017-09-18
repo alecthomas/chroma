@@ -1,9 +1,10 @@
-import re
-import os
+import functools
 import importlib
+import json
+import os
+import re
 import sys
 import types
-import json
 
 import pystache
 from pygments import lexer as pygments_lexer
@@ -47,13 +48,11 @@ var {{upper_name}} = Register(MustNewLexer(
 '''
 
 
+def go_regex(s):
+    return go_string(s)
+
+
 def go_string(s):
-    # TODO: Search for substring ranges and convert them to character classes.
-    #
-    # This seems to commonly occur with Unicode character classes, which presumably
-    # aren't supported by Python's regex engine.
-    if '(?<' in s:
-        warning('perl regex found in %r' % s)
     if '`' not in s:
         return '`' + s + '`'
     return json.dumps(s)
@@ -105,6 +104,8 @@ def resolve_emitter(emitter):
 
 
 def process_state_action(action):
+    if isinstance(action, tuple):
+        return functools.reduce(lambda a, b: a + b, (process_state_action(a) for a in action))
     if action.startswith('#'):
         action = action[1:]
         if action== 'pop':
@@ -119,7 +120,7 @@ def process_state_action(action):
             raise ValueError('unsupported action %r' % (action,))
     else:
         action = 'Push("%s")' % action
-    return action
+    return (action,)
 
 
 def translate_rules(rules):
@@ -128,16 +129,18 @@ def translate_rules(rules):
         if isinstance(rule, tuple):
             regex = rule[0]
             if isinstance(regex, str):
-                regex = go_string(regex)
+                regex = go_regex(regex)
             elif isinstance(regex, pygments_lexer.words):
-                regex = go_string('`%s(?:%s)%s`' % (regex.prefix, '|'.join(regex.words), regex.suffix))
+                regex = 'Words(%s, %s, %s)' % (go_string(regex.prefix),
+                                               go_string(regex.suffix),
+                                               ', '.join(go_string(w) for w in regex.words))
             else:
                 raise ValueError('expected regex string but got %r' % regex)
             emitter = resolve_emitter(rule[1])
             if len(rule) == 2:
                 modifier = 'nil'
             elif type(rule[2]) is str:
-                modifier = process_state_action(rule[2])
+                modifier = process_state_action(rule[2])[0]
             elif isinstance(rule[2], pygments_lexer.combined):
                 modifier = 'Combined("%s")' % '", "'.join(rule[2])
             elif type(rule[2]) is tuple:
@@ -148,7 +151,7 @@ def translate_rules(rules):
         elif isinstance(rule, pygments_lexer.include):
             out.append('Include("{}")'.format(rule))
         elif isinstance(rule, pygments_lexer.default):
-            out.append('Default({})'.format(process_state_action(rule.state)))
+            out.append('Default({})'.format(', '.join(process_state_action(rule.state))))
         else:
             raise ValueError('unsupported rule %r' % (rule,))
     return out

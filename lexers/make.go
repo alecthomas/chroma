@@ -7,10 +7,10 @@ import (
 // Makefile lexer.
 var Makefile = Register(MustNewLexer(
 	&Config{
-		Name:      "Makefile",
-		Aliases:   []string{"make", "makefile", "mf", "bsdmake"},
-		Filenames: []string{"*.mak", "*.mk", "Makefile", "makefile", "Makefile.*", "GNUmakefile"},
-		MimeTypes: []string{"text/x-makefile"},
+		Name:      "Base Makefile",
+		Aliases:   []string{"make"},
+		Filenames: []string{},
+		MimeTypes: []string{},
 	},
 	Rules{
 		"root": {
@@ -18,7 +18,7 @@ var Makefile = Register(MustNewLexer(
 			{`\$[<@$+%?|*]`, Keyword, nil},
 			{`\s+`, Text, nil},
 			{`#.*?\n`, Comment, nil},
-			{`(export)(\s+)`, ByGroups(Keyword, Text), Push("export")},
+			{`(export)(\s+)(?=[\w${}\t -]+\n)`, ByGroups(Keyword, Text), Push("export")},
 			{`export\s+`, Keyword, nil},
 			{`([\w${}().-]+)(\s*)([!?:+]?=)([ \t]*)((?:.*\\\n)+|.*\n)`, ByGroups(NameVariable, Text, Operator, Text, Using(Bash, nil)), nil},
 			{`(?s)"(\\\\|\\.|[^"\\])*"`, LiteralStringDouble, nil},

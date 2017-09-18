@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/dlclark/regexp2"
 )
@@ -54,6 +55,9 @@ type Config struct {
 
 	// If given and greater than 0, expand tabs in the input.
 	// TabSize int
+
+	// Whether to track how long rules take to process.
+	TimeRules bool
 }
 
 // Token output to formatter.
@@ -153,11 +157,11 @@ func UsingSelf(state string) Emitter {
 }
 
 // Words creates a regex that matches any of the given literal words.
-func Words(words ...string) string {
+func Words(prefix, suffix string, words ...string) string {
 	for i, word := range words {
 		words[i] = regexp.QuoteMeta(word)
 	}
-	return `\b(?:` + strings.Join(words, `|`) + `)\b`
+	return prefix + `(` + strings.Join(words, `|`) + `)` + suffix
 }
 
 // Rules maps from state to a sequence of Rules.
@@ -186,7 +190,6 @@ func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 	compiledRules := map[string][]CompiledRule{}
 	for state, rules := range rules {
 		for _, rule := range rules {
-			crule := CompiledRule{Rule: rule}
 			flags := ""
 			if !config.NotMultiline {
 				flags += "m"
@@ -197,12 +200,7 @@ func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 			if config.DotAll {
 				flags += "s"
 			}
-			re, err := regexp2.Compile("^(?"+flags+")(?:"+rule.Pattern+")", 0)
-			if err != nil {
-				return nil, fmt.Errorf("invalid regex %q for state %q: %s", rule.Pattern, state, err)
-			}
-			crule.Regexp = re
-			compiledRules[state] = append(compiledRules[state], crule)
+			compiledRules[state] = append(compiledRules[state], CompiledRule{Rule: rule, flags: flags})
 		}
 	}
 	return &RegexLexer{
@@ -215,12 +213,13 @@ func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 type CompiledRule struct {
 	Rule
 	Regexp *regexp2.Regexp
+	flags  string
 }
 
 type CompiledRules map[string][]CompiledRule
 
 type LexerState struct {
-	Text  string
+	Text  []rune
 	Pos   int
 	Rules map[string][]CompiledRule
 	Stack []string
@@ -228,12 +227,25 @@ type LexerState struct {
 	Rule  int
 	// Group matches.
 	Groups []string
+	// Custum context for mutators.
+	MutatorContext map[interface{}]interface{}
+}
+
+func (l *LexerState) Set(key interface{}, value interface{}) {
+	l.MutatorContext[key] = value
+}
+
+func (l *LexerState) Get(key interface{}) interface{} {
+	return l.MutatorContext[key]
 }
 
 type RegexLexer struct {
 	config   *Config
-	rules    map[string][]CompiledRule
 	analyser func(text string) float32
+
+	mu       sync.Mutex
+	compiled bool
+	rules    map[string][]CompiledRule
 }
 
 // SetAnalyser sets the analyser function used to perform content inspection.
@@ -253,21 +265,45 @@ func (r *RegexLexer) Config() *Config {
 	return r.config
 }
 
+// Regex compilation is deferred until the lexer is used. This is to avoid significant init() time costs.
+func (r *RegexLexer) maybeCompile() (err error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if r.compiled {
+		return nil
+	}
+	for _, rules := range r.rules {
+		for i, rule := range rules {
+			if rule.Regexp == nil {
+				rule.Regexp, err = regexp2.Compile("^(?"+rule.flags+")(?:"+rule.Pattern+")", 0)
+				if err != nil {
+					return err
+				}
+			}
+			rules[i] = rule
+		}
+	}
+	r.compiled = true
+	return nil
+}
+
 func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string, out func(*Token)) error {
+	r.maybeCompile()
 	if options == nil {
 		options = defaultOptions
 	}
 	state := &LexerState{
-		Text:  text,
-		Stack: []string{options.State},
-		Rules: r.rules,
+		Text:           []rune(text),
+		Stack:          []string{options.State},
+		Rules:          r.rules,
+		MutatorContext: map[interface{}]interface{}{},
 	}
-	for state.Pos < len(text) && len(state.Stack) > 0 {
+	for state.Pos < len(state.Text) && len(state.Stack) > 0 {
 		state.State = state.Stack[len(state.Stack)-1]
 		ruleIndex, rule, groups := matchRules(state.Text[state.Pos:], state.Rules[state.State])
 		// No match.
 		if groups == nil {
-			out(&Token{Error, state.Text[state.Pos : state.Pos+1]})
+			out(&Token{Error, string(state.Text[state.Pos : state.Pos+1])})
 			state.Pos++
 			continue
 		}
@@ -294,9 +330,9 @@ func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]*Token, err
 	return out, lexer.Tokenise(options, text, func(token *Token) { out = append(out, token) })
 }
 
-func matchRules(text string, rules []CompiledRule) (int, CompiledRule, []string) {
+func matchRules(text []rune, rules []CompiledRule) (int, CompiledRule, []string) {
 	for i, rule := range rules {
-		match, err := rule.Regexp.FindStringMatch(text)
+		match, err := rule.Regexp.FindRunesMatch(text)
 		if match != nil && err == nil {
 			groups := []string{}
 			for _, g := range match.Groups() {
