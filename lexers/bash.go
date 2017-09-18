@@ -1,8 +1,12 @@
 package lexers
 
 import (
+	"regexp"
+
 	. "github.com/alecthomas/chroma" // nolint
 )
+
+var bashAnalyserRe = regexp.MustCompile(`(?m)^#!.*/bin/(?:bash|zsh|sh|ksh)`)
 
 // Bash lexer.
 var Bash = Register(MustNewLexer(
@@ -82,4 +86,9 @@ var Bash = Register(MustNewLexer(
 			Include("root"),
 		},
 	},
-))
+).SetAnalyser(func(text string) float32 {
+	if bashAnalyserRe.FindString(text) != "" {
+		return 1.0
+	}
+	return 0.0
+}))
