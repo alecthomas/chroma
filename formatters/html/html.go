@@ -102,7 +102,7 @@ func (h *HTMLFormatter) formatWithClasses(w io.Writer, style *chroma.Style) (fun
 		fmt.Fprint(w, "<html>\n")
 	}
 	fmt.Fprint(w, "<style type=\"text/css\">\n")
-	h.WriteStyles(w, style)
+	h.WriteCSS(w, style)
 	if h.standalone {
 		fmt.Fprintf(w, "body { %s; }\n", classes[chroma.Background])
 	}
@@ -136,10 +136,12 @@ func (h *HTMLFormatter) formatWithClasses(w io.Writer, style *chroma.Style) (fun
 	}, nil
 }
 
-// WriteStyles writes style definitions (without any surrounding HTML).
-func (h *HTMLFormatter) WriteStyles(w io.Writer, style *chroma.Style) {
+// WriteCSS writes CSS style definitions (without any surrounding HTML).
+func (h *HTMLFormatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 	classes := h.typeStyles(style)
-	fmt.Fprintf(w, "/* %s */ .chroma { %s }\n", chroma.Background, classes[chroma.Background])
+	if _, err := fmt.Fprintf(w, "/* %s */ .chroma { %s }\n", chroma.Background, classes[chroma.Background]); err != nil {
+		return err
+	}
 	tts := []int{}
 	for tt := range classes {
 		tts = append(tts, int(tt))
@@ -151,8 +153,11 @@ func (h *HTMLFormatter) WriteStyles(w io.Writer, style *chroma.Style) {
 		if tt < 0 {
 			continue
 		}
-		fmt.Fprintf(w, "/* %s */ .chroma .%ss%x { %s }\n", tt, h.prefix, int(tt), styles)
+		if _, err := fmt.Fprintf(w, "/* %s */ .chroma .%ss%x { %s }\n", tt, h.prefix, int(tt), styles); err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 func (h *HTMLFormatter) typeStyles(style *chroma.Style) map[chroma.TokenType]string {

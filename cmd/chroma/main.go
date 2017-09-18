@@ -77,7 +77,7 @@ command, for Go.
 		}
 		if *htmlStylesFlag {
 			formatter := html.New(html.WithClasses())
-			formatter.WriteStyles(w, styles.Get(*styleFlag))
+			formatter.WriteCSS(w, styles.Get(*styleFlag))
 			return
 		}
 		formatters.Register("html", html.New(options...))
