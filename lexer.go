@@ -293,7 +293,9 @@ func (r *RegexLexer) maybeCompile() (err error) {
 }
 
 func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string, out func(*Token)) error {
-	r.maybeCompile()
+	if err := r.maybeCompile(); err != nil {
+		return err
+	}
 	if options == nil {
 		options = defaultOptions
 	}

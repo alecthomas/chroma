@@ -18,7 +18,7 @@ var Lua = Register(MustNewLexer(
 			Default(Push("base")),
 		},
 		"ws": {
-			{`(?:--\[(?P<level>=*)\[[\w\W]*?\](?P=level)\])`, CommentMultiline, nil},
+			{`(?:--\[(=*)\[[\w\W]*?\](\1)\])`, CommentMultiline, nil},
 			{`(?:--.*$)`, CommentSingle, nil},
 			{`(?:\s+)`, Text, nil},
 		},
@@ -46,7 +46,7 @@ var Lua = Register(MustNewLexer(
 		"funcname": {
 			Include("ws"),
 			{`[.:]`, Punctuation, nil},
-			{`(?:[^\W\d]\w*)(?=(?:(?:--\[(?P<level>=*)\[[\w\W]*?\](?P=level)\])|(?:--.*$)|(?:\s+))*[.:])`, NameClass, nil},
+			{`(?:[^\W\d]\w*)(?=(?:(?:--\[(=*)\[[\w\W]*?\](\2)\])|(?:--.*$)|(?:\s+))*[.:])`, NameClass, nil},
 			{`(?:[^\W\d]\w*)`, NameFunction, Pop(1)},
 			{`\(`, Punctuation, Pop(1)},
 		},
