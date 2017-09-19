@@ -5,7 +5,7 @@ import (
 )
 
 // Genshi Text lexer.
-var GenshiTemplate = Register(MustNewLexer(
+var GenshiText = Register(MustNewLexer(
 	&Config{
 		Name:      "Genshi Text",
 		Aliases:   []string{"genshitext"},
@@ -33,3 +33,80 @@ var GenshiTemplate = Register(MustNewLexer(
 		},
 	},
 ))
+
+// Html+Genshi lexer.
+var GenshiHTMLTemplate = Register(MustNewLexer(
+	&Config{
+		Name:         "HTML+Genshi",
+		Aliases:      []string{"html+genshi", "html+kid"},
+		Filenames:    []string{},
+		MimeTypes:    []string{"text/html+genshi"},
+		NotMultiline: true,
+		DotAll:       true,
+	},
+	genshiMarkupRules,
+))
+
+// Genshi lexer.
+var Genshi = Register(MustNewLexer(
+	&Config{
+		Name:         "Genshi",
+		Aliases:      []string{"genshi", "kid", "xml+genshi", "xml+kid"},
+		Filenames:    []string{"*.kid"},
+		MimeTypes:    []string{"application/x-genshi", "application/x-kid"},
+		NotMultiline: true,
+		DotAll:       true,
+	},
+	genshiMarkupRules,
+))
+
+var genshiMarkupRules = Rules{
+	"root": {
+		{`[^<$]+`, Other, nil},
+		{`(<\?python)(.*?)(\?>)`, ByGroups(CommentPreproc, Using(Python, nil), CommentPreproc), nil},
+		{`<\s*(script|style)\s*.*?>.*?<\s*/\1\s*>`, Other, nil},
+		{`<\s*py:[a-zA-Z0-9]+`, NameTag, Push("pytag")},
+		{`<\s*[a-zA-Z0-9:.]+`, NameTag, Push("tag")},
+		Include("variable"),
+		{`[<$]`, Other, nil},
+	},
+	"pytag": {
+		{`\s+`, Text, nil},
+		{`[\w:-]+\s*=`, NameAttribute, Push("pyattr")},
+		{`/?\s*>`, NameTag, Pop(1)},
+	},
+	"pyattr": {
+		{`(")(.*?)(")`, ByGroups(LiteralString, Using(Python, nil), LiteralString), Pop(1)},
+		{`(')(.*?)(')`, ByGroups(LiteralString, Using(Python, nil), LiteralString), Pop(1)},
+		{`[^\s>]+`, LiteralString, Pop(1)},
+	},
+	"tag": {
+		{`\s+`, Text, nil},
+		{`py:[\w-]+\s*=`, NameAttribute, Push("pyattr")},
+		{`[\w:-]+\s*=`, NameAttribute, Push("attr")},
+		{`/?\s*>`, NameTag, Pop(1)},
+	},
+	"attr": {
+		{`"`, LiteralString, Push("attr-dstring")},
+		{`'`, LiteralString, Push("attr-sstring")},
+		{`[^\s>]*`, LiteralString, Pop(1)},
+	},
+	"attr-dstring": {
+		{`"`, LiteralString, Pop(1)},
+		Include("strings"),
+		{`'`, LiteralString, nil},
+	},
+	"attr-sstring": {
+		{`'`, LiteralString, Pop(1)},
+		Include("strings"),
+		{`'`, LiteralString, nil},
+	},
+	"strings": {
+		{`[^"'$]+`, LiteralString, nil},
+		Include("variable"),
+	},
+	"variable": {
+		{`(?<!\$)(\$\{)(.+?)(\})`, ByGroups(CommentPreproc, Using(Python, nil), CommentPreproc), nil},
+		{`(?<!\$)(\$)([a-zA-Z_][\w\.]*)`, NameVariable, nil},
+	},
+}
