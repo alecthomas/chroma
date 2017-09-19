@@ -11,85 +11,125 @@ import (
 )
 
 // Option sets an option of the HTML formatter.
-type Option func(h *HTMLFormatter)
+type Option func(f *Formatter)
 
 // Standalone configures the HTML formatter for generating a standalone HTML document.
-func Standalone() Option { return func(h *HTMLFormatter) { h.standalone = true } }
+func Standalone() Option { return func(f *Formatter) { f.standalone = true } }
 
 // ClassPrefix sets the CSS class prefix.
-func ClassPrefix(prefix string) Option { return func(h *HTMLFormatter) { h.prefix = prefix } }
+func ClassPrefix(prefix string) Option { return func(f *Formatter) { f.prefix = prefix } }
 
 // WithClasses emits HTML using CSS classes, rather than inline styles.
-func WithClasses() Option { return func(h *HTMLFormatter) { h.classes = true } }
+func WithClasses() Option { return func(f *Formatter) { f.classes = true } }
 
 // TabWidth sets the number of characters for a tab. Defaults to 8.
-func TabWidth(width int) Option { return func(h *HTMLFormatter) { h.tabWidth = width } }
+func TabWidth(width int) Option { return func(f *Formatter) { f.tabWidth = width } }
+
+// WithLineNumbers formats output with line numbers.
+func WithLineNumbers() Option {
+	return func(f *Formatter) {
+		f.lineNumbers = true
+	}
+}
+
+// HighlightLines higlights the given line ranges.
+//
+// A range is the beginning and ending of a range as 1-based line numbers, inclusive.
+func HighlightLines(style string, ranges [][2]int) Option {
+	return func(f *Formatter) {
+		f.highlightStyle = style
+		f.highlightRanges = ranges
+	}
+}
 
 // New HTML formatter.
-func New(options ...Option) *HTMLFormatter {
-	h := &HTMLFormatter{}
+func New(options ...Option) *Formatter {
+	f := &Formatter{}
 	for _, option := range options {
-		option(h)
+		option(f)
 	}
-	return h
+	return f
 }
 
-type HTMLFormatter struct {
-	standalone bool
-	prefix     string
-	classes    bool
-	tabWidth   int
+// Formatter that generates HTML.
+type Formatter struct {
+	standalone      bool
+	prefix          string
+	classes         bool
+	tabWidth        int
+	lineNumbers     bool
+	highlightStyle  string
+	highlightRanges [][2]int
 }
 
-func (h *HTMLFormatter) Format(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
-	if h.classes {
-		return h.formatWithClasses(w, style)
+func (f *Formatter) Format(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
+	styles := f.typeStyles(style)
+	if !f.classes {
+		for t, style := range styles {
+			styles[t] = compressStyle(style)
+		}
 	}
-	return h.formatWithoutClasses(w, style)
-}
-
-func (h *HTMLFormatter) tabWidthStyle() string {
-	if h.tabWidth != 0 && h.tabWidth != 8 {
-		return fmt.Sprintf("; -moz-tab-size: %[1]d; -o-tab-size: %[1]d; tab-size: %[1]d", h.tabWidth)
-	}
-	return ""
-}
-
-func (h *HTMLFormatter) formatWithoutClasses(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
-	classes := h.typeStyles(style)
-	bg := compressStyle(classes[chroma.Background])
-	if h.standalone {
+	if f.standalone {
 		fmt.Fprint(w, "<html>\n")
-		fmt.Fprintf(w, "<body style=\"%s\">\n", bg)
+		if f.classes {
+			fmt.Fprint(w, "<style type=\"text/css\">\n")
+			f.WriteCSS(w, style)
+			fmt.Fprintf(w, "body { %s; }\n", styles[chroma.Background])
+			fmt.Fprint(w, "</style>")
+		}
+		fmt.Fprintf(w, "<body%s>\n", f.styleAttr(styles, chroma.Background))
 	}
-	fmt.Fprintf(w, "<pre style=\"%s\">\n", bg)
-	for t, style := range classes {
-		classes[t] = compressStyle(style)
-	}
+	fmt.Fprintf(w, "<pre%s>\n", f.styleAttr(styles, chroma.Background))
 	return func(token *chroma.Token) {
 		if token.Type == chroma.EOF {
 			fmt.Fprint(w, "</pre>\n")
-			if h.standalone {
+			if f.standalone {
 				fmt.Fprint(w, "</body>\n")
 				fmt.Fprint(w, "</html>\n")
 			}
 			return
 		}
-
 		html := html.EscapeString(token.String())
-		style := classes[token.Type]
-		if style == "" {
-			style = classes[token.Type.SubCategory()]
-			if style == "" {
-				style = classes[token.Type.Category()]
-			}
-		}
-		if style == "" {
+		attr := f.styleAttr(styles, token.Type)
+		if attr == "" {
 			fmt.Fprint(w, html)
 		} else {
-			fmt.Fprintf(w, "<span style=\"%s\">%s</span>", style, html)
+			fmt.Fprintf(w, "<span%s>%s</span>", attr, html)
 		}
 	}, nil
+}
+
+func (f *Formatter) class(tt chroma.TokenType) string {
+	if tt == chroma.Background {
+		return "chroma"
+	}
+	if tt < 0 {
+		return fmt.Sprintf("%sss%x", f.prefix, -int(tt))
+	}
+	return fmt.Sprintf("%ss%x", f.prefix, int(tt))
+}
+
+func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.TokenType) string {
+	if _, ok := styles[tt]; !ok {
+		tt = tt.SubCategory()
+		if _, ok := styles[tt]; !ok {
+			tt = tt.Category()
+			if _, ok := styles[tt]; !ok {
+				return ""
+			}
+		}
+	}
+	if f.classes {
+		return string(fmt.Sprintf(` class="%s"`, f.class(tt)))
+	}
+	return string(fmt.Sprintf(` style="%s"`, styles[tt]))
+}
+
+func (f *Formatter) tabWidthStyle() string {
+	if f.tabWidth != 0 && f.tabWidth != 8 {
+		return fmt.Sprintf("; -moz-tab-size: %[1]d; -o-tab-size: %[1]d; tab-size: %[1]d", f.tabWidth)
+	}
+	return ""
 }
 
 func compressStyle(s string) string {
@@ -108,49 +148,9 @@ func compressStyle(s string) string {
 	return strings.Join(out, ";")
 }
 
-func (h *HTMLFormatter) formatWithClasses(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
-	classes := h.typeStyles(style)
-	if h.standalone {
-		fmt.Fprint(w, "<html>\n")
-		fmt.Fprint(w, "<style type=\"text/css\">\n")
-		h.WriteCSS(w, style)
-		fmt.Fprintf(w, "body { %s; }\n", classes[chroma.Background])
-		fmt.Fprint(w, "</style>\n")
-		fmt.Fprint(w, "<body>\n")
-	}
-	fmt.Fprint(w, "<pre class=\"chroma\">\n")
-	return func(token *chroma.Token) {
-		if token.Type == chroma.EOF {
-			fmt.Fprint(w, "</pre>\n")
-			if h.standalone {
-				fmt.Fprint(w, "</body>\n")
-				fmt.Fprint(w, "</html>\n")
-			}
-			return
-		}
-
-		tt := token.Type
-		class := classes[tt]
-		if class == "" {
-			tt = tt.SubCategory()
-			class = classes[tt]
-			if class == "" {
-				tt = tt.Category()
-				class = classes[tt]
-			}
-		}
-		if class == "" {
-			fmt.Fprint(w, token)
-		} else {
-			html := html.EscapeString(token.String())
-			fmt.Fprintf(w, "<span class=\"%ss%x\">%s</span>", h.prefix, int(tt), html)
-		}
-	}, nil
-}
-
 // WriteCSS writes CSS style definitions (without any surrounding HTML).
-func (h *HTMLFormatter) WriteCSS(w io.Writer, style *chroma.Style) error {
-	classes := h.typeStyles(style)
+func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
+	classes := f.typeStyles(style)
 	if _, err := fmt.Fprintf(w, "/* %s */ .chroma { %s }\n", chroma.Background, classes[chroma.Background]); err != nil {
 		return err
 	}
@@ -165,14 +165,14 @@ func (h *HTMLFormatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 		if tt < 0 {
 			continue
 		}
-		if _, err := fmt.Fprintf(w, "/* %s */ .chroma .%ss%x { %s }\n", tt, h.prefix, int(tt), styles); err != nil {
+		if _, err := fmt.Fprintf(w, "/* %s */ .chroma .%ss%x { %s }\n", tt, f.prefix, int(tt), styles); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (h *HTMLFormatter) typeStyles(style *chroma.Style) map[chroma.TokenType]string {
+func (f *Formatter) typeStyles(style *chroma.Style) map[chroma.TokenType]string {
 	bg := style.Get(chroma.Background)
 	classes := map[chroma.TokenType]string{}
 	for t := range style.Entries {
@@ -180,14 +180,13 @@ func (h *HTMLFormatter) typeStyles(style *chroma.Style) map[chroma.TokenType]str
 		if t != chroma.Background {
 			e = e.Sub(bg)
 		}
-		styles := h.class(e)
-		classes[t] = strings.Join(styles, "; ")
+		classes[t] = f.styleEntryToCSS(e)
 	}
-	classes[chroma.Background] += h.tabWidthStyle()
+	classes[chroma.Background] += f.tabWidthStyle()
 	return classes
 }
 
-func (h *HTMLFormatter) class(e *chroma.StyleEntry) []string {
+func (f *Formatter) styleEntryToCSS(e *chroma.StyleEntry) string {
 	styles := []string{}
 	if e.Colour.IsSet() {
 		styles = append(styles, "color: "+e.Colour.String())
@@ -201,5 +200,5 @@ func (h *HTMLFormatter) class(e *chroma.StyleEntry) []string {
 	if e.Italic {
 		styles = append(styles, "font-style: italic")
 	}
-	return styles
+	return strings.Join(styles, "; ")
 }

@@ -24,8 +24,9 @@ import (
 )
 
 var (
-	profileFlag = kingpin.Flag("profile", "Enable profiling to file.").Hidden().String()
-	listFlag    = kingpin.Flag("list", "List lexers, styles and formatters.").Bool()
+	profileFlag    = kingpin.Flag("profile", "Enable profiling to file.").Hidden().String()
+	listFlag       = kingpin.Flag("list", "List lexers, styles and formatters.").Bool()
+	unbufferedFlag = kingpin.Flag("unbuffered", "Do not buffer output.").Bool()
 
 	lexerFlag     = kingpin.Flag("lexer", "Lexer to use when formatting.").PlaceHolder("autodetect").Short('l').Enum(lexers.Names(true)...)
 	styleFlag     = kingpin.Flag("style", "Style to use for formatting.").Short('s').Default("swapoff").Enum(styles.Names()...)
@@ -40,6 +41,15 @@ var (
 
 	filesArgs = kingpin.Arg("files", "Files to highlight.").ExistingFiles()
 )
+
+type flushableWriter interface {
+	io.Writer
+	Flush() error
+}
+
+type nopFlushableWriter struct{ io.Writer }
+
+func (n *nopFlushableWriter) Flush() error { return nil }
 
 func main() {
 	kingpin.CommandLine.Help = `
@@ -64,12 +74,19 @@ command, for Go.
 		}()
 		defer pprof.StopCPUProfile()
 	}
+
 	var out io.Writer = os.Stdout
 	if runtime.GOOS == "windows" && isatty.IsTerminal(os.Stdout.Fd()) {
 		out = colorable.NewColorableStdout()
 	}
-	w := bufio.NewWriterSize(out, 16384)
+	var w flushableWriter
+	if *unbufferedFlag {
+		w = &nopFlushableWriter{out}
+	} else {
+		w = bufio.NewWriterSize(out, 16384)
+	}
 	defer w.Flush()
+
 	if *htmlFlag {
 		*formatterFlag = "html"
 	}
