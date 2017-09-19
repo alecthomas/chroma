@@ -2,6 +2,7 @@ package formatters
 
 import (
 	"io"
+	"sort"
 
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters/html"
@@ -28,6 +29,7 @@ func Names() []string {
 	for name := range Registry {
 		out = append(out, name)
 	}
+	sort.Strings(out)
 	return out
 }
 

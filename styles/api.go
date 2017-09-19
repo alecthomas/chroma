@@ -1,6 +1,10 @@
 package styles
 
-import "github.com/alecthomas/chroma"
+import (
+	"sort"
+
+	"github.com/alecthomas/chroma"
+)
 
 // Registry of Styles.
 var Registry = map[string]*chroma.Style{}
@@ -20,6 +24,7 @@ func Names() []string {
 	for name := range Registry {
 		out = append(out, name)
 	}
+	sort.Strings(out)
 	return out
 }
 
