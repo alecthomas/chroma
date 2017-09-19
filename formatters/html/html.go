@@ -22,6 +22,9 @@ func ClassPrefix(prefix string) Option { return func(h *HTMLFormatter) { h.prefi
 // WithClasses emits HTML using CSS classes, rather than inline styles.
 func WithClasses() Option { return func(h *HTMLFormatter) { h.classes = true } }
 
+// TabWidth sets the number of characters for a tab. Defaults to 8.
+func TabWidth(width int) Option { return func(h *HTMLFormatter) { h.tabWidth = width } }
+
 // New HTML formatter.
 func New(options ...Option) *HTMLFormatter {
 	h := &HTMLFormatter{}
@@ -35,6 +38,7 @@ type HTMLFormatter struct {
 	standalone bool
 	prefix     string
 	classes    bool
+	tabWidth   int
 }
 
 func (h *HTMLFormatter) Format(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
@@ -42,6 +46,13 @@ func (h *HTMLFormatter) Format(w io.Writer, style *chroma.Style) (func(*chroma.T
 		return h.formatWithClasses(w, style)
 	}
 	return h.formatWithoutClasses(w, style)
+}
+
+func (h *HTMLFormatter) tabWidthStyle() string {
+	if h.tabWidth != 0 && h.tabWidth != 8 {
+		return fmt.Sprintf("; -moz-tab-size: %[1]d; -o-tab-size: %[1]d; tab-size: %[1]d", h.tabWidth)
+	}
+	return ""
 }
 
 func (h *HTMLFormatter) formatWithoutClasses(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
@@ -172,6 +183,7 @@ func (h *HTMLFormatter) typeStyles(style *chroma.Style) map[chroma.TokenType]str
 		styles := h.class(e)
 		classes[t] = strings.Join(styles, "; ")
 	}
+	classes[chroma.Background] += h.tabWidthStyle()
 	return classes
 }
 

@@ -55,9 +55,6 @@ type Config struct {
 
 	// If given and greater than 0, expand tabs in the input.
 	// TabSize int
-
-	// Whether to track how long rules take to process.
-	TimeRules bool
 }
 
 // Token output to formatter.

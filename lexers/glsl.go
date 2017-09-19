@@ -4,8 +4,8 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-// Glsl lexer.
-var Glsl = Register(MustNewLexer(
+// GLSL lexer.
+var GLSL = Register(MustNewLexer(
 	&Config{
 		Name:      "GLSL",
 		Aliases:   []string{"glsl"},

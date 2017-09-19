@@ -36,6 +36,7 @@ var (
 	htmlStylesFlag      = kingpin.Flag("html-styles", "Output HTML CSS styles.").Bool()
 	htmlOnlyFlag        = kingpin.Flag("html-only", "Output HTML fragment.").Bool()
 	htmlInlineStyleFlag = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
+	htmlTabWidthFlag    = kingpin.Flag("html-tab-width", "Set the HTML tab width.").Default("8").Int()
 
 	filesArgs = kingpin.Arg("files", "Files to highlight.").ExistingFiles()
 )
@@ -73,7 +74,7 @@ command, for Go.
 		*formatterFlag = "html"
 	}
 	if *formatterFlag == "html" {
-		options := []html.Option{}
+		options := []html.Option{html.TabWidth(*htmlTabWidthFlag)}
 		if *htmlPrefixFlag != "" {
 			options = append(options, html.ClassPrefix(*htmlPrefixFlag))
 		}

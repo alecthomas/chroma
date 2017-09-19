@@ -14,11 +14,11 @@ var Xorg = Register(MustNewLexer(
 	},
 	Rules{
 		"root": {
-			{`\s+`, Text, nil},
+			{`\s+`, TextWhitespace, nil},
 			{`#.*$`, Comment, nil},
-			{`((|Sub)Section)(\s+)("\w+")`, ByGroups(LiteralStringEscape, LiteralStringEscape, Text, LiteralStringEscape), nil},
-			{`(End(|Sub)Section)`, LiteralStringEscape, nil},
-			{`(\w+)(\s+)([^\n#]+)`, ByGroups(NameBuiltin, Text, NameConstant), nil},
+			{`((|Sub)Section)(\s+)("\w+")`, ByGroups(KeywordNamespace, LiteralStringEscape, TextWhitespace, LiteralStringEscape), nil},
+			{`(End(|Sub)Section)`, KeywordNamespace, nil},
+			{`(\w+)(\s+)([^\n#]+)`, ByGroups(NameKeyword, TextWhitespace, LiteralString), nil},
 		},
 	},
 ))
