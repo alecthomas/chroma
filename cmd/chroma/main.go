@@ -115,9 +115,15 @@ func listAll() {
 		filenames := []string{}
 		filenames = append(filenames, config.Filenames...)
 		filenames = append(filenames, config.AliasFilenames...)
-		fmt.Printf("    aliases: %s\n", strings.Join(config.Aliases, " "))
-		fmt.Printf("    filenames: %s\n", strings.Join(filenames, " "))
-		fmt.Printf("    mimetypes: %s\n", strings.Join(config.MimeTypes, " "))
+		if len(config.Aliases) > 0 {
+			fmt.Printf("    aliases: %s\n", strings.Join(config.Aliases, " "))
+		}
+		if len(filenames) > 0 {
+			fmt.Printf("    filenames: %s\n", strings.Join(filenames, " "))
+		}
+		if len(config.MimeTypes) > 0 {
+			fmt.Printf("    mimetypes: %s\n", strings.Join(config.MimeTypes, " "))
+		}
 	}
 	fmt.Println()
 	fmt.Printf("styles:")

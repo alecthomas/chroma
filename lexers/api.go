@@ -40,7 +40,19 @@ func Get(name string) chroma.Lexer {
 	return nil
 }
 
-// Match returns all lexers matching filename.
+// MatchMimeType attempts to find a lexer for the given MIME type.
+func MatchMimeType(mimeType string) chroma.Lexer {
+	for _, l := range Registry.Lexers {
+		for _, lmt := range l.Config().MimeTypes {
+			if mimeType == lmt {
+				return l
+			}
+		}
+	}
+	return nil
+}
+
+// Match returns the first lexer matching filename.
 func Match(filename string) chroma.Lexer {
 	filename = filepath.Base(filename)
 	for _, lexer := range Registry.Lexers {
