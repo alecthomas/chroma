@@ -9,7 +9,7 @@ var R = Register(MustNewLexer(
 	&Config{
 		Name:      "R",
 		Aliases:   []string{"splus", "s", "r"},
-		Filenames: []string{"*.S", "*.R", ".Rhistory", ".Rprofile", ".Renviron"},
+		Filenames: []string{"*.S", "*.R", "*.r", ".Rhistory", ".Rprofile", ".Renviron"},
 		MimeTypes: []string{"text/S-plus", "text/S", "text/x-r-source", "text/x-r", "text/x-R", "text/x-r-history", "text/x-r-profile"},
 	},
 	Rules{
