@@ -37,7 +37,7 @@ var GenshiText = Register(MustNewLexer(
 // Html+Genshi lexer.
 var GenshiHTMLTemplate = Register(MustNewLexer(
 	&Config{
-		Name:         "HTML+Genshi",
+		Name:         "Genshi HTML",
 		Aliases:      []string{"html+genshi", "html+kid"},
 		Filenames:    []string{},
 		MimeTypes:    []string{"text/html+genshi"},
