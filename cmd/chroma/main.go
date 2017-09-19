@@ -9,8 +9,11 @@ import (
 	"os/signal"
 	"runtime"
 	"runtime/pprof"
+	"sort"
 	"strings"
 
+	"github.com/mattn/go-colorable"
+	"github.com/mattn/go-isatty"
 	"gopkg.in/alecthomas/kingpin.v3-unstable"
 
 	"github.com/alecthomas/chroma"
@@ -18,8 +21,6 @@ import (
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
-	"github.com/mattn/go-colorable"
-	"github.com/mattn/go-isatty"
 )
 
 var (
@@ -107,6 +108,7 @@ command, for Go.
 
 func listAll() {
 	fmt.Println("lexers:")
+	sort.Sort(lexers.Registry.Lexers)
 	for _, l := range lexers.Registry.Lexers {
 		config := l.Config()
 		fmt.Printf("  %s\n", config.Name)

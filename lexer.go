@@ -106,6 +106,10 @@ func (l Lexers) Pick(text string) Lexer {
 	return picked
 }
 
+func (l Lexers) Len() int           { return len(l) }
+func (l Lexers) Swap(i, j int)      { l[i], l[j] = l[j], l[i] }
+func (l Lexers) Less(i, j int) bool { return l[i].Config().Name < l[j].Config().Name }
+
 // Analyser determines how appropriate this lexer is for the given text.
 type Analyser interface {
 	AnalyseText(text string) float32

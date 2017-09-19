@@ -2,6 +2,7 @@ package lexers
 
 import (
 	"path/filepath"
+	"sort"
 
 	"github.com/danwakefield/fnmatch"
 
@@ -10,7 +11,7 @@ import (
 
 // Registry of Lexers.
 var Registry = struct {
-	Lexers []chroma.Lexer
+	Lexers chroma.Lexers
 	byName map[string]chroma.Lexer
 }{
 	byName: map[string]chroma.Lexer{},
@@ -26,6 +27,7 @@ func Names(withAliases bool) []string {
 			out = append(out, config.Aliases...)
 		}
 	}
+	sort.Strings(out)
 	return out
 }
 
