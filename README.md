@@ -173,8 +173,8 @@ for a list of lexers, and notes on some of the issues importing them.
 
 Chroma supports HTML output, as well as terminal output in 8 colour, 256 colour, and true-colour.
 
-A `noop` formatter is included that outputs the token text only, and a `raw`
-formatter outputs raw token structs. The latter is useful for debugging lexers.
+A `noop` formatter is included that outputs the token text only, and a `tokens`
+formatter outputs raw tokens. The latter is useful for debugging lexers.
 
 ### Styles
 
