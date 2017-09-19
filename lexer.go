@@ -133,6 +133,8 @@ func (e EmitterFunc) Emit(groups []string, lexer Lexer, out func(*Token)) { e(gr
 // ByGroups emits a token for each matching group in the rule's regex.
 func ByGroups(emitters ...Emitter) Emitter {
 	return EmitterFunc(func(groups []string, lexer Lexer, out func(*Token)) {
+		// NOTE: If this line panics, there is a mismatch with groups. Uncomment the following line to debug.
+		// fmt.Printf("%s %#v\n", emitters, groups[1:])
 		for i, group := range groups[1:] {
 			emitters[i].Emit([]string{group}, lexer, out)
 		}
@@ -212,6 +214,8 @@ func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 }
 
 // A CompiledRule is a Rule with a pre-compiled regex.
+//
+// Note that regular expressions are lazily compiled on first use of the lexer.
 type CompiledRule struct {
 	Rule
 	Regexp *regexp2.Regexp
@@ -274,12 +278,12 @@ func (r *RegexLexer) maybeCompile() (err error) {
 	if r.compiled {
 		return nil
 	}
-	for _, rules := range r.rules {
+	for state, rules := range r.rules {
 		for i, rule := range rules {
 			if rule.Regexp == nil {
 				rule.Regexp, err = regexp2.Compile("^(?"+rule.flags+")(?:"+rule.Pattern+")", 0)
 				if err != nil {
-					return err
+					return fmt.Errorf("failed to compile rule %s.%d: %s", state, i, err)
 				}
 			}
 			rules[i] = rule

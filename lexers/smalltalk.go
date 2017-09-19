@@ -20,7 +20,7 @@ var Smalltalk = Register(MustNewLexer(
 			Include("method definition"),
 			{`(\|)([\w\s]*)(\|)`, ByGroups(Operator, NameVariable, Operator), nil},
 			Include("objects"),
-			{`\^|\:=|\_`, Operator, nil},
+			{`\^|:=|_`, Operator, nil},
 			{`[\]({}.;!]`, Text, nil},
 		},
 		"method definition": {
@@ -75,7 +75,7 @@ var Smalltalk = Register(MustNewLexer(
 			Include("whitespaces"),
 			{`\b(ifTrue:|ifFalse:|whileTrue:|whileFalse:|timesRepeat:)`, NameBuiltin, Pop(1)},
 			{`\b(new\b(?!:))`, NameBuiltin, nil},
-			{`\:=|\_`, Operator, Pop(1)},
+			{`:=|_`, Operator, Pop(1)},
 			{`\b[a-zA-Z]+\w*:`, NameFunction, Pop(1)},
 			{`\b[a-zA-Z]+\w*`, NameFunction, nil},
 			{`\w+:?|[-+*/\\~<>=|&!?,@%]+`, NameFunction, Pop(1)},

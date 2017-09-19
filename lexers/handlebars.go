@@ -9,7 +9,7 @@ var Handlebars = Register(MustNewLexer(
 	&Config{
 		Name:      "Handlebars",
 		Aliases:   []string{"handlebars"},
-		Filenames: []string{},
+		Filenames: []string{"*.handlebars"},
 		MimeTypes: []string{},
 	},
 	Rules{
@@ -23,7 +23,7 @@ var Handlebars = Register(MustNewLexer(
 			{`\s+`, Text, nil},
 			{`\}\}\}`, CommentSpecial, Pop(1)},
 			{`\}\}`, CommentPreproc, Pop(1)},
-			{`([#/]*)(each|if|unless|else|with|log|in(line)?)`, ByGroups(Keyword, Keyword), nil},
+			{`([#/]*)(each|if|unless|else|with|log|in(?:line)?)`, ByGroups(Keyword, Keyword), nil},
 			{`#\*inline`, Keyword, nil},
 			{`([#/])([\w-]+)`, ByGroups(NameFunction, NameFunction), nil},
 			{`([\w-]+)(=)`, ByGroups(NameAttribute, Operator), nil},
