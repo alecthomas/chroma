@@ -43,10 +43,10 @@ Lexers convert source text into a stream of tokens, styles specify how token
 types are mapped to colours, and formatters convert tokens and styles into
 formatted output.
 
-A package exists for each of these, with a global `Registry` variable
-containing all of the registered implementations. There are also helper
-functions for using the registry in each package, such as looking up lexers by
-name or matching filenames, etc.
+A package exists for each of these, containing a global `Registry` variable
+with all of the registered implementations. There are also helper functions
+for using the registry in each package, such as looking up lexers by name or
+matching filenames, etc.
 
 In all cases, if a lexer, formatter or style can not be determined, `nil` will
 be returned. In this situation you may want to default to the `Fallback`
