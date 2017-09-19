@@ -62,20 +62,21 @@ func (h *HTMLFormatter) formatWithoutClasses(w io.Writer, style *chroma.Style) (
 				fmt.Fprint(w, "</body>\n")
 				fmt.Fprint(w, "</html>\n")
 			}
+			return
+		}
+
+		html := html.EscapeString(token.String())
+		style := classes[token.Type]
+		if style == "" {
+			style = classes[token.Type.SubCategory()]
+			if style == "" {
+				style = classes[token.Type.Category()]
+			}
+		}
+		if style == "" {
+			fmt.Fprint(w, html)
 		} else {
-			html := html.EscapeString(token.String())
-			style := classes[token.Type]
-			if style == "" {
-				style = classes[token.Type.SubCategory()]
-				if style == "" {
-					style = classes[token.Type.Category()]
-				}
-			}
-			if style == "" {
-				fmt.Fprint(w, html)
-			} else {
-				fmt.Fprintf(w, "<span style=\"%s\">%s</span>", style, html)
-			}
+			fmt.Fprintf(w, "<span style=\"%s\">%s</span>", style, html)
 		}
 	}, nil
 }
@@ -100,38 +101,38 @@ func (h *HTMLFormatter) formatWithClasses(w io.Writer, style *chroma.Style) (fun
 	classes := h.typeStyles(style)
 	if h.standalone {
 		fmt.Fprint(w, "<html>\n")
-	}
-	fmt.Fprint(w, "<style type=\"text/css\">\n")
-	h.WriteCSS(w, style)
-	if h.standalone {
+		fmt.Fprint(w, "<style type=\"text/css\">\n")
+		h.WriteCSS(w, style)
 		fmt.Fprintf(w, "body { %s; }\n", classes[chroma.Background])
-	}
-	fmt.Fprint(w, "</style>\n")
-	if h.standalone {
+		fmt.Fprint(w, "</style>\n")
 		fmt.Fprint(w, "<body>\n")
 	}
 	fmt.Fprint(w, "<pre class=\"chroma\">\n")
 	return func(token *chroma.Token) {
-		if h.standalone && token.Type == chroma.EOF {
-			fmt.Fprint(w, "</body>\n")
-			fmt.Fprint(w, "</html>\n")
-		} else {
-			tt := token.Type
-			class := classes[tt]
+		if token.Type == chroma.EOF {
+			fmt.Fprint(w, "</pre>\n")
+			if h.standalone {
+				fmt.Fprint(w, "</body>\n")
+				fmt.Fprint(w, "</html>\n")
+			}
+			return
+		}
+
+		tt := token.Type
+		class := classes[tt]
+		if class == "" {
+			tt = tt.SubCategory()
+			class = classes[tt]
 			if class == "" {
-				tt = tt.SubCategory()
+				tt = tt.Category()
 				class = classes[tt]
-				if class == "" {
-					tt = tt.Category()
-					class = classes[tt]
-				}
 			}
-			if class == "" {
-				fmt.Fprint(w, token)
-			} else {
-				html := html.EscapeString(token.String())
-				fmt.Fprintf(w, "<span class=\"%ss%x\">%s</span>", h.prefix, int(tt), html)
-			}
+		}
+		if class == "" {
+			fmt.Fprint(w, token)
+		} else {
+			html := html.EscapeString(token.String())
+			fmt.Fprintf(w, "<span class=\"%ss%x\">%s</span>", h.prefix, int(tt), html)
 		}
 	}, nil
 }

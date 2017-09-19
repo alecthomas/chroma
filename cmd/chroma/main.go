@@ -76,16 +76,18 @@ command, for Go.
 		if *htmlPrefixFlag != "" {
 			options = append(options, html.ClassPrefix(*htmlPrefixFlag))
 		}
-		if !*htmlOnlyFlag {
-			options = append(options, html.Standalone())
-		}
-		if !*htmlInlineStyleFlag {
-			options = append(options, html.WithClasses())
-		}
+
+		// Dump styles.
 		if *htmlStylesFlag {
 			formatter := html.New(html.WithClasses())
 			formatter.WriteCSS(w, styles.Get(*styleFlag))
 			return
+		}
+		if !*htmlInlineStyleFlag {
+			options = append(options, html.WithClasses())
+		}
+		if !*htmlOnlyFlag {
+			options = append(options, html.Standalone())
 		}
 		formatters.Register("html", html.New(options...))
 	}
