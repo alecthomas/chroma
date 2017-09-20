@@ -76,10 +76,8 @@ type TokeniseOptions struct {
 type Lexer interface {
 	// Config describing the features of the Lexer.
 	Config() *Config
-	// Tokenise text and call out for each generated token.
-	//
-	// A token of type EOF will be passed to out() to signify the end of the stream.
-	Tokenise(options *TokeniseOptions, text string, out func(*Token)) error
+	// Tokenise returns an Iterator over tokens in text.
+	Tokenise(options *TokeniseOptions, text string) (Iterator, error)
 }
 
 type Lexers []Lexer

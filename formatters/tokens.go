@@ -8,8 +8,11 @@ import (
 )
 
 // Tokens formatter outputs the raw token structures.
-var Tokens = Register("tokens", chroma.FormatterFunc(func(w io.Writer, s *chroma.Style) (func(*chroma.Token), error) {
-	return func(token *chroma.Token) {
-		fmt.Fprintln(w, token.GoString())
-	}, nil
+var Tokens = Register("tokens", chroma.FormatterFunc(func(w io.Writer, s *chroma.Style, it chroma.Iterator) error {
+	for t := it(); t != nil; t = it() {
+		if _, err := fmt.Fprintln(w, t.GoString()); err != nil {
+			return err
+		}
+	}
+	return nil
 }))

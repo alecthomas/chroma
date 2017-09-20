@@ -146,16 +146,15 @@ command, for Go.
 		}
 		formatters.Register("html", html.New(options...))
 	}
-	writer := getWriter(w, style)
 	if len(*filesArgs) == 0 {
 		contents, err := ioutil.ReadAll(os.Stdin)
 		kingpin.FatalIfError(err, "")
-		lex("", string(contents), writer)
+		format(os.Stdout, style, lex("", string(contents)))
 	} else {
 		for _, filename := range *filesArgs {
 			contents, err := ioutil.ReadFile(filename)
 			kingpin.FatalIfError(err, "")
-			lex(filename, string(contents), writer)
+			format(os.Stdout, style, lex(filename, string(contents)))
 		}
 	}
 }
@@ -192,14 +191,15 @@ func listAll() {
 	fmt.Println()
 }
 
-func lex(path string, contents string, writer func(*chroma.Token)) {
+func lex(path string, contents string) chroma.Iterator {
 	lexer := selexer(path, contents)
 	if lexer == nil {
 		lexer = lexers.Fallback
 	}
 	lexer = chroma.Coalesce(lexer)
-	err := lexer.Tokenise(nil, string(contents), writer)
+	it, err := lexer.Tokenise(nil, string(contents))
 	kingpin.FatalIfError(err, "")
+	return it
 }
 
 func selexer(path, contents string) (lexer chroma.Lexer) {
@@ -215,10 +215,8 @@ func selexer(path, contents string) (lexer chroma.Lexer) {
 	return lexers.Analyse(contents)
 }
 
-func getWriter(w io.Writer, style *chroma.Style) func(*chroma.Token) {
+func format(w io.Writer, style *chroma.Style, it chroma.Iterator) {
 	formatter := formatters.Get(*formatterFlag)
-	// formatter := formatters.TTY8
-	writer, err := formatter.Format(w, style)
+	err := formatter.Format(w, style, it)
 	kingpin.FatalIfError(err, "")
-	return writer
 }

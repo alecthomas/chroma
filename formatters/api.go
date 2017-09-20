@@ -10,8 +10,13 @@ import (
 
 var (
 	// NoOp formatter.
-	NoOp = Register("noop", chroma.FormatterFunc(func(w io.Writer, s *chroma.Style) (func(*chroma.Token), error) {
-		return func(t *chroma.Token) { io.WriteString(w, t.Value) }, nil
+	NoOp = Register("noop", chroma.FormatterFunc(func(w io.Writer, s *chroma.Style, iterator chroma.Iterator) error {
+		for t := iterator(); t != nil; t = iterator() {
+			if _, err := io.WriteString(w, t.Value); err != nil {
+				return err
+			}
+		}
+		return nil
 	}))
 	// Default HTML formatter outputs self-contained HTML.
 	htmlFull = Register("html", html.New(html.Standalone(), html.WithClasses()))

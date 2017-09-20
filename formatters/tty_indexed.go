@@ -234,9 +234,9 @@ type indexedTTYFormatter struct {
 	table *ttyTable
 }
 
-func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
+func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
 	theme := styleToEscapeSequence(c.table, style)
-	return func(token *chroma.Token) {
+	for token := it(); token != nil; token = it() {
 		// TODO: Cache token lookups?
 		clr, ok := theme[token.Type]
 		if !ok {
@@ -255,7 +255,8 @@ func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style) (func(*ch
 		if clr != "" {
 			fmt.Fprintf(w, "\033[0m")
 		}
-	}, nil
+	}
+	return nil
 }
 
 // TTY8 is an 8-colour terminal formatter.

@@ -35,10 +35,9 @@ func Highlight(w io.Writer, source, lexer, formatter, style string) error {
 		s = styles.Fallback
 	}
 
-	writer, err := f.Format(w, s)
+	it, err := l.Tokenise(nil, source)
 	if err != nil {
 		return err
 	}
-
-	return l.Tokenise(nil, source, writer)
+	return f.Format(w, s, it)
 }

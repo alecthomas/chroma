@@ -19,42 +19,47 @@ type Rule struct {
 // An Emitter takes group matches and returns tokens.
 type Emitter interface {
 	// Emit tokens for the given regex groups.
-	Emit(groups []string, lexer Lexer, out func(*Token))
+	Emit(groups []string, lexer Lexer) Iterator
 }
 
 // EmitterFunc is a function that is an Emitter.
-type EmitterFunc func(groups []string, lexer Lexer, out func(*Token))
+type EmitterFunc func(groups []string, lexer Lexer) Iterator
 
 // Emit tokens for groups.
-func (e EmitterFunc) Emit(groups []string, lexer Lexer, out func(*Token)) { e(groups, lexer, out) }
+func (e EmitterFunc) Emit(groups []string, lexer Lexer) Iterator { return e(groups, lexer) }
 
 // ByGroups emits a token for each matching group in the rule's regex.
 func ByGroups(emitters ...Emitter) Emitter {
-	return EmitterFunc(func(groups []string, lexer Lexer, out func(*Token)) {
-		// NOTE: If this line panics, there is a mismatch with groups. Uncomment the following line to debug.
+	return EmitterFunc(func(groups []string, lexer Lexer) Iterator {
+		iterators := make([]Iterator, 0, len(groups)-1)
+		// NOTE: If this panics, there is a mismatch with groups. Uncomment the following line to debug.
 		// fmt.Printf("%s %#v\n", emitters, groups[1:])
 		for i, group := range groups[1:] {
-			emitters[i].Emit([]string{group}, lexer, out)
+			iterators = append(iterators, emitters[i].Emit([]string{group}, lexer))
 		}
-		return
+		return Concaterator(iterators...)
 	})
 }
 
 // Using returns an Emitter that uses a given Lexer for parsing and emitting.
 func Using(lexer Lexer, options *TokeniseOptions) Emitter {
-	return EmitterFunc(func(groups []string, _ Lexer, out func(*Token)) {
-		if err := lexer.Tokenise(options, groups[0], out); err != nil {
+	return EmitterFunc(func(groups []string, _ Lexer) Iterator {
+		it, err := lexer.Tokenise(options, groups[0])
+		if err != nil {
 			panic(err)
 		}
+		return it
 	})
 }
 
 // UsingSelf is like Using, but uses the current Lexer.
 func UsingSelf(state string) Emitter {
-	return EmitterFunc(func(groups []string, lexer Lexer, out func(*Token)) {
-		if err := lexer.Tokenise(&TokeniseOptions{State: state}, groups[0], out); err != nil {
+	return EmitterFunc(func(groups []string, lexer Lexer) Iterator {
+		it, err := lexer.Tokenise(&TokeniseOptions{State: state}, groups[0])
+		if err != nil {
 			panic(err)
 		}
+		return it
 	})
 }
 
@@ -69,7 +74,14 @@ func Words(prefix, suffix string, words ...string) string {
 // Tokenise text using lexer, returning tokens as a slice.
 func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]*Token, error) {
 	out := []*Token{}
-	return out, lexer.Tokenise(options, text, func(token *Token) { out = append(out, token) })
+	it, err := lexer.Tokenise(options, text)
+	if err != nil {
+		return nil, err
+	}
+	for t := it(); t != nil; t = it() {
+		out = append(out, t)
+	}
+	return out, nil
 }
 
 // Rules maps from state to a sequence of Rules.
@@ -129,6 +141,7 @@ type CompiledRule struct {
 type CompiledRules map[string][]CompiledRule
 
 type LexerState struct {
+	Lexer *RegexLexer
 	Text  []rune
 	Pos   int
 	Rules map[string][]CompiledRule
@@ -147,6 +160,55 @@ func (l *LexerState) Set(key interface{}, value interface{}) {
 
 func (l *LexerState) Get(key interface{}) interface{} {
 	return l.MutatorContext[key]
+}
+
+func (l *LexerState) Iterator() Iterator {
+	iteratorStack := []Iterator{}
+	return func() *Token {
+		for l.Pos < len(l.Text) && len(l.Stack) > 0 {
+			// Exhaust the IteratorStack, if any.
+			for len(iteratorStack) > 0 {
+				n := len(iteratorStack) - 1
+				t := iteratorStack[n]()
+				if t == nil {
+					iteratorStack = iteratorStack[:n]
+					continue
+				}
+				return t
+			}
+
+			l.State = l.Stack[len(l.Stack)-1]
+			ruleIndex, rule, groups := matchRules(l.Text[l.Pos:], l.Rules[l.State])
+			// No match.
+			if groups == nil {
+				l.Pos++
+				return &Token{Error, string(l.Text[l.Pos-1 : l.Pos])}
+			}
+			l.Rule = ruleIndex
+			l.Groups = groups
+			l.Pos += utf8.RuneCountInString(groups[0])
+			if rule.Mutator != nil {
+				if err := rule.Mutator.Mutate(l); err != nil {
+					panic(err)
+				}
+			}
+			if rule.Type != nil {
+				iteratorStack = append(iteratorStack, rule.Type.Emit(l.Groups, l.Lexer))
+			}
+		}
+		// Exhaust the IteratorStack, if any.
+		// Duplicate code, but eh.
+		for len(iteratorStack) > 0 {
+			n := len(iteratorStack) - 1
+			t := iteratorStack[n]()
+			if t == nil {
+				iteratorStack = iteratorStack[:n]
+				continue
+			}
+			return t
+		}
+		return nil
+	}
 }
 
 type RegexLexer struct {
@@ -197,9 +259,9 @@ func (r *RegexLexer) maybeCompile() (err error) {
 	return nil
 }
 
-func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string, out func(*Token)) error {
+func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
 	if err := r.maybeCompile(); err != nil {
-		return err
+		return nil, err
 	}
 	if options == nil {
 		options = defaultOptions
@@ -210,30 +272,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string, out func(*T
 		Rules:          r.rules,
 		MutatorContext: map[interface{}]interface{}{},
 	}
-	for state.Pos < len(state.Text) && len(state.Stack) > 0 {
-		state.State = state.Stack[len(state.Stack)-1]
-		ruleIndex, rule, groups := matchRules(state.Text[state.Pos:], state.Rules[state.State])
-		// No match.
-		if groups == nil {
-			out(&Token{Error, string(state.Text[state.Pos : state.Pos+1])})
-			state.Pos++
-			continue
-		}
-		state.Rule = ruleIndex
-
-		state.Groups = groups
-		state.Pos += utf8.RuneCountInString(groups[0])
-		if rule.Mutator != nil {
-			if err := rule.Mutator.Mutate(state); err != nil {
-				return err
-			}
-		}
-		if rule.Type != nil {
-			rule.Type.Emit(state.Groups, r, out)
-		}
-	}
-	out(&Token{Type: EOF})
-	return nil
+	return state.Iterator(), nil
 }
 
 func matchRules(text []rune, rules []CompiledRule) (int, CompiledRule, []string) {

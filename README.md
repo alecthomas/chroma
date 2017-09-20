@@ -1,5 +1,7 @@
 # Chroma - A general purpose syntax highlighter in pure Go [![](https://godoc.org/github.com/alecthomas/chroma?status.svg)](http://godoc.org/github.com/alecthomas/chroma) [![Build Status](https://travis-ci.org/alecthomas/chroma.png)](https://travis-ci.org/alecthomas/chroma) [![Gitter chat](https://badges.gitter.im/alecthomas.png)](https://gitter.im/alecthomas/Lobby)
 
+> **NOTE:** As Chroma has just been released, its API is till in flux. That said, the high-level interface should not change significantly.
+
 Chroma takes source code and other structured text and converts it into syntax
 highlighted HTML, ANSI-coloured text, etc.
 
@@ -115,17 +117,17 @@ if formatter == nil {
 }
 ```
 
-Then obtain a formatting function from the formatter:
-
-```go
-writer, err := formatter.Format(w, style)
-```
-
-And finally, lex the source code and write the output:
+Then obtain an iterator over the tokens:
 
 ```go
 contents, err := ioutil.ReadAll(r)
-err := lexer.Tokenise(nil, string(contents), writer)
+iterator, err := lexer.Tokenise(nil, string(contents))
+```
+
+And finally, format the tokens from the iterator:
+
+```go
+err := formatter.Format(w, style, iterator)
 ```
 
 ### The HTML formatter
@@ -139,6 +141,9 @@ following constructor options:
 - `Standalone()` - generate standalone HTML with embedded CSS.
 - `WithClasses()` - use classes rather than inlined style attributes.
 - `ClassPrefix(prefix)` - prefix each generated CSS class.
+- `TabWidth(width)` - Set the rendered tab width, in characters.
+- `WithLineNumbers()` - Render line numbers (style with `LineNumbers`).
+- `HighlightLines(ranges)` - Highlight lines in these ranges (style with `LineHighlight`).
 
 If `WithClasses()` is used, the corresponding CSS can be obtained from the formatter with:
 

@@ -3,7 +3,7 @@ package lexers
 import (
 	"testing"
 
-	"github.com/alecthomas/chroma"
+	"github.com/stretchr/testify/assert"
 )
 
 const lexerBenchSource = `package chroma
@@ -29,6 +29,9 @@ func (f FormatterFunc) Format(w io.Writer, s *Style) (func(*Token), error) {
 func Benchmark(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		Go.Tokenise(nil, lexerBenchSource, func(t *chroma.Token) {})
+		it, err := Go.Tokenise(nil, lexerBenchSource)
+		assert.NoError(b, err)
+		for t := it(); t != nil; t = it() {
+		}
 	}
 }

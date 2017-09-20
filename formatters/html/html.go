@@ -67,15 +67,8 @@ func (h highlightRanges) Len() int           { return len(h) }
 func (h highlightRanges) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 func (h highlightRanges) Less(i, j int) bool { return h[i][0] < h[j][0] }
 
-func (f *Formatter) Format(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
-	tokens := []*chroma.Token{}
-	return func(token *chroma.Token) {
-		tokens = append(tokens, token)
-		if token.Type == chroma.EOF {
-			f.writeHTML(w, style, tokens)
-			return
-		}
-	}, nil
+func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Iterator) error {
+	return f.writeHTML(w, style, chroma.Flatten(iterator))
 }
 
 func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma.Token) error { // nolint: gocyclo

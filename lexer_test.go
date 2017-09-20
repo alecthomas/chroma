@@ -47,7 +47,6 @@ func TestSimpleLexer(t *testing.T) {
 		{Whitespace, " "},
 		{LiteralString, "10"},
 		{Whitespace, "\n"},
-		{EOF, ""},
 	}
 	require.Equal(t, expected, actual)
 }

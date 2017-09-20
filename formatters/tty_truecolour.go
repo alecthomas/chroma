@@ -10,8 +10,8 @@ import (
 // TTY16m is a true-colour terminal formatter.
 var TTY16m = Register("terminal16m", chroma.FormatterFunc(trueColourFormatter))
 
-func trueColourFormatter(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
-	return func(token *chroma.Token) {
+func trueColourFormatter(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
+	for token := it(); token != nil; token = it() {
 		entry := style.Get(token.Type)
 		if !entry.IsZero() {
 			out := ""
@@ -33,5 +33,6 @@ func trueColourFormatter(w io.Writer, style *chroma.Style) (func(*chroma.Token),
 		if !entry.IsZero() {
 			fmt.Fprint(w, "\033[0m")
 		}
-	}, nil
+	}
+	return nil
 }

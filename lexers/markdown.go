@@ -38,16 +38,25 @@ var Markdown = Register(MustNewLexer(
 	},
 ))
 
-func handleCodeblock(groups []string, lexer Lexer, out func(*Token)) {
-	out(&Token{String, groups[1]})
-	out(&Token{String, groups[2]})
-	out(&Token{Text, groups[3]})
+func handleCodeblock(groups []string, lexer Lexer) Iterator {
+	iterators := []Iterator{}
+	tokens := []*Token{
+		&Token{String, groups[1]},
+		&Token{String, groups[2]},
+		&Token{Text, groups[3]},
+	}
 	code := groups[4]
 	lexer = Get(groups[2])
 	if lexer == nil {
-		out(&Token{String, code})
+		tokens = append(tokens, &Token{String, code})
+		iterators = append(iterators, Literator(tokens...))
 	} else {
-		lexer.Tokenise(nil, code, out)
+		sub, err := lexer.Tokenise(nil, code)
+		if err != nil {
+			panic(err)
+		}
+		iterators = append(iterators, sub)
 	}
-	out(&Token{String, groups[5]})
+	iterators = append(iterators, Literator(&Token{String, groups[5]}))
+	return Concaterator(iterators...)
 }

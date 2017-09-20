@@ -21,16 +21,12 @@ const (
 	LineNumbers
 	// Line higlight style.
 	LineHighlight
-	// Character highlight style.
-	Highlight
 	// Input that could not be tokenised.
 	Error
 	// Other is used by the Delegate lexer to indicate which tokens should be handled by the delegate.
 	Other
 	// No highlighting.
 	None
-	// Final token.
-	EOF
 )
 
 // Keywords.
@@ -208,6 +204,6 @@ func (t TokenType) InSubCategory(other TokenType) bool {
 	return t/100 == other/100
 }
 
-func (t TokenType) Emit(groups []string, lexer Lexer, out func(*Token)) {
-	out(&Token{Type: t, Value: groups[0]})
+func (t TokenType) Emit(groups []string, lexer Lexer) Iterator {
+	return Literator(&Token{Type: t, Value: groups[0]})
 }

@@ -14,9 +14,6 @@ func TestCoalesce(t *testing.T) {
 	}))
 	actual, err := Tokenise(lexer, nil, "!@#$")
 	require.NoError(t, err)
-	expected := []*Token{
-		&Token{Punctuation, "!@#$"},
-		&Token{EOF, ""},
-	}
+	expected := []*Token{{Punctuation, "!@#$"}}
 	require.Equal(t, expected, actual)
 }
