@@ -78,7 +78,7 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style) (func(*chroma.Token
 	}, nil
 }
 
-func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma.Token) error {
+func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma.Token) error { // nolint: gocyclo
 	// We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
 	//
 	// OTOH we need to be super careful about correct escaping...
@@ -115,10 +115,10 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 			}
 		}
 		if highlight {
-			fmt.Fprintf(w, "<span class=\"hl\">")
+			fmt.Fprintf(w, "<span%s>", f.styleAttr(css, chroma.LineHighlight))
 		}
 		if f.lineNumbers {
-			fmt.Fprintf(w, "<span class=\"ln\">%*d</span>", lineDigits, line+1)
+			fmt.Fprintf(w, "<span%s>%*d</span>", f.styleAttr(css, chroma.LineNumbers), lineDigits, line+1)
 		}
 
 		for _, token := range tokens {
