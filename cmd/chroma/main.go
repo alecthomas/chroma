@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"runtime/pprof"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/mattn/go-colorable"
@@ -32,12 +33,15 @@ var (
 	styleFlag     = kingpin.Flag("style", "Style to use for formatting.").Short('s').Default("swapoff").Enum(styles.Names()...)
 	formatterFlag = kingpin.Flag("formatter", "Formatter to use.").Default("terminal").Short('f').Enum(formatters.Names()...)
 
-	htmlFlag            = kingpin.Flag("html", "Enable HTML mode (equivalent to '--formatter html').").Bool()
-	htmlPrefixFlag      = kingpin.Flag("html-prefix", "HTML CSS class prefix.").PlaceHolder("PREFIX").String()
-	htmlStylesFlag      = kingpin.Flag("html-styles", "Output HTML CSS styles.").Bool()
-	htmlOnlyFlag        = kingpin.Flag("html-only", "Output HTML fragment.").Bool()
-	htmlInlineStyleFlag = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
-	htmlTabWidthFlag    = kingpin.Flag("html-tab-width", "Set the HTML tab width.").Default("8").Int()
+	htmlFlag               = kingpin.Flag("html", "Enable HTML mode (equivalent to '--formatter html').").Bool()
+	htmlPrefixFlag         = kingpin.Flag("html-prefix", "HTML CSS class prefix.").PlaceHolder("PREFIX").String()
+	htmlStylesFlag         = kingpin.Flag("html-styles", "Output HTML CSS styles.").Bool()
+	htmlOnlyFlag           = kingpin.Flag("html-only", "Output HTML fragment.").Bool()
+	htmlInlineStyleFlag    = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
+	htmlTabWidthFlag       = kingpin.Flag("html-tab-width", "Set the HTML tab width.").Default("8").Int()
+	htmlLinesFlag          = kingpin.Flag("html-line-numbers", "Include line numbers in output.").Bool()
+	htmlHighlightStyleFlag = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").Default("bg:#yellow").String()
+	htmlHighlightFlag      = kingpin.Flag("html-highlight", "Highlight these ranges (N:M).").Strings()
 
 	filesArgs = kingpin.Arg("files", "Files to highlight.").ExistingFiles()
 )
@@ -107,6 +111,24 @@ command, for Go.
 		}
 		if !*htmlOnlyFlag {
 			options = append(options, html.Standalone())
+		}
+		if *htmlLinesFlag {
+			options = append(options, html.WithLineNumbers())
+		}
+		if len(*htmlHighlightFlag) > 0 {
+			ranges := [][2]int{}
+			for _, span := range *htmlHighlightFlag {
+				parts := strings.Split(span, ":")
+				if len(parts) != 2 {
+					kingpin.Fatalf("range should be N:M, not %q", span)
+				}
+				start, err := strconv.ParseInt(parts[0], 10, 64)
+				kingpin.FatalIfError(err, "min value of range should be integer not %q", parts[0])
+				end, err := strconv.ParseInt(parts[0], 10, 64)
+				kingpin.FatalIfError(err, "max value of range should be integer not %q", parts[0])
+				ranges = append(ranges, [2]int{int(start), int(end)})
+			}
+			options = append(options, html.HighlightLines(*htmlHighlightStyleFlag, ranges))
 		}
 		formatters.Register("html", html.New(options...))
 	}

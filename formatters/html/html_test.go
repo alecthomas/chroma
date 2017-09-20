@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
 )
@@ -26,4 +27,27 @@ func BenchmarkHTMLFormatter(b *testing.B) {
 		err = lexers.Go.Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n", writer)
 		assert.NoError(b, err)
 	}
+}
+
+func TestSplitTokensIntoLines(t *testing.T) {
+	in := []*chroma.Token{
+		{Value: "hello", Type: chroma.NameKeyword},
+		{Value: " world\nwhat?\n", Type: chroma.NameKeyword},
+		{Type: chroma.EOF},
+	}
+	expected := [][]*chroma.Token{
+		[]*chroma.Token{
+			{Type: chroma.NameKeyword, Value: "hello"},
+			{Type: chroma.NameKeyword, Value: " world\n"},
+		},
+		[]*chroma.Token{
+			{Type: chroma.NameKeyword, Value: "what?\n"},
+		},
+		[]*chroma.Token{
+			{Type: chroma.NameKeyword},
+			{Type: chroma.EOF},
+		},
+	}
+	actual := splitTokensIntoLines(in)
+	assert.Equal(t, expected, actual)
 }

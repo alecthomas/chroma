@@ -16,6 +16,8 @@ type TokenType int
 // Meta token types.
 const (
 	Background TokenType = -1 - iota
+	LineNumbers
+	Highlight
 	Escape
 	Error
 	Other

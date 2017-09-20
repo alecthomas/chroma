@@ -180,7 +180,7 @@ func ParseStyleEntry(parent *StyleEntry, entry string) *StyleEntry { // nolint: 
 		case strings.HasPrefix(part, "#"):
 			out.Colour = ParseColour(part)
 		default:
-			panic("unsupported style entry " + part)
+			// Here lies an error, but we ignore it in the interests of convenience.
 		}
 	}
 	return out

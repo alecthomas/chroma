@@ -39,6 +39,7 @@ func HighlightLines(style string, ranges [][2]int) Option {
 	return func(f *Formatter) {
 		f.highlightStyle = style
 		f.highlightRanges = ranges
+		sort.Sort(f.highlightRanges)
 	}
 }
 
@@ -59,14 +60,34 @@ type Formatter struct {
 	tabWidth        int
 	lineNumbers     bool
 	highlightStyle  string
-	highlightRanges [][2]int
+	highlightRanges highlightRanges
 }
 
+type highlightRanges [][2]int
+
+func (h highlightRanges) Len() int           { return len(h) }
+func (h highlightRanges) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h highlightRanges) Less(i, j int) bool { return h[i][0] < h[j][0] }
+
 func (f *Formatter) Format(w io.Writer, style *chroma.Style) (func(*chroma.Token), error) {
-	styles := f.typeStyles(style)
+	tokens := []*chroma.Token{}
+	return func(token *chroma.Token) {
+		tokens = append(tokens, token)
+		if token.Type == chroma.EOF {
+			f.writeHTML(w, style, tokens)
+			return
+		}
+	}, nil
+}
+
+func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma.Token) error {
+	// We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
+	//
+	// OTOH we need to be super careful about correct escaping...
+	css := f.styleToCSS(style)
 	if !f.classes {
-		for t, style := range styles {
-			styles[t] = compressStyle(style)
+		for t, style := range css {
+			css[t] = compressStyle(style)
 		}
 	}
 	if f.standalone {
@@ -74,34 +95,47 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style) (func(*chroma.Token
 		if f.classes {
 			fmt.Fprint(w, "<style type=\"text/css\">\n")
 			f.WriteCSS(w, style)
-			fmt.Fprintf(w, "body { %s; }\n", styles[chroma.Background])
+			fmt.Fprintf(w, "body { %s; }\n", css[chroma.Background])
 			fmt.Fprint(w, "</style>")
 		}
-		fmt.Fprintf(w, "<body%s>\n", f.styleAttr(styles, chroma.Background))
+		fmt.Fprintf(w, "<body%s>\n", f.styleAttr(css, chroma.Background))
 	}
-	fmt.Fprintf(w, "<pre%s>\n", f.styleAttr(styles, chroma.Background))
-	return func(token *chroma.Token) {
-		if token.Type == chroma.EOF {
-			fmt.Fprint(w, "</pre>\n")
-			if f.standalone {
-				fmt.Fprint(w, "</body>\n")
-				fmt.Fprint(w, "</html>\n")
+
+	fmt.Fprintf(w, "<pre%s>\n", f.styleAttr(css, chroma.Background))
+	lines := splitTokensIntoLines(tokens)
+	lineDigits := len(fmt.Sprintf("%d", len(lines)))
+	for line, tokens := range lines {
+		if f.lineNumbers {
+			fmt.Fprintf(w, "<span class=\"ln\">%*d</span>", lineDigits, line+1)
+		}
+
+		for _, token := range tokens {
+			html := html.EscapeString(token.String())
+			attr := f.styleAttr(css, token.Type)
+			if attr != "" {
+				html = fmt.Sprintf("<span%s>%s</span>", attr, html)
 			}
-			return
-		}
-		html := html.EscapeString(token.String())
-		attr := f.styleAttr(styles, token.Type)
-		if attr == "" {
 			fmt.Fprint(w, html)
-		} else {
-			fmt.Fprintf(w, "<span%s>%s</span>", attr, html)
 		}
-	}, nil
+	}
+
+	fmt.Fprint(w, "</pre>\n")
+	if f.standalone {
+		fmt.Fprint(w, "</body>\n")
+		fmt.Fprint(w, "</html>\n")
+	}
+
+	return nil
 }
 
 func (f *Formatter) class(tt chroma.TokenType) string {
-	if tt == chroma.Background {
+	switch tt {
+	case chroma.Background:
 		return "chroma"
+	case chroma.LineNumbers:
+		return "ln"
+	case chroma.Highlight:
+		return "hl"
 	}
 	if tt < 0 {
 		return fmt.Sprintf("%sss%x", f.prefix, -int(tt))
@@ -132,6 +166,75 @@ func (f *Formatter) tabWidthStyle() string {
 	return ""
 }
 
+// WriteCSS writes CSS style definitions (without any surrounding HTML).
+func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
+	css := f.styleToCSS(style)
+	// Special-case background as it is mapped to the outer ".chroma" class.
+	if _, err := fmt.Fprintf(w, "/* %s */ .chroma { %s }\n", chroma.Background, css[chroma.Background]); err != nil {
+		return err
+	}
+	// No line-numbers, add a default.
+	if _, ok := css[chroma.LineNumbers]; !ok {
+		css[chroma.LineNumbers] = "color: #888"
+	}
+	css[chroma.LineNumbers] += "; margin-right: 0.5em"
+	tts := []int{}
+	for tt := range css {
+		tts = append(tts, int(tt))
+	}
+	sort.Ints(tts)
+	for _, ti := range tts {
+		tt := chroma.TokenType(ti)
+		if tt == chroma.Background {
+			continue
+		}
+		styles := css[tt]
+		if _, err := fmt.Fprintf(w, "/* %s */ .chroma .%s { %s }\n", tt, f.class(tt), styles); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string {
+	bg := style.Get(chroma.Background)
+	classes := map[chroma.TokenType]string{}
+	// Insert highlight colour if needed.
+	if len(f.highlightRanges) > 0 {
+		highlight := chroma.ParseStyleEntry(bg, f.highlightStyle).Sub(bg)
+		classes[chroma.Highlight] = StyleEntryToCSS(highlight)
+	}
+	// Convert the style.
+	for t := range style.Entries {
+		e := style.Entries[t]
+		if t != chroma.Background {
+			e = e.Sub(bg)
+		}
+		classes[t] = StyleEntryToCSS(e)
+	}
+	classes[chroma.Background] += f.tabWidthStyle()
+	return classes
+}
+
+// StyleEntryToCSS converts a chroma.StyleEntry to CSS attributes.
+func StyleEntryToCSS(e *chroma.StyleEntry) string {
+	styles := []string{}
+	if e.Colour.IsSet() {
+		styles = append(styles, "color: "+e.Colour.String())
+	}
+	if e.Background.IsSet() {
+		styles = append(styles, "background-color: "+e.Background.String())
+	}
+	if e.Bold {
+		styles = append(styles, "font-weight: bold")
+	}
+	if e.Italic {
+		styles = append(styles, "font-style: italic")
+	}
+	return strings.Join(styles, "; ")
+}
+
+// Compress CSS attributes - remove spaces, transform 6-digit colours to 3.
 func compressStyle(s string) string {
 	s = strings.Replace(s, " ", "", -1)
 	parts := strings.Split(s, ";")
@@ -148,57 +251,25 @@ func compressStyle(s string) string {
 	return strings.Join(out, ";")
 }
 
-// WriteCSS writes CSS style definitions (without any surrounding HTML).
-func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
-	classes := f.typeStyles(style)
-	if _, err := fmt.Fprintf(w, "/* %s */ .chroma { %s }\n", chroma.Background, classes[chroma.Background]); err != nil {
-		return err
-	}
-	tts := []int{}
-	for tt := range classes {
-		tts = append(tts, int(tt))
-	}
-	sort.Ints(tts)
-	for _, ti := range tts {
-		tt := chroma.TokenType(ti)
-		styles := classes[tt]
-		if tt < 0 {
-			continue
-		}
-		if _, err := fmt.Fprintf(w, "/* %s */ .chroma .%ss%x { %s }\n", tt, f.prefix, int(tt), styles); err != nil {
-			return err
-		}
-	}
-	return nil
-}
+func splitTokensIntoLines(tokens []*chroma.Token) (out [][]*chroma.Token) {
+	line := []*chroma.Token{}
+	for _, token := range tokens {
+		for strings.Contains(token.Value, "\n") {
+			parts := strings.SplitAfterN(token.Value, "\n", 2)
+			// Token becomes the tail.
+			token.Value = parts[1]
 
-func (f *Formatter) typeStyles(style *chroma.Style) map[chroma.TokenType]string {
-	bg := style.Get(chroma.Background)
-	classes := map[chroma.TokenType]string{}
-	for t := range style.Entries {
-		e := style.Entries[t]
-		if t != chroma.Background {
-			e = e.Sub(bg)
+			// Append the head to the line and flush the line.
+			clone := token.Clone()
+			clone.Value = parts[0]
+			line = append(line, clone)
+			out = append(out, line)
+			line = nil
 		}
-		classes[t] = f.styleEntryToCSS(e)
+		line = append(line, token)
 	}
-	classes[chroma.Background] += f.tabWidthStyle()
-	return classes
-}
-
-func (f *Formatter) styleEntryToCSS(e *chroma.StyleEntry) string {
-	styles := []string{}
-	if e.Colour.IsSet() {
-		styles = append(styles, "color: "+e.Colour.String())
+	if len(line) > 0 {
+		out = append(out, line)
 	}
-	if e.Background.IsSet() {
-		styles = append(styles, "background-color: "+e.Background.String())
-	}
-	if e.Bold {
-		styles = append(styles, "font-weight: bold")
-	}
-	if e.Italic {
-		styles = append(styles, "font-style: italic")
-	}
-	return strings.Join(styles, "; ")
+	return
 }
