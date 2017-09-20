@@ -1,6 +1,6 @@
 # Chroma - A general purpose syntax highlighter in pure Go [![](https://godoc.org/github.com/alecthomas/chroma?status.svg)](http://godoc.org/github.com/alecthomas/chroma) [![Build Status](https://travis-ci.org/alecthomas/chroma.png)](https://travis-ci.org/alecthomas/chroma) [![Gitter chat](https://badges.gitter.im/alecthomas.png)](https://gitter.im/alecthomas/Lobby)
 
-> **NOTE:** As Chroma has just been released, its API is till in flux. That said, the high-level interface should not change significantly.
+> **NOTE:** As Chroma has just been released, its API is still in flux. That said, the high-level interface should not change significantly.
 
 Chroma takes source code and other structured text and converts it into syntax
 highlighted HTML, ANSI-coloured text, etc.
