@@ -32,12 +32,11 @@ func WithLineNumbers() Option {
 	}
 }
 
-// HighlightLines higlights the given line ranges.
+// HighlightLines higlights the given line ranges with the Highlight style.
 //
 // A range is the beginning and ending of a range as 1-based line numbers, inclusive.
-func HighlightLines(style string, ranges [][2]int) Option {
+func HighlightLines(ranges [][2]int) Option {
 	return func(f *Formatter) {
-		f.highlightStyle = style
 		f.highlightRanges = ranges
 		sort.Sort(f.highlightRanges)
 	}
@@ -59,7 +58,6 @@ type Formatter struct {
 	classes         bool
 	tabWidth        int
 	lineNumbers     bool
-	highlightStyle  string
 	highlightRanges highlightRanges
 }
 
@@ -104,7 +102,21 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 	fmt.Fprintf(w, "<pre%s>\n", f.styleAttr(css, chroma.Background))
 	lines := splitTokensIntoLines(tokens)
 	lineDigits := len(fmt.Sprintf("%d", len(lines)))
+	highlightIndex := 0
 	for line, tokens := range lines {
+		highlight := false
+		for highlightIndex < len(f.highlightRanges) && line+1 > f.highlightRanges[highlightIndex][1] {
+			highlightIndex++
+		}
+		if highlightIndex < len(f.highlightRanges) {
+			hrange := f.highlightRanges[highlightIndex]
+			if line+1 >= hrange[0] && line+1 <= hrange[1] {
+				highlight = true
+			}
+		}
+		if highlight {
+			fmt.Fprintf(w, "<span class=\"hl\">")
+		}
 		if f.lineNumbers {
 			fmt.Fprintf(w, "<span class=\"ln\">%*d</span>", lineDigits, line+1)
 		}
@@ -116,6 +128,9 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 				html = fmt.Sprintf("<span%s>%s</span>", attr, html)
 			}
 			fmt.Fprint(w, html)
+		}
+		if highlight {
+			fmt.Fprintf(w, "</span>")
 		}
 	}
 
@@ -134,7 +149,7 @@ func (f *Formatter) class(tt chroma.TokenType) string {
 		return "chroma"
 	case chroma.LineNumbers:
 		return "ln"
-	case chroma.Highlight:
+	case chroma.LineHighlight:
 		return "hl"
 	}
 	if tt < 0 {
@@ -173,11 +188,6 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 	if _, err := fmt.Fprintf(w, "/* %s */ .chroma { %s }\n", chroma.Background, css[chroma.Background]); err != nil {
 		return err
 	}
-	// No line-numbers, add a default.
-	if _, ok := css[chroma.LineNumbers]; !ok {
-		css[chroma.LineNumbers] = "color: #888"
-	}
-	css[chroma.LineNumbers] += "; margin-right: 0.5em"
 	tts := []int{}
 	for tt := range css {
 		tts = append(tts, int(tt))
@@ -199,11 +209,6 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string {
 	bg := style.Get(chroma.Background)
 	classes := map[chroma.TokenType]string{}
-	// Insert highlight colour if needed.
-	if len(f.highlightRanges) > 0 {
-		highlight := chroma.ParseStyleEntry(bg, f.highlightStyle).Sub(bg)
-		classes[chroma.Highlight] = StyleEntryToCSS(highlight)
-	}
 	// Convert the style.
 	for t := range style.Entries {
 		e := style.Entries[t]
@@ -213,6 +218,8 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 		classes[t] = StyleEntryToCSS(e)
 	}
 	classes[chroma.Background] += f.tabWidthStyle()
+	classes[chroma.LineNumbers] += "; margin-right: 0.5em"
+	classes[chroma.LineHighlight] += "; display: block; width: 100%"
 	return classes
 }
 

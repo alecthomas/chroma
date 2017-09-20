@@ -40,8 +40,9 @@ var (
 	htmlInlineStyleFlag    = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
 	htmlTabWidthFlag       = kingpin.Flag("html-tab-width", "Set the HTML tab width.").Default("8").Int()
 	htmlLinesFlag          = kingpin.Flag("html-line-numbers", "Include line numbers in output.").Bool()
-	htmlHighlightStyleFlag = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").Default("bg:#yellow").String()
-	htmlHighlightFlag      = kingpin.Flag("html-highlight", "Highlight these ranges (N:M).").Strings()
+	htmlLinesStyleFlag     = kingpin.Flag("html-line-numbers-style", "Style for line numbers.").Default("#888").String()
+	htmlHighlightFlag      = kingpin.Flag("html-highlight", "Highlight these lines.").PlaceHolder("N[:M][,...]").String()
+	htmlHighlightStyleFlag = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").Default("bg:#282828").String()
 
 	filesArgs = kingpin.Arg("files", "Files to highlight.").ExistingFiles()
 )
@@ -94,6 +95,16 @@ command, for Go.
 	if *htmlFlag {
 		*formatterFlag = "html"
 	}
+
+	// Retrieve user-specified style, clone it, and add some overrides.
+	style := styles.Get(*styleFlag).Clone()
+	if *htmlHighlightStyleFlag != "" {
+		style.Add(chroma.LineHighlight, *htmlHighlightStyleFlag)
+	}
+	if *htmlLinesStyleFlag != "" {
+		style.Add(chroma.LineNumbers, *htmlLinesStyleFlag)
+	}
+
 	if *formatterFlag == "html" {
 		options := []html.Option{html.TabWidth(*htmlTabWidthFlag)}
 		if *htmlPrefixFlag != "" {
@@ -103,7 +114,7 @@ command, for Go.
 		// Dump styles.
 		if *htmlStylesFlag {
 			formatter := html.New(html.WithClasses())
-			formatter.WriteCSS(w, styles.Get(*styleFlag))
+			formatter.WriteCSS(w, style)
 			return
 		}
 		if !*htmlInlineStyleFlag {
@@ -117,22 +128,25 @@ command, for Go.
 		}
 		if len(*htmlHighlightFlag) > 0 {
 			ranges := [][2]int{}
-			for _, span := range *htmlHighlightFlag {
+			for _, span := range strings.Split(*htmlHighlightFlag, ",") {
 				parts := strings.Split(span, ":")
-				if len(parts) != 2 {
-					kingpin.Fatalf("range should be N:M, not %q", span)
+				if len(parts) > 2 {
+					kingpin.Fatalf("range should be N[:M], not %q", span)
 				}
 				start, err := strconv.ParseInt(parts[0], 10, 64)
 				kingpin.FatalIfError(err, "min value of range should be integer not %q", parts[0])
-				end, err := strconv.ParseInt(parts[0], 10, 64)
-				kingpin.FatalIfError(err, "max value of range should be integer not %q", parts[0])
+				end := start
+				if len(parts) == 2 {
+					end, err = strconv.ParseInt(parts[1], 10, 64)
+					kingpin.FatalIfError(err, "max value of range should be integer not %q", parts[1])
+				}
 				ranges = append(ranges, [2]int{int(start), int(end)})
 			}
-			options = append(options, html.HighlightLines(*htmlHighlightStyleFlag, ranges))
+			options = append(options, html.HighlightLines(ranges))
 		}
 		formatters.Register("html", html.New(options...))
 	}
-	writer := getWriter(w)
+	writer := getWriter(w, style)
 	if len(*filesArgs) == 0 {
 		contents, err := ioutil.ReadAll(os.Stdin)
 		kingpin.FatalIfError(err, "")
@@ -201,8 +215,7 @@ func selexer(path, contents string) (lexer chroma.Lexer) {
 	return lexers.Analyse(contents)
 }
 
-func getWriter(w io.Writer) func(*chroma.Token) {
-	style := styles.Get(*styleFlag)
+func getWriter(w io.Writer, style *chroma.Style) func(*chroma.Token) {
 	formatter := formatters.Get(*formatterFlag)
 	// formatter := formatters.TTY8
 	writer, err := formatter.Format(w, style)

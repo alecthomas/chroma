@@ -17,6 +17,13 @@ type StyleEntry struct {
 	Underline bool
 }
 
+// Clone this StyleEntry.
+func (s *StyleEntry) Clone() *StyleEntry {
+	clone := &StyleEntry{}
+	*clone = *s
+	return clone
+}
+
 func (s *StyleEntry) String() string {
 	out := []string{}
 	if s.Bold {
@@ -87,6 +94,18 @@ func NewStyle(name string, entries StyleEntries) *Style {
 type Style struct {
 	Name    string
 	Entries map[TokenType]*StyleEntry
+}
+
+// Clone this style. The clone can then be safely modified.
+func (s *Style) Clone() *Style {
+	clone := &Style{
+		Name:    s.Name,
+		Entries: map[TokenType]*StyleEntry{},
+	}
+	for tt, e := range s.Entries {
+		clone.Entries[tt] = e.Clone()
+	}
+	return clone
 }
 
 // Get a style entry. Will try sub-category or category if an exact match is not found, and

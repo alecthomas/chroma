@@ -15,13 +15,21 @@ type TokenType int
 
 // Meta token types.
 const (
+	// Default background style.
 	Background TokenType = -1 - iota
+	// Line numbers in output.
 	LineNumbers
+	// Line higlight style.
+	LineHighlight
+	// Character highlight style.
 	Highlight
-	Escape
+	// Input that could not be tokenised.
 	Error
+	// Other is used by the Delegate lexer to indicate which tokens should be handled by the delegate.
 	Other
+	// No highlighting.
 	None
+	// Final token.
 	EOF
 )
 
