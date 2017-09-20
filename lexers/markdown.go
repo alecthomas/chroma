@@ -55,7 +55,7 @@ func handleCodeblock(groups []string, lexer Lexer) Iterator {
 		if err != nil {
 			panic(err)
 		}
-		iterators = append(iterators, sub)
+		iterators = append(iterators, Literator(tokens...), sub)
 	}
 	iterators = append(iterators, Literator(&Token{String, groups[5]}))
 	return Concaterator(iterators...)

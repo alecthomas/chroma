@@ -234,7 +234,12 @@ type indexedTTYFormatter struct {
 	table *ttyTable
 }
 
-func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
+func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma.Iterator) (err error) {
+	defer func() {
+		if perr := recover(); perr != nil {
+			err = perr.(error)
+		}
+	}()
 	theme := styleToEscapeSequence(c.table, style)
 	for token := it(); token != nil; token = it() {
 		// TODO: Cache token lookups?

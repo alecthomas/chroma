@@ -1,6 +1,7 @@
 package html
 
 import (
+	"errors"
 	"io/ioutil"
 	"testing"
 
@@ -48,4 +49,12 @@ func TestSplitTokensIntoLines(t *testing.T) {
 	}
 	actual := splitTokensIntoLines(in)
 	assert.Equal(t, expected, actual)
+}
+
+func TestIteratorPanicRecovery(t *testing.T) {
+	it := func() *chroma.Token {
+		panic(errors.New("bad"))
+	}
+	err := New().Format(ioutil.Discard, styles.Fallback, it)
+	assert.Error(t, err)
 }

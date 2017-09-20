@@ -267,6 +267,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 		options = defaultOptions
 	}
 	state := &LexerState{
+		Lexer:          r,
 		Text:           []rune(text),
 		Stack:          []string{options.State},
 		Rules:          r.rules,
