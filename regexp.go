@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+	"unicode/utf8"
 
 	"github.com/dlclark/regexp2"
 )
@@ -221,7 +222,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string, out func(*T
 		state.Rule = ruleIndex
 
 		state.Groups = groups
-		state.Pos += len(groups[0])
+		state.Pos += utf8.RuneCountInString(groups[0])
 		if rule.Mutator != nil {
 			if err := rule.Mutator.Mutate(state); err != nil {
 				return err
