@@ -21,7 +21,7 @@ var Markdown = Register(MustNewLexer(
 			{`^(\s*)([0-9]+\.)( .+\n)`, ByGroups(Text, Keyword, UsingSelf("inline")), nil},
 			{`^(\s*>\s)(.+\n)`, ByGroups(Keyword, GenericEmph), nil},
 			{"^(```\\n)([\\w\\W]*?)(^```$)", ByGroups(LiteralString, Text, LiteralString), nil},
-			{"^(```)(\\w+)(\\n)([\\w\\W]*?)(^```$)", EmitterFunc(handleCodeblock), nil},
+			{"^(```)(\\w+)(\\n)([\\w\\W]*?)(^```$)", EmitterFunc(markdownCodeBlock), nil},
 			Include("inline"),
 		},
 		"inline": {
@@ -38,12 +38,12 @@ var Markdown = Register(MustNewLexer(
 	},
 ))
 
-func handleCodeblock(groups []string, lexer Lexer) Iterator {
+func markdownCodeBlock(groups []string, lexer Lexer) Iterator {
 	iterators := []Iterator{}
 	tokens := []*Token{
-		&Token{String, groups[1]},
-		&Token{String, groups[2]},
-		&Token{Text, groups[3]},
+		{String, groups[1]},
+		{String, groups[2]},
+		{Text, groups[3]},
 	}
 	code := groups[4]
 	lexer = Get(groups[2])
