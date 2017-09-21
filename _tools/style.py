@@ -14,7 +14,7 @@ import (
 )
 
 // {{upper_name}} style.
-var {{upper_name}} = Register(chroma.NewStyle("{{name}}", chroma.StyleEntries{
+var {{upper_name}} = Register(chroma.MustNewStyle("{{name}}", chroma.StyleEntries{
 {{#styles}}
     chroma.{{type}}: "{{style}}",
 {{/styles}}

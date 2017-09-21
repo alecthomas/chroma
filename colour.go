@@ -50,14 +50,25 @@ var ANSI2RGB = map[string]string{
 type Colour int32
 
 // ParseColour in the forms #rgb, #rrggbb, #ansi<colour>, or #<colour>.
-// Will panic if colour is in an invalid format.
+// Will return an "unset" colour if invalid.
 func ParseColour(colour string) Colour {
 	colour = normaliseColour(colour)
 	n, err := strconv.ParseUint(colour, 16, 32)
 	if err != nil {
-		panic(err)
+		return 0
 	}
 	return Colour(n + 1)
+}
+
+// MustParseColour is like ParseColour except it panics if the colour is invalid.
+//
+// Will panic if colour is in an invalid format.
+func MustParseColour(colour string) Colour {
+	parsed := ParseColour(colour)
+	if !parsed.IsSet() {
+		panic(fmt.Errorf("invalid colour %q", colour))
+	}
+	return parsed
 }
 
 func (c Colour) IsSet() bool { return c != 0 }

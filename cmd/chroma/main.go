@@ -99,10 +99,12 @@ command, for Go.
 	// Retrieve user-specified style, clone it, and add some overrides.
 	style := styles.Get(*styleFlag).Clone()
 	if *htmlHighlightStyleFlag != "" {
-		style.Add(chroma.LineHighlight, *htmlHighlightStyleFlag)
+		err := style.Add(chroma.LineHighlight, *htmlHighlightStyleFlag)
+		kingpin.FatalIfError(err, "invalid line highlight style")
 	}
 	if *htmlLinesStyleFlag != "" {
-		style.Add(chroma.LineNumbers, *htmlLinesStyleFlag)
+		err := style.Add(chroma.LineNumbers, *htmlLinesStyleFlag)
+		kingpin.FatalIfError(err, "invalid line style")
 	}
 
 	if *formatterFlag == "html" {

@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 )
@@ -78,14 +79,27 @@ func (s *StyleEntry) Sub(e *StyleEntry) *StyleEntry {
 type StyleEntries map[TokenType]string
 
 // NewStyle creates a new style definition.
-func NewStyle(name string, entries StyleEntries) *Style {
+func NewStyle(name string, entries StyleEntries) (*Style, error) {
 	s := &Style{
 		Name:    name,
 		Entries: map[TokenType]*StyleEntry{},
 	}
-	s.Add(Background, "")
-	s.AddAll(entries)
-	return s
+	if err := s.Add(Background, ""); err != nil {
+		return nil, err
+	}
+	if err := s.AddAll(entries); err != nil {
+		return nil, err
+	}
+	return s, nil
+}
+
+// MustNewStyle creates a new style or panics.
+func MustNewStyle(name string, entries StyleEntries) *Style {
+	style, err := NewStyle(name, entries)
+	if err != nil {
+		panic(err)
+	}
+	return style
 }
 
 // A Style definition.
@@ -124,7 +138,7 @@ func (s *Style) Get(ttype TokenType) *StyleEntry {
 	return out
 }
 
-func (s *Style) AddAll(entries StyleEntries) *Style {
+func (s *Style) AddAll(entries StyleEntries) error {
 	tis := []int{}
 	for tt := range entries {
 		tis = append(tis, int(tt))
@@ -133,15 +147,17 @@ func (s *Style) AddAll(entries StyleEntries) *Style {
 	for _, ti := range tis {
 		tt := TokenType(ti)
 		entry := entries[tt]
-		s.Add(tt, entry)
+		if err := s.Add(tt, entry); err != nil {
+			return err
+		}
 	}
-	return s
+	return nil
 }
 
 // Add a StyleEntry to the Style map.
 //
 // See http://pygments.org/docs/styles/#style-rules for details.
-func (s *Style) Add(ttype TokenType, entry string) *Style { // nolint: gocyclo
+func (s *Style) Add(ttype TokenType, entry string) error { // nolint: gocyclo
 	dupl := s.Entries[ttype.SubCategory()]
 	if dupl == nil {
 		dupl = s.Entries[ttype.Category()]
@@ -155,12 +171,16 @@ func (s *Style) Add(ttype TokenType, entry string) *Style { // nolint: gocyclo
 	parent := &StyleEntry{}
 	// Duplicate ancestor node.
 	*parent = *dupl
-	s.Entries[ttype] = ParseStyleEntry(parent, entry)
-	return s
+	se, err := ParseStyleEntry(parent, entry)
+	if err != nil {
+		return err
+	}
+	s.Entries[ttype] = se
+	return nil
 }
 
 // ParseStyleEntry parses a Pygments style entry.
-func ParseStyleEntry(parent *StyleEntry, entry string) *StyleEntry { // nolint: gocyclo
+func ParseStyleEntry(parent *StyleEntry, entry string) (*StyleEntry, error) { // nolint: gocyclo
 	out := &StyleEntry{}
 	parts := strings.Fields(entry)
 	// Check if parent style should be inherited...
@@ -194,13 +214,22 @@ func ParseStyleEntry(parent *StyleEntry, entry string) *StyleEntry { // nolint: 
 			out.Background = 0
 		case strings.HasPrefix(part, "bg:#"):
 			out.Background = ParseColour(part[3:])
+			if !out.Background.IsSet() {
+				return nil, fmt.Errorf("invalid background colour %q", part)
+			}
 		case strings.HasPrefix(part, "border:#"):
 			out.Border = ParseColour(part[7:])
+			if !out.Border.IsSet() {
+				return nil, fmt.Errorf("invalid border colour %q", part)
+			}
 		case strings.HasPrefix(part, "#"):
 			out.Colour = ParseColour(part)
+			if !out.Colour.IsSet() {
+				return nil, fmt.Errorf("invalid colour %q", part)
+			}
 		default:
-			// Here lies an error, but we ignore it in the interests of convenience.
+			return nil, fmt.Errorf("unknown style element %q", part)
 		}
 	}
-	return out
+	return out, nil
 }

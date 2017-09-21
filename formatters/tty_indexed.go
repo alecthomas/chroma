@@ -16,7 +16,7 @@ type ttyTable struct {
 	distance   map[chroma.Colour]colorful.Color
 }
 
-var c = chroma.ParseColour
+var c = chroma.MustParseColour
 
 var ttyTables = map[int]*ttyTable{
 	8: &ttyTable{

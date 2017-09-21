@@ -5,7 +5,7 @@ import (
 )
 
 // Pygments default theme.
-var Pygments = Register(chroma.NewStyle("pygments", map[chroma.TokenType]string{
+var Pygments = Register(chroma.MustNewStyle("pygments", map[chroma.TokenType]string{
 	chroma.Whitespace:     "#bbbbbb",
 	chroma.Comment:        "italic #408080",
 	chroma.CommentPreproc: "noitalic #BC7A00",
