@@ -208,8 +208,7 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 	bg := style.Get(chroma.Background)
 	classes := map[chroma.TokenType]string{}
 	// Convert the style.
-	for t := range style.Entries {
-		e := style.Entries[t]
+	for t, e := range style.Entries {
 		if t != chroma.Background {
 			e = e.Sub(bg)
 		}

@@ -11,6 +11,12 @@ type Mutator interface {
 	Mutate(state *LexerState) error
 }
 
+// A LexerMutator is an additional interface that a Mutator can implement
+// to modify the lexer when it is compiled.
+type LexerMutator interface {
+	MutateLexer(lexer *RegexLexer, rule *CompiledRule) error
+}
+
 // A MutatorFunc is a Mutator that mutates the lexer state machine as it is processing.
 type MutatorFunc func(state *LexerState) error
 
@@ -44,25 +50,32 @@ func Include(state string) Rule {
 	}
 }
 
-// Combined creates a new anonymous state from the given states, and pushes that state.
-func Combined(states ...string) MutatorFunc {
-	return func(s *LexerState) error {
-		name := "__combined_" + strings.Join(states, "__")
-		if _, ok := s.Rules[name]; !ok {
-			combined := []CompiledRule{}
-			for _, state := range states {
-				rules, ok := s.Rules[state]
-				if !ok {
-					return fmt.Errorf("invalid combine state %q", state)
-				}
-				combined = append(combined, rules...)
+type combinedMutator struct {
+	states []string
+}
+
+func (c *combinedMutator) Mutate(s *LexerState) error { return nil }
+
+func (c *combinedMutator) MutateLexer(lexer *RegexLexer, rule *CompiledRule) error {
+	name := "__combined_" + strings.Join(c.states, "__")
+	if _, ok := lexer.rules[name]; !ok {
+		combined := []*CompiledRule{}
+		for _, state := range c.states {
+			rules, ok := lexer.rules[state]
+			if !ok {
+				return fmt.Errorf("invalid combine state %q", state)
 			}
-			s.Rules[name] = combined
+			combined = append(combined, rules...)
 		}
-		s.Rules[s.State][s.Rule].Mutator = Push(name)
-		s.Stack = append(s.Stack, name)
-		return nil
+		lexer.rules[name] = combined
 	}
+	rule.Mutator = Push(name)
+	return nil
+}
+
+// Combined creates a new anonymous state from the given states, and pushes that state.
+func Combined(states ...string) Mutator {
+	return &combinedMutator{states}
 }
 
 // Push states onto the stack.

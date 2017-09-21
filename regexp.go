@@ -108,7 +108,7 @@ func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 	if _, ok := rules["root"]; !ok {
 		return nil, fmt.Errorf("no \"root\" state")
 	}
-	compiledRules := map[string][]CompiledRule{}
+	compiledRules := map[string][]*CompiledRule{}
 	for state, rules := range rules {
 		for _, rule := range rules {
 			flags := ""
@@ -121,7 +121,7 @@ func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 			if config.DotAll {
 				flags += "s"
 			}
-			compiledRules[state] = append(compiledRules[state], CompiledRule{Rule: rule, flags: flags})
+			compiledRules[state] = append(compiledRules[state], &CompiledRule{Rule: rule, flags: flags})
 		}
 	}
 	return &RegexLexer{
@@ -144,13 +144,13 @@ type CompiledRule struct {
 	flags  string
 }
 
-type CompiledRules map[string][]CompiledRule
+type CompiledRules map[string][]*CompiledRule
 
 type LexerState struct {
 	Lexer *RegexLexer
 	Text  []rune
 	Pos   int
-	Rules map[string][]CompiledRule
+	Rules CompiledRules
 	Stack []string
 	State string
 	Rule  int
@@ -234,7 +234,7 @@ type RegexLexer struct {
 
 	mu       sync.Mutex
 	compiled bool
-	rules    map[string][]CompiledRule
+	rules    map[string][]*CompiledRule
 }
 
 // SetAnalyser sets the analyser function used to perform content inspection.
@@ -269,7 +269,11 @@ func (r *RegexLexer) maybeCompile() (err error) {
 					return fmt.Errorf("failed to compile rule %s.%d: %s", state, i, err)
 				}
 			}
-			rules[i] = rule
+			if compile, ok := rule.Mutator.(LexerMutator); ok {
+				if err := compile.MutateLexer(r, rule); err != nil {
+					return err
+				}
+			}
 		}
 	}
 	r.compiled = true
@@ -293,7 +297,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 	return state.Iterator(), nil
 }
 
-func matchRules(text []rune, rules []CompiledRule) (int, CompiledRule, []string) {
+func matchRules(text []rune, rules []*CompiledRule) (int, *CompiledRule, []string) {
 	for i, rule := range rules {
 		match, err := rule.Regexp.FindRunesMatch(text)
 		if match != nil && err == nil {
@@ -304,5 +308,5 @@ func matchRules(text []rune, rules []CompiledRule) (int, CompiledRule, []string)
 			return i, rule, groups
 		}
 	}
-	return 0, CompiledRule{}, nil
+	return 0, &CompiledRule{}, nil
 }
