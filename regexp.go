@@ -2,6 +2,7 @@ package chroma
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 	"strings"
 	"sync"
@@ -129,6 +130,11 @@ func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 	}, nil
 }
 
+func (r *RegexLexer) Trace(trace bool) *RegexLexer {
+	r.trace = trace
+	return r
+}
+
 // A CompiledRule is a Rule with a pre-compiled regex.
 //
 // Note that regular expressions are lazily compiled on first use of the lexer.
@@ -166,7 +172,7 @@ func (l *LexerState) Iterator() Iterator {
 	iteratorStack := []Iterator{}
 	return func() *Token {
 		for l.Pos < len(l.Text) && len(l.Stack) > 0 {
-			// Exhaust the IteratorStack, if any.
+			// Exhaust the iterator stack, if any.
 			for len(iteratorStack) > 0 {
 				n := len(iteratorStack) - 1
 				t := iteratorStack[n]()
@@ -178,6 +184,9 @@ func (l *LexerState) Iterator() Iterator {
 			}
 
 			l.State = l.Stack[len(l.Stack)-1]
+			if l.Lexer.trace {
+				fmt.Fprintf(os.Stderr, "%s: pos=%d, text=%q\n", l.State, l.Pos, string(l.Text[l.Pos:]))
+			}
 			ruleIndex, rule, groups := matchRules(l.Text[l.Pos:], l.Rules[l.State])
 			// No match.
 			if groups == nil {
@@ -207,6 +216,13 @@ func (l *LexerState) Iterator() Iterator {
 			}
 			return t
 		}
+
+		// If we get to here and we still have text, return it as an error.
+		if l.Pos != len(l.Text) && len(l.Stack) == 0 {
+			value := string(l.Text[l.Pos:])
+			l.Pos = len(l.Text)
+			return &Token{Type: Error, Value: value}
+		}
 		return nil
 	}
 }
@@ -214,6 +230,7 @@ func (l *LexerState) Iterator() Iterator {
 type RegexLexer struct {
 	config   *Config
 	analyser func(text string) float32
+	trace    bool
 
 	mu       sync.Mutex
 	compiled bool

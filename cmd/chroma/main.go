@@ -28,6 +28,7 @@ var (
 	profileFlag    = kingpin.Flag("profile", "Enable profiling to file.").Hidden().String()
 	listFlag       = kingpin.Flag("list", "List lexers, styles and formatters.").Bool()
 	unbufferedFlag = kingpin.Flag("unbuffered", "Do not buffer output.").Bool()
+	traceFlag      = kingpin.Flag("trace", "Trace lexer states as they are traversed.").Bool()
 
 	lexerFlag     = kingpin.Flag("lexer", "Lexer to use when formatting.").PlaceHolder("autodetect").Short('l').Enum(lexers.Names(true)...)
 	styleFlag     = kingpin.Flag("style", "Style to use for formatting.").Short('s').Default("swapoff").Enum(styles.Names()...)
@@ -197,6 +198,9 @@ func lex(path string, contents string) chroma.Iterator {
 	lexer := selexer(path, contents)
 	if lexer == nil {
 		lexer = lexers.Fallback
+	}
+	if rel, ok := lexer.(*chroma.RegexLexer); ok {
+		rel.Trace(*traceFlag)
 	}
 	lexer = chroma.Coalesce(lexer)
 	it, err := lexer.Tokenise(nil, string(contents))

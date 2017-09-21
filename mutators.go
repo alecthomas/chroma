@@ -86,6 +86,9 @@ func Push(states ...string) MutatorFunc {
 // Pop state from the stack when rule matches.
 func Pop(n int) MutatorFunc {
 	return func(state *LexerState) error {
+		if len(state.Stack) == 0 {
+			return fmt.Errorf("nothing to pop")
+		}
 		state.Stack = state.Stack[:len(state.Stack)-n]
 		return nil
 	}

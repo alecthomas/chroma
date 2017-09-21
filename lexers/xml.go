@@ -4,8 +4,8 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-// Xml lexer.
-var Xml = Register(MustNewLexer(
+// XML lexer.
+var XML = Register(MustNewLexer(
 	&Config{
 		Name:      "XML",
 		Aliases:   []string{"xml"},
