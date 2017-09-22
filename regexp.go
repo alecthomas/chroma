@@ -272,15 +272,23 @@ func (r *RegexLexer) maybeCompile() (err error) {
 			}
 		}
 	}
+restart:
+	seen := map[LexerMutator]bool{}
 	for state := range r.rules {
 		for i := 0; i < len(r.rules[state]); i++ {
 			rule := r.rules[state][i]
 			if compile, ok := rule.Mutator.(LexerMutator); ok {
+				if seen[compile] {
+					return fmt.Errorf("saw mutator %T twice; this should not happen", compile)
+				}
+				seen[compile] = true
 				if err := compile.MutateLexer(r.rules, state, i); err != nil {
 					return err
 				}
 				// Process the rules again in case the mutator added/removed rules.
-				i = -1
+				//
+				// This sounds bad, but shouldn't be significant in practice.
+				goto restart
 			}
 		}
 	}

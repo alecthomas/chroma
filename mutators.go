@@ -45,7 +45,7 @@ func Include(state string) Rule {
 }
 
 func (i *includeMutator) Mutate(s *LexerState) error {
-	panic(fmt.Errorf("should never reach here Include(%q)", i.state))
+	return fmt.Errorf("should never reach here Include(%q)", i.state)
 }
 
 func (i *includeMutator) MutateLexer(rules CompiledRules, state string, rule int) error {
@@ -67,7 +67,7 @@ func Combined(states ...string) Mutator {
 }
 
 func (c *combinedMutator) Mutate(s *LexerState) error {
-	panic(fmt.Errorf("should never reach here Combined(%v)", c.states))
+	return fmt.Errorf("should never reach here Combined(%v)", c.states)
 }
 
 func (c *combinedMutator) MutateLexer(rules CompiledRules, state string, rule int) error {
