@@ -57,7 +57,7 @@ var Turtle = Register(MustNewLexer(
 			{`.`, LiteralString, Pop(1)},
 		},
 		"end-of-string": {
-			{`(@)([a-z]+(:?-[a-z0-9]+)*)`, ByGroups(Operator, GenericEmph), Pop(2)},
+			{`(@)([a-z]+(:?-[a-z0-9]+)*)`, ByGroups(Operator, GenericEmph, GenericEmph), Pop(2)},
 			{"(\\^\\^)(<[^<>\"{}|^`\\\\\\x00-\\x20]*>)", ByGroups(Operator, GenericEmph), Pop(2)},
 			{`(\^\^)((?:[a-z][\w-]*)?\:)([a-z][\w-]*)`, ByGroups(Operator, GenericEmph, GenericEmph), Pop(2)},
 			Default(Pop(2)),

@@ -34,7 +34,6 @@ func ByGroups(emitters ...Emitter) Emitter {
 	return EmitterFunc(func(groups []string, lexer Lexer) Iterator {
 		iterators := make([]Iterator, 0, len(groups)-1)
 		// NOTE: If this panics, there is a mismatch with groups. Uncomment the following line to debug.
-		// fmt.Printf("%s %#v\n", emitters, groups[1:])
 		for i, group := range groups[1:] {
 			iterators = append(iterators, emitters[i].Emit([]string{group}, lexer))
 		}
