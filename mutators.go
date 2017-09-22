@@ -14,7 +14,8 @@ type Mutator interface {
 // A LexerMutator is an additional interface that a Mutator can implement
 // to modify the lexer when it is compiled.
 type LexerMutator interface {
-	MutateLexer(lexer *RegexLexer, rule *CompiledRule) error
+	// Rules are the lexer rules, state is the state key for the rule the mutator is associated with.
+	MutateLexer(rules CompiledRules, state string, rule int) error
 }
 
 // A MutatorFunc is a Mutator that mutates the lexer state machine as it is processing.
@@ -34,48 +35,56 @@ func Mutators(modifiers ...Mutator) MutatorFunc {
 	}
 }
 
+type includeMutator struct {
+	state string
+}
+
 // Include the given state.
 func Include(state string) Rule {
-	return Rule{
-		Mutator: MutatorFunc(func(ls *LexerState) error {
-			includedRules, ok := ls.Rules[state]
-			if !ok {
-				return fmt.Errorf("invalid include state %q", state)
-			}
-			stateRules := ls.Rules[ls.State]
-			stateRules = append(stateRules[:ls.Rule], append(includedRules, stateRules[ls.Rule+1:]...)...)
-			ls.Rules[ls.State] = stateRules
-			return nil
-		}),
+	return Rule{Mutator: &includeMutator{state}}
+}
+
+func (i *includeMutator) Mutate(s *LexerState) error {
+	panic(fmt.Errorf("should never reach here Include(%q)", i.state))
+}
+
+func (i *includeMutator) MutateLexer(rules CompiledRules, state string, rule int) error {
+	includedRules, ok := rules[i.state]
+	if !ok {
+		return fmt.Errorf("invalid include state %q", i.state)
 	}
+	rules[state] = append(rules[state][:rule], append(includedRules, rules[state][rule+1:]...)...)
+	return nil
 }
 
 type combinedMutator struct {
 	states []string
 }
 
-func (c *combinedMutator) Mutate(s *LexerState) error { return nil }
+// Combined creates a new anonymous state from the given states, and pushes that state.
+func Combined(states ...string) Mutator {
+	return &combinedMutator{states}
+}
 
-func (c *combinedMutator) MutateLexer(lexer *RegexLexer, rule *CompiledRule) error {
+func (c *combinedMutator) Mutate(s *LexerState) error {
+	panic(fmt.Errorf("should never reach here Combined(%v)", c.states))
+}
+
+func (c *combinedMutator) MutateLexer(rules CompiledRules, state string, rule int) error {
 	name := "__combined_" + strings.Join(c.states, "__")
-	if _, ok := lexer.rules[name]; !ok {
+	if _, ok := rules[name]; !ok {
 		combined := []*CompiledRule{}
 		for _, state := range c.states {
-			rules, ok := lexer.rules[state]
+			rules, ok := rules[state]
 			if !ok {
 				return fmt.Errorf("invalid combine state %q", state)
 			}
 			combined = append(combined, rules...)
 		}
-		lexer.rules[name] = combined
+		rules[name] = combined
 	}
-	rule.Mutator = Push(name)
+	rules[state][rule].Mutator = Push(name)
 	return nil
-}
-
-// Combined creates a new anonymous state from the given states, and pushes that state.
-func Combined(states ...string) Mutator {
-	return &combinedMutator{states}
 }
 
 // Push states onto the stack.
@@ -107,6 +116,7 @@ func Pop(n int) MutatorFunc {
 	}
 }
 
+// Default returns a Rule that applies a set of Mutators.
 func Default(mutators ...Mutator) Rule {
 	return Rule{Mutator: Mutators(mutators...)}
 }

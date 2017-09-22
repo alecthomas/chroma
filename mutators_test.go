@@ -10,25 +10,14 @@ import (
 func TestInclude(t *testing.T) {
 	include := Include("other")
 	actual := CompiledRules{
-		"root": {
-			{Rule: include},
-		},
+		"root": {{Rule: include}},
 		"other": {
-			{Rule: Rule{
-				Pattern: "//.+",
-				Type:    Comment,
-			}},
-			{Rule: Rule{
-				Pattern: `"[^"]*"`,
-				Type:    String,
-			}},
+			{Rule: Rule{Pattern: "//.+", Type: Comment}},
+			{Rule: Rule{Pattern: `"[^"]*"`, Type: String}},
 		},
 	}
-	state := &LexerState{
-		State: "root",
-		Rules: actual,
-	}
-	err := include.Mutator.Mutate(state)
+	lexer := &RegexLexer{rules: actual}
+	err := include.Mutator.(LexerMutator).MutateLexer(lexer.rules, "root", 0)
 	require.NoError(t, err)
 	expected := CompiledRules{
 		"root": {

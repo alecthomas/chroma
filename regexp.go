@@ -269,10 +269,17 @@ func (r *RegexLexer) maybeCompile() (err error) {
 					return fmt.Errorf("failed to compile rule %s.%d: %s", state, i, err)
 				}
 			}
+		}
+	}
+	for state := range r.rules {
+		for i := 0; i < len(r.rules[state]); i++ {
+			rule := r.rules[state][i]
 			if compile, ok := rule.Mutator.(LexerMutator); ok {
-				if err := compile.MutateLexer(r, rule); err != nil {
+				if err := compile.MutateLexer(r.rules, state, i); err != nil {
 					return err
 				}
+				// Process the rules again in case the mutator added/removed rules.
+				i = -1
 			}
 		}
 	}
