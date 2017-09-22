@@ -2,6 +2,7 @@ package chroma
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -48,6 +49,21 @@ var ANSI2RGB = map[string]string{
 
 // Colour represents an RGB colour.
 type Colour int32
+
+// func (c1 Colour) Distance(c2 Colour) float64 {
+// 	rd := float64(c2.Red() - c1.Red())
+// 	gd := float64(c2.Green() - c1.Green())
+// 	bd := float64(c2.Blue() - c1.Blue())
+// 	return math.Sqrt(2*rd*rd + 4*gd*gd + 3*bd*bd)
+// }
+
+func (e1 Colour) Distance(e2 Colour) float64 {
+	rmean := int(e1.Red()+e2.Red()) / 2
+	r := int(e1.Red() - e2.Red())
+	g := int(e1.Green() - e2.Green())
+	b := int(e1.Blue() - e2.Blue())
+	return math.Sqrt(float64((((512 + rmean) * r * r) >> 8) + 4*g*g + (((767 - rmean) * b * b) >> 8)))
+}
 
 // ParseColour in the forms #rgb, #rrggbb, #ansi<colour>, or #<colour>.
 // Will return an "unset" colour if invalid.
