@@ -152,12 +152,12 @@ command, for Go.
 	if len(*filesArgs) == 0 {
 		contents, err := ioutil.ReadAll(os.Stdin)
 		kingpin.FatalIfError(err, "")
-		format(os.Stdout, style, lex("", string(contents)))
+		format(w, style, lex("", string(contents)))
 	} else {
 		for _, filename := range *filesArgs {
 			contents, err := ioutil.ReadFile(filename)
 			kingpin.FatalIfError(err, "")
-			format(os.Stdout, style, lex(filename, string(contents)))
+			format(w, style, lex(filename, string(contents)))
 		}
 	}
 }
