@@ -110,6 +110,7 @@ func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
 	}
 	compiledRules := map[string][]*CompiledRule{}
 	for state, rules := range rules {
+		compiledRules[state] = nil
 		for _, rule := range rules {
 			flags := ""
 			if !config.NotMultiline {
