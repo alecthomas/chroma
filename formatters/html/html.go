@@ -246,7 +246,7 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 		classes[t] = StyleEntryToCSS(entry)
 	}
 	classes[chroma.Background] += f.tabWidthStyle()
-	classes[chroma.LineNumbers] += "; margin-right: 0.5em"
+	classes[chroma.LineNumbers] += "; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;"
 	classes[chroma.LineHighlight] += "; display: block; width: 100%"
 	return classes
 }
