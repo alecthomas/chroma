@@ -40,8 +40,8 @@ var (
 	htmlOnlyFlag           = kingpin.Flag("html-only", "Output HTML fragment.").Bool()
 	htmlInlineStyleFlag    = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
 	htmlTabWidthFlag       = kingpin.Flag("html-tab-width", "Set the HTML tab width.").Default("8").Int()
-	htmlLinesFlag          = kingpin.Flag("html-line-numbers", "Include line numbers in output.").Bool()
-	htmlLinesStyleFlag     = kingpin.Flag("html-line-numbers-style", "Style for line numbers.").String()
+	htmlLinesFlag          = kingpin.Flag("html-lines", "Include line numbers in output.").Bool()
+	htmlLinesStyleFlag     = kingpin.Flag("html-lines-style", "Style for line numbers.").String()
 	htmlHighlightFlag      = kingpin.Flag("html-highlight", "Highlight these lines.").PlaceHolder("N[:M][,...]").String()
 	htmlHighlightStyleFlag = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").String()
 
