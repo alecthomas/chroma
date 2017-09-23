@@ -76,10 +76,40 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Ite
 	return f.writeHTML(w, style, iterator.Tokens())
 }
 
-func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma.Token) error { // nolint: gocyclo
-	// We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
-	//
-	// OTOH we need to be super careful about correct escaping...
+func brightenOrDarken(colour chroma.Colour, factor float64) chroma.Colour {
+	if colour.Brightness() < 0.5 {
+		return colour.Brighten(factor)
+	}
+	return colour.Brighten(-factor)
+}
+
+// Ensure that style entries exist for highlighting, etc.
+func (f *Formatter) restyle(style *chroma.Style) (*chroma.Style, error) {
+	builder := style.Builder()
+	bg := builder.Get(chroma.Background)
+	// If we don't have a line highlight colour, make one that is 10% brighter/darker than the background.
+	if !style.Has(chroma.LineHighlight) {
+		highlight := chroma.StyleEntry{Background: bg.Background}
+		highlight.Background = brightenOrDarken(highlight.Background, 0.1)
+		builder.AddEntry(chroma.LineHighlight, highlight)
+	}
+	// If we don't have line numbers, use the text colour but 20% brighter/darker
+	if !style.Has(chroma.LineNumbers) {
+		text := chroma.StyleEntry{Colour: bg.Colour}
+		text.Colour = brightenOrDarken(text.Colour, 0.5)
+		builder.AddEntry(chroma.LineNumbers, text)
+	}
+	return builder.Build()
+}
+
+// We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
+//
+// OTOH we need to be super careful about correct escaping...
+func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma.Token) (err error) { // nolint: gocyclo
+	style, err = f.restyle(style)
+	if err != nil {
+		return err
+	}
 	css := f.styleToCSS(style)
 	if !f.classes {
 		for t, style := range css {
@@ -205,14 +235,15 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 }
 
 func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string {
-	bg := style.Get(chroma.Background)
 	classes := map[chroma.TokenType]string{}
+	bg := style.Get(chroma.Background)
 	// Convert the style.
-	for t, e := range style.Entries {
+	for _, t := range style.Types() {
+		entry := style.Get(t)
 		if t != chroma.Background {
-			e = e.Sub(bg)
+			entry = entry.Sub(bg)
 		}
-		classes[t] = StyleEntryToCSS(e)
+		classes[t] = StyleEntryToCSS(entry)
 	}
 	classes[chroma.Background] += f.tabWidthStyle()
 	classes[chroma.LineNumbers] += "; margin-right: 0.5em"
@@ -221,7 +252,7 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 }
 
 // StyleEntryToCSS converts a chroma.StyleEntry to CSS attributes.
-func StyleEntryToCSS(e *chroma.StyleEntry) string {
+func StyleEntryToCSS(e chroma.StyleEntry) string {
 	styles := []string{}
 	if e.Colour.IsSet() {
 		styles = append(styles, "color: "+e.Colour.String())
@@ -229,10 +260,10 @@ func StyleEntryToCSS(e *chroma.StyleEntry) string {
 	if e.Background.IsSet() {
 		styles = append(styles, "background-color: "+e.Background.String())
 	}
-	if e.Bold {
+	if e.Bold == chroma.Yes {
 		styles = append(styles, "font-weight: bold")
 	}
-	if e.Italic {
+	if e.Italic == chroma.Yes {
 		styles = append(styles, "font-style: italic")
 	}
 	return strings.Join(styles, "; ")

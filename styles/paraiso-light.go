@@ -40,5 +40,5 @@ var ParaisoLight = Register(chroma.MustNewStyle("paraiso-light", chroma.StyleEnt
     chroma.GenericPrompt:         "bold #8d8687",
     chroma.GenericStrong:         "bold",
     chroma.GenericSubheading:     "bold #5bc4bf",
-    chroma.Background:            " bg:#e7e9db",
+    chroma.Background:            "bg:#e7e9db",
 }))

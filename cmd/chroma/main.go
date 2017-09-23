@@ -41,9 +41,9 @@ var (
 	htmlInlineStyleFlag    = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
 	htmlTabWidthFlag       = kingpin.Flag("html-tab-width", "Set the HTML tab width.").Default("8").Int()
 	htmlLinesFlag          = kingpin.Flag("html-line-numbers", "Include line numbers in output.").Bool()
-	htmlLinesStyleFlag     = kingpin.Flag("html-line-numbers-style", "Style for line numbers.").Default("#888").String()
+	htmlLinesStyleFlag     = kingpin.Flag("html-line-numbers-style", "Style for line numbers.").String()
 	htmlHighlightFlag      = kingpin.Flag("html-highlight", "Highlight these lines.").PlaceHolder("N[:M][,...]").String()
-	htmlHighlightStyleFlag = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").Default("bg:#282828").String()
+	htmlHighlightStyleFlag = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").String()
 
 	filesArgs = kingpin.Arg("files", "Files to highlight.").ExistingFiles()
 )
@@ -98,15 +98,15 @@ command, for Go.
 	}
 
 	// Retrieve user-specified style, clone it, and add some overrides.
-	style := styles.Get(*styleFlag).Clone()
+	builder := styles.Get(*styleFlag).Builder()
 	if *htmlHighlightStyleFlag != "" {
-		err := style.Add(chroma.LineHighlight, *htmlHighlightStyleFlag)
-		kingpin.FatalIfError(err, "invalid line highlight style")
+		builder.Add(chroma.LineHighlight, *htmlHighlightStyleFlag)
 	}
 	if *htmlLinesStyleFlag != "" {
-		err := style.Add(chroma.LineNumbers, *htmlLinesStyleFlag)
-		kingpin.FatalIfError(err, "invalid line style")
+		builder.Add(chroma.LineNumbers, *htmlLinesStyleFlag)
 	}
+	style, err := builder.Build()
+	kingpin.FatalIfError(err, "")
 
 	if *formatterFlag == "html" {
 		options := []html.Option{html.TabWidth(*htmlTabWidthFlag)}

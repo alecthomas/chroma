@@ -32,5 +32,5 @@ var Monokai = Register(chroma.MustNewStyle("monokai", chroma.StyleEntries{
     chroma.GenericInserted:     "#a6e22e",
     chroma.GenericStrong:       "bold",
     chroma.GenericSubheading:   "#75715e",
-    chroma.Background:          " bg:#272822",
+    chroma.Background:          "bg:#272822",
 }))

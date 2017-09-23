@@ -166,12 +166,12 @@ var ttyTables = map[int]*ttyTable{
 	},
 }
 
-func entryToEscapeSequence(table *ttyTable, entry *chroma.StyleEntry) string {
+func entryToEscapeSequence(table *ttyTable, entry chroma.StyleEntry) string {
 	out := ""
-	if entry.Bold {
+	if entry.Bold == chroma.Yes {
 		out += "\033[1m"
 	}
-	if entry.Underline {
+	if entry.Underline == chroma.Yes {
 		out += "\033[4m"
 	}
 	if entry.Colour.IsSet() {
@@ -198,7 +198,8 @@ func findClosest(table *ttyTable, seeking chroma.Colour) chroma.Colour {
 
 func styleToEscapeSequence(table *ttyTable, style *chroma.Style) map[chroma.TokenType]string {
 	out := map[chroma.TokenType]string{}
-	for ttype, entry := range style.Entries {
+	for _, ttype := range style.Types() {
+		entry := style.Get(ttype)
 		out[ttype] = entryToEscapeSequence(table, entry)
 	}
 	return out

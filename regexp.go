@@ -158,6 +158,7 @@ type LexerState struct {
 	Groups []string
 	// Custum context for mutators.
 	MutatorContext map[interface{}]interface{}
+	iteratorStack  []Iterator
 }
 
 func (l *LexerState) Set(key interface{}, value interface{}) {
@@ -168,63 +169,60 @@ func (l *LexerState) Get(key interface{}) interface{} {
 	return l.MutatorContext[key]
 }
 
-func (l *LexerState) Iterator() Iterator {
-	iteratorStack := []Iterator{}
-	return func() *Token {
-		for l.Pos < len(l.Text) && len(l.Stack) > 0 {
-			// Exhaust the iterator stack, if any.
-			for len(iteratorStack) > 0 {
-				n := len(iteratorStack) - 1
-				t := iteratorStack[n]()
-				if t == nil {
-					iteratorStack = iteratorStack[:n]
-					continue
-				}
-				return t
-			}
-
-			l.State = l.Stack[len(l.Stack)-1]
-			if l.Lexer.trace {
-				fmt.Fprintf(os.Stderr, "%s: pos=%d, text=%q\n", l.State, l.Pos, string(l.Text[l.Pos:]))
-			}
-			ruleIndex, rule, groups := matchRules(l.Text[l.Pos:], l.Rules[l.State])
-			// No match.
-			if groups == nil {
-				l.Pos++
-				return &Token{Error, string(l.Text[l.Pos-1 : l.Pos])}
-			}
-			l.Rule = ruleIndex
-			l.Groups = groups
-			l.Pos += utf8.RuneCountInString(groups[0])
-			if rule.Mutator != nil {
-				if err := rule.Mutator.Mutate(l); err != nil {
-					panic(err)
-				}
-			}
-			if rule.Type != nil {
-				iteratorStack = append(iteratorStack, rule.Type.Emit(l.Groups, l.Lexer))
-			}
-		}
-		// Exhaust the IteratorStack, if any.
-		// Duplicate code, but eh.
-		for len(iteratorStack) > 0 {
-			n := len(iteratorStack) - 1
-			t := iteratorStack[n]()
+func (l *LexerState) Iterator() *Token {
+	for l.Pos < len(l.Text) && len(l.Stack) > 0 {
+		// Exhaust the iterator stack, if any.
+		for len(l.iteratorStack) > 0 {
+			n := len(l.iteratorStack) - 1
+			t := l.iteratorStack[n]()
 			if t == nil {
-				iteratorStack = iteratorStack[:n]
+				l.iteratorStack = l.iteratorStack[:n]
 				continue
 			}
 			return t
 		}
 
-		// If we get to here and we still have text, return it as an error.
-		if l.Pos != len(l.Text) && len(l.Stack) == 0 {
-			value := string(l.Text[l.Pos:])
-			l.Pos = len(l.Text)
-			return &Token{Type: Error, Value: value}
+		l.State = l.Stack[len(l.Stack)-1]
+		if l.Lexer.trace {
+			fmt.Fprintf(os.Stderr, "%s: pos=%d, text=%q\n", l.State, l.Pos, string(l.Text[l.Pos:]))
 		}
-		return nil
+		ruleIndex, rule, groups := matchRules(l.Text[l.Pos:], l.Rules[l.State])
+		// No match.
+		if groups == nil {
+			l.Pos++
+			return &Token{Error, string(l.Text[l.Pos-1 : l.Pos])}
+		}
+		l.Rule = ruleIndex
+		l.Groups = groups
+		l.Pos += utf8.RuneCountInString(groups[0])
+		if rule.Mutator != nil {
+			if err := rule.Mutator.Mutate(l); err != nil {
+				panic(err)
+			}
+		}
+		if rule.Type != nil {
+			l.iteratorStack = append(l.iteratorStack, rule.Type.Emit(l.Groups, l.Lexer))
+		}
 	}
+	// Exhaust the IteratorStack, if any.
+	// Duplicate code, but eh.
+	for len(l.iteratorStack) > 0 {
+		n := len(l.iteratorStack) - 1
+		t := l.iteratorStack[n]()
+		if t == nil {
+			l.iteratorStack = l.iteratorStack[:n]
+			continue
+		}
+		return t
+	}
+
+	// If we get to here and we still have text, return it as an error.
+	if l.Pos != len(l.Text) && len(l.Stack) == 0 {
+		value := string(l.Text[l.Pos:])
+		l.Pos = len(l.Text)
+		return &Token{Type: Error, Value: value}
+	}
+	return nil
 }
 
 type RegexLexer struct {
@@ -309,7 +307,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 		Rules:          r.rules,
 		MutatorContext: map[interface{}]interface{}{},
 	}
-	return state.Iterator(), nil
+	return state.Iterator, nil
 }
 
 func matchRules(text []rune, rules []*CompiledRule) (int, *CompiledRule, []string) {

@@ -50,19 +50,49 @@ var ANSI2RGB = map[string]string{
 // Colour represents an RGB colour.
 type Colour int32
 
-// func (c1 Colour) Distance(c2 Colour) float64 {
-// 	rd := float64(c2.Red() - c1.Red())
-// 	gd := float64(c2.Green() - c1.Green())
-// 	bd := float64(c2.Blue() - c1.Blue())
-// 	return math.Sqrt(2*rd*rd + 4*gd*gd + 3*bd*bd)
-// }
+// NewColour creates a Colour directly from RGB values.
+func NewColour(r, g, b uint8) Colour {
+	return ParseColour(fmt.Sprintf("%02x%02x%02x", r, g, b))
+}
 
-func (e1 Colour) Distance(e2 Colour) float64 {
-	rmean := int(e1.Red()+e2.Red()) / 2
-	r := int(e1.Red() - e2.Red())
-	g := int(e1.Green() - e2.Green())
-	b := int(e1.Blue() - e2.Blue())
+// Distance between this colour and another.
+//
+// This uses the approach described here (https://www.compuphase.com/cmetric.htm).
+// This is not as accurate as LAB, et. al. but is *vastly* simpler and sufficient for our needs.
+func (c Colour) Distance(e2 Colour) float64 {
+	rmean := int(c.Red()+e2.Red()) / 2
+	r := int(c.Red() - e2.Red())
+	g := int(c.Green() - e2.Green())
+	b := int(c.Blue() - e2.Blue())
 	return math.Sqrt(float64((((512 + rmean) * r * r) >> 8) + 4*g*g + (((767 - rmean) * b * b) >> 8)))
+}
+
+// Brighten returns a copy of this colour with its brightness adjusted.
+//
+// If factor is negative, the colour is darkened.
+//
+// Uses approach described here (http://www.pvladov.com/2012/09/make-color-lighter-or-darker.html).
+func (c Colour) Brighten(factor float64) Colour {
+	r := float64(c.Red())
+	g := float64(c.Green())
+	b := float64(c.Blue())
+
+	if factor < 0 {
+		factor++
+		r *= factor
+		g *= factor
+		b *= factor
+	} else {
+		r = (255-r)*factor + r
+		g = (255-g)*factor + g
+		b = (255-b)*factor + b
+	}
+	return NewColour(uint8(r), uint8(g), uint8(b))
+}
+
+// Brightness of the colour (roughly) in the range 0.0 to 1.0
+func (c Colour) Brightness() float64 {
+	return (float64(c.Red()) + float64(c.Green()) + float64(c.Blue())) / 255.0 / 3.0
 }
 
 // ParseColour in the forms #rgb, #rrggbb, #ansi<colour>, or #<colour>.

@@ -15,10 +15,10 @@ func trueColourFormatter(w io.Writer, style *chroma.Style, it chroma.Iterator) e
 		entry := style.Get(token.Type)
 		if !entry.IsZero() {
 			out := ""
-			if entry.Bold {
+			if entry.Bold == chroma.Yes {
 				out += "\033[1m"
 			}
-			if entry.Underline {
+			if entry.Underline == chroma.Yes {
 				out += "\033[4m"
 			}
 			if entry.Colour.IsSet() {
