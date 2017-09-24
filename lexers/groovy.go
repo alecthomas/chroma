@@ -24,7 +24,7 @@ var Groovy = Register(MustNewLexer(
 			{`//.*?\n`, CommentSingle, nil},
 			{`/\*.*?\*/`, CommentMultiline, nil},
 			{`@[a-zA-Z_][\w.]*`, NameDecorator, nil},
-			{`(assert|break|case|catch|continue|default|do|else|finally|for|if|goto|instanceof|new|return|switch|this|throw|try|while|in|as)\b`, Keyword, nil},
+			{`(as|assert|break|case|catch|continue|default|do|else|finally|for|if|in|goto|instanceof|new|return|switch|this|throw|try|while|in|as)\b`, Keyword, nil},
 			{`(abstract|const|enum|extends|final|implements|native|private|protected|public|static|strictfp|super|synchronized|throws|transient|volatile)\b`, KeywordDeclaration, nil},
 			{`(def|boolean|byte|char|double|float|int|long|short|void)\b`, KeywordType, nil},
 			{`(package)(\s+)`, ByGroups(KeywordNamespace, Text), nil},
