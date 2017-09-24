@@ -20,4 +20,5 @@ var SwapOff = Register(chroma.MustNewStyle("swapoff", map[chroma.TokenType]strin
 	chroma.NameAttribute:     "#ansiteal",
 	chroma.NameVariable:      "bold",
 	chroma.Error:             "#ansired",
+	chroma.LiteralDate:       "bold #ansiyellow",
 }))
