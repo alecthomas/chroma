@@ -42,9 +42,18 @@ func HighlightLines(ranges [][2]int) Option {
 	}
 }
 
+// BaseLineNumber sets the initial number to start line numbering at. Defaults to 1.
+func BaseLineNumber(n int) Option {
+	return func(f *Formatter) {
+		f.baseLineNumber = n
+	}
+}
+
 // New HTML formatter.
 func New(options ...Option) *Formatter {
-	f := &Formatter{}
+	f := &Formatter{
+		baseLineNumber: 1,
+	}
 	for _, option := range options {
 		option(f)
 	}
@@ -59,6 +68,7 @@ type Formatter struct {
 	tabWidth        int
 	lineNumbers     bool
 	highlightRanges highlightRanges
+	baseLineNumber  int
 }
 
 type highlightRanges [][2]int
@@ -131,14 +141,16 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 	lines := splitTokensIntoLines(tokens)
 	lineDigits := len(fmt.Sprintf("%d", len(lines)))
 	highlightIndex := 0
-	for line, tokens := range lines {
+	for index, tokens := range lines {
+		// 1-based line number.
+		line := f.baseLineNumber + index
 		highlight := false
-		for highlightIndex < len(f.highlightRanges) && line+1 > f.highlightRanges[highlightIndex][1] {
+		for highlightIndex < len(f.highlightRanges) && line > f.highlightRanges[highlightIndex][1] {
 			highlightIndex++
 		}
 		if highlightIndex < len(f.highlightRanges) {
 			hrange := f.highlightRanges[highlightIndex]
-			if line+1 >= hrange[0] && line+1 <= hrange[1] {
+			if line >= hrange[0] && line <= hrange[1] {
 				highlight = true
 			}
 		}
@@ -146,7 +158,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 			fmt.Fprintf(w, "<span%s>", f.styleAttr(css, chroma.LineHighlight))
 		}
 		if f.lineNumbers {
-			fmt.Fprintf(w, "<span%s>%*d</span>", f.styleAttr(css, chroma.LineNumbers), lineDigits, line+1)
+			fmt.Fprintf(w, "<span%s>%*d</span>", f.styleAttr(css, chroma.LineNumbers), lineDigits, line)
 		}
 
 		for _, token := range tokens {

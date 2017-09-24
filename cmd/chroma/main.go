@@ -44,6 +44,7 @@ var (
 	htmlLinesStyleFlag     = kingpin.Flag("html-lines-style", "Style for line numbers.").String()
 	htmlHighlightFlag      = kingpin.Flag("html-highlight", "Highlight these lines.").PlaceHolder("N[:M][,...]").String()
 	htmlHighlightStyleFlag = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").String()
+	htmlBaseLineFlag       = kingpin.Flag("html-base-line", "Base line number.").Default("1").Int()
 
 	filesArgs = kingpin.Arg("files", "Files to highlight.").ExistingFiles()
 )
@@ -109,7 +110,10 @@ command, for Go.
 	kingpin.FatalIfError(err, "")
 
 	if *formatterFlag == "html" {
-		options := []html.Option{html.TabWidth(*htmlTabWidthFlag)}
+		options := []html.Option{
+			html.TabWidth(*htmlTabWidthFlag),
+			html.BaseLineNumber(*htmlBaseLineFlag),
+		}
 		if *htmlPrefixFlag != "" {
 			options = append(options, html.ClassPrefix(*htmlPrefixFlag))
 		}
