@@ -137,7 +137,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 		fmt.Fprintf(w, "<body%s>\n", f.styleAttr(css, chroma.Background))
 	}
 
-	fmt.Fprintf(w, "<pre%s>\n", f.styleAttr(css, chroma.Background))
+	fmt.Fprintf(w, "<pre%s>", f.styleAttr(css, chroma.Background))
 	lines := splitTokensIntoLines(tokens)
 	lineDigits := len(fmt.Sprintf("%d", len(lines)))
 	highlightIndex := 0
