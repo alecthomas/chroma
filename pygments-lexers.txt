@@ -209,7 +209,7 @@ pygments.lexers.lisp.ShenLexer
 pygments.lexers.lisp.XtlangLexer
 pygments.lexers.modula2.Modula2Lexer
 pygments.lexers.ncl.NCLLexer
-pygments.lexers.nimrod.NimrodLexer
+pygments.lexers.nim.NimLexer
 pygments.lexers.nit.NitLexer
 pygments.lexers.nix.NixLexer
 pygments.lexers.oberon.ComponentPascalLexer
