@@ -188,6 +188,112 @@ const (
 	NumberOct         = LiteralNumberOct
 )
 
+var (
+	StandardTypes = map[TokenType]string{
+		Background:    "chroma",
+		LineNumbers:   "ln",
+		LineHighlight: "hl",
+
+		Text:       "",
+		Whitespace: "w",
+		Error:      "err",
+		Other:      "x",
+		// I have no idea what this is used for...
+		// Escape:     "esc",
+
+		Keyword:            "k",
+		KeywordConstant:    "kc",
+		KeywordDeclaration: "kd",
+		KeywordNamespace:   "kn",
+		KeywordPseudo:      "kp",
+		KeywordReserved:    "kr",
+		KeywordType:        "kt",
+
+		Name:                 "n",
+		NameAttribute:        "na",
+		NameBuiltin:          "nb",
+		NameBuiltinPseudo:    "bp",
+		NameClass:            "nc",
+		NameConstant:         "no",
+		NameDecorator:        "nd",
+		NameEntity:           "ni",
+		NameException:        "ne",
+		NameFunction:         "nf",
+		NameFunctionMagic:    "fm",
+		NameProperty:         "py",
+		NameLabel:            "nl",
+		NameNamespace:        "nn",
+		NameOther:            "nx",
+		NameTag:              "nt",
+		NameVariable:         "nv",
+		NameVariableClass:    "vc",
+		NameVariableGlobal:   "vg",
+		NameVariableInstance: "vi",
+		NameVariableMagic:    "vm",
+
+		Literal:     "l",
+		LiteralDate: "ld",
+
+		String:          "s",
+		StringAffix:     "sa",
+		StringBacktick:  "sb",
+		StringChar:      "sc",
+		StringDelimiter: "dl",
+		StringDoc:       "sd",
+		StringDouble:    "s2",
+		StringEscape:    "se",
+		StringHeredoc:   "sh",
+		StringInterpol:  "si",
+		StringOther:     "sx",
+		StringRegex:     "sr",
+		StringSingle:    "s1",
+		StringSymbol:    "ss",
+
+		Number:            "m",
+		NumberBin:         "mb",
+		NumberFloat:       "mf",
+		NumberHex:         "mh",
+		NumberInteger:     "mi",
+		NumberIntegerLong: "il",
+		NumberOct:         "mo",
+
+		Operator:     "o",
+		OperatorWord: "ow",
+
+		Punctuation: "p",
+
+		Comment:            "c",
+		CommentHashbang:    "ch",
+		CommentMultiline:   "cm",
+		CommentPreproc:     "cp",
+		CommentPreprocFile: "cpf",
+		CommentSingle:      "c1",
+		CommentSpecial:     "cs",
+
+		Generic:           "g",
+		GenericDeleted:    "gd",
+		GenericEmph:       "ge",
+		GenericError:      "gr",
+		GenericHeading:    "gh",
+		GenericInserted:   "gi",
+		GenericOutput:     "go",
+		GenericPrompt:     "gp",
+		GenericStrong:     "gs",
+		GenericSubheading: "gu",
+		GenericTraceback:  "gt",
+	}
+)
+
+func (t TokenType) Parent() TokenType {
+	if t%100 != 0 {
+		return t / 100 * 100
+	}
+	if t%1000 != 0 {
+		return t / 1000 * 1000
+	}
+	return 0
+}
+
 func (t TokenType) Category() TokenType {
 	return t / 1000 * 1000
 }

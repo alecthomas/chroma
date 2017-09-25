@@ -183,19 +183,15 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 	return nil
 }
 
-func (f *Formatter) class(tt chroma.TokenType) string {
-	switch tt {
-	case chroma.Background:
-		return "chroma"
-	case chroma.LineNumbers:
-		return "ln"
-	case chroma.LineHighlight:
-		return "hl"
+func (f *Formatter) class(t chroma.TokenType) string {
+	for t != 0 {
+		cls, ok := chroma.StandardTypes[t]
+		if ok {
+			return cls
+		}
+		t = t.Parent()
 	}
-	if tt < 0 {
-		return fmt.Sprintf("%sss%x", f.prefix, -int(tt))
-	}
-	return fmt.Sprintf("%ss%x", f.prefix, int(tt))
+	return chroma.StandardTypes[t]
 }
 
 func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.TokenType) string {
