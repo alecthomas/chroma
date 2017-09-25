@@ -4,10 +4,10 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-// Vhdl lexer.
-var Vhdl = Register(MustNewLexer(
+// VHDL lexer.
+var VHDL = Register(MustNewLexer(
 	&Config{
-		Name:            "vhdl",
+		Name:            "VHDL",
 		Aliases:         []string{"vhdl"},
 		Filenames:       []string{"*.vhdl", "*.vhd"},
 		MimeTypes:       []string{"text/x-vhdl"},

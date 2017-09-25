@@ -11,10 +11,12 @@ import (
 
 // Registry of Lexers.
 var Registry = struct {
-	Lexers chroma.Lexers
-	byName map[string]chroma.Lexer
+	Lexers  chroma.Lexers
+	byName  map[string]chroma.Lexer
+	byAlias map[string]chroma.Lexer
 }{
-	byName: map[string]chroma.Lexer{},
+	byName:  map[string]chroma.Lexer{},
+	byAlias: map[string]chroma.Lexer{},
 }
 
 // Names of all lexers, optionally including aliases.
@@ -33,11 +35,10 @@ func Names(withAliases bool) []string {
 
 // Get a Lexer by name.
 func Get(name string) chroma.Lexer {
-	lexer, ok := Registry.byName[name]
-	if ok {
+	if lexer := Registry.byName[name]; lexer != nil {
 		return lexer
 	}
-	return nil
+	return Registry.byAlias[name]
 }
 
 // MatchMimeType attempts to find a lexer for the given MIME type.
@@ -55,9 +56,19 @@ func MatchMimeType(mimeType string) chroma.Lexer {
 // Match returns the first lexer matching filename.
 func Match(filename string) chroma.Lexer {
 	filename = filepath.Base(filename)
+	// First, try primary filename matches.
 	for _, lexer := range Registry.Lexers {
 		config := lexer.Config()
 		for _, glob := range config.Filenames {
+			if fnmatch.Match(glob, filename, 0) {
+				return lexer
+			}
+		}
+	}
+	// Next, try filename aliases.
+	for _, lexer := range Registry.Lexers {
+		config := lexer.Config()
+		for _, glob := range config.AliasFilenames {
 			if fnmatch.Match(glob, filename, 0) {
 				return lexer
 			}
@@ -87,7 +98,7 @@ func Register(lexer chroma.Lexer) chroma.Lexer {
 	config := lexer.Config()
 	Registry.byName[config.Name] = lexer
 	for _, alias := range config.Aliases {
-		Registry.byName[alias] = lexer
+		Registry.byAlias[alias] = lexer
 	}
 	Registry.Lexers = append(Registry.Lexers, lexer)
 	return lexer
