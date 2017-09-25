@@ -4,10 +4,10 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-// Nimrod lexer.
-var Nimrod = Register(MustNewLexer(
+// Nim lexer.
+var Nim = Register(MustNewLexer(
 	&Config{
-		Name:            "Nimrod",
+		Name:            "Nim",
 		Aliases:         []string{"nim", "nimrod"},
 		Filenames:       []string{"*.nim", "*.nimrod"},
 		MimeTypes:       []string{"text/x-nim"},
