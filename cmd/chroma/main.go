@@ -25,6 +25,11 @@ import (
 )
 
 var (
+	// Populated by goreleaser.
+	version = "?"
+	commit  = "?"
+	date    = "?"
+
 	profileFlag    = kingpin.Flag("profile", "Enable profiling to file.").Hidden().String()
 	listFlag       = kingpin.Flag("list", "List lexers, styles and formatters.").Bool()
 	unbufferedFlag = kingpin.Flag("unbuffered", "Do not buffer output.").Bool()
@@ -59,6 +64,7 @@ type nopFlushableWriter struct{ io.Writer }
 func (n *nopFlushableWriter) Flush() error { return nil }
 
 func main() {
+	kingpin.CommandLine.Version(fmt.Sprintf("%s-%s-%s", version, commit, date))
 	kingpin.CommandLine.Help = `
 Chroma is a general purpose syntax highlighting library and corresponding
 command, for Go.

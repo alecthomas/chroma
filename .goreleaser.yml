@@ -15,12 +15,12 @@ builds:
   - "386"
   goarm:
   - "6"
-  main: .
+  main: ./cmd/chroma/main.go
   ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
-  binary: cmd/chroma
+  binary: chroma
 archive:
   format: tar.gz
-  name_template: '{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{
+  name_template: '{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{
     .Arm }}{{ end }}'
   files:
   - COPYING
@@ -28,4 +28,4 @@ archive:
 snapshot:
   name_template: SNAPSHOT-{{ .Commit }}
 checksum:
-  name_template: '{{ .ProjectName }}_{{ .Version }}_checksums.txt'
+  name_template: '{{ .ProjectName }}-{{ .Version }}-checksums.txt'
