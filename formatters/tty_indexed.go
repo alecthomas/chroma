@@ -16,7 +16,7 @@ type ttyTable struct {
 var c = chroma.MustParseColour
 
 var ttyTables = map[int]*ttyTable{
-	8: &ttyTable{
+	8: {
 		foreground: map[chroma.Colour]string{
 			c("#000000"): "\033[30m", c("#7f0000"): "\033[31m", c("#007f00"): "\033[32m", c("#7f7fe0"): "\033[33m",
 			c("#00007f"): "\033[34m", c("#7f007f"): "\033[35m", c("#007f7f"): "\033[36m", c("#e5e5e5"): "\033[37m",
@@ -30,7 +30,7 @@ var ttyTables = map[int]*ttyTable{
 			c("#0000ff"): "\033[104m", c("#ff00ff"): "\033[105m", c("#00ffff"): "\033[106m", c("#ffffff"): "\033[107m",
 		},
 	},
-	256: &ttyTable{
+	256: {
 		foreground: map[chroma.Colour]string{
 			c("#000000"): "\033[38;5;0m", c("#800000"): "\033[38;5;1m", c("#008000"): "\033[38;5;2m", c("#808000"): "\033[38;5;3m",
 			c("#000080"): "\033[38;5;4m", c("#800080"): "\033[38;5;5m", c("#008080"): "\033[38;5;6m", c("#c0c0c0"): "\033[38;5;7m",

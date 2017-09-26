@@ -9,7 +9,7 @@ import (
 func TestCoalesce(t *testing.T) {
 	lexer := Coalesce(MustNewLexer(nil, Rules{
 		"root": []Rule{
-			Rule{`[!@#$%^&*()]`, Punctuation, nil},
+			{`[!@#$%^&*()]`, Punctuation, nil},
 		},
 	}))
 	actual, err := Tokenise(lexer, nil, "!@#$")

@@ -36,14 +36,14 @@ func TestSplitTokensIntoLines(t *testing.T) {
 		{Value: " world\nwhat?\n", Type: chroma.NameKeyword},
 	}
 	expected := [][]*chroma.Token{
-		[]*chroma.Token{
+		{
 			{Type: chroma.NameKeyword, Value: "hello"},
 			{Type: chroma.NameKeyword, Value: " world\n"},
 		},
-		[]*chroma.Token{
+		{
 			{Type: chroma.NameKeyword, Value: "what?\n"},
 		},
-		[]*chroma.Token{
+		{
 			{Type: chroma.NameKeyword},
 		},
 	}
