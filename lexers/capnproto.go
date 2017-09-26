@@ -7,7 +7,7 @@ import (
 // Cap'N'Proto Proto lexer.
 var CapNProto = Register(MustNewLexer(
 	&Config{
-		Name:      "Cap&#x27;n Proto",
+		Name:      "Cap'n Proto",
 		Aliases:   []string{"capnp"},
 		Filenames: []string{"*.capnp"},
 		MimeTypes: []string{},
