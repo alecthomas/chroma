@@ -36,30 +36,29 @@ func (r *remappingLexer) Tokenise(options *TokeniseOptions, text string) (Iterat
 	}, nil
 }
 
-type TypeMapping struct {
-	From TokenType
-	To   TokenType
+type TypeMapping []struct {
+	From, To TokenType
+	Words    []string
 }
-type TypeRemappingMap map[TypeMapping][]string
 
 // TypeRemappingLexer remaps types of tokens coming from a parent Lexer.
 //
 // eg. Map "defvaralias" tokens of type NameVariable to NameFunction:
 //
-// 		mapping := TypeRemappingMap{
-// 			{NameVariable, NameFunction}: {"defvaralias"},
+// 		mapping := TypeMapping{
+// 			{NameVariable, NameFunction, []string{"defvaralias"},
 // 		}
 // 		lexer = TypeRemappingLexer(lexer, mapping)
-func TypeRemappingLexer(lexer Lexer, mapping TypeRemappingMap) Lexer {
+func TypeRemappingLexer(lexer Lexer, mapping TypeMapping) Lexer {
 	// Lookup table for fast remapping.
 	lut := map[TokenType]map[string]TokenType{}
-	for rt, kl := range mapping {
+	for _, rt := range mapping {
 		km, ok := lut[rt.From]
 		if !ok {
 			km = map[string]TokenType{}
 			lut[rt.From] = km
 		}
-		for _, k := range kl {
+		for _, k := range rt.Words {
 			km[k] = rt.To
 		}
 
@@ -67,7 +66,6 @@ func TypeRemappingLexer(lexer Lexer, mapping TypeRemappingMap) Lexer {
 	return RemappingLexer(lexer, func(t *Token) []*Token {
 		if k, ok := lut[t.Type]; ok {
 			if tt, ok := k[t.Value]; ok {
-				t = t.Clone()
 				t.Type = tt
 			}
 		}

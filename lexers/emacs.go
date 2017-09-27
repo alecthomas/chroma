@@ -572,10 +572,10 @@ var Emacslisp = Register(TypeRemappingLexer(MustNewLexer(
 			{`"`, LiteralString, Pop(1)},
 		},
 	},
-), TypeRemappingMap{
-	{NameVariable, NameFunction}:  emacsBuiltinFunction,
-	{NameVariable, NameKeyword}:   emacsSpecialForms,
-	{NameVariable, NameException}: emacsErrorKeywords,
-	{NameVariable, NameBuiltin}:   append(emacsBuiltinFunctionHighlighted, emacsMacros...),
-	{NameVariable, KeywordPseudo}: emacsLambdaListKeywords,
+), TypeMapping{
+	{NameVariable, NameFunction, emacsBuiltinFunction},
+	{NameVariable, NameBuiltin, emacsSpecialForms},
+	{NameVariable, NameException, emacsErrorKeywords},
+	{NameVariable, NameBuiltin, append(emacsBuiltinFunctionHighlighted, emacsMacros...)},
+	{NameVariable, KeywordPseudo, emacsLambdaListKeywords},
 }))
