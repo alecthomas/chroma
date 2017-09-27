@@ -195,6 +195,9 @@ func (f *Formatter) class(t chroma.TokenType) string {
 }
 
 func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.TokenType) string {
+	if f.classes {
+		return string(fmt.Sprintf(` class="%s"`, f.class(tt)))
+	}
 	if _, ok := styles[tt]; !ok {
 		tt = tt.SubCategory()
 		if _, ok := styles[tt]; !ok {
@@ -203,9 +206,6 @@ func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.Toke
 				return ""
 			}
 		}
-	}
-	if f.classes {
-		return string(fmt.Sprintf(` class="%s"`, f.class(tt)))
 	}
 	return string(fmt.Sprintf(` style="%s"`, styles[tt]))
 }
