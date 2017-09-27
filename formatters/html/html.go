@@ -246,10 +246,13 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 	classes := map[chroma.TokenType]string{}
 	bg := style.Get(chroma.Background)
 	// Convert the style.
-	for _, t := range style.Types() {
+	for t := range chroma.StandardTypes {
 		entry := style.Get(t)
 		if t != chroma.Background {
 			entry = entry.Sub(bg)
+		}
+		if entry.IsZero() {
+			continue
 		}
 		classes[t] = StyleEntryToCSS(entry)
 	}

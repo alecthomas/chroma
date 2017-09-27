@@ -13,8 +13,8 @@ func TestRemappingLexer(t *testing.T) {
 			{`\w+`, Name, nil},
 		},
 	})
-	lexer = TypeRemappingLexer(lexer, TypeRemappingMap{
-		{Name, Keyword}: {"if", "else"},
+	lexer = TypeRemappingLexer(lexer, TypeMapping{
+		{Name, Keyword, []string{"if", "else"}},
 	})
 
 	it, err := lexer.Tokenise(nil, `if true then print else end`)
