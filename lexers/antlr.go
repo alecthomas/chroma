@@ -4,8 +4,8 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-// Antlr lexer.
-var Antlr = Register(MustNewLexer(
+// ANTLR lexer.
+var ANTLR = Register(MustNewLexer(
 	&Config{
 		Name:      "ANTLR",
 		Aliases:   []string{"antlr"},

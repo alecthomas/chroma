@@ -520,8 +520,8 @@ var (
 	}
 )
 
-// Emacslisp lexer.
-var Emacslisp = Register(TypeRemappingLexer(MustNewLexer(
+// EmacsLisp lexer.
+var EmacsLisp = Register(TypeRemappingLexer(MustNewLexer(
 	&Config{
 		Name:      "EmacsLisp",
 		Aliases:   []string{"emacs", "elisp", "emacs-lisp"},
