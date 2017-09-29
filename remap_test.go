@@ -3,11 +3,11 @@ package chroma
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/alecthomas/assert"
 )
 
 func TestRemappingLexer(t *testing.T) {
-	var lexer Lexer = MustNewLexer(nil, Rules{
+	var lexer Lexer = MustNewLexer(&Config{DontEnsureNL: true}, Rules{
 		"root": {
 			{`\s+`, Whitespace, nil},
 			{`\w+`, Name, nil},

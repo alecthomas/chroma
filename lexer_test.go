@@ -3,13 +3,13 @@ package chroma
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/alecthomas/assert"
 )
 
 func TestTokenTypeClassifiers(t *testing.T) {
-	require.True(t, GenericDeleted.InCategory(Generic))
-	require.True(t, LiteralStringBacktick.InSubCategory(String))
-	require.Equal(t, LiteralStringBacktick.String(), "LiteralStringBacktick")
+	assert.True(t, GenericDeleted.InCategory(Generic))
+	assert.True(t, LiteralStringBacktick.InSubCategory(String))
+	assert.Equal(t, LiteralStringBacktick.String(), "LiteralStringBacktick")
 }
 
 func TestSimpleLexer(t *testing.T) {
@@ -28,13 +28,13 @@ func TestSimpleLexer(t *testing.T) {
 			},
 		},
 	)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	actual, err := Tokenise(lexer, nil, `
 	; this is a comment
 	[section]
 	a = 10
 `)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	expected := []*Token{
 		{Whitespace, "\n\t"},
 		{Comment, "; this is a comment"},
@@ -48,5 +48,5 @@ func TestSimpleLexer(t *testing.T) {
 		{LiteralString, "10"},
 		{Whitespace, "\n"},
 	}
-	require.Equal(t, expected, actual)
+	assert.Equal(t, expected, actual)
 }

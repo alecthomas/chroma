@@ -3,8 +3,7 @@ package chroma
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/alecthomas/assert"
 )
 
 func TestInclude(t *testing.T) {
@@ -18,7 +17,7 @@ func TestInclude(t *testing.T) {
 	}
 	lexer := &RegexLexer{rules: actual}
 	err := include.Mutator.(LexerMutator).MutateLexer(lexer.rules, "root", 0)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	expected := CompiledRules{
 		"root": {
 			{Rule: Rule{
@@ -41,18 +40,18 @@ func TestInclude(t *testing.T) {
 			}},
 		},
 	}
-	require.Equal(t, expected, actual)
+	assert.Equal(t, expected, actual)
 }
 
 func TestCombine(t *testing.T) {
-	l := MustNewLexer(nil, Rules{
+	l := MustNewLexer(&Config{DontEnsureNL: true}, Rules{
 		"root":  {{`hello`, String, Combined("world", "bye", "space")}},
 		"world": {{`world`, Name, nil}},
 		"bye":   {{`bye`, Name, nil}},
 		"space": {{`\s+`, Whitespace, nil}},
 	})
 	it, err := l.Tokenise(nil, "hello world")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	expected := []*Token{{String, `hello`}, {Whitespace, ` `}, {Name, `world`}}
 	assert.Equal(t, expected, it.Tokens())
 }

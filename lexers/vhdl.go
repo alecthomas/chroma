@@ -33,7 +33,9 @@ var VHDL = Register(MustNewLexer(
 			{`(entity|component)(\s+)([a-z_]\w*)`, ByGroups(Keyword, Text, NameClass), nil},
 			{`(architecture|configuration)(\s+)([a-z_]\w*)(\s+)(of)(\s+)([a-z_]\w*)(\s+)(is)`, ByGroups(Keyword, Text, NameClass, Text, Keyword, Text, NameClass, Text, Keyword), nil},
 			{`([a-z_]\w*)(:)(\s+)(process|for)`, ByGroups(NameClass, Operator, Text, Keyword), nil},
-			{`(end)(\s+)`, ByGroups(UsingSelf("root"), Text), Push("endblock")},
+			// This seems to cause a recursive loop.
+			// {`(end)(\s+)`, ByGroups(UsingSelf("root"), Text), Push("endblock")},
+			{`(end)(\s+)`, ByGroups(Keyword, Text), Push("endblock")},
 			Include("types"),
 			Include("keywords"),
 			Include("numbers"),

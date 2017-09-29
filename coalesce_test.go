@@ -3,17 +3,17 @@ package chroma
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/alecthomas/assert"
 )
 
 func TestCoalesce(t *testing.T) {
-	lexer := Coalesce(MustNewLexer(nil, Rules{
+	lexer := Coalesce(MustNewLexer(&Config{DontEnsureNL: true}, Rules{
 		"root": []Rule{
 			{`[!@#$%^&*()]`, Punctuation, nil},
 		},
 	}))
 	actual, err := Tokenise(lexer, nil, "!@#$")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	expected := []*Token{{Punctuation, "!@#$"}}
-	require.Equal(t, expected, actual)
+	assert.Equal(t, expected, actual)
 }

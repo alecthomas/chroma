@@ -46,7 +46,7 @@ type Config struct {
 
 	// Make sure that the input does not end with a newline. This
 	// is required for some lexers that consume input linewise.
-	// DontEnsureNL bool
+	DontEnsureNL bool
 
 	// If given and greater than 0, expand tabs in the input.
 	// TabSize int
