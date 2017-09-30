@@ -6,7 +6,7 @@ import (
 )
 
 // PHP lexer.
-var PHP = internal.Register(MustNewLexer(
+var PHP = internal.Register(DelegatingLexer(HTML, MustNewLexer(
 	&Config{
 		Name:            "PHP",
 		Aliases:         []string{"php", "php3", "php4", "php5"},
@@ -80,4 +80,4 @@ var PHP = internal.Register(MustNewLexer(
 			{`[${\\]`, LiteralStringDouble, nil},
 		},
 	},
-))
+)))
