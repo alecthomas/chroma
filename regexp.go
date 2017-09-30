@@ -300,7 +300,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 	if options == nil {
 		options = defaultOptions
 	}
-	if !r.config.DontEnsureNL && !strings.HasSuffix(text, "\n") {
+	if r.config.EnsureNL && !strings.HasSuffix(text, "\n") {
 		text += "\n"
 	}
 	state := &LexerState{

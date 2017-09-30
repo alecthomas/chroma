@@ -7,7 +7,7 @@ import (
 )
 
 func TestRemappingLexer(t *testing.T) {
-	var lexer Lexer = MustNewLexer(&Config{DontEnsureNL: true}, Rules{
+	var lexer Lexer = MustNewLexer(nil, Rules{
 		"root": {
 			{`\s+`, Whitespace, nil},
 			{`\w+`, Name, nil},

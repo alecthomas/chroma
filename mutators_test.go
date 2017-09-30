@@ -44,7 +44,7 @@ func TestInclude(t *testing.T) {
 }
 
 func TestCombine(t *testing.T) {
-	l := MustNewLexer(&Config{DontEnsureNL: true}, Rules{
+	l := MustNewLexer(nil, Rules{
 		"root":  {{`hello`, String, Combined("world", "bye", "space")}},
 		"world": {{`world`, Name, nil}},
 		"bye":   {{`bye`, Name, nil}},

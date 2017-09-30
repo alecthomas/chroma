@@ -11,6 +11,7 @@ var Makefile = Register(MustNewLexer(
 		Aliases:   []string{"make", "makefile", "mf", "bsdmake"},
 		Filenames: []string{"*.mak", "*.mk", "Makefile", "makefile", "Makefile.*", "GNUmakefile"},
 		MimeTypes: []string{"text/x-makefile"},
+		EnsureNL:  true,
 	},
 	Rules{
 		"root": {

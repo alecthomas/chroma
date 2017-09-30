@@ -44,9 +44,9 @@ type Config struct {
 	// Strip all leading and trailing whitespace from the input
 	// StripAll bool
 
-	// Make sure that the input does not end with a newline. This
+	// Make sure that the input ends with a newline. This
 	// is required for some lexers that consume input linewise.
-	DontEnsureNL bool
+	EnsureNL bool
 
 	// If given and greater than 0, expand tabs in the input.
 	// TabSize int
