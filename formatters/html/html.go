@@ -174,9 +174,9 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 		}
 	}
 
-	fmt.Fprint(w, "</pre>\n")
+	fmt.Fprint(w, "</pre>")
 	if f.standalone {
-		fmt.Fprint(w, "</body>\n")
+		fmt.Fprint(w, "\n</body>\n")
 		fmt.Fprint(w, "</html>\n")
 	}
 
@@ -196,7 +196,11 @@ func (f *Formatter) class(t chroma.TokenType) string {
 
 func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.TokenType) string {
 	if f.classes {
-		return string(fmt.Sprintf(` class="%s"`, f.class(tt)))
+		cls := f.class(tt)
+		if cls == "" {
+			return ""
+		}
+		return string(fmt.Sprintf(` class="%s"`, cls))
 	}
 	if _, ok := styles[tt]; !ok {
 		tt = tt.SubCategory()
