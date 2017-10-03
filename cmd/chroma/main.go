@@ -34,6 +34,7 @@ var (
 	listFlag       = kingpin.Flag("list", "List lexers, styles and formatters.").Bool()
 	unbufferedFlag = kingpin.Flag("unbuffered", "Do not buffer output.").Bool()
 	traceFlag      = kingpin.Flag("trace", "Trace lexer states as they are traversed.").Bool()
+	checkFlag      = kingpin.Flag("check", "Do not format, check for tokenization errors instead.").Bool()
 
 	lexerFlag     = kingpin.Flag("lexer", "Lexer to use when formatting.").PlaceHolder("autodetect").Short('l').Enum(lexers.Names(true)...)
 	styleFlag     = kingpin.Flag("style", "Style to use for formatting.").Short('s').Default("swapoff").Enum(styles.Names()...)
@@ -167,7 +168,11 @@ command, for Go.
 		for _, filename := range *filesArgs {
 			contents, err := ioutil.ReadFile(filename)
 			kingpin.FatalIfError(err, "")
-			format(w, style, lex(filename, string(contents)))
+			if *checkFlag {
+				check(filename, lex(filename, string(contents)))
+			} else {
+				format(w, style, lex(filename, string(contents)))
+			}
 		}
 	}
 }
@@ -235,4 +240,19 @@ func format(w io.Writer, style *chroma.Style, it chroma.Iterator) {
 	formatter := formatters.Get(*formatterFlag)
 	err := formatter.Format(w, style, it)
 	kingpin.FatalIfError(err, "")
+}
+
+func check(filename string, it chroma.Iterator) {
+	line, col := 1, 0
+	for token := it(); token != nil; token = it() {
+		if token.Type == chroma.Error {
+			fmt.Printf("%s:%d:%d %q\n", filename, line, col, token.String())
+		}
+		for _, c := range token.String() {
+			col++
+			if c == '\n' {
+				line, col = line+1, 0
+			}
+		}
+	}
 }
