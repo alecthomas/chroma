@@ -32,6 +32,14 @@ func WithLineNumbers() Option {
 	}
 }
 
+// LineNumbersInTable will, when combined with WithLineNumbers, separate the line numbers
+// and code in table td's, which make them copy-and-paste friendly.
+func LineNumbersInTable() Option {
+	return func(f *Formatter) {
+		f.lineNumbersInTable = true
+	}
+}
+
 // HighlightLines higlights the given line ranges with the Highlight style.
 //
 // A range is the beginning and ending of a range as 1-based line numbers, inclusive.
@@ -62,13 +70,14 @@ func New(options ...Option) *Formatter {
 
 // Formatter that generates HTML.
 type Formatter struct {
-	standalone      bool
-	prefix          string
-	classes         bool
-	tabWidth        int
-	lineNumbers     bool
-	highlightRanges highlightRanges
-	baseLineNumber  int
+	standalone         bool
+	prefix             string
+	classes            bool
+	tabWidth           int
+	lineNumbers        bool
+	lineNumbersInTable bool
+	highlightRanges    highlightRanges
+	baseLineNumber     int
 }
 
 type highlightRanges [][2]int
@@ -108,6 +117,7 @@ func (f *Formatter) restyle(style *chroma.Style) (*chroma.Style, error) {
 		text := chroma.StyleEntry{Colour: bg.Colour}
 		text.Colour = brightenOrDarken(text.Colour, 0.5)
 		builder.AddEntry(chroma.LineNumbers, text)
+		builder.AddEntry(chroma.LineNumbersTable, text)
 	}
 	return builder.Build()
 }
@@ -137,27 +147,51 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 		fmt.Fprintf(w, "<body%s>\n", f.styleAttr(css, chroma.Background))
 	}
 
-	fmt.Fprintf(w, "<pre%s>", f.styleAttr(css, chroma.Background))
+	wrapInTable := f.lineNumbers && f.lineNumbersInTable
+
 	lines := splitTokensIntoLines(tokens)
 	lineDigits := len(fmt.Sprintf("%d", len(lines)))
 	highlightIndex := 0
+
+	if wrapInTable {
+		// List line numbers in its own <td>
+		fmt.Fprintf(w, "<table%s><tr>", f.styleAttr(css, chroma.LineTable))
+		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD))
+		fmt.Fprintf(w, "<pre%s>", f.styleAttr(css, chroma.Background))
+		for index, _ := range lines {
+			line := f.baseLineNumber + index
+			highlight, next := f.shouldHighlight(highlightIndex, line)
+			if next {
+				highlightIndex++
+			}
+			if highlight {
+				fmt.Fprintf(w, "<span%s>", f.styleAttr(css, chroma.LineHighlight))
+			}
+
+			fmt.Fprintf(w, "<span%s>%*d</span>", f.styleAttr(css, chroma.LineNumbersTable), lineDigits, line)
+
+			if highlight {
+				fmt.Fprintf(w, "</span>")
+			}
+		}
+		fmt.Fprint(w, "</pre></td>\n")
+		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD))
+	}
+
+	fmt.Fprintf(w, "<pre%s>", f.styleAttr(css, chroma.Background))
+	highlightIndex = 0
 	for index, tokens := range lines {
 		// 1-based line number.
 		line := f.baseLineNumber + index
-		highlight := false
-		for highlightIndex < len(f.highlightRanges) && line > f.highlightRanges[highlightIndex][1] {
+		highlight, next := f.shouldHighlight(highlightIndex, line)
+		if next {
 			highlightIndex++
-		}
-		if highlightIndex < len(f.highlightRanges) {
-			hrange := f.highlightRanges[highlightIndex]
-			if line >= hrange[0] && line <= hrange[1] {
-				highlight = true
-			}
 		}
 		if highlight {
 			fmt.Fprintf(w, "<span%s>", f.styleAttr(css, chroma.LineHighlight))
 		}
-		if f.lineNumbers {
+
+		if f.lineNumbers && !wrapInTable {
 			fmt.Fprintf(w, "<span%s>%*d</span>", f.styleAttr(css, chroma.LineNumbers), lineDigits, line)
 		}
 
@@ -175,12 +209,32 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 	}
 
 	fmt.Fprint(w, "</pre>")
+
+	if wrapInTable {
+		fmt.Fprint(w, "</td></tr></table>\n")
+	}
+
 	if f.standalone {
 		fmt.Fprint(w, "\n</body>\n")
 		fmt.Fprint(w, "</html>\n")
 	}
 
 	return nil
+}
+
+func (f *Formatter) shouldHighlight(highlightIndex, line int) (bool, bool) {
+	next := false
+	for highlightIndex < len(f.highlightRanges) && line > f.highlightRanges[highlightIndex][1] {
+		highlightIndex++
+		next = true
+	}
+	if highlightIndex < len(f.highlightRanges) {
+		hrange := f.highlightRanges[highlightIndex]
+		if line >= hrange[0] && line <= hrange[1] {
+			return true, next
+		}
+	}
+	return false, next
 }
 
 func (f *Formatter) class(t chroma.TokenType) string {
@@ -261,8 +315,13 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 		classes[t] = StyleEntryToCSS(entry)
 	}
 	classes[chroma.Background] += f.tabWidthStyle()
-	classes[chroma.LineNumbers] += "; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;"
+	lineNumbersStyle := "; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;"
+	classes[chroma.LineNumbers] += lineNumbersStyle
+	classes[chroma.LineNumbersTable] += lineNumbersStyle + "; display: block"
 	classes[chroma.LineHighlight] += "; display: block; width: 100%"
+	classes[chroma.LineTable] += "; border-spacing: 0; padding: 0; margin: 0;"
+	classes[chroma.LineTableTD] += "; vertical-align: top; padding: 0; margin: 0;"
+
 	return classes
 }
 

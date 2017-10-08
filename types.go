@@ -19,8 +19,14 @@ const (
 	Background TokenType = -1 - iota
 	// Line numbers in output.
 	LineNumbers
+	// Line numbers in output when in table.
+	LineNumbersTable
 	// Line higlight style.
 	LineHighlight
+	// Line numbers table wrapper style.
+	LineTable
+	// Line numbers table TD wrapper style.
+	LineTableTD
 	// Input that could not be tokenised.
 	Error
 	// Other is used by the Delegate lexer to indicate which tokens should be handled by the delegate.
@@ -190,14 +196,16 @@ const (
 
 var (
 	StandardTypes = map[TokenType]string{
-		Background:    "chroma",
-		LineNumbers:   "ln",
-		LineHighlight: "hl",
-
-		Text:       "",
-		Whitespace: "w",
-		Error:      "err",
-		Other:      "x",
+		Background:       "chroma",
+		LineNumbers:      "ln",
+		LineNumbersTable: "lnt",
+		LineHighlight:    "hl",
+		LineTable:        "lntable",
+		LineTableTD:      "lntd",
+		Text:             "",
+		Whitespace:       "w",
+		Error:            "err",
+		Other:            "x",
 		// I have no idea what this is used for...
 		// Escape:     "esc",
 

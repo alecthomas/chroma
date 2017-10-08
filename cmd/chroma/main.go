@@ -47,6 +47,7 @@ var (
 	htmlInlineStyleFlag    = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
 	htmlTabWidthFlag       = kingpin.Flag("html-tab-width", "Set the HTML tab width.").Default("8").Int()
 	htmlLinesFlag          = kingpin.Flag("html-lines", "Include line numbers in output.").Bool()
+	htmlLinesTableFlag     = kingpin.Flag("html-lines-table", "Split line numbers and code in a HTML table").Bool()
 	htmlLinesStyleFlag     = kingpin.Flag("html-lines-style", "Style for line numbers.").String()
 	htmlHighlightFlag      = kingpin.Flag("html-highlight", "Highlight these lines.").PlaceHolder("N[:M][,...]").String()
 	htmlHighlightStyleFlag = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").String()
@@ -139,6 +140,9 @@ command, for Go.
 		}
 		if *htmlLinesFlag {
 			options = append(options, html.WithLineNumbers())
+		}
+		if *htmlLinesTableFlag {
+			options = append(options, html.LineNumbersInTable())
 		}
 		if len(*htmlHighlightFlag) > 0 {
 			ranges := [][2]int{}
