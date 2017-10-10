@@ -198,12 +198,12 @@ func listAll() {
 	}
 	fmt.Println()
 	fmt.Printf("styles:")
-	for name := range styles.Registry {
+	for _, name := range styles.Names() {
 		fmt.Printf(" %s", name)
 	}
 	fmt.Println()
 	fmt.Printf("formatters:")
-	for name := range formatters.Registry {
+	for _, name := range formatters.Names() {
 		fmt.Printf(" %s", name)
 	}
 	fmt.Println()
