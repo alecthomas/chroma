@@ -11,6 +11,7 @@ var Verilog = Register(MustNewLexer(
 		Aliases:   []string{"verilog", "v"},
 		Filenames: []string{"*.v"},
 		MimeTypes: []string{"text/x-verilog"},
+		EnsureNL:  true,
 	},
 	Rules{
 		"root": {

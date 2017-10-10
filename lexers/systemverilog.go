@@ -11,6 +11,7 @@ var Systemverilog = Register(MustNewLexer(
 		Aliases:   []string{"systemverilog", "sv"},
 		Filenames: []string{"*.sv", "*.svh"},
 		MimeTypes: []string{"text/x-systemverilog"},
+		EnsureNL:  true,
 	},
 	Rules{
 		"root": {
