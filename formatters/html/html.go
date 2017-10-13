@@ -155,6 +155,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 
 	if wrapInTable {
 		// List line numbers in its own <td>
+		fmt.Fprintf(w, "<div%s>\n", f.styleAttr(css, chroma.Background))
 		fmt.Fprintf(w, "<table%s><tr>", f.styleAttr(css, chroma.LineTable))
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD))
 		fmt.Fprintf(w, "<pre%s>", f.styleAttr(css, chroma.Background))
@@ -212,6 +213,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 
 	if wrapInTable {
 		fmt.Fprint(w, "</td></tr></table>\n")
+		fmt.Fprint(w, "</div>\n")
 	}
 
 	if f.standalone {
@@ -317,10 +319,10 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 	classes[chroma.Background] += f.tabWidthStyle()
 	lineNumbersStyle := "; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;"
 	classes[chroma.LineNumbers] += lineNumbersStyle
-	classes[chroma.LineNumbersTable] += lineNumbersStyle + "; display: block"
+	classes[chroma.LineNumbersTable] += lineNumbersStyle + " display: block;"
 	classes[chroma.LineHighlight] += "; display: block; width: 100%"
-	classes[chroma.LineTable] += "; border-spacing: 0; padding: 0; margin: 0;"
-	classes[chroma.LineTableTD] += "; vertical-align: top; padding: 0; margin: 0;"
+	classes[chroma.LineTable] += "; border-spacing: 0; padding: 0; margin: 0; border: 0; width: 100%; overflow: auto; display: block;"
+	classes[chroma.LineTableTD] += "; vertical-align: top; padding: 0; margin: 0; border: 0;"
 
 	return classes
 }
