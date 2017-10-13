@@ -95,6 +95,12 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Ite
 	return f.writeHTML(w, style, iterator.Tokens())
 }
 
+// HasClasses is a helper function to know if the formatter was initialized
+// with or without the use of CSS classes
+func (f *Formatter) HasClasses() bool {
+	return f.classes
+}
+
 func brightenOrDarken(colour chroma.Colour, factor float64) chroma.Colour {
 	if colour.Brightness() < 0.5 {
 		return colour.Brighten(factor)
