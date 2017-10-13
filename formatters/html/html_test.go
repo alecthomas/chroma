@@ -58,10 +58,3 @@ func TestIteratorPanicRecovery(t *testing.T) {
 	err := New().Format(ioutil.Discard, styles.Fallback, it)
 	assert.Error(t, err)
 }
-
-func TestHasClasses(t *testing.T) {
-	f := New(WithClasses())
-	assert.True(t, f.HasClasses())
-	f = New()
-	assert.False(t, f.HasClasses())
-}

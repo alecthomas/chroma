@@ -20,7 +20,7 @@ func Standalone() Option { return func(f *Formatter) { f.standalone = true } }
 func ClassPrefix(prefix string) Option { return func(f *Formatter) { f.prefix = prefix } }
 
 // WithClasses emits HTML using CSS classes, rather than inline styles.
-func WithClasses() Option { return func(f *Formatter) { f.classes = true } }
+func WithClasses() Option { return func(f *Formatter) { f.Classes = true } }
 
 // TabWidth sets the number of characters for a tab. Defaults to 8.
 func TabWidth(width int) Option { return func(f *Formatter) { f.tabWidth = width } }
@@ -72,7 +72,7 @@ func New(options ...Option) *Formatter {
 type Formatter struct {
 	standalone         bool
 	prefix             string
-	classes            bool
+	Classes            bool // Exported field to detect when classes are being used
 	tabWidth           int
 	lineNumbers        bool
 	lineNumbersInTable bool
@@ -93,12 +93,6 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Ite
 		}
 	}()
 	return f.writeHTML(w, style, iterator.Tokens())
-}
-
-// HasClasses is a helper function to know if the formatter was initialized
-// with or without the use of CSS classes
-func (f *Formatter) HasClasses() bool {
-	return f.classes
 }
 
 func brightenOrDarken(colour chroma.Colour, factor float64) chroma.Colour {
@@ -137,14 +131,14 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 		return err
 	}
 	css := f.styleToCSS(style)
-	if !f.classes {
+	if !f.Classes {
 		for t, style := range css {
 			css[t] = compressStyle(style)
 		}
 	}
 	if f.standalone {
 		fmt.Fprint(w, "<html>\n")
-		if f.classes {
+		if f.Classes {
 			fmt.Fprint(w, "<style type=\"text/css\">\n")
 			f.WriteCSS(w, style)
 			fmt.Fprintf(w, "body { %s; }\n", css[chroma.Background])
@@ -255,7 +249,7 @@ func (f *Formatter) class(t chroma.TokenType) string {
 }
 
 func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.TokenType) string {
-	if f.classes {
+	if f.Classes {
 		cls := f.class(tt)
 		if cls == "" {
 			return ""
