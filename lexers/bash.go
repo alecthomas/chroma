@@ -6,7 +6,7 @@ import (
 	. "github.com/alecthomas/chroma" // nolint
 )
 
-var bashAnalyserRe = regexp.MustCompile(`(?m)^#!.*/bin/(?:bash|zsh|sh|ksh)`)
+var bashAnalyserRe = regexp.MustCompile(`(?m)^#!.*/bin/(?:env |)(?:bash|zsh|sh|ksh)`)
 
 // Bash lexer.
 var Bash = Register(MustNewLexer(
