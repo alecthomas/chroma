@@ -8,8 +8,8 @@ import (
 var Markdown = Register(MustNewLexer(
 	&Config{
 		Name:      "markdown",
-		Aliases:   []string{"md"},
-		Filenames: []string{"*.md"},
+		Aliases:   []string{"md", "mkd"},
+		Filenames: []string{"*.md", "*.mkd", "*.markdown"},
 		MimeTypes: []string{"text/x-markdown"},
 	},
 	Rules{
