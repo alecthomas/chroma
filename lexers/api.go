@@ -43,12 +43,17 @@ func Get(name string) chroma.Lexer {
 
 // MatchMimeType attempts to find a lexer for the given MIME type.
 func MatchMimeType(mimeType string) chroma.Lexer {
+	matched := chroma.PrioritisedLexers{}
 	for _, l := range Registry.Lexers {
 		for _, lmt := range l.Config().MimeTypes {
 			if mimeType == lmt {
-				return l
+				matched = append(matched, l)
 			}
 		}
+	}
+	if len(matched) != 0 {
+		sort.Sort(matched)
+		return matched[0]
 	}
 	return nil
 }
@@ -56,23 +61,33 @@ func MatchMimeType(mimeType string) chroma.Lexer {
 // Match returns the first lexer matching filename.
 func Match(filename string) chroma.Lexer {
 	filename = filepath.Base(filename)
+	matched := chroma.PrioritisedLexers{}
 	// First, try primary filename matches.
 	for _, lexer := range Registry.Lexers {
 		config := lexer.Config()
 		for _, glob := range config.Filenames {
 			if fnmatch.Match(glob, filename, 0) {
-				return lexer
+				matched = append(matched, lexer)
 			}
 		}
 	}
+	if len(matched) > 0 {
+		sort.Sort(matched)
+		return matched[0]
+	}
+	matched = nil
 	// Next, try filename aliases.
 	for _, lexer := range Registry.Lexers {
 		config := lexer.Config()
 		for _, glob := range config.AliasFilenames {
 			if fnmatch.Match(glob, filename, 0) {
-				return lexer
+				matched = append(matched, lexer)
 			}
 		}
+	}
+	if len(matched) > 0 {
+		sort.Sort(matched)
+		return matched[0]
 	}
 	return nil
 }

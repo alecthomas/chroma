@@ -11,6 +11,7 @@ var Mason = Register(MustNewLexer(
 		Aliases:   []string{"mason"},
 		Filenames: []string{"*.m", "*.mhtml", "*.mc", "*.mi", "autohandler", "dhandler"},
 		MimeTypes: []string{"application/x-mason"},
+		Priority:  0.1,
 	},
 	Rules{
 		"root": {
