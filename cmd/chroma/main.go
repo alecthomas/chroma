@@ -35,6 +35,7 @@ var (
 	unbufferedFlag = kingpin.Flag("unbuffered", "Do not buffer output.").Bool()
 	traceFlag      = kingpin.Flag("trace", "Trace lexer states as they are traversed.").Bool()
 	checkFlag      = kingpin.Flag("check", "Do not format, check for tokenization errors instead.").Bool()
+	filenameFlag   = kingpin.Flag("filename", "Filename to use for selecting a lexer when reading from stdin.").String()
 
 	lexerFlag     = kingpin.Flag("lexer", "Lexer to use when formatting.").PlaceHolder("autodetect").Short('l').Enum(lexers.Names(true)...)
 	styleFlag     = kingpin.Flag("style", "Style to use for formatting.").Short('s').Default("swapoff").Enum(styles.Names()...)
@@ -167,7 +168,7 @@ command, for Go.
 	if len(*filesArgs) == 0 {
 		contents, err := ioutil.ReadAll(os.Stdin)
 		kingpin.FatalIfError(err, "")
-		format(w, style, lex("", string(contents)))
+		format(w, style, lex(*filenameFlag, string(contents)))
 	} else {
 		for _, filename := range *filesArgs {
 			contents, err := ioutil.ReadFile(filename)
