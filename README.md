@@ -6,7 +6,7 @@ Chroma takes source code and other structured text and converts it into syntax
 highlighted HTML, ANSI-coloured text, etc.
 
 Chroma is based heavily on [Pygments](http://pygments.org/), and includes
-translaters for Pygments lexers and styles.
+translators for Pygments lexers and styles.
 
 ## Table of Contents
 
