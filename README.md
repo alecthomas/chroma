@@ -86,7 +86,7 @@ written in. There are three primary ways to do that:
     lexer := lexers.Analyse("package main\n\nfunc main()\n{\n}\n")
     ```
 
-In all cases, `nil` will be returned if the langauge can not be identified.
+In all cases, `nil` will be returned if the language can not be identified.
 
 ```go
 if lexer == nil {
