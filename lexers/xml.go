@@ -9,7 +9,7 @@ var XML = Register(MustNewLexer(
 	&Config{
 		Name:      "XML",
 		Aliases:   []string{"xml"},
-		Filenames: []string{"*.xml", "*.xsl", "*.rss", "*.xslt", "*.xsd", "*.wsdl", "*.wsf"},
+		Filenames: []string{"*.xml", "*.xsl", "*.rss", "*.xslt", "*.xsd", "*.wsdl", "*.wsf", "*.svg"},
 		MimeTypes: []string{"text/xml", "application/xml", "image/svg+xml", "application/rss+xml", "application/atom+xml"},
 		DotAll:    true,
 	},
