@@ -5,10 +5,8 @@ import (
 	"strings"
 )
 
-var httpBodyContentType string
-
-// Http lexer.
-var Http = Register(MustNewLexer(
+// HTTP lexer.
+var HTTP = Register(httpBodyContentTypeLexer(MustNewLexer(
 	&Config{
 		Name:         "HTTP",
 		Aliases:      []string{"http"},
@@ -31,52 +29,17 @@ var Http = Register(MustNewLexer(
 			{`.+`, EmitterFunc(httpContentBlock), nil},
 		},
 	},
-))
+)))
 
 func httpContentBlock(groups []string, lexer Lexer) Iterator {
-	iterators := []Iterator{}
-	code := groups[0]
-
-	if len(httpBodyContentType) > 0 {
-		lexer := MatchMimeType(httpBodyContentType)
-
-		// application/calendar+xml can be treated as application/xml
-		// if there's not a better match.
-		if lexer == nil && strings.Contains(httpBodyContentType, "+") {
-			slashPos := strings.Index(httpBodyContentType, "/")
-			plusPos := strings.LastIndex(httpBodyContentType, "+")
-			httpBodyContentType = httpBodyContentType[:slashPos+1] + httpBodyContentType[plusPos+1:]
-			lexer = MatchMimeType(httpBodyContentType)
-		}
-
-		if lexer != nil {
-			sub, err := lexer.Tokenise(nil, code)
-			if err != nil {
-				panic(err)
-			}
-			iterators = append(iterators, sub)
-		} else {
-			tokens := []*Token{
-				{Text, code},
-			}
-			iterators = append(iterators, Literator(tokens...))
-		}
+	tokens := []*Token{
+		{Generic, groups[0]},
 	}
-	return Concaterator(iterators...)
+	return Literator(tokens...)
+
 }
 
 func httpHeaderBlock(groups []string, lexer Lexer) Iterator {
-	if strings.ToLower(groups[1]) == "content-type" {
-		contentType := strings.TrimSpace(groups[5])
-		pos := strings.Index(contentType, ";")
-		if pos > 0 {
-			contentType = strings.TrimSpace(contentType[:pos])
-		}
-
-		httpBodyContentType = contentType
-	}
-
-	iterators := []Iterator{}
 	tokens := []*Token{
 		{Name, groups[1]},
 		{Text, groups[2]},
@@ -85,17 +48,82 @@ func httpHeaderBlock(groups []string, lexer Lexer) Iterator {
 		{Literal, groups[5]},
 		{Text, groups[6]},
 	}
-	iterators = append(iterators, Literator(tokens...))
-	return Concaterator(iterators...)
+	return Literator(tokens...)
 }
 
 func httpContinuousHeaderBlock(groups []string, lexer Lexer) Iterator {
-	iterators := []Iterator{}
 	tokens := []*Token{
 		{Text, groups[1]},
 		{Literal, groups[2]},
 		{Text, groups[3]},
 	}
-	iterators = append(iterators, Literator(tokens...))
-	return Concaterator(iterators...)
+	return Literator(tokens...)
+}
+
+func httpBodyContentTypeLexer(lexer Lexer) Lexer { return &httpBodyContentTyper{lexer} }
+
+type httpBodyContentTyper struct{ Lexer }
+
+func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
+	var contentType string
+	var isContentType bool
+	var subIterator Iterator
+
+	it, err := d.Lexer.Tokenise(options, text)
+	if err != nil {
+		return nil, err
+	}
+
+	return func() *Token {
+		for token := it(); token != nil; token = it() {
+			switch {
+			case token.Type == Name && strings.ToLower(token.Value) == "content-type":
+				{
+					isContentType = true
+				}
+			case token.Type == Literal && isContentType:
+				{
+					contentType = strings.TrimSpace(token.Value)
+					pos := strings.Index(contentType, ";")
+					if pos > 0 {
+						contentType = strings.TrimSpace(contentType[:pos])
+					}
+				}
+			case token.Type == Generic && contentType != "":
+				{
+					lexer := MatchMimeType(contentType)
+
+					// application/calendar+xml can be treated as application/xml
+					// if there's not a better match.
+					if lexer == nil && strings.Contains(contentType, "+") {
+						slashPos := strings.Index(contentType, "/")
+						plusPos := strings.LastIndex(contentType, "+")
+						contentType = contentType[:slashPos+1] + contentType[plusPos+1:]
+						lexer = MatchMimeType(contentType)
+					}
+
+					if lexer == nil {
+						token.Type = Text
+					} else {
+						subIterator, err = lexer.Tokenise(nil, token.Value)
+						if err != nil {
+							panic(err)
+						}
+						return nil
+					}
+				}
+
+			}
+
+			return token
+		}
+
+		if subIterator != nil {
+			for token := subIterator(); token != nil; token = subIterator() {
+				return token
+			}
+		}
+		return nil
+
+	}, nil
 }
