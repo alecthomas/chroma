@@ -19,3 +19,15 @@ func TestCompileAllRegexes(t *testing.T) {
 		assert.NoError(t, err, "%s failed", lexer.Config().Name)
 	}
 }
+
+func TestGet(t *testing.T) {
+	t.Run("ByName", func(t *testing.T) {
+		assert.Equal(t, lexers.Get("xml"), lexers.XML)
+	})
+	t.Run("ByAlias", func(t *testing.T) {
+		assert.Equal(t, lexers.Get("as"), lexers.Actionscript)
+	})
+	t.Run("ViaFilename", func(t *testing.T) {
+		assert.Equal(t, lexers.Get("svg"), lexers.XML)
+	})
+}
