@@ -9,6 +9,7 @@ var Diff = Register(MustNewLexer(
 	&Config{
 		Name:      "Diff",
 		Aliases:   []string{"diff", "udiff"},
+		EnsureNL:  true,
 		Filenames: []string{"*.diff", "*.patch"},
 		MimeTypes: []string{"text/x-diff", "text/x-patch"},
 	},
