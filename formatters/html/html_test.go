@@ -58,3 +58,47 @@ func TestIteratorPanicRecovery(t *testing.T) {
 	err := New().Format(ioutil.Discard, styles.Fallback, it)
 	assert.Error(t, err)
 }
+
+func Test_formatStyle(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "empty",
+			args: args{s: ""},
+			want: "",
+		}, {
+			name: "semicolon only",
+			args: args{s: ";"},
+			want: "",
+		}, {
+			name: "must strip empty rule at beginning",
+			args: args{s: "; margin: 0;"},
+			want: "margin: 0;",
+		}, {
+			name: "must end with semicolon",
+			args: args{s: "margin: 0;"},
+			want: "margin: 0;",
+		}, {
+			name: "must remove empty rules in between",
+			args: args{s: "margin: 0; ; ; padding: 0;; color: #fff;"},
+			want: "margin: 0; padding: 0; color: #fff;",
+		}, {
+			name: "complex example",
+			args: args{s: "   ;margin: 0  ; ; padding: 0;;; ; color: #fff   "},
+			want: "margin: 0; padding: 0; color: #fff;",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := formatStyle(tt.args.s); got != tt.want {
+				t.Errorf("formatStyle() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}

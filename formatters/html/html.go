@@ -133,6 +133,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 	css := f.styleToCSS(style)
 	if !f.Classes {
 		for t, style := range css {
+			style = formatStyle(style)
 			css[t] = compressStyle(style)
 		}
 	}
@@ -281,7 +282,7 @@ func (f *Formatter) tabWidthStyle() string {
 func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 	css := f.styleToCSS(style)
 	// Special-case background as it is mapped to the outer ".chroma" class.
-	if _, err := fmt.Fprintf(w, "/* %s */ .chroma { %s }\n", chroma.Background, css[chroma.Background]); err != nil {
+	if _, err := fmt.Fprintf(w, "/* %s */ .chroma { %s; }\n", chroma.Background, css[chroma.Background]); err != nil {
 		return err
 	}
 	tts := []int{}
@@ -295,6 +296,7 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 			continue
 		}
 		styles := css[tt]
+		styles = formatStyle(styles)
 		if _, err := fmt.Fprintf(w, "/* %s */ .chroma .%s { %s }\n", tt, f.class(tt), styles); err != nil {
 			return err
 		}
@@ -383,4 +385,26 @@ func splitTokensIntoLines(tokens []*chroma.Token) (out [][]*chroma.Token) {
 		out = append(out, line)
 	}
 	return
+}
+
+// formatStyle removes empty style rules and
+// appends a semicolon to all style rules.
+//
+// Turns `{ ; vertical-align: top; border: 0 }`
+// into `{ vertical-align: top; border: 0; }`.
+func formatStyle(s string) string {
+	parts := strings.Split(s, ";")
+	out := []string{}
+	for _, p := range parts {
+		p = strings.TrimSpace(p)
+		if p == "" {
+			continue
+		}
+		out = append(out, p)
+	}
+	res := strings.Join(out, "; ")
+	if len(res) == 0 {
+		return ""
+	}
+	return res + ";"
 }
