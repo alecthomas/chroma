@@ -3,10 +3,10 @@ package html
 import (
 	"errors"
 	"io/ioutil"
+	"strings"
 	"testing"
 
 	"github.com/alecthomas/assert"
-
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
@@ -57,4 +57,21 @@ func TestIteratorPanicRecovery(t *testing.T) {
 	}
 	err := New().Format(ioutil.Discard, styles.Fallback, it)
 	assert.Error(t, err)
+}
+
+func TestFormatter_styleToCSS(t *testing.T) {
+	builder := styles.Get("github").Builder()
+	builder.Add(chroma.LineHighlight, "bg:#ffffcc")
+	builder.Add(chroma.LineNumbers, "bold")
+	style, err := builder.Build()
+	if err != nil {
+		t.Error(err)
+	}
+	formatter := New(WithClasses())
+	css := formatter.styleToCSS(style)
+	for _, s := range css {
+		if strings.HasPrefix(strings.TrimSpace(s), ";") {
+			t.Errorf("rule starts with semicolon - expected valid css rule without semicolon: %v", s)
+		}
+	}
 }

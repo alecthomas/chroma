@@ -317,12 +317,13 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 		classes[t] = StyleEntryToCSS(entry)
 	}
 	classes[chroma.Background] += f.tabWidthStyle()
-	lineNumbersStyle := "; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;"
-	classes[chroma.LineNumbers] += lineNumbersStyle
-	classes[chroma.LineNumbersTable] += lineNumbersStyle + " display: block;"
-	classes[chroma.LineHighlight] += "; display: block; width: 100%"
-	classes[chroma.LineTable] += "; border-spacing: 0; padding: 0; margin: 0; border: 0; width: 100%; overflow: auto; display: block;"
-	classes[chroma.LineTableTD] += "; vertical-align: top; padding: 0; margin: 0; border: 0;"
+	lineNumbersStyle := "margin-right: 0.4em; padding: 0 0.4em 0 0.4em;"
+	// all rules begin with default rules followed by user provided rules
+	classes[chroma.LineNumbers] = lineNumbersStyle + classes[chroma.LineNumbers]
+	classes[chroma.LineNumbersTable] = lineNumbersStyle + " display: block;" + classes[chroma.LineNumbersTable]
+	classes[chroma.LineHighlight] = "display: block; width: 100%;" + classes[chroma.LineHighlight]
+	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0; width: 100%; overflow: auto; display: block;" + classes[chroma.LineTable]
+	classes[chroma.LineTableTD] = "vertical-align: top; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTableTD]
 
 	return classes
 }
