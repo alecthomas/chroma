@@ -41,6 +41,8 @@ var (
 	styleFlag     = kingpin.Flag("style", "Style to use for formatting.").Short('s').Default("swapoff").Enum(styles.Names()...)
 	formatterFlag = kingpin.Flag("formatter", "Formatter to use.").Default("terminal").Short('f').Enum(formatters.Names()...)
 
+	jsonFlag = kingpin.Flag("json", "Output JSON representation of tokens.").Bool()
+
 	htmlFlag               = kingpin.Flag("html", "Enable HTML mode (equivalent to '--formatter html').").Bool()
 	htmlPrefixFlag         = kingpin.Flag("html-prefix", "HTML CSS class prefix.").PlaceHolder("PREFIX").String()
 	htmlStylesFlag         = kingpin.Flag("html-styles", "Output HTML CSS styles.").Bool()
@@ -102,6 +104,10 @@ command, for Go.
 		w = bufio.NewWriterSize(out, 16384)
 	}
 	defer w.Flush()
+
+	if *jsonFlag {
+		*formatterFlag = "json"
+	}
 
 	if *htmlFlag {
 		*formatterFlag = "html"

@@ -1,0 +1,16 @@
+[
+  {"type":"Punctuation","value":":"},
+  {"type":"NameDecorator","value":"root"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"{"},
+  {"type":"Text","value":"\n  "},
+  {"type":"NameVariable","value":"--variable-name"},
+  {"type":"Text","value":""},
+  {"type":"Punctuation","value":":"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralNumberHex","value":"#fff"},
+  {"type":"Punctuation","value":";"},
+  {"type":"Text","value":"\n"},
+  {"type":"Punctuation","value":"}"},
+  {"type":"Text","value":"\n"}
+]

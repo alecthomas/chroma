@@ -59,8 +59,8 @@ type Config struct {
 
 // Token output to formatter.
 type Token struct {
-	Type  TokenType
-	Value string
+	Type  TokenType `json:"type"`
+	Value string    `json:"value"`
 }
 
 func (t *Token) String() string   { return t.Value }
