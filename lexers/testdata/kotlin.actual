@@ -1,0 +1,21 @@
+package X
+
+import A
+import B.*
+
+fun main(args: Array<String>) {
+  val ` + "`with spaces`" + ` = "hello"
+  val multiline = """1
+2"""
+  StringBuilder().apply {
+    append(multiline)
+  }
+}
+/*
+*/
+
+class X {
+  companion object {
+  }
+  suspend inline <reified T> generic(t: T) { print(T::class.name) }
+} // eof comment
