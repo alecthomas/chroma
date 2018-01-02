@@ -9,22 +9,31 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/alecthomas/chroma"
 )
 
 // Test source files are in the form <key>.<key> and validation data is in the form <key>.<key>.expected.
 func TestLexers(t *testing.T) {
-	for _, lexer := range Registry.Lexers {
-		name := strings.ToLower(lexer.Config().Name)
-		filename := filepath.Join("testdata", name+"."+name)
-		expectedFilename := filepath.Join("testdata", name+".expected")
-		if _, err := os.Stat(filename); err != nil {
+	files, err := ioutil.ReadDir("testdata")
+	require.NoError(t, err)
+
+	for _, file := range files {
+		ext := filepath.Ext(file.Name())[1:]
+		if ext != "actual" {
 			continue
 		}
+
+		lexer := Get(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())))
 		if !assert.NotNil(t, lexer) {
 			continue
 		}
+
+		filename := filepath.Join("testdata", file.Name())
+		expectedFilename := strings.TrimSuffix(filename, filepath.Ext(filename)) + ".expected"
+
+		lexer = chroma.Coalesce(lexer)
 		t.Run(lexer.Config().Name, func(t *testing.T) {
 			// Read and tokenise source text.
 			actualText, err := ioutil.ReadFile(filename)
