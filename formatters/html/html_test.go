@@ -59,7 +59,7 @@ func TestIteratorPanicRecovery(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestFormatter_styleToCSS(t *testing.T) {
+func TestFormatterStyleToCSS(t *testing.T) {
 	builder := styles.Get("github").Builder()
 	builder.Add(chroma.LineHighlight, "bg:#ffffcc")
 	builder.Add(chroma.LineNumbers, "bold")

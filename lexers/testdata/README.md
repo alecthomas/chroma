@@ -19,7 +19,7 @@ eg.
 
 ```bash
 $ export LEXER=csharp
-$ go run ./cmd/chroma/main.go --lexer ${LEXER} --json lexers/testdata/${LEXER}.${LEXER} > lexers/testdata/${LEXER}.expected
+$ go run ./cmd/chroma/main.go --lexer ${LEXER} --json lexers/testdata/${LEXER}.actual > lexers/testdata/${LEXER}.expected
 $ go test -v -run TestLexers ./lexers
 === RUN   TestLexers
 === RUN   TestLexers/C#
