@@ -33,7 +33,7 @@ var ProtocolBuffer = Register(MustNewLexer(
 			{`0[0-7]+[LlUu]*`, LiteralNumberOct, nil},
 			{`\d+[LlUu]*`, LiteralNumberInteger, nil},
 			{`[+-=]`, Operator, nil},
-			{`([a-zA-Z_][\w.]*)([ \t]*)(=)`, ByGroups(NameAttribute, Text, Operator), nil},
+			{`([a-zA-Z_][\w.]*)([ \t]*)(=)`, ByGroups(Name, Text, Operator), nil},
 			{`[a-zA-Z_][\w.]*`, Name, nil},
 		},
 		"package": {
