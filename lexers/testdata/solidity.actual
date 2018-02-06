@@ -1,0 +1,20 @@
+pragma solidity ^0.4.11;
+
+contract ReactExample {
+    address private owner;
+    string public you_awesome;
+    
+    function ReactExample() public {
+        owner = msg.sender;
+        you_awesome = "You're awesome";
+    }
+    
+    function kill() public {
+        require(msg.sender==owner);
+        selfdestruct(owner);
+    }
+    
+    function () public payable {
+        revert ();
+    }
+}
