@@ -87,6 +87,15 @@ func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]*Token, err
 // Rules maps from state to a sequence of Rules.
 type Rules map[string][]Rule
 
+func (r Rules) Clone() Rules {
+	out := map[string][]Rule{}
+	for key, rules := range r {
+		out[key] = make([]Rule, len(rules))
+		copy(out[key], rules)
+	}
+	return out
+}
+
 // MustNewLexer creates a new Lexer or panics.
 func MustNewLexer(config *Config, rules Rules) *RegexLexer {
 	lexer, err := NewLexer(config, rules)
