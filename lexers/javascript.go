@@ -65,6 +65,7 @@ var Javascript = Register(MustNewLexer(
 		Filenames: []string{"*.js", "*.jsm"},
 		MimeTypes: []string{"application/javascript", "application/x-javascript", "text/x-javascript", "text/javascript"},
 		DotAll:    true,
+		EnsureNL:  true,
 	},
 	JavascriptRules,
 ))
