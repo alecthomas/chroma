@@ -13,6 +13,7 @@ var PHP = Register(MustNewLexer(
 		MimeTypes:       []string{"text/x-php"},
 		DotAll:          true,
 		CaseInsensitive: true,
+		EnsureNL:        true,
 	},
 	Rules{
 		"root": {
