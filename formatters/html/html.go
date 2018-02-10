@@ -348,10 +348,11 @@ func StyleEntryToCSS(e chroma.StyleEntry) string {
 
 // Compress CSS attributes - remove spaces, transform 6-digit colours to 3.
 func compressStyle(s string) string {
-	s = strings.Replace(s, " ", "", -1)
 	parts := strings.Split(s, ";")
 	out := []string{}
 	for _, p := range parts {
+		p = strings.Join(strings.Fields(p), " ")
+		p = strings.Replace(p, ": ", ":", 1)
 		if strings.Contains(p, "#") {
 			c := p[len(p)-6:]
 			if c[0] == c[1] && c[2] == c[3] && c[4] == c[5] {
