@@ -19,7 +19,7 @@ var Go = Register(MustNewLexer(
 			{`\n`, Text, nil},
 			{`\s+`, Text, nil},
 			{`\\\n`, Text, nil},
-			{`//(.*?)\n`, CommentSingle, nil},
+			{`//(.*?)$`, CommentSingle, nil},
 			{`/(\\\n)?[*](.|\n)*?[*](\\\n)?/`, CommentMultiline, nil},
 			{`(import|package)\b`, KeywordNamespace, nil},
 			{`(var|func|struct|map|chan|type|interface|const)\b`, KeywordDeclaration, nil},
