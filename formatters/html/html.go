@@ -159,7 +159,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 		fmt.Fprintf(w, "<table%s><tr>", f.styleAttr(css, chroma.LineTable))
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD))
 		fmt.Fprintf(w, "<pre%s>", f.styleAttr(css, chroma.Background))
-		for index, _ := range lines {
+		for index := range lines {
 			line := f.baseLineNumber + index
 			highlight, next := f.shouldHighlight(highlightIndex, line)
 			if next {
@@ -267,7 +267,7 @@ func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.Toke
 			}
 		}
 	}
-	return string(fmt.Sprintf(` style="%s"`, styles[tt]))
+	return fmt.Sprintf(` style="%s"`, styles[tt])
 }
 
 func (f *Formatter) tabWidthStyle() string {
@@ -283,6 +283,13 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 	// Special-case background as it is mapped to the outer ".chroma" class.
 	if _, err := fmt.Fprintf(w, "/* %s */ .chroma { %s }\n", chroma.Background, css[chroma.Background]); err != nil {
 		return err
+	}
+	// Special-case code column of table to expand width.
+	if f.lineNumbers && f.lineNumbersInTable {
+		if _, err := fmt.Fprintf(w, "/* %s */ .chroma .%s:last-child { width: 100%%; }",
+			chroma.LineTableTD, f.class(chroma.LineTableTD)); err != nil {
+			return err
+		}
 	}
 	tts := []int{}
 	for tt := range css {
@@ -318,13 +325,12 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 	}
 	classes[chroma.Background] += f.tabWidthStyle()
 	lineNumbersStyle := "margin-right: 0.4em; padding: 0 0.4em 0 0.4em;"
-	// all rules begin with default rules followed by user provided rules
+	// All rules begin with default rules followed by user provided rules
 	classes[chroma.LineNumbers] = lineNumbersStyle + classes[chroma.LineNumbers]
 	classes[chroma.LineNumbersTable] = lineNumbersStyle + " display: block;" + classes[chroma.LineNumbersTable]
 	classes[chroma.LineHighlight] = "display: block; width: 100%;" + classes[chroma.LineHighlight]
-	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0; width: 100%; overflow: auto; display: block;" + classes[chroma.LineTable]
+	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block;" + classes[chroma.LineTable]
 	classes[chroma.LineTableTD] = "vertical-align: top; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTableTD]
-
 	return classes
 }
 
