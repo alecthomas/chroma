@@ -23,7 +23,7 @@ func BenchmarkHTMLFormatter(b *testing.B) {
 	formatter := New()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		it, err := lexers.Go.Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
+		it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
 		assert.NoError(b, err)
 		err = formatter.Format(ioutil.Discard, styles.Fallback, it)
 		assert.NoError(b, err)
