@@ -15,9 +15,9 @@ var YAML = Register(MustNewLexer(
 		"root": {
 			Include("whitespace"),
 			{`#.*`, Comment, nil},
-			{`![^\s]+`, CommentPreproc, nil},
-			{`\s&[^\s]+`, CommentPreproc, nil},
-			{`\s\*[^\s]+`, CommentPreproc, nil},
+			{`!![^\s]+`, CommentPreproc, nil},
+			{`&[^\s]+`, CommentPreproc, nil},
+			{`\*[^\s]+`, CommentPreproc, nil},
 			{`^%include\s+[^\n\r]+`, CommentPreproc, nil},
 			{`([>|])(\s+)((?:(?:.*?$)(?:[\n\r]*?\2)?)*)`, ByGroups(StringDoc, StringDoc, StringDoc), nil},
 			Include("value"),
@@ -30,6 +30,7 @@ var YAML = Register(MustNewLexer(
 			{`'(?:\\.|[^'])*'`, StringSingle, nil},
 			{`\d\d\d\d-\d\d-\d\d([T ]\d\d:\d\d:\d\d(\.\d+)?(Z|\s+[-+]\d+)?)?`, LiteralDate, nil},
 			{`\b[+\-]?(0x[\da-f]+|0o[0-7]+|(\d+\.?\d*|\.?\d+)(e[\+\-]?\d+)?|\.inf|\.nan)\b`, Number, nil},
+			{`\b[\w]+\b`, Text, nil},
 		},
 		"whitespace": {
 			{`\s+`, Whitespace, nil},
