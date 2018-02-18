@@ -243,11 +243,11 @@ func (f *Formatter) class(t chroma.TokenType) string {
 	for t != 0 {
 		cls, ok := chroma.StandardTypes[t]
 		if ok {
-			return cls
+			return f.prefix + cls
 		}
 		t = t.Parent()
 	}
-	return chroma.StandardTypes[t]
+	return f.prefix + chroma.StandardTypes[t]
 }
 
 func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.TokenType) string {
@@ -281,13 +281,13 @@ func (f *Formatter) tabWidthStyle() string {
 func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 	css := f.styleToCSS(style)
 	// Special-case background as it is mapped to the outer ".chroma" class.
-	if _, err := fmt.Fprintf(w, "/* %s */ .chroma { %s }\n", chroma.Background, css[chroma.Background]); err != nil {
+	if _, err := fmt.Fprintf(w, "/* %s */ .%schroma { %s }\n", chroma.Background, f.prefix, css[chroma.Background]); err != nil {
 		return err
 	}
 	// Special-case code column of table to expand width.
 	if f.lineNumbers && f.lineNumbersInTable {
-		if _, err := fmt.Fprintf(w, "/* %s */ .chroma .%s:last-child { width: 100%%; }",
-			chroma.LineTableTD, f.class(chroma.LineTableTD)); err != nil {
+		if _, err := fmt.Fprintf(w, "/* %s */ .%schroma .%s:last-child { width: 100%%; }",
+			chroma.LineTableTD, f.prefix, f.class(chroma.LineTableTD)); err != nil {
 			return err
 		}
 	}
@@ -302,7 +302,7 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 			continue
 		}
 		styles := css[tt]
-		if _, err := fmt.Fprintf(w, "/* %s */ .chroma .%s { %s }\n", tt, f.class(tt), styles); err != nil {
+		if _, err := fmt.Fprintf(w, "/* %s */ .%schroma .%s { %s }\n", tt, f.prefix, f.class(tt), styles); err != nil {
 			return err
 		}
 	}
