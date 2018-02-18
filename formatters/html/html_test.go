@@ -1,6 +1,7 @@
 package html
 
 import (
+	"bytes"
 	"errors"
 	"io/ioutil"
 	"strings"
@@ -73,5 +74,21 @@ func TestFormatterStyleToCSS(t *testing.T) {
 		if strings.HasPrefix(strings.TrimSpace(s), ";") {
 			t.Errorf("rule starts with semicolon - expected valid css rule without semicolon: %v", s)
 		}
+	}
+}
+
+func TestClassPrefix(t *testing.T) {
+	wantPrefix := "some-prefix-"
+	f := New(WithClasses(), ClassPrefix(wantPrefix))
+	for st := range chroma.StandardTypes {
+		if got := f.class(st); !strings.HasPrefix(got, wantPrefix) {
+			t.Errorf("f.class(%v): %q should have a class prefix", st, got)
+		}
+	}
+
+	var styleBuf bytes.Buffer
+	f.WriteCSS(&styleBuf, styles.Fallback)
+	if !strings.Contains(styleBuf.String(), ".some-prefix-chroma ") {
+		t.Error("Stylesheets should have a class prefix")
 	}
 }
