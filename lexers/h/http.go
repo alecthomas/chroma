@@ -19,7 +19,7 @@ var HTTP = internal.Register(httpBodyContentTypeLexer(MustNewLexer(
 	},
 	Rules{
 		"root": {
-			{`(GET|POST|PUT|DELETE|HEAD|OPTIONS|TRACE|PATCH)( +)([^ ]+)( +)(HTTP)(/)(1\.[01])(\r?\n|\Z)`, ByGroups(NameFunction, Text, NameNamespace, Text, KeywordReserved, Operator, LiteralNumber, Text), Push("headers")},
+			{`(GET|POST|PUT|DELETE|HEAD|OPTIONS|TRACE|PATCH|CONNECT)( +)([^ ]+)( +)(HTTP)(/)(1\.[01])(\r?\n|\Z)`, ByGroups(NameFunction, Text, NameNamespace, Text, KeywordReserved, Operator, LiteralNumber, Text), Push("headers")},
 			{`(HTTP)(/)(1\.[01])( +)(\d{3})( +)([^\r\n]+)(\r?\n|\Z)`, ByGroups(KeywordReserved, Operator, LiteralNumber, Text, LiteralNumber, Text, NameException, Text), Push("headers")},
 		},
 		"headers": {
