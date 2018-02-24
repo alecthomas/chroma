@@ -241,13 +241,18 @@ func (f *Formatter) shouldHighlight(highlightIndex, line int) (bool, bool) {
 
 func (f *Formatter) class(t chroma.TokenType) string {
 	for t != 0 {
-		cls, ok := chroma.StandardTypes[t]
-		if ok {
-			return f.prefix + cls
+		if cls, ok := chroma.StandardTypes[t]; ok {
+			if cls != "" {
+				return f.prefix + cls
+			}
+			return ""
 		}
 		t = t.Parent()
 	}
-	return f.prefix + chroma.StandardTypes[t]
+	if cls := chroma.StandardTypes[t]; cls != "" {
+		return f.prefix + cls
+	}
+	return ""
 }
 
 func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.TokenType) string {

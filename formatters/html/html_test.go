@@ -79,15 +79,20 @@ func TestFormatterStyleToCSS(t *testing.T) {
 
 func TestClassPrefix(t *testing.T) {
 	wantPrefix := "some-prefix-"
-	f := New(WithClasses(), ClassPrefix(wantPrefix))
+	withPrefix := New(WithClasses(), ClassPrefix(wantPrefix))
+	noPrefix := New(WithClasses())
 	for st := range chroma.StandardTypes {
-		if got := f.class(st); !strings.HasPrefix(got, wantPrefix) {
-			t.Errorf("f.class(%v): %q should have a class prefix", st, got)
+		if noPrefix.class(st) == "" {
+			if got := withPrefix.class(st); got != "" {
+				t.Errorf("Formatter.class(%v): prefix shouldn't be added to empty classes")
+			}
+		} else if got := withPrefix.class(st); !strings.HasPrefix(got, wantPrefix) {
+			t.Errorf("Formatter.class(%v): %q should have a class prefix", st, got)
 		}
 	}
 
 	var styleBuf bytes.Buffer
-	f.WriteCSS(&styleBuf, styles.Fallback)
+	withPrefix.WriteCSS(&styleBuf, styles.Fallback)
 	if !strings.Contains(styleBuf.String(), ".some-prefix-chroma ") {
 		t.Error("Stylesheets should have a class prefix")
 	}
