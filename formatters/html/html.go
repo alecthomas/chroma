@@ -169,7 +169,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []*chroma
 				fmt.Fprintf(w, "<span%s>", f.styleAttr(css, chroma.LineHighlight))
 			}
 
-			fmt.Fprintf(w, "<span%s>%*d</span>", f.styleAttr(css, chroma.LineNumbersTable), lineDigits, line)
+			fmt.Fprintf(w, "<span%s>%*d\n</span>", f.styleAttr(css, chroma.LineNumbersTable), lineDigits, line)
 
 			if highlight {
 				fmt.Fprintf(w, "</span>")
@@ -327,7 +327,7 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 	lineNumbersStyle := "margin-right: 0.4em; padding: 0 0.4em 0 0.4em;"
 	// All rules begin with default rules followed by user provided rules
 	classes[chroma.LineNumbers] = lineNumbersStyle + classes[chroma.LineNumbers]
-	classes[chroma.LineNumbersTable] = lineNumbersStyle + " display: block;" + classes[chroma.LineNumbersTable]
+	classes[chroma.LineNumbersTable] = lineNumbersStyle + classes[chroma.LineNumbersTable]
 	classes[chroma.LineHighlight] = "display: block; width: 100%;" + classes[chroma.LineHighlight]
 	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block;" + classes[chroma.LineTable]
 	classes[chroma.LineTableTD] = "vertical-align: top; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTableTD]
