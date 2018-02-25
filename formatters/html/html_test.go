@@ -92,3 +92,22 @@ func TestClassPrefix(t *testing.T) {
 		t.Error("Stylesheets should have a class prefix")
 	}
 }
+
+func TestTableLineNumberNewlines(t *testing.T) {
+	f := New(WithClasses(), WithLineNumbers(), LineNumbersInTable())
+	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+
+	// Don't bother testing the whole output, just verify it's got line numbers
+	// in a <pre>-friendly format.
+	// Note: placing the newlines inside the <span> lets browser selections look
+	// better, instead of "skipping" over the span margin.
+	assert.Contains(t, buf.String(), `<span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span>`)
+}
