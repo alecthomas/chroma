@@ -8,11 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 
-	"github.com/alecthomas/assert"
 	"github.com/alecthomas/chroma"
-
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/lexers/a"
@@ -44,7 +42,7 @@ func TestGet(t *testing.T) {
 // Test source files are in the form <key>.<key> and validation data is in the form <key>.<key>.expected.
 func TestLexers(t *testing.T) {
 	files, err := ioutil.ReadDir("testdata")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	for _, file := range files {
 		ext := filepath.Ext(file.Name())[1:]
