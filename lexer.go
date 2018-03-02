@@ -75,6 +75,8 @@ func (t *Token) Clone() *Token {
 type TokeniseOptions struct {
 	// State to start tokenisation in. Defaults to "root".
 	State string
+	// Nested tokenisation.
+	Nested bool
 }
 
 // A Lexer for tokenising source code.

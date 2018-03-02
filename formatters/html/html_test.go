@@ -84,7 +84,7 @@ func TestClassPrefix(t *testing.T) {
 	for st := range chroma.StandardTypes {
 		if noPrefix.class(st) == "" {
 			if got := withPrefix.class(st); got != "" {
-				t.Errorf("Formatter.class(%v): prefix shouldn't be added to empty classes")
+				t.Errorf("Formatter.class(%v): prefix shouldn't be added to empty classes", st)
 			}
 		} else if got := withPrefix.class(st); !strings.HasPrefix(got, wantPrefix) {
 			t.Errorf("Formatter.class(%v): %q should have a class prefix", st, got)

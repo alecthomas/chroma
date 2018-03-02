@@ -19,7 +19,7 @@ var Smarty = internal.Register(MustNewLexer(
 		"root": {
 			{`[^{]+`, Other, nil},
 			{`(\{)(\*.*?\*)(\})`, ByGroups(CommentPreproc, Comment, CommentPreproc), nil},
-			{`(\{php\})(.*?)(\{/php\})`, ByGroups(CommentPreproc, Using(PHP, nil), CommentPreproc), nil},
+			{`(\{php\})(.*?)(\{/php\})`, ByGroups(CommentPreproc, Using(PHP), CommentPreproc), nil},
 			{`(\{)(/?[a-zA-Z_]\w*)(\s*)`, ByGroups(CommentPreproc, NameFunction, Text), Push("smarty")},
 			{`\{`, CommentPreproc, Push("smarty")},
 		},

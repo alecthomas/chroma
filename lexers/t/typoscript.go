@@ -42,9 +42,9 @@ var Typoscript = internal.Register(MustNewLexer(
 			{`\s+`, Text, nil},
 		},
 		"html": {
-			{`<\S[^\n>]*>`, Using(TypoScriptHTMLData, nil), nil},
+			{`<\S[^\n>]*>`, Using(TypoScriptHTMLData), nil},
 			{`&[^;\n]*;`, LiteralString, nil},
-			{`(_CSS_DEFAULT_STYLE)(\s*)(\()(?s)(.*(?=\n\)))`, ByGroups(NameClass, Text, LiteralStringSymbol, Using(TypoScriptCSSData, nil)), nil},
+			{`(_CSS_DEFAULT_STYLE)(\s*)(\()(?s)(.*(?=\n\)))`, ByGroups(NameClass, Text, LiteralStringSymbol, Using(TypoScriptCSSData)), nil},
 		},
 		"literal": {
 			{`0x[0-9A-Fa-f]+t?`, LiteralNumberHex, nil},

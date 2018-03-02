@@ -24,13 +24,13 @@ var GenshiText = internal.Register(MustNewLexer(
 		},
 		"directive": {
 			{`\n`, Text, Pop(1)},
-			{`(?:def|for|if)\s+.*`, Using(Python, nil), Pop(1)},
-			{`(choose|when|with)([^\S\n]+)(.*)`, ByGroups(Keyword, Text, Using(Python, nil)), Pop(1)},
+			{`(?:def|for|if)\s+.*`, Using(Python), Pop(1)},
+			{`(choose|when|with)([^\S\n]+)(.*)`, ByGroups(Keyword, Text, Using(Python)), Pop(1)},
 			{`(choose|otherwise)\b`, Keyword, Pop(1)},
 			{`(end\w*)([^\S\n]*)(.*)`, ByGroups(Keyword, Text, Comment), Pop(1)},
 		},
 		"variable": {
-			{`(?<!\$)(\$\{)(.+?)(\})`, ByGroups(CommentPreproc, Using(Python, nil), CommentPreproc), nil},
+			{`(?<!\$)(\$\{)(.+?)(\})`, ByGroups(CommentPreproc, Using(Python), CommentPreproc), nil},
 			{`(?<!\$)(\$)([a-zA-Z_][\w.]*)`, NameVariable, nil},
 		},
 	},
@@ -65,7 +65,7 @@ var Genshi = internal.Register(MustNewLexer(
 var genshiMarkupRules = Rules{
 	"root": {
 		{`[^<$]+`, Other, nil},
-		{`(<\?python)(.*?)(\?>)`, ByGroups(CommentPreproc, Using(Python, nil), CommentPreproc), nil},
+		{`(<\?python)(.*?)(\?>)`, ByGroups(CommentPreproc, Using(Python), CommentPreproc), nil},
 		{`<\s*(script|style)\s*.*?>.*?<\s*/\1\s*>`, Other, nil},
 		{`<\s*py:[a-zA-Z0-9]+`, NameTag, Push("pytag")},
 		{`<\s*[a-zA-Z0-9:.]+`, NameTag, Push("tag")},
@@ -78,8 +78,8 @@ var genshiMarkupRules = Rules{
 		{`/?\s*>`, NameTag, Pop(1)},
 	},
 	"pyattr": {
-		{`(")(.*?)(")`, ByGroups(LiteralString, Using(Python, nil), LiteralString), Pop(1)},
-		{`(')(.*?)(')`, ByGroups(LiteralString, Using(Python, nil), LiteralString), Pop(1)},
+		{`(")(.*?)(")`, ByGroups(LiteralString, Using(Python), LiteralString), Pop(1)},
+		{`(')(.*?)(')`, ByGroups(LiteralString, Using(Python), LiteralString), Pop(1)},
 		{`[^\s>]+`, LiteralString, Pop(1)},
 	},
 	"tag": {
@@ -108,7 +108,7 @@ var genshiMarkupRules = Rules{
 		Include("variable"),
 	},
 	"variable": {
-		{`(?<!\$)(\$\{)(.+?)(\})`, ByGroups(CommentPreproc, Using(Python, nil), CommentPreproc), nil},
+		{`(?<!\$)(\$\{)(.+?)(\})`, ByGroups(CommentPreproc, Using(Python), CommentPreproc), nil},
 		{`(?<!\$)(\$)([a-zA-Z_][\w\.]*)`, NameVariable, nil},
 	},
 }

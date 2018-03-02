@@ -21,13 +21,13 @@ var Mason = internal.Register(MustNewLexer(
 			{`\s+`, Text, nil},
 			{`(<%doc>)(.*?)(</%doc>)(?s)`, ByGroups(NameTag, CommentMultiline, NameTag), nil},
 			{`(<%(?:def|method))(\s*)(.*?)(>)(.*?)(</%\2\s*>)(?s)`, ByGroups(NameTag, Text, NameFunction, NameTag, UsingSelf("root"), NameTag), nil},
-			{`(<%\w+)(.*?)(>)(.*?)(</%\2\s*>)(?s)`, ByGroups(NameTag, NameFunction, NameTag, Using(Perl, nil), NameTag), nil},
-			{`(<&[^|])(.*?)(,.*?)?(&>)(?s)`, ByGroups(NameTag, NameFunction, Using(Perl, nil), NameTag), nil},
-			{`(<&\|)(.*?)(,.*?)?(&>)(?s)`, ByGroups(NameTag, NameFunction, Using(Perl, nil), NameTag), nil},
+			{`(<%\w+)(.*?)(>)(.*?)(</%\2\s*>)(?s)`, ByGroups(NameTag, NameFunction, NameTag, Using(Perl), NameTag), nil},
+			{`(<&[^|])(.*?)(,.*?)?(&>)(?s)`, ByGroups(NameTag, NameFunction, Using(Perl), NameTag), nil},
+			{`(<&\|)(.*?)(,.*?)?(&>)(?s)`, ByGroups(NameTag, NameFunction, Using(Perl), NameTag), nil},
 			{`</&>`, NameTag, nil},
-			{`(<%!?)(.*?)(%>)(?s)`, ByGroups(NameTag, Using(Perl, nil), NameTag), nil},
+			{`(<%!?)(.*?)(%>)(?s)`, ByGroups(NameTag, Using(Perl), NameTag), nil},
 			{`(?<=^)#[^\n]*(\n|\Z)`, Comment, nil},
-			{`(?<=^)(%)([^\n]*)(\n|\Z)`, ByGroups(NameTag, Using(Perl, nil), Other), nil},
+			{`(?<=^)(%)([^\n]*)(\n|\Z)`, ByGroups(NameTag, Using(Perl), Other), nil},
 			{`(?sx)
                  (.+?)               # anything, followed by:
                  (?:
@@ -37,7 +37,7 @@ var Mason = internal.Register(MustNewLexer(
                                      # - don't consume
                   (\\\n) |           # an escaped newline
                   \Z                 # end of string
-                 )`, ByGroups(Using(HTML, nil), Operator), nil},
+                 )`, ByGroups(Using(HTML), Operator), nil},
 		},
 	},
 ))

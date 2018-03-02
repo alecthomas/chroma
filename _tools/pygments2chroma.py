@@ -85,7 +85,7 @@ def resolve_emitter(emitter):
                 name = args.__name__
                 if name.endswith('Lexer'):
                     name = name[:-5]
-                emitter = 'Using(%s, nil)' % name
+                emitter = 'Using(%s)' % name
             else:
                 raise ValueError('only support "using" with lexer classes, not %r' % args)
         else:

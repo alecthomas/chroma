@@ -42,9 +42,9 @@ func ByGroups(emitters ...Emitter) Emitter {
 }
 
 // Using returns an Emitter that uses a given Lexer for parsing and emitting.
-func Using(lexer Lexer, options *TokeniseOptions) Emitter {
+func Using(lexer Lexer) Emitter {
 	return EmitterFunc(func(groups []string, _ Lexer) Iterator {
-		it, err := lexer.Tokenise(options, groups[0])
+		it, err := lexer.Tokenise(&TokeniseOptions{State: "root", Nested: true}, groups[0])
 		if err != nil {
 			panic(err)
 		}
@@ -55,7 +55,7 @@ func Using(lexer Lexer, options *TokeniseOptions) Emitter {
 // UsingSelf is like Using, but uses the current Lexer.
 func UsingSelf(state string) Emitter {
 	return EmitterFunc(func(groups []string, lexer Lexer) Iterator {
-		it, err := lexer.Tokenise(&TokeniseOptions{State: state}, groups[0])
+		it, err := lexer.Tokenise(&TokeniseOptions{State: state, Nested: true}, groups[0])
 		if err != nil {
 			panic(err)
 		}
@@ -309,7 +309,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 	if options == nil {
 		options = defaultOptions
 	}
-	if r.config.EnsureNL && !strings.HasSuffix(text, "\n") {
+	if !options.Nested && r.config.EnsureNL && !strings.HasSuffix(text, "\n") {
 		text += "\n"
 	}
 	state := &LexerState{

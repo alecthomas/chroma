@@ -17,13 +17,13 @@ var Makefile = internal.Register(MustNewLexer(
 	},
 	Rules{
 		"root": {
-			{`^(?:[\t ]+.*\n|\n)+`, Using(Bash, nil), nil},
+			{`^(?:[\t ]+.*\n|\n)+`, Using(Bash), nil},
 			{`\$[<@$+%?|*]`, Keyword, nil},
 			{`\s+`, Text, nil},
 			{`#.*?\n`, Comment, nil},
 			{`(export)(\s+)(?=[\w${}\t -]+\n)`, ByGroups(Keyword, Text), Push("export")},
 			{`export\s+`, Keyword, nil},
-			{`([\w${}().-]+)(\s*)([!?:+]?=)([ \t]*)((?:.*\\\n)+|.*\n)`, ByGroups(NameVariable, Text, Operator, Text, Using(Bash, nil)), nil},
+			{`([\w${}().-]+)(\s*)([!?:+]?=)([ \t]*)((?:.*\\\n)+|.*\n)`, ByGroups(NameVariable, Text, Operator, Text, Using(Bash)), nil},
 			{`(?s)"(\\\\|\\.|[^"\\])*"`, LiteralStringDouble, nil},
 			{`(?s)'(\\\\|\\.|[^'\\])*'`, LiteralStringSingle, nil},
 			{`([^\n:]+)(:+)([ \t]*)`, ByGroups(NameFunction, Operator, Text), Push("block-header")},

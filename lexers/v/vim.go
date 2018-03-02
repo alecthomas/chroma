@@ -16,8 +16,8 @@ var Viml = internal.Register(MustNewLexer(
 	},
 	Rules{
 		"root": {
-			{`^([ \t:]*)(py(?:t(?:h(?:o(?:n)?)?)?)?)([ \t]*)(<<)([ \t]*)(.*)((?:\n|.)*)(\6)`, ByGroups(UsingSelf("root"), Keyword, Text, Operator, Text, Text, Using(Python, nil), Text), nil},
-			{`^([ \t:]*)(py(?:t(?:h(?:o(?:n)?)?)?)?)([ \t])(.*)`, ByGroups(UsingSelf("root"), Keyword, Text, Using(Python, nil)), nil},
+			{`^([ \t:]*)(py(?:t(?:h(?:o(?:n)?)?)?)?)([ \t]*)(<<)([ \t]*)(.*)((?:\n|.)*)(\6)`, ByGroups(UsingSelf("root"), Keyword, Text, Operator, Text, Text, Using(Python), Text), nil},
+			{`^([ \t:]*)(py(?:t(?:h(?:o(?:n)?)?)?)?)([ \t])(.*)`, ByGroups(UsingSelf("root"), Keyword, Text, Using(Python)), nil},
 			{`^\s*".*`, Comment, nil},
 			{`[ \t]+`, Text, nil},
 			{`/(\\\\|\\/|[^\n/])*/`, LiteralStringRegex, nil},

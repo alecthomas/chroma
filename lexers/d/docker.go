@@ -21,7 +21,7 @@ var Docker = internal.Register(MustNewLexer(
 			{`^((?:FROM|MAINTAINER|CMD|EXPOSE|ENV|ADD|ENTRYPOINT|VOLUME|WORKDIR))\b(.*)`, ByGroups(Keyword, LiteralString), nil},
 			{`#.*`, Comment, nil},
 			{`RUN`, Keyword, nil},
-			{`(.*\\\n)*.+`, Using(Bash, nil), nil},
+			{`(.*\\\n)*.+`, Using(Bash), nil},
 		},
 	},
 ))

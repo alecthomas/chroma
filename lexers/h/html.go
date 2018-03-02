@@ -44,11 +44,11 @@ var HTML = internal.Register(MustNewLexer(
 		},
 		"script-content": {
 			{`(<)(\s*)(/)(\s*)(script)(\s*)(>)`, ByGroups(Punctuation, Text, Punctuation, Text, NameTag, Text, Punctuation), Pop(1)},
-			{`.+?(?=<\s*/\s*script\s*>)`, Using(Javascript, nil), nil},
+			{`.+?(?=<\s*/\s*script\s*>)`, Using(Javascript), nil},
 		},
 		"style-content": {
 			{`(<)(\s*)(/)(\s*)(style)(\s*)(>)`, ByGroups(Punctuation, Text, Punctuation, Text, NameTag, Text, Punctuation), Pop(1)},
-			{`.+?(?=<\s*/\s*style\s*>)`, Using(CSS, nil), nil},
+			{`.+?(?=<\s*/\s*style\s*>)`, Using(CSS), nil},
 		},
 		"attr": {
 			{`".*?"`, LiteralString, Pop(1)},

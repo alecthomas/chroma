@@ -20,9 +20,9 @@ var Cheetah = internal.Register(MustNewLexer(
 			{`#[*](.|\n)*?[*]#`, Comment, nil},
 			{`#end[^#\n]*(?:#|$)`, CommentPreproc, nil},
 			{`#slurp$`, CommentPreproc, nil},
-			{`(#[a-zA-Z]+)([^#\n]*)(#|$)`, ByGroups(CommentPreproc, Using(Python, nil), CommentPreproc), nil},
-			{`(\$)([a-zA-Z_][\w.]*\w)`, ByGroups(CommentPreproc, Using(Python, nil)), nil},
-			{`(\$\{!?)(.*?)(\})(?s)`, ByGroups(CommentPreproc, Using(Python, nil), CommentPreproc), nil},
+			{`(#[a-zA-Z]+)([^#\n]*)(#|$)`, ByGroups(CommentPreproc, Using(Python), CommentPreproc), nil},
+			{`(\$)([a-zA-Z_][\w.]*\w)`, ByGroups(CommentPreproc, Using(Python)), nil},
+			{`(\$\{!?)(.*?)(\})(?s)`, ByGroups(CommentPreproc, Using(Python), CommentPreproc), nil},
 			{`(?sx)
                 (.+?)               # anything, followed by:
                 (?:

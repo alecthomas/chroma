@@ -17,14 +17,14 @@ var Mako = internal.Register(MustNewLexer(
 	Rules{
 		"root": {
 			{`(\s*)(%)(\s*end(?:\w+))(\n|\Z)`, ByGroups(Text, CommentPreproc, Keyword, Other), nil},
-			{`(\s*)(%)([^\n]*)(\n|\Z)`, ByGroups(Text, CommentPreproc, Using(Python, nil), Other), nil},
+			{`(\s*)(%)([^\n]*)(\n|\Z)`, ByGroups(Text, CommentPreproc, Using(Python), Other), nil},
 			{`(\s*)(##[^\n]*)(\n|\Z)`, ByGroups(Text, CommentPreproc, Other), nil},
 			{`(?s)<%doc>.*?</%doc>`, CommentPreproc, nil},
 			{`(<%)([\w.:]+)`, ByGroups(CommentPreproc, NameBuiltin), Push("tag")},
 			{`(</%)([\w.:]+)(>)`, ByGroups(CommentPreproc, NameBuiltin, CommentPreproc), nil},
 			{`<%(?=([\w.:]+))`, CommentPreproc, Push("ondeftags")},
-			{`(<%(?:!?))(.*?)(%>)(?s)`, ByGroups(CommentPreproc, Using(Python, nil), CommentPreproc), nil},
-			{`(\$\{)(.*?)(\})`, ByGroups(CommentPreproc, Using(Python, nil), CommentPreproc), nil},
+			{`(<%(?:!?))(.*?)(%>)(?s)`, ByGroups(CommentPreproc, Using(Python), CommentPreproc), nil},
+			{`(\$\{)(.*?)(\})`, ByGroups(CommentPreproc, Using(Python), CommentPreproc), nil},
 			{`(?sx)
                 (.+?)                # anything, followed by:
                 (?:
