@@ -1,12 +1,13 @@
-package p
+package circular
 
 import (
 	. "github.com/alecthomas/chroma" // nolint
+	"github.com/alecthomas/chroma/lexers/h"
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
 // PHP lexer.
-var PHP = internal.Register(DelegatingLexer(HTML, MustNewLexer(
+var PHP = internal.Register(DelegatingLexer(h.HTML, MustNewLexer(
 	&Config{
 		Name:            "PHP",
 		Aliases:         []string{"php", "php3", "php4", "php5"},

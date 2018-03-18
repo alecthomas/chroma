@@ -9,10 +9,12 @@ type delegatingLexer struct {
 	language Lexer
 }
 
-// DelegatingLexer takes two lexer as arguments. A root lexer and
-// a language lexer. First everything is scanned using the language
-// lexer, afterwards all Other tokens are lexed using the root
-// lexer.
+// DelegatingLexer combines two lexers to handle the common case of a language embedded inside another, such as PHP
+// inside HTML or PHP inside plain text.
+//
+// It takes two lexer as arguments: a root lexer and a language lexer.  First everything is scanned using the language
+// lexer, which must return "Other" for unrecognised tokens. Then all "Other" tokens are lexed using the root lexer.
+// Finally, these two sets of tokens are merged.
 //
 // The lexers from the template lexer package use this base lexer.
 func DelegatingLexer(root Lexer, language Lexer) Lexer {
@@ -26,101 +28,108 @@ func (d *delegatingLexer) Config() *Config {
 	return d.language.Config()
 }
 
-type tokenSplit struct {
-	pos    int
-	tokens []*Token
-}
-
-func splitOtherTokens(it Iterator) ([]tokenSplit, string) {
-	splits := []tokenSplit{}
-	var split *tokenSplit
-	other := bytes.Buffer{}
-	offset := 0
-	for t := it(); t != nil; t = it() {
-		if t.Type == Other {
-			if split != nil {
-				splits = append(splits, *split)
-				split = nil
-			}
-			other.WriteString(t.Value)
-		} else {
-			if split == nil {
-				split = &tokenSplit{pos: offset}
-			}
-			split.tokens = append(split.tokens, t)
-		}
-		offset += len(t.Value)
-	}
-	if split != nil {
-		splits = append(splits, *split)
-	}
-	return splits, other.String()
+// An insertion is the character range where language tokens should be inserted.
+type insertion struct {
+	start, end int
+	tokens     []*Token
 }
 
 func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
-	it, err := d.language.Tokenise(options, text)
+	tokens, err := Tokenise(Coalesce(d.language), options, text)
 	if err != nil {
 		return nil, err
 	}
-	splits, other := splitOtherTokens(it)
-	it, err = d.root.Tokenise(options, other)
-	if err != nil {
-		return nil, err
-	}
-
+	// Compute insertions and gather "Other" tokens.
+	others := &bytes.Buffer{}
+	insertions := []*insertion{}
+	var insert *insertion
 	offset := 0
-	return func() *Token {
-		// First, see if there's a split at the start of this token.
-		for len(splits) > 0 && splits[0].pos == offset {
-			if len(splits[0].tokens) > 0 {
-				t := splits[0].tokens[0]
-				splits[0].tokens = splits[0].tokens[1:]
-				offset += len(t.Value)
-				return t
+	var last *Token
+	for _, t := range tokens {
+		if t.Type == Other {
+			if last != nil && insert != nil && last.Type != Other {
+				insert.end = offset
 			}
-			// End of tokens from this split, shift it off the queue.
-			splits = splits[1:]
+			others.WriteString(t.Value)
+		} else {
+			if last == nil || last.Type == Other {
+				insert = &insertion{start: offset}
+				insertions = append(insertions, insert)
+			}
+			insert.tokens = append(insert.tokens, t)
 		}
+		last = t
+		offset += len(t.Value)
+	}
 
-		// No split, try to consume a token.
-		t := it()
-		if t == nil {
-			for len(splits) > 0 {
-				if len(splits[0].tokens) > 0 {
-					t = splits[0].tokens[0]
-					splits[0].tokens = splits[0].tokens[1:]
-					offset += len(t.Value)
-					return t
-				}
-				// End of tokens from this split, shift it off the queue.
-				splits = splits[1:]
-			}
+	if len(insertions) == 0 {
+		return d.root.Tokenise(options, text)
+	}
+
+	// Lex the other tokens.
+	rootTokens, err := Tokenise(d.root, options, others.String())
+	if err != nil {
+		return nil, err
+	}
+
+	// Interleave the two sets of tokens.
+	out := []*Token{}
+	offset = 0
+	index := 0
+	next := func() *Token {
+		if index >= len(rootTokens) {
 			return nil
 		}
-
-		// Check if there's a split in the middle of the current token.
-		if len(splits) > 0 && splits[0].pos < offset+len(t.Value) {
-			// Split the token.
-			next := t.Clone()
-			point := splits[0].pos - offset
-			next.Value = next.Value[point:]
-			t.Value = t.Value[:point]
-
-			// Insert the tail of the split token after any other splits at the same point.
-			tailPos := offset + len(t.Value)
-			tail := []tokenSplit{{pos: tailPos, tokens: []*Token{next}}}
-			i := 0
-			for ; i < len(splits); i++ {
-				if splits[i].pos > tailPos {
-					break
-				}
-			}
-			splits = append(splits[:i], append(tail, splits[i:]...)...)
-
-			// Finally, return the head.
+		t := rootTokens[index]
+		index++
+		return t
+	}
+	t := next()
+	for _, insert := range insertions {
+		// Consume tokens until insertion point.
+		for t != nil && offset+len(t.Value) <= insert.start {
+			out = append(out, t)
+			offset += len(t.Value)
+			t = next()
+		}
+		// End of root tokens, append insertion point.
+		if t == nil {
+			out = append(out, insert.tokens...)
+			break
 		}
 
-		offset += len(t.Value)
-		return t
-	}, nil
+		// Split and insert.
+		l, r := splitToken(t, insert.start-offset)
+		if l != nil {
+			out = append(out, l)
+			offset += len(l.Value)
+		}
+		out = append(out, insert.tokens...)
+		offset += insert.end - insert.start
+		if r != nil {
+			out = append(out, r)
+			offset += len(r.Value)
+		}
+		t = next()
+	}
+	if t != nil {
+		out = append(out, t)
+	}
+	// Remainder.
+	out = append(out, rootTokens[index:]...)
+	return Literator(out...), nil
+}
+
+func splitToken(t *Token, offset int) (l *Token, r *Token) {
+	if offset == 0 {
+		return nil, t
+	}
+	if offset >= len(t.Value) {
+		return t, nil
+	}
+	l = t.Clone()
+	r = t.Clone()
+	l.Value = l.Value[:offset]
+	r.Value = r.Value[offset:]
+	return
 }

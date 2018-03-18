@@ -9,6 +9,7 @@ import (
 	_ "github.com/alecthomas/chroma/lexers/a"
 	_ "github.com/alecthomas/chroma/lexers/b"
 	_ "github.com/alecthomas/chroma/lexers/c"
+	_ "github.com/alecthomas/chroma/lexers/circular"
 	_ "github.com/alecthomas/chroma/lexers/d"
 	_ "github.com/alecthomas/chroma/lexers/e"
 	_ "github.com/alecthomas/chroma/lexers/f"

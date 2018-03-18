@@ -6,11 +6,6 @@ import (
 	"github.com/alecthomas/assert"
 )
 
-var (
-	delegateSourceMiddle = `hello world <? what ?> there`
-	delegateSourceEnd    = `hello world <? what there`
-)
-
 func makeDelegationTestLexers() (lang Lexer, root Lexer) {
 	return MustNewLexer(nil, Rules{
 			"root": {
@@ -32,85 +27,84 @@ func makeDelegationTestLexers() (lang Lexer, root Lexer) {
 		})
 }
 
-func TestDelegateSplitOtherTokens(t *testing.T) {
-	lang, _ := makeDelegationTestLexers()
-	it, err := lang.Tokenise(nil, delegateSourceMiddle)
-	assert.NoError(t, err)
-	splits, other := splitOtherTokens(it)
-	assert.Equal(t, "hello world  there", other)
-	expected := []tokenSplit{tokenSplit{
-		pos: 12,
-		tokens: []*Token{
+func TestDelegate(t *testing.T) {
+	testdata := []struct {
+		name     string
+		source   string
+		expected []*Token
+	}{
+		{"SourceInMiddle", `hello world <? what ?> there`, []*Token{
+			{Keyword, "hello"},
+			{TextWhitespace, " "},
+			{Name, "world"},
+			{TextWhitespace, " "},
+			// lang
 			{CommentPreproc, "<?"},
 			{Whitespace, " "},
 			{Keyword, "what"},
 			{Whitespace, " "},
 			{CommentPreproc, "?>"},
-		},
-	}}
-	assert.Equal(t, expected, splits)
-}
-
-func TestDelegateSplitOtherTokensSourceAtEnd(t *testing.T) {
-	lang, _ := makeDelegationTestLexers()
-	lang = Coalesce(lang)
-	it, err := lang.Tokenise(nil, delegateSourceEnd)
-	assert.NoError(t, err)
-	splits, other := splitOtherTokens(it)
-	assert.Equal(t, "hello world ", other)
-	expected := []tokenSplit{tokenSplit{
-		pos: 12,
-		tokens: []*Token{
+			// /lang
+			{TextWhitespace, " "},
+			{Name, "there"},
+		}},
+		{"SourceBeginning", `<? what ?> hello world there`, []*Token{
+			{CommentPreproc, "<?"},
+			{TextWhitespace, " "},
+			{Keyword, "what"},
+			{TextWhitespace, " "},
+			{CommentPreproc, "?>"},
+			{TextWhitespace, " "},
+			{Keyword, "hello"},
+			{TextWhitespace, " "},
+			{Name, "world"},
+			{TextWhitespace, " "},
+			{Name, "there"},
+		}},
+		{"SourceEnd", `hello world <? what there`, []*Token{
+			{Keyword, "hello"},
+			{TextWhitespace, " "},
+			{Name, "world"},
+			{TextWhitespace, " "},
+			// lang
 			{CommentPreproc, "<?"},
 			{Whitespace, " "},
 			{Keyword, "what"},
 			{TextWhitespace, " "},
 			{Error, "there"},
-		},
-	}}
-	assert.Equal(t, expected, splits)
-}
-
-func TestDelegate(t *testing.T) {
+		}},
+		{"SourceMultiple", "hello world <? what ?> hello there <? what ?> hello", []*Token{
+			{Keyword, "hello"},
+			{TextWhitespace, " "},
+			{Name, "world"},
+			{TextWhitespace, " "},
+			{CommentPreproc, "<?"},
+			{TextWhitespace, " "},
+			{Keyword, "what"},
+			{TextWhitespace, " "},
+			{CommentPreproc, "?>"},
+			{TextWhitespace, " "},
+			{Keyword, "hello"},
+			{TextWhitespace, " "},
+			{Name, "there"},
+			{TextWhitespace, " "},
+			{CommentPreproc, "<?"},
+			{TextWhitespace, " "},
+			{Keyword, "what"},
+			{TextWhitespace, " "},
+			{CommentPreproc, "?>"},
+			{TextWhitespace, " "},
+			{Keyword, "hello"},
+		}},
+	}
 	lang, root := makeDelegationTestLexers()
 	delegate := DelegatingLexer(root, lang)
-	it, err := delegate.Tokenise(nil, delegateSourceMiddle)
-	assert.NoError(t, err)
-	expected := []*Token{
-		{Keyword, "hello"},
-		{TextWhitespace, " "},
-		{Name, "world"},
-		{TextWhitespace, " "},
-		// lang
-		{CommentPreproc, "<?"},
-		{Whitespace, " "},
-		{Keyword, "what"},
-		{Whitespace, " "},
-		{CommentPreproc, "?>"},
-		// /lang
-		{TextWhitespace, " "},
-		{Name, "there"},
+	for _, test := range testdata {
+		t.Run(test.name, func(t *testing.T) {
+			it, err := delegate.Tokenise(nil, test.source)
+			assert.NoError(t, err)
+			actual := it.Tokens()
+			assert.Equal(t, test.expected, actual)
+		})
 	}
-	assert.Equal(t, expected, it.Tokens())
-}
-
-func TestDelegateEnd(t *testing.T) {
-	lang, root := makeDelegationTestLexers()
-	lang = Coalesce(lang)
-	delegate := DelegatingLexer(root, lang)
-	it, err := delegate.Tokenise(nil, delegateSourceEnd)
-	assert.NoError(t, err)
-	expected := []*Token{
-		{Keyword, "hello"},
-		{TextWhitespace, " "},
-		{Name, "world"},
-		{TextWhitespace, " "},
-		// lang
-		{CommentPreproc, "<?"},
-		{Whitespace, " "},
-		{Keyword, "what"},
-		{TextWhitespace, " "},
-		{Error, "there"},
-	}
-	assert.Equal(t, expected, it.Tokens())
 }
