@@ -97,11 +97,17 @@ var goTemplateRules = Rules{
 }
 
 var GoHTMLTemplate = internal.Register(DelegatingLexer(h.HTML, MustNewLexer(
-	&Config{Name: "go-html-template"},
+	&Config{
+		Name:    "Go HTML Template",
+		Aliases: []string{"go-html-template"},
+	},
 	goTemplateRules,
 )))
 
 var GoTextTemplate = internal.Register(MustNewLexer(
-	&Config{Name: "go-text-template"},
+	&Config{
+		Name:    "Go Text Template",
+		Aliases: []string{"go-text-template"},
+	},
 	goTemplateRules,
 ))
