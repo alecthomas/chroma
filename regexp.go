@@ -195,7 +195,11 @@ func (l *LexerState) Iterator() *Token {
 		if l.Lexer.trace {
 			fmt.Fprintf(os.Stderr, "%s: pos=%d, text=%q\n", l.State, l.Pos, string(l.Text[l.Pos:]))
 		}
-		ruleIndex, rule, groups := matchRules(l.Text[l.Pos:], l.Rules[l.State])
+		selectedRule, ok := l.Rules[l.State]
+		if !ok {
+			panic("unknown state " + l.State)
+		}
+		ruleIndex, rule, groups := matchRules(l.Text[l.Pos:], selectedRule)
 		// No match.
 		if groups == nil {
 			l.Pos++

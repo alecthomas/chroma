@@ -58,14 +58,20 @@ func TypeRemappingLexer(lexer Lexer, mapping TypeMapping) Lexer {
 			km = map[string]TokenType{}
 			lut[rt.From] = km
 		}
-		for _, k := range rt.Words {
-			km[k] = rt.To
+		if len(rt.Words) == 0 {
+			km[""] = rt.To
+		} else {
+			for _, k := range rt.Words {
+				km[k] = rt.To
+			}
 		}
 
 	}
 	return RemappingLexer(lexer, func(t *Token) []*Token {
 		if k, ok := lut[t.Type]; ok {
 			if tt, ok := k[t.Value]; ok {
+				t.Type = tt
+			} else if tt, ok := k[""]; ok {
 				t.Type = tt
 			}
 		}
