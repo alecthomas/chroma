@@ -120,3 +120,12 @@ func Pop(n int) MutatorFunc {
 func Default(mutators ...Mutator) Rule {
 	return Rule{Mutator: Mutators(mutators...)}
 }
+
+// Stringify returns the raw string for a set of tokens.
+func Stringify(tokens ...*Token) string {
+	out := []string{}
+	for _, t := range tokens {
+		out = append(out, t.Value)
+	}
+	return strings.Join(out, "")
+}

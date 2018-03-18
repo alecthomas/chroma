@@ -67,64 +67,66 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 	}
 
 	// Lex the other tokens.
-	rootTokens, err := Tokenise(d.root, options, others.String())
+	rootTokens, err := Tokenise(Coalesce(d.root), options, others.String())
 	if err != nil {
 		return nil, err
 	}
 
 	// Interleave the two sets of tokens.
 	out := []*Token{}
-	offset = 0
-	index := 0
-	next := func() *Token {
-		if index >= len(rootTokens) {
+	offset = 0 // Offset into text.
+	tokenIndex := 0
+	nextToken := func() *Token {
+		if tokenIndex >= len(rootTokens) {
 			return nil
 		}
-		t := rootTokens[index]
-		index++
+		t := rootTokens[tokenIndex]
+		tokenIndex++
 		return t
 	}
-	t := next()
-	for _, insert := range insertions {
-		// Consume tokens until insertion point.
-		for t != nil && offset+len(t.Value) <= insert.start {
+	insertionIndex := 0
+	nextInsertion := func() *insertion {
+		if insertionIndex >= len(insertions) {
+			return nil
+		}
+		i := insertions[insertionIndex]
+		insertionIndex++
+		return i
+	}
+	t := nextToken()
+	i := nextInsertion()
+	for t != nil || i != nil {
+		// fmt.Printf("%d->%d:%q   %d->%d:%q\n", offset, offset+len(t.Value), t.Value, i.start, i.end, Stringify(i.tokens...))
+		if t == nil || (i != nil && i.start < offset+len(t.Value)) {
+			var l *Token
+			l, t = splitToken(t, i.start-offset)
+			if l != nil {
+				out = append(out, l)
+				offset += len(l.Value)
+			}
+			out = append(out, i.tokens...)
+			offset += i.end - i.start
+			if t == nil {
+				t = nextToken()
+			}
+			i = nextInsertion()
+		} else {
 			out = append(out, t)
 			offset += len(t.Value)
-			t = next()
+			t = nextToken()
 		}
-		// End of root tokens, append insertion point.
-		if t == nil {
-			out = append(out, insert.tokens...)
-			break
-		}
-
-		// Split and insert.
-		l, r := splitToken(t, insert.start-offset)
-		if l != nil {
-			out = append(out, l)
-			offset += len(l.Value)
-		}
-		out = append(out, insert.tokens...)
-		offset += insert.end - insert.start
-		if r != nil {
-			out = append(out, r)
-			offset += len(r.Value)
-		}
-		t = next()
 	}
-	if t != nil {
-		out = append(out, t)
-	}
-	// Remainder.
-	out = append(out, rootTokens[index:]...)
 	return Literator(out...), nil
 }
 
 func splitToken(t *Token, offset int) (l *Token, r *Token) {
+	if t == nil {
+		return nil, nil
+	}
 	if offset == 0 {
 		return nil, t
 	}
-	if offset >= len(t.Value) {
+	if offset == len(t.Value) {
 		return t, nil
 	}
 	l = t.Clone()

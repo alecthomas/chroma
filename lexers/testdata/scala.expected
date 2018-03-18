@@ -50,7 +50,6 @@
   {"type":"Keyword","value":":"},
   {"type":"Text","value":" "},
   {"type":"KeywordType","value":"Seq"},
-  {"type":"Text","value":""},
   {"type":"Operator","value":"["},
   {"type":"KeywordType","value":"T"},
   {"type":"Operator","value":"];"},

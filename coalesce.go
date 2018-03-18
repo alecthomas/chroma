@@ -13,6 +13,9 @@ func (d *coalescer) Tokenise(options *TokeniseOptions, text string) (Iterator, e
 	}
 	return func() *Token {
 		for token := it(); token != nil; token = it() {
+			if len(token.Value) == 0 {
+				continue
+			}
 			if prev == nil {
 				prev = token
 			} else {
