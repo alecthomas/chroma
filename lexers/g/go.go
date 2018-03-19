@@ -64,7 +64,6 @@ var goTemplateRules = Rules{
 	},
 	"template": {
 		{`[-]?}}`, CommentPreproc, Pop(1)},
-		{`\s+`, Whitespace, nil},
 		{`/\*.*?\*/`, Comment, nil},
 		{`(?=}})`, CommentPreproc, Pop(1)}, // Terminate the pipeline
 		{`\(`, Operator, Push("subexpression")},
@@ -76,6 +75,7 @@ var goTemplateRules = Rules{
 		Include("expression"),
 	},
 	"expression": {
+		{`\s+`, Whitespace, nil},
 		{`\(`, Operator, Push("subexpression")},
 		{`(range|if|else|while|with|template|end|true|false|nil|and|call|html|index|js|len|not|or|print|printf|println|urlquery|eq|ne|lt|le|gt|ge)\b`, Keyword, nil},
 		{`\||:=`, Operator, nil},
