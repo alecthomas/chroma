@@ -35,7 +35,6 @@ var CSharp = internal.Register(MustNewLexer(
 			{`(global)(::)`, ByGroups(Keyword, Punctuation), nil},
 			{`(bool|byte|char|decimal|double|dynamic|float|int|long|object|sbyte|short|string|uint|ulong|ushort|var)\b\??`, KeywordType, nil},
 			{`(class|struct)(\s+)`, ByGroups(Keyword, Text), Push("class")},
-			{`\b([_a-zA-Z]\w*)(\.)`, ByGroups(NameClass, Punctuation), nil},
 			{`(namespace|using)(\s+)`, ByGroups(Keyword, Text), Push("namespace")},
 			{`@?[_a-zA-Z]\w*`, Name, nil},
 		},
