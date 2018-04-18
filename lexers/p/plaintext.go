@@ -5,7 +5,6 @@ import (
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
-// Plaintext lexer.
 var Plaintext = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "plaintext",
@@ -13,8 +12,5 @@ var Plaintext = internal.Register(MustNewLexer(
 		Filenames: []string{"*.txt"},
 		MimeTypes: []string{"text/plain"},
 	},
-	Rules{
-		"root": {
-			{`.*`, Text, nil},
-	},
+	internal.PlaintextRules,
 ))
