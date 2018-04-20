@@ -124,6 +124,13 @@ command, for Go.
 	style, err := builder.Build()
 	kingpin.FatalIfError(err, "")
 
+	// Dump styles.
+	if *htmlStylesFlag {
+		formatter := html.New(html.WithClasses())
+		formatter.WriteCSS(w, style)
+		return
+	}
+
 	if *formatterFlag == "html" {
 		options := []html.Option{
 			html.TabWidth(*htmlTabWidthFlag),
@@ -131,13 +138,6 @@ command, for Go.
 		}
 		if *htmlPrefixFlag != "" {
 			options = append(options, html.ClassPrefix(*htmlPrefixFlag))
-		}
-
-		// Dump styles.
-		if *htmlStylesFlag {
-			formatter := html.New(html.WithClasses())
-			formatter.WriteCSS(w, style)
-			return
 		}
 		if !*htmlInlineStyleFlag {
 			options = append(options, html.WithClasses())
