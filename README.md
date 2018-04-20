@@ -189,6 +189,12 @@ All Pygments styles have been converted to Chroma using the `_tools/style.py` sc
 
 For a quick overview of the available styles and how they look, check out the [Chroma Style Gallery](https://xyproto.github.io/splash/docs/).
 
+For standalone usage css styles can be generated using `_tools/style2css/main.go` tool:
+
+```sh
+$ go run _tools/style2css/main.go dracula > dracula.css
+```
+
 ## Command-line interface
 
 A command-line interface to Chroma is included. It can be installed with:
