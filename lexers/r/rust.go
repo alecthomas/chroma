@@ -12,6 +12,7 @@ var Rust = internal.Register(MustNewLexer(
 		Aliases:   []string{"rust"},
 		Filenames: []string{"*.rs", "*.rs.in"},
 		MimeTypes: []string{"text/rust"},
+		EnsureNL:  true,
 	},
 	Rules{
 		"root": {
