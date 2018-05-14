@@ -18,7 +18,7 @@ var CPP = internal.Register(MustNewLexer(
 		"statements": {
 			{Words(``, `\b`, `catch`, `const_cast`, `delete`, `dynamic_cast`, `explicit`, `export`, `friend`, `mutable`, `namespace`, `new`, `operator`, `private`, `protected`, `public`, `reinterpret_cast`, `restrict`, `static_cast`, `template`, `this`, `throw`, `throws`, `try`, `typeid`, `typename`, `using`, `virtual`, `constexpr`, `nullptr`, `decltype`, `thread_local`, `alignas`, `alignof`, `static_assert`, `noexcept`, `override`, `final`), Keyword, nil},
 			{`char(16_t|32_t)\b`, KeywordType, nil},
-			{`(class)(\s+)`, ByGroups(Keyword, Text), Push("classname")},
+			{`(class)\b`, ByGroups(Keyword, Text), Push("classname")},
 			{`(R)(")([^\\()\s]{,16})(\()((?:.|\n)*?)(\)\3)(")`, ByGroups(LiteralStringAffix, LiteralString, LiteralStringDelimiter, LiteralStringDelimiter, LiteralString, LiteralStringDelimiter, LiteralString), nil},
 			{`(u8|u|U)(")`, ByGroups(LiteralStringAffix, LiteralString), Push("string")},
 			{`(L?)(")`, ByGroups(LiteralStringAffix, LiteralString), Push("string")},
