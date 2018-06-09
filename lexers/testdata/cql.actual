@@ -1,0 +1,56 @@
+-- basic statements
+// c-style comment
+/* 
+
+   multiline comment
+
+*/
+CREATE TABLE cycling.cyclist_name ( id UUID PRIMARY KEY, lastname text, firstname text );
+INSERT INTO cycling.cyclist_name (id, lastname, firstname) VALUES (5b6962dd-3f90-4c93-8f61-eabfa4a803e2, 'VOS','Marianne');
+SELECT * FROM cycling.cyclist_name;
+SELECT lastname, firstname FROM /* a comment */ cycling.cyclist_name WHERE id = 6ab09bec-e68e-48d9-a5f8-97e6fb4c9b47 /* multiline comment 
+
+*/ -- comment;
+;
+
+CREATE TABLE cycling.cyclist_category ( category text, points int, id UUID, lastname text, PRIMARY KEY (category, points)) WITH CLUSTERING ORDER BY (points DESC);
+CREATE TABLE cycling.race_winners (race_name text, race_position int, cyclist_name FROZEN<fullname>, PRIMARY KEY (race_name, race_position));
+CREATE TABLE cycling.cyclist_races ( id UUID PRIMARY KEY, lastname text, firstname text, races list<FROZEN <race>> );
+INSERT INTO cycling.cyclist_races (id, lastname, firstname, races) VALUES (5b6962dd-3f90-4c93-8f61-eabfa4a803e2, 'VOS', 'Marianne', [ {race_title:'Rabobank 7-Dorpenomloop Aalburg',race_date:'2015-05-09',race_time:'02:58:33'},{race_title:'Ronde van Gelderland',race_date:'2015-04-19',race_time:'03:22:23'}
+]);
+
+INSERT INTO cycling.cyclist_races (id, lastname, firstname, races) VALUES (e7cd5752-bc0d-4157-a80f-7523add8dbcd, 'VAN DER BREGGEN', 'Anna', [ {race_title:'Festival Luxembourgeois du cyclisme feminin Elsy Jacobs - Prologue - Garnich > Garnich',race_date:'2015-05-01',race_time:'08:13:00'},{race_title:'Festival Luxembourgeois du cyclisme feminin Elsy Jacobs - Stage 2 - Garnich > Garnich',race_date:'2015-05-02',race_time:'02:41:52'},{race_title:'Festival Luxembourgeois du cyclisme feminin Elsy Jacobs - Stage 3 - Mamer > Mamer',race_date:'2015-05-03',race_time:'02:31:24'} ]);
+
+SELECT * FROM cycling.cyclist_races;
+
+SELECT lastname, races FROM cycling.cyclist_races WHERE id = e7cd5752-bc0d-4157-a80f-7523add8dbcd;
+
+INSERT INTO cycling.calendar (race_id, race_start_date, race_end_date, race_name) VALUES (201, '2015-02-18', '2015-02-22', $$Women's Tour of New Zealand$$);
+
+CREATE USER IF NOT EXISTS sandy WITH PASSWORD 'Ride2Win@' NOSUPERUSER;
+CREATE USER chuck WITH PASSWORD 'Always1st$' SUPERUSER;
+ALTER USER sandy SUPERUSER;
+LIST USERS;
+DROP USER IF EXISTS chuck;
+CREATE ROLE IF NOT EXISTS team_manager WITH PASSWORD = 'RockIt4Us!';
+CREATE ROLE sys_admin WITH PASSWORD = 'IcanDoIt4ll' AND LOGIN = true AND SUPERUSER = true;
+ALTER ROLE sys_admin WITH PASSWORD = 'All4one1forAll' AND SUPERUSER = false;
+GRANT sys_admin TO team_manager;
+GRANT team_manager TO sandy;
+LIST ROLES;
+LIST ROLES OF sandy;
+REVOKE sys_admin FROM team_manager;
+REVOKE team_manager FROM sandy;
+DROP ROLE IF EXISTS sys_admin;
+GRANT MODIFY ON KEYSPACE cycling TO team_manager;
+GRANT DESCRIBE ON ALL ROLES TO sys_admin;
+GRANT AUTHORIZE ALL KEYSPACES TO sys_admin;
+REVOKE SELECT ON ALL KEYSPACES FROM team_manager;
+REVOKE EXECUTE ON FUNCTION cycling.fLog(double) FROM team_manager;
+LIST ALL PERMISSIONS OF sandy;
+LIST ALL PERMISSIONS ON cycling.cyclist_name OF chuck;
+CREATE MATERIALIZED VIEW cyclist_by_age AS SELECT age, birthday, name, country FROM cyclist_mv WHERE age is NOT NULL AND cid IS NOT NULL PRIMARY KEY (age, cid);
+CREATE MATERIALIZED VIEW cyclist_by_country AS SELECT age, birthday, name, country FROM cyclist_mv WHERE country is NOT NULL AND cid IS NOT NULL PRIMARY KEY (country, cid);
+CREATE MATERIALIZED VIEW cyclist_by_birthday AS SELECT age, birthday, name, country FROM cyclist_mv WHERE birthday is NOT NULL AND cid IS NOT NULL PRIMARY KEY (birthday, cid);
+DROP MATERIALIZED VIEW cyclist_by_age;
+INSERT INTO cycling.calendar (race_id, race_name, race_start_date, race_end_date) VALUES (200, 'placeholder', '2015-05-27', '2015-05-27') USING TIMESTAMP 123456789;
