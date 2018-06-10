@@ -1,0 +1,81 @@
+# about
+
+## user defined function in cql
+
+```javascript
+  column.substring(0,num) 
+```
+
+```cql
+CREATE FUNCTION IF NOT EXISTS cycling.left (column TEXT,num int)
+RETURNS NULL ON NULL INPUT
+RETURNS text
+LANGUAGE javascript AS $$ 
+  column.substring(0,num) 
+$$;
+
+CREATE OR REPLACE FUNCTION cycling.fLog (input double)
+CALLED ON NULL INPUT
+RETURNS double LANGUAGE java AS
+'return Double.valueOf(Math.log(input.doubleValue()));';
+```
+
+```postgres
+DROP TABLE IF EXISTS emp CASCADE;
+
+CREATE TABLE emp (
+  empname text,
+  salary integer,
+  last_date timestamp,
+  last_user text
+);
+
+select 
+  $my_tag$aoeuaoeu$my_tag$ as blah
+;
+
+CREATE OR REPLACE FUNCTION emp_stamp() RETURNS trigger AS $emp_stamp$
+BEGIN
+  -- Check that empname and salary are given
+  IF NEW.empname IS NULL THEN
+    RAISE EXCEPTION 'empname cannot be null';
+  END IF;
+  IF NEW.salary IS NULL THEN
+    RAISE EXCEPTION '% cannot have null salary', NEW.empname;
+  END IF;
+
+  -- Who works for us when she must pay for it?
+  IF NEW.salary < 0 THEN
+    RAISE EXCEPTION '% cannot have a negative salary', NEW.empname;
+  END IF;
+
+  -- Remember who changed the payroll when
+  NEW.last_date := current_timestamp;
+  NEW.last_user := current_user;
+  RETURN NEW;
+END;
+$emp_stamp$ LANGUAGE plpgsql;
+
+CREATE TRIGGER emp_stamp BEFORE INSERT OR UPDATE ON emp
+  FOR EACH ROW EXECUTE PROCEDURE emp_stamp();
+
+DO language plpgsql $$
+declare r record;
+begin
+  for r in select * from books
+loop
+  execute 'select ''' || r.title || '''';
+end loop;
+end
+$$;
+
+DO $$
+declare r record;
+begin
+  for r in select * from books
+loop
+  execute 'select ''' || r.title || '''';
+end loop;
+end
+$$;
+```

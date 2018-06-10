@@ -21,8 +21,15 @@ var Markdown = internal.Register(MustNewLexer(
 			{`^(\s*)([*-])(\s)(.+\n)`, ByGroups(Text, Keyword, Text, UsingSelf("inline")), nil},
 			{`^(\s*)([0-9]+\.)( .+\n)`, ByGroups(Text, Keyword, UsingSelf("inline")), nil},
 			{`^(\s*>\s)(.+\n)`, ByGroups(Keyword, GenericEmph), nil},
-			{"^(```\\n)([\\w\\W]*?)(^```$)", ByGroups(LiteralString, Text, LiteralString), nil},
-			{"^(```)(\\w+)(\\n)([\\w\\W]*?)(^```$)", EmitterFunc(markdownCodeBlock), nil},
+			{"^(```\\n)([\\w\\W]*?)(^```$)", ByGroups(String, Text, String), nil},
+			{"^(```)(\\w+)(\\n)([\\w\\W]*?)(^```$)",
+				UsingByGroup(
+					internal.Get,
+					2, 4,
+					String, String, String, Text, String,
+				),
+				nil,
+			},
 			Include("inline"),
 		},
 		"inline": {
@@ -38,26 +45,3 @@ var Markdown = internal.Register(MustNewLexer(
 		},
 	},
 ))
-
-func markdownCodeBlock(groups []string, lexer Lexer) Iterator {
-	iterators := []Iterator{}
-	tokens := []*Token{
-		{String, groups[1]},
-		{String, groups[2]},
-		{Text, groups[3]},
-	}
-	code := groups[4]
-	lexer = internal.Get(groups[2])
-	if lexer == nil {
-		tokens = append(tokens, &Token{String, code})
-		iterators = append(iterators, Literator(tokens...))
-	} else {
-		sub, err := lexer.Tokenise(nil, code)
-		if err != nil {
-			panic(err)
-		}
-		iterators = append(iterators, Literator(tokens...), sub)
-	}
-	iterators = append(iterators, Literator(&Token{String, groups[5]}))
-	return Concaterator(iterators...)
-}
