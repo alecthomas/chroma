@@ -54,3 +54,15 @@ CREATE MATERIALIZED VIEW cyclist_by_country AS SELECT age, birthday, name, count
 CREATE MATERIALIZED VIEW cyclist_by_birthday AS SELECT age, birthday, name, country FROM cyclist_mv WHERE birthday is NOT NULL AND cid IS NOT NULL PRIMARY KEY (birthday, cid);
 DROP MATERIALIZED VIEW cyclist_by_age;
 INSERT INTO cycling.calendar (race_id, race_name, race_start_date, race_end_date) VALUES (200, 'placeholder', '2015-05-27', '2015-05-27') USING TIMESTAMP 123456789;
+
+CREATE FUNCTION IF NOT EXISTS cycling.left (column TEXT,num int)
+RETURNS NULL ON NULL INPUT
+RETURNS text
+LANGUAGE javascript AS $$ 
+  column.substring(0,num) 
+$$;
+
+CREATE OR REPLACE FUNCTION cycling.fLog (input double)
+CALLED ON NULL INPUT
+RETURNS double LANGUAGE java AS
+'return Double.valueOf(Math.log(input.doubleValue()));';
