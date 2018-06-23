@@ -1,0 +1,47 @@
+using Toybox.Application as App;
+using Toybox.System;
+
+const PI = 3.14;
+
+class MyProjectApp extends App.AppBase {
+    protected var y;
+
+    function initialize () {
+        me.y = "Hello";
+        self.y = "World";
+        var x = add( 3, 4 );
+        var array = new [x];
+
+        // Initialize the sub-arrays
+        for( var i = 0; i < x; i += 1 ) {
+            array[i] = new [5];
+        }
+
+        var dict = { "a" => 1, "b" => 2 };
+        var person = { :firstName=>"Bob", :lastName=>"Jones" };
+    }
+
+    public function onStart(state) {
+        var v = new Foo();
+        var m = v.method(:op);
+        m.invoke(1,2l);
+    }
+
+    function getInitialView() {
+        return [ new MyProjectView() ];
+    }
+
+    function add( a, b ) {
+        return a + b;
+    }
+
+    function thisFunctionUsesAdd() {
+        var a = add( 1, 0x03f ); // Return  4
+        var b = add( "Hello ", "World" ); // Returns "Hello World"
+    }
+    
+}
+
+class Foo  {
+    function op(a, b) {}
+}
