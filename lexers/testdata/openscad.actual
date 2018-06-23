@@ -1,0 +1,46 @@
+use <write.scad>
+include <../common/base.scad>
+
+/*
+	Multiline
+	Comment
+*/
+
+//draw a foobar
+module foobar(){
+    translate([0,-10,0])
+    difference(){
+    	height=5+6;
+        cube([height,10.04,2.99e+8]);
+        sphere(r=PI,$fn=100);
+    }
+}
+
+foobar();
+#cube ([5,5,5]);
+echo("done");
+    
+function func0() = 5;
+function func1(x=3) = 2*x+1;
+function func2() = [1,2,3,4];
+function func3(y=7) = (y==7) ? 5 : 2 ;
+function func4(p0,p1,p2,p3) = [p0,p1,p2,p3];
+    
+echo (func0());           // 5
+a =   func1();            // 7
+b=    func1(5);           // 11
+echo (func2());           // [1, 2, 3, 4]
+echo( func3(2),func3());  // 2, 5
+   
+z= func4(func0(),func1(),func2(),func3()); //  [5, 7, [1, 2, 3, 4], 5]
+   
+translate([0,-4*func0(),0])cube([func0(),2*func0(),func0()]);
+
+module parallelogram(x=1,y=1,angle=90)
+    {polygon([[0,0],[x,0],
+              [x+x*cos(angle)/sin(angle),y],
+              [x*cos(angle)/sin(angle),y]]);};
+  
+parallelogram(10,10,35);
+
+ function add_up_to(n) = ( n==0 ? 0 : n + add_up_to(n-1) );
