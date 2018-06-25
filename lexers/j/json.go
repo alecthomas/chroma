@@ -5,8 +5,8 @@ import (
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
-// Json lexer.
-var Json = internal.Register(MustNewLexer(
+// JSON lexer.
+var JSON = internal.Register(MustNewLexer(
 	&Config{
 		Name:         "JSON",
 		Aliases:      []string{"json"},

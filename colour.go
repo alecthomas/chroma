@@ -60,10 +60,12 @@ func NewColour(r, g, b uint8) Colour {
 // This uses the approach described here (https://www.compuphase.com/cmetric.htm).
 // This is not as accurate as LAB, et. al. but is *vastly* simpler and sufficient for our needs.
 func (c Colour) Distance(e2 Colour) float64 {
-	rmean := int(c.Red()+e2.Red()) / 2
-	r := int(c.Red() - e2.Red())
-	g := int(c.Green() - e2.Green())
-	b := int(c.Blue() - e2.Blue())
+	ar, ag, ab := int64(c.Red()), int64(c.Green()), int64(c.Blue())
+	br, bg, bb := int64(e2.Red()), int64(e2.Green()), int64(e2.Blue())
+	rmean := (ar + br) / 2
+	r := ar - br
+	g := ag - bg
+	b := ab - bb
 	return math.Sqrt(float64((((512 + rmean) * r * r) >> 8) + 4*g*g + (((767 - rmean) * b * b) >> 8)))
 }
 
