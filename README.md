@@ -12,18 +12,18 @@ translators for Pygments lexers and styles.
 
 <!-- MarkdownTOC -->
 
-- [Supported languages](#supported-languages)
-- [Using the library](#using-the-library)
-  - [Quick start](#quick-start)
-  - [Identifying the language](#identifying-the-language)
-  - [Formatting the output](#formatting-the-output)
-  - [The HTML formatter](#the-html-formatter)
-- [More detail](#more-detail)
-  - [Lexers](#lexers)
-  - [Formatters](#formatters)
-  - [Styles](#styles)
-- [Command-line interface](#command-line-interface)
-- [What's missing compared to Pygments?](#whats-missing-compared-to-pygments)
+1. [Supported languages](#supported-languages)
+1. [Using the library](#using-the-library)
+    1. [Quick start](#quick-start)
+    1. [Identifying the language](#identifying-the-language)
+    1. [Formatting the output](#formatting-the-output)
+    1. [The HTML formatter](#the-html-formatter)
+1. [More detail](#more-detail)
+    1. [Lexers](#lexers)
+    1. [Formatters](#formatters)
+    1. [Styles](#styles)
+1. [Command-line interface](#command-line-interface)
+1. [What's missing compared to Pygments?](#whats-missing-compared-to-pygments)
 
 <!-- /MarkdownTOC -->
 
@@ -144,6 +144,7 @@ following constructor options:
 - `TabWidth(width)` - Set the rendered tab width, in characters.
 - `WithLineNumbers()` - Render line numbers (style with `LineNumbers`).
 - `HighlightLines(ranges)` - Highlight lines in these ranges (style with `LineHighlight`).
+- `LineNumbersInTable()` - Use a table for formatting line numbers and code, rather than spans.
 
 If `WithClasses()` is used, the corresponding CSS can be obtained from the formatter with:
 
