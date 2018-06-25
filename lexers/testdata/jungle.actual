@@ -1,0 +1,14 @@
+project.manifest = manifest.xml
+
+#here is a comment
+base.barrelPath = barrels
+
+fr235.barrelPath = barrels/IconLibrary.barrel;barrels/GraphLibrary.barrel
+fr645m.barrelPath = barrels/M.barrel;[A/A.jungle;A/B.jungle]
+round-215x215.GraphLibrary.annotations = bar
+
+round.resourcePath = $(base.resourcePath);resource-round
+DigitsPicker = [..\ScreenPickers\monkey.jungle]
+base.barrelPath = $(base.barrelPath);$(DigitsPicker)
+d2bravo.resourcePath = $(d2bravo.resourcePath);resources-round-218x218-ciq_1.x;resources-ciq_1.x-no_hr
+d2bravo_titanium.resourcePath = $(d2bravo_titanium.resourcePath);resources-round-218x218-ciq_1.x;resources-ciq_1.x
