@@ -40,7 +40,7 @@ var Ballerina = internal.Register(MustNewLexer(
 			{`\n`, Text, nil},
 		},
 		"import": {
-			{`[\w.]+\/?;?`, NameNamespace, Pop(1)},
+			{`[\w.]+`, NameNamespace, Pop(1)},
 		},
 	},
 ))
