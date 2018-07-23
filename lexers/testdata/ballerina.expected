@@ -1,0 +1,22 @@
+[
+  {"type":"KeywordNamespace","value":" "},
+  {"type":"NameNamespace","value":"ballerina"},
+  {"type":"Operator","value":"/"},
+  {"type":"Name","value":"http"},
+  {"type":"Operator","value":";"},
+  {"type":"Text","value":"\n\n"},
+  {"type":"KeywordDeclaration","value":"endpoint"},
+  {"type":"Text","value":" "},
+  {"type":"NameLabel","value":"http:"},
+  {"type":"Name","value":"Listener"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"listener"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"{"},
+  {"type":"NameLabel","value":"\n    port:"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"9090"},
+  {"type":"Text","value":"\n"},
+  {"type":"Operator","value":"};"},
+  {"type":"Text","value":"\n"}
+]
