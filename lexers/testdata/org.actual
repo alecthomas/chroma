@@ -1,0 +1,126 @@
+# -*- org -*-
+#+title: Single Post with TOML front matter
+#+author:
+#+date: 2017-07-20
+#+options: creator:t toc:2
+
+#+hugo_base_dir: ../../
+#+hugo_categories: cat1 cat2
+#+hugo_menu: :menu "foo" :weight 10 :parent main :identifier single-toml
+#+description: Some description for this post.
+
+This is a single post. You do not need to set the =EXPORT_FILE_NAME=
+property in here. But then you also lose the tag and property
+inheritance Org awesomeness.
+
+line one \\
+line two
+
+*bold* /italics/ =verbatim= ~code~
+* First heading in this post
+This is a under first heading. <2018-07-27 Fri>
+** COMMENT comment header
+** TODO something
+** DONE anything
+
+{{{n}}} abc {{{n(,10)}}} def {{{n(x,5)}}}
+* Second heading in this post
+- unordered list item 1
+- unordered list item 2
+- Desc1 :: Description list item 1
+- Desc2 :: Description list item 2
+
+1. ordered list item 1
+2. ordered list item 2
+
+
+1) ordered list item 1
+2) ordered list item 2
+3) [@20] asdf
+
+
+- *bold*
+- /italics/
+- =verbatim=
+- ~code~
+- +strikethrough+
+
+#+begin_comment
+this is a
+comment
+#+end_comment
+
+- 09 :: asdf
+- 09 :: asdf
+** Checkbox lists                                             :checkbox:list:
+- [ ] asdf
+- [X] def
+* Dates
+** deadline
+DEADLINE: <2018-07-31 Tue>
+something
+** scheduled
+SCHEDULED: <2018-07-31 Tue>
+something
+* Blocks
+#+BEGIN_QUOTE
+quote
+block
+#+END_QUOTE
+
+#+begin_example
+example
+block
+#+end_example
+
+#+begin_src emacs-lisp
+(message "hello")
+#+end_src
+
+- {{{latex}}}
+- {{{xetex}}}
+#+caption: Declaring Constants
+#+name: code__decl_constants
+#+begin_src systemverilog
+const bit [7:0] R_CHARACTER = 8'b000_11100; // The /K28.0/ character
+const bit [7:0] A_CHARACTER = 8'b011_11100; // The /K28.3/ character
+const bit [7:0] Q_CHARACTER = 8'b100_11100; // The /K28.4/ character
+#+end_src
+Check out code snippet [[code__decl_constants]].
+* Links                                                            :some_tag:
+:properties:
+:CUSTOM_ID: links
+:end:
+- [[file:post-yaml.org]]
+- [[file:post-yaml.org][Post exported with YAML front-matter]].
+- <<target>>
+* Tables
+:PROPERTIES:
+:CUSTOM_ID: tables
+:END:
+| a | b |
+| c | d |
+
+|---+---|
+| a | b |
+|---+---|
+| c | d |
+|---+---|
+
+Some text [fn:2]
+
+#+BEGIN: aggregate :table "original" :cols "Color count()"
+| Color | count() |
+|-------+---------|
+| Red   |       7 |
+| Blue  |       7 |
+#+END:
+* Footnotes
+
+[fn:2] footnote 2
+[fn:1] For more detail, check out the Org manual [[http://orgmode.org/
+manual/Footnotes.html][page for footnotes]].
+* Local Variables :ARCHIVE:
+# Local Variables:
+# org-link-file-path-type: relative
+# End:
