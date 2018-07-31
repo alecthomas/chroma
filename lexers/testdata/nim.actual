@@ -1,0 +1,7 @@
+# -*- nim -*-
+import random
+proc randBool(): bool =
+  randomize()
+  result = rand(1).bool
+for _ in 0..5:
+  echo randBool()
