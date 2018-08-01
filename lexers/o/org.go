@@ -42,7 +42,9 @@ var Org = internal.Register(MustNewLexer(
 			// Dynamic Blocks
 			{`(?i)^( *#\+begin: )([^ ]+)([\w\W]*?\n)([\w\W]*?)(^ *#\+end: *$)`, ByGroups(Comment, CommentSpecial, Comment, UsingSelf("inline"), Comment), nil},
 			// Blocks
+			// - Comment Blocks
 			{`(?i)^( *#\+begin_comment *\n)([\w\W]*?)(^ *#\+end_comment *$)`, ByGroups(Comment, Comment, Comment), nil},
+			// - Src Blocks
 			{`(?i)^( *#\+begin_src )([^ \n]+)(.*?\n)([\w\W]*?)(^ *#\+end_src *$)`,
 				UsingByGroup(
 					internal.Get,
@@ -51,7 +53,17 @@ var Org = internal.Register(MustNewLexer(
 				),
 				nil,
 			},
-			{`(?i)^( *#\+begin_\w+ *\n)([\w\W]*?)(^ *#\+end_\w+ *$)`, ByGroups(Comment, Text, Comment), nil},
+			// - Export Blocks
+			{`(?i)^( *#\+begin_export )(\w+)( *\n)([\w\W]*?)(^ *#\+end_export *$)`,
+				UsingByGroup(
+					internal.Get,
+					2, 4,
+					Comment, CommentSpecial, Text, Text, Comment,
+				),
+				nil,
+			},
+			// - Org Special, Example, Verse, etc. Blocks
+			{`(?i)^( *#\+begin_)(\w+)( *\n)([\w\W]*?)(^ *#\+end_\2)( *$)`, ByGroups(Comment, Comment, Text, Text, Comment, Text), nil},
 			// Keywords
 			{`^(#\+\w+)(:.*)$`, ByGroups(CommentSpecial, Comment), nil}, // Other Org keywords like #+title
 			// Properties and Drawers
@@ -59,7 +71,9 @@ var Org = internal.Register(MustNewLexer(
 			// Line break operator
 			{`^(.*)(\\\\)$`, ByGroups(UsingSelf("inline"), Operator), nil},
 			// Deadline/Scheduled
-			{`(?i)^( *(?:DEADLINE|SCHEDULED): )(<[^<>]+?> *)$`, ByGroups(Comment, CommentSpecial), nil}, // <datestamp>
+			{`(?i)^( *(?:DEADLINE|SCHEDULED): )(<[^<>]+?> *)$`, ByGroups(Comment, CommentSpecial), nil}, // DEADLINE/SCHEDULED: <datestamp>
+			// DONE state CLOSED
+			{`(?i)^( *CLOSED: )(\[[^][]+?\] *)$`, ByGroups(Comment, CommentSpecial), nil}, // CLOSED: [datestamp]
 			// All other lines
 			Include("inline"),
 		},
@@ -69,6 +83,7 @@ var Org = internal.Register(MustNewLexer(
 			{`(\s)*(=[^\n=]+?=)((?=\W|\n|$))`, ByGroups(Text, NameClass, Text), nil}, // Verbatim
 			{`(\s)*(~[^\n~]+?~)((?=\W|\n|$))`, ByGroups(Text, NameClass, Text), nil}, // Code
 			{`(\s)*(\+[^+]+?\+)((?=\W|\n|$))`, ByGroups(Text, GenericDeleted, Text), nil}, // Strikethrough
+			{`(\s)*(_[^_]+?_)((?=\W|\n|$))`, ByGroups(Text, GenericUnderline, Text), nil}, // Underline
 			{`(<)([^<>]+?)(>)`, ByGroups(Text, String, Text), nil}, // <datestamp>
 			{`[{]{3}[^}]+[}]{3}`, NameBuiltin, nil}, // {{{macro(foo,1)}}}
 			{`([^[])(\[fn:)([^]]+?)(\])([^]])`, ByGroups(Text, NameBuiltinPseudo, LiteralString, NameBuiltinPseudo, Text), nil}, // [fn:1]
