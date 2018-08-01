@@ -38,6 +38,7 @@ var Perldoc = Register(chroma.MustNewStyle("perldoc", chroma.StyleEntries{
 	chroma.GenericPrompt:        "#555555",
 	chroma.GenericOutput:        "#888888",
 	chroma.GenericTraceback:     "#aa0000",
+	chroma.GenericUnderline:     "underline",
 	chroma.Error:                "bg:#e3d2d2 #a61717",
 	chroma.Background:           " bg:#eeeedd",
 }))

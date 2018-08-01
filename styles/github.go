@@ -22,6 +22,7 @@ var GitHub = Register(chroma.MustNewStyle("github", chroma.StyleEntries{
 	chroma.GenericStrong:        "bold",
 	chroma.GenericSubheading:    "#aaaaaa",
 	chroma.GenericTraceback:     "#aa0000",
+	chroma.GenericUnderline:     "underline",
 	chroma.KeywordType:          "bold #445588",
 	chroma.Keyword:              "bold #000000",
 	chroma.LiteralNumber:        "#009999",

@@ -354,6 +354,9 @@ func StyleEntryToCSS(e chroma.StyleEntry) string {
 	if e.Italic == chroma.Yes {
 		styles = append(styles, "font-style: italic")
 	}
+	if e.Underline == chroma.Yes {
+		styles = append(styles, "text-decoration: underline")
+	}
 	return strings.Join(styles, "; ")
 }
 

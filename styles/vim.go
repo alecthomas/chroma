@@ -31,5 +31,6 @@ var Vim = Register(chroma.MustNewStyle("vim", chroma.StyleEntries{
 	chroma.GenericPrompt:      "bold #000080",
 	chroma.GenericOutput:      "#888",
 	chroma.GenericTraceback:   "#04D",
+	chroma.GenericUnderline:   "underline",
 	chroma.Error:              "border:#FF0000",
 }))

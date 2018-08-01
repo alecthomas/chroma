@@ -37,5 +37,6 @@ var Native = Register(chroma.MustNewStyle("native", chroma.StyleEntries{
 	chroma.GenericPrompt:      "#aaaaaa",
 	chroma.GenericOutput:      "#cccccc",
 	chroma.GenericTraceback:   "#d22323",
+	chroma.GenericUnderline:   "underline",
 	chroma.Error:              "bg:#e3d2d2 #a61717",
 }))

@@ -310,6 +310,7 @@ var (
 		GenericStrong:     "gs",
 		GenericSubheading: "gu",
 		GenericTraceback:  "gt",
+		GenericUnderline:  "gl",
 	}
 )
 
