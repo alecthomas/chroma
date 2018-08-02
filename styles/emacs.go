@@ -45,6 +45,7 @@ var Emacs = Register(chroma.MustNewStyle("emacs", chroma.StyleEntries{
 	chroma.GenericPrompt:         "bold #000080",
 	chroma.GenericOutput:         "#888",
 	chroma.GenericTraceback:      "#04D",
+	chroma.GenericUnderline:      "underline",
 	chroma.Error:                 "border:#FF0000",
 	chroma.Background:            " bg:#f8f8f8",
 }))

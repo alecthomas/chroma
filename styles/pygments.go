@@ -49,6 +49,7 @@ var Pygments = Register(chroma.MustNewStyle("pygments", map[chroma.TokenType]str
 	chroma.GenericPrompt:     "bold #000080",
 	chroma.GenericOutput:     "#888",
 	chroma.GenericTraceback:  "#04D",
+	chroma.GenericUnderline:  "underline",
 
 	chroma.Error: "border:#FF0000",
 }))

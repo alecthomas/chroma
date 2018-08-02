@@ -74,5 +74,6 @@ var Tango = Register(chroma.MustNewStyle("tango", chroma.StyleEntries{
 	chroma.GenericStrong:            "bold #000000",
 	chroma.GenericSubheading:        "bold #800080",
 	chroma.GenericTraceback:         "bold #a40000",
+	chroma.GenericUnderline:         "underline",
 	chroma.Background:               " bg:#f8f8f8",
 }))

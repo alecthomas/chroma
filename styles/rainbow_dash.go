@@ -20,6 +20,7 @@ var RainbowDash = Register(chroma.MustNewStyle("rainbow_dash", chroma.StyleEntri
 	chroma.GenericStrong:       "bold",
 	chroma.GenericSubheading:   "bold #2c5dcd",
 	chroma.GenericTraceback:    "#c5060b",
+	chroma.GenericUnderline:    "underline",
 	chroma.Keyword:             "bold #2c5dcd",
 	chroma.KeywordPseudo:       "nobold",
 	chroma.KeywordType:         "#5918bb",

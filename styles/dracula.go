@@ -23,6 +23,7 @@ var Dracula = Register(chroma.MustNewStyle("dracula", chroma.StyleEntries{
 	chroma.GenericStrong:            "#f8f8f2",
 	chroma.GenericSubheading:        "#f8f8f2 bold",
 	chroma.GenericTraceback:         "#f8f8f2",
+	chroma.GenericUnderline:         "underline",
 	chroma.Error:                    "#f8f8f2",
 	chroma.Keyword:                  "#ff79c6",
 	chroma.KeywordConstant:          "#ff79c6",
