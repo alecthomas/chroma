@@ -16,12 +16,13 @@ inheritance Org awesomeness.
 line one \\
 line two
 
-*bold* /italics/ =verbatim= ~code~
+*bold* /italics/ =verbatim= ~code~ +strikethrough+ _underline_
 * First heading in this post
 This is a under first heading. <2018-07-27 Fri>
 ** COMMENT comment header
 ** TODO something
 ** DONE anything
+CLOSED: [2018-08-01 Wed 16:17]
 
 {{{n}}} abc {{{n(,10)}}} def {{{n(x,5)}}}
 * Second heading in this post
@@ -44,6 +45,7 @@ This is a under first heading. <2018-07-27 Fri>
 - =verbatim=
 - ~code~
 - +strikethrough+
+- _underline_
 
 #+begin_comment
 this is a
@@ -76,6 +78,23 @@ block
 #+begin_src emacs-lisp
 (message "hello")
 #+end_src
+
+#+begin_details
+#+begin_summary
+Why is this in *green*?
+#+end_summary
+You will learn that later below in [[#details-css][CSS]] section.
+#+end_details
+
+#+begin_export html
+<style>
+.my-table th,
+.my-table td {
+    padding: 20px;
+    text-align: left;
+}
+</style>
+#+end_export
 
 - {{{latex}}}
 - {{{xetex}}}
