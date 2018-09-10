@@ -1,0 +1,12 @@
+//@version=3
+study(title="Chroma example script", overlay=true, precision=3)
+
+emaLen = input(title="EMA Length", type=integer, defval=10)
+emaVal = ema(close, emaLen)
+
+plot(series=emaVal, style=circles, offset=2, linewidth=3)
+
+// Colour background
+bgcolor(color=close > open ? orange :
+     close != high[1] ? purple :
+     na, transp=80)
