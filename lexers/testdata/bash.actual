@@ -1,0 +1,46 @@
+# Install fish
+
+brew install fish
+
+# Add fish to your list of available shells
+
+echo "/usr/local/bin/fish/" | sudo tee -a /etc/shells
+
+# Make fish the defaul shell
+
+chsh -s /usr/local/bin/fish
+
+# Restart the terminal to load fish shell
+
+
+# Code snippet from https://github.com/gmarik/gist.sh/blob/master/gist.sh
+gist_clone ()
+{
+    if [ "$_PRIVATE" = "1" ]; then
+        URL="git@gist.github.com:$1.git"
+    else
+        URL="git://gist.github.com/$1.git"
+    fi
+
+    log "* cloning Gist from $URL"
+
+    CMD="git clone $URL gist-$1"
+
+    if [ "$_DEBUG" = "1" ]; then
+        echo $CMD
+        exit 0
+    fi
+
+    $CMD
+}
+
+# Code snippet from https://gist.github.com/thejefflarson/885812
+tiger_em () {
+    directory=$WD/$1
+    shift
+    until [ -z "$1" ] 
+    do
+        get_em $directory "ftp://ftp2.census.gov/geo/tiger/TIGER2010/"$1
+        shift
+    done
+}
