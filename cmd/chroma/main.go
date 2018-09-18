@@ -43,18 +43,19 @@ var (
 
 	jsonFlag = kingpin.Flag("json", "Output JSON representation of tokens.").Bool()
 
-	htmlFlag               = kingpin.Flag("html", "Enable HTML mode (equivalent to '--formatter html').").Bool()
-	htmlPrefixFlag         = kingpin.Flag("html-prefix", "HTML CSS class prefix.").PlaceHolder("PREFIX").String()
-	htmlStylesFlag         = kingpin.Flag("html-styles", "Output HTML CSS styles.").Bool()
-	htmlOnlyFlag           = kingpin.Flag("html-only", "Output HTML fragment.").Bool()
-	htmlInlineStyleFlag    = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
-	htmlTabWidthFlag       = kingpin.Flag("html-tab-width", "Set the HTML tab width.").Default("8").Int()
-	htmlLinesFlag          = kingpin.Flag("html-lines", "Include line numbers in output.").Bool()
-	htmlLinesTableFlag     = kingpin.Flag("html-lines-table", "Split line numbers and code in a HTML table").Bool()
-	htmlLinesStyleFlag     = kingpin.Flag("html-lines-style", "Style for line numbers.").String()
-	htmlHighlightFlag      = kingpin.Flag("html-highlight", "Highlight these lines.").PlaceHolder("N[:M][,...]").String()
-	htmlHighlightStyleFlag = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").String()
-	htmlBaseLineFlag       = kingpin.Flag("html-base-line", "Base line number.").Default("1").Int()
+	htmlFlag                      = kingpin.Flag("html", "Enable HTML mode (equivalent to '--formatter html').").Bool()
+	htmlPrefixFlag                = kingpin.Flag("html-prefix", "HTML CSS class prefix.").PlaceHolder("PREFIX").String()
+	htmlStylesFlag                = kingpin.Flag("html-styles", "Output HTML CSS styles.").Bool()
+	htmlOnlyFlag                  = kingpin.Flag("html-only", "Output HTML fragment.").Bool()
+	htmlInlineStyleFlag           = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
+	htmlTabWidthFlag              = kingpin.Flag("html-tab-width", "Set the HTML tab width.").Default("8").Int()
+	htmlLinesFlag                 = kingpin.Flag("html-lines", "Include line numbers in output.").Bool()
+	htmlLinesTableFlag            = kingpin.Flag("html-lines-table", "Split line numbers and code in a HTML table").Bool()
+	htmlLinesStyleFlag            = kingpin.Flag("html-lines-style", "Style for line numbers.").String()
+	htmlHighlightFlag             = kingpin.Flag("html-highlight", "Highlight these lines.").PlaceHolder("N[:M][,...]").String()
+	htmlHighlightStyleFlag        = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").String()
+	htmlBaseLineFlag              = kingpin.Flag("html-base-line", "Base line number.").Default("1").Int()
+	htmlPreventSurroundingPreFlag = kingpin.Flag("html-prevent-surrounding-pre", "Prevent the surrounding pre tag.").Bool()
 
 	filesArgs = kingpin.Arg("files", "Files to highlight.").ExistingFiles()
 )
@@ -150,6 +151,9 @@ command, for Go.
 		}
 		if *htmlLinesTableFlag {
 			options = append(options, html.LineNumbersInTable())
+		}
+		if *htmlPreventSurroundingPreFlag {
+			options = append(options, html.PreventSurroundingPre())
 		}
 		if len(*htmlHighlightFlag) > 0 {
 			ranges := [][2]int{}
