@@ -30,27 +30,27 @@ translators for Pygments lexers and styles.
 ## Supported languages
 
 Prefix | Language
----- | --------
-A | ABNF, ANTLR, APL, ActionScript, ActionScript 3, Ada, Angular2, ApacheConf, AppleScript, Awk
-B | BNF, Ballerina, Base Makefile, Bash, Batchfile, BlitzBasic, Brainfuck
-C | C, C#, C++, CFEngine3, cfstatement, CMake, COBOL, CSS, Cap'n Proto, Ceylon, ChaiScript, Cheetah, Clojure, CoffeeScript, Common Lisp, Coq, Crystal, Cython
-D | DTD, Dart, Diff, Django/Jinja, Docker
+:----: | --------
+A | ABNF, ActionScript, ActionScript 3, Ada, Angular2, ANTLR, ApacheConf, APL, AppleScript, Awk
+B | Ballerina, Base Makefile, Bash, Batchfile, BlitzBasic, BNF, Brainfuck
+C | C, C#, C++, Cassandra CQL, CFEngine3, cfstatement/ColdFusion, CMake, COBOL, CSS, Cap'n Proto, Ceylon, ChaiScript, Cheetah, Clojure, CoffeeScript, Common Lisp, Coq, Crystal, Cython
+D | Dart, Diff, Django/Jinja, Docker, DTD
 E | EBNF, Elixir, Elm, EmacsLisp, Erlang
-F | FSharp, Factor, Fish, Forth, Fortran
+F | Factor, Fish, Forth, Fortran, FSharp
 G | GAS, GDScript, GLSL, Genshi, Genshi HTML, Genshi Text, Gnuplot, Go, Go HTML Template, Go Text Template, Groovy
-H | HTML, HTTP, Handlebars, Haskell, Haxe, Hexdump, Hy 
-I | INI, Idris, Io
-J | JSON, JSX, Java, JavaScript, Julia
+H | Handlebars, Haskell, Haxe, Hexdump, HTML, HTTP, Hy 
+I | Idris, INI, Io
+J | Java, JavaScript, JSON, Jsx, Julia, Jungle
 K | Kotlin
-L | LLVM, Lighttpd configuration file, Lua
-M | Mako, Markdown, Mason, Mathematica, MiniZinc, Modula-2, MorrowindScript, MySQL, Myghty
+L | Lighttpd configuration file, LLVM, Lua
+M | Mako, Markdown, Mason, Mathematica, MiniZinc, Modula-2, MonkeyC, MorrowindScript, Myghty, MySQL
 N | NASM, Newspeak, Nginx configuration file, Nim, Nix
-O | OCaml, Objective-C, Octave, Org Mode
-P | PHP, PL/pgSQL, POVRay, PacmanConf, Perl, Pig, PkgConfig, PostScript, PostgreSQL SQL dialect, PowerShell, Prolog, Protocol Buffer, Puppet, Python, Python 3
+O | Objective-C, OCaml, Octave, OpenSCAD, Org Mode
+P | PacmanConf, Perl, PHP, Pig, PkgConfig, Plaintext, PL/pgSQL, PostgreSQL SQL dialect, PostScript, POVRay, PowerShell, Prolog, Protocol Buffer, Puppet, Python, Python 3
 Q | QBasic
 R | R, Racket, Ragel, reg, reStructuredText, Rexx, Ruby, Rust
-S | SCSS, SPARQL, SQL, Sass, Scala, Scheme, Scilab, Smalltalk, Smarty, Snobol, Solidity, SquidConf, Swift, Systemverilog
-T | TASM, TOML, Tcl, Tcsh, TeX, Termcap, Terminfo, Terraform, Thrift, TradingView, Transact-SQL, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData
+S | Sass, Scala, Scheme, Scilab, SCSS, Smalltalk, Smarty, Snobol, Solidity, SPARQL, SQL, SquidConf, Swift, systemd, Systemverilog
+T | TASM, Tcl, Tcsh, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData
 V | verilog, VHDL, VimL
 W | WDTE
 X | XML, Xorg
