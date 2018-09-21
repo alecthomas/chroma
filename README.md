@@ -178,6 +178,96 @@ formatter := html.New(html.WithClasses())
 err := formatter.WriteCSS(w, style)
 ```
 
+#### HTML style classes
+
+When you use `WithClasses()`, Chroma wraps each recognised token in a `<span>` element with a certain class. For instance, the output of `WithClasses()` can be something like:
+
+```html
+<pre class="chroma">
+<span class="kd">function</span> <span class="nx">backToTop</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="nx">toc</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;toc&#34;</span><span class="p">)</span><span class="p">;</span>
+</pre>
+```
+
+You can style these classes with one of Chroma's built-in styles or provide your own formatting. If you write your own CSS for Chroma's highlighting (or work on a custom lexers), it helps to know which class name refers to which token. The `k` class, for instance, marks keywords, `nb` signals a built-in name, and Chroma uses the `p` class for punctuation.
+
+These are the class names that Chroma uses for its recognised token:
+
+Token |	Chroma class
+----- | ------------------
+Comment 	                 |  `.c`
+CommentHashbang 	         |  `.ch`
+CommentMultiline 	        |  `.cm`
+CommentPreproc 	          |  `.cp`
+CommentPreprocFile 	      |  `.cpf`
+CommentSingle 	           |  `.c1`
+CommentSpecial 	          |  `.cs`
+Date 	                    |  `.ld`
+Generic 	                 |  `.g`
+GenericDeleted 	          |  `.gd`
+GenericEmph 	             |  `.ge`
+GenericError 	            |  `.gr`
+GenericHeading 	          |  `.gh`
+GenericInserted 	         |  `.gi`
+GenericOutput 	           |  `.go`
+GenericPrompt 	           |  `.gp`
+GenericStrong 	           |  `.gs`
+GenericSubheading 	       |  `.gu`
+GenericTraceback 	        | `.gt`
+Keyword                   |  `.k`
+KeywordConstant           |	 `.kc`
+KeywordDeclaration        | 	`.kd`
+KeywordNamespace          |	 `.kn`
+KeywordPseudo             |	 `.kp`
+KeywordReserved           |	 `.kr`
+KeywordType               |	 `.kt`
+Literal 	                 |  `.l`
+LiteralNumber 	           |  `.m`
+LiteralNumberBin 	        |  `.mb`
+LiteralNumberFloat 	      |  `.mf`
+LiteralNumberHex 	        |  `.mh`
+LiteralNumberInteger 	    |  ` .mi`
+LiteralNumberIntegerLong  |  `.il`
+LiteralNumberOct 	        |  `.mo`
+LiteralString 	           |  `.s`
+LiteralStringAffix 	      |  `.sa`
+LiteralStringBacktick     |  `.sb`
+LiteralStringChar 	       |  `.sc`
+LiteralStringDelimiter|   `.dl`
+LiteralStringDoc 	        |  `.sd`
+LiteralStringDouble 	     |  `.s2`
+LiteralStringEscape 	     |  `.se`
+LiteralStringHeredoc 	    |  `.sh`
+LiteralStringInterpol     |  `.si`
+LiteralStringOther 	      |  `.sx`
+LiteralStringRegex 	      |  `.sr`
+LiteralStringSingle 	     |  `.s1`
+LiteralStringSymbol 	     |  `.ss`
+Name 	                    |  `.n`
+NameAttribute 	           |  `.na`
+NameBuiltin 	             |  `.nb`
+NameBuiltinPseudo 	       |  `.bp`
+NameClass 	               |  `.nc`
+NameConstant 	            |  `.no`
+NameDecorator 	           |  `.nd`
+NameEntity 	              |  `.ni`
+NameException 	           |  `.ne`
+NameFunction 	            |  `.nf`
+NameFunctionMagic 	       |  `.fm`
+NameLabel 	               |  `.nl`
+NameNamespace 	           |  `.nn`
+NameOther 	               |  `.nx`
+NameProperty 	            |  `.py`
+NameTag 	                 |  `.nt`
+NameVariable 	            |  `.nv`
+NameVariableClass 	       |  `.vc`
+NameVariableGlobal 	      |  `.vg`
+NameVariableInstance|     `.vi`
+NameVariableMagic 	       |  `.vm`
+Operator 	                |  `.o`
+OperatorWord 	            |  `.ow`
+Punctuation 	             |  `.p`
+
 ## More detail
 
 ### Lexers
