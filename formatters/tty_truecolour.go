@@ -11,7 +11,11 @@ import (
 var TTY16m = Register("terminal16m", chroma.FormatterFunc(trueColourFormatter))
 
 func trueColourFormatter(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
-	for token := it(); token != nil; token = it() {
+	for {
+		token, ok := it()
+		if !ok {
+			return nil
+		}
 		entry := style.Get(token.Type)
 		if !entry.IsZero() {
 			out := ""
@@ -34,5 +38,4 @@ func trueColourFormatter(w io.Writer, style *chroma.Style, it chroma.Iterator) e
 			fmt.Fprint(w, "\033[0m")
 		}
 	}
-	return nil
 }

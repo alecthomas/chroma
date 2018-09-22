@@ -216,7 +216,11 @@ func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma
 		}
 	}()
 	theme := styleToEscapeSequence(c.table, style)
-	for token := it(); token != nil; token = it() {
+	for {
+		token, ok := it()
+		if !ok {
+			return nil
+		}
 		// TODO: Cache token lookups?
 		clr, ok := theme[token.Type]
 		if !ok {
@@ -236,7 +240,6 @@ func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma
 			fmt.Fprintf(w, "\033[0m")
 		}
 	}
-	return nil
 }
 
 // TTY8 is an 8-colour terminal formatter.

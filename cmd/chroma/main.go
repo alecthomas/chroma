@@ -259,7 +259,11 @@ func format(w io.Writer, style *chroma.Style, it chroma.Iterator) {
 
 func check(filename string, it chroma.Iterator) {
 	line, col := 1, 0
-	for token := it(); token != nil; token = it() {
+	for {
+		token, ok := it()
+		if !ok {
+			break
+		}
 		if token.Type == chroma.Error {
 			fmt.Printf("%s:%d:%d %q\n", filename, line, col, token.String())
 		}
