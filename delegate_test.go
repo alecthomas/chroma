@@ -31,9 +31,9 @@ func TestDelegate(t *testing.T) {
 	testdata := []struct {
 		name     string
 		source   string
-		expected []*Token
+		expected []Token
 	}{
-		{"SourceInMiddle", `hello world <? what ?> there`, []*Token{
+		{"SourceInMiddle", `hello world <? what ?> there`, []Token{
 			{Keyword, "hello"},
 			{TextWhitespace, " "},
 			{Name, "world"},
@@ -48,7 +48,7 @@ func TestDelegate(t *testing.T) {
 			{TextWhitespace, " "},
 			{Name, "there"},
 		}},
-		{"SourceBeginning", `<? what ?> hello world there`, []*Token{
+		{"SourceBeginning", `<? what ?> hello world there`, []Token{
 			{CommentPreproc, "<?"},
 			{TextWhitespace, " "},
 			{Keyword, "what"},
@@ -61,7 +61,7 @@ func TestDelegate(t *testing.T) {
 			{TextWhitespace, " "},
 			{Name, "there"},
 		}},
-		{"SourceEnd", `hello world <? what there`, []*Token{
+		{"SourceEnd", `hello world <? what there`, []Token{
 			{Keyword, "hello"},
 			{TextWhitespace, " "},
 			{Name, "world"},
@@ -73,7 +73,7 @@ func TestDelegate(t *testing.T) {
 			{TextWhitespace, " "},
 			{Error, "there"},
 		}},
-		{"SourceMultiple", "hello world <? what ?> hello there <? what ?> hello", []*Token{
+		{"SourceMultiple", "hello world <? what ?> hello there <? what ?> hello", []Token{
 			{Keyword, "hello"},
 			{TextWhitespace, " "},
 			{Name, "world"},

@@ -2,11 +2,11 @@ package chroma
 
 type remappingLexer struct {
 	lexer  Lexer
-	mapper func(*Token) []*Token
+	mapper func(Token) []Token
 }
 
 // RemappingLexer remaps a token to a set of, potentially empty, tokens.
-func RemappingLexer(lexer Lexer, mapper func(*Token) []*Token) Lexer {
+func RemappingLexer(lexer Lexer, mapper func(Token) []Token) Lexer {
 	return &remappingLexer{lexer, mapper}
 }
 
@@ -19,17 +19,17 @@ func (r *remappingLexer) Tokenise(options *TokeniseOptions, text string) (Iterat
 	if err != nil {
 		return nil, err
 	}
-	buffer := []*Token{}
-	return func() *Token {
+	var buffer []Token
+	return func() (Token, bool) {
 		for {
 			if len(buffer) > 0 {
 				t := buffer[0]
 				buffer = buffer[1:]
-				return t
+				return t, true
 			}
-			t := it()
-			if t == nil {
-				return t
+			t, ok := it()
+			if !ok {
+				return t, ok
 			}
 			buffer = r.mapper(t)
 		}
@@ -67,7 +67,7 @@ func TypeRemappingLexer(lexer Lexer, mapping TypeMapping) Lexer {
 		}
 
 	}
-	return RemappingLexer(lexer, func(t *Token) []*Token {
+	return RemappingLexer(lexer, func(t Token) []Token {
 		if k, ok := lut[t.Type]; ok {
 			if tt, ok := k[t.Value]; ok {
 				t.Type = tt
@@ -75,6 +75,6 @@ func TypeRemappingLexer(lexer Lexer, mapping TypeMapping) Lexer {
 				t.Type = tt
 			}
 		}
-		return []*Token{t}
+		return []Token{t}
 	})
 }

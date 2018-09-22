@@ -140,16 +140,12 @@ func Words(prefix, suffix string, words ...string) string {
 }
 
 // Tokenise text using lexer, returning tokens as a slice.
-func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]*Token, error) {
-	out := []*Token{}
+func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, error) {
 	it, err := lexer.Tokenise(options, text)
 	if err != nil {
 		return nil, err
 	}
-	for t := it(); t != nil; t = it() {
-		out = append(out, t)
-	}
-	return out, nil
+	return it.Tokens(), nil
 }
 
 // Rules maps from state to a sequence of Rules.
@@ -246,17 +242,17 @@ func (l *LexerState) Get(key interface{}) interface{} {
 	return l.MutatorContext[key]
 }
 
-func (l *LexerState) Iterator() *Token {
+func (l *LexerState) Iterator() (Token, bool) {
 	for l.Pos < len(l.Text) && len(l.Stack) > 0 {
 		// Exhaust the iterator stack, if any.
 		for len(l.iteratorStack) > 0 {
 			n := len(l.iteratorStack) - 1
-			t := l.iteratorStack[n]()
-			if t == nil {
+			t, ok := l.iteratorStack[n]()
+			if !ok {
 				l.iteratorStack = l.iteratorStack[:n]
 				continue
 			}
-			return t
+			return t, true
 		}
 
 		l.State = l.Stack[len(l.Stack)-1]
@@ -271,7 +267,7 @@ func (l *LexerState) Iterator() *Token {
 		// No match.
 		if groups == nil {
 			l.Pos++
-			return &Token{Error, string(l.Text[l.Pos-1 : l.Pos])}
+			return Token{Error, string(l.Text[l.Pos-1 : l.Pos])}, true
 		}
 		l.Rule = ruleIndex
 		l.Groups = groups
@@ -289,21 +285,21 @@ func (l *LexerState) Iterator() *Token {
 	// Duplicate code, but eh.
 	for len(l.iteratorStack) > 0 {
 		n := len(l.iteratorStack) - 1
-		t := l.iteratorStack[n]()
-		if t == nil {
+		t, ok := l.iteratorStack[n]()
+		if !ok {
 			l.iteratorStack = l.iteratorStack[:n]
 			continue
 		}
-		return t
+		return t, true
 	}
 
 	// If we get to here and we still have text, return it as an error.
 	if l.Pos != len(l.Text) && len(l.Stack) == 0 {
 		value := string(l.Text[l.Pos:])
 		l.Pos = len(l.Text)
-		return &Token{Type: Error, Value: value}
+		return Token{Type: Error, Value: value}, true
 	}
-	return nil
+	return Token{}, false
 }
 
 type RegexLexer struct {

@@ -2,15 +2,19 @@ package chroma
 
 // An Iterator across tokens.
 //
-// nil will be returned at the end of the Token stream.
+// Token{}, false will be returned at the end of the Token stream.
 //
 // If an error occurs within an Iterator, it may propagate this in a panic. Formatters should recover.
-type Iterator func() *Token
+type Iterator func() (Token, bool)
 
 // Tokens consumes all tokens from the iterator and returns them as a slice.
-func (i Iterator) Tokens() []*Token {
-	out := []*Token{}
-	for t := i(); t != nil; t = i() {
+func (i Iterator) Tokens() []Token {
+	out := []Token{}
+	for {
+		t, ok := i()
+		if !ok {
+			break
+		}
 		out = append(out, t)
 	}
 	return out
@@ -18,26 +22,26 @@ func (i Iterator) Tokens() []*Token {
 
 // Concaterator concatenates tokens from a series of iterators.
 func Concaterator(iterators ...Iterator) Iterator {
-	return func() *Token {
+	return func() (Token, bool) {
 		for len(iterators) > 0 {
-			t := iterators[0]()
-			if t != nil {
-				return t
+			t, ok := iterators[0]()
+			if ok {
+				return t, ok
 			}
 			iterators = iterators[1:]
 		}
-		return nil
+		return Token{}, false
 	}
 }
 
 // Literator converts a sequence of literal Tokens into an Iterator.
-func Literator(tokens ...*Token) Iterator {
-	return func() (out *Token) {
+func Literator(tokens ...Token) Iterator {
+	return func() (Token, bool) {
 		if len(tokens) == 0 {
-			return nil
+			return Token{}, false
 		}
 		token := tokens[0]
 		tokens = tokens[1:]
-		return token
+		return token, true
 	}
 }

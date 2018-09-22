@@ -34,15 +34,14 @@ var HTTP = internal.Register(httpBodyContentTypeLexer(MustNewLexer(
 )))
 
 func httpContentBlock(groups []string, lexer Lexer) Iterator {
-	tokens := []*Token{
+	tokens := []Token{
 		{Generic, groups[0]},
 	}
 	return Literator(tokens...)
-
 }
 
 func httpHeaderBlock(groups []string, lexer Lexer) Iterator {
-	tokens := []*Token{
+	tokens := []Token{
 		{Name, groups[1]},
 		{Text, groups[2]},
 		{Operator, groups[3]},
@@ -54,7 +53,7 @@ func httpHeaderBlock(groups []string, lexer Lexer) Iterator {
 }
 
 func httpContinuousHeaderBlock(groups []string, lexer Lexer) Iterator {
-	tokens := []*Token{
+	tokens := []Token{
 		{Text, groups[1]},
 		{Literal, groups[2]},
 		{Text, groups[3]},
@@ -76,8 +75,12 @@ func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (
 		return nil, err
 	}
 
-	return func() *Token {
-		for token := it(); token != nil; token = it() {
+	return func() (Token, bool) {
+		for {
+			token, ok := it()
+			if !ok {
+				break
+			}
 			switch {
 			case token.Type == Name && strings.ToLower(token.Value) == "content-type":
 				{
@@ -111,21 +114,24 @@ func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (
 						if err != nil {
 							panic(err)
 						}
-						return nil
+						return Token{}, false
 					}
 				}
 
 			}
 
-			return token
+			return token, true
 		}
 
 		if subIterator != nil {
-			for token := subIterator(); token != nil; token = subIterator() {
-				return token
+			for {
+				token, ok := subIterator()
+				if !ok {
+					break
+				}
+				return token, true
 			}
 		}
-		return nil
-
+		return Token{}, false
 	}, nil
 }

@@ -341,5 +341,5 @@ func (t TokenType) InSubCategory(other TokenType) bool {
 }
 
 func (t TokenType) Emit(groups []string, lexer Lexer) Iterator {
-	return Literator(&Token{Type: t, Value: groups[0]})
+	return Literator(Token{Type: t, Value: groups[0]})
 }

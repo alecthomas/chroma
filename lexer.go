@@ -66,10 +66,8 @@ type Token struct {
 func (t *Token) String() string   { return t.Value }
 func (t *Token) GoString() string { return fmt.Sprintf("&Token{%s, %q}", t.Type, t.Value) }
 
-func (t *Token) Clone() *Token {
-	clone := &Token{}
-	*clone = *t
-	return clone
+func (t *Token) Clone() Token {
+	return *t
 }
 
 type TokeniseOptions struct {

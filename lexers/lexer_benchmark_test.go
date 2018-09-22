@@ -32,7 +32,8 @@ func Benchmark(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		it, err := g.Go.Tokenise(nil, lexerBenchSource)
 		assert.NoError(b, err)
-		for t := it(); t != nil; t = it() {
+		if len(it.Tokens()) == 0 {
+			panic("this exists just to try and prevent the compiler from optimizing away the call to Tokens()")
 		}
 	}
 }

@@ -6,30 +6,38 @@ func Coalesce(lexer Lexer) Lexer { return &coalescer{lexer} }
 type coalescer struct{ Lexer }
 
 func (d *coalescer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
-	var prev *Token
+	var prev Token
+	havePrev := false
 	it, err := d.Lexer.Tokenise(options, text)
 	if err != nil {
 		return nil, err
 	}
-	return func() *Token {
-		for token := it(); token != nil; token = it() {
+	return func() (Token, bool) {
+		for {
+			token, ok := it()
+			if !ok {
+				break
+			}
 			if len(token.Value) == 0 {
 				continue
 			}
-			if prev == nil {
+			if !havePrev {
 				prev = token
+				havePrev = true
 			} else {
 				if prev.Type == token.Type && len(prev.Value) < 8192 {
 					prev.Value += token.Value
 				} else {
 					out := prev
 					prev = token
-					return out
+					return out, true
 				}
 			}
 		}
-		out := prev
-		prev = nil
-		return out
+		if havePrev {
+			havePrev = false
+			return prev, true
+		}
+		return Token{}, false
 	}, nil
 }

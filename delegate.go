@@ -31,7 +31,7 @@ func (d *delegatingLexer) Config() *Config {
 // An insertion is the character range where language tokens should be inserted.
 type insertion struct {
 	start, end int
-	tokens     []*Token
+	tokens     []Token
 }
 
 func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
@@ -44,15 +44,15 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 	insertions := []*insertion{}
 	var insert *insertion
 	offset := 0
-	var last *Token
-	for _, t := range tokens {
+	var last Token
+	for i, t := range tokens {
 		if t.Type == Other {
-			if last != nil && insert != nil && last.Type != Other {
+			if i != 0 && insert != nil && last.Type != Other {
 				insert.end = offset
 			}
 			others.WriteString(t.Value)
 		} else {
-			if last == nil || last.Type == Other {
+			if i == 0 || last.Type == Other {
 				insert = &insertion{start: offset}
 				insertions = append(insertions, insert)
 			}
@@ -73,16 +73,16 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 	}
 
 	// Interleave the two sets of tokens.
-	out := []*Token{}
+	var out []Token
 	offset = 0 // Offset into text.
 	tokenIndex := 0
-	nextToken := func() *Token {
+	nextToken := func() (Token, bool) {
 		if tokenIndex >= len(rootTokens) {
-			return nil
+			return Token{}, false
 		}
 		t := rootTokens[tokenIndex]
 		tokenIndex++
-		return t
+		return t, true
 	}
 	insertionIndex := 0
 	nextInsertion := func() *insertion {
@@ -93,45 +93,45 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 		insertionIndex++
 		return i
 	}
-	t := nextToken()
+	t, ok := nextToken()
 	i := nextInsertion()
-	for t != nil || i != nil {
+	for ok || i != nil {
 		// fmt.Printf("%d->%d:%q   %d->%d:%q\n", offset, offset+len(t.Value), t.Value, i.start, i.end, Stringify(i.tokens...))
-		if t == nil || (i != nil && i.start < offset+len(t.Value)) {
-			var l *Token
-			l, t = splitToken(t, i.start-offset)
-			if l != nil {
+		if !ok || (i != nil && i.start < offset+len(t.Value)) {
+			var l Token
+			var lok bool
+			if ok {
+				l, lok, t, ok = splitToken(t, i.start-offset)
+			}
+			if lok {
 				out = append(out, l)
 				offset += len(l.Value)
 			}
 			out = append(out, i.tokens...)
 			offset += i.end - i.start
-			if t == nil {
-				t = nextToken()
+			if !ok {
+				t, ok = nextToken()
 			}
 			i = nextInsertion()
 		} else {
 			out = append(out, t)
 			offset += len(t.Value)
-			t = nextToken()
+			t, ok = nextToken()
 		}
 	}
 	return Literator(out...), nil
 }
 
-func splitToken(t *Token, offset int) (l *Token, r *Token) {
-	if t == nil {
-		return nil, nil
-	}
+func splitToken(t Token, offset int) (r Token, rok bool, l Token, lok bool) {
 	if offset == 0 {
-		return nil, t
+		return Token{}, false, t, true
 	}
 	if offset == len(t.Value) {
-		return t, nil
+		return t, true, Token{}, false
 	}
-	l = t.Clone()
-	r = t.Clone()
-	l.Value = l.Value[:offset]
-	r.Value = r.Value[offset:]
-	return
+	l.Type = t.Type
+	r.Type = t.Type
+	l.Value = t.Value[:offset]
+	r.Value = t.Value[offset:]
+	return r, true, l, true
 }

@@ -14,6 +14,6 @@ func TestCoalesce(t *testing.T) {
 	}))
 	actual, err := Tokenise(lexer, nil, "!@#$")
 	assert.NoError(t, err)
-	expected := []*Token{{Punctuation, "!@#$"}}
+	expected := []Token{{Punctuation, "!@#$"}}
 	assert.Equal(t, expected, actual)
 }
