@@ -65,7 +65,7 @@ func TestLexers(t *testing.T) {
 			assert.NoError(t, err)
 
 			// Read expected JSON into token slice.
-			expected := []*chroma.Token{}
+			expected := []chroma.Token{}
 			r, err := os.Open(expectedFilename)
 			assert.NoError(t, err)
 			err = json.NewDecoder(r).Decode(&expected)

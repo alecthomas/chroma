@@ -122,7 +122,7 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 	return Literator(out...), nil
 }
 
-func splitToken(t Token, offset int) (r Token, rok bool, l Token, lok bool) {
+func splitToken(t Token, offset int) (l Token, rok bool, r Token, lok bool) {
 	if offset == 0 {
 		return Token{}, false, t, true
 	}
@@ -133,5 +133,5 @@ func splitToken(t Token, offset int) (r Token, rok bool, l Token, lok bool) {
 	r.Type = t.Type
 	l.Value = t.Value[:offset]
 	r.Value = t.Value[offset:]
-	return r, true, l, true
+	return l, true, r, true
 }
