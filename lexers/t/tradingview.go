@@ -29,7 +29,7 @@ var TradingView = internal.Register(MustNewLexer(
 			{`(accdist|aqua|area|areabr|black|blue|bool|circles|close|columns|currency\.(AUD|CAD|CHF|EUR|GBP|HKD|JPY|NOK|NONE|NZD|SEK|SGD|TRY|USD|ZAR)|dashed|dotted|float|friday|fuchsia|gray|green|high|histogram|hl2|hlc3|integer|interval|isdaily|isdwm|isintraday|ismonthly|isweekly|lime|line|linebr|location\.(abovebar|belowbar|bottom|top)|low|maroon|monday|n|navy|ohlc4|olive|open|orange|period|purple|red|resolution|saturday|scale\.(left|none|right)|session|session\.(extended|regular)|silver|size\.(auto|huge|large|normal|small|tiny)|solid|source|string|sunday|symbol|syminfo\.(mintick|pointvalue|prefix|root|session)|teal|thursday|ticker|tuesday|volume|wednesday|white|yellow|strategy\.(cash|position_size|closedtrades|direction\.(all|long|short)|equity|eventrades|fixed|grossloss|grossprofit|initial_capital|long|losstrades|max_contracts_held_all|max_contracts_held_long|max_contracts_held_short|max_drawdown|netprofit|oca\.(cancel|none|reduce)|openprofit|opentrades|percent_of_equity|position_avg_price|position_entry_name|short|wintrades)|shape\.(arrowdown|arrowup|circle|cross|diamond|flag|labeldown|labelup|square|triangledown|triangleup|xcross)|barstate\.is(first|history|last|new|realtime)|barmerge\.(gaps_on|gaps_off|lookahead_on|lookahead_off)|strategy\.commission\.(cash_per_contract|cash_per_order|percent))\b`, NameVariable, nil},
 			{`(cross|dayofmonth|dayofweek|hour|minute|month|na|second|tickerid|time|tr|vwap|weekofyear|year)(\b[^\(])`, ByGroups(NameVariable, Text), nil}, // variables that can also be function
 			{`(true|false)\b`, KeywordConstant, nil},
-			{`(and|or|not|if|else|for)\b`, OperatorWord, nil},
+			{`(and|or|not|if|else|for|to)\b`, OperatorWord, nil},
 			{`@?[_a-zA-Z]\w*`, Text, nil},
 		},
 	},
