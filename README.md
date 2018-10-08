@@ -207,6 +207,17 @@ Chroma supports HTML output, as well as terminal output in 8 colour, 256 colour,
 A `noop` formatter is included that outputs the token text only, and a `tokens`
 formatter outputs raw tokens. The latter is useful for debugging lexers.
 
+Formatters list:
+
+- html
+- json
+- noop
+- terminal
+- terminal16m
+- terminal256
+- tokens
+
+
 ### Styles
 
 Chroma styles use the [same syntax](http://pygments.org/docs/styles/) as Pygments.
@@ -215,6 +226,45 @@ All Pygments styles have been converted to Chroma using the `_tools/style.py` sc
 
 For a quick overview of the available styles and how they look, check out the [Chroma Style Gallery](https://xyproto.github.io/splash/docs/).
 
+Styles list:
+
+- abap
+- algol
+- algol_nu
+- arduino
+- autumn
+- borland
+- bw
+- colorful
+- dracula
+- emacs
+- friendly
+- fruity
+- github
+- igor
+- lovelace
+- manni
+- monokai
+- monokailight
+- murphy
+- native
+- paraiso-dark
+- paraiso-light
+- pastie
+- perldoc
+- pygments
+- rainbow_dash
+- rrt
+- solarized-dark
+- solarized-dark256
+- solarized-light
+- swapoff
+- tango
+- trac
+- vim
+- vs
+- xcode
+
 ## Command-line interface
 
 A command-line interface to Chroma is included. It can be installed with:
@@ -222,6 +272,13 @@ A command-line interface to Chroma is included. It can be installed with:
 ```
 go get -u github.com/alecthomas/chroma/cmd/chroma
 ```
+
+you can list lexers, styles and formatters:
+
+```bash
+$ chroma --list
+```
+
 
 ## What's missing compared to Pygments?
 
