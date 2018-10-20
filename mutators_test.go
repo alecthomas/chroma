@@ -52,6 +52,6 @@ func TestCombine(t *testing.T) {
 	})
 	it, err := l.Tokenise(nil, "hello world")
 	assert.NoError(t, err)
-	expected := []*Token{{String, `hello`}, {Whitespace, ` `}, {Name, `world`}}
+	expected := []Token{{String, `hello`}, {Whitespace, ` `}, {Name, `world`}}
 	assert.Equal(t, expected, it.Tokens())
 }

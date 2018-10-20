@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/alecthomas/assert"
+	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/lexers/g"
 )
 
@@ -32,7 +33,7 @@ func Benchmark(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		it, err := g.Go.Tokenise(nil, lexerBenchSource)
 		assert.NoError(b, err)
-		for t := it(); t != nil; t = it() {
+		for t := it(); t != chroma.EOF; t = it() {
 		}
 	}
 }

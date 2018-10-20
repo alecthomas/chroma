@@ -48,12 +48,14 @@ const (
 	LineTable
 	// Line numbers table TD wrapper style.
 	LineTableTD
-	// Input that could not be tokenised.
+	// Input that could not be tokenized.
 	Error
 	// Other is used by the Delegate lexer to indicate which tokens should be handled by the delegate.
 	Other
 	// No highlighting.
 	None
+	// Used as an EOF marker / nil token
+	EOFType TokenType = 0
 )
 
 // Keywords.
@@ -341,5 +343,5 @@ func (t TokenType) InSubCategory(other TokenType) bool {
 }
 
 func (t TokenType) Emit(groups []string, lexer Lexer) Iterator {
-	return Literator(&Token{Type: t, Value: groups[0]})
+	return Literator(Token{Type: t, Value: groups[0]})
 }
