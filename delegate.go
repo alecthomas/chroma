@@ -28,20 +28,10 @@ func (d *delegatingLexer) Config() *Config {
 	return d.language.Config()
 }
 
-func emptyInsertion() insertion {
-	return insertion{
-		start: -1,
-	}
-}
-
 // An insertion is the character range where language tokens should be inserted.
 type insertion struct {
 	start, end int
 	tokens     []Token
-}
-
-func (i *insertion) IsEmpty() bool {
-	return i.start < 0
 }
 
 func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
@@ -51,19 +41,19 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 	}
 	// Compute insertions and gather "Other" tokens.
 	others := &bytes.Buffer{}
-	var insertions []insertion
-	insert := emptyInsertion()
+	insertions := []*insertion{}
+	var insert *insertion
 	offset := 0
 	var last Token
 	for _, t := range tokens {
 		if t.Type == Other {
-			if last != EOF && !insert.IsEmpty() && last.Type != Other {
+			if last != EOF && insert != nil && last.Type != Other {
 				insert.end = offset
 			}
 			others.WriteString(t.Value)
 		} else {
 			if last == EOF || last.Type == Other {
-				insert = insertion{start: offset}
+				insert = &insertion{start: offset}
 				insertions = append(insertions, insert)
 			}
 			insert.tokens = append(insert.tokens, t)
@@ -95,9 +85,9 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 		return t
 	}
 	insertionIndex := 0
-	nextInsertion := func() insertion {
+	nextInsertion := func() *insertion {
 		if insertionIndex >= len(insertions) {
-			return emptyInsertion()
+			return nil
 		}
 		i := insertions[insertionIndex]
 		insertionIndex++
@@ -105,9 +95,9 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 	}
 	t := nextToken()
 	i := nextInsertion()
-	for t != EOF || !i.IsEmpty() {
+	for t != EOF || i != nil {
 		// fmt.Printf("%d->%d:%q   %d->%d:%q\n", offset, offset+len(t.Value), t.Value, i.start, i.end, Stringify(i.tokens...))
-		if t == EOF || (!i.IsEmpty() && i.start < offset+len(t.Value)) {
+		if t == EOF || (i != nil && i.start < offset+len(t.Value)) {
 			var l Token
 			l, t = splitToken(t, i.start-offset)
 			if l != EOF {
