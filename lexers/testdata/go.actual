@@ -1,0 +1,15 @@
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello World!")
+}
+
+func hello(a int) {
+	fmt.Println("Hello World!").Hello()
+
+    return func() int {
+        return i
+    }
+}
