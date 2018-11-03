@@ -48,7 +48,7 @@ const (
 	LineTable
 	// Line numbers table TD wrapper style.
 	LineTableTD
-	// Input that could not be tokenized.
+	// Input that could not be tokenised.
 	Error
 	// Other is used by the Delegate lexer to indicate which tokens should be handled by the delegate.
 	Other
