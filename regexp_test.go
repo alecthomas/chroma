@@ -14,7 +14,7 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 	}))
 	it, err := l.Tokenise(nil, `hello`)
 	assert.NoError(t, err)
-	assert.Equal(t, []*Token{{Keyword, "hello"}, {Whitespace, "\n"}}, it.Tokens())
+	assert.Equal(t, []Token{{Keyword, "hello"}, {Whitespace, "\n"}}, it.Tokens())
 
 	l = Coalesce(MustNewLexer(nil, Rules{
 		"root": {
@@ -23,5 +23,5 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 	}))
 	it, err = l.Tokenise(nil, `hello`)
 	assert.NoError(t, err)
-	assert.Equal(t, []*Token{{Error, "hello"}}, it.Tokens())
+	assert.Equal(t, []Token{{Error, "hello"}}, it.Tokens())
 }

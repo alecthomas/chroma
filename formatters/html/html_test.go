@@ -32,11 +32,11 @@ func BenchmarkHTMLFormatter(b *testing.B) {
 }
 
 func TestSplitTokensIntoLines(t *testing.T) {
-	in := []*chroma.Token{
+	in := []chroma.Token{
 		{Value: "hello", Type: chroma.NameKeyword},
 		{Value: " world\nwhat?\n", Type: chroma.NameKeyword},
 	}
-	expected := [][]*chroma.Token{
+	expected := [][]chroma.Token{
 		{
 			{Type: chroma.NameKeyword, Value: "hello"},
 			{Type: chroma.NameKeyword, Value: " world\n"},
@@ -53,7 +53,7 @@ func TestSplitTokensIntoLines(t *testing.T) {
 }
 
 func TestIteratorPanicRecovery(t *testing.T) {
-	it := func() *chroma.Token {
+	it := func() chroma.Token {
 		panic(errors.New("bad"))
 	}
 	err := New().Format(ioutil.Discard, styles.Fallback, it)
