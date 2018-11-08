@@ -48,7 +48,7 @@ func TestSplitTokensIntoLines(t *testing.T) {
 			{Type: chroma.NameKeyword},
 		},
 	}
-	actual := splitTokensIntoLines(in)
+	actual := chroma.SplitTokensIntoLines(in)
 	assert.Equal(t, expected, actual)
 }
 
