@@ -153,7 +153,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 
 	wrapInTable := f.lineNumbers && f.lineNumbersInTable
 
-	lines := splitTokensIntoLines(tokens)
+	lines := chroma.SplitTokensIntoLines(tokens)
 	lineDigits := len(fmt.Sprintf("%d", len(lines)))
 	highlightIndex := 0
 
@@ -389,27 +389,4 @@ func compressStyle(s string) string {
 		out = append(out, p)
 	}
 	return strings.Join(out, ";")
-}
-
-func splitTokensIntoLines(tokens []chroma.Token) (out [][]chroma.Token) {
-	var line []chroma.Token
-	for _, token := range tokens {
-		for strings.Contains(token.Value, "\n") {
-			parts := strings.SplitAfterN(token.Value, "\n", 2)
-			// Token becomes the tail.
-			token.Value = parts[1]
-
-			// Append the head to the line and flush the line.
-			clone := token.Clone()
-			clone.Value = parts[0]
-			line = append(line, clone)
-			out = append(out, line)
-			line = nil
-		}
-		line = append(line, token)
-	}
-	if len(line) > 0 {
-		out = append(out, line)
-	}
-	return
 }

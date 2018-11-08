@@ -1,5 +1,7 @@
 package chroma
 
+import "strings"
+
 // An Iterator across tokens.
 //
 // nil will be returned at the end of the Token stream.
@@ -40,4 +42,27 @@ func Literator(tokens ...Token) Iterator {
 		tokens = tokens[1:]
 		return token
 	}
+}
+
+func SplitTokensIntoLines(tokens []Token) (out [][]Token) {
+	var line []Token
+	for _, token := range tokens {
+		for strings.Contains(token.Value, "\n") {
+			parts := strings.SplitAfterN(token.Value, "\n", 2)
+			// Token becomes the tail.
+			token.Value = parts[1]
+
+			// Append the head to the line and flush the line.
+			clone := token.Clone()
+			clone.Value = parts[0]
+			line = append(line, clone)
+			out = append(out, line)
+			line = nil
+		}
+		line = append(line, token)
+	}
+	if len(line) > 0 {
+		out = append(out, line)
+	}
+	return
 }
