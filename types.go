@@ -12,7 +12,7 @@ import (
 // It is also an Emitter, emitting a single token of itself
 type TokenType int
 
-func (t *TokenType) MarshalJSON() ([]byte, error) { return json.Marshal(t.String()) }
+func (t TokenType) MarshalJSON() ([]byte, error) { return json.Marshal(t.String()) }
 func (t *TokenType) UnmarshalJSON(data []byte) error {
 	key := ""
 	err := json.Unmarshal(data, &key)
