@@ -15,8 +15,8 @@ var Markdown = internal.Register(MustNewLexer(
 	},
 	Rules{
 		"root": {
-			{`^(#)([^#].+\n)`, ByGroups(GenericHeading, Text), nil},
-			{`^(#{2,6})(.+\n)`, ByGroups(GenericSubheading, Text), nil},
+			{`^(#)([^#].+\n)`, GenericHeading, nil},
+			{`^(#{2,6})(.+\n)`, GenericSubheading, nil},
 			{`^(\s*)([*-] )(\[[ xX]\])( .+\n)`, ByGroups(Text, Keyword, Keyword, UsingSelf("inline")), nil},
 			{`^(\s*)([*-])(\s)(.+\n)`, ByGroups(Text, Keyword, Text, UsingSelf("inline")), nil},
 			{`^(\s*)([0-9]+\.)( .+\n)`, ByGroups(Text, Keyword, UsingSelf("inline")), nil},
