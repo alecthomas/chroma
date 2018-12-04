@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/alecthomas/kong"
 	"io"
 	"io/ioutil"
 	"os"
@@ -13,15 +14,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mattn/go-colorable"
-	"github.com/mattn/go-isatty"
-	"gopkg.in/alecthomas/kingpin.v3-unstable"
-
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
+	"github.com/mattn/go-colorable"
+	"github.com/mattn/go-isatty"
 )
 
 var (
@@ -30,34 +29,42 @@ var (
 	commit  = "?"
 	date    = "?"
 
-	profileFlag    = kingpin.Flag("profile", "Enable profiling to file.").Hidden().String()
-	listFlag       = kingpin.Flag("list", "List lexers, styles and formatters.").Bool()
-	unbufferedFlag = kingpin.Flag("unbuffered", "Do not buffer output.").Bool()
-	traceFlag      = kingpin.Flag("trace", "Trace lexer states as they are traversed.").Bool()
-	checkFlag      = kingpin.Flag("check", "Do not format, check for tokenization errors instead.").Bool()
-	filenameFlag   = kingpin.Flag("filename", "Filename to use for selecting a lexer when reading from stdin.").String()
+	description = `
+Chroma is a general purpose syntax highlighting library and corresponding
+command, for Go.
+`
 
-	lexerFlag     = kingpin.Flag("lexer", "Lexer to use when formatting.").PlaceHolder("autodetect").Short('l').Enum(lexers.Names(true)...)
-	styleFlag     = kingpin.Flag("style", "Style to use for formatting.").Short('s').Default("swapoff").Enum(styles.Names()...)
-	formatterFlag = kingpin.Flag("formatter", "Formatter to use.").Default("terminal").Short('f').Enum(formatters.Names()...)
+	cli struct {
+		Version    kong.VersionFlag `help:"Show version."`
+		Profile    string           `hidden:"" help:"Enable profiling to file."`
+		List       bool             `help:"List lexers, styles and formatters."`
+		Unbuffered bool             `help:"Do not buffer output."`
+		Trace      bool             `help:"Trace lexer states as they are traversed."`
+		Check      bool             `help:"Do not format, check for tokenization errors instead."`
+		Filename   string           `help:"Filename to use for selecting a lexer when reading from stdin."`
 
-	jsonFlag = kingpin.Flag("json", "Output JSON representation of tokens.").Bool()
+		Lexer     string `help:"Lexer to use when formatting." placeholder:"autodetect" short:"l"`
+		Style     string `help:"Style to use for formatting." default:"swapoff" short:"s"`
+		Formatter string `help:"Formatter to use." default:"terminal" short:"f"`
 
-	htmlFlag                      = kingpin.Flag("html", "Enable HTML mode (equivalent to '--formatter html').").Bool()
-	htmlPrefixFlag                = kingpin.Flag("html-prefix", "HTML CSS class prefix.").PlaceHolder("PREFIX").String()
-	htmlStylesFlag                = kingpin.Flag("html-styles", "Output HTML CSS styles.").Bool()
-	htmlOnlyFlag                  = kingpin.Flag("html-only", "Output HTML fragment.").Bool()
-	htmlInlineStyleFlag           = kingpin.Flag("html-inline-styles", "Output HTML with inline styles (no classes).").Bool()
-	htmlTabWidthFlag              = kingpin.Flag("html-tab-width", "Set the HTML tab width.").Default("8").Int()
-	htmlLinesFlag                 = kingpin.Flag("html-lines", "Include line numbers in output.").Bool()
-	htmlLinesTableFlag            = kingpin.Flag("html-lines-table", "Split line numbers and code in a HTML table").Bool()
-	htmlLinesStyleFlag            = kingpin.Flag("html-lines-style", "Style for line numbers.").String()
-	htmlHighlightFlag             = kingpin.Flag("html-highlight", "Highlight these lines.").PlaceHolder("N[:M][,...]").String()
-	htmlHighlightStyleFlag        = kingpin.Flag("html-highlight-style", "Style used for highlighting lines.").String()
-	htmlBaseLineFlag              = kingpin.Flag("html-base-line", "Base line number.").Default("1").Int()
-	htmlPreventSurroundingPreFlag = kingpin.Flag("html-prevent-surrounding-pre", "Prevent the surrounding pre tag.").Bool()
+		JSON bool `help:"Output JSON representation of tokens."`
 
-	filesArgs = kingpin.Arg("files", "Files to highlight.").ExistingFiles()
+		HTML                      bool   `help:"Enable HTML mode (equivalent to '--formatter html')."`
+		HTMLPrefix                string `help:"HTML CSS class prefix." placeholder:"PREFIX"`
+		HTMLStyles                bool   `help:"Output HTML CSS styles."`
+		HTMLOnly                  bool   `help:"Output HTML fragment."`
+		HTMLInlineStyles          bool   `help:"Output HTML with inline styles (no classes)."`
+		HTMLTabWidth              int    `help:"Set the HTML tab width." default:"8"`
+		HTMLLines                 bool   `help:"Include line numbers in output."`
+		HTMLLinesTable            bool   `help:"Split line numbers and code in a HTML table"`
+		HTMLLinesStyle            string `help:"Style for line numbers."`
+		HTMLHighlight             string `help:"Highlight these lines." placeholder:"N[:M][,...]"`
+		HTMLHighlightStyle        string `help:"Style used for highlighting lines."`
+		HTMLBaseLine              int    `help:"Base line number." default:"1"`
+		HTMLPreventSurroundingPre bool   `help:"Prevent the surrounding pre tag."`
+
+		Files []string `arg:"" help:"Files to highlight." type:"existingfile"`
+	}
 )
 
 type flushableWriter interface {
@@ -70,19 +77,16 @@ type nopFlushableWriter struct{ io.Writer }
 func (n *nopFlushableWriter) Flush() error { return nil }
 
 func main() {
-	kingpin.CommandLine.Version(fmt.Sprintf("%s-%s-%s", version, commit, date))
-	kingpin.CommandLine.Help = `
-Chroma is a general purpose syntax highlighting library and corresponding
-command, for Go.
-`
-	kingpin.Parse()
-	if *listFlag {
+	ctx := kong.Parse(&cli, kong.Description(description), kong.Vars{
+		"version": fmt.Sprintf("%s-%s-%s", version, commit, date),
+	}, )
+	if cli.List {
 		listAll()
 		return
 	}
-	if *profileFlag != "" {
-		f, err := os.Create(*profileFlag)
-		kingpin.FatalIfError(err, "")
+	if cli.Profile != "" {
+		f, err := os.Create(cli.Profile)
+		ctx.FatalIfErrorf(err)
 		pprof.StartCPUProfile(f)
 		signals := make(chan os.Signal, 1)
 		signal.Notify(signals, os.Interrupt)
@@ -99,75 +103,75 @@ command, for Go.
 		out = colorable.NewColorableStdout()
 	}
 	var w flushableWriter
-	if *unbufferedFlag {
+	if cli.Unbuffered {
 		w = &nopFlushableWriter{out}
 	} else {
 		w = bufio.NewWriterSize(out, 16384)
 	}
 	defer w.Flush()
 
-	if *jsonFlag {
-		*formatterFlag = "json"
+	if cli.JSON {
+		cli.Formatter = "json"
 	}
 
-	if *htmlFlag {
-		*formatterFlag = "html"
+	if cli.HTML {
+		cli.Formatter = "html"
 	}
 
 	// Retrieve user-specified style, clone it, and add some overrides.
-	builder := styles.Get(*styleFlag).Builder()
-	if *htmlHighlightStyleFlag != "" {
-		builder.Add(chroma.LineHighlight, *htmlHighlightStyleFlag)
+	builder := styles.Get(cli.Style).Builder()
+	if cli.HTMLHighlightStyle != "" {
+		builder.Add(chroma.LineHighlight, cli.HTMLHighlightStyle)
 	}
-	if *htmlLinesStyleFlag != "" {
-		builder.Add(chroma.LineNumbers, *htmlLinesStyleFlag)
+	if cli.HTMLLinesStyle != "" {
+		builder.Add(chroma.LineNumbers, cli.HTMLLinesStyle)
 	}
 	style, err := builder.Build()
-	kingpin.FatalIfError(err, "")
+	ctx.FatalIfErrorf(err)
 
 	// Dump styles.
-	if *htmlStylesFlag {
+	if cli.HTMLStyles {
 		formatter := html.New(html.WithClasses())
 		formatter.WriteCSS(w, style)
 		return
 	}
 
-	if *formatterFlag == "html" {
+	if cli.Formatter == "html" {
 		options := []html.Option{
-			html.TabWidth(*htmlTabWidthFlag),
-			html.BaseLineNumber(*htmlBaseLineFlag),
+			html.TabWidth(cli.HTMLTabWidth),
+			html.BaseLineNumber(cli.HTMLBaseLine),
 		}
-		if *htmlPrefixFlag != "" {
-			options = append(options, html.ClassPrefix(*htmlPrefixFlag))
+		if cli.HTMLPrefix != "" {
+			options = append(options, html.ClassPrefix(cli.HTMLPrefix))
 		}
-		if !*htmlInlineStyleFlag {
+		if !cli.HTMLInlineStyles {
 			options = append(options, html.WithClasses())
 		}
-		if !*htmlOnlyFlag {
+		if !cli.HTMLOnly {
 			options = append(options, html.Standalone())
 		}
-		if *htmlLinesFlag {
+		if cli.HTMLLines {
 			options = append(options, html.WithLineNumbers())
 		}
-		if *htmlLinesTableFlag {
+		if cli.HTMLLinesTable {
 			options = append(options, html.LineNumbersInTable())
 		}
-		if *htmlPreventSurroundingPreFlag {
+		if cli.HTMLPreventSurroundingPre {
 			options = append(options, html.PreventSurroundingPre())
 		}
-		if len(*htmlHighlightFlag) > 0 {
+		if len(cli.HTMLHighlight) > 0 {
 			ranges := [][2]int{}
-			for _, span := range strings.Split(*htmlHighlightFlag, ",") {
+			for _, span := range strings.Split(cli.HTMLHighlight, ",") {
 				parts := strings.Split(span, ":")
 				if len(parts) > 2 {
-					kingpin.Fatalf("range should be N[:M], not %q", span)
+					ctx.Fatalf("range should be N[:M], not %q", span)
 				}
 				start, err := strconv.ParseInt(parts[0], 10, 64)
-				kingpin.FatalIfError(err, "min value of range should be integer not %q", parts[0])
+				ctx.FatalIfErrorf(err, "min value of range should be integer not %q", parts[0])
 				end := start
 				if len(parts) == 2 {
 					end, err = strconv.ParseInt(parts[1], 10, 64)
-					kingpin.FatalIfError(err, "max value of range should be integer not %q", parts[1])
+					ctx.FatalIfErrorf(err, "max value of range should be integer not %q", parts[1])
 				}
 				ranges = append(ranges, [2]int{int(start), int(end)})
 			}
@@ -175,18 +179,18 @@ command, for Go.
 		}
 		formatters.Register("html", html.New(options...))
 	}
-	if len(*filesArgs) == 0 {
+	if len(cli.Files) == 0 {
 		contents, err := ioutil.ReadAll(os.Stdin)
-		kingpin.FatalIfError(err, "")
-		format(w, style, lex(*filenameFlag, string(contents)))
+		ctx.FatalIfErrorf(err)
+		format(ctx, w, style, lex(ctx, cli.Filename, string(contents)))
 	} else {
-		for _, filename := range *filesArgs {
+		for _, filename := range cli.Files {
 			contents, err := ioutil.ReadFile(filename)
-			kingpin.FatalIfError(err, "")
-			if *checkFlag {
-				check(filename, lex(filename, string(contents)))
+			ctx.FatalIfErrorf(err)
+			if cli.Check {
+				check(filename, lex(ctx, filename, string(contents)))
 			} else {
-				format(w, style, lex(filename, string(contents)))
+				format(ctx, w, style, lex(ctx, filename, string(contents)))
 			}
 		}
 	}
@@ -224,23 +228,23 @@ func listAll() {
 	fmt.Println()
 }
 
-func lex(path string, contents string) chroma.Iterator {
+func lex(ctx *kong.Context, path string, contents string) chroma.Iterator {
 	lexer := selexer(path, contents)
 	if lexer == nil {
 		lexer = lexers.Fallback
 	}
 	if rel, ok := lexer.(*chroma.RegexLexer); ok {
-		rel.Trace(*traceFlag)
+		rel.Trace(cli.Trace)
 	}
 	lexer = chroma.Coalesce(lexer)
 	it, err := lexer.Tokenise(nil, string(contents))
-	kingpin.FatalIfError(err, "")
+	ctx.FatalIfErrorf(err)
 	return it
 }
 
 func selexer(path, contents string) (lexer chroma.Lexer) {
-	if *lexerFlag != "" {
-		return lexers.Get(*lexerFlag)
+	if cli.Lexer != "" {
+		return lexers.Get(cli.Lexer)
 	}
 	if path != "" {
 		lexer := lexers.Match(path)
@@ -251,10 +255,10 @@ func selexer(path, contents string) (lexer chroma.Lexer) {
 	return lexers.Analyse(contents)
 }
 
-func format(w io.Writer, style *chroma.Style, it chroma.Iterator) {
-	formatter := formatters.Get(*formatterFlag)
+func format(ctx *kong.Context, w io.Writer, style *chroma.Style, it chroma.Iterator) {
+	formatter := formatters.Get(cli.Formatter)
 	err := formatter.Format(w, style, it)
-	kingpin.FatalIfError(err, "")
+	ctx.FatalIfErrorf(err)
 }
 
 func check(filename string, it chroma.Iterator) {

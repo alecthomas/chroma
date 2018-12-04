@@ -16,10 +16,11 @@ package lexers
 
 import (
     . "github.com/alecthomas/chroma" // nolint
+    "github.com/alecthomas/chroma/lexers/internal"
 )
 
 // {{upper_name}} lexer.
-var {{upper_name}} = Register(MustNewLexer(
+var {{upper_name}} = internal.Register(MustNewLexer(
     &Config{
         Name:      "{{name}}",
         Aliases:   []string{ {{#aliases}}"{{.}}", {{/aliases}} },
