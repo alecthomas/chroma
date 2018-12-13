@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html"
 	"io"
+	"os"
 	"sort"
 	"strings"
 
@@ -27,6 +28,11 @@ func TabWidth(width int) Option { return func(f *Formatter) { f.tabWidth = width
 
 // PreventSurroundingPre prevents the surrounding pre tags around the generated code
 func PreventSurroundingPre() Option { return func(f *Formatter) { f.preventSurroundingPre = true } }
+
+// Add custom user stylesheet
+func UserStylesheet(stylesheet string) Option {
+	return func(f *Formatter) { f.userStylesheet = stylesheet }
+}
 
 // WithLineNumbers formats output with line numbers.
 func WithLineNumbers() Option {
@@ -82,6 +88,7 @@ type Formatter struct {
 	lineNumbersInTable    bool
 	highlightRanges       highlightRanges
 	baseLineNumber        int
+	userStylesheet        string
 }
 
 type highlightRanges [][2]int
@@ -126,6 +133,18 @@ func (f *Formatter) restyle(style *chroma.Style) (*chroma.Style, error) {
 	return builder.Build()
 }
 
+func (f *Formatter) writeUserStylesheet(w io.Writer) error {
+	s, err := os.Open(f.userStylesheet)
+	if err != nil {
+		return err
+	}
+	defer s.Close()
+	fmt.Fprint(w, "<style type=\"text/css\">\n")
+	_, err = io.Copy(w, s)
+	fmt.Fprint(w, "</style>")
+	return err
+}
+
 // We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
 //
 // OTOH we need to be super careful about correct escaping...
@@ -147,6 +166,11 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 			f.WriteCSS(w, style)
 			fmt.Fprintf(w, "body { %s; }\n", css[chroma.Background])
 			fmt.Fprint(w, "</style>")
+		}
+		if f.userStylesheet != "" {
+			if err := f.writeUserStylesheet(w); err != nil {
+				return fmt.Errorf("failed to open user stylesheet: %s", err)
+			}
 		}
 		fmt.Fprintf(w, "<body%s>\n", f.styleAttr(css, chroma.Background))
 	}
