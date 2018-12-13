@@ -62,6 +62,7 @@ command, for Go.
 		HTMLHighlightStyle        string `help:"Style used for highlighting lines."`
 		HTMLBaseLine              int    `help:"Base line number." default:"1"`
 		HTMLPreventSurroundingPre bool   `help:"Prevent the surrounding pre tag."`
+		HTMLUserStylesheet        string `help:"Embedd user defined CSS styles in html header."`
 
 		Files []string `arg:"" help:"Files to highlight." type:"existingfile"`
 	}
@@ -79,7 +80,7 @@ func (n *nopFlushableWriter) Flush() error { return nil }
 func main() {
 	ctx := kong.Parse(&cli, kong.Description(description), kong.Vars{
 		"version": fmt.Sprintf("%s-%s-%s", version, commit, date),
-	}, )
+	})
 	if cli.List {
 		listAll()
 		return
@@ -158,6 +159,9 @@ func main() {
 		}
 		if cli.HTMLPreventSurroundingPre {
 			options = append(options, html.PreventSurroundingPre())
+		}
+		if cli.HTMLUserStylesheet != "" {
+			options = append(options, html.UserStylesheet(cli.HTMLUserStylesheet))
 		}
 		if len(cli.HTMLHighlight) > 0 {
 			ranges := [][2]int{}
