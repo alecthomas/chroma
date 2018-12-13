@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/alecthomas/kong"
 	"io"
 	"io/ioutil"
 	"os"
@@ -14,13 +13,15 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/alecthomas/kong"
+	colorable "github.com/mattn/go-colorable"
+	isatty "github.com/mattn/go-isatty"
+
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
-	"github.com/mattn/go-colorable"
-	"github.com/mattn/go-isatty"
 )
 
 var (
@@ -63,7 +64,7 @@ command, for Go.
 		HTMLBaseLine              int    `help:"Base line number." default:"1"`
 		HTMLPreventSurroundingPre bool   `help:"Prevent the surrounding pre tag."`
 
-		Files []string `arg:"" help:"Files to highlight." type:"existingfile"`
+		Files []string `arg:"" optional:"" help:"Files to highlight." type:"existingfile"`
 	}
 )
 
@@ -79,7 +80,7 @@ func (n *nopFlushableWriter) Flush() error { return nil }
 func main() {
 	ctx := kong.Parse(&cli, kong.Description(description), kong.Vars{
 		"version": fmt.Sprintf("%s-%s-%s", version, commit, date),
-	}, )
+	})
 	if cli.List {
 		listAll()
 		return
