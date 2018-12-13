@@ -111,8 +111,8 @@ func TestTableLineNumberNewlines(t *testing.T) {
 	// in a <pre>-friendly format.
 	// Note: placing the newlines inside the <span> lets browser selections look
 	// better, instead of "skipping" over the span margin.
-	assert.Contains(t, buf.String(), `<span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span>`)
+	assert.Contains(t, buf.String(), `<a href="#n2" id="n2" class="lnt">2
+</a><a href="#n3" id="n3" class="lnt">3
+</a><a href="#n4" id="n4" class="lnt">4
+</a>`)
 }

@@ -175,7 +175,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 				fmt.Fprintf(w, "<span%s>", f.styleAttr(css, chroma.LineHighlight))
 			}
 
-			fmt.Fprintf(w, "<a class=\"ln\" href=\"#n%d\" id=\"n%d\" %s>%*d\n</a>", line, line, f.styleAttr(css, chroma.LineNumbersTable), lineDigits, line)
+			fmt.Fprintf(w, "<a href=\"#n%d\" id=\"n%d\"%s>%*d\n</a>", line, line, f.styleAttr(css, chroma.LineNumbersTable), lineDigits, line)
 
 			if highlight {
 				fmt.Fprintf(w, "</span>")
