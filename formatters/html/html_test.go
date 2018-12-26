@@ -116,3 +116,16 @@ func TestTableLineNumberNewlines(t *testing.T) {
 </span><span class="lnt">4
 </span>`)
 }
+
+func TestWriteHTMLStartWithLF(t *testing.T) {
+	f := New(WithClasses(), WithLineNumbers())
+	it, err := lexers.Get("go").Tokenise(nil, "\npackage main")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+	// expect 2 lines
+	assert.Equal(t, buf.String(), `<pre class="chroma"><span><span class="ln">1</span>
+</span><span><span class="ln">2</span><span class="kn">package</span> <span class="nx">main</span></span></pre>`)
+}

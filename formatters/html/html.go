@@ -201,6 +201,8 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		}
 		if highlight {
 			fmt.Fprintf(w, "<span%s>", f.styleAttr(css, chroma.LineHighlight))
+		} else {
+			fmt.Fprintf(w, "<span>")
 		}
 
 		if f.lineNumbers && !wrapInTable {
@@ -215,9 +217,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 			}
 			fmt.Fprint(w, html)
 		}
-		if highlight {
-			fmt.Fprintf(w, "</span>")
-		}
+		fmt.Fprintf(w, "</span>")
 	}
 
 	if !f.preventSurroundingPre {
