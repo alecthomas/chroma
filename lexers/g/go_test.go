@@ -1,15 +1,15 @@
 package g
 
 import (
-  "testing"
+	"testing"
 
-  "github.com/alecthomas/assert"
-  "github.com/alecthomas/chroma"
+	"github.com/alecthomas/assert"
+	"github.com/alecthomas/chroma"
 )
 
 func TestGoHTMLTemplateIssue126(t *testing.T) {
-  for _, source := range []string{
-    `<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	for _, source := range []string{
+		`<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>{{ if eq  .Title  .Site.Title }}{{ .Site.Title }}{{ else }}{{ with .Title }}{{.}} on {{ end }}{{ .Site.Title }}{{ end }}</title>
     <link>{{ .Permalink }}</link>
@@ -36,15 +36,15 @@ func TestGoHTMLTemplateIssue126(t *testing.T) {
   </channel>
 </rss>
 `,
-    `{{ $headless := .Site.GetPage "page" "some-headless-bundle" }}
+		`{{ $headless := .Site.GetPage "page" "some-headless-bundle" }}
 {{ $reusablePages := $headless.Resources.Match "author*" }}
 <h2>Authors</h2>
 {{ range $reusablePages }}
     <h3>{{ .Title }}</h3>
     {{ .Content }}
 {{ end }}`} {
-    tokens, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
-    assert.NoError(t, err)
-    assert.Equal(t, source, chroma.Stringify(tokens...))
-  }
+		tokens, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		assert.NoError(t, err)
+		assert.Equal(t, source, chroma.Stringify(tokens...))
+	}
 }
