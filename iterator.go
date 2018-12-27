@@ -64,5 +64,12 @@ func SplitTokensIntoLines(tokens []Token) (out [][]Token) {
 	if len(line) > 0 {
 		out = append(out, line)
 	}
+	// Strip empty trailing token line.
+	if len(out) > 0 {
+		last := out[len(out)-1]
+		if len(last) == 1 && last[0].Value == "" {
+			out = out[:len(out)-1]
+		}
+	}
 	return
 }

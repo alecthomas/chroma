@@ -44,9 +44,6 @@ func TestSplitTokensIntoLines(t *testing.T) {
 		{
 			{Type: chroma.NameKeyword, Value: "what?\n"},
 		},
-		{
-			{Type: chroma.NameKeyword},
-		},
 	}
 	actual := chroma.SplitTokensIntoLines(in)
 	assert.Equal(t, expected, actual)
