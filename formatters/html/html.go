@@ -99,13 +99,6 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Ite
 	return f.writeHTML(w, style, iterator.Tokens())
 }
 
-func brightenOrDarken(colour chroma.Colour, factor float64) chroma.Colour {
-	if colour.Brightness() < 0.5 {
-		return colour.Brighten(factor)
-	}
-	return colour.Brighten(-factor)
-}
-
 // Ensure that style entries exist for highlighting, etc.
 func (f *Formatter) restyle(style *chroma.Style) (*chroma.Style, error) {
 	builder := style.Builder()
@@ -113,13 +106,13 @@ func (f *Formatter) restyle(style *chroma.Style) (*chroma.Style, error) {
 	// If we don't have a line highlight colour, make one that is 10% brighter/darker than the background.
 	if !style.Has(chroma.LineHighlight) {
 		highlight := chroma.StyleEntry{Background: bg.Background}
-		highlight.Background = brightenOrDarken(highlight.Background, 0.1)
+		highlight.Background = highlight.Background.BrightenOrDarken(0.1)
 		builder.AddEntry(chroma.LineHighlight, highlight)
 	}
 	// If we don't have line numbers, use the text colour but 20% brighter/darker
 	if !style.Has(chroma.LineNumbers) {
 		text := chroma.StyleEntry{Colour: bg.Colour}
-		text.Colour = brightenOrDarken(text.Colour, 0.5)
+		text.Colour = text.Colour.BrightenOrDarken(0.5)
 		builder.AddEntry(chroma.LineNumbers, text)
 		builder.AddEntry(chroma.LineNumbersTable, text)
 	}
