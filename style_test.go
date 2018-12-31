@@ -35,3 +35,16 @@ func TestStyleClone(t *testing.T) {
 	assert.Equal(t, "#00ff00 bg:#ffffff", clone.Get(Comment).String())
 	assert.Equal(t, "bg:#ffffff", parent.Get(Comment).String())
 }
+
+func TestSynthesisedStyleEntries(t *testing.T) {
+	style, err := NewStyle("test", StyleEntries{
+		Background: "bg:#ffffff",
+	})
+	assert.NoError(t, err)
+	assert.True(t, style.Has(LineHighlight))
+	assert.True(t, style.Has(LineNumbersTable))
+	assert.True(t, style.Has(LineNumbers))
+	assert.Equal(t, "bg:#e5e5e5", style.Get(LineHighlight).String())
+	assert.Equal(t, "#7f7f7f bg:#ffffff", style.Get(LineNumbers).String())
+	assert.Equal(t, "#7f7f7f bg:#ffffff", style.Get(LineNumbersTable).String())
+}

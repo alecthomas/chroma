@@ -99,34 +99,10 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Ite
 	return f.writeHTML(w, style, iterator.Tokens())
 }
 
-// Ensure that style entries exist for highlighting, etc.
-func (f *Formatter) restyle(style *chroma.Style) (*chroma.Style, error) {
-	builder := style.Builder()
-	bg := builder.Get(chroma.Background)
-	// If we don't have a line highlight colour, make one that is 10% brighter/darker than the background.
-	if !style.Has(chroma.LineHighlight) {
-		highlight := chroma.StyleEntry{Background: bg.Background}
-		highlight.Background = highlight.Background.BrightenOrDarken(0.1)
-		builder.AddEntry(chroma.LineHighlight, highlight)
-	}
-	// If we don't have line numbers, use the text colour but 20% brighter/darker
-	if !style.Has(chroma.LineNumbers) {
-		text := chroma.StyleEntry{Colour: bg.Colour}
-		text.Colour = text.Colour.BrightenOrDarken(0.5)
-		builder.AddEntry(chroma.LineNumbers, text)
-		builder.AddEntry(chroma.LineNumbersTable, text)
-	}
-	return builder.Build()
-}
-
 // We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
 //
 // OTOH we need to be super careful about correct escaping...
 func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.Token) (err error) { // nolint: gocyclo
-	style, err = f.restyle(style)
-	if err != nil {
-		return err
-	}
 	css := f.styleToCSS(style)
 	if !f.Classes {
 		for t, style := range css {
