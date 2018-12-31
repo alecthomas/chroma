@@ -1,10 +1,12 @@
 [
-  {"type":"GenericHeading","value":"#"},
-  {"type":"Text","value":" about\n"},
-  {"type":"Error","value":"\n"},
-  {"type":"GenericSubheading","value":"##"},
-  {"type":"Text","value":" user defined function in cql\n"},
-  {"type":"Error","value":"\n"},
+  {"type":"GenericHeading","value":"# about\n"},
+  {"type":"Text","value":"\nMultiple "},
+  {"type":"GenericStrong","value":"**bold**"},
+  {"type":"Text","value":" on the "},
+  {"type":"GenericStrong","value":"**same line**"},
+  {"type":"Text","value":".\n\n"},
+  {"type":"GenericSubheading","value":"## user defined function in cql\n"},
+  {"type":"Text","value":"\n"},
   {"type":"LiteralString","value":"```javascript\n"},
   {"type":"Text","value":"  "},
   {"type":"NameOther","value":"column"},
@@ -17,7 +19,7 @@
   {"type":"Punctuation","value":")"},
   {"type":"Text","value":" \n"},
   {"type":"LiteralString","value":"```"},
-  {"type":"Error","value":"\n\n"},
+  {"type":"Text","value":"\n\n"},
   {"type":"LiteralString","value":"```cql\n"},
   {"type":"Keyword","value":"CREATE"},
   {"type":"TextWhitespace","value":" "},
@@ -132,7 +134,7 @@
   {"type":"Punctuation","value":";"},
   {"type":"TextWhitespace","value":"\n"},
   {"type":"LiteralString","value":"```"},
-  {"type":"Error","value":"\n\n"},
+  {"type":"Text","value":"\n\n"},
   {"type":"LiteralString","value":"```postgres\n"},
   {"type":"Keyword","value":"DROP"},
   {"type":"Text","value":" "},
@@ -423,5 +425,5 @@
   {"type":"Punctuation","value":";"},
   {"type":"Text","value":"\n"},
   {"type":"LiteralString","value":"```"},
-  {"type":"Error","value":"\n"}
+  {"type":"Text","value":"\n"}
 ]
