@@ -127,6 +127,7 @@ func MustParseColour(colour string) Colour {
 	return parsed
 }
 
+// IsSet returns true if the colour is set.
 func (c Colour) IsSet() bool { return c != 0 }
 
 func (c Colour) String() string   { return fmt.Sprintf("#%06x", int(c-1)) }

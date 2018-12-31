@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/alecthomas/assert"
+
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
@@ -89,7 +90,8 @@ func TestClassPrefix(t *testing.T) {
 	}
 
 	var styleBuf bytes.Buffer
-	withPrefix.WriteCSS(&styleBuf, styles.Fallback)
+	err := withPrefix.WriteCSS(&styleBuf, styles.Fallback)
+	assert.NoError(t, err)
 	if !strings.Contains(styleBuf.String(), ".some-prefix-chroma ") {
 		t.Error("Stylesheets should have a class prefix")
 	}

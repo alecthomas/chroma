@@ -21,7 +21,7 @@ type LexerMutator interface {
 // A MutatorFunc is a Mutator that mutates the lexer state machine as it is processing.
 type MutatorFunc func(state *LexerState) error
 
-func (m MutatorFunc) Mutate(state *LexerState) error { return m(state) }
+func (m MutatorFunc) Mutate(state *LexerState) error { return m(state) } // nolint
 
 // Mutators applies a set of Mutators in order.
 func Mutators(modifiers ...Mutator) MutatorFunc {

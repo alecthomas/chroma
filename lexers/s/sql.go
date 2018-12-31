@@ -5,8 +5,8 @@ import (
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
-// Sql lexer.
-var Sql = internal.Register(MustNewLexer(
+// SQL lexer.
+var SQL = internal.Register(MustNewLexer(
 	&Config{
 		Name:            "SQL",
 		Aliases:         []string{"sql"},

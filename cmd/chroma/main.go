@@ -14,8 +14,8 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	colorable "github.com/mattn/go-colorable"
-	isatty "github.com/mattn/go-isatty"
+	"github.com/mattn/go-colorable"
+	"github.com/mattn/go-isatty"
 
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
@@ -88,7 +88,8 @@ func main() {
 	if cli.Profile != "" {
 		f, err := os.Create(cli.Profile)
 		ctx.FatalIfErrorf(err)
-		pprof.StartCPUProfile(f)
+		err = pprof.StartCPUProfile(f)
+		ctx.FatalIfErrorf(err)
 		signals := make(chan os.Signal, 1)
 		signal.Notify(signals, os.Interrupt)
 		go func() {
@@ -109,7 +110,7 @@ func main() {
 	} else {
 		w = bufio.NewWriterSize(out, 16384)
 	}
-	defer w.Flush()
+	defer w.Flush() // nolint: errcheck
 
 	if cli.JSON {
 		cli.Formatter = "json"
@@ -133,7 +134,8 @@ func main() {
 	// Dump styles.
 	if cli.HTMLStyles {
 		formatter := html.New(html.WithClasses())
-		formatter.WriteCSS(w, style)
+		err = formatter.WriteCSS(w, style)
+		ctx.FatalIfErrorf(err)
 		return
 	}
 
@@ -238,7 +240,7 @@ func lex(ctx *kong.Context, path string, contents string) chroma.Iterator {
 		rel.Trace(cli.Trace)
 	}
 	lexer = chroma.Coalesce(lexer)
-	it, err := lexer.Tokenise(nil, string(contents))
+	it, err := lexer.Tokenise(nil, contents)
 	ctx.FatalIfErrorf(err)
 	return it
 }

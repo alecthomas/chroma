@@ -113,7 +113,10 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprint(w, "<html>\n")
 		if f.Classes {
 			fmt.Fprint(w, "<style type=\"text/css\">\n")
-			f.WriteCSS(w, style)
+			err = f.WriteCSS(w, style)
+			if err != nil {
+				return err
+			}
 			fmt.Fprintf(w, "body { %s; }\n", css[chroma.Background])
 			fmt.Fprint(w, "</style>")
 		}
@@ -243,7 +246,7 @@ func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.Toke
 		if cls == "" {
 			return ""
 		}
-		return string(fmt.Sprintf(` class="%s"`, cls))
+		return fmt.Sprintf(` class="%s"`, cls)
 	}
 	if _, ok := styles[tt]; !ok {
 		tt = tt.SubCategory()

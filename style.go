@@ -8,6 +8,7 @@ import (
 // Trilean value for StyleEntry value inheritance.
 type Trilean uint8
 
+// Trilean states.
 const (
 	Pass Trilean = iota
 	Yes
@@ -25,6 +26,7 @@ func (t Trilean) String() string {
 	}
 }
 
+// Prefix returns s with "no" as a prefix if Trilean is no.
 func (t Trilean) Prefix(s string) string {
 	if t == Yes {
 		return s
@@ -73,6 +75,7 @@ func (s StyleEntry) String() string {
 	return strings.Join(out, " ")
 }
 
+// Sub subtracts e from s where elements match.
 func (s StyleEntry) Sub(e StyleEntry) StyleEntry {
 	out := StyleEntry{}
 	if e.Colour != s.Colour {
