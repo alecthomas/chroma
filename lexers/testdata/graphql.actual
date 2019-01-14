@@ -1,0 +1,42 @@
+query Hero($episode: Episode, $withFriends: Boolean!) {
+  hero(episode: $episode) {
+    name
+    friends @include(if: $withFriends) {
+      name
+      ...frag
+
+      ... {
+        inlineFrag
+      }
+    }
+  }
+}
+
+fragment frag on User {
+  id
+  name
+  profilePic(size: 50)
+}
+
+# Switching to schema
+"Description for the type"
+type MyObjectType {
+  """
+  Description for field
+  Supports **multi-line** description for your [API](http://example.com)!
+  """
+  myField: String! @deprecated(reason: "Use `newField`.")
+
+  otherField(
+    "Description for argument"
+    arg: Int
+  )
+}
+
+input Foo {
+    bar [String!]! = ["baz"]
+}
+
+directive @deprecated(
+  reason: String = "No longer supported"
+) on FIELD_DEFINITION | ENUM_VALUE
