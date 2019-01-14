@@ -69,5 +69,12 @@
   {"type":"Punctuation","value":"}"},
   {"type":"Text","value":"\n"},
   {"type":"Punctuation","value":"}"},
-  {"type":"Text","value":"\n"}
+  {"type":"Text","value":"\n"},
+  {"type":"Keyword","value":"if"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"("},
+  {"type":"Name","value":"BooleanExpression"},
+  {"type":"Punctuation","value":")"},
+  {"type":"Text","value":"\n    "},
+  {"type":"CommentSingle","value":"// Code to execute when the Boolean expression is `true`"}
 ]

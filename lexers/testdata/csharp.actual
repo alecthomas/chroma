@@ -9,3 +9,6 @@ foreach (DriveInfo drive in drives)
     Console.WriteLine(dir);
   }
 }
+
+if (BooleanExpression)
+    // Code to execute when the Boolean expression is `true`

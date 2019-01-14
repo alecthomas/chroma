@@ -20,6 +20,7 @@ var CSharp = internal.Register(MustNewLexer(
 			{`[^\S\n]+`, Text, nil},
 			{`\\\n`, Text, nil},
 			{`//.*?\n`, CommentSingle, nil},
+			{`//.*?$`, CommentSingle, nil},
 			{`/[*].*?[*]/`, CommentMultiline, nil},
 			{`\n`, Text, nil},
 			{`[~!%^&*()+=|\[\]:;,.<>/?-]`, Punctuation, nil},
