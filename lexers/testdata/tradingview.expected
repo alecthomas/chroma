@@ -89,5 +89,6 @@
   {"type":"Text","value":", transp"},
   {"type":"KeywordPseudo","value":"="},
   {"type":"LiteralNumber","value":"80"},
-  {"type":"Text","value":")\n"}
+  {"type":"Text","value":")\n\n"},
+  {"type":"CommentSingle","value":"// Comment as last line should be recognised too"}
 ]

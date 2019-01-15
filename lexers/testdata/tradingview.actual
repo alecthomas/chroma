@@ -10,3 +10,5 @@ plot(series=emaVal, style=circles, offset=2, linewidth=3)
 bgcolor(color=close > open ? orange :
      close != high[1] ? purple :
      na, transp=80)
+
+// Comment as last line should be recognised too

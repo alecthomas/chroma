@@ -17,7 +17,7 @@ var TradingView = internal.Register(MustNewLexer(
 	Rules{
 		"root": {
 			{`[^\S\n]+|\n|[()]`, Text, nil},
-			{`(//.*?)(\n)`, ByGroups(CommentSingle, Text), nil},
+			{`//.*?$`, CommentSingle, nil},
 			{`>=|<=|==|!=|>|<|\?|-|\+|\*|\/|%|\[|\]`, Operator, nil},
 			{`[:,.]`, Punctuation, nil},
 			{`=`, KeywordPseudo, nil},
