@@ -13,6 +13,7 @@ var TradingView = internal.Register(MustNewLexer(
 		Filenames: []string{"*.tv"},
 		MimeTypes: []string{"text/x-tradingview"},
 		DotAll:    true,
+		EnsureNL:  true,
 	},
 	Rules{
 		"root": {

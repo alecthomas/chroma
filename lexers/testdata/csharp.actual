@@ -9,3 +9,5 @@ foreach (DriveInfo drive in drives)
     Console.WriteLine(dir);
   }
 }
+
+// Comment as last line should be recognised properly
