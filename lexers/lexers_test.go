@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/alecthomas/assert"
-
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/lexers"
@@ -64,15 +63,23 @@ func TestLexers(t *testing.T) {
 			actual, err := chroma.Tokenise(lexer, nil, string(actualText))
 			assert.NoError(t, err)
 
-			// Read expected JSON into token slice.
-			var expected []chroma.Token
-			r, err := os.Open(expectedFilename)
-			assert.NoError(t, err)
-			err = json.NewDecoder(r).Decode(&expected)
-			assert.NoError(t, err)
+			if os.Getenv("RECORD") == "true" {
+				// Update the expected file with the generated output of this lexer
+				f, err := os.Create(expectedFilename)
+				defer f.Close()
+				assert.NoError(t, err)
+				assert.NoError(t, formatters.JSON.Format(f, nil, chroma.Literator(actual...)))
+			} else {
+				// Read expected JSON into token slice.
+				var expected []chroma.Token
+				r, err := os.Open(expectedFilename)
+				assert.NoError(t, err)
+				err = json.NewDecoder(r).Decode(&expected)
+				assert.NoError(t, err)
 
-			// Equal?
-			assert.Equal(t, expected, actual)
+				// Equal?
+				assert.Equal(t, expected, actual)
+			}
 		})
 	}
 }
