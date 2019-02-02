@@ -5,8 +5,8 @@ import (
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
-// CPP lexer.
-var CPP = internal.Register(MustNewLexer(
+// Arduino lexer.
+var arduino = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "Arduino",
 		Aliases:   []string{"arduino"},
