@@ -1,0 +1,87 @@
+#include <Servo.h>
+#include <Adafruit_NeoPixel.h>
+
+Servo elbow_servo; 
+Servo wrist_servo;
+const int potpin = 0;  // analog pin used to connect the potentiometer
+int val;    // variable to read the value from the analog pin
+
+//// button cycles through controlling each color
+//// in the neopixel.  state 0=stop, 1=red, 2=blue, 3=green, 4=all/white
+const int button_pin = 4;
+int buttonState;             // the current reading from the input pin
+int lastButtonState = HIGH;   // the previous reading from the input pin
+// the following variables are unsigned longs because the time, measured in
+// milliseconds, will quickly become a bigger number than can be stored in an int.
+unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
+unsigned long debounceDelay = 50;    // the debounce time; increase if the output flickers
+int led_control_state = 0;
+
+const int pixel_pin = 6;
+const int num_leds = 2;
+Adafruit_NeoPixel pixel = Adafruit_NeoPixel(num_leds, pixel_pin, NEO_GRB + NEO_KHZ800);
+int red = 0;
+int green = 0;
+int blue = 0;
+
+void setup() {
+  Serial.begin(9600);
+  elbow_servo.attach(9);  // attaches the servo on pin 9 to the servo object
+  pinMode(button_pin, INPUT_PULLUP); // create a button for the neopixels
+  pixel.begin();
+}
+
+void loop() {
+  
+  //// Read signal from variable resistor or potentiometer
+  //
+  val = analogRead(potpin);            // reads the value of the potentiometer (value between 0 and 1023)
+  int v = map(val, 0, 1023, 0, 180);     // scale it to use it with the servo (value between 0 and 180)
+  elbow_servo.write(v);  
+  delay(15);                           // waits for the servo to get there
+
+
+  //// Toggle between states using a button
+  ////
+  int b = digitalRead(button_pin); // read button
+  // "debounce" the button signal
+  if (b != lastButtonState) lastDebounceTime = millis();
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (b != buttonState) {
+      buttonState = b;
+      if (buttonState == LOW) {
+        led_control_state++;
+        if (led_control_state > 3) led_control_state = 0;
+      }
+    }
+  }
+  lastButtonState = b;
+
+  switch(led_control_state) {
+    case 0:
+      break; 
+    case 1:
+      red = 255;
+      blue = 255;
+      green = 0;
+      break;
+    case 2:
+      red = 0;
+      blue = 255;
+      green = 255;
+      break;
+    case 3:
+      red = 255;
+      blue = 0;
+      green = 255;
+      break;
+  }
+
+  Serial.println(led_control_state);
+  // set color ofpixels
+  for(int i=0;i<num_leds;i++){
+    pixel.setPixelColor(i,red,green,blue);
+    pixel.show(); 
+    delay(15); 
+  }
+}
