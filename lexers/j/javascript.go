@@ -23,7 +23,6 @@ var JavascriptRules = Rules{
 	},
 	"root": {
 		{`\A#! ?/.*?\n`, CommentHashbang, nil},
-		{`^(?=\s|/|<!--)`, Text, Push("slashstartsregex")},
 		Include("commentsandwhitespace"),
 		{`(\.\d+|[0-9]+\.[0-9]*)([eE][-+]?[0-9]+)?`, LiteralNumberFloat, nil},
 		{`0[bB][01]+`, LiteralNumberBin, nil},
@@ -32,6 +31,7 @@ var JavascriptRules = Rules{
 		{`[0-9]+`, LiteralNumberInteger, nil},
 		{`\.\.\.|=>`, Punctuation, nil},
 		{`\+\+|--|~|&&|\?|:|\|\||\\(?=\n)|(<<|>>>?|==?|!=?|[-<>+*%&|^/])=?`, Operator, Push("slashstartsregex")},
+		{`^(?=\s|/|<!--)`, Text, Push("slashstartsregex")},
 		{`[{(\[;,]`, Punctuation, Push("slashstartsregex")},
 		{`[})\].]`, Punctuation, nil},
 		{`(for|in|while|do|break|return|continue|switch|case|default|if|else|throw|try|catch|finally|new|delete|typeof|instanceof|void|yield|this|of|class|const|debugger|export|extends|import|super)\b`, Keyword, Push("slashstartsregex")},
