@@ -39,7 +39,7 @@ E | EBNF, Elixir, Elm, EmacsLisp, Erlang
 F | Factor, Fish, Forth, Fortran, FSharp
 G | GAS, GDScript, GLSL, Genshi, Genshi HTML, Genshi Text, Gnuplot, Go, Go HTML Template, Go Text Template, GraphQL, Groovy
 H | Handlebars, Haskell, Haxe, Hexdump, HTML, HTTP, Hy 
-I | Idris, INI, Io
+I | Idris, INI, IPython, Io
 J | Java, JavaScript, JSON, Jsx, Julia, Jungle
 K | Kotlin
 L | Lighttpd configuration file, LLVM, Lua
