@@ -6,7 +6,7 @@ import (
 )
 
 // Arduino lexer.
-var arduino = internal.Register(MustNewLexer(
+var Arduino = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "Arduino",
 		Aliases:   []string{"arduino"},
