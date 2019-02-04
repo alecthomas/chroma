@@ -1,0 +1,7 @@
+var x : int := 10
+
+fcn testFunction(a, b, c)
+    result (a + b) * c
+end testFunction
+
+put testFunction(x, 2 * x, 3)
