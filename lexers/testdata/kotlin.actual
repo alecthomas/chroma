@@ -10,6 +10,7 @@ fun main(args: Array<String>) {
   StringBuilder().apply {
     append(multiline)
   }
+  val unsigned = 0x00UL + 123u + 76.54
 }
 /*
 */
