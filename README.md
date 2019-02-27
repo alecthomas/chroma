@@ -190,7 +190,7 @@ In many cases lexers can be automatically converted directly from Pygments by
 using the included Python 3 script `pygments2chroma.py`. I use something like
 the following:
 
-```
+```sh
 python3 ~/Projects/chroma/_tools/pygments2chroma.py \
   pygments.lexers.jvm.KotlinLexer \
   > ~/Projects/chroma/lexers/kotlin.go \
@@ -229,7 +229,7 @@ For a quick overview of the available styles and how they look, check out the [C
 
 A command-line interface to Chroma is included. It can be installed with:
 
-```
+```sh
 go get -u github.com/alecthomas/chroma/cmd/chroma
 ```
 
