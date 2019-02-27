@@ -1,4 +1,4 @@
-# Chroma - A general purpose syntax highlighter in pure Go [![](https://godoc.org/github.com/alecthomas/chroma?status.svg)](http://godoc.org/github.com/alecthomas/chroma) [![Build Status](https://travis-ci.org/alecthomas/chroma.png)](https://travis-ci.org/alecthomas/chroma) [![Gitter chat](https://badges.gitter.im/alecthomas.png)](https://gitter.im/alecthomas/Lobby)
+# Chroma — A general purpose syntax highlighter in pure Go [![Golang Documentation](https://godoc.org/github.com/alecthomas/chroma?status.svg)](https://godoc.org/github.com/alecthomas/chroma) [![Build Status](https://travis-ci.org/alecthomas/chroma.svg)](https://travis-ci.org/alecthomas/chroma) [![Gitter chat](https://badges.gitter.im/alecthomas.svg)](https://gitter.im/alecthomas/Lobby)
 
 > **NOTE:** As Chroma has just been released, its API is still in flux. That said, the high-level interface should not change significantly.
 
@@ -190,7 +190,7 @@ In many cases lexers can be automatically converted directly from Pygments by
 using the included Python 3 script `pygments2chroma.py`. I use something like
 the following:
 
-```
+```sh
 python3 ~/Projects/chroma/_tools/pygments2chroma.py \
   pygments.lexers.jvm.KotlinLexer \
   > ~/Projects/chroma/lexers/kotlin.go \
@@ -229,7 +229,7 @@ For a quick overview of the available styles and how they look, check out the [C
 
 A command-line interface to Chroma is included. It can be installed with:
 
-```
+```sh
 go get -u github.com/alecthomas/chroma/cmd/chroma
 ```
 
