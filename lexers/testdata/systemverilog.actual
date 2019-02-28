@@ -1,0 +1,11 @@
+// Comment
+
+program top;
+
+  import "DPI-C" hello=task hello();
+
+  initial begin
+    hello();
+  end
+
+endprogram : top
