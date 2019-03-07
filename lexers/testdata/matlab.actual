@@ -1,0 +1,10 @@
+% a sum function
+function p = vector_sum(x)
+p = 0;
+for k1 = 1:length(x)
+    p = p + x(k1);
+end
+end
+
+z = 1:10;
+sum_from_1_to_10 = vector_sum(z)
