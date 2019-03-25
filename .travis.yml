@@ -4,6 +4,7 @@ script:
   - go test -v ./...
   - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s v1.10.2
   - ./bin/golangci-lint run
+  - git clean -fdx .
 after_success:
   go get github.com/goreleaser/goreleaser && goreleaser
 
