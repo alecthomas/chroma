@@ -8,8 +8,8 @@ import (
 var JSXRules = func() Rules {
 	rules := JavascriptRules.Clone()
 	rules["jsx"] = []Rule{
-		{`(<)([\w_\-]+)`, ByGroups(Punctuation, NameTag), Push("tag")},
-		{`(<)(/)(\s*)([\w_\-]+)(\s*)(>)`, ByGroups(Punctuation, Punctuation, Text, NameTag, Text, Punctuation), nil},
+		{`(<)([\w\._\-]+)`, ByGroups(Punctuation, NameTag), Push("tag")},
+		{`(<)(/)(\s*)([\w\._\-]+)(\s*)(>)`, ByGroups(Punctuation, Punctuation, Text, NameTag, Text, Punctuation), nil},
 	}
 	rules["tag"] = []Rule{
 		{`\s+`, Text, nil},
