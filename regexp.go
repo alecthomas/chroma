@@ -241,6 +241,7 @@ type LexerState struct {
 	// Custum context for mutators.
 	MutatorContext map[interface{}]interface{}
 	iteratorStack  []Iterator
+	options        *TokeniseOptions
 }
 
 // Set mutator context.
@@ -278,6 +279,16 @@ func (l *LexerState) Iterator() Token {
 		ruleIndex, rule, groups := matchRules(l.Text[l.Pos:], selectedRule)
 		// No match.
 		if groups == nil {
+			// From Pygments :\
+			//
+			// If the RegexLexer encounters a newline that is flagged as an error token, the stack is
+			// emptied and the lexer continues scanning in the 'root' state. This can help producing
+			// error-tolerant highlighting for erroneous input, e.g. when a single-line string is not
+			// closed.
+			if l.Text[l.Pos] == '\n' && l.State != l.options.State {
+				l.Stack = []string{l.options.State}
+				continue
+			}
 			l.Pos++
 			return Token{Error, string(l.Text[l.Pos-1 : l.Pos])}
 		}
@@ -394,6 +405,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 		text += "\n"
 	}
 	state := &LexerState{
+		options:        options,
 		Lexer:          r,
 		Text:           []rune(text),
 		Stack:          []string{options.State},
