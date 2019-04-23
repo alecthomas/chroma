@@ -73,7 +73,6 @@ var Vue = internal.Register(MustNewLexer(
 			{`(<)(/)([\w]+)(>)`, ByGroups(Punctuation, Punctuation, NameTag, Punctuation), nil},
 		},
 		"tag": {
-			// VUE
 			{`\s+`, Text, nil},
 			{`(-)([\w]+)`, NameTag, nil},
 			{`(@[\w]+)(="[\S]+")(>)`, ByGroups(NameTag, LiteralString, Punctuation), nil},

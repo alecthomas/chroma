@@ -1,0 +1,15 @@
+<template>
+    <button class="button">This is MyButton</button>
+</template>
+
+<script>
+    export default {
+        name: "MyButton"
+    }
+</script>
+
+<style>
+    .button{
+        font-size:18px;
+    }
+</style>
