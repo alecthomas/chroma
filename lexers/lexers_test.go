@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/alecthomas/assert"
-	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/formatters"
-	"github.com/alecthomas/chroma/lexers"
-	"github.com/alecthomas/chroma/lexers/a"
-	"github.com/alecthomas/chroma/lexers/x"
-	"github.com/alecthomas/chroma/styles"
+	"github.com/colin3dmax/chroma"
+	"github.com/colin3dmax/chroma/formatters"
+	"github.com/colin3dmax/chroma/lexers"
+	"github.com/colin3dmax/chroma/lexers/a"
+	"github.com/colin3dmax/chroma/lexers/x"
+	"github.com/colin3dmax/chroma/styles"
 )
 
 func TestCompileAllRegexes(t *testing.T) {

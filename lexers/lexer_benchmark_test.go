@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/alecthomas/assert"
-	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/lexers/g"
+	"github.com/colin3dmax/chroma"
+	"github.com/colin3dmax/chroma/lexers/g"
 )
 
 const lexerBenchSource = `// Copyright 2011 The Go Authors. All rights reserved.

@@ -1,5 +1,7 @@
 github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38 h1:smF2tmSOzy2Mm+0dGI2AIUHY+w0BUc+4tn40djz7+6U=
 github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38/go.mod h1:r7bzyVFMNntcxPZXK3/+KdruV1H5KSlyVY0gc+NgInI=
+github.com/colin3dmax/chroma v0.6.3 h1:8H1D0yddf0mvgvO4JDBKnzLd9ERmzzAijBxnZXGV/FA=
+github.com/colin3dmax/chroma v0.6.3/go.mod h1:quT2EpvJNqkuPi6DmBHB+E33FXBgBBPzyH5++Dn1LPc=
 github.com/alecthomas/colour v0.0.0-20160524082231-60882d9e2721 h1:JHZL0hZKJ1VENNfmXvHbgYlbUOvpzYzvy2aZU5gXVeo=
 github.com/alecthomas/colour v0.0.0-20160524082231-60882d9e2721/go.mod h1:QO9JBoKquHd+jz9nshCh40fOfO+JzsoXy8qTHF68zU0=
 github.com/alecthomas/kong v0.1.15 h1:IWBg+KrLvoHBicD50OzMI8fKjrtAa1okMR9g38HVM/s=

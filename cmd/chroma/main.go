@@ -17,11 +17,11 @@ import (
 	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
 
-	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/formatters"
-	"github.com/alecthomas/chroma/formatters/html"
-	"github.com/alecthomas/chroma/lexers"
-	"github.com/alecthomas/chroma/styles"
+	"github.com/colin3dmax/chroma"
+	"github.com/colin3dmax/chroma/formatters"
+	"github.com/colin3dmax/chroma/formatters/html"
+	"github.com/colin3dmax/chroma/lexers"
+	"github.com/colin3dmax/chroma/styles"
 )
 
 var (

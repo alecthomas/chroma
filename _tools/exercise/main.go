@@ -5,9 +5,9 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/alecthomas/chroma/formatters"
-	"github.com/alecthomas/chroma/lexers"
-	"github.com/alecthomas/chroma/styles"
+	"github.com/colin3dmax/chroma/formatters"
+	"github.com/colin3dmax/chroma/lexers"
+	"github.com/colin3dmax/chroma/styles"
 	"gopkg.in/alecthomas/kingpin.v3-unstable"
 )
 

@@ -1,7 +1,7 @@
 package styles
 
 import (
-	"github.com/alecthomas/chroma"
+	"github.com/colin3dmax/chroma"
 )
 
 // RainbowDash style.

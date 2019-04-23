@@ -1,9 +1,9 @@
 package s
 
 import (
-	. "github.com/alecthomas/chroma"                 // nolint
-	. "github.com/alecthomas/chroma/lexers/circular" // nolint
-	"github.com/alecthomas/chroma/lexers/internal"
+	. "github.com/colin3dmax/chroma"                 // nolint
+	. "github.com/colin3dmax/chroma/lexers/circular" // nolint
+	"github.com/colin3dmax/chroma/lexers/internal"
 )
 
 // Smarty lexer.

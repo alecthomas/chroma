@@ -1,4 +1,4 @@
-# Chroma — A general purpose syntax highlighter in pure Go [![Golang Documentation](https://godoc.org/github.com/alecthomas/chroma?status.svg)](https://godoc.org/github.com/alecthomas/chroma) [![Build Status](https://travis-ci.org/alecthomas/chroma.svg)](https://travis-ci.org/alecthomas/chroma) [![Gitter chat](https://badges.gitter.im/alecthomas.svg)](https://gitter.im/alecthomas/Lobby)
+# Chroma — A general purpose syntax highlighter in pure Go [![Golang Documentation](https://godoc.org/github.com/colin3dmax/chroma?status.svg)](https://godoc.org/github.com/colin3dmax/chroma) [![Build Status](https://travis-ci.org/alecthomas/chroma.svg)](https://travis-ci.org/alecthomas/chroma) [![Gitter chat](https://badges.gitter.im/alecthomas.svg)](https://gitter.im/alecthomas/Lobby)
 
 > **NOTE:** As Chroma has just been released, its API is still in flux. That said, the high-level interface should not change significantly.
 
@@ -62,9 +62,9 @@ displayed with `chroma --list`._
 ## Using the library
 
 Chroma, like Pygments, has the concepts of
-[lexers](https://github.com/alecthomas/chroma/tree/master/lexers),
-[formatters](https://github.com/alecthomas/chroma/tree/master/formatters) and
-[styles](https://github.com/alecthomas/chroma/tree/master/styles).
+[lexers](https://github.com/colin3dmax/chroma/tree/master/lexers),
+[formatters](https://github.com/colin3dmax/chroma/tree/master/formatters) and
+[styles](https://github.com/colin3dmax/chroma/tree/master/styles).
 
 Lexers convert source text into a stream of tokens, styles specify how token
 types are mapped to colours, and formatters convert tokens and styles into
@@ -197,7 +197,7 @@ python3 ~/Projects/chroma/_tools/pygments2chroma.py \
   && gofmt -s -w ~/Projects/chroma/lexers/*.go
 ```
 
-See notes in [pygments-lexers.go](https://github.com/alecthomas/chroma/blob/master/pygments-lexers.txt)
+See notes in [pygments-lexers.go](https://github.com/colin3dmax/chroma/blob/master/pygments-lexers.txt)
 for a list of lexers, and notes on some of the issues importing them.
 
 ### Formatters
@@ -213,7 +213,7 @@ Chroma styles use the [same syntax](http://pygments.org/docs/styles/) as Pygment
 
 All Pygments styles have been converted to Chroma using the `_tools/style.py` script.
 
-When you work with one of [Chroma's styles](https://github.com/alecthomas/chroma/tree/master/styles), know that the `chroma.Background` token type provides the default style for tokens. It does so by defining a foreground color and background color. 
+When you work with one of [Chroma's styles](https://github.com/colin3dmax/chroma/tree/master/styles), know that the `chroma.Background` token type provides the default style for tokens. It does so by defining a foreground color and background color. 
 
 For example, this gives each token name not defined in the style a default color of `#f8f8f8` and uses `#000000` for the highlighted code block's background:
 
@@ -230,7 +230,7 @@ For a quick overview of the available styles and how they look, check out the [C
 A command-line interface to Chroma is included. It can be installed with:
 
 ```sh
-go get -u github.com/alecthomas/chroma/cmd/chroma
+go get -u github.com/colin3dmax/chroma/cmd/chroma
 ```
 
 ## What's missing compared to Pygments?

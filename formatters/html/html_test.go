@@ -9,9 +9,9 @@ import (
 
 	"github.com/alecthomas/assert"
 
-	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/lexers"
-	"github.com/alecthomas/chroma/styles"
+	"github.com/colin3dmax/chroma"
+	"github.com/colin3dmax/chroma/lexers"
+	"github.com/colin3dmax/chroma/styles"
 )
 
 func TestCompressStyle(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/alecthomas/chroma"
+	"github.com/colin3dmax/chroma"
 )
 
 // TTY16m is a true-colour terminal formatter.

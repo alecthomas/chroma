@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/alecthomas/chroma"
+	"github.com/colin3dmax/chroma"
 )
 
 // JSON formatter outputs the raw token structures as JSON.

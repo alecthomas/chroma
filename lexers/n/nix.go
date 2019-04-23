@@ -3,8 +3,8 @@ package n
 import (
 	"strings"
 
-	. "github.com/alecthomas/chroma" // nolint
-	"github.com/alecthomas/chroma/lexers/internal"
+	. "github.com/colin3dmax/chroma" // nolint
+	"github.com/colin3dmax/chroma/lexers/internal"
 )
 
 // nixb matches right boundary of a nix word. Use it instead of \b.
