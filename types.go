@@ -44,8 +44,6 @@ const (
 	LineNumbersTable
 	// Line higlight style.
 	LineHighlight
-
-	VueAdd
 	// Line numbers table wrapper style.
 	LineTable
 	// Line numbers table TD wrapper style.
