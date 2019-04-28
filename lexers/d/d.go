@@ -25,8 +25,8 @@ var D = internal.Register(MustNewLexer(
 
 			// https://dlang.org/spec/lex.html#keywords
 			{`(asm|assert|body|break|case|cast|catch|continue|default|debug|delete|deprecated|do|else|finally|for|foreach|foreach_reverse|goto|if|in|invariant|is|macro|mixin|new|out|pragma|return|super|switch|this|throw|try|version|while|with)\b`, Keyword, nil},
-			{`__(FILE|FILE_FULL_PATH|MODULE|LINE|FUNCTION|PRETTY_FUNCTION|DATE|EOF|TIME|TIMESTAMP|VENDOR|VERSION)__\b`, Keyword, nil},
-			{`__(traits|vector|parameters)\b`, Keyword, nil},
+			{`__(FILE|FILE_FULL_PATH|MODULE|LINE|FUNCTION|PRETTY_FUNCTION|DATE|EOF|TIME|TIMESTAMP|VENDOR|VERSION)__\b`, NameBuiltin, nil},
+			{`__(traits|vector|parameters)\b`, NameBuiltin, nil},
 			{`((?:(?:[^\W\d]|\$)[\w.\[\]$<>]*\s+)+?)((?:[^\W\d]|\$)[\w$]*)(\s*)(\()`, ByGroups(UsingSelf("root"), NameFunction, Text, Operator), nil},
 
 			// https://dlang.org/spec/attribute.html#uda
