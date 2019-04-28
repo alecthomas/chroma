@@ -34,15 +34,16 @@ var D = internal.Register(MustNewLexer(
 			{`(abstract|auto|alias|align|const|delegate|enum|export|final|function|inout|lazy|nothrow|override|package|private|protected|public|pure|static|synchronized|template|volatile|__gshared)\b`, KeywordDeclaration, nil},
 
 			// https://dlang.org/spec/type.html#basic-data-types
-			{`(void|bool|byte|ubyte|short|ushort|int|uint|long|ulong|cent|ucent|float|double|real|ifloat|idouble|ireal|cfloat|cdouble|creal|char|wchar|dchar)\b`, KeywordType, nil},
+			{`(void|bool|byte|ubyte|short|ushort|int|uint|long|ulong|cent|ucent|float|double|real|ifloat|idouble|ireal|cfloat|cdouble|creal|char|wchar|dchar|string|wstring|dstring)\b`, KeywordType, nil},
 			{`(module)(\s+)`, ByGroups(KeywordNamespace, Text), Push("import")},
 			{`(true|false|null)\b`, KeywordConstant, nil},
 			{`(class|interface|struct|template|union)(\s+)`, ByGroups(KeywordDeclaration, Text), Push("class")},
 			{`(import)(\s+)`, ByGroups(KeywordNamespace, Text), Push("import")},
 
 			// https://dlang.org/spec/lex.html#string_literals
-			// TODO support more string literals
-			{`"(\\\\|\\"|[^"])*"`, LiteralString, nil},
+			// TODO support raw string literals (see go.go)
+			{`[qr]?"(\\\\|\\"|[^"])*"[cwd]?`, LiteralString, nil},
+			{"(`)([^`]*)(`)[cwd]?", LiteralString, nil},
 			{`'\\.'|'[^\\]'|'\\u[0-9a-fA-F]{4}'`, LiteralStringChar, nil},
 			{`(\.)((?:[^\W\d]|\$)[\w$]*)`, ByGroups(Operator, NameAttribute), nil},
 			{`^\s*([^\W\d]|\$)[\w$]*:`, NameLabel, nil},
