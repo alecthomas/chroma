@@ -1,0 +1,21 @@
+module foo;
+
+import std.stdio;
+
+class C {}
+
+/* comment1 */
+/+ comment2 +/
+@(1)
+@nogc
+int main() {
+    writeln(__FILE__);
+    auto s = r"hi"d;
+    auto w = `hi`w;
+    auto q = q{
+        auto w = `hi`w;
+    };
+    enum f = 1.2fi;
+    enum d = 0x1.FFFFFFFFFFFFFp1023;
+    return 0;
+}
