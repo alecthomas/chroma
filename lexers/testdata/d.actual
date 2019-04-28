@@ -9,6 +9,7 @@ class C {}
 @(1)
 @nogc
 int main() {
+    writeln(__FILE__);
     auto s = r"hi"d;
     auto w = `hi`w;
     auto q = q{

@@ -40,6 +40,12 @@
   {"type":"Operator","value":"{"},
   {"type":"Text","value":"\n    "},
 
+  {"type":"Name","value":"writeln"},
+  {"type":"Operator","value":"("},
+  {"type":"NameBuiltin","value":"__FILE__"},
+  {"type":"Operator","value":");"},
+  {"type":"Text","value":"\n    "},
+
   {"type":"KeywordDeclaration","value":"auto"},
   {"type":"Text","value":" "},
   {"type":"Name","value":"s"},
