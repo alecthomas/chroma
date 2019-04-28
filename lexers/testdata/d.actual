@@ -1,0 +1,9 @@
+module foo;
+
+class C {}
+
+/* comment1 */
+/+ comment2 +/
+int main() {
+    return 0;
+}
