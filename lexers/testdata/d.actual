@@ -9,5 +9,7 @@ class C {}
 @(1)
 @nogc
 int main() {
+    enum f = 1.2fi;
+    enum d = 0x1.FFFFFFFFFFFFFp1023;
     return 0;
 }

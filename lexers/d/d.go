@@ -5,7 +5,7 @@ import (
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
-// D lexer. See https://dlang.org/spec/lex.html
+// D lexer. https://dlang.org/spec/lex.html
 var D = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "D",
@@ -17,6 +17,7 @@ var D = internal.Register(MustNewLexer(
 	Rules{
 		"root": {
 			{`[^\S\n]+`, Text, nil},
+
 			// https://dlang.org/spec/lex.html#comment
 			{`//.*?\n`, CommentSingle, nil},
 			{`/\*.*?\*/`, CommentMultiline, nil},
@@ -30,20 +31,25 @@ var D = internal.Register(MustNewLexer(
 
 			// https://dlang.org/spec/attribute.html#uda
 			{`@[\w.]*`, NameDecorator, nil},
-			{`(abstract|auto|alias|align|const|delegate|enum|export|final|function|inout|lazy|nothrow|override|package|private|protected|public|pure|static|synchronized|volatile|__gshared)\b`, KeywordDeclaration, nil},
+			{`(abstract|auto|alias|align|const|delegate|enum|export|final|function|inout|lazy|nothrow|override|package|private|protected|public|pure|static|synchronized|template|volatile|__gshared)\b`, KeywordDeclaration, nil},
+
 			// https://dlang.org/spec/type.html#basic-data-types
 			{`(void|bool|byte|ubyte|short|ushort|int|uint|long|ulong|cent|ucent|float|double|real|ifloat|idouble|ireal|cfloat|cdouble|creal|char|wchar|dchar)\b`, KeywordType, nil},
 			{`(module)(\s+)`, ByGroups(KeywordNamespace, Text), Push("import")},
 			{`(true|false|null)\b`, KeywordConstant, nil},
-			{`(class|struct|interface|union)(\s+)`, ByGroups(KeywordDeclaration, Text), Push("class")},
-			{`(import(?:\s+static)?)(\s+)`, ByGroups(KeywordNamespace, Text), Push("import")},
+			{`(class|interface|struct|template|union)(\s+)`, ByGroups(KeywordDeclaration, Text), Push("class")},
+			{`(import)(\s+)`, ByGroups(KeywordNamespace, Text), Push("import")},
+
 			// https://dlang.org/spec/lex.html#string_literals
-			// TODO support raw string literals
+			// TODO support more string literals
 			{`"(\\\\|\\"|[^"])*"`, LiteralString, nil},
 			{`'\\.'|'[^\\]'|'\\u[0-9a-fA-F]{4}'`, LiteralStringChar, nil},
 			{`(\.)((?:[^\W\d]|\$)[\w$]*)`, ByGroups(Operator, NameAttribute), nil},
 			{`^\s*([^\W\d]|\$)[\w$]*:`, NameLabel, nil},
-			{`([0-9][0-9_]*\.([0-9][0-9_]*)?|\.[0-9][0-9_]*)([eE][+\-]?[0-9][0-9_]*)?[fFdD]?|[0-9][eE][+\-]?[0-9][0-9_]*[fFdD]?|[0-9]([eE][+\-]?[0-9][0-9_]*)?[fFdD]|0[xX]([0-9a-fA-F][0-9a-fA-F_]*\.?|([0-9a-fA-F][0-9a-fA-F_]*)?\.[0-9a-fA-F][0-9a-fA-F_]*)[pP][+\-]?[0-9][0-9_]*[fFdD]?`, LiteralNumberFloat, nil},
+
+			// https://dlang.org/spec/lex.html#floatliteral
+			{`([0-9][0-9_]*\.([0-9][0-9_]*)?|\.[0-9][0-9_]*)([eE][+\-]?[0-9][0-9_]*)?[fFL]?i?|[0-9][eE][+\-]?[0-9][0-9_]*[fFL]?|[0-9]([eE][+\-]?[0-9][0-9_]*)?[fFL]|0[xX]([0-9a-fA-F][0-9a-fA-F_]*\.?|([0-9a-fA-F][0-9a-fA-F_]*)?\.[0-9a-fA-F][0-9a-fA-F_]*)[pP][+\-]?[0-9][0-9_]*[fFL]?`, LiteralNumberFloat, nil},
+			// https://dlang.org/spec/lex.html#integerliteral
 			{`0[xX][0-9a-fA-F][0-9a-fA-F_]*[lL]?`, LiteralNumberHex, nil},
 			{`0[bB][01][01_]*[lL]?`, LiteralNumberBin, nil},
 			{`0[0-7_]+[lL]?`, LiteralNumberOct, nil},
