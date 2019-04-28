@@ -41,7 +41,7 @@ var D = internal.Register(MustNewLexer(
 			{`(import)(\s+)`, ByGroups(KeywordNamespace, Text), Push("import")},
 
 			// https://dlang.org/spec/lex.html#string_literals
-			// TODO support raw string literals (see go.go)
+			// TODO support delimited strings
 			{`[qr]?"(\\\\|\\"|[^"])*"[cwd]?`, LiteralString, nil},
 			{"(`)([^`]*)(`)[cwd]?", LiteralString, nil},
 			{`'\\.'|'[^\\]'|'\\u[0-9a-fA-F]{4}'`, LiteralStringChar, nil},
@@ -55,7 +55,7 @@ var D = internal.Register(MustNewLexer(
 			{`0[bB][01][01_]*[lL]?`, LiteralNumberBin, nil},
 			{`0[0-7_]+[lL]?`, LiteralNumberOct, nil},
 			{`0|[1-9][0-9_]*[lL]?`, LiteralNumberInteger, nil},
-			{`[~^*!%&\[\](){}<>|+=:;,./?-]`, Operator, nil},
+			{`([~^*!%&\[\](){}<>|+=:;,./?-]|q{)`, Operator, nil},
 			{`([^\W\d]|\$)[\w$]*`, Name, nil},
 			{`\n`, Text, nil},
 		},
