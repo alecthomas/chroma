@@ -21,12 +21,15 @@ var D = internal.Register(MustNewLexer(
 			{`//.*?\n`, CommentSingle, nil},
 			{`/\*.*?\*/`, CommentMultiline, nil},
 			{`/\+.*?\+/`, CommentMultiline, nil},
+
 			// https://dlang.org/spec/lex.html#keywords
 			{`(asm|assert|body|break|case|cast|catch|continue|default|debug|delete|deprecated|do|else|finally|for|foreach|foreach_reverse|goto|if|in|invariant|is|macro|mixin|new|out|pragma|return|super|switch|this|throw|try|version|while|with)\b`, Keyword, nil},
 			{`__(FILE|FILE_FULL_PATH|MODULE|LINE|FUNCTION|PRETTY_FUNCTION|DATE|EOF|TIME|TIMESTAMP|VENDOR|VERSION)__\b`, Keyword, nil},
 			{`__(traits|vector|parameters)\b`, Keyword, nil},
 			{`((?:(?:[^\W\d]|\$)[\w.\[\]$<>]*\s+)+?)((?:[^\W\d]|\$)[\w$]*)(\s*)(\()`, ByGroups(UsingSelf("root"), NameFunction, Text, Operator), nil},
-			{`@[^\W\d][\w.]*`, NameDecorator, nil},
+
+			// https://dlang.org/spec/attribute.html#uda
+			{`@[\w.]*`, NameDecorator, nil},
 			{`(abstract|auto|alias|align|const|delegate|enum|export|final|function|inout|lazy|nothrow|override|package|private|protected|public|pure|static|synchronized|volatile|__gshared)\b`, KeywordDeclaration, nil},
 			// https://dlang.org/spec/type.html#basic-data-types
 			{`(void|bool|byte|ubyte|short|ushort|int|uint|long|ulong|cent|ucent|float|double|real|ifloat|idouble|ireal|cfloat|cdouble|creal|char|wchar|dchar)\b`, KeywordType, nil},
@@ -34,6 +37,8 @@ var D = internal.Register(MustNewLexer(
 			{`(true|false|null)\b`, KeywordConstant, nil},
 			{`(class|struct|interface|union)(\s+)`, ByGroups(KeywordDeclaration, Text), Push("class")},
 			{`(import(?:\s+static)?)(\s+)`, ByGroups(KeywordNamespace, Text), Push("import")},
+			// https://dlang.org/spec/lex.html#string_literals
+			// TODO support raw string literals
 			{`"(\\\\|\\"|[^"])*"`, LiteralString, nil},
 			{`'\\.'|'[^\\]'|'\\u[0-9a-fA-F]{4}'`, LiteralStringChar, nil},
 			{`(\.)((?:[^\W\d]|\$)[\w$]*)`, ByGroups(Operator, NameAttribute), nil},

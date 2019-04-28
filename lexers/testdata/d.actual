@@ -1,9 +1,13 @@
 module foo;
 
+import std.stdio;
+
 class C {}
 
 /* comment1 */
 /+ comment2 +/
+@(1)
+@nogc
 int main() {
     return 0;
 }
