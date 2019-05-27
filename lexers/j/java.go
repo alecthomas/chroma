@@ -2,7 +2,7 @@ package j
 
 import (
 	. "github.com/alecthomas/chroma" // nolint
-	"github.com/chroma/lexers/internal"
+	"github.com/alecthomas/chroma/lexers/internal"
 )
 
 // Java lexer.
