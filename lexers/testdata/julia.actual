@@ -1,0 +1,6 @@
+% Implementing Feed Forward to calculate H
+
+m = size(X, 1);
+X = [ones(m, 1) X];
+Z2 = Theta1 * X';
+A2 = sigmoid(Z2);
