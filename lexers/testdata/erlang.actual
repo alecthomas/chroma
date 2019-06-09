@@ -1,0 +1,15 @@
+-module(repl).
+
+-export([run/0]).
+
+run() ->
+    read_eval_process().
+
+read_eval_process() ->
+    Line = io:get_line("> "),
+    Out = process_line(Line),
+    io:format("< ~s~n~n", [Out]),
+    read_eval_process().
+
+process_line(Line) ->
+    string:uppercase(Line).
