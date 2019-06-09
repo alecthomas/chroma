@@ -276,7 +276,7 @@ func (l *LexerState) Iterator() Token {
 		if !ok {
 			panic("unknown state " + l.State)
 		}
-		ruleIndex, rule, groups := matchRules(l.Text[l.Pos:], selectedRule)
+		ruleIndex, rule, groups := matchRules(l.Text, l.Pos, selectedRule)
 		// No match.
 		if groups == nil {
 			// From Pygments :\
@@ -363,7 +363,12 @@ func (r *RegexLexer) maybeCompile() (err error) {
 	for state, rules := range r.rules {
 		for i, rule := range rules {
 			if rule.Regexp == nil {
-				rule.Regexp, err = regexp2.Compile("^(?"+rule.flags+")(?:"+rule.Pattern+")", 0)
+				pattern := "(?:" + rule.Pattern + ")"
+				if rule.flags != "" {
+					pattern = "(?" + rule.flags + ")" + pattern
+				}
+				pattern = `\G` + pattern
+				rule.Regexp, err = regexp2.Compile(pattern, 0)
 				if err != nil {
 					return fmt.Errorf("failed to compile rule %s.%d: %s", state, i, err)
 				}
@@ -415,10 +420,10 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 	return state.Iterator, nil
 }
 
-func matchRules(text []rune, rules []*CompiledRule) (int, *CompiledRule, []string) {
+func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule, []string) {
 	for i, rule := range rules {
-		match, err := rule.Regexp.FindRunesMatch(text)
-		if match != nil && err == nil {
+		match, err := rule.Regexp.FindRunesMatchStartingAt(text, pos)
+		if match != nil && err == nil && match.Index == pos {
 			groups := []string{}
 			for _, g := range match.Groups() {
 				groups = append(groups, g.String())
