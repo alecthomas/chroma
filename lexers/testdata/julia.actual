@@ -1,6 +1,18 @@
-% Implementing Feed Forward to calculate H
+% Defining basic types
 
-m = size(X, 1);
-X = [ones(m, 1) X];
-Z2 = Theta1 * X';
-A2 = sigmoid(Z2);
+struct Value
+    v::Int
+end
+const r = 33
+
+A = zeros(3,3)
+B = rand(4,3)
+
+type = typeof(B)
+C = A * B'
+res = C' .+ r
+
+const abstract = 33
+abstract type K end
+
+primitive type MyFloat32 32 end
