@@ -1,6 +1,6 @@
 [
   {"type":"Name","value":"DriveInfo"},
-  {"type":"NameAttribute","value":"[]"},
+  {"type":"Punctuation","value":"[]"},
   {"type":"Text","value":" "},
   {"type":"Name","value":"drives"},
   {"type":"Text","value":" "},

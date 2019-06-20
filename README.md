@@ -33,28 +33,29 @@ Prefix | Language
 :----: | --------
 A | ABNF, ActionScript, ActionScript 3, Ada, Angular2, ANTLR, ApacheConf, APL, AppleScript, Arduino, Awk
 B | Ballerina, Base Makefile, Bash, Batchfile, BlitzBasic, BNF, Brainfuck
-C | C, C#, C++, Cassandra CQL, CFEngine3, cfstatement/ColdFusion, CMake, COBOL, CSS, Cap'n Proto, Ceylon, ChaiScript, Cheetah, Clojure, CoffeeScript, Common Lisp, Coq, Crystal, Cython
-D | Dart, Diff, Django/Jinja, Docker, DTD
+C | C, C#, C++, Cap'n Proto, Cassandra CQL, Ceylon, CFEngine3, cfstatement, ChaiScript, Cheetah, Clojure, CMake, COBOL, CoffeeScript, Common Lisp, Coq, Crystal, CSS, Cython
+D | D, Dart, Diff, Django/Jinja, Docker, DTD
 E | EBNF, Elixir, Elm, EmacsLisp, Erlang
 F | Factor, Fish, Forth, Fortran, FSharp
-G | GAS, GDScript, GLSL, Genshi, Genshi HTML, Genshi Text, Gnuplot, Go, Go HTML Template, Go Text Template, GraphQL, Groovy
-H | Handlebars, Haskell, Haxe, Hexdump, HTML, HTTP, Hy 
+G | GAS, GDScript, Genshi, Genshi HTML, Genshi Text, GLSL, Gnuplot, Go, Go HTML Template, Go Text Template, GraphQL, Groovy
+H | Handlebars, Haskell, Haxe, HCL, Hexdump, HTML, HTTP, Hy
 I | Idris, INI, Io
-J | Java, JavaScript, JSON, Jsx, Julia, Jungle
+J | Java, JavaScript, JSON, Julia, Jungle
 K | Kotlin
 L | Lighttpd configuration file, LLVM, Lua
-M | Mako, Markdown, Mason, Mathematica, MiniZinc, Modula-2, MonkeyC, MorrowindScript, Myghty, MySQL
+M | Mako, markdown, Mason, Mathematica, Matlab, MiniZinc, Modula-2, MonkeyC, MorrowindScript, Myghty, MySQL
 N | NASM, Newspeak, Nginx configuration file, Nim, Nix
 O | Objective-C, OCaml, Octave, OpenSCAD, Org Mode
-P | PacmanConf, Perl, PHP, Pig, PkgConfig, Plaintext, PL/pgSQL, PostgreSQL SQL dialect, PostScript, POVRay, PowerShell, Prolog, Protocol Buffer, Puppet, Python, Python 3
+P | PacmanConf, Perl, PHP, Pig, PkgConfig, PL/pgSQL, plaintext, PostgreSQL SQL dialect, PostScript, POVRay, PowerShell, Prolog, Protocol Buffer, Puppet, Python, Python 3
 Q | QBasic
-R | R, Racket, Ragel, reg, reStructuredText, Rexx, Ruby, Rust
-S | Sass, Scala, Scheme, Scilab, SCSS, Smalltalk, Smarty, Snobol, Solidity, SPARQL, SQL, SquidConf, Swift, systemd, Systemverilog
-T | TASM, Tcl, Tcsh, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData
-V | verilog, VHDL, VimL
+R | R, Racket, Ragel, react, reg, reStructuredText, Rexx, Ruby, Rust
+S | Sass, Scala, Scheme, Scilab, SCSS, Smalltalk, Smarty, Snobol, Solidity, SPARQL, SQL, SquidConf, Swift, SYSTEMD, systemverilog
+T | TASM, Tcl, Tcsh, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, Turing, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData
+V | VB.net, verilog, VHDL, VimL, vue
 W | WDTE
 X | XML, Xorg
 Y | YAML
+
 
 _I will attempt to keep this section up to date, but an authoritative list can be
 displayed with `chroma --list`._
