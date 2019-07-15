@@ -1,0 +1,7 @@
+items %>%
+	group_by(id) %>%
+	filter(n() > 2) %>%
+	mutate(count = n()) %>%
+	ungroup() %>%
+	distinct(id, .keep_all = TRUE)
+	write_csv("items.csv")
