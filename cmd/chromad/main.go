@@ -9,6 +9,8 @@ import (
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/alecthomas/kong"
+	"github.com/alecthomas/kong-hcl"
+	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
 
 	"github.com/alecthomas/chroma"
@@ -24,10 +26,6 @@ var (
 	htmlTemplate = template.Must(template.New("html").Parse(templateFiles.MustString("index.html.tmpl")))
 )
 
-var cli struct {
-	Bind string `help:"HTTP bind address." default:"127.0.0.1:8080"`
-}
-
 type context struct {
 	Background       template.CSS
 	SelectedLanguage string
@@ -37,6 +35,7 @@ type context struct {
 	Text             string
 	HTML             template.HTML
 	Error            string
+	CSRFField        template.HTML
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -84,6 +83,7 @@ func contextFromRequest(r *http.Request) context {
 		SelectedLanguage: r.Form.Get("language"),
 		SelectedStyle:    r.Form.Get("style"),
 		Text:             r.Form.Get("text"),
+		CSRFField:        csrf.TemplateField(r),
 	}
 	if err != nil {
 		ctx.Error = err.Error()
@@ -104,13 +104,25 @@ func contextFromRequest(r *http.Request) context {
 }
 
 func main() {
-	ctx := kong.Parse(&cli)
+	var cli struct {
+		Config  kong.ConfigFlag `help:"Load configuration." placeholder:"FILE"`
+		Bind    string          `help:"HTTP bind address." default:"127.0.0.1:8080"`
+		CSRFKey string          `help:"CSRF key." default:""`
+	}
+	ctx := kong.Parse(&cli, kong.Configuration(konghcl.Loader))
+
 	log.Println("Starting")
 
 	router := mux.NewRouter()
 	router.Handle("/", http.HandlerFunc(handler))
 	router.Handle("/static/{file:.*}", http.StripPrefix("/static/", http.FileServer(staticFiles.HTTPBox())))
 
-	err := http.ListenAndServe(cli.Bind, router)
+	options := []csrf.Option{}
+	if cli.CSRFKey == "" {
+		options = append(options, csrf.Secure(false))
+	}
+	CSRF := csrf.Protect([]byte(cli.CSRFKey), options...)
+
+	err := http.ListenAndServe(cli.Bind, CSRF(router))
 	ctx.FatalIfErrorf(err)
 }
