@@ -89,7 +89,7 @@ func render(req *renderRequest) (*renderResponse, error) {
 		language = lexers.Fallback
 	}
 
-	tokens, err := language.Tokenise(nil, req.Text)
+	tokens, err := chroma.Coalesce(language).Tokenise(nil, req.Text)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func render(req *renderRequest) (*renderResponse, error) {
 	buf := &strings.Builder{}
 	options := []html.Option{}
 	if req.Classes {
-		options = append(options, html.WithClasses())
+		options = append(options, html.WithClasses(), html.Standalone())
 	}
 	formatter := html.New(options...)
 	err = formatter.Format(buf, style, tokens)
