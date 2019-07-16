@@ -9,7 +9,7 @@
     }
 
     #output {
-    {{.Background}}
+      {{.Background}}
     }
 
     #output pre {
@@ -20,7 +20,7 @@
 </head>
 <body>
 <div class="container">
-  {{if .Error}}<div class="notification">{{.Error}}</div>{{end}}
+  <div class="notification is-hidden"></div>
 
   <h1 class="title">Chroma Playground</h1>
 
@@ -31,7 +31,7 @@
         <label class="label">Language</label>
         <div class="control">
           <div class="select">
-            <select name="language">
+            <select name="language" id="language">
               <option value="" disabled{{if eq "" $.SelectedLanguage}} selected{{end}}>Language</option>
               {{- range .Languages}}
                 <option value="{{.}}"{{if eq . $.SelectedLanguage}} selected{{end}}>{{.}}</option>
@@ -45,7 +45,7 @@
         <label class="label">Style</label>
         <div class="control">
           <div class="select">
-            <select name="style">
+            <select name="style" id="style">
               <option value="" disabled{{if eq "" $.SelectedStyle}} selected{{end}}>Style</option>
               {{- range .Styles}}
                 <option value="{{.}}"{{if eq . $.SelectedStyle}} selected{{end}}>{{.}}</option>
@@ -59,22 +59,20 @@
     <div class="field">
       <label class="label">Code</label>
       <div class="control">
-        <textarea class="textarea" name="text" rows="25" cols="80">{{.Text}}</textarea>
+        <textarea class="textarea" id="text" name="text" rows="25" cols="80"></textarea>
       </div>
     </div>
 
     <div class="field">
       <div class="control">
-        <button class="button is-link">Submit</button>
+        <button type="submit" class="button is-link">Submit</button>
       </div>
     </div>
 
     <hr>
 
     <label class="label">Output</label>
-    <div class="field box" id="output">
-      {{.HTML}}
-    </div>
+    <div class="field box" id="output"></div>
   </form>
 </div>
 </body>

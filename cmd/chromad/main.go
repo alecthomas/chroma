@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
@@ -32,63 +33,91 @@ type context struct {
 	Languages        []string
 	SelectedStyle    string
 	Styles           []string
-	Text             string
-	HTML             template.HTML
-	Error            string
 	CSRFField        template.HTML
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	ctx := contextFromRequest(r)
-	style := styles.Get(ctx.SelectedStyle)
-	if style == nil {
-		style = styles.Fallback
+func index(w http.ResponseWriter, r *http.Request) {
+	ctx := newContext(r)
+	err := htmlTemplate.Execute(w, &ctx)
+	if err != nil {
+		panic(err)
 	}
-	ctx.Background = template.CSS(html.StyleEntryToCSS(style.Get(chroma.Background)))
+}
 
-	language := lexers.Get(ctx.SelectedLanguage)
+type renderRequest struct {
+	Language string `json:"language"`
+	Style    string `json:"style"`
+	Text     string `json:"text"`
+}
+
+type renderResponse struct {
+	Error      string `json:"error,omitempty"`
+	HTML       string `json:"html,omitempty"`
+	Language   string `json:"language,omitempty"`
+	Background string `json:"background,omitempty"`
+}
+
+func renderHandler(w http.ResponseWriter, r *http.Request) {
+	req := &renderRequest{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	var rep *renderResponse
+	if err != nil {
+		rep = &renderResponse{Error: err.Error()}
+	} else {
+		rep, err = render(req)
+		if err != nil {
+			rep = &renderResponse{Error: err.Error()}
+		}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(rep)
+}
+
+func render(req *renderRequest) (*renderResponse, error) {
+	language := lexers.Get(req.Language)
 	if language == nil {
-		language = lexers.Analyse(ctx.Text)
+		language = lexers.Analyse(req.Text)
 		if language != nil {
-			ctx.SelectedLanguage = language.Config().Name
+			req.Language = language.Config().Name
 		}
 	}
 	if language == nil {
 		language = lexers.Fallback
 	}
 
-	tokens, err := language.Tokenise(nil, ctx.Text)
+	tokens, err := language.Tokenise(nil, req.Text)
 	if err != nil {
-		ctx.Error = err.Error()
-	} else {
-		buf := &strings.Builder{}
-		formatter := html.New()
-		err = formatter.Format(buf, style, tokens)
-		if err != nil {
-			ctx.Error = err.Error()
-		} else {
-			ctx.HTML = template.HTML(buf.String()) // nolint: gosec
-		}
+		return nil, err
 	}
 
-	err = htmlTemplate.Execute(w, &ctx)
-	if err != nil {
-		panic(err)
+	style := styles.Get(req.Style)
+	if style == nil {
+		style = styles.Fallback
 	}
+
+	buf := &strings.Builder{}
+	formatter := html.New()
+	err = formatter.Format(buf, style, tokens)
+	if err != nil {
+		return nil, err
+	}
+	return &renderResponse{
+		Language:   language.Config().Name,
+		HTML:       buf.String(),
+		Background: html.StyleEntryToCSS(style.Get(chroma.Background)),
+	}, nil
 }
 
-func contextFromRequest(r *http.Request) context {
-	err := r.ParseForm()
+func newContext(r *http.Request) context {
 	ctx := context{
-		SelectedLanguage: r.Form.Get("language"),
-		SelectedStyle:    r.Form.Get("style"),
-		Text:             r.Form.Get("text"),
-		CSRFField:        csrf.TemplateField(r),
+		SelectedStyle: "monokailight",
+		CSRFField:     csrf.TemplateField(r),
 	}
-	if err != nil {
-		ctx.Error = err.Error()
-		return ctx
+	style := styles.Get(ctx.SelectedStyle)
+	if style == nil {
+		style = styles.Fallback
 	}
+	ctx.Background = template.CSS(html.StyleEntryToCSS(style.Get(chroma.Background)))
 	if ctx.SelectedStyle == "" {
 		ctx.SelectedStyle = "monokailight"
 	}
@@ -114,8 +143,9 @@ func main() {
 	log.Println("Starting")
 
 	router := mux.NewRouter()
-	router.Handle("/", http.HandlerFunc(handler))
-	router.Handle("/static/{file:.*}", http.StripPrefix("/static/", http.FileServer(staticFiles.HTTPBox())))
+	router.Handle("/", http.HandlerFunc(index)).Methods("GET")
+	router.Handle("/api/render", http.HandlerFunc(renderHandler))
+	router.Handle("/static/{file:.*}", http.StripPrefix("/static/", http.FileServer(staticFiles.HTTPBox()))).Methods("GET")
 
 	options := []csrf.Option{}
 	if cli.CSRFKey == "" {
