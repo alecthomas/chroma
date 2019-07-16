@@ -11,6 +11,13 @@ document.addEventListener("DOMContentLoaded", function () {
     var output = document.getElementById("output");
     var htmlCheckbox = document.getElementById("html");
 
+    (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+        $notification = $delete.parentNode;
+        $delete.addEventListener('click', () => {
+            $notification.parentNode.removeChild($notification);
+        });
+    });
+
     function debounce(func, wait, immediate) {
         var timeout;
         return function () {
