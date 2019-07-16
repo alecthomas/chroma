@@ -140,7 +140,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			ctx.Error = err.Error()
 		} else {
-			ctx.HTML = template.HTML(buf.String())
+			ctx.HTML = template.HTML(buf.String()) // nolint: gosec
 		}
 	}
 
