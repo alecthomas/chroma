@@ -10,6 +10,8 @@
 
     #output {
       {{.Background}}
+
+      overflow-x: scroll;
     }
 
     #output pre {
@@ -63,15 +65,17 @@
       </div>
     </div>
 
-    <div class="field">
-      <div class="control">
-        <button type="submit" class="button is-link">Submit</button>
-      </div>
-    </div>
-
     <hr>
 
-    <label class="label">Output</label>
+    <label class="checkbox is-pulled-right">
+      <input name="html" id="html" type="checkbox">
+      Show HTML
+    </label>
+
+    <label class="label">
+      Output
+    </label>
+
     <div class="field box" id="output"></div>
   </form>
 </div>

@@ -10,6 +10,7 @@ require (
 	github.com/danwakefield/fnmatch v0.0.0-20160403171240-cbb64ac3d964
 	github.com/dlclark/regexp2 v1.1.6
 	github.com/gorilla/csrf v1.6.0
+	github.com/gorilla/handlers v1.4.1
 	github.com/gorilla/mux v1.7.3
 	github.com/mattn/go-colorable v0.0.9
 	github.com/mattn/go-isatty v0.0.4

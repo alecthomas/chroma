@@ -12,6 +12,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/alecthomas/kong-hcl"
 	"github.com/gorilla/csrf"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 
 	"github.com/alecthomas/chroma"
@@ -48,6 +49,7 @@ type renderRequest struct {
 	Language string `json:"language"`
 	Style    string `json:"style"`
 	Text     string `json:"text"`
+	Classes  bool   `json:"classes"`
 }
 
 type renderResponse struct {
@@ -96,13 +98,21 @@ func render(req *renderRequest) (*renderResponse, error) {
 	}
 
 	buf := &strings.Builder{}
-	formatter := html.New()
+	options := []html.Option{}
+	if req.Classes {
+		options = append(options, html.WithClasses())
+	}
+	formatter := html.New(options...)
 	err = formatter.Format(buf, style, tokens)
 	if err != nil {
 		return nil, err
 	}
+	lang := language.Config().Name
+	if language == lexers.Fallback {
+		lang = ""
+	}
 	return &renderResponse{
-		Language:   language.Config().Name,
+		Language:   lang,
 		HTML:       buf.String(),
 		Background: html.StyleEntryToCSS(style.Get(chroma.Background)),
 	}, nil
@@ -151,8 +161,9 @@ func main() {
 	if cli.CSRFKey == "" {
 		options = append(options, csrf.Secure(false))
 	}
-	CSRF := csrf.Protect([]byte(cli.CSRFKey), options...)
 
-	err := http.ListenAndServe(cli.Bind, CSRF(router))
+	root := handlers.CORS()(csrf.Protect([]byte(cli.CSRFKey), options...)(router))
+
+	err := http.ListenAndServe(cli.Bind, root)
 	ctx.FatalIfErrorf(err)
 }

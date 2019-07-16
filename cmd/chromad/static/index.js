@@ -5,9 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var form = document.getElementById('chroma');
     var textArea = form.elements["text"];
+    var styleSelect = form.elements["style"];
+    var languageSelect = form.elements["language"];
     var csrfToken = form.elements["gorilla.csrf.Token"].value;
-    var elms = document.getElementsByTagName("select");
     var output = document.getElementById("output");
+    var htmlCheckbox = document.getElementById("html");
 
     function debounce(func, wait, immediate) {
         var timeout;
@@ -22,52 +24,58 @@ document.addEventListener("DOMContentLoaded", function () {
             timeout = setTimeout(later, wait);
             if (callNow) func.apply(context, args);
         };
-    };
+    }
 
     function getFormJSON() {
         return {
-            "language": document.getElementById("language").value,
-            "style": document.getElementById("style").value,
-            "text": document.getElementById("text").value,
+            "language": languageSelect.value,
+            "style": styleSelect.value,
+            "text": textArea.value,
+            "classes": htmlCheckbox.checked,
         }
     }
 
     function update(event) {
         fetch("api/render", {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors', // no-cors, cors, *same-origin
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
             headers: {
                 'X-CSRF-Token': csrfToken,
                 'Content-Type': 'application/json',
-                // 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            redirect: 'follow', // manual, *follow, error
-            referrer: 'no-referrer', // no-referrer, *client
+            redirect: 'follow',
+            referrer: 'no-referrer',
             body: JSON.stringify(getFormJSON()),
-
         }).then(data => {
             data.json().then(
                 value => {
+                    if (value.language) {
+                        languageSelect.value = value.language;
+                    }
                     style.innerHTML = "#output { " + value.background + "}";
-                    output.innerHTML = value.html;
+                    if (htmlCheckbox.checked) {
+                        output.innerText = value.html;
+                    } else {
+                        output.innerHTML = value.html;
+                    }
                 }
             );
         }).catch(reason => {
             console.log(reason);
-        })
+        });
 
         event.preventDefault();
     }
 
     var eventHandler = (event) => update(event);
-    for (e of elms) {
-        e.addEventListener('change', eventHandler);
-    }
-    form.addEventListener('submit', eventHandler);
-
     var debouncedEventHandler = debounce(eventHandler, 250);
+
+    languageSelect.addEventListener('change', eventHandler);
+    styleSelect.addEventListener('change', eventHandler);
+    htmlCheckbox.addEventListener('change', eventHandler);
+
     textArea.addEventListener('input', debouncedEventHandler);
-    textArea.addEventListener('change', debouncedEventHandler)
+    textArea.addEventListener('change', debouncedEventHandler);
 });
