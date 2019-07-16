@@ -7,7 +7,9 @@ import (
 	"sort"
 	"strings"
 
+	rice "github.com/GeertJohan/go.rice"
 	"github.com/alecthomas/kong"
+	"github.com/gorilla/mux"
 
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters/html"
@@ -15,86 +17,12 @@ import (
 	"github.com/alecthomas/chroma/styles"
 )
 
-var htmlTemplate = template.Must(template.New("html").Parse(`
-<!doctype html>
-<html>
-<head>
-	<title>Chroma Playground</title>
-    <!-- other stuff here -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" />
-	<style>
-		textarea {
-			font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
-		}
-		#output {
-			{{.Background}}
-		}
-		#output pre {
-			padding: 0;
-		}
-	</style>
-</head>
-<body>
-<div class="container">
-	{{if .Error}}<div class="notification">{{.Error}}</div>{{end}}
+var (
+	templateFiles = rice.MustFindBox("templates")
+	staticFiles   = rice.MustFindBox("static")
 
-<h1 class="title">Chroma Playground</h1>
-
-<form method="post">
-	<div class="columns">
-		<div class="column field">
-			<label class="label">Language</label>
-			<div class="control">
-				<div class="select">
-					<select name="language">
-						<option value="" disabled{{if eq "" $.SelectedLanguage}} selected{{end}}>Language</option>
-					{{- range .Languages}}
-						<option value="{{.}}"{{if eq . $.SelectedLanguage}} selected{{end}}>{{.}}</option>
-					{{end -}}
-					</select>
-				</div>
-			</div>
-		</div>
-
-		<div class="column field">
-			<label class="label">Style</label>
-			<div class="control">
-				<div class="select">
-					<select name="style">
-						<option value="" disabled{{if eq "" $.SelectedStyle}} selected{{end}}>Style</option>
-					{{- range .Styles}}
-						<option value="{{.}}"{{if eq . $.SelectedStyle}} selected{{end}}>{{.}}</option>
-					{{end -}}
-					</select>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="field">
-		<label class="label">Code</label>
-		<div class="control">
-			<textarea class="textarea" name="text" rows="25" cols="80">{{.Text}}</textarea>
-		</div>
-	</div>
-
-	<div class="field">
-		<div class="control">
-			<button class="button is-link">Submit</button>
-		</div>
-	</div>
-
-	<hr>
-
-	<label class="label">Output</label>
-	<div class="field box" id="output">
-		{{.HTML}}
-	</div>
-</form>
-</div>
-</body>
-</html>
-`))
+	htmlTemplate = template.Must(template.New("html").Parse(templateFiles.MustString("index.html.tmpl")))
+)
 
 var cli struct {
 	Bind string `help:"HTTP bind address." default:"127.0.0.1:8080"`
@@ -178,6 +106,11 @@ func contextFromRequest(r *http.Request) context {
 func main() {
 	ctx := kong.Parse(&cli)
 	log.Println("Starting")
-	err := http.ListenAndServe(cli.Bind, http.HandlerFunc(handler))
+
+	router := mux.NewRouter()
+	router.Handle("/", http.HandlerFunc(handler))
+	router.Handle("/static/{file:.*}", http.StripPrefix("/static/", http.FileServer(staticFiles.HTTPBox())))
+
+	err := http.ListenAndServe(cli.Bind, router)
 	ctx.FatalIfErrorf(err)
 }

@@ -8,25 +8,29 @@ highlighted HTML, ANSI-coloured text, etc.
 Chroma is based heavily on [Pygments](http://pygments.org/), and includes
 translators for Pygments lexers and styles.
 
+<a id="markdown-table-of-contents" name="table-of-contents"></a>
 ## Table of Contents
 
-<!-- MarkdownTOC -->
+<!-- TOC -->
 
-1. [Supported languages](#supported-languages)
-1. [Using the library](#using-the-library)
+1. [Table of Contents](#table-of-contents)
+2. [Supported languages](#supported-languages)
+3. [Try it](#try-it)
+4. [Using the library](#using-the-library)
     1. [Quick start](#quick-start)
-    1. [Identifying the language](#identifying-the-language)
-    1. [Formatting the output](#formatting-the-output)
-    1. [The HTML formatter](#the-html-formatter)
-1. [More detail](#more-detail)
+    2. [Identifying the language](#identifying-the-language)
+    3. [Formatting the output](#formatting-the-output)
+    4. [The HTML formatter](#the-html-formatter)
+5. [More detail](#more-detail)
     1. [Lexers](#lexers)
-    1. [Formatters](#formatters)
-    1. [Styles](#styles)
-1. [Command-line interface](#command-line-interface)
-1. [What's missing compared to Pygments?](#whats-missing-compared-to-pygments)
+    2. [Formatters](#formatters)
+    3. [Styles](#styles)
+6. [Command-line interface](#command-line-interface)
+7. [What's missing compared to Pygments?](#whats-missing-compared-to-pygments)
 
-<!-- /MarkdownTOC -->
+<!-- /TOC -->
 
+<a id="markdown-supported-languages" name="supported-languages"></a>
 ## Supported languages
 
 Prefix | Language
@@ -60,6 +64,12 @@ Y | YAML
 _I will attempt to keep this section up to date, but an authoritative list can be
 displayed with `chroma --list`._
 
+<a id="markdown-try-it" name="try-it"></a>
+## Try it
+
+Try out various languages and styles on the [Chroma Playground](https://swapoff.org/chroma/playground/).
+
+<a id="markdown-using-the-library" name="using-the-library"></a>
 ## Using the library
 
 Chroma, like Pygments, has the concepts of
@@ -80,6 +90,7 @@ In all cases, if a lexer, formatter or style can not be determined, `nil` will
 be returned. In this situation you may want to default to the `Fallback`
 value in each respective package, which provides sane defaults.
 
+<a id="markdown-quick-start" name="quick-start"></a>
 ### Quick start
 
 A convenience function exists that can be used to simply format some source
@@ -89,6 +100,7 @@ text, without any effort:
 err := quick.Highlight(os.Stdout, someSourceCode, "go", "html", "monokai")
 ```
 
+<a id="markdown-identifying-the-language" name="identifying-the-language"></a>
 ### Identifying the language
 
 To highlight code, you'll first have to identify what language the code is
@@ -128,6 +140,7 @@ token types into a single token:
 lexer = chroma.Coalesce(lexer)
 ```
 
+<a id="markdown-formatting-the-output" name="formatting-the-output"></a>
 ### Formatting the output
 
 Once a language is identified you will need to pick a formatter and a style (theme).
@@ -156,6 +169,7 @@ And finally, format the tokens from the iterator:
 err := formatter.Format(w, style, iterator)
 ```
 
+<a id="markdown-the-html-formatter" name="the-html-formatter"></a>
 ### The HTML formatter
 
 By default the `html` registered formatter generates standalone HTML with
@@ -179,8 +193,10 @@ formatter := html.New(html.WithClasses())
 err := formatter.WriteCSS(w, style)
 ```
 
+<a id="markdown-more-detail" name="more-detail"></a>
 ## More detail
 
+<a id="markdown-lexers" name="lexers"></a>
 ### Lexers
 
 See the [Pygments documentation](http://pygments.org/docs/lexerdevelopment/)
@@ -201,6 +217,7 @@ python3 ~/Projects/chroma/_tools/pygments2chroma.py \
 See notes in [pygments-lexers.go](https://github.com/alecthomas/chroma/blob/master/pygments-lexers.txt)
 for a list of lexers, and notes on some of the issues importing them.
 
+<a id="markdown-formatters" name="formatters"></a>
 ### Formatters
 
 Chroma supports HTML output, as well as terminal output in 8 colour, 256 colour, and true-colour.
@@ -208,13 +225,14 @@ Chroma supports HTML output, as well as terminal output in 8 colour, 256 colour,
 A `noop` formatter is included that outputs the token text only, and a `tokens`
 formatter outputs raw tokens. The latter is useful for debugging lexers.
 
+<a id="markdown-styles" name="styles"></a>
 ### Styles
 
 Chroma styles use the [same syntax](http://pygments.org/docs/styles/) as Pygments.
 
 All Pygments styles have been converted to Chroma using the `_tools/style.py` script.
 
-When you work with one of [Chroma's styles](https://github.com/alecthomas/chroma/tree/master/styles), know that the `chroma.Background` token type provides the default style for tokens. It does so by defining a foreground color and background color. 
+When you work with one of [Chroma's styles](https://github.com/alecthomas/chroma/tree/master/styles), know that the `chroma.Background` token type provides the default style for tokens. It does so by defining a foreground color and background color.
 
 For example, this gives each token name not defined in the style a default color of `#f8f8f8` and uses `#000000` for the highlighted code block's background:
 
@@ -226,6 +244,7 @@ Also, token types in a style file are hierarchical. For instance, when `CommentS
 
 For a quick overview of the available styles and how they look, check out the [Chroma Style Gallery](https://xyproto.github.io/splash/docs/).
 
+<a id="markdown-command-line-interface" name="command-line-interface"></a>
 ## Command-line interface
 
 A command-line interface to Chroma is included. It can be installed with:
@@ -234,6 +253,7 @@ A command-line interface to Chroma is included. It can be installed with:
 go get -u github.com/alecthomas/chroma/cmd/chroma
 ```
 
+<a id="markdown-whats-missing-compared-to-pygments" name="whats-missing-compared-to-pygments"></a>
 ## What's missing compared to Pygments?
 
 - Quite a few lexers, for various reasons (pull-requests welcome):

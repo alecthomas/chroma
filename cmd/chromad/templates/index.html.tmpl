@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+  <title>Chroma Playground</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"/>
+  <style>
+    textarea {
+      font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+    }
+
+    #output {
+    {{.Background}}
+    }
+
+    #output pre {
+      padding: 0;
+    }
+  </style>
+  <script src="static/index.js"></script>
+</head>
+<body>
+<div class="container">
+  {{if .Error}}<div class="notification">{{.Error}}</div>{{end}}
+
+  <h1 class="title">Chroma Playground</h1>
+
+  <form id="chroma" method="post">
+    <div class="columns">
+      <div class="column field">
+        <label class="label">Language</label>
+        <div class="control">
+          <div class="select">
+            <select name="language">
+              <option value="" disabled{{if eq "" $.SelectedLanguage}} selected{{end}}>Language</option>
+              {{- range .Languages}}
+                <option value="{{.}}"{{if eq . $.SelectedLanguage}} selected{{end}}>{{.}}</option>
+              {{- end}}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="column field">
+        <label class="label">Style</label>
+        <div class="control">
+          <div class="select">
+            <select name="style">
+              <option value="" disabled{{if eq "" $.SelectedStyle}} selected{{end}}>Style</option>
+              {{- range .Styles}}
+                <option value="{{.}}"{{if eq . $.SelectedStyle}} selected{{end}}>{{.}}</option>
+              {{- end}}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Code</label>
+      <div class="control">
+        <textarea class="textarea" name="text" rows="25" cols="80">{{.Text}}</textarea>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="control">
+        <button class="button is-link">Submit</button>
+      </div>
+    </div>
+
+    <hr>
+
+    <label class="label">Output</label>
+    <div class="field box" id="output">
+      {{.HTML}}
+    </div>
+  </form>
+</div>
+</body>
+</html>
