@@ -154,7 +154,7 @@ func main() {
 
 	router := mux.NewRouter()
 	router.Handle("/", http.HandlerFunc(index)).Methods("GET")
-	router.Handle("/api/render", http.HandlerFunc(renderHandler))
+	router.Handle("/api/render", http.HandlerFunc(renderHandler)).Methods("POST")
 	router.Handle("/static/{file:.*}", http.StripPrefix("/static/", http.FileServer(staticFiles.HTTPBox()))).Methods("GET")
 
 	options := []csrf.Option{}
