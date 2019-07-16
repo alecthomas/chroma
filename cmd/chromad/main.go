@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -35,6 +36,7 @@ type context struct {
 	SelectedStyle    string
 	Styles           []string
 	CSRFField        template.HTML
+	Version          string
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -122,6 +124,7 @@ func newContext(r *http.Request) context {
 	ctx := context{
 		SelectedStyle: "monokailight",
 		CSRFField:     csrf.TemplateField(r),
+		Version:       fmt.Sprintf("%d", staticFiles.Time().Unix()),
 	}
 	style := styles.Get(ctx.SelectedStyle)
 	if style == nil {
