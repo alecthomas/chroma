@@ -4,8 +4,8 @@ github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38 h1:smF2tmSOzy2Mm
 github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38/go.mod h1:r7bzyVFMNntcxPZXK3/+KdruV1H5KSlyVY0gc+NgInI=
 github.com/alecthomas/colour v0.0.0-20160524082231-60882d9e2721 h1:JHZL0hZKJ1VENNfmXvHbgYlbUOvpzYzvy2aZU5gXVeo=
 github.com/alecthomas/colour v0.0.0-20160524082231-60882d9e2721/go.mod h1:QO9JBoKquHd+jz9nshCh40fOfO+JzsoXy8qTHF68zU0=
-github.com/alecthomas/go.rice v1.0.1-0.20190717012239-da52ca60cf1c h1:wloPd9/qXt1IEPTOxv5B5Gau1NKN1JGNkcQmN5Qx7Yw=
-github.com/alecthomas/go.rice v1.0.1-0.20190717012239-da52ca60cf1c/go.mod h1:af5vUNlDNkCjOZeSGFgIJxDje9qdjsO6hshx0gTmZt4=
+github.com/alecthomas/go.rice v1.0.1-0.20190717041731-572a5da3dff8 h1:PyEz5JLcmLYoi+1CegL90Wm5qfx9pl62D/DeNRnmkdU=
+github.com/alecthomas/go.rice v1.0.1-0.20190717041731-572a5da3dff8/go.mod h1:af5vUNlDNkCjOZeSGFgIJxDje9qdjsO6hshx0gTmZt4=
 github.com/alecthomas/kong v0.1.13/go.mod h1:0m2VYms8rH0qbCqVB2gvGHk74bqLIq0HXjCs5bNbNQU=
 github.com/alecthomas/kong v0.1.15 h1:IWBg+KrLvoHBicD50OzMI8fKjrtAa1okMR9g38HVM/s=
 github.com/alecthomas/kong v0.1.15/go.mod h1:0m2VYms8rH0qbCqVB2gvGHk74bqLIq0HXjCs5bNbNQU=

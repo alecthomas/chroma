@@ -19,4 +19,4 @@ require (
 	golang.org/x/sys v0.0.0-20181128092732-4ed8d59d0b35 // indirect
 )
 
-replace github.com/GeertJohan/go.rice => github.com/alecthomas/go.rice v1.0.1-0.20190717012239-da52ca60cf1c
+replace github.com/GeertJohan/go.rice => github.com/alecthomas/go.rice v1.0.1-0.20190717041731-572a5da3dff8
