@@ -44,9 +44,9 @@ command, for Go.
 		Check      bool             `help:"Do not format, check for tokenization errors instead."`
 		Filename   string           `help:"Filename to use for selecting a lexer when reading from stdin."`
 
-		Lexer     string `help:"Lexer to use when formatting." placeholder:"autodetect" short:"l"`
-		Style     string `help:"Style to use for formatting." default:"swapoff" short:"s"`
-		Formatter string `help:"Formatter to use." default:"terminal" short:"f"`
+		Lexer     string `help:"Lexer to use when formatting." default:"autodetect" short:"l" enum:"${lexers}"`
+		Style     string `help:"Style to use for formatting." default:"swapoff" short:"s" enum:"${styles}"`
+		Formatter string `help:"Formatter to use." default:"terminal" short:"f" enum:"${formatters}"`
 
 		JSON bool `help:"Output JSON representation of tokens."`
 
@@ -79,7 +79,10 @@ func (n *nopFlushableWriter) Flush() error { return nil }
 
 func main() {
 	ctx := kong.Parse(&cli, kong.Description(description), kong.Vars{
-		"version": fmt.Sprintf("%s-%s-%s", version, commit, date),
+		"version":    fmt.Sprintf("%s-%s-%s", version, commit, date),
+		"lexers":     "autodetect," + strings.Join(lexers.Names(true), ","),
+		"styles":     strings.Join(styles.Names(), ","),
+		"formatters": strings.Join(formatters.Names(), ","),
 	})
 	if cli.List {
 		listAll()
@@ -246,7 +249,7 @@ func lex(ctx *kong.Context, path string, contents string) chroma.Iterator {
 }
 
 func selexer(path, contents string) (lexer chroma.Lexer) {
-	if cli.Lexer != "" {
+	if cli.Lexer != "autodetect" {
 		return lexers.Get(cli.Lexer)
 	}
 	if path != "" {
