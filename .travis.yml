@@ -6,5 +6,5 @@ script:
   - ./bin/golangci-lint run
   - git clean -fdx .
 after_success:
-  go get github.com/goreleaser/goreleaser && goreleaser
+  curl -sL https://git.io/goreleaser | bash && goreleaser
 
