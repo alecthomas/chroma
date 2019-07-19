@@ -11,7 +11,7 @@ import (
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/alecthomas/kong"
-	"github.com/alecthomas/kong-hcl"
+	konghcl "github.com/alecthomas/kong-hcl"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"

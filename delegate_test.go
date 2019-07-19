@@ -100,6 +100,7 @@ func TestDelegate(t *testing.T) {
 	lang, root := makeDelegationTestLexers()
 	delegate := DelegatingLexer(root, lang)
 	for _, test := range testdata {
+		// nolint: scopelint
 		t.Run(test.name, func(t *testing.T) {
 			it, err := delegate.Tokenise(nil, test.source)
 			assert.NoError(t, err)
