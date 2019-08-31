@@ -1,3 +1,26 @@
+#include "a"
+#include <b>
+
+[[nodiscard]] void foo() noexcept;
+void foo();
+
+constexpr class {} a;
+
+enum class E { A, B };
+enum class [[nodiscard]] E { A, B };
+
+enum class {
+  a, b,
+  c,
+} e;
+
+enum E { A, B };
+
+class A {
+  void foo();
+  void bar();
+};
+
 int main() {
-    return 0;
+    return 0 + 1'3 + 1.4;
 }
