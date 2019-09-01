@@ -174,6 +174,9 @@ func entryToEscapeSequence(table *ttyTable, entry chroma.StyleEntry) string {
 	if entry.Underline == chroma.Yes {
 		out += "\033[4m"
 	}
+	if entry.Italic == chroma.Yes {
+		out += "\033[3m"
+	}
 	if entry.Colour.IsSet() {
 		out += table.foreground[findClosest(table, entry.Colour)]
 	}
