@@ -1,0 +1,24 @@
+#pragma rtGlobals=3
+
+#include "someFile"
+
+StrConstant myConstString="abcd"
+// some comment
+Constant myConst=123
+
+static Structure struct1
+	string str
+	variable var
+EndStructure
+
+Function/WAVE myFunction(var)
+	Variable var
+
+	Make/N=(var) test
+
+	return test
+End
+
+#ifdef NOT_DEFINED
+	// conditional compilation
+#endif
