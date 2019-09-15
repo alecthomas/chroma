@@ -5,11 +5,7 @@
   },
   {
     "type": "Text",
-    "value": " rtGlobals=3\n"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
+    "value": " rtGlobals=3\n\n"
   },
   {
     "type": "NameDecorator",
@@ -25,11 +21,7 @@
   },
   {
     "type": "Text",
-    "value": "\n"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
+    "value": "\n\n"
   },
   {
     "type": "KeywordType",
@@ -44,7 +36,7 @@
     "value": "\"abcd\""
   },
   {
-    "type": "Error",
+    "type": "Text",
     "value": "\n"
   },
   {
@@ -52,7 +44,7 @@
     "value": "// some comment"
   },
   {
-    "type": "Error",
+    "type": "Text",
     "value": "\n"
   },
   {
@@ -61,11 +53,7 @@
   },
   {
     "type": "Text",
-    "value": " myConst=123\n"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
+    "value": " myConst=123\n\n"
   },
   {
     "type": "KeywordReserved",
@@ -81,15 +69,7 @@
   },
   {
     "type": "Text",
-    "value": " struct1"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
-  },
-  {
-    "type": "Text",
-    "value": "\t"
+    "value": " struct1\n\t"
   },
   {
     "type": "KeywordType",
@@ -97,15 +77,7 @@
   },
   {
     "type": "Text",
-    "value": " str"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
-  },
-  {
-    "type": "Text",
-    "value": "\t"
+    "value": " str\n\t"
   },
   {
     "type": "KeywordType",
@@ -113,11 +85,7 @@
   },
   {
     "type": "Text",
-    "value": " var"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
+    "value": " var\n"
   },
   {
     "type": "KeywordReserved",
@@ -125,11 +93,7 @@
   },
   {
     "type": "Text",
-    "value": "\n"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
+    "value": "\n\n"
   },
   {
     "type": "KeywordReserved",
@@ -145,15 +109,7 @@
   },
   {
     "type": "Text",
-    "value": " myFunction(var)"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
-  },
-  {
-    "type": "Text",
-    "value": "\t"
+    "value": " myFunction(var)\n\t"
   },
   {
     "type": "KeywordType",
@@ -161,15 +117,7 @@
   },
   {
     "type": "Text",
-    "value": " var\n"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
-  },
-  {
-    "type": "Text",
-    "value": "\t"
+    "value": " var\n\n\t"
   },
   {
     "type": "NameClass",
@@ -177,15 +125,7 @@
   },
   {
     "type": "Text",
-    "value": "/N=(var) test\n"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
-  },
-  {
-    "type": "Text",
-    "value": "\t"
+    "value": "/N=(var) test\n\n\t"
   },
   {
     "type": "Keyword",
@@ -193,11 +133,7 @@
   },
   {
     "type": "Text",
-    "value": " test"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
+    "value": " test\n"
   },
   {
     "type": "KeywordReserved",
@@ -205,11 +141,7 @@
   },
   {
     "type": "Text",
-    "value": "\n"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
+    "value": "\n\n"
   },
   {
     "type": "NameDecorator",
@@ -217,22 +149,14 @@
   },
   {
     "type": "Text",
-    "value": " NOT_DEFINED"
-  },
-  {
-    "type": "Error",
-    "value": "\n"
-  },
-  {
-    "type": "Text",
-    "value": "\t"
+    "value": " NOT_DEFINED\n\t"
   },
   {
     "type": "CommentSingle",
     "value": "// conditional compilation"
   },
   {
-    "type": "Error",
+    "type": "Text",
     "value": "\n"
   },
   {

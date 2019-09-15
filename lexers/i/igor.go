@@ -26,6 +26,7 @@ var Igor = internal.Register(MustNewLexer(
 			{`^#(include|pragma|define|undef|ifdef|ifndef|if|elif|else|endif)`, NameDecorator, nil},
 			{`[^a-z"/]+$`, Text, nil},
 			{`.`, Text, nil},
+			{`\n|\r`, Text, nil},
 		},
 	},
 ))
