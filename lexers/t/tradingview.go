@@ -5,7 +5,7 @@ import (
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
-// TradingView lexer.
+// TradingView lexer
 var TradingView = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "TradingView",
@@ -30,7 +30,7 @@ var TradingView = internal.Register(MustNewLexer(
 			{`\b(bool|color|cross|dayofmonth|dayofweek|float|hour|input|int|label|line|minute|month|na|offset|second|strategy|string|tickerid|time|tr|vwap|weekofyear|year)(\()`, ByGroups(NameFunction, Text), nil}, // functions that can also be variable
 			{`(accdist|adjustment\.(dividends|none|splits)|aqua|area|areabr|bar_index|black|blue|bool|circles|close|columns|currency\.(AUD|CAD|CHF|EUR|GBP|HKD|JPY|NOK|NONE|NZD|RUB|SEK|SGD|TRY|USD|ZAR)|color\.(aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|purple|red|silver|teal|white|yellow)|dashed|dotted|dayofweek\.(monday|tuesday|wednesday|thursday|friday|saturday|sunday)|extend\.(both|left|right|none)|float|format\.(inherit|price|volume)|friday|fuchsia|gray|green|high|histogram|hl2|hlc3|hline\.style_(dotted|solid|dashed)|input\.(bool|float|integer|resolution|session|source|string|symbol)|integer|interval|isdaily|isdwm|isintraday|ismonthly|isweekly|label\.style_(arrowdown|arrowup|circle|cross|diamond|flag|labeldown|labelup|none|square|triangledown|triangleup|xcross)|lime|line\.style_(dashed|dotted|solid|arrow_both|arrow_left|arrow_right)|linebr|location\.(abovebar|absolute|belowbar|bottom|top)|low|maroon|monday|n|navy|ohlc4|olive|open|orange|period|plot\.style_(area|areabr|circles|columns|cross|histogram|line|linebr|stepline)|purple|red|resolution|saturday|scale\.(left|none|right)|session|session\.(extended|regular)|silver|size\.(auto|huge|large|normal|small|tiny)|solid|source|stepline|string|sunday|symbol|syminfo\.(mintick|pointvalue|prefix|root|session|ticker|tickerid|timezone)|teal|thursday|ticker|timeframe\.(isdaily|isdwm|isintraday|ismonthly|isweekly|multiplier|period)|timenow|tuesday|volume|wednesday|white|yellow|strategy\.(cash|closedtrades|commission\.(cash_per_contract|cash_per_order|percent)|direction\.(all|long|short)|equity|eventrades|fixed|grossloss|grossprofit|initial_capital|long|losstrades|max_contracts_held_(all|long|short)|max_drawdown|netprofit|oca\.(cancel|none|reduce)|openprofit|opentrades|percent_of_equity|position_avg_price|position_entry_name|position_size|short|wintrades)|shape\.(arrowdown|arrowup|circle|cross|diamond|flag|labeldown|labelup|square|triangledown|triangleup|xcross)|barstate\.is(first|history|last|new|realtime)|barmerge\.(gaps_on|gaps_off|lookahead_on|lookahead_off)|xloc\.bar_(index|time)|yloc\.(abovebar|belowbar|price))\b`, NameVariable, nil},
 			{`(cross|dayofmonth|dayofweek|hour|minute|month|na|second|tickerid|time|tr|vwap|weekofyear|year)(\b[^\(])`, ByGroups(NameVariable, Text), nil}, // variables that can also be function
-			{`(int|float|bool|color|string|label|line)(\b[^\(=.])`, ByGroups(KeywordType, Text), nil}, // types that can also be a function
+			{`(int|float|bool|color|string|label|line)(\b[^\(=.])`, ByGroups(KeywordType, Text), nil},                                                      // types that can also be a function
 			{`(var)\b`, KeywordType, nil},
 			{`(true|false)\b`, KeywordConstant, nil},
 			{`(and|or|not|if|else|for|to)\b`, OperatorWord, nil},
