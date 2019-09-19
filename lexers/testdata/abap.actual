@@ -1,0 +1,62 @@
+*&---------------------------------------------------------------------*
+*& Report  /WUE/AUFGABE_PRIMZAHL
+*&
+*&---------------------------------------------------------------------*
+*& Anmerkung: um bei einer Zahl entscheiden zu können, ob diese eine Primzahl ist,
+*&            genügt es die Primzahlen zu prüfen die kleiner gleich der Würzel der Zahl sind
+*&
+*&---------------------------------------------------------------------*
+REPORT /wue/aufgabe_primzahl.
+
+
+PARAMETERS p_range TYPE i.
+
+"Tabelle in der alle gefundenen Primzahlen gespeichert werden, die kleiner gleich
+"der Würzel der eingegebenen Zahl sind
+DATA gt_prim_num TYPE TABLE OF i.
+
+"Diese Variable dient dazu, alle Zahlen <= der eingegebenen Zahl und >= 2 aufzustellen
+DATA g_number    TYPE i VALUE 1.
+
+"Diese Variable dient dazu, zu sagen, ob die aktuelle g_number eine Primzahl ist oder nicht
+DATA g_is_prime  TYPE abap_bool.
+
+"mit sqrt( zahl1 ) kann die Quadratwurzel der Zahl1 berechnet werden
+DATA(g_sqrt_range) = sqrt( p_range ).
+
+
+
+"da die zu prüfenden Zahlen bei der 2 beginnend durch Addition von 1 aufgestellt werden
+"muss die Schleife lediglich p_range - 1 male durchlaufen werden
+DO p_range - 1 TIMES.
+
+  "zählt die zu prüfende Zahlen hoch
+  ADD 1 TO g_number.
+
+  "grundsätzlich wird solange, bis es nicht widerlegt ist angenommen, dass g_number eine Primzahl ist
+  g_is_prime = abap_true.
+
+  "Jede Zahl die in der Tabelle gt_prim_num enthalten ist wird geprüft, ob g_number durch diese ohne Rest teilbar ist
+  LOOP AT gt_prim_num ASSIGNING FIELD-SYMBOL(<g_prim>).
+
+    "Durch Zahl1 MOD Zahl2 kann der Rest, der bei Zahl1 / Zahl2 herauskommt ermittelt werden
+    "Sobald dieser bei g_number / <g_prim> 0 ist, handelt es sich bei g_number um keine Primzahl und somit muss diese nicht
+    "weiter überprüft werden, folglich kann die Loop-Schleife mit EXIT verlassen werden
+    IF g_number MOD <g_prim> = 0.
+      g_is_prime = abap_false.
+      EXIT.
+    ENDIF.
+
+  ENDLOOP.
+
+  "Wenn nicht widerlegt werden konnte, dass g_number eine Primzahl ist, wird diese ausgegeben
+  IF g_is_prime = abap_true.
+
+    "Wenn die neu gefundene Primzahl <= g_sqrt_range, wird diese in die Tabelle gt_prim_num eingefügt (Erklärung siehe Anmerkung)
+    IF g_number <= g_sqrt_range.
+      INSERT g_number INTO TABLE gt_prim_num.
+    ENDIF.
+    WRITE g_number.
+  ENDIF.
+
+ENDDO.
