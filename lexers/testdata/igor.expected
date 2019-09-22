@@ -1,0 +1,170 @@
+[
+  {
+    "type": "NameDecorator",
+    "value": "#pragma"
+  },
+  {
+    "type": "Text",
+    "value": " rtGlobals=3\n\n"
+  },
+  {
+    "type": "NameDecorator",
+    "value": "#include"
+  },
+  {
+    "type": "Text",
+    "value": " "
+  },
+  {
+    "type": "LiteralString",
+    "value": "\"someFile\""
+  },
+  {
+    "type": "Text",
+    "value": "\n\n"
+  },
+  {
+    "type": "KeywordType",
+    "value": "StrConstant"
+  },
+  {
+    "type": "Text",
+    "value": " myConstString="
+  },
+  {
+    "type": "LiteralString",
+    "value": "\"abcd\""
+  },
+  {
+    "type": "Text",
+    "value": "\n"
+  },
+  {
+    "type": "CommentSingle",
+    "value": "// some comment"
+  },
+  {
+    "type": "Text",
+    "value": "\n"
+  },
+  {
+    "type": "KeywordType",
+    "value": "Constant"
+  },
+  {
+    "type": "Text",
+    "value": " myConst=123\n\n"
+  },
+  {
+    "type": "KeywordReserved",
+    "value": "static"
+  },
+  {
+    "type": "Text",
+    "value": " "
+  },
+  {
+    "type": "KeywordReserved",
+    "value": "Structure"
+  },
+  {
+    "type": "Text",
+    "value": " struct1\n\t"
+  },
+  {
+    "type": "KeywordType",
+    "value": "string"
+  },
+  {
+    "type": "Text",
+    "value": " str\n\t"
+  },
+  {
+    "type": "KeywordType",
+    "value": "variable"
+  },
+  {
+    "type": "Text",
+    "value": " var\n"
+  },
+  {
+    "type": "KeywordReserved",
+    "value": "EndStructure"
+  },
+  {
+    "type": "Text",
+    "value": "\n\n"
+  },
+  {
+    "type": "KeywordReserved",
+    "value": "Function"
+  },
+  {
+    "type": "Text",
+    "value": "/"
+  },
+  {
+    "type": "KeywordType",
+    "value": "WAVE"
+  },
+  {
+    "type": "Text",
+    "value": " myFunction(var)\n\t"
+  },
+  {
+    "type": "KeywordType",
+    "value": "Variable"
+  },
+  {
+    "type": "Text",
+    "value": " var\n\n\t"
+  },
+  {
+    "type": "NameClass",
+    "value": "Make"
+  },
+  {
+    "type": "Text",
+    "value": "/N=(var) test\n\n\t"
+  },
+  {
+    "type": "Keyword",
+    "value": "return"
+  },
+  {
+    "type": "Text",
+    "value": " test\n"
+  },
+  {
+    "type": "KeywordReserved",
+    "value": "End"
+  },
+  {
+    "type": "Text",
+    "value": "\n\n"
+  },
+  {
+    "type": "NameDecorator",
+    "value": "#ifdef"
+  },
+  {
+    "type": "Text",
+    "value": " NOT_DEFINED\n\t"
+  },
+  {
+    "type": "CommentSingle",
+    "value": "// conditional compilation"
+  },
+  {
+    "type": "Text",
+    "value": "\n"
+  },
+  {
+    "type": "NameDecorator",
+    "value": "#endif"
+  },
+  {
+    "type": "Text",
+    "value": "\n"
+  }
+]
