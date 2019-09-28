@@ -64,6 +64,8 @@ command, for Go.
 		HTMLBaseLine              int    `help:"Base line number." default:"1"`
 		HTMLPreventSurroundingPre bool   `help:"Prevent the surrounding pre tag."`
 
+		SVG bool `help:"Output SVG representation of tokens."`
+
 		Files []string `arg:"" optional:"" help:"Files to highlight." type:"existingfile"`
 	}
 )
@@ -121,6 +123,10 @@ func main() {
 
 	if cli.HTML {
 		cli.Formatter = "html"
+	}
+
+	if cli.SVG {
+		cli.Formatter = "svg"
 	}
 
 	// Retrieve user-specified style, clone it, and add some overrides.

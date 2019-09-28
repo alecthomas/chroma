@@ -6,6 +6,7 @@ import (
 
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters/html"
+	"github.com/alecthomas/chroma/formatters/svg"
 )
 
 var (
@@ -20,6 +21,7 @@ var (
 	}))
 	// Default HTML formatter outputs self-contained HTML.
 	htmlFull = Register("html", html.New(html.Standalone(), html.WithClasses())) // nolint
+	Svg      = Register("svg", svg.New())
 )
 
 // Fallback formatter.
