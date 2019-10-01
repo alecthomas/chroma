@@ -10,10 +10,27 @@ Run the tests as normal:
 go test ./lexers
 ```
 
-## Updating the existing tests
+## Update existing tests
+When you add a new test data file (`*.actual`), you need to regenerate all tests. That's how Chroma creates the `*.expected` test file based on the corresponding lexer.
 
-You can regenerate all the test outputs
+To regenerate all tests, type in your terminal:
 
 ```go
 RECORD=true go test ./lexers
 ```
+
+This first sets the `RECORD` environment variable to `true`. Then it runs `go test` on the `./lexers` directory of the Chroma project.
+
+(That environment variable tells Chroma it needs to output test data. After running `go test ./lexers` you can remove or reset that variable.)
+
+### Windows users
+Windows users will find that the `RECORD=true go test ./lexers` command fails in both the standard command prompt terminal and in PowerShell.
+
+Instead we have to perform both steps separately:
+
+- Set the `RECORD` environment variable to `true`.
+	+ In PowerShell, you can use the `$env:RECORD = 'true'` command for that. See [this article](https://mcpmag.com/articles/2019/03/28/environment-variables-in-powershell.aspx) for more.
+	+ For the regular command prompt window, you can create the environment variable in Windows by hand in the computer settings. See [this article](https://www.computerhope.com/issues/ch000549.htm) for how.
+- When the environment variable is set, run `go tests ./lexers`.
+
+Chroma will now regenerate the test files and print its results to the console window.
