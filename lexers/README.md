@@ -29,8 +29,9 @@ Windows users will find that the `RECORD=true go test ./lexers` command fails in
 Instead we have to perform both steps separately:
 
 - Set the `RECORD` environment variable to `true`.
+	+ In the regular command prompt window, the `set` command sets an environment variable for the current session: `set RECORD=true`. See [this page](https://superuser.com/questions/212150/how-to-set-env-variable-in-windows-cmd-line) for more.
 	+ In PowerShell, you can use the `$env:RECORD = 'true'` command for that. See [this article](https://mcpmag.com/articles/2019/03/28/environment-variables-in-powershell.aspx) for more.
-	+ For the regular command prompt window, you can create the environment variable in Windows by hand in the computer settings. See [this article](https://www.computerhope.com/issues/ch000549.htm) for how.
+	+ You can also make a persistent environment variable by hand in the Windows computer settings. See [this article](https://www.computerhope.com/issues/ch000549.htm) for how.
 - When the environment variable is set, run `go tests ./lexers`.
 
 Chroma will now regenerate the test files and print its results to the console window.
