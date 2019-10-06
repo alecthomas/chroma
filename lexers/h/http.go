@@ -38,7 +38,6 @@ func httpContentBlock(groups []string, lexer Lexer) Iterator {
 		{Generic, groups[0]},
 	}
 	return Literator(tokens...)
-
 }
 
 func httpHeaderBlock(groups []string, lexer Lexer) Iterator {
@@ -123,9 +122,7 @@ func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (
 					return EOF
 				}
 			}
-
 		}
 		return token
-
 	}, nil
 }

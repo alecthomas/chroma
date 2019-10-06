@@ -1,3 +1,4 @@
+// Package svg contains an SVG formatter.
 package svg
 
 import (

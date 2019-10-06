@@ -9,9 +9,9 @@ import (
 var Bibtex = internal.Register(MustNewLexer(
 	&Config{
 		Name:            "BibTeX",
-		Aliases:         []string{"bib", "bibtex",},
-		Filenames:       []string{"*.bib",},
-		MimeTypes:       []string{"text/x-bibtex",},
+		Aliases:         []string{"bib", "bibtex"},
+		Filenames:       []string{"*.bib"},
+		MimeTypes:       []string{"text/x-bibtex"},
 		NotMultiline:    true,
 		CaseInsensitive: true,
 	},
