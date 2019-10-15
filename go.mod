@@ -20,3 +20,5 @@ require (
 )
 
 replace github.com/GeertJohan/go.rice => github.com/alecthomas/go.rice v1.0.1-0.20190719113735-961b99d742e7
+
+go 1.13

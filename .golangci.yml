@@ -17,6 +17,7 @@ linters:
     - gochecknoglobals
     - funlen
     - godox
+    - wsl
 
 linters-settings:
   govet:

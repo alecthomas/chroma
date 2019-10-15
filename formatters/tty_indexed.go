@@ -200,12 +200,24 @@ func findClosest(table *ttyTable, seeking chroma.Colour) chroma.Colour {
 }
 
 func styleToEscapeSequence(table *ttyTable, style *chroma.Style) map[chroma.TokenType]string {
+	style = clearBackground(style)
 	out := map[chroma.TokenType]string{}
 	for _, ttype := range style.Types() {
 		entry := style.Get(ttype)
 		out[ttype] = entryToEscapeSequence(table, entry)
 	}
 	return out
+}
+
+// Clear the background colour.
+func clearBackground(style *chroma.Style) *chroma.Style {
+	builder := style.Builder()
+	bg := builder.Get(chroma.Background)
+	bg.Background = 0
+	bg.NoInherit = true
+	builder.AddEntry(chroma.Background, bg)
+	style, _ = builder.Build()
+	return style
 }
 
 type indexedTTYFormatter struct {

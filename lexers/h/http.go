@@ -65,7 +65,7 @@ func httpBodyContentTypeLexer(lexer Lexer) Lexer { return &httpBodyContentTyper{
 
 type httpBodyContentTyper struct{ Lexer }
 
-func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
+func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint: gocognit
 	var contentType string
 	var isContentType bool
 	var subIterator Iterator

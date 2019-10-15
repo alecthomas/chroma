@@ -255,7 +255,7 @@ func (l *LexerState) Get(key interface{}) interface{} {
 }
 
 // Iterator returns the next Token from the lexer.
-func (l *LexerState) Iterator() Token {
+func (l *LexerState) Iterator() Token { // nolint: gocognit
 	for l.Pos < len(l.Text) && len(l.Stack) > 0 {
 		// Exhaust the iterator stack, if any.
 		for len(l.iteratorStack) > 0 {
