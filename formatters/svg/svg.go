@@ -33,7 +33,8 @@ func EmbedFontFile(fontFamily string, fileName string) (option Option, err error
 		return nil, errors.New("unexpected font file suffix")
 	}
 
-	if content, err := ioutil.ReadFile(fileName); err == nil {
+	var content []byte
+	if content, err = ioutil.ReadFile(fileName); err == nil {
 		option = EmbedFont(fontFamily, base64.StdEncoding.EncodeToString(content), format)
 	}
 	return
