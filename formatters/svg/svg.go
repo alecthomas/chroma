@@ -91,7 +91,7 @@ func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens []chroma.T
 
 	fmt.Fprint(w, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
 	fmt.Fprint(w, "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n")
-	fmt.Fprintf(w, "<svg height=\"%d\" xmlns=\"http://www.w3.org/2000/svg\">\n", len(lines)*22)
+	fmt.Fprintf(w, "<svg width=\"%dpx\" height=\"%dpx\" xmlns=\"http://www.w3.org/2000/svg\">\n", 8*maxLineWidth(lines), 10+int(16.8*float64(len(lines)+1)))
 
 	if f.embeddedFont != "" {
 		f.writeFontStyle(w)
@@ -103,7 +103,7 @@ func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens []chroma.T
 	f.writeTokenBackgrounds(w, lines, style)
 
 	for index, tokens := range lines {
-		fmt.Fprintf(w, "<text x=\"0\" y=\"%d\" xml:space=\"preserve\">", (14+7)*(index+1))
+		fmt.Fprintf(w, "<text x=\"0\" y=\"%fem\" xml:space=\"preserve\">", 1.2*float64(index+1))
 
 		for _, token := range tokens {
 			text := escapeString(token.String())
@@ -120,6 +120,20 @@ func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens []chroma.T
 	fmt.Fprint(w, "</svg>\n")
 }
 
+func maxLineWidth(lines [][]chroma.Token) int {
+	maxWidth := 0
+	for _, tokens := range lines {
+		length := 0
+		for _, token := range tokens {
+			length += len(strings.Replace(token.String(), `	`, "    ", -1))
+		}
+		if length > maxWidth {
+			maxWidth = length
+		}
+	}
+	return maxWidth
+}
+
 // There is no background attribute for text in SVG so simply calculate the position and text
 // of tokens with a background color that differs from the default and add a rectangle for each before
 // adding the token.
@@ -130,7 +144,7 @@ func (f *Formatter) writeTokenBackgrounds(w io.Writer, lines [][]chroma.Token, s
 			length := len(strings.Replace(token.String(), `	`, "    ", -1))
 			tokenBackground := style.Get(token.Type).Background
 			if tokenBackground.IsSet() && tokenBackground != style.Get(chroma.Background).Background {
-				fmt.Fprintf(w, "<rect id=\"%s\" x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"%s\" />\n", escapeString(token.String()), lineLength*8, (14+7)*index+7, length*8, 14, style.Get(token.Type).Background.String())
+				fmt.Fprintf(w, "<rect id=\"%s\" x=\"%dch\" y=\"%fem\" width=\"%dch\" height=\"1.2em\" fill=\"%s\" />\n", escapeString(token.String()), lineLength, 1.2*float64(index)+0.25, length, style.Get(token.Type).Background.String())
 			}
 			lineLength += length
 		}
