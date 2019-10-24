@@ -1,5 +1,6 @@
 [
-  {"type":"KeywordNamespace","value":" "},
+  {"type":"KeywordNamespace","value":"import"},
+  {"type":"Text","value":" "},
   {"type":"NameNamespace","value":"ballerina"},
   {"type":"Operator","value":"/"},
   {"type":"Name","value":"http"},

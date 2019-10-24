@@ -2,7 +2,6 @@ package html
 
 import (
 	"bytes"
-	"errors"
 	"io/ioutil"
 	"strings"
 	"testing"
@@ -48,14 +47,6 @@ func TestSplitTokensIntoLines(t *testing.T) {
 	}
 	actual := chroma.SplitTokensIntoLines(in)
 	assert.Equal(t, expected, actual)
-}
-
-func TestIteratorPanicRecovery(t *testing.T) {
-	it := func() chroma.Token {
-		panic(errors.New("bad"))
-	}
-	err := New().Format(ioutil.Discard, styles.Fallback, it)
-	assert.Error(t, err)
 }
 
 func TestFormatterStyleToCSS(t *testing.T) {

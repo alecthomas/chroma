@@ -62,11 +62,6 @@ type Formatter struct {
 }
 
 func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Iterator) (err error) {
-	defer func() {
-		if perr := recover(); perr != nil {
-			err = perr.(error)
-		}
-	}()
 	f.writeSVG(w, style, iterator.Tokens())
 	return err
 }
