@@ -3,7 +3,7 @@ package c_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/alecthomas/assert"
 
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/lexers/c"
@@ -17,7 +17,7 @@ double c =     0011111111010011001100110011001100110011001100110011001100110011;
 double a + b = 0011111111010011001100110011001100110011001100110011001100110100; // Note that this is not quite equal to the "canonical" 0.3!a
 `
 	it, err := c.CPP.Tokenise(nil, input)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	for {
 		token := it()
 		if token == chroma.EOF {

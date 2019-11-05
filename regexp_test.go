@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/alecthomas/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestNewlineAtEndOfFile(t *testing.T) {
@@ -40,7 +39,7 @@ func TestMatchingAtStart(t *testing.T) {
 	}))
 	it, err := l.Tokenise(nil, `-module ->`)
 	assert.NoError(t, err)
-	require.Equal(t,
+	assert.Equal(t,
 		[]Token{{Punctuation, "-"}, {NameEntity, "module"}, {Whitespace, " "}, {Operator, "->"}},
 		it.Tokens())
 }

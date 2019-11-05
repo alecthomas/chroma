@@ -1,0 +1,26 @@
+package example;
+
+import com.oracle.svm.core.annotate.Alias;
+import com.oracle.svm.core.annotate.RecomputeFieldValue;
+import com.oracle.svm.core.annotate.Targetclass;
+
+@TargetClass(className = "io.netty.util.internal.cleanerJava6")
+final class TargetCleanerJava6 {
+    @Alias
+    @RecomputeFieldValue(kind = RecomputeFieldValue.Kind.Fieldoffset, declClassName = "java.nio.DirectBy")
+    private static long CLEANER_FIELD_OFFSET;
+}
+
+@TargetClass(className = "io.netty.util.internal.PlatformDependent0")
+final class TargetPlatformDependent0 {
+    @Alias
+    @RecomputeFieldValue(kind = RecomputeFieldValue.Kind.Fieldoffset, declClassName = "java.nio.Buffer", rest = "IDK")
+    private static long ADDRESS_FIELD_OFFSET;
+}
+
+@TargetClass(io.netty.util.internal.shaded.org.jctools.util.UnsafeRefArrayAccess.class)
+final class TargetUnsafeRefArrayAccess {
+    @Alias
+    @RecomputeFieldValue(kind = RecomputeFieldValue.Kind.ArrayIndexShift, declClass = Object[].class)
+    public static int REF_ELEMENT_SHIFT;
+}
