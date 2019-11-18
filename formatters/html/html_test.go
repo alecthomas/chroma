@@ -2,6 +2,7 @@ package html
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"strings"
 	"testing"
@@ -105,4 +106,54 @@ func TestTableLineNumberNewlines(t *testing.T) {
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span>`)
+}
+
+func TestWithPreWrapper(t *testing.T) {
+	wrapper := preWrapper{
+		start: func(code bool, styleAttr string) string {
+			return fmt.Sprintf("<foo%s id=\"code-%t\">", styleAttr, code)
+		},
+		end: func(code bool) string {
+			return fmt.Sprintf("</foo>")
+		},
+	}
+
+	format := func(f *Formatter) string {
+		it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+		assert.NoError(t, err)
+
+		var buf bytes.Buffer
+		err = f.Format(&buf, styles.Fallback, it)
+		assert.NoError(t, err)
+
+		return buf.String()
+	}
+
+	t.Run("Regular", func(t *testing.T) {
+		s := format(New(WithClasses()))
+		assert.Equal(t, s, `<pre class="chroma"><span class="nb">echo</span> FOO</pre>`)
+	})
+
+	t.Run("PreventSurroundingPre", func(t *testing.T) {
+		s := format(New(PreventSurroundingPre(), WithClasses()))
+		assert.Equal(t, s, `<span class="nb">echo</span> FOO`)
+	})
+
+	t.Run("Wrapper", func(t *testing.T) {
+		s := format(New(WithPreWrapper(wrapper), WithClasses()))
+		assert.Equal(t, s, `<foo class="chroma" id="code-true"><span class="nb">echo</span> FOO</foo>`)
+	})
+
+	t.Run("Wrapper, LineNumbersInTable", func(t *testing.T) {
+		s := format(New(WithPreWrapper(wrapper), WithClasses(), WithLineNumbers(), LineNumbersInTable()))
+
+		assert.Equal(t, s, `<div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<foo class="chroma" id="code-false"><span class="lnt">1
+</span></foo></td>
+<td class="lntd">
+<foo class="chroma" id="code-true"><span class="nb">echo</span> FOO</foo></td></tr></table>
+</div>
+`)
+	})
 }
