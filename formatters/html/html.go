@@ -14,21 +14,25 @@ import (
 type Option func(f *Formatter)
 
 // Standalone configures the HTML formatter for generating a standalone HTML document.
-func Standalone() Option { return func(f *Formatter) { f.standalone = true } }
+func Standalone(b bool) Option { return func(f *Formatter) { f.standalone = b } }
 
 // ClassPrefix sets the CSS class prefix.
 func ClassPrefix(prefix string) Option { return func(f *Formatter) { f.prefix = prefix } }
 
 // WithClasses emits HTML using CSS classes, rather than inline styles.
-func WithClasses() Option { return func(f *Formatter) { f.Classes = true } }
+func WithClasses(b bool) Option { return func(f *Formatter) { f.Classes = b } }
 
 // TabWidth sets the number of characters for a tab. Defaults to 8.
 func TabWidth(width int) Option { return func(f *Formatter) { f.tabWidth = width } }
 
-// PreventSurroundingPre prevents the surrounding pre tags around the generated code
-func PreventSurroundingPre() Option {
+// PreventSurroundingPre prevents the surrounding pre tags around the generated code.
+func PreventSurroundingPre(b bool) Option {
 	return func(f *Formatter) {
-		f.preWrapper = nopPreWrapper
+		if b {
+			f.preWrapper = nopPreWrapper
+		} else {
+			f.preWrapper = defaultPreWrapper
+		}
 	}
 }
 
@@ -40,17 +44,17 @@ func WithPreWrapper(wrapper PreWrapper) Option {
 }
 
 // WithLineNumbers formats output with line numbers.
-func WithLineNumbers() Option {
+func WithLineNumbers(b bool) Option {
 	return func(f *Formatter) {
-		f.lineNumbers = true
+		f.lineNumbers = b
 	}
 }
 
 // LineNumbersInTable will, when combined with WithLineNumbers, separate the line numbers
 // and code in table td's, which make them copy-and-paste friendly.
-func LineNumbersInTable() Option {
+func LineNumbersInTable(b bool) Option {
 	return func(f *Formatter) {
-		f.lineNumbersInTable = true
+		f.lineNumbersInTable = b
 	}
 }
 

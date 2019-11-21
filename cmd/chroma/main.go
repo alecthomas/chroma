@@ -139,7 +139,7 @@ func main() {
 
 	// Dump styles.
 	if cli.HTMLStyles {
-		formatter := html.New(html.WithClasses())
+		formatter := html.New(html.WithClasses(true))
 		err = formatter.WriteCSS(w, style)
 		ctx.FatalIfErrorf(err)
 		return
@@ -174,19 +174,19 @@ func configureHTMLFormatter(ctx *kong.Context) {
 		options = append(options, html.ClassPrefix(cli.HTMLPrefix))
 	}
 	if !cli.HTMLInlineStyles {
-		options = append(options, html.WithClasses())
+		options = append(options, html.WithClasses(true))
 	}
 	if !cli.HTMLOnly {
-		options = append(options, html.Standalone())
+		options = append(options, html.Standalone(true))
 	}
 	if cli.HTMLLines {
-		options = append(options, html.WithLineNumbers())
+		options = append(options, html.WithLineNumbers(true))
 	}
 	if cli.HTMLLinesTable {
-		options = append(options, html.LineNumbersInTable())
+		options = append(options, html.LineNumbersInTable(true))
 	}
 	if cli.HTMLPreventSurroundingPre {
-		options = append(options, html.PreventSurroundingPre())
+		options = append(options, html.PreventSurroundingPre(true))
 	}
 	if len(cli.HTMLHighlight) > 0 {
 		ranges := [][2]int{}
