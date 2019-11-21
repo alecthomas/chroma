@@ -58,7 +58,7 @@ func TestFormatterStyleToCSS(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	formatter := New(WithClasses())
+	formatter := New(WithClasses(true))
 	css := formatter.styleToCSS(style)
 	for _, s := range css {
 		if strings.HasPrefix(strings.TrimSpace(s), ";") {
@@ -69,8 +69,8 @@ func TestFormatterStyleToCSS(t *testing.T) {
 
 func TestClassPrefix(t *testing.T) {
 	wantPrefix := "some-prefix-"
-	withPrefix := New(WithClasses(), ClassPrefix(wantPrefix))
-	noPrefix := New(WithClasses())
+	withPrefix := New(WithClasses(true), ClassPrefix(wantPrefix))
+	noPrefix := New(WithClasses(true))
 	for st := range chroma.StandardTypes {
 		if noPrefix.class(st) == "" {
 			if got := withPrefix.class(st); got != "" {
@@ -90,7 +90,7 @@ func TestClassPrefix(t *testing.T) {
 }
 
 func TestTableLineNumberNewlines(t *testing.T) {
-	f := New(WithClasses(), WithLineNumbers(), LineNumbersInTable())
+	f := New(WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true))
 	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
 	assert.NoError(t, err)
 
@@ -130,22 +130,22 @@ func TestWithPreWrapper(t *testing.T) {
 	}
 
 	t.Run("Regular", func(t *testing.T) {
-		s := format(New(WithClasses()))
+		s := format(New(WithClasses(true)))
 		assert.Equal(t, s, `<pre class="chroma"><span class="nb">echo</span> FOO</pre>`)
 	})
 
 	t.Run("PreventSurroundingPre", func(t *testing.T) {
-		s := format(New(PreventSurroundingPre(), WithClasses()))
+		s := format(New(PreventSurroundingPre(true), WithClasses(true)))
 		assert.Equal(t, s, `<span class="nb">echo</span> FOO`)
 	})
 
 	t.Run("Wrapper", func(t *testing.T) {
-		s := format(New(WithPreWrapper(wrapper), WithClasses()))
+		s := format(New(WithPreWrapper(wrapper), WithClasses(true)))
 		assert.Equal(t, s, `<foo class="chroma" id="code-true"><span class="nb">echo</span> FOO</foo>`)
 	})
 
 	t.Run("Wrapper, LineNumbersInTable", func(t *testing.T) {
-		s := format(New(WithPreWrapper(wrapper), WithClasses(), WithLineNumbers(), LineNumbersInTable()))
+		s := format(New(WithPreWrapper(wrapper), WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true)))
 
 		assert.Equal(t, s, `<div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -156,4 +156,24 @@ func TestWithPreWrapper(t *testing.T) {
 </div>
 `)
 	})
+}
+
+func TestReconfigureOptions(t *testing.T) {
+	options := []Option{
+		WithClasses(true),
+		WithLineNumbers(true),
+	}
+
+	options = append(options, WithLineNumbers(false))
+
+	f := New(options...)
+
+	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+
+	assert.NoError(t, err)
+	assert.Equal(t, `<pre class="chroma"><span class="nb">echo</span> FOO</pre>`, buf.String())
 }
