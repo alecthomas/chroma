@@ -169,24 +169,12 @@ func configureHTMLFormatter(ctx *kong.Context) {
 	options := []html.Option{
 		html.TabWidth(cli.HTMLTabWidth),
 		html.BaseLineNumber(cli.HTMLBaseLine),
-	}
-	if cli.HTMLPrefix != "" {
-		options = append(options, html.ClassPrefix(cli.HTMLPrefix))
-	}
-	if !cli.HTMLInlineStyles {
-		options = append(options, html.WithClasses(true))
-	}
-	if !cli.HTMLOnly {
-		options = append(options, html.Standalone(true))
-	}
-	if cli.HTMLLines {
-		options = append(options, html.WithLineNumbers(true))
-	}
-	if cli.HTMLLinesTable {
-		options = append(options, html.LineNumbersInTable(true))
-	}
-	if cli.HTMLPreventSurroundingPre {
-		options = append(options, html.PreventSurroundingPre(true))
+		html.ClassPrefix(cli.HTMLPrefix),
+		html.WithClasses(!cli.HTMLInlineStyles),
+		html.Standalone(!cli.HTMLOnly),
+		html.WithLineNumbers(cli.HTMLLines),
+		html.LineNumbersInTable(cli.HTMLLinesTable),
+		html.PreventSurroundingPre(cli.HTMLPreventSurroundingPre),
 	}
 	if len(cli.HTMLHighlight) > 0 {
 		ranges := [][2]int{}

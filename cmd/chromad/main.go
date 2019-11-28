@@ -153,7 +153,7 @@ func main() {
 	}
 	ctx := kong.Parse(&cli, kong.Configuration(konghcl.Loader))
 
-	log.Println("Starting")
+	log.Printf("Starting on http://%s\n", cli.Bind)
 
 	router := mux.NewRouter()
 	router.Handle("/", http.HandlerFunc(index)).Methods("GET")
