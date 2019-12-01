@@ -27,7 +27,7 @@ var Mlir = internal.Register(MustNewLexer(
 			{`0[xX][a-fA-F0-9]+`, LiteralNumber, nil},
 			{`-?\d+(?:[.]\d+)?(?:[eE][-+]?\d+(?:[.]\d+)?)?`, LiteralNumber, nil},
 			{`[=<>{}\[\]()*.,!:]|x\b`, Punctuation, nil},
-			{`[\w\d]*`, Text, nil},
+			{`[\w\d]+`, Text, nil},
 		},
 		"whitespace": {
 			{`(\n|\s)+`, Text, nil},
