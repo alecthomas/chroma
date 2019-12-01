@@ -1,0 +1,44 @@
+signature S = sig
+    datatype t = Hoge | Fuga
+end
+
+structur A = struct
+  structure B = struct
+    structure C = struct
+      type t = int * real * string * bool ref
+    end
+  end
+end
+
+functor F(X:sig type t; val compare: t * t -> order): S = struct
+  datatype t = Hoge | Fuga
+end
+
+structure Main = struct
+  local
+      structure M = F(Int)
+      open M
+  in
+    fun id x = x
+    val bool = if true then false orelse false else true andalso true
+    val int = ~1 + 1
+    val real = 0.7 - 0.32E5 * E3~7
+    val string = "a\a\b\t\n\v\f\r\^M\097\u00a1\"\\\
+                 \"
+    (* (* comments *) *)
+    val ## = 1
+    val |=| = 2
+    infix ##
+    infixr ##
+    val op## = case Hoge of
+                   Hoge => Fuga
+                | Fuga => Hoge
+    type s = {1: t, label: unit}
+    type u = A.B.C.t
+    val s = {1 = Hoge, label = ()}
+    fun id x = x
+    val rec id = fn x => x
+    exception X and Y
+    raise X handle X => (nil, [1], [1, 2])
+  end
+end
