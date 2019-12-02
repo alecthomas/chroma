@@ -1,0 +1,29 @@
+#include "main"
+
+#ifndef SHOULD_DEF
+#define SHOULD_DEF
+def ConstantOp : Toy_Op<"constant", [NoSideEffect]> {
+  // Provide a summary and description for this operation. This can be used to
+  // auto-generate documenatation of the operations within our dialect.
+  let summary = "constant operation";
+  let description = [{
+    Constant operation turns a literal into an SSA value. The data is attached
+    to the operation as an attribute. For example:
+
+      %0 = "toy.constant"()
+         { value = dense<[[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]> : tensor<2x3xf64> }
+        : () -> tensor<2x3xf64>
+  }];
+
+  // The constant operation takes an attribute as the only input.
+  // `F64ElementsAttr` corresponds to a 64-bit floating-point ElementsAttr.
+  let arguments = (ins F64ElementsAttr:$value);
+
+  // The generic call operation returns a single value of TensorType.
+  // F64Tensor corresponds to a 64-bit floating-point TensorType.
+  let results = (outs F64Tensor<10>);
+
+  // Add additional verification logic to the constant operation.
+  let verifier = [{ return ::verify(*this); }];
+}
+#endif  // SHOULD_DEF
