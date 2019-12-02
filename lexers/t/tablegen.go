@@ -21,7 +21,7 @@ var Tablegen = internal.Register(MustNewLexer(
 			Include("keyword"),
 			{`\$[_a-zA-Z][_\w]*`, NameVariable, nil},
 			{`\d*[_a-zA-Z][_\w]*`, NameVariable, nil},
-			{`\[\{([^}]*?[^]]*?)*?\}\]`, LiteralString, nil},
+			{`\[\{[\w\W]*?\}\]`, LiteralString, nil},
 			{`[+-]?\d+|0x[\da-fA-F]+|0b[01]+`, LiteralNumber, nil},
 			{`[=<>{}\[\]()*.,!:;]`, Punctuation, nil},
 		},
