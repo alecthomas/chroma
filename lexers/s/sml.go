@@ -45,7 +45,7 @@ var StandardML = internal.Register(MustNewLexer(
             { `\b(type|eqtype)\b(?!\')`, KeywordReserved, Push("tname") },
             { `\'[\w\']*`, NameDecorator, nil },
             { `([a-zA-Z][\w']*)(\.)`, NameNamespace, Push("dotted") },
-            { `\b(abstype|and|andalso|as|case|datatype|do|alse|end|exception|fn|fun|handle|if|in|infix|infixr|let|local|nonfix|of|op|open|orelse|raise|rec|then|type|val|with|withtype|while|eqtype|functor|include|sharing|sig|signature|struct|structure|where)\b`, KeywordReserved, nil },
+            { `\b(abstype|and|andalso|as|case|datatype|do|else|end|exception|fn|fun|handle|if|in|infix|infixr|let|local|nonfix|of|op|open|orelse|raise|rec|then|type|val|with|withtype|while|eqtype|functor|include|sharing|sig|signature|struct|structure|where)\b`, KeywordReserved, nil },
             { `([a-zA-Z][\w']*)`, Name, nil },
             { `\b(:|\|,=|=>|->|#|:>)\b`, KeywordReserved, nil },
             { "([!%&$#+\\-/:<=>?@\\\\~`^|*]+)", Name, nil },
