@@ -1,0 +1,22 @@
+[
+  {"type":"NameBuiltin","value":"Get-ChildItem"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"-Recurse"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"-Force"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"-ErrorAction"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"SilentlyContinue"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"-Name"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"-Path"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"C:"},
+  {"type":"Punctuation","value":"\\"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"*."},
+  {"type":"Name","value":"txt"},
+  {"type":"Text","value":"\n"}
+]
