@@ -345,6 +345,13 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 			return err
 		}
 	}
+	// Special-case line number highlighting when targeted.
+	if f.lineNumbers || f.lineNumbersInTable {
+		targetedLineCSS := StyleEntryToCSS(style.Get(chroma.LineHighlight))
+		for _, tt := range []chroma.TokenType{chroma.LineNumbers, chroma.LineNumbersTable} {
+			fmt.Fprintf(w, "/* %s targeted by URL anchor */ .%schroma .%s:target { %s }\n", tt, f.prefix, f.class(tt), targetedLineCSS)
+		}
+	}
 	tts := []int{}
 	for tt := range css {
 		tts = append(tts, int(tt))
