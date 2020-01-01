@@ -11,7 +11,7 @@ tokentype_string.go: types.go
 chromad:
 	(cd ./cmd/chromad && go get github.com/GeertJohan/go.rice/rice@master && go install github.com/GeertJohan/go.rice/rice)
 	rm -f chromad
-	(CGOENABLED=0 GOOS=linux cd ./cmd/chromad && go build -o ../../chromad .)
+	(export CGOENABLED=0 GOOS=linux ; cd ./cmd/chromad && go build -o ../../chromad .)
 	rice append -i ./cmd/chromad --exec=./chromad
 
 upload: chromad
