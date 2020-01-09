@@ -188,7 +188,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 	wrapInTable := f.lineNumbers && f.lineNumbersInTable
 
 	lines := chroma.SplitTokensIntoLines(tokens)
-	lineDigits := len(fmt.Sprintf("%d", len(lines)))
+	lineDigits := len(fmt.Sprintf("%d", f.baseLineNumber+len(lines)-1))
 	highlightIndex := 0
 
 	if wrapInTable {

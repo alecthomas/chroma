@@ -108,6 +108,51 @@ func TestTableLineNumberNewlines(t *testing.T) {
 </span>`)
 }
 
+func TestTableLineNumberSpacing(t *testing.T) {
+	testCases := []struct {
+		baseLineNumber int
+		expectedBuf    string
+	}{{
+		7,
+		`<span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span>`,
+	}, {
+		6,
+		`<span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span>`,
+	}, {
+		5,
+		`<span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span>`,
+	}}
+	for i, testCase := range testCases {
+		f := New(
+			WithClasses(true),
+			WithLineNumbers(true),
+			LineNumbersInTable(true),
+			BaseLineNumber(testCase.baseLineNumber),
+		)
+		it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
+		assert.NoError(t, err)
+		var buf bytes.Buffer
+		err = f.Format(&buf, styles.Fallback, it)
+		assert.NoError(t, err, "Test Case %d", i)
+		assert.Contains(t, buf.String(), testCase.expectedBuf, "Test Case %d", i)
+	}
+}
+
 func TestWithPreWrapper(t *testing.T) {
 	wrapper := preWrapper{
 		start: func(code bool, styleAttr string) string {
