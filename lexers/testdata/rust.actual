@@ -9,4 +9,6 @@ fn main() {
 
     // Some comment
     println!("rect1 is {:?}", rect1);
+
+    let r#type = "valid";
 }
