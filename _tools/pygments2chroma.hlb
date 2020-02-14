@@ -1,0 +1,29 @@
+fs default() {
+	gofmt fs { chromaLexer "pygments.lexers.hlb.HlbLexer"; }
+}
+
+fs script() {
+	local "." with option {
+		includePatterns "pygments2chroma.py"
+	}
+}
+
+fs runChromaPython(string package) {
+	image "python:alpine" with option { resolve; }
+	run "apk add -U git"
+	run "pip install -U pystache"
+	run "pip install -U -e git+https://github.com/hinshun/pygments.git@hlb-lexer#egg=pygments"
+	run string { format "python pygments2chroma.py %s > /out/lexer.go" package; } with option {
+		dir "/chroma"
+		mount script "/chroma"
+		mount fs { scratch; } "/out" as chromaLexer
+	}
+}
+
+fs runGoFormat(fs goFiles) {
+	image "golang:alpine" with option { resolve; }
+	run "gofmt -s -w /gofmt/*.go" with option {
+		dir "/gofmt"
+		mount goFiles "/gofmt" as gofmt
+	}
+}
