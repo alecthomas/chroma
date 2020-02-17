@@ -1,5 +1,7 @@
 module github.com/alecthomas/chroma
 
+go 1.13
+
 require (
 	github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38
 	github.com/alecthomas/colour v0.0.0-20160524082231-60882d9e2721 // indirect
@@ -13,7 +15,3 @@ require (
 	github.com/stretchr/testify v1.3.0 // indirect
 	golang.org/x/sys v0.0.0-20181128092732-4ed8d59d0b35 // indirect
 )
-
-replace github.com/GeertJohan/go.rice => github.com/alecthomas/go.rice v1.0.1-0.20190719113735-961b99d742e7
-
-go 1.13
