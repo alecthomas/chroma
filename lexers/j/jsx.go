@@ -69,8 +69,8 @@ var JSX = internal.Register(MustNewLexer(
 			Include("root"),
 		},
 		"jsx": {
-			{`(<)([\w]+)`, ByGroups(Punctuation, NameTag), Push("tag")},
-			{`(<)(/)([\w]+)(>)`, ByGroups(Punctuation, Punctuation, NameTag, Punctuation), nil},
+			{`(<)([\w\.]+)`, ByGroups(Punctuation, NameTag), Push("tag")},
+			{`(<)(/)([\w\.]*)(>)`, ByGroups(Punctuation, Punctuation, NameTag, Punctuation), nil},
 		},
 		"tag": {
 			{`\s+`, Text, nil},

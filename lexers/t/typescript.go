@@ -32,6 +32,7 @@ var TypeScript = internal.Register(MustNewLexer(
 			{`\n`, Text, Pop(1)},
 		},
 		"root": {
+			Include("jsx"),
 			{`^(?=\s|/|<!--)`, Text, Push("slashstartsregex")},
 			Include("commentsandwhitespace"),
 			{`\+\+|--|~|&&|\?|:|\|\||\\(?=\n)|(<<|>>>?|==?|!=?|[-<>+*%&|^/])=?`, Operator, Push("slashstartsregex")},
@@ -48,6 +49,7 @@ var TypeScript = internal.Register(MustNewLexer(
 			{`(super)(\s*)(\([\w,?.$\s]+\s*\))`, ByGroups(KeywordReserved, Text), Push("slashstartsregex")},
 			{`([a-zA-Z_?.$][\w?.$]*)\(\) \{`, NameOther, Push("slashstartsregex")},
 			{`([\w?.$][\w?.$]*)(\s*:\s*)([\w?.$][\w?.$]*)`, ByGroups(NameOther, Text, KeywordType), nil},
+			{`([$a-zA-Z_]\w*)(\s*)(<)`, ByGroups(NameOther, Text, Operator), nil}, // generic type
 			{`[$a-zA-Z_]\w*`, NameOther, nil},
 			{`[0-9][0-9]*\.[0-9]+([eE][0-9]+)?[fd]?`, LiteralNumberFloat, nil},
 			{`0x[0-9a-fA-F]+`, LiteralNumberHex, nil},
@@ -63,10 +65,33 @@ var TypeScript = internal.Register(MustNewLexer(
 			{"\\\\`", LiteralStringBacktick, nil},
 			{`\$\{`, LiteralStringInterpol, Push("interp-inside")},
 			{`\$`, LiteralStringBacktick, nil},
-			{"[^`\\\\$]+", LiteralStringBacktick, nil},
+			{"[^`\\$]+", LiteralStringBacktick, nil},
 		},
 		"interp-inside": {
 			{`\}`, LiteralStringInterpol, Pop(1)},
+			Include("root"),
+		},
+		"jsx": {
+			{`(<)([\w\.]+)`, ByGroups(Punctuation, NameTag), Push("tag")},
+			{`(<)(/)([\w\.]*)(>)`, ByGroups(Punctuation, Punctuation, NameTag, Punctuation), nil},
+		},
+		"tag": {
+			Include("commentsandwhitespace"),
+			{`\s+`, Text, nil},
+			{`([\w]+\s*)(=)(\s*)`, ByGroups(NameAttribute, Operator, Text), Push("attr")},
+			{`[{}(),;:]+`, Punctuation, nil},
+			{`[\w\.]+`, NameAttribute, nil},
+			{`(/?)(\s*)(>)`, ByGroups(Punctuation, Text, Punctuation), Pop(1)},
+		},
+		"attr": {
+			{`{`, Punctuation, Push("expression")},
+			{`".*?"`, LiteralString, Pop(1)},
+			{`'.*?'`, LiteralString, Pop(1)},
+			Default(Pop(1)),
+		},
+		"expression": {
+			{`{`, Punctuation, Push()},
+			{`}`, Punctuation, Pop(1)},
 			Include("root"),
 		},
 	},
