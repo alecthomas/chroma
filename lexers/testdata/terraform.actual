@@ -1,0 +1,39 @@
+variable "some_var" {
+    default = 12
+}
+
+resource "something" "nice" {
+  name        = "hello"
+  value       = var.some_var
+  x           = var.some_var > 5 ? var.some_var : 10
+
+  cidr_blocks = [
+    for num in [1,2,3]:
+    cidrhost("10.0.0.0/24", num)
+  ]
+  str = <<-EOT
+    hello
+    world
+  EOT
+
+  /*
+    Multiline comment
+  */
+  # Single comment
+
+  dynamic "setting" {
+    for_each = var.settings
+    content {
+      namespace = setting.value["namespace"]
+      name = setting.value["name"]
+      value = setting.value["value"]
+    }
+  }
+}
+
+
+resource "other" "resource" {
+  count = 3
+  name = "resource${count.index+1}"
+}
+
