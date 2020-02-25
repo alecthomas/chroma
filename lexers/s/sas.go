@@ -22,6 +22,8 @@ var Sas = internal.Register(MustNewLexer(
 			Include("logs"),
 			Include("general"),
 			{`.`, Text, nil},
+			{`\\\n`, Text, nil},
+			{`\n`, Text, nil},
 		},
 		"comments": {
 			{`^\s*\*.*?;`, Comment, nil},
