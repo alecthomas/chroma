@@ -1,0 +1,13 @@
+ods listing close;
+proc reg data=work.funda edf outest=work.params;
+  /* industry-year regression */
+  by fyear sic2;
+  /* id is necessary for later matching Jackknifed coefficients to firm-year */
+  id key;
+  /* Jones Model */
+  Jones: model tac = inv_at_l drev ppe / noint influence i;
+  /* Kothari Model with ROA */
+  Kothari: model tac = inv_at_l drevadj ppe roa / noint influence i;
+  ods output OutputStatistics=work.outstats InvXPX=work.xpxinv;
+run;
+ods listing;
