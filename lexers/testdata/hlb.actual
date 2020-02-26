@@ -1,0 +1,29 @@
+# Run `npm test` for the node project `left-pad`.
+fs default() {
+	npmRun leftPad fs { nodeModules leftPad; } "test"
+}
+
+fs leftPad() {
+	git "https://github.com/left-pad/left-pad.git" "master"
+}
+
+fs npmInstall(fs src) {
+	image "node:alpine" with option {
+		resolve
+	}
+	run "npm install" with option {
+		dir "/src"
+		mount src "/src"
+		# Name the mounted filesystem as nodeModules
+		mount fs { scratch; } "/src/node_modules" as nodeModules
+	}
+}
+
+fs npmRun(fs src, fs nodeModules, string script) {
+	image "node:alpine"
+	run string { format "npm run %s" script; } with option {
+		dir "/src"
+		mount src "/src"
+		mount nodeModules "/src/node_modules"
+	}
+}
