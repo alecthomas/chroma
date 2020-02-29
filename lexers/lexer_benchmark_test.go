@@ -3,9 +3,10 @@ package lexers_test
 import (
 	"testing"
 
-	"github.com/alecthomas/assert"
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/lexers/g"
+	"github.com/alecthomas/chroma/lexers/j"
+	"github.com/alecthomas/chroma/lexers/k"
 )
 
 const lexerBenchSource = `// Copyright 2011 The Go Authors. All rights reserved.
@@ -2465,7 +2466,39 @@ func Benchmark(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		it, err := g.Go.Tokenise(nil, lexerBenchSource)
-		assert.NoError(b, err)
+		if err != nil {
+			b.Fatal(err)
+		}
+		for t := it(); t != chroma.EOF; t = it() {
+		}
+	}
+}
+
+const javaSource = `
+fun main() {
+   println("sunday")
+}
+`
+
+func BenchmarkJava(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		it, err := j.Java.Tokenise(nil, javaSource)
+		if err != nil {
+			b.Fatal(err)
+		}
+		for t := it(); t != chroma.EOF; t = it() {
+		}
+	}
+}
+
+func BenchmarkKotlin(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		it, err := k.Kotlin.Tokenise(nil, javaSource)
+		if err != nil {
+			b.Fatal(err)
+		}
 		for t := it(); t != chroma.EOF; t = it() {
 		}
 	}
