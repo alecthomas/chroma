@@ -44,7 +44,7 @@ func TestMatchingAtStart(t *testing.T) {
 		it.Tokens())
 }
 
-func TestEnsureLF(t *testing.T) {
+func TestEnsureLFOption(t *testing.T) {
 	l := Coalesce(MustNewLexer(&Config{}, Rules{
 		"root": {
 			{`(\w+)(\r?\n|\r)`, ByGroups(Keyword, Whitespace), nil},
@@ -78,4 +78,24 @@ func TestEnsureLF(t *testing.T) {
 		{Keyword, "world"},
 		{Whitespace, "\r"},
 	}, it.Tokens())
+}
+
+func TestEnsureLFFunc(t *testing.T) {
+	tests := []struct{ in, out string }{
+		{in: "", out: ""},
+		{in: "abc", out: "abc"},
+		{in: "\r", out: "\n"},
+		{in: "a\r", out: "a\n"},
+		{in: "\rb", out: "\nb"},
+		{in: "a\rb", out: "a\nb"},
+		{in: "\r\n", out: "\n"},
+		{in: "a\r\n", out: "a\n"},
+		{in: "\r\nb", out: "\nb"},
+		{in: "a\r\nb", out: "a\nb"},
+		{in: "\r\r\r\n\r", out: "\n\n\n\n"},
+	}
+	for _, test := range tests {
+		out := ensureLF(test.in)
+		assert.Equal(t, out, test.out)
+	}
 }
