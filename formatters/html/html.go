@@ -22,6 +22,9 @@ func ClassPrefix(prefix string) Option { return func(f *Formatter) { f.prefix = 
 // WithClasses emits HTML using CSS classes, rather than inline styles.
 func WithClasses(b bool) Option { return func(f *Formatter) { f.Classes = b } }
 
+// WithAllClasses disables an optimisation that omits redundant CSS classes.
+func WithAllClasses(b bool) Option { return func(f *Formatter) { f.allClasses = b } }
+
 // TabWidth sets the number of characters for a tab. Defaults to 8.
 func TabWidth(width int) Option { return func(f *Formatter) { f.tabWidth = width } }
 
@@ -141,6 +144,7 @@ type Formatter struct {
 	standalone          bool
 	prefix              string
 	Classes             bool // Exported field to detect when classes are being used
+	allClasses          bool
 	preWrapper          PreWrapper
 	tabWidth            int
 	lineNumbers         bool
@@ -379,7 +383,7 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 		if t != chroma.Background {
 			entry = entry.Sub(bg)
 		}
-		if entry.IsZero() {
+		if !f.allClasses && entry.IsZero() {
 			continue
 		}
 		classes[t] = StyleEntryToCSS(entry)

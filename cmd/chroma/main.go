@@ -53,6 +53,7 @@ command, for Go.
 		HTML                      bool   `help:"Enable HTML mode (equivalent to '--formatter html')."`
 		HTMLPrefix                string `help:"HTML CSS class prefix." placeholder:"PREFIX"`
 		HTMLStyles                bool   `help:"Output HTML CSS styles."`
+		HTMLAllStyles             bool   `help:"Output all HTML CSS styles, including redundant ones."`
 		HTMLOnly                  bool   `help:"Output HTML fragment."`
 		HTMLInlineStyles          bool   `help:"Output HTML with inline styles (no classes)."`
 		HTMLTabWidth              int    `help:"Set the HTML tab width." default:"8"`
@@ -139,7 +140,11 @@ func main() {
 
 	// Dump styles.
 	if cli.HTMLStyles {
-		formatter := html.New(html.WithClasses(true))
+		options := []html.Option{html.WithClasses(true)}
+		if cli.HTMLAllStyles {
+			options = append(options, html.WithAllClasses(true))
+		}
+		formatter := html.New(options...)
 		err = formatter.WriteCSS(w, style)
 		ctx.FatalIfErrorf(err)
 		return
@@ -170,6 +175,7 @@ func configureHTMLFormatter(ctx *kong.Context) {
 		html.TabWidth(cli.HTMLTabWidth),
 		html.BaseLineNumber(cli.HTMLBaseLine),
 		html.ClassPrefix(cli.HTMLPrefix),
+		html.WithAllClasses(cli.HTMLAllStyles),
 		html.WithClasses(!cli.HTMLInlineStyles),
 		html.Standalone(!cli.HTMLOnly),
 		html.WithLineNumbers(cli.HTMLLines),
