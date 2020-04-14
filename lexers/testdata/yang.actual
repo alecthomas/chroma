@@ -1,0 +1,64 @@
+module server-system {
+    yang-version 1.1;
+    namespace "http://autlan.dt/gribok/yang/example";
+    prefix ex;
+
+    import ietf-yang-types {
+      prefix yang;
+      reference
+        "RFC 6991: Common YANG Data Types.";
+    }
+
+    organization "Gribok";
+    contact "gribok@example.org";
+    description
+        "An example module";
+
+    revision 2020-04-03 {
+        description "Example yang";
+    }
+
+    /*
+     * Comment for container system
+     */
+
+    container system {
+        leaf host-name {
+            type string;
+            description "Hostname for this system";
+        }
+
+        leaf-list domain-search {
+            type string;
+            description "List of domain names to search";
+        }
+
+        container login {
+            leaf message {
+                type string;
+                description
+                    "Message given at start of login session";
+            }
+
+            list user {
+                key "name";
+                leaf name {
+                    type string;
+                }
+                leaf uuid {
+                  type yang:uuid;
+                }
+                leaf full-name {
+                    type string;
+                    mandatory true;
+                    description
+                      "The full name of user  See also 'name'.  This could
+                       be, for example, a reference to the user name";
+                }
+                leaf class {
+                    type string;
+                }
+            }
+        }
+    }
+}
