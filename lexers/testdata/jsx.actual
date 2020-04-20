@@ -5,6 +5,10 @@ import './index.css';
 import 'github-fork-ribbon-css/gh-fork-ribbon.css';
 
 ReactDOM.render(
-  <App />,
+  <>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </>,
   document.getElementById('root')
 );
