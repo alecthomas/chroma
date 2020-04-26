@@ -6,11 +6,11 @@ import (
 )
 
 // TypeScript lexer.
-var TypeScript = internal.Register(MustNewLexer(
+var Tsx = internal.Register(MustNewLexer(
 	&Config{
-		Name:      "TypeScript",
-		Aliases:   []string{"ts", "typescript"},
-		Filenames: []string{"*.ts"},
+		Name:      "Tsx",
+		Aliases:   []string{"tsx"},
+		Filenames: []string{ "*.tsx"},
 		MimeTypes: []string{"text/x-typescript"},
 		DotAll:    true,
 		EnsureNL:  true,
@@ -32,6 +32,7 @@ var TypeScript = internal.Register(MustNewLexer(
 			{`\n`, Text, Pop(1)},
 		},
 		"root": {
+			Include("jsx"),
 			{`^(?=\s|/|<!--)`, Text, Push("slashstartsregex")},
 			Include("commentsandwhitespace"),
 			{`\+\+|--|~|&&|\?|:|\|\||\\(?=\n)|(<<|>>>?|==?|!=?|[-<>+*%&|^/])=?`, Operator, Push("slashstartsregex")},
@@ -68,6 +69,11 @@ var TypeScript = internal.Register(MustNewLexer(
 		"interp-inside": {
 			{`\}`, LiteralStringInterpol, Pop(1)},
 			Include("root"),
+		},
+		"jsx": {
+			{`(<)(/?)(>)`, ByGroups(Punctuation, Punctuation, Punctuation), nil},
+			{`(<)([\w\.]+)`, ByGroups(Punctuation, NameTag), Push("tag")},
+			{`(<)(/)([\w\.]*)(>)`, ByGroups(Punctuation, Punctuation, NameTag, Punctuation), nil},
 		},
 		"tag": {
 			{`\s+`, Text, nil},

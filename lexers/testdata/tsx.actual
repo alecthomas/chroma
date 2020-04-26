@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import { App } from './App'
 
+const Greeter: React.FC<{ name: string }> = ({name}) =>
+  <>{ 'Hello ' + name }</>
+
 ReactDOM.render(
   <>
     <React.StrictMode>

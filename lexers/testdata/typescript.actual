@@ -1,0 +1,13 @@
+const x: {
+   value: string
+} = { value: 'Hello' };
+
+export const myGenericFunc = <TIn, TOut>(fn: (input: TIn) => TOut, value: TIn): TOut => fn(value);
+
+var test = myGenericFunc(x => x.value, x);
+
+export class SomeClass<T1 extends number, T2 extends string> {
+    constructor(private one: T1, private two: T2) {
+
+    }
+}
