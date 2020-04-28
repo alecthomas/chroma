@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// SolarizedLight-hc style.
-var SolarizedLight-hc = Register(chroma.MustNewStyle("solarized-light-hc", chroma.StyleEntries{
+// SolarizedLightHighContrast style.
+var SolarizedLightHighContrast = Register(chroma.MustNewStyle("solarized-light-hc", chroma.StyleEntries{
 	chroma.Text:             "bg:#eee8d5 #304951",
 	chroma.Keyword:          "#445001",
 	chroma.KeywordConstant:  "bold",

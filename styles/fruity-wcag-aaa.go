@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Fruity-hc style.
-var Fruity-hc = Register(chroma.MustNewStyle("fruity-hc", chroma.StyleEntries{
+// FruityHighContrast style.
+var FruityHighContrast = Register(chroma.MustNewStyle("fruity-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:    "#A6A6A6",
 	chroma.Background:        "#ffffff bg:#111111",
 	chroma.GenericOutput:     "#B1B1B1 bg:#222222",

@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Trac-hc style.
-var Trac-hc = Register(chroma.MustNewStyle("trac-hc", chroma.StyleEntries{
+// TracHighContrast style.
+var TracHighContrast = Register(chroma.MustNewStyle("trac-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:     "#555555",
 	chroma.Comment:            "italic #595946",
 	chroma.CommentPreproc:     "bold noitalic #585858",
@@ -35,7 +35,7 @@ var Trac-hc = Register(chroma.MustNewStyle("trac-hc", chroma.StyleEntries{
 	chroma.GenericStrong:      "bold",
 	chroma.GenericPrompt:      "#555555",
 	chroma.GenericOutput:      "#585858",
-	chroma.GenericTrac-hceback:   "#aa0000",
+	chroma.GenericTracHighContrasteback:   "#aa0000",
 	chroma.GenericUnderline:   "underline",
 	chroma.Error:              "bg:#e3d2d2 #820101",
 	chroma.Background:         " bg:#ffffff",

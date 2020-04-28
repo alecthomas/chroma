@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Rrt-hc style.
-var Rrt-hc = Register(chroma.MustNewStyle("rrt-hc", chroma.StyleEntries{
+// RrtHighContrast style.
+var RrtHighContrast = Register(chroma.MustNewStyle("rrt-hc", chroma.StyleEntries{
 	chroma.CommentPreproc:      "#e5e5e5",
 	chroma.Comment:             "#00ff00",
 	chroma.KeywordType:         "#ee82ee",

@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Colorful-hc style.
-var Colorful-hc = Register(chroma.MustNewStyle("colorful-hc", chroma.StyleEntries{
+// ColorfulHighContrast style.
+var ColorfulHighContrast = Register(chroma.MustNewStyle("colorful-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:        "#555555",
 	chroma.Comment:               "#585858",
 	chroma.CommentPreproc:        "#2E577A",

@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Lovelace-hc style.
-var Lovelace-hc = Register(chroma.MustNewStyle("lovelace-hc", chroma.StyleEntries{
+// LovelaceHighContrast style.
+var LovelaceHighContrast = Register(chroma.MustNewStyle("lovelace-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:         "#635202",
 	chroma.Comment:                "italic #585858",
 	chroma.CommentHashbang:        "#025B72",

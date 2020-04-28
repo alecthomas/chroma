@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Manni-hc style.
-var Manni-hc = Register(chroma.MustNewStyle("manni-hc", chroma.StyleEntries{
+// ManniHighContrast style.
+var ManniHighContrast = Register(chroma.MustNewStyle("manni-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:        "#4C4C4C",
 	chroma.Comment:               "italic #034F89",
 	chroma.CommentPreproc:        "noitalic #005A5A",

@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Dracula-hc Style
-var Dracula-hc = Register(chroma.MustNewStyle("dracula-hc", chroma.StyleEntries{
+// DraculaHighContrast Style
+var DraculaHighContrast = Register(chroma.MustNewStyle("dracula-hc", chroma.StyleEntries{
 	chroma.Comment:                  "#AAB8EB",
 	chroma.CommentHashbang:          "#AAB8EB",
 	chroma.CommentMultiline:         "#AAB8EB",

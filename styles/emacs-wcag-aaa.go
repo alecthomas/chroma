@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Emacs-hc style.
-var Emacs-hc = Register(chroma.MustNewStyle("emacs-hc", chroma.StyleEntries{
+// EmacsHighContrast style.
+var EmacsHighContrast = Register(chroma.MustNewStyle("emacs-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:        "#555555",
 	chroma.Comment:               "italic #026302",
 	chroma.CommentPreproc:        "noitalic",

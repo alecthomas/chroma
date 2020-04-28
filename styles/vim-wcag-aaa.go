@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Vim-hc style.
-var Vim-hc = Register(chroma.MustNewStyle("vim-hc", chroma.StyleEntries{
+// VimHighContrast style.
+var VimHighContrast = Register(chroma.MustNewStyle("vim-hc", chroma.StyleEntries{
 	chroma.Background:         "#cccccc bg:#000000",
 	chroma.Comment:            "#9191D0",
 	chroma.CommentSpecial:     "bold #FF6262",

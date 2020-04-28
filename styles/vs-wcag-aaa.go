@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// VisualStudio-hc style.
-var VisualStudio-hc = Register(chroma.MustNewStyle("vs-hc", chroma.StyleEntries{
+// VisualStudioHighContrast style.
+var VisualStudioHighContrast = Register(chroma.MustNewStyle("vs-hc", chroma.StyleEntries{
 	chroma.Comment:           "#056705",
 	chroma.CommentPreproc:    "#0000ff",
 	chroma.Keyword:           "#0000ff",

@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Arduino-hc style.
-var Arduino-hc = Register(chroma.MustNewStyle("arduino-hc", chroma.StyleEntries{
+// ArduinoHighContrast style.
+var ArduinoHighContrast = Register(chroma.MustNewStyle("arduino-hc", chroma.StyleEntries{
 	chroma.Error:           "#a61717",
 	chroma.Comment:         "#445657",
 	chroma.CommentPreproc:  "#495C00",

@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// SolarizedDark256-hc style.
-var SolarizedDark256-hc = Register(chroma.MustNewStyle("solarized-dark256-hc", chroma.StyleEntries{
+// SolarizedDark256HighContrast style.
+var SolarizedDark256HighContrast = Register(chroma.MustNewStyle("solarized-dark256-hc", chroma.StyleEntries{
 	chroma.Keyword:               "#89B351",
 	chroma.KeywordConstant:       "#FF8D5E",
 	chroma.KeywordDeclaration:    "#77A6FF",

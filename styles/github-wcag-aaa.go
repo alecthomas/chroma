@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// GitHub-hc style.
-var GitHub-hc = Register(chroma.MustNewStyle("github-hc", chroma.StyleEntries{
+// GitHubHighContrast style.
+var GitHubHighContrast = Register(chroma.MustNewStyle("github-hc", chroma.StyleEntries{
 	chroma.CommentMultiline:     "italic #595946",
 	chroma.CommentPreproc:       "bold #585858",
 	chroma.CommentSingle:        "italic #595946",

@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Autumn-hc style.
-var Autumn-hc = Register(chroma.MustNewStyle("autumn-hc", chroma.StyleEntries{
+// AutumnHighContrast style.
+var AutumnHighContrast = Register(chroma.MustNewStyle("autumn-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:      "#555555",
 	chroma.Comment:             "italic #575757",
 	chroma.CommentPreproc:      "noitalic #345F02",

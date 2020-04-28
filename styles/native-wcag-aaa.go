@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Native-hc style.
-var Native-hc = Register(chroma.MustNewStyle("native-hc", chroma.StyleEntries{
+// NativeHighContrast style.
+var NativeHighContrast = Register(chroma.MustNewStyle("native-hc", chroma.StyleEntries{
 	chroma.Background:         "#d0d0d0 bg:#202020",
 	chroma.TextWhitespace:     "#ABABAB",
 	chroma.Comment:            "italic #ACACAC",

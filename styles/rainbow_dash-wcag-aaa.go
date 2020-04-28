@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// RainbowDash-hc style.
-var RainbowDash-hc = Register(chroma.MustNewStyle("rainbow_dash-hc", chroma.StyleEntries{
+// RainbowDashHighContrast style.
+var RainbowDashHighContrast = Register(chroma.MustNewStyle("rainbow_dash-hc", chroma.StyleEntries{
 	chroma.Comment:             "italic #0452A8",
 	chroma.CommentPreproc:      "noitalic",
 	chroma.CommentSpecial:      "bold",

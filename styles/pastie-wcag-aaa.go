@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Pastie-hc style.
-var Pastie-hc = Register(chroma.MustNewStyle("pastie-hc", chroma.StyleEntries{
+// PastieHighContrast style.
+var PastieHighContrast = Register(chroma.MustNewStyle("pastie-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:        "#555555",
 	chroma.Comment:               "#585858",
 	chroma.CommentPreproc:        "bold #A70202",

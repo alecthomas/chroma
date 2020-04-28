@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Igor-hc style.
-var Igor-hc = Register(chroma.MustNewStyle("igor-hc", chroma.StyleEntries{
+// IgorHighContrast style.
+var IgorHighContrast = Register(chroma.MustNewStyle("igor-hc", chroma.StyleEntries{
 	chroma.Comment:       "italic #A80303",
 	chroma.Keyword:       "#0000FF",
 	chroma.NameFunction:  "#903600",

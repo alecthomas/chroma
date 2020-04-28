@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Monokai-hc style.
-var Monokai-hc = Register(chroma.MustNewStyle("monokai-hc", chroma.StyleEntries{
+// MonokaiHighContrast style.
+var MonokaiHighContrast = Register(chroma.MustNewStyle("monokai-hc", chroma.StyleEntries{
 	chroma.Text:                "#f8f8f2",
 	chroma.Error:               "#EE72A1 bg:#1e0010",
 	chroma.Comment:             "#BCB8A5",

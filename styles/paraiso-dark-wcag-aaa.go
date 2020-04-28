@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// ParaisoDark-hc style.
-var ParaisoDark-hc = Register(chroma.MustNewStyle("paraiso-dark-hc", chroma.StyleEntries{
+// ParaisoDarkHighContrast style.
+var ParaisoDarkHighContrast = Register(chroma.MustNewStyle("paraiso-dark-hc", chroma.StyleEntries{
 	chroma.Text:                  "#e7e9db",
 	chroma.Error:                 "#FF9792",
 	chroma.Comment:               "#B6ADB0",

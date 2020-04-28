@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Xcode-hc style.
-var Xcode-hc = Register(chroma.MustNewStyle("xcode-hc", chroma.StyleEntries{
+// XcodeHighContrast style.
+var XcodeHighContrast = Register(chroma.MustNewStyle("xcode-hc", chroma.StyleEntries{
 	chroma.Comment:           "#105F00",
 	chroma.CommentPreproc:    "#633820",
 	chroma.LiteralString:     "#B50701",

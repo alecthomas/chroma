@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Abap-hc style.
-var Abap-hc = Register(chroma.MustNewStyle("abap-hc", chroma.StyleEntries{
+// AbapHighContrast style.
+var AbapHighContrast = Register(chroma.MustNewStyle("abap-hc", chroma.StyleEntries{
 	chroma.Comment:        "italic #585858",
 	chroma.CommentSpecial: "#585858",
 	chroma.Keyword:        "#0000ff",

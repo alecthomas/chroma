@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Friendly-hc style.
-var Friendly-hc = Register(chroma.MustNewStyle("friendly-hc", chroma.StyleEntries{
+// FriendlyHighContrast style.
+var FriendlyHighContrast = Register(chroma.MustNewStyle("friendly-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:        "#4C4C4C",
 	chroma.Comment:               "italic #045663",
 	chroma.CommentPreproc:        "noitalic #035B1A",

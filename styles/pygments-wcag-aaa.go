@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Pygments-hc default theme.
-var Pygments-hc = Register(chroma.MustNewStyle("pygments-hc", chroma.StyleEntries{
+// PygmentsHighContrast default theme.
+var PygmentsHighContrast = Register(chroma.MustNewStyle("pygments-hc", chroma.StyleEntries{
 	chroma.Whitespace:     "#555555",
 	chroma.Comment:        "italic #075F5F",
 	chroma.CommentPreproc: "noitalic #7A4E03",

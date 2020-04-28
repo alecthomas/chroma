@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// AlgolNu-hc style.
-var AlgolNu-hc = Register(chroma.MustNewStyle("algol_nu-hc", chroma.StyleEntries{
+// AlgolNuHighContrast style.
+var AlgolNuHighContrast = Register(chroma.MustNewStyle("algol_nu-hc", chroma.StyleEntries{
 	chroma.Comment:            "italic #585858",
 	chroma.CommentPreproc:     "bold noitalic #585858",
 	chroma.CommentSpecial:     "bold noitalic #585858",

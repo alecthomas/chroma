@@ -184,7 +184,7 @@ amend_style <- function(style_file, wcag = "AAA") {
     stringr::str_remove("\\=") %>%
     stringr::str_squish()
   
-  newlines <- stringr::str_replace(newlines, name, paste0(name, "-hc"))
+  newlines <- stringr::str_replace(newlines, name, paste0(name, "HighContrast"))
   
   var <- style %>%
     glue::glue_collapse() %>%

@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Murphy-hc style.
-var Murphy-hc = Register(chroma.MustNewStyle("murphy-hc", chroma.StyleEntries{
+// MurphyHighContrast style.
+var MurphyHighContrast = Register(chroma.MustNewStyle("murphy-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:        "#555555",
 	chroma.Comment:               "#535353 italic",
 	chroma.CommentPreproc:        "#2E577A noitalic",

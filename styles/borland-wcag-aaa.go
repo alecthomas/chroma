@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Borland-hc style.
-var Borland-hc = Register(chroma.MustNewStyle("borland-hc", chroma.StyleEntries{
+// BorlandHighContrast style.
+var BorlandHighContrast = Register(chroma.MustNewStyle("borland-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:    "#555555",
 	chroma.Comment:           "italic #026302",
 	chroma.CommentPreproc:    "noitalic #085C5C",

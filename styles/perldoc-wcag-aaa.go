@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Perldoc-hc style.
-var Perldoc-hc = Register(chroma.MustNewStyle("perldoc-hc", chroma.StyleEntries{
+// PerldocHighContrast style.
+var PerldocHighContrast = Register(chroma.MustNewStyle("perldoc-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:       "#4C4C4C",
 	chroma.Comment:              "#025C02",
 	chroma.CommentPreproc:       "#014F5C",

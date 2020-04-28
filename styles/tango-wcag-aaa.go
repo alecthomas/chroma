@@ -4,8 +4,8 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Tango-hc style.
-var Tango-hc = Register(chroma.MustNewStyle("tango-hc", chroma.StyleEntries{
+// TangoHighContrast style.
+var TangoHighContrast = Register(chroma.MustNewStyle("tango-hc", chroma.StyleEntries{
 	chroma.TextWhitespace:           "underline #505050",
 	chroma.Error:                    "#a40000 border:#ef2929",
 	chroma.Other:                    "#000000",
