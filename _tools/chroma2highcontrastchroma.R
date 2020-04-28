@@ -172,6 +172,11 @@ amend_style <- function(style_file, wcag = "AAA") {
   newlines <- purrr::map_chr(style, treat_line,
                              bg = bg, wcag = wcag)
   
+  if (all(newlines == style)) {
+    message("The theme is already compliant!")
+    return(invisible())
+  }
+  
   name <- style %>%
     glue::glue_collapse() %>%
     stringr::str_extract("var .* \\=") %>%
