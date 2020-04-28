@@ -1,0 +1,51 @@
+package styles
+
+import (
+	"github.com/alecthomas/chroma"
+)
+
+// Friendly-hc style.
+var Friendly-hc = Register(chroma.MustNewStyle("friendly-hc", chroma.StyleEntries{
+	chroma.TextWhitespace:        "#4C4C4C",
+	chroma.Comment:               "italic #045663",
+	chroma.CommentPreproc:        "noitalic #035B1A",
+	chroma.CommentSpecial:        "noitalic bg:#fff0f0",
+	chroma.Keyword:               "bold #035B1A",
+	chroma.KeywordPseudo:         "nobold",
+	chroma.KeywordType:           "nobold #902000",
+	chroma.Operator:              "#4B4B4B",
+	chroma.OperatorWord:          "bold #035B1A",
+	chroma.NameBuiltin:           "#035B1A",
+	chroma.NameFunction:          "#06287e",
+	chroma.NameClass:             "bold #005678",
+	chroma.NameNamespace:         "bold #005678",
+	chroma.NameException:         "#035B1A",
+	chroma.NameVariable:          "#85039E",
+	chroma.NameConstant:          "#04526D",
+	chroma.NameLabel:             "bold #002070",
+	chroma.NameEntity:            "bold #882800",
+	chroma.NameAttribute:         "#055283",
+	chroma.NameTag:               "bold #062873",
+	chroma.NameDecorator:         "bold #4C4C4C",
+	chroma.LiteralString:         "#055283",
+	chroma.LiteralStringDoc:      "italic",
+	chroma.LiteralStringInterpol: "italic #015582",
+	chroma.LiteralStringEscape:   "bold #055283",
+	chroma.LiteralStringRegex:    "#114B81",
+	chroma.LiteralStringSymbol:   "#385802",
+	chroma.LiteralStringOther:    "#833A00",
+	chroma.LiteralNumber:         "#045634",
+	chroma.GenericHeading:        "bold #000080",
+	chroma.GenericSubheading:     "bold #800080",
+	chroma.GenericDeleted:        "#A00000",
+	chroma.GenericInserted:       "#045D04",
+	chroma.GenericError:          "#990101",
+	chroma.GenericEmph:           "italic",
+	chroma.GenericStrong:         "bold",
+	chroma.GenericPrompt:         "bold #833A00",
+	chroma.GenericOutput:         "#4F4F4F",
+	chroma.GenericTraceback:      "#023DC8",
+	chroma.GenericUnderline:      "underline",
+	chroma.Error:                 "border:#FF0000",
+	chroma.Background:            " bg:#f0f0f0",
+}))

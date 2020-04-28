@@ -1,0 +1,52 @@
+package styles
+
+import (
+	"github.com/alecthomas/chroma"
+)
+
+// Pastie-hc style.
+var Pastie-hc = Register(chroma.MustNewStyle("pastie-hc", chroma.StyleEntries{
+	chroma.TextWhitespace:        "#555555",
+	chroma.Comment:               "#585858",
+	chroma.CommentPreproc:        "bold #A70202",
+	chroma.CommentSpecial:        "bg:#fff0f0 bold #A70202",
+	chroma.LiteralString:         "bg:#fff0f0 #A31600",
+	chroma.LiteralStringRegex:    "bg:#fff0ff #045904",
+	chroma.LiteralStringOther:    "bg:#f0fff0 #026102",
+	chroma.LiteralStringSymbol:   "#7C4900",
+	chroma.LiteralStringInterpol: "#3333bb",
+	chroma.LiteralStringEscape:   "#0044dd",
+	chroma.OperatorWord:          "#026302",
+	chroma.Keyword:               "bold #026302",
+	chroma.KeywordPseudo:         "nobold",
+	chroma.KeywordType:           "#585858",
+	chroma.NameClass:             "bold #A9005C",
+	chroma.NameException:         "bold #A9005C",
+	chroma.NameFunction:          "bold #005399",
+	chroma.NameProperty:          "bold #225C8F",
+	chroma.NameNamespace:         "bold #A9005C",
+	chroma.NameBuiltin:           "#003388",
+	chroma.NameVariable:          "#225C8F",
+	chroma.NameVariableClass:     "#225C8F",
+	chroma.NameVariableInstance:  "#3333bb",
+	chroma.NameVariableGlobal:    "#824300",
+	chroma.NameConstant:          "bold #003366",
+	chroma.NameTag:               "bold #A9005C",
+	chroma.NameAttribute:         "#225C8F",
+	chroma.NameDecorator:         "#555555",
+	chroma.NameLabel:             "italic #225C8F",
+	chroma.LiteralNumber:         "bold #0000DD",
+	chroma.GenericHeading:        "#333333",
+	chroma.GenericSubheading:     "#535353",
+	chroma.GenericDeleted:        "bg:#ffdddd #000000",
+	chroma.GenericInserted:       "bg:#ddffdd #000000",
+	chroma.GenericError:          "#aa0000",
+	chroma.GenericEmph:           "italic",
+	chroma.GenericStrong:         "bold",
+	chroma.GenericPrompt:         "#555555",
+	chroma.GenericOutput:         "#585858",
+	chroma.GenericTraceback:      "#aa0000",
+	chroma.GenericUnderline:      "underline",
+	chroma.Error:                 "bg:#e3d2d2 #820101",
+	chroma.Background:            " bg:#ffffff",
+}))

@@ -73,9 +73,17 @@ replace_color <- function(original_color, background, wcag, verbose = FALSE) {
     }
     
     if (calculate_luminance(original_color) > calculate_luminance(background)) {
+      if (calculate_luminance(color) == 1) {
+        message(glue::glue("We cannot do better than {color} for {original_color} on {background}"))
+        return(color)
+      }
       color <- colorspace::lighten(color, space = "HCL")
     } else {
       color <- colorspace::darken(color, space = "HCL")
+      if (calculate_luminance(color) == 0) {
+        message(glue::glue("We cannot do better than {color} for {original_color} on {background}"))
+        return(color)
+      }
     }
     
   }
@@ -94,7 +102,7 @@ replace_color <- function(original_color, background, wcag, verbose = FALSE) {
 extract_colors <- function(style_file) {
   style <- readLines(style_file)
   # original colors
-  colors <- unique(
+  colors <- (
     tolower(
       stringr::str_extract(style, "\\#[:alnum:]*")
     )
@@ -105,6 +113,9 @@ extract_colors <- function(style_file) {
 
 treat_line <- function(line, bg = bg, wcag) {
 
+  # special case of e.g. solarized-light
+  line <- gsub("bg\\: ", "bg:", line)
+  
   # don't amend background
   if (!grepl("chroma\\.Background", line)) {
     # only amend lines with a color
@@ -144,12 +155,20 @@ treat_line <- function(line, bg = bg, wcag) {
 amend_style <- function(style_file, wcag = "AAA") {
   print(style_file)
   style <- readLines(style_file)
-  
+
   bg_line <- style[grepl("chroma\\.Background", style)]
-  bg <- stringr::str_extract(bg_line, "\\#[:alnum:]*")
   
-  
-  
+  if (length(bg_line) > 0) {
+    if (grepl("bg\\:", bg_line)) {
+      bg <- stringr::str_extract(bg_line, "bg\\:\\#[:alnum:]*") %>%
+        stringr::str_remove("bg\\:")
+    } else {
+      bg <- stringr::str_extract(bg_line, "\\#[:alnum:]*")
+    }
+  } else {
+    bg <- "#fff" # pygments has no background
+  }
+
   newlines <- purrr::map_chr(style, treat_line,
                              bg = bg, wcag = wcag)
   
@@ -161,12 +180,20 @@ amend_style <- function(style_file, wcag = "AAA") {
     stringr::str_squish()
   
   newlines <- stringr::str_replace(newlines, name, paste0(name, "-hc"))
-  newlines <- stringr::str_replace(newlines, tolower(name), 
-                                   paste0(tolower(name), "-hc"))
   
+  var <- style %>%
+    glue::glue_collapse() %>%
+    stringr::str_extract('MustNewStyle\\(".*?"') %>%
+    stringr::str_remove('MustNewStyle\\("') %>%
+    stringr::str_remove('"')
+
+  newlines <- stringr::str_replace(newlines, 
+                                   paste0('MustNewStyle\\("', var), 
+                                   paste0('MustNewStyle\\("', var, "-hc"))
+
   if (wcag == "AAA") {
     new_path <- file.path("styles",
-                          paste0(tolower(name), "-wcag-aaa.go"))
+                          paste0(var, "-wcag-aaa.go"))
     
   } else {
     
@@ -177,7 +204,8 @@ amend_style <- function(style_file, wcag = "AAA") {
 
   pals::pal.bands(original = extract_colors(style_file), 
                   new = extract_colors(new_path),
-                  show.names = TRUE)
+                  show.names = TRUE,
+                  main = name)
 }
 
 
@@ -187,6 +215,7 @@ style_file <- file.path("styles", "monokai.go")
 
 style_files <- fs::dir_ls("styles")
 style_files <- style_files[style_files != file.path("styles", "api.go")]
+style_files <- style_files[style_files != file.path("styles", "swapoff.go")]
 style_files <- style_files[!grepl("wcag", style_files)]
 
 # purrr::walk(style_files, amend_style, wcag = "AA")

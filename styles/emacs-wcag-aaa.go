@@ -1,0 +1,51 @@
+package styles
+
+import (
+	"github.com/alecthomas/chroma"
+)
+
+// Emacs-hc style.
+var Emacs-hc = Register(chroma.MustNewStyle("emacs-hc", chroma.StyleEntries{
+	chroma.TextWhitespace:        "#555555",
+	chroma.Comment:               "italic #026302",
+	chroma.CommentPreproc:        "noitalic",
+	chroma.CommentSpecial:        "noitalic bold",
+	chroma.Keyword:               "bold #8100C3",
+	chroma.KeywordPseudo:         "nobold",
+	chroma.KeywordType:           "bold #026102",
+	chroma.Operator:              "#535353",
+	chroma.OperatorWord:          "bold #8100C3",
+	chroma.NameBuiltin:           "#8100C3",
+	chroma.NameFunction:          "#045D04",
+	chroma.NameClass:             "#0000FF",
+	chroma.NameNamespace:         "bold #0000FF",
+	chroma.NameException:         "bold #A91500",
+	chroma.NameVariable:          "#6C4D00",
+	chroma.NameConstant:          "#880000",
+	chroma.NameLabel:             "#545400",
+	chroma.NameEntity:            "bold #4F4F4F",
+	chroma.NameAttribute:         "#981F1F",
+	chroma.NameTag:               "bold #045D04",
+	chroma.NameDecorator:         "#8100C3",
+	chroma.LiteralString:         "#981F1F",
+	chroma.LiteralStringDoc:      "italic",
+	chroma.LiteralStringInterpol: "bold #8B345A",
+	chroma.LiteralStringEscape:   "bold #7E4002",
+	chroma.LiteralStringRegex:    "#8B345A",
+	chroma.LiteralStringSymbol:   "#6C4D00",
+	chroma.LiteralStringOther:    "#045D04",
+	chroma.LiteralNumber:         "#535353",
+	chroma.GenericHeading:        "bold #000080",
+	chroma.GenericSubheading:     "bold #800080",
+	chroma.GenericDeleted:        "#A00000",
+	chroma.GenericInserted:       "#045D04",
+	chroma.GenericError:          "#A80303",
+	chroma.GenericEmph:           "italic",
+	chroma.GenericStrong:         "bold",
+	chroma.GenericPrompt:         "bold #000080",
+	chroma.GenericOutput:         "#4F4F4F",
+	chroma.GenericTraceback:      "#023DC8",
+	chroma.GenericUnderline:      "underline",
+	chroma.Error:                 "border:#FF0000",
+	chroma.Background:            " bg:#f8f8f8",
+}))

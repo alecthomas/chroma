@@ -1,0 +1,51 @@
+package styles
+
+import (
+	"github.com/alecthomas/chroma"
+)
+
+// GitHub-hc style.
+var GitHub-hc = Register(chroma.MustNewStyle("github-hc", chroma.StyleEntries{
+	chroma.CommentMultiline:     "italic #595946",
+	chroma.CommentPreproc:       "bold #585858",
+	chroma.CommentSingle:        "italic #595946",
+	chroma.CommentSpecial:       "bold italic #585858",
+	chroma.Comment:              "italic #595946",
+	chroma.Error:                "bg:#e3d2d2 #820101",
+	chroma.GenericDeleted:       "bg:#ffdddd #000000",
+	chroma.GenericEmph:          "italic #000000",
+	chroma.GenericError:         "#aa0000",
+	chroma.GenericHeading:       "#585858",
+	chroma.GenericInserted:      "bg:#ddffdd #000000",
+	chroma.GenericOutput:        "#585858",
+	chroma.GenericPrompt:        "#555555",
+	chroma.GenericStrong:        "bold",
+	chroma.GenericSubheading:    "#575757",
+	chroma.GenericTraceback:     "#aa0000",
+	chroma.GenericUnderline:     "underline",
+	chroma.KeywordType:          "bold #445588",
+	chroma.Keyword:              "bold #000000",
+	chroma.LiteralNumber:        "#005A5A",
+	chroma.LiteralStringRegex:   "#006414",
+	chroma.LiteralStringSymbol:  "#990073",
+	chroma.LiteralString:        "#A6012D",
+	chroma.NameAttribute:        "#085C5C",
+	chroma.NameBuiltinPseudo:    "#585858",
+	chroma.NameBuiltin:          "#015776",
+	chroma.NameClass:            "bold #445588",
+	chroma.NameConstant:         "#085C5C",
+	chroma.NameDecorator:        "bold #3c5d5d",
+	chroma.NameEntity:           "#800080",
+	chroma.NameException:        "bold #990000",
+	chroma.NameFunction:         "bold #990000",
+	chroma.NameLabel:            "bold #990000",
+	chroma.NameNamespace:        "#555555",
+	chroma.NameTag:              "#000080",
+	chroma.NameVariableClass:    "#085C5C",
+	chroma.NameVariableGlobal:   "#085C5C",
+	chroma.NameVariableInstance: "#085C5C",
+	chroma.NameVariable:         "#085C5C",
+	chroma.Operator:             "bold #000000",
+	chroma.TextWhitespace:       "#555555",
+	chroma.Background:           " bg:#ffffff",
+}))
