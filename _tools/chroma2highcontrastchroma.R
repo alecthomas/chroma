@@ -1,3 +1,5 @@
+# Inspired by https://github.com/mpchadwick/pygments-high-contrast-stylesheets/blob/c678dd005994a9807ded4ad2f88bf86679fb8d51/tools/make-stylesheet
+
 library("magrittr")
 
 # Find color passing --------------------
