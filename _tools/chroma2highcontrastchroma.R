@@ -10,7 +10,7 @@ get_letter <- function(rgb, letter) {
   }
 }
 
-calculate_luminance <- function(hex) {
+.calculate_luminance <- function(hex) {
   # https://www.w3.org/TR/WCAG20-TECHS/G17.html
   
   rgb <- colorspace::hex2RGB(hex)
@@ -21,6 +21,8 @@ calculate_luminance <- function(hex) {
   
   0.2126 * R + 0.7152 * G + 0.0722 * B
 }
+
+calculate_luminance <- memoise::memoise(.calculate_luminance)
 
 calculate_contrast <- function(color, background) {
   # https://www.w3.org/TR/WCAG20-TECHS/G17.html
@@ -33,11 +35,35 @@ calculate_contrast <- function(color, background) {
 
 }
 
-replace_color <- function(original_color, background, verbose = FALSE) {
 
+lengthen_color <- function(color) {
+  if (stringr::str_length(color) == 7) {
+    return(color)
+  } else {
+    color <- glue::glue_collapse(c("#",
+                                   rep(substring(color, 2, 2), 2),
+                                   rep(substring(color, 3, 3), 2),
+                                   rep(substring(color, 4, 4), 2)))
+    
+    return(color)
+  }
+  
+}
+
+replace_color <- function(original_color, background, wcag, verbose = FALSE) {
+
+  if(wcag == "AAA") {
+    threshold <- 7
+  } else{
+    threshold <- 4.5
+  }
+  
+  original_color <- lengthen_color(original_color)
+  background <- lengthen_color(background)
+  
   color <- original_color
 
-  while (calculate_contrast(color, background) < 4.5) {
+  while (calculate_contrast(color, background) < threshold) {
     if(verbose) {
       message(
         glue::glue(
@@ -46,7 +72,12 @@ replace_color <- function(original_color, background, verbose = FALSE) {
         )
     }
     
-    color <- colorspace::darken(color, space = "HCL")
+    if (calculate_luminance(original_color) > calculate_luminance(background)) {
+      color <- colorspace::lighten(color, space = "HCL")
+    } else {
+      color <- colorspace::darken(color, space = "HCL")
+    }
+    
   }
   
   if (verbose) {
@@ -72,60 +103,55 @@ extract_colors <- function(style_file) {
   purrr::map_chr(colors, lengthen_color)
 }
 
-lengthen_color <- function(color) {
-  if (stringr::str_length(color) == 7) {
-    return(color)
-  } else {
-    color <- glue::glue_collapse(c("#",
-                      rep(substring(color, 2, 2), 2),
-                      rep(substring(color, 3, 3), 2),
-                      rep(substring(color, 4, 4), 2)))
-    
-    return(color)
+treat_line <- function(line, bg = bg, wcag) {
+
+  # don't amend background
+  if (!grepl("chroma\\.Background", line)) {
+    # only amend lines with a color
+    if (grepl('[\" ]\\#[:alnum:]*', line)) {
+      # extract the color
+      line_color <- trimws(
+        stringr::str_remove(
+          stringr::str_extract(
+            line, '[\" ]\\#[:alnum:]*'),
+          '"'
+        )
+      )
+      
+      # if available extract the background
+      if (grepl("bg\\:\\#[:alnum:]*", line)) {
+        background <- stringr::str_remove(
+          stringr::str_extract(line, "bg\\:\\#[:alnum:]*"),
+          "bg\\:"
+        )
+      } else {
+        background <- bg
+      }
+
+      new_color <- replace_color(line_color, 
+                                 background = background,
+                                 wcag = wcag,
+                                 verbose = FALSE)
+      
+      line <- stringr::str_replace(line, line_color, new_color)
+      
+    }
   }
   
+  return(line)
 }
 
 amend_style <- function(style_file, wcag = "AAA") {
+  print(style_file)
   style <- readLines(style_file)
-  
-  
   
   bg_line <- style[grepl("chroma\\.Background", style)]
   bg <- stringr::str_extract(bg_line, "\\#[:alnum:]*")
   
-  treat_line <- function(line, bg = bg) {
-    # don't amend background
-    if (!grepl("chroma\\.Background", line)) {
-      # only amend lines with a color
-      if (grepl('[\" ]\\#[:alnum:]*', line)) {
-        # extract the color
-        line_color <- trimws(
-          stringr::str_remove(stringr::str_extract(
-                                line, '[\" ]\\#[:alnum:]*'),
-                              '"'
-                              )
-          )
-        
-        # if available extract the background
-        if (grepl("bg\\:\\#[:alnum:]*", line)) {
-          bg <- stringr::str_remove(
-            stringr::str_extract(line, "bg\\:\\#[:alnum:]*"),
-            "bg\\:"
-            )
-        }
-
-        new_color <- replace_color(lengthen_color(color), 
-                                   background = bg)
-        line <- stringr::str_replace(line, color, new_color)
-        
-      }
-    }
-    
-    return(line)
-  }
   
-  newlines <- purrr::map_chr(style, treat_line)
+  
+  newlines <- purrr::map_chr(style, treat_line,
+                             bg = bg, wcag = wcag)
   
   name <- style %>%
     glue::glue_collapse() %>%
@@ -134,12 +160,19 @@ amend_style <- function(style_file, wcag = "AAA") {
     stringr::str_remove("\\=") %>%
     stringr::str_squish()
   
-  newlines <- stringr::str_replace(name, paste0(name, "-hc"))
-  newlines <- stringr::str_replace(tolower(name), 
+  newlines <- stringr::str_replace(newlines, name, paste0(name, "-hc"))
+  newlines <- stringr::str_replace(newlines, tolower(name), 
                                    paste0(tolower(name), "-hc"))
   
-  new_path <- file.path(styles,
-                        paste0(tolower(name), "-hc.go"))
+  if (wcag == "AAA") {
+    new_path <- file.path("styles",
+                          paste0(tolower(name), "-wcag-aaa.go"))
+    
+  } else {
+    
+    new_path <- file.path("styles",
+                          paste0(tolower(name), "-wcag-aa.go"))
+  }
   writeLines(newlines, new_path)
 
   pals::pal.bands(original = extract_colors(style_file), 
@@ -150,6 +183,11 @@ amend_style <- function(style_file, wcag = "AAA") {
 
 
 # Transform styleS --------------------
-
 style_file <- file.path("styles", "monokai.go")
-amend_style(style_file)
+
+style_files <- fs::dir_ls("styles")
+style_files <- style_files[style_files != file.path("styles", "api.go")]
+style_files <- style_files[!grepl("wcag", style_files)]
+
+# purrr::walk(style_files, amend_style, wcag = "AA")
+purrr::walk(style_files, amend_style, wcag = "AAA")
