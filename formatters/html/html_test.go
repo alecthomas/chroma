@@ -222,3 +222,14 @@ func TestReconfigureOptions(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, `<pre class="chroma"><span class="nb">echo</span> FOO</pre>`, buf.String())
 }
+
+func TestWriteCssWithAllClasses(t *testing.T) {
+	formatter := New()
+	formatter.allClasses = true
+
+	var buf bytes.Buffer
+	err := formatter.WriteCSS(&buf, styles.Fallback)
+
+	assert.NoError(t, err)
+	assert.NotContains(t, buf.String(), ".chroma . {", "Generated css doesn't contain invalid css")
+}
