@@ -366,8 +366,12 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 		if tt == chroma.Background {
 			continue
 		}
+		class := f.class(tt)
+		if class == "" {
+			continue
+		}
 		styles := css[tt]
-		if _, err := fmt.Fprintf(w, "/* %s */ .%schroma .%s { %s }\n", tt, f.prefix, f.class(tt), styles); err != nil {
+		if _, err := fmt.Fprintf(w, "/* %s */ .%schroma .%s { %s }\n", tt, f.prefix, class, styles); err != nil {
 			return err
 		}
 	}
