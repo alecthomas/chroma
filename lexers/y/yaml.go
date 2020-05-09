@@ -37,10 +37,10 @@ var YAML = internal.Register(MustNewLexer(
 			{`\b[\w]+\b`, Text, nil},
 		},
 		"key": {
-			{`"[^"\n].*": `, Keyword, nil},
-			{`(-)( )([^"\n{]*)(:)( )`, ByGroups(Punctuation, Whitespace, Keyword, Punctuation, Whitespace), nil},
-			{`([^"\n{]*)(:)( )`, ByGroups(Keyword, Punctuation, Whitespace), nil},
-			{`([^"\n{]*)(:)(\n)`, ByGroups(Keyword, Punctuation, Whitespace), nil},
+			{`"[^"\n].*": `, NameTag, nil},
+			{`(-)( )([^"\n{]*)(:)( )`, ByGroups(Punctuation, Whitespace, NameTag, Punctuation, Whitespace), nil},
+			{`([^"\n{]*)(:)( )`, ByGroups(NameTag, Punctuation, Whitespace), nil},
+			{`([^"\n{]*)(:)(\n)`, ByGroups(NameTag, Punctuation, Whitespace), nil},
 		},
 		"whitespace": {
 			{`\s+`, Whitespace, nil},
