@@ -15,7 +15,8 @@ var YAML = internal.Register(MustNewLexer(
 	Rules{
 		"root": {
 			Include("whitespace"),
-			{`^---`, Text, nil},
+			{`^---`, NameNamespace, nil},
+			{`^\.\.\.`, NameNamespace, nil},
 			{`[\n?]?\s*- `, Text, nil},
 			{`#.*$`, Comment, nil},
 			{`!![^\s]+`, CommentPreproc, nil},
