@@ -1,5 +1,5 @@
 [
-  {"type":"Text","value":"---"},
+  {"type":"NameNamespace","value":"---"},
   {"type":"TextWhitespace","value":"  "},
   {"type":"Comment","value":"# document start"},
   {"type":"TextWhitespace","value":"\n\n"},
@@ -642,7 +642,7 @@
   {"type":"TextWhitespace","value":" "},
   {"type":"KeywordConstant","value":"null"},
   {"type":"TextWhitespace","value":"\n\n"},
-  {"type":"Text","value":"..."},
+  {"type":"NameNamespace","value":"..."},
   {"type":"TextWhitespace","value":"  "},
   {"type":"Comment","value":"# document end"},
   {"type":"TextWhitespace","value":"\n"}
