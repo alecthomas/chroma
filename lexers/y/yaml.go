@@ -30,7 +30,9 @@ var YAML = internal.Register(MustNewLexer(
 			{`.`, Text, nil},
 		},
 		"value": {
-			{Words(``, `\b`, "true", "false", "null"), KeywordConstant, nil},
+			{Words(``, `\b`, "true", "True", "TRUE", "false", "False", "FALSE", "null",
+				"y", "Y", "yes", "Yes", "YES", "n", "N", "no", "No", "NO",
+				"on", "On", "ON", "off", "Off", "OFF"), KeywordConstant, nil},
 			{`"(?:\\.|[^"])*"`, StringDouble, nil},
 			{`'(?:\\.|[^'])*'`, StringSingle, nil},
 			{`\d\d\d\d-\d\d-\d\d([T ]\d\d:\d\d:\d\d(\.\d+)?(Z|\s+[-+]\d+)?)?`, LiteralDate, nil},
