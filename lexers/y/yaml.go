@@ -23,7 +23,7 @@ var YAML = internal.Register(MustNewLexer(
 			{`&[^\s]+`, CommentPreproc, nil},
 			{`\*[^\s]+`, CommentPreproc, nil},
 			{`^%include\s+[^\n\r]+`, CommentPreproc, nil},
-			{`([>|+-]\s+)(\s+)((?:(?:.*?$)(?:[\n\r]*?)?)*)`, ByGroups(StringDoc, StringDoc, StringDoc), nil},
+			{`[>|](?:[+-])?\s(?:^(?:[ \n]{1})+.*\n?)*$`, StringDoc, nil},
 			Include("key"),
 			Include("value"),
 			{`[?:,\[\]]`, Punctuation, nil},
