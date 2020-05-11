@@ -15,6 +15,8 @@ scientific_notation: 1e+12
 # The number 1 will be interpreted as a number, not a boolean. if you want
 # it to be interpreted as a boolean, use true
 boolean: true
+boolean_different_case: False
+boolean_yes: YES
 null_value: null
 key with spaces: value
 # Notice that strings don't need to be quoted. However, they can be.
@@ -25,6 +27,16 @@ double quotes: "have many: \", \0, \t, \u263A, \x0d\x0a == \r\n, and more."
 # UTF-8/16/32 characters need to be encoded
 Superscript two: \u00B2
 
+# Multi-line flow scalars can be unquoted or quoted.
+unquoted_scalar: Multiline scalar
+                 with 'quotes' in the middle.
+                 This is the last line.
+single_quoted_scalar: 'Multiline single quoted scalar
+                 with "quotes" in the middle
+                 Last line'
+double_quoted_scalar: "Multiline double quoted scalar
+                 with 'quotes' in the middle
+                 end"
 # Multiple-line strings can be written either as a 'literal block' (using |),
 # or a 'folded block' (using '>').
 literal_block: |
@@ -44,7 +56,21 @@ folded_style: >
 
         'More-indented' lines keep their newlines, too -
         this text will appear over two lines.
+literal_block_with_strip_chomping: |-
+    This entire block of text will be the value of the 'literal_block' key,
+    with line breaks being preserved and the strip chomping indicator.
 
+    The literal continues until de-dented, and the leading indentation is
+    stripped.
+
+        Any lines that are 'more-indented' keep the rest of their indentation -
+        these lines will be indented by 4 spaces.
+literal_block_with_keep_chomping: |+
+    This entire block of text will be the value of the 'literal_block' key,
+    with line breaks being preserved and the keep chomping indicator.
+
+    The literal continues until de-dented, and the leading indentation is
+    stripped.
 ####################
 # COLLECTION TYPES #
 ####################
