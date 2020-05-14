@@ -1,0 +1,5 @@
+GET /foo HTTP/2.0
+Content-Type: application/json
+User-Agent: foo
+
+{"hello": "world"}
