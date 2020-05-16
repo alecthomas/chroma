@@ -13,8 +13,10 @@
 	redir @blocked /
 }
 
-example.com, fake.org {
+example.com, fake.org, {$ENV_SITE} {
 	root * /srv
+
+	respond /get-env {$ENV_VAR}
 
 	tls off
 

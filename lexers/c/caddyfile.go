@@ -125,7 +125,7 @@ var caddyfileCommon = Rules{
 		{`(https?://)?([a-z0-9.-]+)(:)([0-9]+)`, ByGroups(Name, Name, Punctuation, LiteralNumberInteger), nil},
 		{`[a-z-]+/[a-z-+]+`, LiteralString, nil},
 		{`[0-9]+[km]?\b`, LiteralNumberInteger, nil},
-		{`\{[\w+.-]+\}`, LiteralStringEscape, nil}, // Placeholder
+		{`\{[\w+.\$-]+\}`, LiteralStringEscape, nil}, // Placeholder
 		{`\[(?=[^#{}$]+\])`, Punctuation, nil},
 		{`\]|\|`, Punctuation, nil},
 		{`[^\s#{}$\]]+`, LiteralString, nil},
@@ -152,7 +152,7 @@ var Caddyfile = internal.Register(MustNewLexer(
 			// Site label
 			{`[^#{(\s,]+`, GenericHeading, Push("label")},
 			// Site label with placeholder
-			{`\{[\w+.-]+\}`, NameAttribute, Push("label")},
+			{`\{[\w+.\$-]+\}`, LiteralStringEscape, Push("label")},
 			{`\s+`, Text, nil},
 		},
 		"globals": {
@@ -173,6 +173,9 @@ var Caddyfile = internal.Register(MustNewLexer(
 			// a comma means another label is coming
 			{`,\s*\n?`, Text, nil},
 			{` `, Text, nil},
+			// Site label with placeholder
+			{`\{[\w+.\$-]+\}`, LiteralStringEscape, nil},
+			// Site label
 			{`[^#{(\s,]+`, GenericHeading, nil},
 			// Comment after non-block label (hack because comments end in \n)
 			{`#.*\n`, CommentSingle, Push("site_block")},
