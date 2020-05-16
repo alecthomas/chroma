@@ -170,6 +170,15 @@ func (r Rules) Clone() Rules {
 	return out
 }
 
+// Merge creates a clone of "r" then merges "rules" into the clone.
+func (r Rules) Merge(rules Rules) Rules {
+	out := r.Clone()
+	for k, v := range rules.Clone() {
+		out[k] = v
+	}
+	return out
+}
+
 // MustNewLexer creates a new Lexer or panics.
 func MustNewLexer(config *Config, rules Rules) *RegexLexer {
 	lexer, err := NewLexer(config, rules)
