@@ -5,15 +5,20 @@ import (
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
-// CaddyfileCommon are the rules common to both of the lexer variants
-var CaddyfileCommon = Rules{
+// caddyfileCommon are the rules common to both of the lexer variants
+var caddyfileCommon = Rules{
 	"site_block_common": {
 		// Import keyword
 		{`(import)(\s+)([^\s]+)`, ByGroups(Keyword, Text, NameVariableMagic), nil},
 		// Matcher definition
-		{`@[^\s]+\s+`, NameDecorator, Push("matcher")},
+		{`@[^\s]+(?=\s)`, NameDecorator, Push("matcher")},
+		// Matcher token stub for docs
+		{`\[\<matcher\>\]`, NameDecorator, Push("matcher")},
+		// These cannot have matchers but may have things that look like
+		// matchers in their arguments, so we just parse as a subdirective.
+		{`try_files`, Keyword, Push("subdirective")},
 		// These are special, they can nest more directives
-		{`handle|route|handle_path|not`, Keyword, Push("nested_directive")},
+		{`handle_errors|handle|route|handle_path|not`, Keyword, Push("nested_directive")},
 		// Any other directive
 		{`[^\s#]+`, Keyword, Push("directive")},
 		Include("base"),
@@ -40,7 +45,9 @@ var CaddyfileCommon = Rules{
 	"nested_block": {
 		{`\}`, Punctuation, Pop(2)},
 		// Matcher definition
-		{`@[^\s]+\s+`, NameDecorator, Push("matcher")},
+		{`@[^\s]+(?=\s)`, NameDecorator, Push("matcher")},
+		// Something that starts with literally < is probably a docs stub
+		{`\<[^#]+\>`, Keyword, Push("nested_directive")},
 		// Any other directive
 		{`[^\s#]+`, Keyword, Push("nested_directive")},
 		Include("base"),
@@ -60,32 +67,33 @@ var CaddyfileCommon = Rules{
 	"directive": {
 		{`\{(?=\s)`, Punctuation, Push("block")},
 		Include("matcher_token"),
-		Include("comments_pop"),
+		Include("comments_pop_1"),
 		{`\n`, Text, Pop(1)},
 		Include("base"),
 	},
 	"nested_directive": {
 		{`\{(?=\s)`, Punctuation, Push("nested_block")},
 		Include("matcher_token"),
-		Include("comments_pop"),
+		Include("comments_pop_1"),
 		{`\n`, Text, Pop(1)},
 		Include("base"),
 	},
 	"subdirective": {
 		{`\{(?=\s)`, Punctuation, Push("block")},
-		Include("comments_pop"),
+		Include("comments_pop_1"),
 		{`\n`, Text, Pop(1)},
 		Include("base"),
 	},
 	"arguments": {
 		{`\{(?=\s)`, Punctuation, Push("block")},
-		Include("comments_pop"),
+		Include("comments_pop_2"),
+		{`\\\n`, Text, nil}, // Skip escaped newlines
 		{`\n`, Text, Pop(2)},
 		Include("base"),
 	},
 	"deep_subdirective": {
 		{`\{(?=\s)`, Punctuation, Push("block")},
-		Include("comments_pop"),
+		Include("comments_pop_3"),
 		{`\n`, Text, Pop(3)},
 		Include("base"),
 	},
@@ -99,88 +107,32 @@ var CaddyfileCommon = Rules{
 		{`^#.*\n`, CommentSingle, nil},   // Comment at start of line
 		{`\s+#.*\n`, CommentSingle, nil}, // Comment preceded by whitespace
 	},
-	"comments_pop": {
+	"comments_pop_1": {
 		{`^#.*\n`, CommentSingle, Pop(1)},   // Comment at start of line
 		{`\s+#.*\n`, CommentSingle, Pop(1)}, // Comment preceded by whitespace
 	},
+	"comments_pop_2": {
+		{`^#.*\n`, CommentSingle, Pop(2)},   // Comment at start of line
+		{`\s+#.*\n`, CommentSingle, Pop(2)}, // Comment preceded by whitespace
+	},
+	"comments_pop_3": {
+		{`^#.*\n`, CommentSingle, Pop(3)},   // Comment at start of line
+		{`\s+#.*\n`, CommentSingle, Pop(3)}, // Comment preceded by whitespace
+	},
 	"base": {
 		Include("comments"),
-		{`on|off`, NameConstant, nil},
+		{`on|off|first|last|before|after|internal|strip_prefix|strip_suffix|replace`, NameConstant, nil},
 		{`(https?://)?([a-z0-9.-]+)(:)([0-9]+)`, ByGroups(Name, Name, Punctuation, LiteralNumberInteger), nil},
 		{`[a-z-]+/[a-z-+]+`, LiteralString, nil},
 		{`[0-9]+[km]?\b`, LiteralNumberInteger, nil},
-		{`\{[\w+.-]+\}`, NameAttribute, nil}, // Placeholder
-		{`[^\s#{}$]+`, LiteralString, nil},
+		{`\{[\w+.-]+\}`, LiteralStringEscape, nil}, // Placeholder
+		{`\[(?=[^#{}$]+\])`, Punctuation, nil},
+		{`\]|\|`, Punctuation, nil},
+		{`[^\s#{}$\]]+`, LiteralString, nil},
 		{`/[^\s#]*`, Name, nil},
 		{`\s+`, Text, nil},
 	},
 }
-
-// CaddyfileRules are the merged rules for the main Caddyfile lexer
-var CaddyfileRules = (func(a Rules, b Rules) Rules {
-	for k, v := range b {
-		a[k] = v
-	}
-	return a
-})(
-	Rules{
-		"root": {
-			Include("comments"),
-			// Global options block
-			{`^\s*(\{)\s*$`, ByGroups(Punctuation), Push("globals")},
-			// Snippets
-			{`(\([^\s#]+\))(\s*)(\{)`, ByGroups(NameVariableAnonymous, Text, Punctuation), Push("snippet")},
-			// Site label
-			{`[^#{(\s,]+`, NameLabel, Push("label")},
-			// Site label with placeholder
-			{`\{[\w+.-]+\}`, NameAttribute, Push("label")},
-			{`\s+`, Text, nil},
-		},
-		"globals": {
-			{`\}`, Punctuation, Pop(1)},
-			{`[^\s#]+`, KeywordType, Push("directive")},
-			Include("base"),
-		},
-		"snippet": {
-			{`\}`, Punctuation, Pop(1)},
-			// Matcher definition
-			{`@[^\s]+\s+`, NameDecorator, Push("matcher")},
-			// Any directive
-			{`[^\s#]+`, KeywordType, Push("directive")},
-			Include("base"),
-		},
-		"label": {
-			{`,`, Text, nil},
-			{` `, Text, nil},
-			{`[^#{(\s,]+`, NameLabel, nil},
-			// Comment after non-block label (hack because comments end in \n)
-			{`#.*\n`, CommentSingle, Push("site_block")},
-			// Note: if \n, we'll never pop out of the site_block, it's valid
-			{`\{(?=\s)|\n`, Punctuation, Push("site_block")},
-		},
-		"site_block": {
-			{`\}`, Punctuation, Pop(2)},
-			Include("site_block_common"),
-		},
-	},
-	CaddyfileCommon,
-)
-
-// CaddyfileDirectiveRules are the merged rules for the secondary lexer
-var CaddyfileDirectiveRules = (func(a Rules, b Rules) Rules {
-	for k, v := range b {
-		a[k] = v
-	}
-	return a
-})(
-	Rules{
-		// Same as "site_block" in Caddyfile
-		"root": {
-			Include("site_block_common"),
-		},
-	},
-	CaddyfileCommon,
-)
 
 // Caddyfile lexer.
 var Caddyfile = internal.Register(MustNewLexer(
@@ -190,7 +142,48 @@ var Caddyfile = internal.Register(MustNewLexer(
 		Filenames: []string{"Caddyfile*"},
 		MimeTypes: []string{},
 	},
-	CaddyfileRules,
+	Rules{
+		"root": {
+			Include("comments"),
+			// Global options block
+			{`^\s*(\{)\s*$`, ByGroups(Punctuation), Push("globals")},
+			// Snippets
+			{`(\([^\s#]+\))(\s*)(\{)`, ByGroups(NameVariableAnonymous, Text, Punctuation), Push("snippet")},
+			// Site label
+			{`[^#{(\s,]+`, GenericHeading, Push("label")},
+			// Site label with placeholder
+			{`\{[\w+.-]+\}`, NameAttribute, Push("label")},
+			{`\s+`, Text, nil},
+		},
+		"globals": {
+			{`\}`, Punctuation, Pop(1)},
+			{`[^\s#]+`, Keyword, Push("directive")},
+			Include("base"),
+		},
+		"snippet": {
+			{`\}`, Punctuation, Pop(1)},
+			// Matcher definition
+			{`@[^\s]+(?=\s)`, NameDecorator, Push("matcher")},
+			// Any directive
+			{`[^\s#]+`, Keyword, Push("directive")},
+			Include("base"),
+		},
+		"label": {
+			// Allow multiple labels, comma separated, newlines after
+			// a comma means another label is coming
+			{`,\s*\n?`, Text, nil},
+			{` `, Text, nil},
+			{`[^#{(\s,]+`, GenericHeading, nil},
+			// Comment after non-block label (hack because comments end in \n)
+			{`#.*\n`, CommentSingle, Push("site_block")},
+			// Note: if \n, we'll never pop out of the site_block, it's valid
+			{`\{(?=\s)|\n`, Punctuation, Push("site_block")},
+		},
+		"site_block": {
+			{`\}`, Punctuation, Pop(2)},
+			Include("site_block_common"),
+		},
+	}.Merge(caddyfileCommon),
 ))
 
 // Caddyfile directive-only lexer.
@@ -201,5 +194,10 @@ var CaddyfileDirectives = internal.Register(MustNewLexer(
 		Filenames: []string{},
 		MimeTypes: []string{},
 	},
-	CaddyfileDirectiveRules,
+	Rules{
+		// Same as "site_block" in Caddyfile
+		"root": {
+			Include("site_block_common"),
+		},
+	}.Merge(caddyfileCommon),
 ))
