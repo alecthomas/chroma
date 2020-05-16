@@ -49,11 +49,13 @@ var CaddyfileCommon = Rules{
 		{`\}`, Punctuation, Pop(2)},
 		{`\{(?=\s)`, Punctuation, Push("block")},
 		{`[^\s#]+`, Keyword, Push("arguments")},
+		{`\s+`, Text, nil},
 	},
 	"deep_not_matcher": {
 		{`\}`, Punctuation, Pop(2)},
 		{`\{(?=\s)`, Punctuation, Push("block")},
 		{`[^\s#]+`, Keyword, Push("deep_subdirective")},
+		{`\s+`, Text, nil},
 	},
 	"directive": {
 		{`\{(?=\s)`, Punctuation, Push("block")},
@@ -132,6 +134,7 @@ var CaddyfileRules = (func(a Rules, b Rules) Rules {
 			{`[^#{(\s,]+`, NameLabel, Push("label")},
 			// Site label with placeholder
 			{`\{[\w+.-]+\}`, NameAttribute, Push("label")},
+			{`\s+`, Text, nil},
 		},
 		"globals": {
 			{`\}`, Punctuation, Pop(1)},
