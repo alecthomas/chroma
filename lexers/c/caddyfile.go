@@ -183,7 +183,7 @@ var CaddyfileDirectiveRules = (func(a Rules, b Rules) Rules {
 var Caddyfile = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "Caddyfile",
-		Aliases:   []string{"caddyfile"},
+		Aliases:   []string{"caddyfile", "caddy"},
 		Filenames: []string{"Caddyfile*"},
 		MimeTypes: []string{},
 	},
@@ -194,7 +194,7 @@ var Caddyfile = internal.Register(MustNewLexer(
 var CaddyfileDirectives = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "Caddyfile Directives",
-		Aliases:   []string{"caddyfile-directives"},
+		Aliases:   []string{"caddyfile-directives", "caddyfile-d", "caddy-d"},
 		Filenames: []string{},
 		MimeTypes: []string{},
 	},
