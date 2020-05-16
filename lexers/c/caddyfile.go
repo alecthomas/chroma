@@ -121,7 +121,7 @@ var caddyfileCommon = Rules{
 	},
 	"base": {
 		Include("comments"),
-		{`on|off|first|last|before|after|internal|strip_prefix|strip_suffix|replace`, NameConstant, nil},
+		{`(on|off|first|last|before|after|internal|strip_prefix|strip_suffix|replace)\b`, NameConstant, nil},
 		{`(https?://)?([a-z0-9.-]+)(:)([0-9]+)`, ByGroups(Name, Name, Punctuation, LiteralNumberInteger), nil},
 		{`[a-z-]+/[a-z-+]+`, LiteralString, nil},
 		{`[0-9]+[km]?\b`, LiteralNumberInteger, nil},
