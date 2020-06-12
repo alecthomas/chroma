@@ -1,0 +1,82 @@
+use "net"
+use "files"
+
+class ClientSide is TCPConnectionNotify
+  let _env: Env
+
+  new iso create(env: Env) =>
+    _env = env
+
+  fun ref connecting(conn: TCPConnection ref, count: U32) =>
+    _env.out.print("connecting: " + count.string())
+
+  fun ref connected(conn: TCPConnection ref) =>
+    try
+      (let host, let service) = conn.remote_address().name()?
+      _env.out.print("connected to " + host + ":" + service)
+      conn.set_nodelay(true)
+      conn.set_keepalive(10)
+      conn.write("client says hi")
+    end
+
+class Listener is TCPListenNotify
+  let _env: Env
+  let _limit: USize
+  var _host: String = ""
+  var _count: USize = 0
+
+  new create(env: Env, limit: USize) =>
+    _env = env
+    _limit = limit
+
+  fun ref connected(listen: TCPListener ref): TCPConnectionNotify iso^ =>
+    let env = _env
+
+    _env.out.print("Server starting")
+
+    let server = ServerSide(env)
+
+    _spawn(listen)
+    server
+
+  fun ref _spawn(listen: TCPListener ref) =>
+    if (_limit > 0) and (_count >= _limit) then
+      listen.dispose()
+      return
+    end
+
+    _count = _count + 1
+    _env.out.print("spawn " + _count.string())
+
+    try
+      let env = _env
+
+      _env.out.print("Client starting")
+      TCPConnection(
+        _env.root as AmbientAuth,
+        ClientSide(env),
+        _host,
+        _service)
+    else
+      _env.out.print("couldn't create client side")
+      listen.close()
+    end
+
+actor Main
+  new create(env: Env) =>
+    let limit = try
+      env.args(1)?.usize()?
+    else
+      1
+    end
+
+    try
+      let auth = env.root as AmbientAuth
+      TCPListener(auth, recover Listener(env, limit) end)
+      UDPSocket(auth, recover Pong(env) end)
+    else
+      env.out.print("unable to use the network")
+    end
+  be test() =>
+    nonsensical.stuff.here()
+
