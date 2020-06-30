@@ -1,0 +1,95 @@
+(
+fork{ 
+    var bufs = [];
+    var group = Group.new();
+    var kGroup = Group.head(group);
+    var instrGroup = Group.after(kGroup);
+    var routeGroup = Group.after(instrGroup);
+    var fxGroup = Group.after(routeGroup);
+    var outGroup = Group.after(fxGroup);
+    var long = PathName.new(~root+/+"audio/trumpet/long");
+    var squeak = PathName.new(~root+/+"audio/trumpet/squeak");
+    var trigs;
+    var route = [];
+    var reverb;
+    var revBus = Bus.audio(s, ~numSpeakers);
+    var revTime = 2;
+    var aBus = Bus.audio(s, ~numSpeakers);
+    var outBus = Bus.audio(s, ~numSpeakers);
+    var eq;
+    // ~free.do(_.value());
+    "sketches/trumpetdeltagrain.scd".postln;
+    long.entries.do({|path|
+        bufs = bufs.add(Buffer.readChannel(s, path.fullPath, channels: 0));
+    });
+    squeak.entries.do({|path|
+        bufs = bufs.add(Buffer.readChannel(s, path.fullPath, channels: 0));
+    });
+    route = [
+        Synth(\route, [\in, aBus, \out, outBus], routeGroup),
+        Synth(\route, [\in, aBus, \out, revBus, \amp, 0], routeGroup), 
+    ];
+    reverb = Synth(\jpverb, [\revtime, revTime, \in, revBus, \out, outBus], fxGroup);
+    eq = Synth(\eq, [\in, outBus, \out, ~bus[\trumpetdeltagrain], \locut, 80, \hishelffreq, 500, \hishelfdb, -6 ], outGroup);
+    s.sync;
+    bufs.postln;
+    trigs = ~mb.collect{|id| 
+        MBDeltaTrig.new( 
+            speedlim: 0.5, 
+            threshold: 0.02, 
+            minibeeID: id, 
+            minAmp: -10.dbamp, 
+            maxAmp: 6.dbamp,
+            function: { |dt, minAmp, maxAmp|
+                var buf = bufs.choose;
+                var bufdur = buf.duration * 0.5;
+                var release = bufdur * 0.5;
+                var attack = bufdur * 0.4;
+                var revLevel= rrand(-20, -6).dbamp;
+                var phasorBus = Bus.control(s, 1);
+                var phasor = Synth(\kline, [\dur, bufdur, \out, phasorBus], kGroup);
+                var grFreqBus = Bus.control(s, 1);
+                var grFreq = Synth(\kline, [\dur, bufdur, \start, rrand(1, 20), \end, rrand(1, 20), \out, grFreqBus], kGroup);
+                var panBus = Bus.control(s, 1);
+                var pan = Synth(\kline, [\dur, bufdur, \start, rrand(-1.0, 1.0), \end, rrand(-1.0, 1.0), \out, panBus], kGroup);
+                var impulseBus = Bus.control(s, 1);
+                var impulse = Synth(\impulse, [\freq, grFreqBus.asMap, \out, impulseBus], kGroup); 
+                var synth = Synth(\grbuf, 
+                    [
+                        \buf, buf,
+                        \amp, dt.linlin(0.0, 1.0, minAmp, maxAmp),
+                        \attack, attack,
+                        \pos, phasorBus.asMap,
+                        \rate, exprand(0.125, 4),
+                        \grainsize, exprand(0.001, 0.3),
+                        \trig, impulseBus.asMap,
+                        \rel, release,
+                        \pan, panBus.asMap,
+                        // \pan, rrand(-1.0, 1.0),
+                        \out, aBus, 
+                    ], 
+                    target: instrGroup,
+                );
+                SystemClock.sched((bufdur - attack - release), {synth.release(release)});
+                SystemClock.sched(bufdur, { [grFreqBus, grFreq, panBus, pan, phasorBus, impulse, impulseBus].do(_.free); });
+                route[1].set(\amp, revLevel);
+            };
+        ).play();
+    };
+
+    ~free.add(\trumpetdeltagrain -> {
+        fork{
+            trigs.do(_.stop);
+            bufs.do(_.free);
+            revTime.wait;
+            reverb.release(revTime);
+            route.do(_.release(revTime));
+            revTime.wait;
+            aBus.free;
+            revBus.free;
+            outBus.free;
+            group.free;
+        }
+    });
+}
+) 
