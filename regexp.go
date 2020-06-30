@@ -160,6 +160,14 @@ func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, erro
 // Rules maps from state to a sequence of Rules.
 type Rules map[string][]Rule
 
+// Rename clones rules then a rule.
+func (r Rules) Rename(old, new string) Rules {
+	r = r.Clone()
+	r[new] = r[old]
+	delete(r, old)
+	return r
+}
+
 // Clone returns a clone of the Rules.
 func (r Rules) Clone() Rules {
 	out := map[string][]Rule{}

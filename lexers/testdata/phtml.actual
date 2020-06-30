@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My first PHP page</h1>
+<?php
+
 $docs = $modx->getIterator('modResource', ["parent" => 84]);
 
 foreach($docs as $doc){
@@ -5,5 +12,8 @@ foreach($docs as $doc){
     $doc->set("content", preg_replace("/Some value/i", "Replacement", $q));
     print_r($doc->content);
     // $doc->save();
-}
+} 
 // some comment
+?>
+</body>
+</html>

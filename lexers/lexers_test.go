@@ -73,7 +73,7 @@ func TestLexers(t *testing.T) {
 			if os.Getenv("RECORD") == "true" {
 				// Update the expected file with the generated output of this lexer
 				f, err := os.Create(expectedFilename)
-				defer f.Close()
+				defer f.Close() // nolint: gosec
 				assert.NoError(t, err)
 				assert.NoError(t, formatters.JSON.Format(f, nil, chroma.Literator(actual...)))
 			} else {
