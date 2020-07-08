@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+	"time"
 	"unicode/utf8"
 
 	"github.com/dlclark/regexp2"
@@ -393,6 +394,7 @@ func (r *RegexLexer) maybeCompile() (err error) {
 				if err != nil {
 					return fmt.Errorf("failed to compile rule %s.%d: %s", state, i, err)
 				}
+				rule.Regexp.MatchTimeout = time.Millisecond * 250
 			}
 		}
 	}
