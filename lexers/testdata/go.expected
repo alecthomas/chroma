@@ -58,5 +58,7 @@
   {"type":"Text","value":"\n    "},
   {"type":"Punctuation","value":"}"},
   {"type":"Text","value":"\n"},
-  {"type":"Punctuation","value":"}"}
+  {"type":"Punctuation","value":"}"},
+  {"type":"Text","value":" "},
+  {"type":"CommentSingle","value":"// One last thing\n"}
 ]
