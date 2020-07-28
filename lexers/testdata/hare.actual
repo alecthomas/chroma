@@ -1,0 +1,32 @@
+// test comment
+use bufio::*;
+use fmt, os::exec = exec;
+use time;
+
+type foo = struct {
+	bar: str,
+	baz: time::duration,
+};
+
+export type e = enum u8 {
+	a, b, c
+};
+
+const arr: [_]foo= [
+	foo { bar = "This is a \"string\"!", baz = 25 * time::MINUTE },
+	foo { bar = `This is also a
+string`, baz = 5 * time::SECOND},
+];
+
+let c = 'a'; // char
+let d = 0b1010u16;
+let e: size = 32z;
+let g = 0xffa31u32 + 0o3u32;
+
+export fn main() void = {
+	fmt::println("{}", size(int))!;
+
+	for (let i = 0z; i < 5; i += 1) {
+		fmt::println("{}", i);
+	};
+};
