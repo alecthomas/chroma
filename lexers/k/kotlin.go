@@ -36,7 +36,7 @@ var Kotlin = internal.Register(MustNewLexer(
 			{`(package|import)(\s+)`, ByGroups(Keyword, Text), Push("package")},
 			{`(val|var)(\s+)`, ByGroups(Keyword, Text), Push("property")},
 			{`(fun)(\s+)(<[^>]*>\s+)?`, ByGroups(Keyword, Text, Text), Push("function")},
-			{`(abstract|actual|annotation|as|break|by|catch|class|companion|const|constructor|continue|crossinline|data|do|dynamic|else|enum|expect|external|false|final|finally|for|fun|get|if|import|in|infix|inline|inner|interface|internal|is|lateinit|noinline|null|object|open|operator|out|override|package|private|protected|public|reified|return|sealed|set|super|suspend|tailrec|this|throw|true|try|val|var|vararg|when|where|while)\b`, Keyword, nil},
+			{`(abstract|actual|annotation|as|as?|break|by|catch|class|companion|const|constructor|continue|crossinline|data|delegate|do|dynamic|else|enum|expect|external|false|field|file|final|finally|for|fun|get|if|import|in|infix|init|inline|inner|interface|internal|is|it|lateinit|noinline|null|object|open|operator|out|override|package|param|private|property|protected|public|receiver|reified|return|sealed|set|setparam|super|suspend|tailrec|this|throw|true|try|typealias|typeof|val|var|vararg|when|where|while)\b`, Keyword, nil},
 			{"(@?[" + kotlinIdentifier + "]*`)", Name, nil},
 		},
 		"package": {
