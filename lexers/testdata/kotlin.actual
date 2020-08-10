@@ -4,19 +4,69 @@ import A
 import B.*
 
 fun main(args: Array<String>) {
-  val ` + "`with spaces`" + ` = "hello"
-  val multiline = """1
+    val ` + "with spaces" + ` = "hello"
+    val multiline = """1
 2"""
-  StringBuilder().apply {
-    append(multiline)
-  }
-  val unsigned = 0x00UL + 123u + 76.54
+    StringBuilder().apply {
+        append(multiline)
+    }
+    val unsigned = 0x00UL + 123u + 76.54
 }
 /*
 */
 
+fun nullable(nullable: String?): Int = nullable?.length ?: 0
+
+fun nullable2(nullable: String?): Int = nullable?.length ?: run {
+    1 + 2
+}
+
+typealias MySecretAlias<A, B> = (A, B) -> Unit
+
+val impl : MySecretAlias<Int, Int> = { a, _ -> Unit }
+
+fun someOperators(a: Int, b: Int) {
+    var c : Int = 123
+    println("This is an example a = $a and the sum is ${a + b} ${ A.foo() }")
+    println( a % b)
+    println(c in a..b)
+    
+    a %= 2
+	a && b
+	a *= 2
+	a++
+	b+=2
+	b--
+	a-=1
+	a /= 2
+	a <= b
+	b == a
+	a >= b
+	nullable!!
+	a != b
+	a || b
+	a?.foo
+	a ?: b
+}
+
+class B // no braces
+
+data class C(
+    val s: String
+)
+
+fun moreOperators(arg: Any?) {
+    when(arg) {
+        !is Int -> { }
+        is Number -> {}
+        in emptyList<Int>() -> { }
+    }
+
+    println(arg === Unit)
+}
+
 class X {
-  companion object {
-  }
-  suspend inline <reified T> generic(t: T) { print(T::class.name) }
+    companion object {
+    }
+    suspend inline fun <reified T>  generic(t: T) { print(T::class.simpleName) }
 } // eof comment
