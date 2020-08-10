@@ -62,7 +62,8 @@ fun moreOperators(arg: Any?) {
         in emptyList<Int>() -> { }
     }
 
-    println(arg === Unit)
+    if(arg !== Boolean)
+    	println(arg === Unit)
 }
 
 class X {
