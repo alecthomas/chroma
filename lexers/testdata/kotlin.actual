@@ -98,6 +98,9 @@ annotation class Annotated
     }
 }
 
+open class TUpper
+fun <T: TUpper, R: Any?> generic() = 123
+
 class X {
     companion object {
     }

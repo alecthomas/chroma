@@ -37,26 +37,36 @@ var Kotlin = internal.Register(MustNewLexer(
 			{`(class|interface|object)(\s+)`, ByGroups(Keyword, Text), Push("class")},
 			{`(package|import)(\s+)`, ByGroups(Keyword, Text), Push("package")},
 			{`(val|var)(\s+)`, ByGroups(Keyword, Text), Push("property")},
-			{`(fun)(\s+)(<[^>]*>\s+)?`, ByGroups(Keyword, Text, Text), Push("function")},
+			{`(fun)(\s+)`, ByGroups(Keyword, Text), Push("function")},
 			{`(abstract|actual|annotation|as|as\?|break|by|catch|class|companion|const|constructor|continue|crossinline|data|delegate|do|dynamic|else|enum|expect|external|false|field|file|final|finally|for|fun|get|if|import|in|infix|init|inline|inner|interface|internal|is|it|lateinit|noinline|null|object|open|operator|out|override|package|param|private|property|protected|public|receiver|reified|return|sealed|set|setparam|super|suspend|tailrec|this|throw|true|try|typealias|typeof|val|var|vararg|when|where|while)\b`, Keyword, nil},
-			{"@[" + kotlinIdentifier + "]+", NameDecorator, nil},
-			{"[" + kotlinIdentifier + "]+", Name, nil},
+			{`@[` + kotlinIdentifier + `]+`, NameDecorator, nil},
+			{`[` + kotlinIdentifier + `]+`, Name, nil},
 		},
 		"package": {
 			{`\S+`, NameNamespace, Pop(1)},
 		},
 		"class": {
 			// \x60 is the back tick character (`)
-			{"\x60[^\x60]+?\x60", NameClass, Pop(1)},
-			{"[" + kotlinIdentifier + "]+", NameClass, Pop(1)},
+			{`\x60[^\x60]+?\x60`, NameClass, Pop(1)},
+			{`[` + kotlinIdentifier + `]+`, NameClass, Pop(1)},
 		},
 		"property": {
-			{"\x60[^\x60]+?\x60", NameProperty, Pop(1)},
-			{"[" + kotlinIdentifier + "]+", NameProperty, Pop(1)},
+			{`\x60[^\x60]+?\x60`, NameProperty, Pop(1)},
+			{`[` + kotlinIdentifier + `]+`, NameProperty, Pop(1)},
+		},
+		"generics-specification": {
+			{`>`, Punctuation, Pop(1)},
+			{`[,:*?]`, Punctuation, nil},
+			{`(in|out|reified)`, Keyword, nil},
+			{`\x60[^\x60]+?\x60`, NameClass, nil},
+			{`[` + kotlinIdentifier + `]+`, NameClass, nil},
+			{`\s+`, Text, nil},
 		},
 		"function": {
-			{"\x60[^\x60]+?\x60", NameFunction, Pop(1)},
-			{"[" + kotlinIdentifier + "]+", NameFunction, Pop(1)},
+			{`<`, Punctuation, Push("generics-specification")},
+			{`\x60[^\x60]+?\x60`, NameFunction, Pop(1)},
+			{`[` + kotlinIdentifier + `]+`, NameFunction, Pop(1)},
+			{`\s+`, Text, nil},
 		},
 		"rawstring": {
 			// raw strings don't allow character escaping
