@@ -101,6 +101,24 @@ annotation class Annotated
 open class TUpper
 fun <T: TUpper, R: Any?> generic() = 123
 
+class Holder <in A, out B, C: TUpper>
+
+class Holder2  <T>
+
+var holder1: Holder<Int, String, *>? = null
+
+class Some(
+    val holder2: Holder<Int, String, *>? = null
+) {
+    var holder3: Holder<Int, String, *>? = null
+    fun example() {
+        var holder4: Holder<Int, String, *>? = null
+    }
+}
+fun <T : Comparable<T>> sort(list: List<T>) {
+    
+}
+
 class X {
     companion object {
     }

@@ -55,6 +55,7 @@ var Kotlin = internal.Register(MustNewLexer(
 			{`[` + kotlinIdentifier + `]+`, NameProperty, Pop(1)},
 		},
 		"generics-specification": {
+			{`<`, Punctuation, Push("generics-specification")}, // required for generics inside generics e.g. <T : List<Int> >
 			{`>`, Punctuation, Pop(1)},
 			{`[,:*?]`, Punctuation, nil},
 			{`(in|out|reified)`, Keyword, nil},
