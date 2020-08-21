@@ -83,6 +83,21 @@ fun moreOperators(arg: Any?) {
     	println(arg === Unit)
 }
 
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION,
+        AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.EXPRESSION)
+@Retention(AnnotationRetention.SOURCE)
+annotation class Annotated
+
+@Annotated class A {
+    @Annotated fun a(
+        @Annotated param: Int
+    ) {
+
+        @Annotated val y = 0
+
+    }
+}
+
 class X {
     companion object {
     }
