@@ -45,16 +45,17 @@ var Kotlin = internal.Register(MustNewLexer(
 			{`\S+`, NameNamespace, Pop(1)},
 		},
 		"class": {
+			// \x60 is the back tick character (`)
 			{"\x60[^\x60]+?\x60", NameClass, Pop(1)},
-			{"(@?[" + kotlinIdentifier + "]*)", NameClass, Pop(1)},
+			{"[" + kotlinIdentifier + "]+", NameClass, Pop(1)},
 		},
 		"property": {
 			{"\x60[^\x60]+?\x60", NameProperty, Pop(1)},
-			{"(@?[" + kotlinIdentifier + " ]*`)", NameProperty, Pop(1)},
+			{"[" + kotlinIdentifier + "]+", NameProperty, Pop(1)},
 		},
 		"function": {
 			{"\x60[^\x60]+?\x60", NameFunction, Pop(1)},
-			{"(@?[" + kotlinIdentifier + " ]*`)", NameFunction, Pop(1)},
+			{"[" + kotlinIdentifier + "]+", NameFunction, Pop(1)},
 		},
 		"rawstring": {
 			// raw strings don't allow character escaping
