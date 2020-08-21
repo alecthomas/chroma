@@ -30,7 +30,7 @@ var Kotlin = internal.Register(MustNewLexer(
 			{`[{}]`, Punctuation, nil},
 			{`"""`, LiteralString, Push("rawstring")},
 			{`"`, LiteralStringDouble, Push("string")},
-			{`(')(\\u[0-9a-fA-F]{4})(')`, ByGroups(LiteralStringChar,LiteralStringEscape,LiteralStringChar), nil},
+			{`(')(\\u[0-9a-fA-F]{4})(')`, ByGroups(LiteralStringChar, LiteralStringEscape, LiteralStringChar), nil},
 			{`'\\.'|'[^\\]'`, LiteralStringChar, nil},
 			{`0[xX][0-9a-fA-F]+[Uu]?[Ll]?|[0-9]+(\.[0-9]*)?([eE][+-][0-9]+)?[fF]?[Uu]?[Ll]?`, LiteralNumber, nil},
 			{`(companion)(\s+)(object)`, ByGroups(Keyword, Text, Keyword), nil},
