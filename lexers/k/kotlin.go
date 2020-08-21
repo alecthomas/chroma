@@ -28,8 +28,9 @@ var Kotlin = internal.Register(MustNewLexer(
 			{`%=|&&|\*=|\+\+|\+=|--|-=|->|\.\.|\/=|::|<=|==|>=|!!|!=|\|\||\?[:.]`, Operator, nil},
 			{`[~!%^&*()+=|\[\]:;,.<>\/?-]`, Punctuation, nil},
 			{`[{}]`, Punctuation, nil},
-			{`"""[^"]*"""`, LiteralString, nil},
-			{`"(\\\\|\\"|[^"\n])*["\n]`, LiteralString, nil},
+			{`"""`, LiteralString, Push("rawstring")},
+			{`"`, LiteralStringDouble, Push("string")},
+			{`(')(\\u[0-9a-fA-F]{4})(')`, ByGroups(LiteralStringChar,LiteralStringEscape,LiteralStringChar), nil},
 			{`'\\.'|'[^\\]'`, LiteralStringChar, nil},
 			{`0[xX][0-9a-fA-F]+[Uu]?[Ll]?|[0-9]+(\.[0-9]*)?([eE][+-][0-9]+)?[fF]?[Uu]?[Ll]?`, LiteralNumber, nil},
 			{`(companion)(\s+)(object)`, ByGroups(Keyword, Text, Keyword), nil},
@@ -51,6 +52,27 @@ var Kotlin = internal.Register(MustNewLexer(
 		},
 		"function": {
 			{"(@?[" + kotlinIdentifier + " ]*`)", NameFunction, Pop(1)},
+		},
+		"rawstring": {
+			// raw strings don't allow character escaping
+			{`"""`, LiteralString, Pop(1)},
+			{`(?:[^$"]+|\"{1,2}[^"])+`, LiteralString, nil},
+			Include("string-interpol"),
+			// remaining dollar signs are just a string
+			{`\$`, LiteralString, nil},
+		},
+		"string": {
+			{`\\[tbnr'"\\\$]`, LiteralStringEscape, nil},
+			{`\\u[0-9a-fA-F]{4}`, LiteralStringEscape, nil},
+			{`"`, LiteralStringDouble, Pop(1)},
+			Include("string-interpol"),
+			{`[^\n\\"$]+`, LiteralStringDouble, nil},
+			// remaining dollar signs are just a string
+			{`\$`, LiteralStringDouble, nil},
+		},
+		"string-interpol": {
+			{`\$[` + kotlinIdentifier + `]+`, LiteralStringInterpol, nil},
+			{`\${[^}\n]*}`, LiteralStringInterpol, nil},
 		},
 	},
 ))
