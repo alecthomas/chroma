@@ -21,6 +21,23 @@ fun nullable2(nullable: String?): Int = nullable?.length ?: run {
     1 + 2
 }
 
+val rawStringWithQuotes = """
+Hello "example" ${1 + 2}
+And now { Just the braces }
+Escapes here don't work so this is just text \t \n \u1234 $ \$
+"""
+
+fun returnsSomething(): Int {
+    return "".length
+}
+
+fun returnsSomethingElse(): Int = "\\\n".length
+
+val character = '"'
+val escapedCharacter = '\"'
+// escaping a double quote character inside a character is optional
+val stringWithSingleQuote = "'"
+
 typealias MySecretAlias<A, B> = (A, B) -> Unit
 
 val impl : MySecretAlias<Int, Int> = { a, _ -> Unit }
@@ -64,6 +81,42 @@ fun moreOperators(arg: Any?) {
 
     if(arg !== Boolean)
     	println(arg === Unit)
+}
+
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION,
+        AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.EXPRESSION)
+@Retention(AnnotationRetention.SOURCE)
+annotation class Annotated
+
+@Annotated class A {
+    @Annotated fun a(
+        @Annotated param: Int
+    ) {
+
+        @Annotated val y = 0
+
+    }
+}
+
+open class TUpper
+fun <T: TUpper, R: Any?> generic() = 123
+
+class Holder <in A, out B, C: TUpper>
+
+class Holder2  <T>
+
+var holder1: Holder<Int, String, *>? = null
+
+class Some(
+    val holder2: Holder<Int, String, *>? = null
+) {
+    var holder3: Holder<Int, String, *>? = null
+    fun example() {
+        var holder4: Holder<Int, String, *>? = null
+    }
+}
+fun <T : Comparable<T>> sort(list: List<T>) {
+    
 }
 
 class X {
