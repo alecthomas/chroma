@@ -1,0 +1,12 @@
+defmodule Test do
+  defmodule Formatter do
+    defstruct [:name]
+  end
+
+  def hello(name \\ "chroma") do
+    case name do
+      "chroma" -> IO.puts("Hello, CHROMA!!")
+      other -> raise "no others please"
+    end
+  end
+end
