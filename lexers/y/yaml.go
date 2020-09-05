@@ -37,6 +37,7 @@ var YAML = internal.Register(MustNewLexer(
 			{`'(?:\\.|[^'])*'`, StringSingle, nil},
 			{`\d\d\d\d-\d\d-\d\d([T ]\d\d:\d\d:\d\d(\.\d+)?(Z|\s+[-+]\d+)?)?`, LiteralDate, nil},
 			{`\b[+\-]?(0x[\da-f]+|0o[0-7]+|(\d+\.?\d*|\.?\d+)(e[\+\-]?\d+)?|\.inf|\.nan)\b`, Number, nil},
+			{`([^\{\}\[\]\?,\:\!\-\*&\@].*)( )+(#.*)`, ByGroups(Literal, Whitespace, Comment), nil},
 			{`[^\{\}\[\]\?,\:\!\-\*&\@].*`, Literal, nil},
 		},
 		"key": {
