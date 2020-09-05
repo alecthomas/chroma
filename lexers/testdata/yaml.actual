@@ -2,6 +2,17 @@
 
 # Comments in YAML look like this.
 
+comment_after_string_key: string value # comments can follow on same line
+nested_comment: # this is a comment right next to a key
+  sub_key: sub string value # sub comment
+  inline_not_comment: string#hash #nospacecomment
+  bool_comment: True # comment after bool
+  int_comment: 123 # comment after int
+  date_comment: 2010-11-12 # comment after date
+  single_quote: 'single # quote string' # comment after single quote string
+  double_quote: "double # quote string" # comment after double quote string
+  key: no comment
+
 ################
 # SCALAR TYPES #
 ################
