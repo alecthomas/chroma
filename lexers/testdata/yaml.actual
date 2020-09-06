@@ -82,6 +82,55 @@ literal_block_with_keep_chomping: |+
 
     The literal continues until de-dented, and the leading indentation is
     stripped.
+
+a: |
+  multiline literal
+  line 2
+b: >
+  multiline: folded
+  line 2
+c: |-
+  multiline # literal strip
+  line 2
+d: >-
+  multiline folded strip
+  line 2: test
+
+  # not a comment
+   indented by 1
+e: |+
+  multiline literal keep
+  line: 2
+# this is a comment
+f: >+
+ multiline folded keep one space
+ line 2
+g: test
+
+block_scalars_with_indent:
+  a: |
+    multiline literal
+    line 2
+  b: >
+    multiline: folded
+    line 2
+  c: |-
+      multiline # literal strip
+      line 2 6 leading spaces
+
+  d: >-
+    multiline folded strip
+    line 2: test
+    # not a comment
+  e: |+
+    multiline literal keep
+    line: 2
+  # this is a comment
+  f: >+
+    multiline folded keep
+    line 2
+  g: test
+
 ####################
 # COLLECTION TYPES #
 ####################
