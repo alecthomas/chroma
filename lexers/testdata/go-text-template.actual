@@ -1,0 +1,6 @@
+{{/*
+  This is a multiline comment
+*/}}
+
+{{ $myVar := 2 }}
+{{ $myVar = 4 }}
