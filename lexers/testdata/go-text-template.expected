@@ -1,3 +1,23 @@
 [
-  {"type":"CommentMultiline","value":"{{/*\n  This is a multiline comment\n*/}}"}
+  {"type":"CommentMultiline","value":"{{/*\n  This is a multiline comment\n*/}}"},
+  {"type":"Other","value":"\n\n"},
+  {"type":"CommentPreproc","value":"{{"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameOther","value":"$myVar"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Operator","value":":="},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameOther","value":"2"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"CommentPreproc","value":"}}"},
+  {"type":"Other","value":"\n"},
+  {"type":"CommentPreproc","value":"{{"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameOther","value":"$myVar"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Operator","value":"="},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameOther","value":"4"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"CommentPreproc","value":"}}"}
 ]
