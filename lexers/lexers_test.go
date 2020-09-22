@@ -55,7 +55,7 @@ func TestLexers(t *testing.T) {
 			continue
 		}
 
-		base := strings.Split(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), "-")[0]
+		base := strings.Split(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), ".")[0]
 		lexer := lexers.Get(base)
 		assert.NotNil(t, lexer)
 

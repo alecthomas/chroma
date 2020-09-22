@@ -23,6 +23,9 @@ func TestGoHTMLTemplateIssue126(t *testing.T) {
     {{ with .OutputFormats.Get "RSS" }}
         {{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
     {{ end }}
+	{{/*
+		Print all pages
+	*/}}
     {{ range .Data.Pages }}
     <item>
       <title>{{ .Title }}</title>
@@ -46,5 +49,74 @@ func TestGoHTMLTemplateIssue126(t *testing.T) {
 		tokens, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
 		assert.NoError(t, err)
 		assert.Equal(t, source, chroma.Stringify(tokens...))
+	}
+}
+
+func TestGoHTMLTemplateMultilineComments(t *testing.T) {
+	for _, source := range []string{
+		`
+{{/*
+	This is a multiline comment
+*/}}
+`,
+		`
+{{- /*
+	This is a multiline comment
+*/}}
+`,
+		`
+{{/*
+	This is a multiline comment
+*/ -}}
+`,
+		`
+{{- /*
+	This is a multiline comment
+*/ -}}
+`,
+	} {
+		tokens, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		assert.NoError(t, err)
+		assert.Equal(t, source, chroma.Stringify(tokens...))
+
+		// Make sure that there are no errors
+		for _, token := range tokens {
+			assert.NotEqual(t, chroma.Error, token.Type)
+		}
+
+		// Make sure that multiline comments are printed
+		found := false
+		for _, token := range tokens {
+			if token.Type == chroma.CommentMultiline {
+				found = true
+			}
+		}
+		assert.True(t, found)
+	}
+}
+
+func TestGoHTMLTemplateNegativeNumber(t *testing.T) {
+	for _, source := range []string{
+		`
+{{ fn -3 }}
+`,
+	} {
+		tokens, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		assert.NoError(t, err)
+		assert.Equal(t, source, chroma.Stringify(tokens...))
+
+		// Make sure that there are no errors
+		for _, token := range tokens {
+			assert.NotEqual(t, chroma.Error, token.Type)
+		}
+
+		// Make sure that negative number is found
+		found := false
+		for _, token := range tokens {
+			if token.Type == chroma.LiteralNumberInteger {
+				found = true
+			}
+		}
+		assert.True(t, found)
 	}
 }
