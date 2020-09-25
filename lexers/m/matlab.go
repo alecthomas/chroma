@@ -1,8 +1,16 @@
 package m
 
 import (
+	"regexp"
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
+)
+
+var (
+	matlabAnalyserCommentRe   = regexp.MustCompile(`^\s*%`)
+	matlabAnalyserSystemCMDRe = regexp.MustCompile(`^!\w+`)
 )
 
 // Matlab lexer.
@@ -48,4 +56,35 @@ var Matlab = internal.Register(MustNewLexer(
 			{`(\s*)([a-zA-Z_]\w*)`, ByGroups(Text, NameFunction), Pop(1)},
 		},
 	},
-))
+).SetAnalyser(func(text string) float32 {
+	lines := strings.Split(strings.Replace(text, "\r\n", "\n", -1), "\n")
+
+	var firstNonComment string
+	for _, line := range lines {
+		if !matlabAnalyserCommentRe.MatchString(line) {
+			firstNonComment = strings.TrimSpace(line)
+			break
+		}
+	}
+
+	// function declaration
+	if strings.HasPrefix(firstNonComment, "function") && !strings.Contains(firstNonComment, "{") {
+		return 1.0
+	}
+
+	// comment
+	for _, line := range lines {
+		if matlabAnalyserCommentRe.MatchString(line) {
+			return 0.2
+		}
+	}
+
+	// system cmd
+	for _, line := range lines {
+		if matlabAnalyserSystemCMDRe.MatchString(line) {
+			return 0.2
+		}
+	}
+
+	return 0
+}))
