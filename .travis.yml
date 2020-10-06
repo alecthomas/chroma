@@ -1,4 +1,7 @@
 sudo: false
+arch:
+  - ppc64le
+  - amd64
 language: go
 go:
   - "1.13.x"
