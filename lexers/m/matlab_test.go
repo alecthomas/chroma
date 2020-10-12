@@ -1,7 +1,7 @@
 package m_test
 
 import (
-	"strings"
+	"io/ioutil"
 	"testing"
 
 	"github.com/alecthomas/assert"
@@ -11,36 +11,23 @@ import (
 
 func TestMatlab_AnalyseText(t *testing.T) {
 	tests := map[string]struct {
-		Text     string
+		Filepath string
 		Expected float32
 	}{
 		"function": {
-			Text: strings.Join([]string{
-				"% comment",
-				"function foo = bar(a, b, c)",
-			}, "\n"),
+			Filepath: "testdata/matlab_function.m",
 			Expected: 1.0,
 		},
 		"comment": {
-			Text: strings.Join([]string{
-				"",
-				"% comment",
-				"",
-			}, "\n"),
+			Filepath: "testdata/matlab_comment.m",
 			Expected: 0.2,
 		},
-		"system cmd": {
-			Text: strings.Join([]string{
-				"",
-				"!rmdir oldtests",
-			}, "\n"),
+		"systemcmd": {
+			Filepath: "testdata/matlab_systemcmd.m",
 			Expected: 0.2,
 		},
 		"windows": {
-			Text: strings.Join([]string{
-				"% comment",
-				"function foo = bar(a, b, c)",
-			}, "\r\n"),
+			Filepath: "testdata/matlab_windows.m",
 			Expected: 1.0,
 		},
 	}
@@ -48,10 +35,13 @@ func TestMatlab_AnalyseText(t *testing.T) {
 	for name, test := range tests {
 		test := test
 		t.Run(name, func(t *testing.T) {
+			data, err := ioutil.ReadFile(test.Filepath)
+			assert.NoError(t, err)
+
 			analyser, ok := m.Matlab.(chroma.Analyser)
 			assert.True(t, ok)
 
-			assert.Equal(t, test.Expected, analyser.AnalyseText(test.Text))
+			assert.Equal(t, test.Expected, analyser.AnalyseText(string(data)))
 		})
 	}
 }
