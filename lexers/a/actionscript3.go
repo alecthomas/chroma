@@ -1,9 +1,13 @@
 package a
 
 import (
+	"regexp"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
+
+var actionscript3AnalyserRe = regexp.MustCompile(`\w+\s*:\s*\w`)
 
 // Actionscript 3 lexer.
 var Actionscript3 = internal.Register(MustNewLazyLexer(
@@ -15,7 +19,13 @@ var Actionscript3 = internal.Register(MustNewLazyLexer(
 		DotAll:    true,
 	},
 	actionscript3Rules,
-))
+).SetAnalyser(func(text string) float32 {
+	if actionscript3AnalyserRe.MatchString(text) {
+		return 0.3
+	}
+
+	return 0
+}))
 
 func actionscript3Rules() Rules {
 	return Rules{
