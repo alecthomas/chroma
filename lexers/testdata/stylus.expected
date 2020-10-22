@@ -1,0 +1,19 @@
+[
+  {"type":"NameVariable", "value":"$white"},
+  {"type":"Text", "value":" "},
+  {"type":"Operator", "value":"?="},
+  {"type":"Text", "value":" "},
+  {"type":"LiteralNumberHex", "value":"#fff"},
+  {"type":"Text", "value":"\n"},
+  {"type":"NameTag","value":"body"},
+  {"type":"Text", "value":" "},
+  {"type":"Punctuation", "value":"{"},
+  {"type":"Text", "value":"\n  "},
+  {"type":"NameProperty", "value":"color"},
+  {"type":"Punctuation", "value":":"},
+  {"type":"Text", "value":" "},
+  {"type":"NameVariable", "value":"$white"},
+  {"type":"Punctuation", "value":";"},
+  {"type":"Text", "value":"\n"},
+  {"type":"Punctuation", "value":"}"}
+]
