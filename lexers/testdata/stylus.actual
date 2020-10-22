@@ -1,0 +1,4 @@
+$white ?= #fff
+body {
+  color: $white;
+}
