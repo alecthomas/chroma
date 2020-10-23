@@ -1,13 +1,42 @@
 package c_test
 
 import (
+	"io/ioutil"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
+	"github.com/alecthomas/assert"
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/lexers/c"
 )
+
+func TestCpp_AnalyseText(t *testing.T) {
+	tests := map[string]struct {
+		Filepath string
+		Expected float32
+	}{
+		"include": {
+			Filepath: "testdata/cpp_include.cpp",
+			Expected: 0.2,
+		},
+		"namespace": {
+			Filepath: "testdata/cpp_namespace.cpp",
+			Expected: 0.4,
+		},
+	}
+
+	for name, test := range tests {
+		test := test
+		t.Run(name, func(t *testing.T) {
+			data, err := ioutil.ReadFile(test.Filepath)
+			assert.NoError(t, err)
+
+			analyser, ok := c.CPP.(chroma.Analyser)
+			assert.True(t, ok)
+
+			assert.Equal(t, test.Expected, analyser.AnalyseText(string(data)))
+		})
+	}
+}
 
 func TestIssue290(t *testing.T) {
 	input := `// 64-bit floats have 53 digits of precision, including the whole-number-part.

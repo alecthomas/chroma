@@ -5,6 +5,9 @@
 *.dylib
 /cmd/chroma/chroma
 
+# Dependency directories
+vendor/
+
 # Test binary, build with `go test -c`
 *.test
 
