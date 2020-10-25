@@ -25,5 +25,17 @@
   {"type":"NameOther","value":"sum"},
   {"type":"Punctuation","value":")"},
   {"type":"Text","value":"  "},
-  {"type":"CommentSingle","value":"// \"+\" means combine into a string\n"}
+  {"type":"CommentSingle","value":"// \"+\" means combine into a string\n"},
+  {"type":"KeywordReserved","value":"const"},
+  {"type":"Text","value":" "},
+  {"type":"NameOther","value":"filePath"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"NameBuiltin","value":"String"},
+  {"type":"Punctuation","value":"."},
+  {"type":"NameOther","value":"raw"},
+  {"type":"LiteralStringBacktick","value":"`C:\\Development\\profile\\aboutme.html`"},
+  {"type":"Punctuation","value":";"},
+  {"type":"Text","value":"\n"}
 ]
