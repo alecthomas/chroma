@@ -26,4 +26,5 @@ jobs:
       - run:
           name: Release
           command: |
+            git clean -fdx .
             curl -sL https://git.io/goreleaser | bash && goreleaser
