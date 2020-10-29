@@ -1,5 +1,5 @@
-# Chroma — A general purpose syntax highlighter in pure Go [![Golang Documentation](https://godoc.org/github.com/alecthomas/chroma?status.svg)](https://godoc.org/github.com/alecthomas/chroma) [![CircleCI](https://img.shields.io/circleci/project/github/alecthomas/chroma.svg)](https://circleci.com/gh/alecthomas/chroma)
- [![Go Report Card](https://goreportcard.com/badge/github.com/alecthomas/chroma)](https://goreportcard.com/report/github.com/alecthomas/chroma) [![Slack chat](https://img.shields.io/static/v1?logo=slack&style=flat&label=slack&color=green&message=gophers)](https://gophers.slack.com/messages/CN9DS8YF3) 
+# Chroma — A general purpose syntax highlighter in pure Go [![Golang Documentation](https://godoc.org/github.com/alecthomas/chroma?status.svg)](https://godoc.org/github.com/alecthomas/chroma)[![CircleCI](https://img.shields.io/circleci/project/github/alecthomas/chroma.svg)](https://circleci.com/gh/alecthomas/chroma)
+[![Go Report Card](https://goreportcard.com/badge/github.com/alecthomas/chroma)](https://goreportcard.com/report/github.com/alecthomas/chroma)[![Slack chat](https://img.shields.io/static/v1?logo=slack&style=flat&label=slack&color=green&message=gophers)](https://gophers.slack.com/messages/CN9DS8YF3) 
 
 > **NOTE:** As Chroma has just been released, its API is still in flux. That said, the high-level interface should not change significantly.
 
