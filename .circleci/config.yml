@@ -2,7 +2,7 @@ version: 2.1
 workflows:
   main:
     jobs:
-			- build:
+      - build
       - release:
           # Only run this job on git tag pushes
           filters:
