@@ -1,10 +1,21 @@
-version: 2
+version: 2.1
+workflows:
+  main:
+    jobs:
+			- build:
+      - release:
+          # Only run this job on git tag pushes
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*(-.*)*/
 jobs:
   build:
     environment:
       GO111MODULE: "on"
     docker:
-      - image: circleci/golang:1.14
+      - image: circleci/golang:1.15
     working_directory: /go/src/github.com/alecthomas/chroma
     steps:
       - checkout
@@ -23,8 +34,9 @@ jobs:
           command: |
             go build ./...
             ./bin/golangci-lint run
-      - run:
-          name: Release
-          command: |
-            git clean -fdx .
-            curl -sL https://git.io/goreleaser | bash && goreleaser
+  release:
+    docker:
+      - image: circleci/golang:1.15
+    steps:
+      - checkout
+      - run: curl -sL https://git.io/goreleaser | bash
