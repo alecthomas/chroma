@@ -11,4 +11,10 @@ fn main() {
     println!("rect1 is {:?}", rect1);
 
     let r#type = "valid";
+
+    let s = "May
+June";
+    let s = r"May
+June";
+
 }
