@@ -4,6 +4,8 @@ struct Rectangle {
     height: u32,
 }
 
+async fn alignof() {}
+
 fn main() {
     let rect1 = Rectangle { width: 30, height: 50 };
 
@@ -11,4 +13,5 @@ fn main() {
     println!("rect1 is {:?}", rect1);
 
     let r#type = "valid";
+    let i: i128 = 1117;
 }
