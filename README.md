@@ -183,7 +183,7 @@ following constructor options:
 - `ClassPrefix(prefix)` - prefix each generated CSS class.
 - `TabWidth(width)` - Set the rendered tab width, in characters.
 - `WithLineNumbers()` - Render line numbers (style with `LineNumbers`).
-- `LinkableLineNumbers()` - Make the line numbers linkable.
+- `LinkableLineNumbers()` - Make the line numbers linkable and be a link to themselves.
 - `HighlightLines(ranges)` - Highlight lines in these ranges (style with `LineHighlight`).
 - `LineNumbersInTable()` - Use a table for formatting line numbers and code, rather than spans.
 
