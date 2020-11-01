@@ -108,6 +108,32 @@ func TestTableLineNumberNewlines(t *testing.T) {
 </span>`)
 }
 
+func TestLinkeableLineNumbers(t *testing.T) {
+	f := New(WithClasses(true), WithLineNumbers(true), LinkableLineNumbers(true, "line"))
+	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+
+	assert.Contains(t, buf.String(), `id="line1"><a style="outline: none; text-decoration:none; color:inherit" href="#line1">1</a>`)
+	assert.Contains(t, buf.String(), `id="line5"><a style="outline: none; text-decoration:none; color:inherit" href="#line5">5</a>`)
+}
+
+func TestTableLinkeableLineNumbers(t *testing.T) {
+	f := New(WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true), LinkableLineNumbers(true, "line"))
+	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+
+	assert.Contains(t, buf.String(), `id="line1"><a style="outline: none; text-decoration:none; color:inherit" href="#line1">1</a>`)
+	assert.Contains(t, buf.String(), `id="line5"><a style="outline: none; text-decoration:none; color:inherit" href="#line5">5</a>`)
+}
+
 func TestTableLineNumberSpacing(t *testing.T) {
 	testCases := []struct {
 		baseLineNumber int
