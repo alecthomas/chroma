@@ -1,8 +1,24 @@
 package o
 
 import (
+	"regexp"
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
+)
+
+var (
+	// Have to be careful not to accidentally match JavaDoc/Doxygen syntax here,
+	// since that's quite common in ordinary C/C++ files.  It's OK to match
+	// JavaDoc/Doxygen keywords that only apply to Objective-C, mind.
+	//
+	// The upshot of this is that we CANNOT match @class or @interface.
+	objectiveCAnalyserKeywordsRe = regexp.MustCompile(`@(?:end|implementation|protocol)`)
+	// Matches [ <ws>? identifier <ws> ( identifier <ws>? ] |  identifier? : )
+	// (note the identifier is *optional* when there is a ':'!)
+	objectiveCAnalyserMessageRe  = regexp.MustCompile(`\[\s*[a-zA-Z_]\w*\s+(?:[a-zA-Z_]\w*\s*\]|(?:[a-zA-Z_]\w*)?:)`)
+	objectiveCAnalyserNSNumberRe = regexp.MustCompile(`@[0-9]+`)
 )
 
 // Objective-C lexer.
@@ -14,7 +30,25 @@ var ObjectiveC = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/x-objective-c"},
 	},
 	objectiveCRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if objectiveCAnalyserKeywordsRe.MatchString(text) {
+		return 1.0
+	}
+
+	if strings.Contains(text, `@"`) {
+		return 0.8
+	}
+
+	if objectiveCAnalyserNSNumberRe.MatchString(text) {
+		return 0.7
+	}
+
+	if objectiveCAnalyserMessageRe.MatchString(text) {
+		return 0.8
+	}
+
+	return 0
+}))
 
 func objectiveCRules() Rules {
 	return Rules{
