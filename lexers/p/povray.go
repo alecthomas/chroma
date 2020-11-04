@@ -1,6 +1,8 @@
 package p
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
@@ -14,7 +16,33 @@ var Povray = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/x-povray"},
 	},
 	povrayRules,
-))
+).SetAnalyser(func(text string) float32 {
+	// POVRAY is similar to JSON/C, but the combination of camera and
+	// light_source is probably not very likely elsewhere. HLSL or GLSL
+	// are similar (GLSL even has #version), but they miss #declare, and
+	// light_source/camera are not keywords anywhere else -- it's fair
+	// to assume though that any POVRAY scene must have a camera and
+	// lightsource.
+	var result float32 = 0
+
+	if strings.Contains(text, "#version") {
+		result += 0.05
+	}
+
+	if strings.Contains(text, "#declare") {
+		result += 0.05
+	}
+
+	if strings.Contains(text, "camera") {
+		result += 0.05
+	}
+
+	if strings.Contains(text, "light_source") {
+		result += 0.1
+	}
+
+	return result
+}))
 
 func povrayRules() Rules {
 	return Rules{
