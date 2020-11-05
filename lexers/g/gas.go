@@ -1,8 +1,15 @@
 package g
 
 import (
+	"regexp"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
+)
+
+var (
+	gasAnalyzerDirectiveRe      = regexp.MustCompile(`(?m)^\.(text|data|section)`)
+	gasAnalyzerOtherDirectiveRe = regexp.MustCompile(`(?m)^\.\w+`)
 )
 
 // Gas lexer.
@@ -14,7 +21,17 @@ var Gas = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/x-gas"},
 	},
 	gasRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if gasAnalyzerDirectiveRe.MatchString(text) {
+		return 1.0
+	}
+
+	if gasAnalyzerOtherDirectiveRe.MatchString(text) {
+		return 0.1
+	}
+
+	return 0
+}))
 
 func gasRules() Rules {
 	return Rules{
