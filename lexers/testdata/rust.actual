@@ -14,4 +14,10 @@ fn main() {
 
     let r#type = "valid";
     let i: i128 = 1117;
+
+    let s = "March
+April";
+    let s = r"March
+April";
+
 }
