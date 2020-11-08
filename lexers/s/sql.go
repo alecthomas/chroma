@@ -49,5 +49,12 @@ func sqlRules() Rules {
 			{`""`, LiteralStringDouble, nil},
 			{`"`, LiteralStringDouble, Pop(1)},
 		},
+<<<<<<< HEAD
 	}
 }
+=======
+	},
+).SetAnalyser(func(text string) float32 {
+	return 0.01
+}))
+>>>>>>> a168d45 (Add set text analyser for SQL lexer)
