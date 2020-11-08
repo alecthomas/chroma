@@ -32,7 +32,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.s`          | GAS            | :heavy_check_mark: |
 |                | R              | :heavy_check_mark: |
 | `*.sql`        | MySQL          |                    |
-|                | SQL            |                    |
+|                | SQL            | :heavy_check_mark: |
 | `*.ts`         | TypeScript     |                    |
 |                | TypoScript     |                    |
 | `*.v`          | Coq            |                    |
