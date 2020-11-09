@@ -1,9 +1,14 @@
 package c
 
 import (
+	"regexp"
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
+
+var coqAnalyzerQedCommandRe = regexp.MustCompile(`[qQ]ed`)
 
 // Coq lexer.
 var Coq = internal.Register(MustNewLazyLexer(
@@ -14,7 +19,14 @@ var Coq = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/x-coq"},
 	},
 	coqRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if coqAnalyzerQedCommandRe.MatchString(text) &&
+		strings.Contains(text, "tauto") {
+		return 1.0
+	}
+
+	return 0
+}))
 
 func coqRules() Rules {
 	return Rules{
