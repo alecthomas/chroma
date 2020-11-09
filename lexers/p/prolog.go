@@ -1,6 +1,8 @@
 package p
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
@@ -14,7 +16,13 @@ var Prolog = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/x-prolog"},
 	},
 	prologRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if strings.Contains(text, ":-") {
+		return 1.0
+	}
+
+	return 0
+}))
 
 func prologRules() Rules {
 	return Rules{
