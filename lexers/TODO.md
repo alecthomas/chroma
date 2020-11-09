@@ -28,7 +28,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.mc`         | Mason          | :heavy_check_mark: |
 |                | MonkeyC        |                    |
 | `*.pl`         | Perl           |                    |
-|                | Prolog         |                    |
+|                | Prolog         | :heavy_check_mark: |
 | `*.s`          | GAS            | :heavy_check_mark: |
 |                | R              | :heavy_check_mark: |
 | `*.sql`        | MySQL          |                    |
