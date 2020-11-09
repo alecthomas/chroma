@@ -36,7 +36,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.ts`         | TypeScript     |                    |
 |                | TypoScript     |                    |
 | `*.v`          | Coq            | :heavy_check_mark: |
-|                | verilog        |                    |
+|                | verilog        | :heavy_check_mark: |
 | `*.xslt`       | HTML           |                    |
 |                | XML            |                    |
 
