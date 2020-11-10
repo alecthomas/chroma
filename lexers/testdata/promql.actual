@@ -1,0 +1,30 @@
+# A metric with label filtering
+go_gc_duration_seconds{instance="localhost:9090", job="alertmanager"}
+
+# Aggregation operators
+sum by (app, proc) (
+  instance_memory_limit_bytes - instance_memory_usage_bytes
+) / 1024 / 1024
+
+# Metric with multiple lables and whitespaces
+go_gc_duration_seconds{ instance="localhost:9090",  job="alertmanager" }
+
+# Expression and comment
+go_gc_duration_seconds{instance="localhost:9090"} # single comment
+
+# Delta function
+delta(cpu_temp_celsius{host="zeus"}[2h])
+
+# Sum with arguments
+sum by (app, proc) (instance_memory_usage_bytes)
+
+# Multi-line with offset
+label_replace(
+    avg by(instance)
+        (irate(node_cpu_seconds_total{mode = "idle"}[5m] offset 3s)
+    ) * 100,
+    "device",
+    "cpu",
+    "instance",
+    ".*"
+)
