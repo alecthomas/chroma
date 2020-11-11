@@ -44,7 +44,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 
 | file extension(s)                                    | lexer            | lexer exists | note                                | done               |
 | ---                                                  | ---              | ---          | ---                                 | ---                |
-| `*.asax`,`*.ascx`,`*.ashx`,`*.asmx`,`*.aspx`,`*.axd` | aspx-cs          | :x:          |                                     |                    |
+| `*.asax`,`*.ascx`,`*.ashx`,`*.asmx`,`*.aspx`,`*.axd` | aspx-cs          | :x:          |                                     | :heavy_check_mark: |
 |                                                      | aspx-vb          | :x:          |                                     |                    |
 | `*.ASM`                                              | NASM             |              |                                     |                    |
 |                                                      | TASM             |              |                                     |                    |
