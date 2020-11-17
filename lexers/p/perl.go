@@ -1,9 +1,15 @@
 package p
 
 import (
+	"regexp"
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
+	"github.com/alecthomas/chroma/pkg/shebang"
 )
+
+var perlAnalyzerRe = regexp.MustCompile(`(?:my|our)\s+[$@%(]`)
 
 // Perl lexer.
 var Perl = internal.Register(MustNewLazyLexer(
@@ -15,7 +21,25 @@ var Perl = internal.Register(MustNewLazyLexer(
 		DotAll:    true,
 	},
 	perlRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if matched, _ := shebang.MatchString(text, "perl"); matched {
+		return 1.0
+	}
+
+	var result float32 = 0
+
+	if perlAnalyzerRe.MatchString(text) {
+		result += 0.9
+	}
+
+	if strings.Contains(text, ":=") {
+		// := is not valid Perl, but it appears in unicon, so we should
+		// become less confident if we think we found Perl with :=
+		result /= 2
+	}
+
+	return result
+}))
 
 func perlRules() Rules {
 	return Rules{

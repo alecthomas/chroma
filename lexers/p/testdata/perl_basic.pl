@@ -1,0 +1,1 @@
+my $string = "wakatime-cli"; 
