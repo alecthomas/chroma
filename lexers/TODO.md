@@ -51,7 +51,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.S`                                                | GAS              |              |                                     |                    |
 |                                                      | S                | :x:          |                                     |                    |
 | `*.b`                                                | Brainfuck        |              |                                     |                    |
-|                                                      | Limbo            | :x:          |                                     |                    |
+|                                                      | Limbo            | :x:          |                                     | :heavy_check_mark: |
 | `*.bas`                                              | CBM BASIC V2     | :x:          |                                     |                    |
 |                                                      | QBasic           |              |                                     |                    |
 |                                                      | VB.net           |              |                                     |                    |
