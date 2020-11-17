@@ -22,13 +22,11 @@ var PHP = internal.Register(MustNewLazyLexer(
 	},
 	phpRules,
 ).SetAnalyser(func(text string) float32 {
-	matched, _ := shebang.MatchString(text, "php")
-	if matched {
+	if matched, _ := shebang.MatchString(text, "php"); matched {
 		return 1.0
 	}
 
-	matched, _ = phpAnalyserRe.MatchString(text)
-	if matched {
+	if matched, _ = phpAnalyserRe.MatchString(text); matched {
 		return 0.3
 	}
 
