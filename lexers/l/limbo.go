@@ -1,9 +1,13 @@
 package l
 
 import (
+	"regexp"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
+
+var limboAnalyzerRe = regexp.MustCompile(`(?m)^implement \w+;`)
 
 // Limbo lexer.
 var Limbo = internal.Register(MustNewLexer(
@@ -16,4 +20,11 @@ var Limbo = internal.Register(MustNewLexer(
 	Rules{
 		"root": {},
 	},
-))
+).SetAnalyser(func(text string) float32 {
+	// Any limbo module implements something
+	if limboAnalyzerRe.MatchString(text) {
+		return 0.7
+	}
+
+	return 0
+}))
