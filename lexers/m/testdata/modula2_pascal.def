@@ -1,0 +1,14 @@
+Program WakaTime_Cli;
+Var       
+    Num1, Num2, Sum : Integer;
+
+(* Here the main program block starts *)
+Begin {no semicolon}
+	Write('Input number 1:'); 
+	Readln(Num1);
+	Writeln('Input number 2:');
+	Readln(Num2);
+	Sum := Num1 + Num2; {addition} 
+	Writeln(Sum);
+	Readln;
+End.

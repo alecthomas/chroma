@@ -57,7 +57,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 |                                                      | VB.net           |              |                                     |                    |
 | `*.bug`                                              | BUGS             | :x:          |                                     | :heavy_check_mark: |
 |                                                      | JAGS             | :x:          |                                     | :heavy_check_mark: |
-| `*.def`                                              | Modula-2         |              |                                     |                    |
+| `*.def`                                              | Modula-2         | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Singularity      | :x:          |                                     |                    |
 | `*.ecl`                                              | ECL              | :x:          |                                     |                    |
 |                                                      | Prolog           |              |                                     |                    |
