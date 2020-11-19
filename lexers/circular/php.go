@@ -26,7 +26,7 @@ var PHP = internal.Register(MustNewLazyLexer(
 		return 1.0
 	}
 
-	if matched, _ = phpAnalyserRe.MatchString(text); matched {
+	if matched, _ := phpAnalyserRe.MatchString(text); matched {
 		return 0.3
 	}
 
