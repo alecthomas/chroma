@@ -55,7 +55,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.bas`                                              | CBM BASIC V2     | :x:          |                                     |                    |
 |                                                      | QBasic           |              |                                     |                    |
 |                                                      | VB.net           |              |                                     |                    |
-| `*.bug`                                              | BUGS             | :x:          |                                     |                    |
+| `*.bug`                                              | BUGS             | :x:          |                                     | :heavy_check_mark: |
 |                                                      | JAGS             | :x:          |                                     | :heavy_check_mark: |
 | `*.def`                                              | Modula-2         |              |                                     |                    |
 |                                                      | Singularity      | :x:          |                                     |                    |
