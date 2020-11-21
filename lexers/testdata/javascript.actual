@@ -1,3 +1,6 @@
 sum = parseInt(num1) + parseInt(num2) // "+" means "add"
 alert("Sum = " + sum)  // "+" means combine into a string
 const filePath = String.raw`C:\Development\profile\aboutme.html`;
+
+let n = 0x21 + 1_000;
+let n2 = 1e3;

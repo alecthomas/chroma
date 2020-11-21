@@ -67,7 +67,7 @@ var Python = internal.Register(MustNewLexer(
 			{`0[bB][01]+`, LiteralNumberBin, nil},
 			{`0[xX][a-fA-F0-9]+`, LiteralNumberHex, nil},
 			{`\d+L`, LiteralNumberIntegerLong, nil},
-			{`\d+j?`, LiteralNumberInteger, nil},
+			{`[\d_]+j?`, LiteralNumberInteger, nil},
 		},
 		"backtick": {
 			{"`.*?`", LiteralStringBacktick, nil},

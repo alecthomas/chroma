@@ -38,7 +38,7 @@ var Go = internal.Register(MustNewLexer(
 			{`\.\d+([eE][+\-]?\d+)?`, LiteralNumberFloat, nil},
 			{`0[0-7]+`, LiteralNumberOct, nil},
 			{`0[xX][0-9a-fA-F]+`, LiteralNumberHex, nil},
-			{`(0|[1-9][0-9]*)`, LiteralNumberInteger, nil},
+			{`(0|[1-9][0-9_]*)`, LiteralNumberInteger, nil},
 			{`'(\\['"\\abfnrtv]|\\x[0-9a-fA-F]{2}|\\[0-7]{1,3}|\\u[0-9a-fA-F]{4}|\\U[0-9a-fA-F]{8}|[^\\])'`, LiteralStringChar, nil},
 			{"(`)([^`]*)(`)", ByGroups(LiteralString, Using(TypeRemappingLexer(GoTextTemplate, TypeMapping{{Other, LiteralString, nil}})), LiteralString), nil},
 			{`"(\\\\|\\"|[^"])*"`, LiteralString, nil},

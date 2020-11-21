@@ -10,4 +10,7 @@ foreach (DriveInfo drive in drives)
   }
 }
 
+int n = 0x21 + 1_000;
+double n2 = 1e3;
+
 // Comment as last line should be recognised properly
