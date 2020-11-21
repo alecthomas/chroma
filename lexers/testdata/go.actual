@@ -6,6 +6,9 @@ func main() {
     fmt.Println("Hello World!")
 }
 
+var n int = 0x21 + 1_000
+var n2 float64 = 1e3
+
 func hello(a int) {
 	fmt.Println("Hello World!").Hello()
 

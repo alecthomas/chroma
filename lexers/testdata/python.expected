@@ -1,0 +1,18 @@
+[
+  {"type":"Name","value":"n"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralNumberHex","value":"0x21"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"+"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralNumberInteger","value":"1_000"},
+  {"type":"Text","value":"\n"},
+  {"type":"Name","value":"n2"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralNumberFloat","value":"1e3"},
+  {"type":"Text","value":"\n"}
+]

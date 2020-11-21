@@ -1,5 +1,8 @@
 $docs = $modx->getIterator('modResource', ["parent" => 84]);
 
+$n = 0x21 + 1_000;
+$n2 = 1e3;
+
 foreach($docs as $doc){
     $q=$doc->content;
     $doc->set("content", preg_replace("/Some value/i", "Replacement", $q));

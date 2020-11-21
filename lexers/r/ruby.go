@@ -39,7 +39,7 @@ var Ruby = internal.Register(MustNewLexer(
 			{`(0_?[0-7]+(?:_[0-7]+)*)(\s*)([/?])?`, ByGroups(LiteralNumberOct, Text, Operator), nil},
 			{`(0x[0-9A-Fa-f]+(?:_[0-9A-Fa-f]+)*)(\s*)([/?])?`, ByGroups(LiteralNumberHex, Text, Operator), nil},
 			{`(0b[01]+(?:_[01]+)*)(\s*)([/?])?`, ByGroups(LiteralNumberBin, Text, Operator), nil},
-			{`([\d]+(?:_\d+)*)(\s*)([/?])?`, ByGroups(LiteralNumberInteger, Text, Operator), nil},
+			{`([\d]+(?:[_e]\d+)*)(\s*)([/?])?`, ByGroups(LiteralNumberInteger, Text, Operator), nil},
 			{`@@[a-zA-Z_]\w*`, NameVariableClass, nil},
 			{`@[a-zA-Z_]\w*`, NameVariableInstance, nil},
 			{`\$\w+`, NameVariableGlobal, nil},
