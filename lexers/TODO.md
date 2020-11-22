@@ -58,7 +58,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.bug`                                              | BUGS             | :x:          |                                     | :heavy_check_mark: |
 |                                                      | JAGS             | :x:          |                                     | :heavy_check_mark: |
 | `*.def`                                              | Modula-2         | :x:          |                                     | :heavy_check_mark: |
-|                                                      | Singularity      | :x:          |                                     |                    |
+|                                                      | Singularity      | :x:          |                                     | :heavy_check_mark: |
 | `*.ecl`                                              | ECL              | :x:          |                                     |                    |
 |                                                      | Prolog           |              |                                     |                    |
 | `*.gd`                                               | GAP              | :x:          |                                     |                    |
