@@ -26,7 +26,6 @@ var Singularity = internal.Register(MustNewLexer(
 ).SetAnalyser(func(text string) float32 {
 	// This is a quite simple script file, but there are a few keywords
 	// which seem unique to this language.
-
 	var result float32
 
 	if singularityAnalyserHeaderRe.MatchString(text) {
