@@ -64,7 +64,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.gd`                                               | GAP              | :x:          |                                     |                    |
 |                                                      | GDScript         | :x:          |                                     | :heavy_check_mark: |
 | `*.hy`                                               | Hy               |              |                                     |                    |
-|                                                      | Hybris           | :x:          |                                     |                    |
+|                                                      | Hybris           | :x:          |                                     | :heavy_check_mark: |
 | `*.inc`                                              | Pawn             | :x:          |                                     |                    |
 |                                                      | PHP              |              |                                     |                    |
 |                                                      | POVRay           |              |                                     |                    |
