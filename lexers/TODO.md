@@ -1,8 +1,10 @@
-## Wakatime lexer support
+# Wakatime lexer support
+
+## Text analysis
 
 For the following lexers, text analysis capabilities of pygments have to be ported to chroma for the wakatime golang client to work. In general we focus on lexers, which are associated with the same file extension. If the lexer doesn't even exist in chroma yet, it has to be added.
 
-## Top languages
+### Top languages
 
 | file extension | lexer          | done               |
 | ---            | ---            | ---                |
@@ -40,7 +42,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.xslt`       | HTML           | :heavy_check_mark: |
 |                | XML            |                    |
 
-## Long tail languages
+### Long tail languages
 
 | file extension(s)                                    | lexer            | lexer exists | note                                | done               |
 | ---                                                  | ---              | ---          | ---                                 | ---                |
@@ -107,3 +109,67 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.xslt`                                             | HTML             | :x:          |                                     | :heavy_check_mark: |
 |                                                      | XML              |              |                                     |                    |
 |                                                      | XSLT             | :x:          |                                     |                    |
+
+## Missing file extension support
+
+For the following lexers, file extension support has to be added, to match the behaviour of wakatime cli. This mostly matches pygments.
+
+### Top languages
+
+| lexer       | filename pattern                                             | done                                  |
+| ---         | ---                                                          | ---                                   |
+| Elixir      | `.eex`                                                       | :heavy_check_mark:                    |
+| JavaScript  | `*.mjs`                                                      | :heavy_check_mark:                    |
+| JSX         | `*.jsx`                                                      | not needed, as matched by react lexer |
+| Python      | `*.jy`, `*.bzl`, `BUCK`, `BUILD`, `BUILD.bazel`, `WORKSPACE` | :heavy_check_mark:                    |
+| TOML        | `Pipfile`, `poetry.lock`                                     | :heavy_check_mark:                    |
+| Twig        | `*.twig`                                                     | :heavy_check_mark:                    |
+
+### Long tail
+
+TBD
+
+## Missing lexers
+
+The following lexers exist in pygments, but not in chroma. They have to be added to emulate the behaviour of pygments, which is the baseline for the wakatime cli.
+
+Only a very stripped down version is necessary here, though. No token related be functionality is needed and we really only care about 2 things here:
+
+1. The lexer name, should match the pygments lexer name.
+2. Associated file name pattern have to be identical to pygments.
+
+### Top languages
+
+| lexer               | filename pattern                            | not in pygments | done               |
+| ---                 | ---                                         | ---             | ---                |
+| Crontab             | `crontab`                                   | :x:             |                    |
+| Coldfusion HTML     | `.cfm`, `*.cfml`                            |                 |                    |
+| Delphi              | `.pas`, `*.dpr`                             |                 |                    |
+| Gosu                | `*.gs`, `*.gsp`, `*.gst`, `*.gsx`, `*.vark` |                 |                    |
+| Lasso               | `'*.lasso', '*.lasso[89]'`                  |                 |                    |
+| LessCss             | `*.less`                                    |                 |                    |
+| liquid              | `*.liquid`                                  |                 |                    |
+| Marko               | `*.marko`                                   | :x:             |                    |
+| Modelica            | `*.mo`                                      |                 |                    |
+| Mustache            | `*.mustache`                                | :x:             |                    |
+| NewLisp             | `*.lsp`, `*.nl`, `*.kif`                    |                 |                    |
+| Objective-J         | `*.j`                                       |                 |                    |
+| Pawn                | `'*.p`, `*.pwn`, `*.inc`                    |                 |                    |
+| Pug                 | `*.pug`, `*.jade`                           |                 |                    |
+| QML                 | `*.qml`, `*.qbs`                            |                 |                    |
+| RPMSpec             | `*.spec`                                    |                 |                    |
+| Sketch Drawing      | `*.sketch`                                  | :x:             |                    |
+| Slim                | `*.slim`                                    |                 |                    |
+| Smali               | `*.smali`                                   |                 |                    |
+| SourcePawn          | `*.sp`                                      |                 |                    |
+| Sublime Text Config | `*.sublime-settings`                        | :x:             |                    |
+| Svelte              | `*.svelte`                                  | :x:             |                    |
+| SWIG                | `*.swg`, `*.i`                              |                 |                    |
+| VCL                 | `*.vcl`                                     |                 |                    |
+| Velocity            | `*.vm`, `*.fhtml`                           |                 |                    |
+| XAML                | `*.xaml`                                    | :x:             |                    |
+| XSLT                | `*.xsl`, `*.xslt`, `*.xpl` # xpl is XProc   |                 |                    |
+
+### Long tail
+
+TBD
