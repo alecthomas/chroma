@@ -81,7 +81,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 |                                                      | Prolog           |              |                                     |                    |
 | `*.pm`                                               | Perl6            | :x:          |                                     |                    |
 |                                                      | Perl             |              |                                     |                    |
-| `*.pro`                                              | IDL              | :x:          |                                     |                    |
+| `*.pro`                                              | IDL              | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Prolog           |              |                                     |                    |
 | `*.s`                                                | ca65 assembler   | :x:          |                                     |                    |
 |                                                      | GAS              |              |                                     |                    |
