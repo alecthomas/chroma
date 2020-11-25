@@ -10,7 +10,7 @@ var Twig = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "Twig",
 		Aliases:   []string{"twig"},
-		Filenames: []string{},
+		Filenames: []string{"*.twig"},
 		MimeTypes: []string{"application/x-twig"},
 		DotAll:    true,
 	},
