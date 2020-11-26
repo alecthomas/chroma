@@ -83,7 +83,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 |                                                      | Perl             |              |                                     |                    |
 | `*.pro`                                              | IDL              | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Prolog           |              |                                     |                    |
-| `*.s`                                                | ca65 assembler   | :x:          |                                     |                    |
+| `*.s`                                                | ca65 assembler   | :x:          |                                     | :heavy_check_mark: |
 |                                                      | GAS              |              |                                     |                    |
 | `*.sc`                                               | Python           |              |                                     |                    |
 |                                                      | SuperCollider    | :x:          |                                     |                    |
