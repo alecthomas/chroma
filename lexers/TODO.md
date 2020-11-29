@@ -142,33 +142,33 @@ Only a very stripped down version is necessary here, though. No token related be
 
 | lexer               | filename pattern                            | not in pygments | done               |
 | ---                 | ---                                         | ---             | ---                |
-| Crontab             | `crontab`                                   | :x:             |                    |
-| Coldfusion HTML     | `.cfm`, `*.cfml`                            |                 |                    |
-| Delphi              | `.pas`, `*.dpr`                             |                 |                    |
-| Gosu                | `*.gs`, `*.gsp`, `*.gst`, `*.gsx`, `*.vark` |                 |                    |
-| Lasso               | `'*.lasso', '*.lasso[89]'`                  |                 |                    |
-| LessCss             | `*.less`                                    |                 |                    |
-| liquid              | `*.liquid`                                  |                 |                    |
-| Marko               | `*.marko`                                   | :x:             |                    |
-| Modelica            | `*.mo`                                      |                 |                    |
-| Mustache            | `*.mustache`                                | :x:             |                    |
-| NewLisp             | `*.lsp`, `*.nl`, `*.kif`                    |                 |                    |
-| Objective-J         | `*.j`                                       |                 |                    |
-| Pawn                | `'*.p`, `*.pwn`, `*.inc`                    |                 |                    |
-| Pug                 | `*.pug`, `*.jade`                           |                 |                    |
-| QML                 | `*.qml`, `*.qbs`                            |                 |                    |
-| RPMSpec             | `*.spec`                                    |                 |                    |
-| Sketch Drawing      | `*.sketch`                                  | :x:             |                    |
-| Slim                | `*.slim`                                    |                 |                    |
-| Smali               | `*.smali`                                   |                 |                    |
-| SourcePawn          | `*.sp`                                      |                 |                    |
-| Sublime Text Config | `*.sublime-settings`                        | :x:             |                    |
-| Svelte              | `*.svelte`                                  | :x:             |                    |
-| SWIG                | `*.swg`, `*.i`                              |                 |                    |
-| VCL                 | `*.vcl`                                     |                 |                    |
-| Velocity            | `*.vm`, `*.fhtml`                           |                 |                    |
-| XAML                | `*.xaml`                                    | :x:             |                    |
-| XSLT                | `*.xsl`, `*.xslt`, `*.xpl` # xpl is XProc   |                 |                    |
+| Crontab             | `crontab`                                   | :x:             | :heavy_check_mark: |
+| Coldfusion HTML     | `.cfm`, `*.cfml`                            |                 | :heavy_check_mark: |
+| Delphi              | `.pas`, `*.dpr`                             |                 | :heavy_check_mark: |
+| Gosu                | `*.gs`, `*.gsp`, `*.gst`, `*.gsx`, `*.vark` |                 | :heavy_check_mark: |
+| Lasso               | `*.lasso`, `*.lasso[89]`                    |                 | :heavy_check_mark: |
+| LessCss             | `*.less`                                    |                 | :heavy_check_mark: |
+| liquid              | `*.liquid`                                  |                 | :heavy_check_mark: |
+| Marko               | `*.marko`                                   | :x:             | :heavy_check_mark: |
+| Modelica            | `*.mo`                                      |                 | :heavy_check_mark: |
+| Mustache            | `*.mustache`                                | :x:             | :heavy_check_mark: |
+| NewLisp             | `*.lsp`, `*.nl`, `*.kif`                    |                 | :heavy_check_mark: |
+| Objective-J         | `*.j`                                       |                 | :heavy_check_mark: |
+| Pawn                | `*.p`, `*.pwn`, `*.inc`                     |                 | :heavy_check_mark: |
+| Pug                 | `*.pug`, `*.jade`                           |                 | :heavy_check_mark: |
+| QML                 | `*.qml`, `*.qbs`                            |                 | :heavy_check_mark: |
+| RPMSpec             | `*.spec`                                    |                 | :heavy_check_mark: |
+| Sketch Drawing      | `*.sketch`                                  | :x:             | :heavy_check_mark: |
+| Slim                | `*.slim`                                    |                 | :heavy_check_mark: |
+| Smali               | `*.smali`                                   |                 | :heavy_check_mark: |
+| SourcePawn          | `*.sp`                                      |                 | :heavy_check_mark: |
+| Sublime Text Config | `*.sublime-settings`                        | :x:             | :heavy_check_mark: |
+| Svelte              | `*.svelte`                                  | :x:             | :heavy_check_mark: |
+| SWIG                | `*.swg`, `*.i`                              |                 | :heavy_check_mark: |
+| VCL                 | `*.vcl`                                     |                 | :heavy_check_mark: |
+| Velocity            | `*.vm`, `*.fhtml`                           |                 | :heavy_check_mark: |
+| XAML                | `*.xaml`                                    | :x:             | :heavy_check_mark: |
+| XSLT                | `*.xsl`, `*.xslt`, `*.xpl` # xpl is XProc   |                 | :heavy_check_mark: |
 
 ### Long tail
 
