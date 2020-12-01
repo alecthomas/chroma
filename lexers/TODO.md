@@ -68,8 +68,8 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.inc`                                              | Pawn             | :x:          |                                     | :heavy_check_mark: |
 |                                                      | PHP              |              |                                     |                    |
 |                                                      | POVRay           |              |                                     |                    |
-| `*.inf`                                              | Inform 6         | :x:          |                                     |                    |
-|                                                      | INI              | :x:          |                                     | :heavy_check_mark: |
+| `*.inf`                                              | Inform 6         | :x:          |                                     | :heavy_check_mark: |
+|                                                      | INI              |              |                                     | :heavy_check_mark: |
 | `*.j`                                                | Jasmin           | :x:          |                                     |                    |
 |                                                      | Objective-J      |              |                                     |                    |
 | `*.n`                                                | Ezhil            | :x:          |                                     |                    |
