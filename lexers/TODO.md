@@ -70,7 +70,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 |                                                      | POVRay           |              |                                     |                    |
 | `*.inf`                                              | Inform 6         | :x:          |                                     | :heavy_check_mark: |
 |                                                      | INI              | :x:          |                                     | :heavy_check_mark: |
-| `*.j`                                                | Jasmin           | :x:          |                                     |                    |
+| `*.j`                                                | Jasmin           | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Objective-J      | :x:          |                                     | :heavy_check_mark: |
 | `*.n`                                                | Ezhil            | :x:          |                                     |                    |
 |                                                      | Nemerle          | :x:          |                                     | :heavy_check_mark: |
