@@ -65,7 +65,7 @@ var Javascript = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "JavaScript",
 		Aliases:   []string{"js", "javascript"},
-		Filenames: []string{"*.js", "*.jsm"},
+		Filenames: []string{"*.js", "*.jsm", "*.mjs"},
 		MimeTypes: []string{"application/javascript", "application/x-javascript", "text/x-javascript", "text/javascript"},
 		DotAll:    true,
 		EnsureNL:  true,
