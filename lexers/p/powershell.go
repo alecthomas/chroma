@@ -9,8 +9,8 @@ import (
 var Powershell = internal.Register(MustNewLexer(
 	&Config{
 		Name:            "PowerShell",
-		Aliases:         []string{"powershell", "posh", "ps1", "psm1"},
-		Filenames:       []string{"*.ps1", "*.psm1"},
+		Aliases:         []string{"powershell", "posh", "ps1", "psm1", "psd1"},
+		Filenames:       []string{"*.ps1", "*.psm1", "*.psd1"},
 		MimeTypes:       []string{"text/x-powershell"},
 		DotAll:          true,
 		CaseInsensitive: true,

@@ -9,8 +9,8 @@ import (
 var Handlebars = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "Handlebars",
-		Aliases:   []string{"handlebars"},
-		Filenames: []string{"*.handlebars"},
+		Aliases:   []string{"handlebars", "hbs"},
+		Filenames: []string{"*.handlebars", "*.hbs"},
 		MimeTypes: []string{},
 	},
 	Rules{
