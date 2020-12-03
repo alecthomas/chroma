@@ -1,0 +1,1 @@
+@import <Foundation/CPObject.j>
