@@ -71,7 +71,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.inf`                                              | Inform 6         | :x:          |                                     | :heavy_check_mark: |
 |                                                      | INI              | :x:          |                                     | :heavy_check_mark: |
 | `*.j`                                                | Jasmin           | :x:          |                                     |                    |
-|                                                      | Objective-J      |              |                                     |                    |
+|                                                      | Objective-J      | :x:          |                                     | :heavy_check_mark: |
 | `*.n`                                                | Ezhil            | :x:          |                                     |                    |
 |                                                      | Nemerle          | :x:          |                                     |                    |
 | `*.p`                                                | OpenEdge ABL     | :x:          |                                     |                    |
