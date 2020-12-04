@@ -27,16 +27,3 @@ var Pawn = internal.Register(MustNewLexer(
 
 	return 0
 }))
-
-// SourcePawn lexer.
-var SourcePawn = internal.Register(MustNewLexer(
-	&Config{
-		Name:      "SourcePawn",
-		Aliases:   []string{"sp"},
-		Filenames: []string{"*.sp"},
-		MimeTypes: []string{"text/x-sourcepawn"},
-	},
-	Rules{
-		"root": {},
-	},
-))
