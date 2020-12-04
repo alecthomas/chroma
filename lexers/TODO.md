@@ -74,7 +74,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 |                                                      | Objective-J      | :x:          |                                     | :heavy_check_mark: |
 | `*.n`                                                | Ezhil            | :x:          |                                     |                    |
 |                                                      | Nemerle          | :x:          |                                     | :heavy_check_mark: |
-| `*.p`                                                | OpenEdge ABL     | :x:          |                                     |                    |
+| `*.p`                                                | OpenEdge ABL     | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Pawn             | :x:          |                                     | :heavy_check_mark: |
 | `*.pl`                                               | Perl6            | :x:          |                                     |                    |
 |                                                      | Perl             |              |                                     |                    |
