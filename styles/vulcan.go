@@ -4,14 +4,28 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
-// Base16Snazzy style
-var Base16Snazzy = Register(chroma.MustNewStyle("vulcan", chroma.StyleEntries{
-	chroma.Comment:                  "#78787e",
-	chroma.CommentHashbang:          "#78787e",
-	chroma.CommentMultiline:         "#78787e",
-	chroma.CommentPreproc:           "#78787e",
-	chroma.CommentSingle:            "#78787e",
-	chroma.CommentSpecial:           "#78787e",
+/*
+Inspired by the Doom One Theme
+black       : "#282C34"
+grey        : "#3E4452"
+white       : "#C9C9C9"
+red         : "#CF5967"
+yellow      : "#E5C07B"
+orange      : "#E69C57"
+green       : "#82CC6A"
+brightgreen : "#7ed95f"
+cyan        : "#56B6C2"
+blue        : "#7FBAF5"
+purple      : "#BC74C4"
+*/
+
+var vulcan = Register(chroma.MustNewStyle("vulcan", chroma.StyleEntries{
+	chroma.Comment:                  "#3E4452",
+	chroma.CommentHashbang:          "#3E4452 italic",
+	chroma.CommentMultiline:         "#3E4452",
+	chroma.CommentPreproc:           "#7FBAF5",
+	chroma.CommentSingle:            "#3E4452",
+	chroma.CommentSpecial:           "#BC74C4 italic",
 	chroma.Generic:                  "#e2e4e5",
 	chroma.GenericDeleted:           "#ff5c57",
 	chroma.GenericEmph:              "#e2e4e5 underline",
