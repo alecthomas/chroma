@@ -1,0 +1,7 @@
+PROCEDURE runRemoteProc:
+  DEFINE VARIABLE ix AS CHARACTER NO-UNDO.
+  ASSIGN
+    xmtcnt = xmtcnt + 1
+    ix     = FILL("X", 30).
+  sh:CANCEL-REQUESTS-AFTER(10).
+END PROCEDURE.
