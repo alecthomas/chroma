@@ -1,6 +1,8 @@
 package o
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
@@ -16,4 +18,21 @@ var OpenEdgeABL = internal.Register(MustNewLexer(
 	Rules{
 		"root": {},
 	},
-))
+).SetAnalyser(func(text string) float32 {
+	// try to identify OpenEdge ABL based on a few common constructs.
+	var result float32
+
+	if strings.Contains(text, "END.") {
+		result += 0.05
+	}
+
+	if strings.Contains(text, "END PROCEDURE.") {
+		result += 0.05
+	}
+
+	if strings.Contains(text, "ELSE DO:") {
+		result += 0.05
+	}
+
+	return result
+}))
