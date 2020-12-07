@@ -21,11 +21,11 @@ purple      : "#BC74C4"
 */
 
 var vulcan = Register(chroma.MustNewStyle("vulcan", chroma.StyleEntries{
-	chroma.Comment:                  "#3E4452",
-	chroma.CommentHashbang:          "#3E4452 italic",
-	chroma.CommentMultiline:         "#3E4452",
+	chroma.Comment:                  "#3E4460",
+	chroma.CommentHashbang:          "#3E4460 italic",
+	chroma.CommentMultiline:         "#3E4460",
 	chroma.CommentPreproc:           "#7FBAF5",
-	chroma.CommentSingle:            "#3E4452",
+	chroma.CommentSingle:            "#3E4460",
 	chroma.CommentSpecial:           "#BC74C4 italic",
 	chroma.Generic:                  "#C9C9C9",
 	chroma.GenericDeleted:           "#CF5967",
@@ -46,7 +46,7 @@ var vulcan = Register(chroma.MustNewStyle("vulcan", chroma.StyleEntries{
 	chroma.KeywordNamespace:         "#BC74C4",
 	chroma.KeywordPseudo:            "#BC74C4",
 	chroma.KeywordReserved:          "#7FBAF5",
-	chroma.KeywordType:              "#9aedfe italic",
+	chroma.KeywordType:              "#9AEDFE italic",
 	chroma.Literal:                  "#C9C9C9",
 	chroma.LiteralDate:              "#57c7ff",
 	chroma.Name:                     "#C9C9C9",
