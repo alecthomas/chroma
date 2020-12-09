@@ -46,5 +46,17 @@
   {"type":"TextWhitespace","value":" "},
   {"type":"Keyword","value":"end"},
   {"type":"TextWhitespace","value":" "},
+  {"type":"CommentPreproc","value":"}}"},
+  {"type":"Other","value":"\n\n"},
+  {"type":"CommentPreproc","value":"{{"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameAttribute","value":".name"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"CommentPreproc","value":"}}"},
+  {"type":"Other","value":"\n"},
+  {"type":"CommentPreproc","value":"{{"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameAttribute","value":"$"},
+  {"type":"TextWhitespace","value":" "},
   {"type":"CommentPreproc","value":"}}"}
 ]

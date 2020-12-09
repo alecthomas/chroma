@@ -15,7 +15,6 @@
   {"type":"LiteralString","value":"alertmanager"},
   {"type":"Punctuation","value":"\"}"},
   {"type":"TextWhitespace","value":"\n\n"},
-
   {"type":"CommentSingle","value":"# Aggregation operators"},
   {"type":"TextWhitespace","value":"\n"},
   {"type":"Keyword","value":"sum"},
@@ -47,7 +46,6 @@
   {"type":"TextWhitespace","value":" "},
   {"type":"LiteralNumberInteger","value":"1024"},
   {"type":"TextWhitespace","value":"\n\n"},
-
   {"type":"CommentSingle","value":"# Metric with multiple lables and whitespaces"},
   {"type":"TextWhitespace","value":"\n"},
   {"type":"NameVariable","value":"go_gc_duration_seconds"},
@@ -67,7 +65,6 @@
   {"type":"TextWhitespace","value":" "},
   {"type":"Punctuation","value":"}"},
   {"type":"TextWhitespace","value":"\n\n"},
-
   {"type":"CommentSingle","value":"# Expression and comment"},
   {"type":"TextWhitespace","value":"\n"},
   {"type":"NameVariable","value":"go_gc_duration_seconds"},
@@ -80,7 +77,6 @@
   {"type":"TextWhitespace","value":" "},
   {"type":"CommentSingle","value":"# single comment"},
   {"type":"TextWhitespace","value":"\n\n"},
-
   {"type":"CommentSingle","value":"# Delta function"},
   {"type":"TextWhitespace","value":"\n"},
   {"type":"KeywordReserved","value":"delta"},
@@ -96,7 +92,6 @@
   {"type":"Punctuation","value":"]"},
   {"type":"Operator","value":")"},
   {"type":"TextWhitespace","value":"\n\n"},
-
   {"type":"CommentSingle","value":"# Sum with arguments"},
   {"type":"TextWhitespace","value":"\n"},
   {"type":"Keyword","value":"sum"},
@@ -114,7 +109,6 @@
   {"type":"NameVariable","value":"instance_memory_usage_bytes"},
   {"type":"Operator","value":")"},
   {"type":"TextWhitespace","value":"\n\n"},
-
   {"type":"CommentSingle","value":"# Multi-line with offset"},
   {"type":"TextWhitespace","value":"\n"},
   {"type":"KeywordReserved","value":"label_replace"},
