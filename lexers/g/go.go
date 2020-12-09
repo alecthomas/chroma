@@ -82,7 +82,7 @@ var goTemplateRules = Rules{
 		{`(range|if|else|while|with|template|end|true|false|nil|and|call|html|index|js|len|not|or|print|printf|println|urlquery|eq|ne|lt|le|gt|ge)\b`, Keyword, nil},
 		{`\||:?=|,`, Operator, nil},
 		{`[$]?[^\W\d]\w*`, NameOther, nil},
-		{`[$]?\.(?:[^\W\d]\w*)?`, NameAttribute, nil},
+		{`\$|[$]?\.(?:[^\W\d]\w*)?`, NameAttribute, nil},
 		{`"(\\\\|\\"|[^"])*"`, LiteralString, nil},
 		{`-?\d+i`, LiteralNumber, nil},
 		{`-?\d+\.\d*([Ee][-+]\d+)?i`, LiteralNumber, nil},

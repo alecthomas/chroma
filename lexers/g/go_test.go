@@ -120,3 +120,32 @@ func TestGoHTMLTemplateNegativeNumber(t *testing.T) {
 		assert.True(t, found)
 	}
 }
+
+func TestGoHTMLTemplateNameAttribute(t *testing.T) {
+	for _, source := range []string{
+		`
+{{ .hello }}
+`,
+		`
+{{ $ }}
+`,
+	} {
+		tokens, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		assert.NoError(t, err)
+		assert.Equal(t, source, chroma.Stringify(tokens...))
+
+		// Make sure that there are no errors
+		for _, token := range tokens {
+			assert.NotEqual(t, chroma.Error, token.Type)
+		}
+
+		// Make sure that name is processed correctly
+		found := false
+		for _, token := range tokens {
+			if token.Type == chroma.NameAttribute {
+				found = true
+			}
+		}
+		assert.True(t, found)
+	}
+}
