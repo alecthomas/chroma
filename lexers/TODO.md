@@ -46,28 +46,28 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | ---                                                  | ---              | ---          | ---                                 | ---                |
 | `*.asax`,`*.ascx`,`*.ashx`,`*.asmx`,`*.aspx`,`*.axd` | aspx-cs          | :x:          |                                     | :heavy_check_mark: |
 |                                                      | aspx-vb          | :x:          |                                     | :heavy_check_mark: |
-| `*.ASM`                                              | NASM             |              |                                     |                    |
-|                                                      | TASM             |              |                                     |                    |
-| `*.S`                                                | GAS              |              |                                     |                    |
+| `*.ASM`                                              | NASM             | :x:          |                                     | :heavy_check_mark: |
+|                                                      | TASM             | :x:          |                                     | :heavy_check_mark: |
+| `*.S`                                                | GAS              | :x:          |                                     | :heavy_check_mark: |
 |                                                      | S                | :x:          |                                     |                    |
 | `*.b`                                                | Brainfuck        |              |                                     |                    |
 |                                                      | Limbo            | :x:          |                                     | :heavy_check_mark: |
 | `*.bas`                                              | CBM BASIC V2     | :x:          |                                     | :heavy_check_mark: |
-|                                                      | QBasic           |              |                                     |                    |
-|                                                      | VB.net           |              |                                     |                    |
+|                                                      | QBasic           | :x:          |                                     | :heavy_check_mark: |
+|                                                      | VB.net           | :x:          |                                     | :heavy_check_mark: |
 | `*.bug`                                              | BUGS             | :x:          |                                     | :heavy_check_mark: |
 |                                                      | JAGS             | :x:          |                                     | :heavy_check_mark: |
 | `*.def`                                              | Modula-2         | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Singularity      | :x:          |                                     | :heavy_check_mark: |
 | `*.ecl`                                              | ECL              | :x:          |                                     | :heavy_check_mark: |
-|                                                      | Prolog           |              |                                     |                    |
+|                                                      | Prolog           | :x:          |                                     | :heavy_check_mark: |
 | `*.gd`                                               | GAP              | :x:          |                                     |                    |
 |                                                      | GDScript         | :x:          |                                     | :heavy_check_mark: |
 | `*.hy`                                               | Hy               | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Hybris           | :x:          |                                     | :heavy_check_mark: |
 | `*.inc`                                              | Pawn             | :x:          |                                     | :heavy_check_mark: |
-|                                                      | PHP              |              |                                     |                    |
-|                                                      | POVRay           |              |                                     |                    |
+|                                                      | PHP              | :x:          |                                     | :heavy_check_mark: |
+|                                                      | POVRay           | :x:          |                                     | :heavy_check_mark: |
 | `*.inf`                                              | Inform 6         | :x:          |                                     | :heavy_check_mark: |
 |                                                      | INI              | :x:          |                                     | :heavy_check_mark: |
 | `*.j`                                                | Jasmin           | :x:          |                                     | :heavy_check_mark: |
@@ -78,20 +78,20 @@ For the following lexers, text analysis capabilities of pygments have to be port
 |                                                      | Pawn             | :x:          |                                     | :heavy_check_mark: |
 | `*.pl`                                               | Perl6            | :x:          |                                     |                    |
 |                                                      | Perl             |              |                                     |                    |
-|                                                      | Prolog           |              |                                     |                    |
+|                                                      | Prolog           | :x:          |                                     | :heavy_check_mark: |
 | `*.pm`                                               | Perl6            | :x:          |                                     |                    |
 |                                                      | Perl             |              |                                     |                    |
 | `*.pro`                                              | IDL              | :x:          |                                     | :heavy_check_mark: |
-|                                                      | Prolog           |              |                                     |                    |
+|                                                      | Prolog           | :x:          |                                     | :heavy_check_mark: |
 | `*.s`                                                | ca65 assembler   | :x:          |                                     | :heavy_check_mark: |
-|                                                      | GAS              |              |                                     |                    |
+|                                                      | GAS              | :x:          |                                     | :heavy_check_mark: |
 | `*.sc`                                               | Python           |              |                                     |                    |
 |                                                      | SuperCollider    | :x:          |                                     |                    |
 | `*.scd`                                              | scdoc            | :x:          |                                     |                    |
 |                                                      | SuperCollider    | :x:          |                                     |                    |
 | `*.sl`                                               | Slash            | :x:          | No text analysis exists in pygments |                    |
 |                                                      | Slurm            | :x:          | No text analysis exists in pygments |                    |
-| `*.sql`                                              | SQL              |              |                                     |                    |
+| `*.sql`                                              | SQL              | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Transact-SQL     |              |                                     |                    |
 | `*.t`                                                | Perl6            |              |                                     |                    |
 |                                                      | Perl             |              |                                     |                    |
@@ -100,10 +100,10 @@ For the following lexers, text analysis capabilities of pygments have to be port
 |                                                      | Turtle           |              |                                     |                    |
 | `*.u`                                                | ucode            | :x:          |                                     |                    |
 |                                                      | UrbiScript       | :x:          |                                     |                    |
-| `*.v`                                                | Coq              |              |                                     |                    |
-|                                                      | verilog          |              |                                     |                    |
+| `*.v`                                                | Coq              | :x:          |                                     | :heavy_check_mark: |
+|                                                      | verilog          | :x:          |                                     | :heavy_check_mark: |
 | `*.xsl`                                              | XML              |              |                                     |                    |
 |                                                      | XSLT             | :x:          |                                     |                    |
-| `*.xslt`                                             | HTML             |              |                                     |                    |
+| `*.xslt`                                             | HTML             | :x:          |                                     | :heavy_check_mark: |
 |                                                      | XML              |              |                                     |                    |
 |                                                      | XSLT             | :x:          |                                     |                    |
