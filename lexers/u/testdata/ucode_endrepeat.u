@@ -1,0 +1,4 @@
+repeat {
+    write(i)
+}
+endrepeat
