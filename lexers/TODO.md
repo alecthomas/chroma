@@ -94,7 +94,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.sl`                                               | Slash            | :x:          | No text analysis exists in pygments |                    |
 |                                                      | Slurm            | :x:          | No text analysis exists in pygments |                    |
 | `*.sql`                                              | SQL              | :x:          |                                     | :heavy_check_mark: |
-|                                                      | Transact-SQL     |              |                                     |                    |
+|                                                      | Transact-SQL     | :x:          |                                     | :heavy_check_mark: |
 | `*.t`                                                | Perl6            |              |                                     |                    |
 |                                                      | Perl             |              |                                     |                    |
 |                                                      | TADS 3           | :x:          |                                     |                    |
