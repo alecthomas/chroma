@@ -1,0 +1,1 @@
+SET @MyCounter = 0;
