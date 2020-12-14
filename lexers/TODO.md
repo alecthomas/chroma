@@ -89,7 +89,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 |                                                      | GAS              | :x:          |                                     | :heavy_check_mark: |
 | `*.sc`                                               | Python           |              |                                     |                    |
 |                                                      | SuperCollider    | :x:          |                                     |                    |
-| `*.scd`                                              | scdoc            | :x:          |                                     |                    |
+| `*.scd`                                              | scdoc            | :x:          |                                     | :heavy_check_mark: |
 |                                                      | SuperCollider    | :x:          |                                     |                    |
 | `*.sl`                                               | Slash            | :x:          | No text analysis exists in pygments |                    |
 |                                                      | Slurm            | :x:          | No text analysis exists in pygments |                    |
