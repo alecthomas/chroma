@@ -1,0 +1,6 @@
+@base  <http://example.com> .
+@prefix dcterms: <http://purl.org/dc/terms/>. @prefix xs: <http://www.w3.org/2001/XMLSchema> .
+@prefix mads: <http://www.loc.gov/mads/rdf/v1#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+PREFIX dc: <http://purl.org/dc/elements/1.1/>  # SPARQL-like syntax is OK
+@prefix : <http://xmlns.com/foaf/0.1/> .  # empty prefix is OK
