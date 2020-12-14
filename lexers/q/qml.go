@@ -1,4 +1,4 @@
-package lexers
+package q
 
 import (
 	. "github.com/alecthomas/chroma" // nolint

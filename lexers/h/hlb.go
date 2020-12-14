@@ -1,4 +1,4 @@
-package lexers
+package h
 
 import (
 	. "github.com/alecthomas/chroma" // nolint
