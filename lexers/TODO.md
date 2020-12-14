@@ -51,7 +51,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.ASM`                                              | NASM             | :x:          |                                     | :heavy_check_mark: |
 |                                                      | TASM             | :x:          |                                     | :heavy_check_mark: |
 | `*.S`                                                | GAS              | :x:          |                                     | :heavy_check_mark: |
-|                                                      | S                | :x:          |                                     |                    |
+|                                                      | S                | :x:          | It's implemented altogether in r.go | :heavy_check_mark: |
 | `*.b`                                                | Brainfuck        | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Limbo            | :x:          |                                     | :heavy_check_mark: |
 | `*.bas`                                              | CBM BASIC V2     | :x:          |                                     | :heavy_check_mark: |
@@ -79,18 +79,18 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.p`                                                | OpenEdge ABL     | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Pawn             | :x:          |                                     | :heavy_check_mark: |
 | `*.pl`                                               | Perl6            | :x:          |                                     |                    |
-|                                                      | Perl             |              |                                     |                    |
+|                                                      | Perl             | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Prolog           | :x:          |                                     | :heavy_check_mark: |
 | `*.pm`                                               | Perl6            | :x:          |                                     |                    |
-|                                                      | Perl             |              |                                     |                    |
+|                                                      | Perl             | :x:          |                                     | :heavy_check_mark: |
 | `*.pro`                                              | IDL              | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Prolog           | :x:          |                                     | :heavy_check_mark: |
 | `*.s`                                                | ca65 assembler   | :x:          |                                     | :heavy_check_mark: |
 |                                                      | GAS              | :x:          |                                     | :heavy_check_mark: |
 | `*.sc`                                               | Python           |              |                                     |                    |
-|                                                      | SuperCollider    | :x:          |                                     |                    |
+|                                                      | SuperCollider    | :x:          |                                     | :heavy_check_mark: |
 | `*.scd`                                              | scdoc            | :x:          |                                     | :heavy_check_mark: |
-|                                                      | SuperCollider    | :x:          |                                     |                    |
+|                                                      | SuperCollider    | :x:          |                                     | :heavy_check_mark: |
 | `*.sl`                                               | Slash            | :x:          | No text analysis exists in pygments |                    |
 |                                                      | Slurm            | :x:          | No text analysis exists in pygments |                    |
 | `*.sql`                                              | SQL              | :x:          |                                     | :heavy_check_mark: |
