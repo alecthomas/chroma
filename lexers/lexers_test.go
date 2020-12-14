@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -79,6 +80,11 @@ func TestLexers(t *testing.T) {
 	assert.NoError(t, err)
 
 	for _, file := range files {
+		// skip text analysis test files
+		if file.Name() == "analysis" {
+			continue
+		}
+
 		if file.IsDir() {
 			dirname := filepath.Join("testdata", file.Name())
 			lexer := lexers.Get(file.Name())
@@ -115,5 +121,54 @@ func TestLexers(t *testing.T) {
 			lexer = chroma.Coalesce(lexer)
 			FileTest(t, lexer, filename, expectedFilename)
 		}
+	}
+}
+
+func FileTestAnalysis(t *testing.T, lexer chroma.Lexer, actualFilepath, expectedFilepath string) {
+	t.Helper()
+	t.Run(lexer.Config().Name+"/"+actualFilepath, func(t *testing.T) {
+		expectedData, err := ioutil.ReadFile(expectedFilepath)
+		assert.NoError(t, err)
+
+		analyser, ok := lexer.(chroma.Analyser)
+		assert.True(t, ok, "lexer %q does not set analyser", lexer.Config().Name)
+
+		data, err := ioutil.ReadFile(actualFilepath)
+		assert.NoError(t, err)
+
+		actual := analyser.AnalyseText(string(data))
+
+		if os.Getenv("RECORD") == "true" {
+			// Update the expected file with the generated output of this lexer
+			f, err := os.Create(expectedFilepath)
+			defer f.Close() // nolint: gosec
+			assert.NoError(t, err)
+
+			_, err = f.WriteString(strconv.FormatFloat(float64(actual), 'f', -1, 32))
+			assert.NoError(t, err)
+		} else {
+			expected, err := strconv.ParseFloat(strings.TrimSpace(string(expectedData)), 32)
+			assert.NoError(t, err)
+
+			assert.Equal(t, float32(expected), actual)
+		}
+	})
+}
+
+func TestLexersTextAnalyser(t *testing.T) {
+	files, err := filepath.Glob("testdata/analysis/*.actual")
+	assert.NoError(t, err)
+
+	for _, actualFilepath := range files {
+		filename := filepath.Base(actualFilepath)
+		baseFilename := strings.TrimSuffix(filename, filepath.Ext(filename))
+		lexerName := strings.Split(baseFilename, ".")[0]
+
+		lexer := lexers.Get(lexerName)
+		assert.NotNil(t, lexer, "no lexer found for name %q", lexerName)
+
+		expectedFilepath := "testdata/analysis/" + baseFilename + ".expected"
+
+		FileTestAnalysis(t, lexer, actualFilepath, expectedFilepath)
 	}
 }
