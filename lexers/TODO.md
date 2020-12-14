@@ -98,7 +98,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.t`                                                | Perl6            |              |                                     |                    |
 |                                                      | Perl             |              |                                     |                    |
 |                                                      | TADS 3           | :x:          |                                     | :heavy_check_mark: |
-| `*.ttl`                                              | Tera Term macro  | :x:          |                                     |                    |
+| `*.ttl`                                              | Tera Term macro  | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Turtle           | :x:          |                                     | :heavy_check_mark: |
 | `*.u`                                                | ucode            | :x:          |                                     |                    |
 |                                                      | UrbiScript       | :x:          |                                     |                    |
