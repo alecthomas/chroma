@@ -101,7 +101,7 @@ For the following lexers, text analysis capabilities of pygments have to be port
 | `*.ttl`                                              | Tera Term macro  | :x:          |                                     | :heavy_check_mark: |
 |                                                      | Turtle           | :x:          |                                     | :heavy_check_mark: |
 | `*.u`                                                | ucode            | :x:          |                                     | :heavy_check_mark: |
-|                                                      | UrbiScript       | :x:          |                                     |                    |
+|                                                      | UrbiScript       | :x:          |                                     | :heavy_check_mark: |
 | `*.v`                                                | Coq              | :x:          |                                     | :heavy_check_mark: |
 |                                                      | verilog          | :x:          |                                     | :heavy_check_mark: |
 | `*.xsl`                                              | XML              |              |                                     |                    |
