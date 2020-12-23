@@ -39,6 +39,18 @@ var CSS = internal.Register(MustNewLexer(
 			Include("basics"),
 			{`\}`, Punctuation, Pop(2)},
 		},
+		"atparenthesis": {
+			Include("common-values"),
+			{`/\*(?:.|\n)*?\*/`, Comment, nil},
+			Include("numeric-values"),
+			{`[*+/-]`, Operator, nil},
+			{`[,]`, Punctuation, nil},
+			{`"(\\\\|\\"|[^"])*"`, LiteralStringDouble, nil},
+			{`'(\\\\|\\'|[^'])*'`, LiteralStringSingle, nil},
+			{`[a-zA-Z_-]\w*`, Name, nil},
+			{`\(`, Punctuation, Push("atparenthesis")},
+			{`\)`, Punctuation, Pop(1)},
+		},
 		"content": {
 			{`\s+`, Text, nil},
 			{`\}`, Punctuation, Pop(1)},
@@ -73,6 +85,7 @@ var CSS = internal.Register(MustNewLexer(
 			{`"(\\\\|\\"|[^"])*"`, LiteralStringDouble, nil},
 			{`'(\\\\|\\'|[^'])*'`, LiteralStringSingle, nil},
 			{`[a-zA-Z_-]\w*`, Name, nil},
+			{`\(`, Punctuation, Push("atparenthesis")},
 			{`\)`, Punctuation, Pop(1)},
 		},
 		"common-values": {
