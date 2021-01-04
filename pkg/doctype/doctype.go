@@ -18,6 +18,10 @@ func MatchString(text string, pattern string) (bool, error) {
 		return false, nil
 	}
 
+	if len(pattern) == 0 {
+		return false, nil
+	}
+
 	doctypeRe, err := regexp.Compile(fmt.Sprintf("(?i)%s", pattern))
 	if err != nil {
 		return false, fmt.Errorf("failed to compile doctype regex: %s", err)

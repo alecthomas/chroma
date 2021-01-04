@@ -58,7 +58,7 @@
 | Velocity                      |                                     | :heavy_check_mark: |                    |
 | verilog                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | XAML                          |                                     | :heavy_check_mark: |                    |
-| XML                           |                                     |                    |                    |
+| XML                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | XSLT                          |                                     | :heavy_check_mark: |                    |
 
 
