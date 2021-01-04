@@ -65,8 +65,8 @@
 ## Long tail languages
 
 | lexer                         | note                                | lexer done         | text analysis done |
-| ---                           | ---                                 | ---                | ---                |
-| ADL                           |                                     |                    |                    |
+| ---                           | ---                                 | ---                |                    |
+| ADL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Agda                          |                                     |                    |                    |
 | Aheui                         |                                     |                    |                    |
 | Alloy                         |                                     |                    |                    |
