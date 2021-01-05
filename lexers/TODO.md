@@ -70,7 +70,7 @@
 | Agda                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Aheui                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Alloy                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| AmbientTalk                   |                                     |                    |                    |
+| AmbientTalk                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Ampl                          |                                     |                    |                    |
 | Arrow                         |                                     |                    |                    |
 | AspectJ                       |                                     |                    |                    |
