@@ -69,7 +69,7 @@
 | ADL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Agda                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Aheui                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Alloy                         |                                     |                    |                    |
+| Alloy                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | AmbientTalk                   |                                     |                    |                    |
 | Ampl                          |                                     |                    |                    |
 | Arrow                         |                                     |                    |                    |
