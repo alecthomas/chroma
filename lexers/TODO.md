@@ -67,7 +67,7 @@
 | lexer                         | note                                | lexer done         | text analysis done |
 | ---                           | ---                                 | ---                |                    |
 | ADL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Agda                          |                                     |                    |                    |
+| Agda                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Aheui                         |                                     |                    |                    |
 | Alloy                         |                                     |                    |                    |
 | AmbientTalk                   |                                     |                    |                    |
