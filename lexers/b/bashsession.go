@@ -8,10 +8,10 @@ import (
 // BashSession lexer.
 var BashSession = internal.Register(MustNewLazyLexer(
 	&Config{
-		Name:      "BashSession",
+		Name:      "Bash Session",
 		Aliases:   []string{"bash-session", "console", "shell-session"},
 		Filenames: []string{".sh-session"},
-		MimeTypes: []string{"text/x-sh"},
+		MimeTypes: []string{"application/x-shell-session", "application/x-sh-session", "text/x-sh"},
 		EnsureNL:  true,
 	},
 	bashsessionRules,
