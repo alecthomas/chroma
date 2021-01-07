@@ -79,7 +79,7 @@
 | Augeas                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | autohotkey                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | AutoIt                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| BBC Basic                     |                                     | :heavy_check_mark: |                    |
+| BBC Basic                     |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | BBCode                        |                                     |                    |                    |
 | BC                            |                                     |                    |                    |
 | BST                           |                                     |                    |                    |
