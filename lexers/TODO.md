@@ -87,7 +87,7 @@
 | Bash Session                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Befunge                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | BlitzMax                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Boa                           |                                     |                    |                    |
+| Boa                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Boo                           |                                     |                    |                    |
 | Boogie                        |                                     |                    |                    |
 | Brainfuck                     |                                     | :heavy_check_mark: | :heavy_check_mark: |
