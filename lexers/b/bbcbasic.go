@@ -1,6 +1,8 @@
 package b
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
@@ -15,4 +17,10 @@ var BbcBasic = internal.Register(MustNewLexer(
 	Rules{
 		"root": {},
 	},
-))
+).SetAnalyser(func(text string) float32 {
+	if strings.HasPrefix(text, "10REM >") || strings.HasPrefix(text, "REM >") {
+		return 0.9
+	}
+
+	return 0
+}))
