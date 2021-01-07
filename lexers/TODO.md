@@ -72,7 +72,7 @@
 | AmbientTalk                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Ampl                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Arrow                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| AspectJ                       |                                     |                    |                    |
+| AspectJ                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | aspx-cs                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | aspx-vb                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Asymptote                     |                                     |                    |                    |
