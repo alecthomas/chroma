@@ -83,7 +83,7 @@
 | BBCode                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | BC                            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | BST                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| BARE                          |                                     |                    |                    |
+| BARE                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Bash Session                  |                                     |                    |                    |
 | Befunge                       |                                     |                    |                    |
 | BlitzMax                      |                                     |                    |                    |
