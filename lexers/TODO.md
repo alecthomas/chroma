@@ -71,7 +71,7 @@
 | Alloy                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | AmbientTalk                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Ampl                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Arrow                         |                                     |                    |                    |
+| Arrow                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | AspectJ                       |                                     |                    |                    |
 | aspx-cs                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | aspx-vb                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
