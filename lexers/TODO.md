@@ -88,7 +88,7 @@
 | Befunge                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | BlitzMax                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Boa                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Boo                           |                                     |                    |                    |
+| Boo                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Boogie                        |                                     |                    |                    |
 | Brainfuck                     |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | BUGS                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
