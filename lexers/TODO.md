@@ -61,7 +61,6 @@
 | XML                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | XSLT                          |                                     | :heavy_check_mark: |                    |
 
-
 ## Long tail languages
 
 | lexer                         | note                                | lexer done         | text analysis done |
@@ -71,7 +70,7 @@
 | Aheui                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Alloy                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | AmbientTalk                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Ampl                          |                                     |                    |                    |
+| Ampl                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Arrow                         |                                     |                    |                    |
 | AspectJ                       |                                     |                    |                    |
 | aspx-cs                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
@@ -340,7 +339,6 @@
 | xtlang                        |                                     |                    |                    |
 | Zeek                          |                                     |                    |                    |
 | Zephir                        |                                     |                    |                    |
-
 
 ## Missing file extension support
 
