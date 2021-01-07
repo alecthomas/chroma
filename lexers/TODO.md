@@ -76,7 +76,7 @@
 | aspx-cs                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | aspx-vb                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Asymptote                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Augeas                        |                                     |                    |                    |
+| Augeas                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | AutoIt                        |                                     |                    |                    |
 | autohotkey                    |                                     |                    |                    |
 | BBC Basic                     |                                     |                    |                    |
