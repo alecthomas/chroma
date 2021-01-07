@@ -78,7 +78,7 @@
 | Asymptote                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Augeas                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | autohotkey                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| AutoIt                        |                                     |                    |                    |
+| AutoIt                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | BBC Basic                     |                                     |                    |                    |
 | BBCode                        |                                     |                    |                    |
 | BC                            |                                     |                    |                    |
