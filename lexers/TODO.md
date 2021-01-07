@@ -81,7 +81,7 @@
 | AutoIt                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | BBC Basic                     |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | BBCode                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| BC                            |                                     |                    |                    |
+| BC                            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | BST                           |                                     |                    |                    |
 | BARE                          |                                     |                    |                    |
 | Bash Session                  |                                     |                    |                    |
