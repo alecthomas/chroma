@@ -85,7 +85,7 @@
 | BST                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | BARE                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Bash Session                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Befunge                       |                                     |                    |                    |
+| Befunge                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | BlitzMax                      |                                     |                    |                    |
 | Boa                           |                                     |                    |                    |
 | Boo                           |                                     |                    |                    |
