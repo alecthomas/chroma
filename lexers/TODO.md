@@ -75,7 +75,7 @@
 | AspectJ                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | aspx-cs                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | aspx-vb                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Asymptote                     |                                     |                    |                    |
+| Asymptote                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Augeas                        |                                     |                    |                    |
 | AutoIt                        |                                     |                    |                    |
 | autohotkey                    |                                     |                    |                    |
