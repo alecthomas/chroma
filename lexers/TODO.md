@@ -97,7 +97,7 @@
 | CAmkES                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | CBM BASIC V2                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | CPSA                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| cADL                          |                                     |                    |                    |
+| cADL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | CapDL                         |                                     |                    |                    |
 | Chapel                        |                                     |                    |                    |
 | Charmci                       |                                     |                    |                    |
