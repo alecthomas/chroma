@@ -99,7 +99,7 @@
 | CPSA                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | cADL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | CapDL                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Chapel                        |                                     |                    |                    |
+| Chapel                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Charmci                       |                                     |                    |                    |
 | Cirru                         |                                     |                    |                    |
 | Clay                          |                                     |                    |                    |
