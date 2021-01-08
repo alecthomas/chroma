@@ -98,7 +98,7 @@
 | CBM BASIC V2                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | CPSA                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | cADL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| CapDL                         |                                     |                    |                    |
+| CapDL                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Chapel                        |                                     |                    |                    |
 | Charmci                       |                                     |                    |                    |
 | Cirru                         |                                     |                    |                    |
