@@ -94,7 +94,7 @@
 | BUGS                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | c-objdump                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ca65 assembler                |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| CAmkES                        |                                     |                    |                    |
+| CAmkES                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | CBM BASIC V2                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | CPSA                          |                                     |                    |                    |
 | cADL                          |                                     |                    |                    |
