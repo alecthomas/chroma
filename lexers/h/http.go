@@ -18,7 +18,20 @@ var HTTP = internal.Register(httpBodyContentTypeLexer(MustNewLazyLexer(
 		DotAll:       true,
 	},
 	httpRules,
-)))
+).SetAnalyser(func(text string) float32 {
+	if strings.HasPrefix(text, "GET") ||
+		strings.HasPrefix(text, "POST") ||
+		strings.HasPrefix(text, "PUT") ||
+		strings.HasPrefix(text, "DELETE") ||
+		strings.HasPrefix(text, "HEAD") ||
+		strings.HasPrefix(text, "OPTIONS") ||
+		strings.HasPrefix(text, "TRACE") ||
+		strings.HasPrefix(text, "PATCH") {
+		return 1.0
+	}
+
+	return 0
+})))
 
 func httpRules() Rules {
 	return Rules{
@@ -35,6 +48,14 @@ func httpRules() Rules {
 			{`.+`, EmitterFunc(httpContentBlock), nil},
 		},
 	}
+}
+
+func (d *httpBodyContentTyper) AnalyseText(text string) float32 {
+	if analyser, ok := d.Lexer.(Analyser); ok {
+		return analyser.AnalyseText(text)
+	}
+
+	return 0
 }
 
 func httpContentBlock(groups []string, state *LexerState) Iterator {
