@@ -105,7 +105,7 @@
 |                               | and there's no reason to have text  |                    |                    |
 |                               | analysis based on C++ on it.        |                    |                    |
 | Cirru                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Clay                          |                                     |                    |                    |
+| Clay                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Clean                         |                                     |                    |                    |
 | ClojureScript                 |                                     |                    |                    |
 | COBOLFree                     |                                     |                    |                    |
