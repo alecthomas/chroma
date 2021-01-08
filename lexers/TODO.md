@@ -111,7 +111,7 @@
 | COBOLFree                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Coldfusion CFC                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Common Lisp                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Component Pascal              |                                     |                    |                    |
+| Component Pascal              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Coq                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | cpp-objdump                   |                                     |                    |                    |
 | Crmsh                         |                                     |                    |                    |
