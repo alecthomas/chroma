@@ -119,7 +119,7 @@
 | Cryptol                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Csound Document               | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Csound Orchestra              | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Csound Score                  |                                     |                    |                    |
+| Csound Score                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | CUDA                          |                                     |                    |                    |
 | Cypher                        |                                     |                    |                    |
 | d-objdump                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
