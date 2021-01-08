@@ -116,7 +116,7 @@
 | cpp-objdump                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Crmsh                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Croc                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Cryptol                       |                                     |                    |                    |
+| Cryptol                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Csound Document               |                                     |                    |                    |
 | Csound Orchestra              |                                     |                    |                    |
 | Csound Score                  |                                     |                    |                    |
