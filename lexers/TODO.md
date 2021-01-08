@@ -110,7 +110,7 @@
 | ClojureScript                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | COBOLFree                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Coldfusion CFC                | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Common Lisp                   | Lexer exists in chroma              | :heavy_check_mark: |                    |
+| Common Lisp                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Component Pascal              |                                     |                    |                    |
 | Coq                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | cpp-objdump                   |                                     |                    |                    |
