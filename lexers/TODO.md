@@ -104,7 +104,7 @@
 |                               | However ci file is only interface   |                    |                    |
 |                               | and there's no reason to have text  |                    |                    |
 |                               | analysis based on C++ on it.        |                    |                    |
-| Cirru                         |                                     |                    |                    |
+| Cirru                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Clay                          |                                     |                    |                    |
 | Clean                         |                                     |                    |                    |
 | ClojureScript                 |                                     |                    |                    |
