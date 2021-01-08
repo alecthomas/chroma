@@ -115,7 +115,7 @@
 | Coq                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | cpp-objdump                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Crmsh                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Croc                          |                                     |                    |                    |
+| Croc                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Cryptol                       |                                     |                    |                    |
 | Csound Document               |                                     |                    |                    |
 | Csound Orchestra              |                                     |                    |                    |
