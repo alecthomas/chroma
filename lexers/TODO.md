@@ -100,7 +100,10 @@
 | cADL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | CapDL                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Chapel                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Charmci                       |                                     |                    |                    |
+| Charmci                       | Text analysis inherits from C++.    | :heavy_check_mark: | :heavy_check_mark: |
+|                               | However ci file is only interface   |                    |                    |
+|                               | and there's no reason to have text  |                    |                    |
+|                               | analysis based on C++ on it.        |                    |                    |
 | Cirru                         |                                     |                    |                    |
 | Clay                          |                                     |                    |                    |
 | Clean                         |                                     |                    |                    |
