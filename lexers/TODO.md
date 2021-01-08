@@ -108,7 +108,7 @@
 | Clay                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Clean                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ClojureScript                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| COBOLFree                     |                                     |                    |                    |
+| COBOLFree                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Coldfusion CFC                |                                     |                    |                    |
 | Common Lisp                   | Lexer exists in chroma              | :heavy_check_mark: |                    |
 | Component Pascal              |                                     |                    |                    |
