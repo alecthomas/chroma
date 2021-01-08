@@ -165,7 +165,7 @@
 | HSAIL                         |                                     |                    |                    |
 | Hspec                         |                                     |                    |                    |
 | HTML                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| HTTP                          |  Lexer exists in chroma             | :heavy_check_mark: |                    |
+| HTTP                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Hxml                          |                                     |                    |                    |
 | Hy                            |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Hybris                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
