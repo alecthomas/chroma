@@ -118,7 +118,7 @@
 | Croc                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Cryptol                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Csound Document               | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Csound Orchestra              |                                     |                    |                    |
+| Csound Orchestra              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Csound Score                  |                                     |                    |                    |
 | CUDA                          |                                     |                    |                    |
 | Cypher                        |                                     |                    |                    |
