@@ -114,7 +114,7 @@
 | Component Pascal              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Coq                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | cpp-objdump                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Crmsh                         |                                     |                    |                    |
+| Crmsh                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Croc                          |                                     |                    |                    |
 | Cryptol                       |                                     |                    |                    |
 | Csound Document               |                                     |                    |                    |
