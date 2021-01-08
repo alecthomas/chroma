@@ -96,7 +96,7 @@
 | ca65 assembler                |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | CAmkES                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | CBM BASIC V2                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| CPSA                          |                                     |                    |                    |
+| CPSA                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | cADL                          |                                     |                    |                    |
 | CapDL                         |                                     |                    |                    |
 | Chapel                        |                                     |                    |                    |
