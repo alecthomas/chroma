@@ -120,7 +120,7 @@
 | Csound Document               | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Csound Orchestra              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Csound Score                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| CUDA                          |                                     |                    |                    |
+| CUDA                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Cypher                        |                                     |                    |                    |
 | d-objdump                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Darcs Patch                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
