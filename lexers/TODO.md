@@ -106,7 +106,7 @@
 |                               | analysis based on C++ on it.        |                    |                    |
 | Cirru                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Clay                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Clean                         |                                     |                    |                    |
+| Clean                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ClojureScript                 |                                     |                    |                    |
 | COBOLFree                     |                                     |                    |                    |
 | Coldfusion CFC                |                                     |                    |                    |
