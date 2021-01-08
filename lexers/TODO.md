@@ -107,7 +107,7 @@
 | Cirru                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Clay                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Clean                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| ClojureScript                 |                                     |                    |                    |
+| ClojureScript                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | COBOLFree                     |                                     |                    |                    |
 | Coldfusion CFC                |                                     |                    |                    |
 | Common Lisp                   | Lexer exists in chroma              | :heavy_check_mark: |                    |
