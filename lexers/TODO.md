@@ -126,7 +126,7 @@
 | Devicetree                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | dg                            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Duel                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Dylan session                 |                                     |                    |                    |
+| Dylan session                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Dylan                         |                                     |                    |                    |
 | DylanLID                      |                                     |                    |                    |
 | E-mail                        |                                     |                    |                    |
