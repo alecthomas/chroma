@@ -121,7 +121,7 @@
 | Cypher                        |                                     |                    |                    |
 | d-objdump                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Darcs Patch                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| DASM16                        |                                     |                    |                    |
+| DASM16                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Debian Control file           |                                     |                    |                    |
 | Devicetree                    |                                     |                    |                    |
 | dg                            |                                     |                    |                    |
