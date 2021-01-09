@@ -120,7 +120,7 @@
 | CUDA                          |                                     |                    |                    |
 | Cypher                        |                                     |                    |                    |
 | d-objdump                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Darcs Patch                   |                                     |                    |                    |
+| Darcs Patch                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | DASM16                        |                                     |                    |                    |
 | Debian Control file           |                                     |                    |                    |
 | Devicetree                    |                                     |                    |                    |
