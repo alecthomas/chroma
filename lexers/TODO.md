@@ -125,7 +125,7 @@
 | Debian Control file           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Devicetree                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | dg                            | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Duel                          |                                     |                    |                    |
+| Duel                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Dylan session                 |                                     |                    |                    |
 | Dylan                         |                                     |                    |                    |
 | DylanLID                      |                                     |                    |                    |
