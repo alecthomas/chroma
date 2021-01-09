@@ -128,7 +128,7 @@
 | Duel                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Dylan session                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Dylan                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| DylanLID                      |                                     |                    |                    |
+| DylanLID                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | E-mail                        |                                     |                    |                    |
 | eC                            |                                     |                    |                    |
 | Earl Grey                     |                                     |                    |                    |
