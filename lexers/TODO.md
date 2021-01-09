@@ -119,7 +119,7 @@
 | Csound Score                  |                                     |                    |                    |
 | CUDA                          |                                     |                    |                    |
 | Cypher                        |                                     |                    |                    |
-| d-objdump                     |                                     |                    |                    |
+| d-objdump                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Darcs Patch                   |                                     |                    |                    |
 | DASM16                        |                                     |                    |                    |
 | Debian Control file           |                                     |                    |                    |
