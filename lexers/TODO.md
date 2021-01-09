@@ -124,7 +124,7 @@
 | DASM16                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Debian Control file           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Devicetree                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| dg                            |                                     |                    |                    |
+| dg                            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Duel                          |                                     |                    |                    |
 | Dylan session                 |                                     |                    |                    |
 | Dylan                         |                                     |                    |                    |
