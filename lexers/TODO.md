@@ -127,7 +127,7 @@
 | dg                            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Duel                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Dylan session                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Dylan                         |                                     |                    |                    |
+| Dylan                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | DylanLID                      |                                     |                    |                    |
 | E-mail                        |                                     |                    |                    |
 | eC                            |                                     |                    |                    |
