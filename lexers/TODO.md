@@ -135,7 +135,7 @@
 | E-mail                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | eC                            | Text analysis inherits from C.      | :heavy_check_mark: | :heavy_check_mark: |
 | Earl Grey                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Easytrieve                    |                                     |                    |                    |
+| Easytrieve                    |                                     | :heavy_check_mark: |                    |
 | ECL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Eiffel                        |                                     |                    |                    |
 | Elixir iex session            |                                     |                    |                    |
