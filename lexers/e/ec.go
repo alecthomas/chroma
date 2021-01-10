@@ -1,7 +1,9 @@
 package e
 
 import (
+	"github.com/alecthomas/chroma"
 	. "github.com/alecthomas/chroma" // nolint
+	"github.com/alecthomas/chroma/lexers/c"
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
@@ -16,4 +18,10 @@ var Ec = internal.Register(MustNewLexer(
 	Rules{
 		"root": {},
 	},
-))
+).SetAnalyser(func(text string) float32 {
+	if analyser, ok := c.C.(chroma.Analyser); ok {
+		return analyser.AnalyseText(text)
+	}
+
+	return 0
+}))
