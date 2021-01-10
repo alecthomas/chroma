@@ -133,7 +133,7 @@
 | Dylan                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | DylanLID                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | E-mail                        |                                     |                    |                    |
-| eC                            |                                     | :heavy_check_mark: |                    |
+| eC                            | Text analysis inherits from C.      | :heavy_check_mark: | :heavy_check_mark: |
 | Earl Grey                     |                                     |                    |                    |
 | Easytrieve                    |                                     |                    |                    |
 | ECL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
