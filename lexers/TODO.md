@@ -281,12 +281,11 @@
 | RobotFramework                |                                     |                    |                    |
 | RQL                           |                                     |                    |                    |
 | RSL                           |                                     |                    |                    |
-| TrafficScript                 |                                     |                    |                    |
 | Ruby irb session              |                                     |                    |                    |
-| scdoc                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | S                             | It's implemented altogether in r.go | :heavy_check_mark: | :heavy_check_mark: |
 | SARL                          |                                     |                    |                    |
 | Scaml                         |                                     |                    |                    |
+| scdoc                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | ShExC                         |                                     |                    |                    |
 | Shen                          |                                     |                    |                    |
 | Sieve                         |                                     |                    |                    |
@@ -297,12 +296,13 @@
 | SmartGameFormat               |                                     |                    |                    |
 | Snowball                      |                                     |                    |                    |
 | SQL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
+| Stan                          |                                     |                    |                    |
+| Stata                         |                                     |                    |                    |
 | SuperCollider                 |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Debian Sourcelist             |                                     |                    |                    |
 | sqlite3con                    |                                     |                    |                    |
 | Scalate Server Page           |                                     |                    |                    |
-| Stan                          |                                     |                    |                    |
-| Stata                         |                                     |                    |                    |
+| TrafficScript                 |                                     |                    |                    |
 | TADS 3                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | TAP                           |                                     |                    |                    |
 | TASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
