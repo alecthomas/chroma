@@ -137,7 +137,7 @@
 | Earl Grey                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Easytrieve                    |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | ECL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Eiffel                        |                                     |                    |                    |
+| Eiffel                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Elixir iex session            |                                     |                    |                    |
 | EmacsLisp                     |  Lexer exists in chroma             | :heavy_check_mark: |                    |
 | ERB                           |                                     |                    |                    |
