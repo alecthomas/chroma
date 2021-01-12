@@ -140,7 +140,7 @@
 | Eiffel                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Elixir iex session            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | EmacsLisp                     | Lexer exists in chroma              | :heavy_check_mark: |                    |
-| ERB                           |                                     |                    |                    |
+| ERB                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Erlang erl session            |                                     |                    |                    |
 | Evoque                        |                                     |                    |                    |
 | execline                      |                                     |                    |                    |
