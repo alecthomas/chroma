@@ -71,31 +71,29 @@ var Easytrieve = internal.Register(MustNewLexer(
 			continue
 		}
 
-		firstWord := string(splitted[0])
-
-		if !hasReport && !hasJob && !hasFile && !hasParm && firstWord == "PARM" {
+		if !hasReport && !hasJob && !hasFile && !hasParm && splitted[0] == "PARM" {
 			hasParm = true
 		}
 
-		if !hasReport && !hasJob && !hasFile && firstWord == "FILE" {
+		if !hasReport && !hasJob && !hasFile && splitted[0] == "FILE" {
 			hasFile = true
 		}
 
-		if !hasReport && !hasJob && firstWord == "JOB" {
+		if !hasReport && !hasJob && splitted[0] == "JOB" {
 			hasJob = true
 		}
 
-		if !hasReport && firstWord == "PROC" {
+		if !hasReport && splitted[0] == "PROC" {
 			hasProc = true
 			continue
 		}
 
-		if !hasReport && firstWord == "END-PROC" {
+		if !hasReport && splitted[0] == "END-PROC" {
 			hasEndProc = true
 			continue
 		}
 
-		if !hasReport && firstWord == "REPORT" {
+		if !hasReport && splitted[0] == "REPORT" {
 			hasReport = true
 		}
 	}

@@ -143,7 +143,7 @@
 | ERB                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Erlang erl session            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Evoque                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| execline                      |                                     | :heavy_check_mark: |                    |
+| execline                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Ezhil                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | F#                            |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | FStar                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
