@@ -10,7 +10,7 @@ var Fennel = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "Fennel",
 		Aliases:   []string{"fennel", "fnl"},
-		Filenames: []string{"*.fennel"},
+		Filenames: []string{"*.fnl", "*.fennel"},
 		MimeTypes: []string{"text/x-fennel", "application/x-fennel"},
 	},
 	fennelRules,
