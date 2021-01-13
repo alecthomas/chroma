@@ -162,7 +162,7 @@
 | Gettext Catalog               | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Golo                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | GoodData-CL                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Groff                         |                                     |                    |                    |
+| Groff                         |                                     | :heavy_check_mark: |                    |
 | HLSL                          |                                     |                    |                    |
 | Haml                          |                                     |                    |                    |
 | HSAIL                         |                                     |                    |                    |
