@@ -149,7 +149,7 @@
 | FStar                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Fancy                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Fantom                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Felix                         |                                     |                    |                    |
+| Felix                         | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | Fennel                        |                                     |                    |                    |
 | Flatline                      |                                     |                    |                    |
 | FloScript                     |                                     |                    |                    |
