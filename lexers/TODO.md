@@ -145,7 +145,7 @@
 | Evoque                        |                                     |                    |                    |
 | execline                      |                                     |                    |                    |
 | Ezhil                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| F#                            |                                     |                    |                    |
+| F#                            |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | FStar                         |                                     |                    |                    |
 | Fancy                         |                                     |                    |                    |
 | Fantom                        |                                     |                    |                    |
