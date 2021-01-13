@@ -159,7 +159,7 @@
 | GAP                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | GAS                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | GDScript                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Gettext Catalog               |                                     |                    |                    |
+| Gettext Catalog               | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Golo                          |                                     |                    |                    |
 | GoodData-CL                   |                                     |                    |                    |
 | Groff                         |                                     |                    |                    |
