@@ -161,7 +161,7 @@
 | GDScript                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Gettext Catalog               | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Golo                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| GoodData-CL                   |                                     |                    |                    |
+| GoodData-CL                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Groff                         |                                     |                    |                    |
 | HLSL                          |                                     |                    |                    |
 | Haml                          |                                     |                    |                    |
