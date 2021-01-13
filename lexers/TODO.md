@@ -146,7 +146,7 @@
 | execline                      |                                     |                    |                    |
 | Ezhil                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | F#                            |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| FStar                         |                                     |                    |                    |
+| FStar                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Fancy                         |                                     |                    |                    |
 | Fantom                        |                                     |                    |                    |
 | Felix                         |                                     |                    |                    |
