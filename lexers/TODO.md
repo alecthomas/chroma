@@ -154,7 +154,7 @@
 | Flatline                      | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | FloScript                     | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | FortranFixed                  | No text analysis exists in pygments | :heavy_check_mark: |                    |``
-| FoxPro                        |                                     |                    |                    |
+| FoxPro                        | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | Freefem                       |                                     |                    |                    |
 | GAP                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | GAS                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
