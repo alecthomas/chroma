@@ -148,7 +148,7 @@
 | F#                            |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | FStar                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Fancy                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Fantom                        |                                     |                    |                    |
+| Fantom                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Felix                         |                                     |                    |                    |
 | Fennel                        |                                     |                    |                    |
 | Flatline                      |                                     |                    |                    |
