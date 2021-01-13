@@ -152,7 +152,7 @@
 | Felix                         | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | Fennel                        | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | Flatline                      | No text analysis exists in pygments | :heavy_check_mark: |                    |``
-| FloScript                     |                                     |                    |                    |
+| FloScript                     | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | FortranFixed                  |                                     |                    |                    |
 | FoxPro                        |                                     |                    |                    |
 | Freefem                       |                                     |                    |                    |
