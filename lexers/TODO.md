@@ -153,7 +153,7 @@
 | Fennel                        | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | Flatline                      | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | FloScript                     | No text analysis exists in pygments | :heavy_check_mark: |                    |``
-| FortranFixed                  |                                     |                    |                    |
+| FortranFixed                  | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | FoxPro                        |                                     |                    |                    |
 | Freefem                       |                                     |                    |                    |
 | GAP                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
