@@ -155,7 +155,7 @@
 | FloScript                     | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | FortranFixed                  | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | FoxPro                        | No text analysis exists in pygments | :heavy_check_mark: |                    |``
-| Freefem                       |                                     |                    |                    |
+| Freefem                       | No text analysis exists in pygments | :heavy_check_mark: |                    |``
 | GAP                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | GAS                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | GDScript                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
