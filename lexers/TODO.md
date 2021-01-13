@@ -160,7 +160,7 @@
 | GAS                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | GDScript                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Gettext Catalog               | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Golo                          |                                     |                    |                    |
+| Golo                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | GoodData-CL                   |                                     |                    |                    |
 | Groff                         |                                     |                    |                    |
 | HLSL                          |                                     |                    |                    |
