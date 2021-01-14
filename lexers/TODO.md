@@ -164,7 +164,7 @@
 | GoodData-CL                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Groff                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | HLSL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Haml                          |                                     |                    |                    |
+| Haml                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | HSAIL                         |                                     |                    |                    |
 | Hspec                         |                                     |                    |                    |
 | HTML                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
