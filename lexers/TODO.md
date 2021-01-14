@@ -149,13 +149,13 @@
 | FStar                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Fancy                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Fantom                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Felix                         | No text analysis exists in pygments | :heavy_check_mark: |                    |``
-| Fennel                        | No text analysis exists in pygments | :heavy_check_mark: |                    |``
-| Flatline                      | No text analysis exists in pygments | :heavy_check_mark: |                    |``
-| FloScript                     | No text analysis exists in pygments | :heavy_check_mark: |                    |``
-| FortranFixed                  | No text analysis exists in pygments | :heavy_check_mark: |                    |``
-| FoxPro                        | No text analysis exists in pygments | :heavy_check_mark: |                    |``
-| Freefem                       | No text analysis exists in pygments | :heavy_check_mark: |                    |``
+| Felix                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| Fennel                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| Flatline                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| FloScript                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| FortranFixed                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| FoxPro                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| Freefem                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | GAP                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | GAS                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | GDScript                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
@@ -163,7 +163,7 @@
 | Golo                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | GoodData-CL                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Groff                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| HLSL                          |                                     |                    |                    |
+| HLSL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Haml                          |                                     |                    |                    |
 | HSAIL                         |                                     |                    |                    |
 | Hspec                         |                                     |                    |                    |
