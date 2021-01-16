@@ -334,7 +334,7 @@
 | vhdl                          |                                     |                    |                    |
 | WDiff                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Web IDL                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Whiley                        |                                     |                    |                    |
+| Whiley                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | X10                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | XQuery                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | XSLT                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
