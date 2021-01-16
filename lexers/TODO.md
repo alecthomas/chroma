@@ -333,7 +333,7 @@
 | Vala                          |                                     |                    |                    |
 | vhdl                          |                                     |                    |                    |
 | WDiff                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Web IDL                       |                                     |                    |                    |
+| Web IDL                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Whiley                        |                                     |                    |                    |
 | X10                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | XQuery                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
