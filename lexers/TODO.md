@@ -336,7 +336,7 @@
 | Web IDL                       |                                     |                    |                    |
 | Whiley                        |                                     |                    |                    |
 | X10                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| XQuery                        |                                     |                    |                    |
+| XQuery                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | XSLT                          |                                     |                    |                    |
 | Xtend                         |                                     |                    |                    |
 | xtlang                        |                                     |                    |                    |
