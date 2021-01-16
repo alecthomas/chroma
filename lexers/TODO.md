@@ -335,7 +335,7 @@
 | WDiff                         |                                     |                    |                    |
 | Web IDL                       |                                     |                    |                    |
 | Whiley                        |                                     |                    |                    |
-| X10                           |                                     |                    |                    |
+| X10                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | XQuery                        |                                     |                    |                    |
 | XSLT                          |                                     |                    |                    |
 | Xtend                         |                                     |                    |                    |
