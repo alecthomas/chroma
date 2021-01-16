@@ -337,7 +337,7 @@
 | Whiley                        |                                     |                    |                    |
 | X10                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | XQuery                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| XSLT                          |                                     |                    |                    |
+| XSLT                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Xtend                         |                                     |                    |                    |
 | xtlang                        |                                     |                    |                    |
 | Zeek                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
