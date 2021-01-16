@@ -339,7 +339,7 @@
 | XQuery                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | XSLT                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Xtend                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| xtlang                        |                                     |                    |                    |
+| xtlang                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Zeek                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Zephir                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 
