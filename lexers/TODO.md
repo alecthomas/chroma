@@ -330,7 +330,8 @@
 | VCTreeStatus                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | verilog                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | VGL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| vhdl                          |                                     |                    |                    |
+| vhdl                          | Different name in chroma "VHDL"!    | :heavy_check_mark: |                    |
+|                               | No text analysis exists in pygments |                    |                    |
 | WDiff                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Web IDL                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Whiley                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
