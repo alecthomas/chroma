@@ -324,7 +324,6 @@
 | Unicon                        |                                     |                    |                    |
 | UrbiScript                    |                                     |                    |                    |
 | USD                           |                                     |                    |                    |
-| VB.net                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | VBScript                      |                                     |                    |                    |
 | VCLSnippets                   |                                     |                    |                    |
 | VCTreeStatus                  |                                     |                    |                    |
