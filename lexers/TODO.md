@@ -328,7 +328,7 @@
 | VCLSnippets                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | VCTreeStatus                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | verilog                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| VGL                           |                                     |                    |                    |
+| VGL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Vala                          |                                     |                    |                    |
 | vhdl                          |                                     |                    |                    |
 | WDiff                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
