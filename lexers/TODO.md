@@ -326,7 +326,7 @@
 | USD                           |                                     |                    |                    |
 | VBScript                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | VCLSnippets                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| VCTreeStatus                  |                                     |                    |                    |
+| VCTreeStatus                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | verilog                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | VGL                           |                                     |                    |                    |
 | Vala                          |                                     |                    |                    |
