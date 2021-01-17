@@ -325,7 +325,7 @@
 | UrbiScript                    |                                     |                    |                    |
 | USD                           |                                     |                    |                    |
 | VBScript                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| VCLSnippets                   |                                     |                    |                    |
+| VCLSnippets                   | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | VCTreeStatus                  |                                     |                    |                    |
 | verilog                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | VGL                           |                                     |                    |                    |
