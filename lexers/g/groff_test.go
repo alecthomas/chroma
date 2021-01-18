@@ -14,6 +14,10 @@ func TestGroff_AnalyseText(t *testing.T) {
 		Filepath string
 		Expected float32
 	}{
+		"comment": {
+			Filepath: "testdata/groff_comment.man",
+			Expected: 1.0,
+		},
 		"title head": {
 			Filepath: "testdata/groff_title_head.man",
 			Expected: 1.0,
