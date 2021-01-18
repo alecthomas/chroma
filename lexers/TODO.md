@@ -187,7 +187,7 @@
 | JSGF                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | JSONBareObject                | Deprecated in pygments. Behaves the |                    |                    |
 |                               | same as `Json lexer` now.           |                    |                    |
-| JSON-LD                       |                                     |                    |                    |
+| JSON-LD                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Java Server Page              |                                     |                    |                    |
 | Julia console                 |                                     |                    |                    |
 | Juttle                        |                                     |                    |                    |
