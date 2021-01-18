@@ -310,7 +310,7 @@
 | TAP                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | TASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Tcsh Session                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Tea                           |                                     |                    |                    |
+| Tea                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Tera Term macro               |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Text only                     |                                     |                    |                    |
 | tiddler                       |                                     |                    |                    |
