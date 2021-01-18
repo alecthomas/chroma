@@ -185,7 +185,8 @@
 | Jasmin                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | JCL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | JSGF                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| JSONBareObject                |                                     |                    |                    |
+| JSONBareObject                | Deprecated in pygments. Behaves the |                    |                    |
+|                               | same as `Json lexer` now.           |                    |                    |
 | JSON-LD                       |                                     |                    |                    |
 | Java Server Page              |                                     |                    |                    |
 | Julia console                 |                                     |                    |                    |
