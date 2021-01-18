@@ -307,7 +307,7 @@
 | sqlite3con                    |                                     |                    |                    |
 | Scalate Server Page           |                                     |                    |                    |
 | TADS 3                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| TAP                           |                                     |                    |                    |
+| TAP                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | TASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Tcsh Session                  |                                     |                    |                    |
 | Tea                           |                                     |                    |                    |
