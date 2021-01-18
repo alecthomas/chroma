@@ -177,7 +177,7 @@
 | INI                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Inform 6                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Inform 6 template             | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Inform 7                      |                                     |                    |                    |
+| Inform 7                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Ioke                          |                                     |                    |                    |
 | IRC logs                      |                                     |                    |                    |
 | Isabelle                      |                                     |                    |                    |
