@@ -188,7 +188,7 @@
 | JSONBareObject                | Deprecated in pygments. Behaves the |                    |                    |
 |                               | same as `Json lexer` now.           |                    |                    |
 | JSON-LD                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Java Server Page              |                                     |                    |                    |
+| Java Server Page              |                                     | :heavy_check_mark: |                    |
 | Julia console                 |                                     |                    |                    |
 | Juttle                        |                                     |                    |                    |
 | Kal                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
