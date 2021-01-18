@@ -176,7 +176,7 @@
 | IDL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | INI                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Inform 6                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Inform 6 template             |                                     |                    |                    |
+| Inform 6 template             | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Inform 7                      |                                     |                    |                    |
 | Ioke                          |                                     |                    |                    |
 | IRC logs                      |                                     |                    |                    |
