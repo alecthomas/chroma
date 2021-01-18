@@ -184,7 +184,7 @@
 | JAGS                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Jasmin                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | JCL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| JSGF                          |                                     |                    |                    |
+| JSGF                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | JSONBareObject                |                                     |                    |                    |
 | JSON-LD                       |                                     |                    |                    |
 | Java Server Page              |                                     |                    |                    |
