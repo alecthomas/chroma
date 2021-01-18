@@ -309,7 +309,7 @@
 | TADS 3                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | TAP                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | TASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Tcsh Session                  |                                     |                    |                    |
+| Tcsh Session                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Tea                           |                                     |                    |                    |
 | Tera Term macro               |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Text only                     |                                     |                    |                    |
