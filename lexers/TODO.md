@@ -321,7 +321,7 @@
 | Typographic Number Theory     |                                     |                    |                    |
 | ucode                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | UrbiScript                    |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Unicon                        |                                     |                    |                    |
+| Unicon                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | UrbiScript                    |                                     |                    |                    |
 | USD                           |                                     |                    |                    |
 | Vala                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
