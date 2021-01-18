@@ -312,7 +312,8 @@
 | Tcsh Session                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Tea                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Tera Term macro               |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Text only                     |                                     |                    |                    |
+| Text only                     | Named "plaintext" lexer in chroma   | :heavy_check_mark: |                    |
+|                               | No text analysis exists in pygments |                    |                    |
 | tiddler                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Todotxt                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | TrafficScript                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
