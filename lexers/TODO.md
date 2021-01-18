@@ -172,7 +172,7 @@
 | Hxml                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Hy                            |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Hybris                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Icon                          |                                     |                    |                    |
+| Icon                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | IDL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | INI                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Inform 6                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
