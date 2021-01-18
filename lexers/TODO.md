@@ -317,7 +317,7 @@
 | Todotxt                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | TrafficScript                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Transact-SQL                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Treetop                       |                                     |                    |                    |
+| Treetop                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Turtle                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Typographic Number Theory     |                                     |                    |                    |
 | ucode                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
