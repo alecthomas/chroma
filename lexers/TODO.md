@@ -165,7 +165,7 @@
 | Groff                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | HLSL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Haml                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| HSAIL                         |                                     |                    |                    |
+| HSAIL                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Hspec                         |                                     |                    |                    |
 | HTML                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | HTTP                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
