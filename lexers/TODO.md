@@ -313,7 +313,7 @@
 | Tea                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Tera Term macro               |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Text only                     |                                     |                    |                    |
-| tiddler                       |                                     |                    |                    |
+| tiddler                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Todotxt                       |                                     |                    |                    |
 | TrafficScript                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Transact-SQL                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
