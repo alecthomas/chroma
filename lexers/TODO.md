@@ -319,7 +319,7 @@
 | Transact-SQL                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Treetop                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Turtle                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Typographic Number Theory     |                                     |                    |                    |
+| Typographic Number Theory     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ucode                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Unicon                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | UrbiScript                    |                                     | :heavy_check_mark: | :heavy_check_mark: |
