@@ -314,7 +314,7 @@
 | Tera Term macro               |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Text only                     |                                     |                    |                    |
 | tiddler                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Todotxt                       |                                     |                    |                    |
+| Todotxt                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | TrafficScript                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Transact-SQL                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Treetop                       |                                     |                    |                    |
