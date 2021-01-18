@@ -8,7 +8,7 @@ import (
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
-var groffAlphanumericRe = regexp.MustCompile(`^[a-zA-Z0-9.]+$`)
+var groffAlphanumericRe = regexp.MustCompile(`^[a-zA-Z0-9]+$`)
 
 // Groff lexer.
 var Groff = internal.Register(MustNewLazyLexer(
@@ -54,7 +54,7 @@ var Groff = internal.Register(MustNewLazyLexer(
 		return 0
 	}
 
-	if text[:3] == ".\\" {
+	if text[:3] == `.\"` {
 		return 1.0
 	}
 
