@@ -179,7 +179,7 @@
 | Inform 6 template             | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Inform 7                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Ioke                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| IRC logs                      |                                     |                    |                    |
+| IRC logs                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Isabelle                      |                                     |                    |                    |
 | JAGS                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Jasmin                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
