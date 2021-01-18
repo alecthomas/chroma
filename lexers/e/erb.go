@@ -1,6 +1,8 @@
 package e
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
@@ -15,4 +17,10 @@ var Erb = internal.Register(MustNewLexer(
 	Rules{
 		"root": {},
 	},
-))
+).SetAnalyser(func(text string) float32 {
+	if strings.Contains(text, "<%") && strings.Contains(text, "%>") {
+		return 0.4
+	}
+
+	return 0
+}))
