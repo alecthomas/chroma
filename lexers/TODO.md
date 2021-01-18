@@ -183,7 +183,7 @@
 | Isabelle                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | JAGS                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Jasmin                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| JCL                           |                                     |                    |                    |
+| JCL                           |                                     | :heavy_check_mark: |                    |
 | JSGF                          |                                     |                    |                    |
 | JSONBareObject                |                                     |                    |                    |
 | JSON-LD                       |                                     |                    |                    |
