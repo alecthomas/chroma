@@ -169,7 +169,7 @@
 | Hspec                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | HTML                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | HTTP                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Hxml                          |                                     |                    |                    |
+| Hxml                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Hy                            |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Hybris                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Icon                          |                                     |                    |                    |
