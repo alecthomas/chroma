@@ -166,7 +166,7 @@
 | HLSL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Haml                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | HSAIL                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Hspec                         |                                     |                    |                    |
+| Hspec                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | HTML                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | HTTP                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Hxml                          |                                     |                    |                    |
