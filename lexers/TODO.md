@@ -189,7 +189,7 @@
 |                               | same as `Json lexer` now.           |                    |                    |
 | JSON-LD                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Java Server Page              |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Julia console                 |                                     |                    |                    |
+| Julia console                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Juttle                        |                                     |                    |                    |
 | Kal                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Kconfig                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
