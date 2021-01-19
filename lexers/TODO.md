@@ -205,7 +205,7 @@
 | LiveScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | LLVM-MIR                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | LLVM-MIR Body                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Logos                         |                                     |                    |                    |
+| Logos                         |                                     | :heavy_check_mark: |                    |
 | Logtalk                       |                                     |                    |                    |
 | MIME                          |                                     |                    |                    |
 | MOOCode                       |                                     |                    |                    |
