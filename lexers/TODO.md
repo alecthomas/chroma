@@ -200,7 +200,7 @@
 | Limbo                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Literate Agda                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Literate Cryptol              | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Literate Haskell              |                                     |                    |                    |
+| Literate Haskell              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Literate Idris                |                                     |                    |                    |
 | LiveScript                    |                                     |                    |                    |
 | LLVM-MIR Body                 |                                     |                    |                    |
