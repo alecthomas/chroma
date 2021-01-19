@@ -206,7 +206,7 @@
 | LLVM-MIR                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | LLVM-MIR Body                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Logos                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Logtalk                       |                                     | :heavy_check_mark: |                    |
+| Logtalk                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | MIME                          |                                     |                    |                    |
 | MOOCode                       |                                     |                    |                    |
 | MSDOS Session                 |                                     |                    |                    |
