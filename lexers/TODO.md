@@ -190,7 +190,7 @@
 | Java Server Page              |                                     |                    |                    |
 | Julia console                 |                                     |                    |                    |
 | Juttle                        |                                     |                    |                    |
-| Kal                           |                                     |                    |                    |
+| Kal                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Kconfig                       |                                     |                    |                    |
 | Kernel log                    |                                     |                    |                    |
 | Koka                          |                                     |                    |                    |
