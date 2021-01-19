@@ -198,7 +198,7 @@
 | LSL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Lean                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Limbo                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Literate Agda                 |                                     |                    |                    |
+| Literate Agda                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Literate Cryptol              |                                     |                    |                    |
 | Literate Haskell              |                                     |                    |                    |
 | Literate Idris                |                                     |                    |                    |
