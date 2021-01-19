@@ -199,7 +199,7 @@
 | Lean                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Limbo                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Literate Agda                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Literate Cryptol              |                                     |                    |                    |
+| Literate Cryptol              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Literate Haskell              |                                     |                    |                    |
 | Literate Idris                |                                     |                    |                    |
 | LiveScript                    |                                     |                    |                    |
