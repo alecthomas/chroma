@@ -190,7 +190,7 @@
 | JSON-LD                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Java Server Page              |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Julia console                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Juttle                        |                                     |                    |                    |
+| Juttle                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Kal                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Kconfig                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Kernel log                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
