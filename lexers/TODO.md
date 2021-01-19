@@ -196,7 +196,7 @@
 | Kernel log                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Koka                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | LSL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Lean                          |                                     |                    |                    |
+| Lean                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Limbo                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Literate Agda                 |                                     |                    |                    |
 | Literate Cryptol              |                                     |                    |                    |
