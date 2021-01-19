@@ -204,7 +204,7 @@
 | Literate Idris                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | LiveScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | LLVM-MIR                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| LLVM-MIR Body                 |                                     |                    |                    |
+| LLVM-MIR Body                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Logos                         |                                     |                    |                    |
 | Logtalk                       |                                     |                    |                    |
 | MIME                          |                                     |                    |                    |
