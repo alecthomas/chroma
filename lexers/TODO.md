@@ -202,7 +202,7 @@
 | Literate Cryptol              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Literate Haskell              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Literate Idris                | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| LiveScript                    |                                     |                    |                    |
+| LiveScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | LLVM-MIR Body                 |                                     |                    |                    |
 | LLVM-MIR                      |                                     |                    |                    |
 | Logos                         |                                     |                    |                    |
