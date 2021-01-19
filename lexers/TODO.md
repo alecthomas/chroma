@@ -192,7 +192,7 @@
 | Juttle                        |                                     |                    |                    |
 | Kal                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Kconfig                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Kernel log                    |                                     |                    |                    |
+| Kernel log                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Koka                          |                                     |                    |                    |
 | LSL                           |                                     |                    |                    |
 | Lean                          |                                     |                    |                    |
