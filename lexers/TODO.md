@@ -191,7 +191,7 @@
 | Julia console                 |                                     |                    |                    |
 | Juttle                        |                                     |                    |                    |
 | Kal                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Kconfig                       |                                     |                    |                    |
+| Kconfig                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Kernel log                    |                                     |                    |                    |
 | Koka                          |                                     |                    |                    |
 | LSL                           |                                     |                    |                    |
