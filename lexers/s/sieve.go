@@ -11,7 +11,6 @@ var Sieve = internal.Register(MustNewLazyLexer(
 		Name:      "Sieve",
 		Aliases:   []string{"sieve"},
 		Filenames: []string{"*.siv", "*.sieve"},
-		MimeTypes: []string{},
 	},
 	func() Rules {
 		return Rules{
