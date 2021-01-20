@@ -298,7 +298,7 @@
 | Slash                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Slurm                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | SmartGameFormat               | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Snowball                      |                                     |                    |                    |
+| Snowball                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | SQL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Stan                          |                                     |                    |                    |
 | Stata                         |                                     |                    |                    |
