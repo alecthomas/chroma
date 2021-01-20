@@ -287,7 +287,7 @@
 | RSL                           |                                     |                    |                    |
 | Ruby irb session              |                                     |                    |                    |
 | S                             | It's implemented altogether in r.go | :heavy_check_mark: | :heavy_check_mark: |
-| SARL                          |                                     |                    |                    |
+| SARL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Scaml                         |                                     |                    |                    |
 | scdoc                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | ShExC                         |                                     |                    |                    |
