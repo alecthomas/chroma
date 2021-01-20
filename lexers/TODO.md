@@ -301,7 +301,7 @@
 | Snowball                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | SQL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Stan                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Stata                         |                                     |                    |                    |
+| Stata                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | SuperCollider                 |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Debian Sourcelist             |                                     |                    |                    |
 | sqlite3con                    |                                     |                    |                    |
