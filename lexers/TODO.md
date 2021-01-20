@@ -292,7 +292,7 @@
 | scdoc                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Shen                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ShExC                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Sieve                         |                                     |                    |                    |
+| Sieve                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Silver                        |                                     |                    |                    |
 | Singularity                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Slash                         | No text analysis exists in pygments |                    |                    |
