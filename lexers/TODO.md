@@ -290,8 +290,8 @@
 | SARL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Scaml                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | scdoc                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
+| Shen                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ShExC                         |                                     |                    |                    |
-| Shen                          |                                     |                    |                    |
 | Sieve                         |                                     |                    |                    |
 | Silver                        |                                     |                    |                    |
 | Singularity                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
