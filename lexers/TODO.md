@@ -293,7 +293,7 @@
 | Shen                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ShExC                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Sieve                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Silver                        |                                     |                    |                    |
+| Silver                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Singularity                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Slash                         | No text analysis exists in pygments |                    |                    |
 | Slurm                         | No text analysis exists in pygments |                    |                    |
