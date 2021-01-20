@@ -288,7 +288,7 @@
 | Ruby irb session              |                                     |                    |                    |
 | S                             | It's implemented altogether in r.go | :heavy_check_mark: | :heavy_check_mark: |
 | SARL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Scaml                         |                                     |                    |                    |
+| Scaml                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | scdoc                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | ShExC                         |                                     |                    |                    |
 | Shen                          |                                     |                    |                    |
