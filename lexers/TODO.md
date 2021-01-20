@@ -288,6 +288,7 @@
 | Ruby irb session              |                                     |                    |                    |
 | S                             | It's implemented altogether in r.go | :heavy_check_mark: | :heavy_check_mark: |
 | SARL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| Scalate Server Page           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Scaml                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | scdoc                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Shen                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
@@ -305,7 +306,6 @@
 | SuperCollider                 |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Sourcelist/Debian Sourceslist |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | sqlite3con                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Scalate Server Page           |                                     |                    |                    |
 | TADS 3                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | TAP                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | TASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |

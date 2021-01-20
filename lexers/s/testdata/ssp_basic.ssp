@@ -1,0 +1,2 @@
+<%@ import val model: Person %>
+<p>Hello ${name}, what is the weather like in ${city}</p>
