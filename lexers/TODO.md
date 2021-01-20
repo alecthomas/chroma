@@ -303,7 +303,7 @@
 | Stan                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Stata                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | SuperCollider                 |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Debian Sourcelist             |                                     |                    |                    |
+| Sourcelist/Debian Sourceslist |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | sqlite3con                    |                                     |                    |                    |
 | Scalate Server Page           |                                     |                    |                    |
 | TADS 3                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
