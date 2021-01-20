@@ -296,7 +296,7 @@
 | Silver                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Singularity                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Slash                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Slurm                         | No text analysis exists in pygments |                    |                    |
+| Slurm                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | SmartGameFormat               |                                     |                    |                    |
 | Snowball                      |                                     |                    |                    |
 | SQL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
