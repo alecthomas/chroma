@@ -285,7 +285,7 @@
 | Rd                            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | REBOL                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Red                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Redcode                       |                                     |                    |                    |
+| Redcode                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ResourceBundle                |                                     |                    |                    |
 | RHTML                         |                                     |                    |                    |
 | Ride                          |                                     |                    |                    |
