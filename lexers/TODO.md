@@ -216,7 +216,7 @@
 | markdown                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Mask                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Matlab session                | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| MiniD                         |                                     |                    |                    |
+| MiniD                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MiniScript                    |                                     |                    |                    |
 | Modula-2                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | MoinMoin/Trac Wiki markup     |                                     |                    |                    |
