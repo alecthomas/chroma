@@ -226,7 +226,10 @@
 | Mosel                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | mozhashpreproc                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | mozpercentpreproc             | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| MQL                           |                                     | :heavy_check_mark: |                    |
+| MQL                           | Text analysis inherits from C++.    | :heavy_check_mark: | :heavy_check_mark: |
+|                               | However the include syntax seems to |                    |                    |
+|                               | always have file extension which is |                    |                    |
+|                               | not validated at C++ text analysis. |                    |                    |
 | Mscgen                        |                                     |                    |                    |
 | MuPAD                         |                                     |                    |                    |
 | MXML                          |                                     |                    |                    |
