@@ -282,7 +282,7 @@
 | Relax-NG Compact              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Ragel Embedded                |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Raw token data                | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Rd                            |                                     |                    |                    |
+| Rd                            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | REBOL                         |                                     |                    |                    |
 | Red                           |                                     |                    |                    |
 | Redcode                       |                                     |                    |                    |
