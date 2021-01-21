@@ -209,7 +209,7 @@
 | Logtalk                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | MIME                          | analyse_text at Pygments is broken  | :heavy_check_mark: |                    |
 |                               | Issue https://bit.ly/393s14x        |                    |                    |
-| MOOCode                       |                                     |                    |                    |
+| MOOCode                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MSDOS Session                 |                                     |                    |                    |
 | Makefile                      |                                     |                    |                    |
 | MAQL                          |                                     |                    |                    |
