@@ -278,7 +278,7 @@
 | Python Traceback              |                                     |                    |                    |
 | QBasic                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | QVTO                          |                                     |                    |                    |
-| RConsole                      |                                     |                    |                    |
+| RConsole                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Relax-NG Compact              |                                     |                    |                    |
 | Embedded Ragel                |                                     |                    |                    |
 | Raw token data                |                                     |                    |                    |
