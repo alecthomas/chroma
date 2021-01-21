@@ -224,7 +224,7 @@
 | Monte                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MoonScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Mosel                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| mozhashpreproc                |                                     |                    |                    |
+| mozhashpreproc                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | mozpercentpreproc             |                                     |                    |                    |
 | MQL                           |                                     |                    |                    |
 | Mscgen                        |                                     |                    |                    |
