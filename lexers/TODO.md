@@ -225,7 +225,7 @@
 | MoonScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Mosel                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | mozhashpreproc                | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| mozpercentpreproc             |                                     |                    |                    |
+| mozpercentpreproc             | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MQL                           |                                     |                    |                    |
 | Mscgen                        |                                     |                    |                    |
 | MuPAD                         |                                     |                    |                    |
