@@ -280,7 +280,7 @@
 | QVTO                          |                                     |                    |                    |
 | RConsole                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Relax-NG Compact              | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Embedded Ragel                |                                     |                    |                    |
+| Ragel Embedded                |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Raw token data                |                                     |                    |                    |
 | Rd                            |                                     |                    |                    |
 | REBOL                         |                                     |                    |                    |
