@@ -214,7 +214,7 @@
 | Makefile                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | MAQL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | markdown                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Mask                          |                                     |                    |                    |
+| Mask                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Matlab session                |                                     |                    |                    |
 | MiniD                         |                                     |                    |                    |
 | MiniScript                    |                                     |                    |                    |
