@@ -284,7 +284,7 @@
 | Raw token data                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Rd                            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | REBOL                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Red                           |                                     |                    |                    |
+| Red                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Redcode                       |                                     |                    |                    |
 | ResourceBundle                |                                     |                    |                    |
 | RHTML                         |                                     |                    |                    |
