@@ -215,7 +215,7 @@
 | MAQL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | markdown                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Mask                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Matlab session                |                                     |                    |                    |
+| Matlab session                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MiniD                         |                                     |                    |                    |
 | MiniScript                    |                                     |                    |                    |
 | Modula-2                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
