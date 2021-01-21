@@ -286,7 +286,7 @@
 | REBOL                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Red                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Redcode                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| ResourceBundle                |                                     |                    |                    |
+| ResourceBundle                |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | RHTML                         |                                     |                    |                    |
 | Ride                          |                                     |                    |                    |
 | Roboconf Graph                |                                     |                    |                    |
