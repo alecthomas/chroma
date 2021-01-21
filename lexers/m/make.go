@@ -1,10 +1,14 @@
 package m
 
 import (
+	"regexp"
+
 	. "github.com/alecthomas/chroma"          // nolint
 	. "github.com/alecthomas/chroma/lexers/b" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
+
+var makefileAnalyserVariableRe = regexp.MustCompile(`\$\([A-Z_]+\)`)
 
 // Makefile lexer.
 var Makefile = internal.Register(MustNewLazyLexer(
@@ -16,7 +20,14 @@ var Makefile = internal.Register(MustNewLazyLexer(
 		EnsureNL:  true,
 	},
 	makefileRules,
-))
+).SetAnalyser(func(text string) float32 {
+	// Many makefiles have $(BIG_CAPS) style variables.
+	if makefileAnalyserVariableRe.MatchString(text) {
+		return 0.1
+	}
+
+	return 0
+}))
 
 func makefileRules() Rules {
 	return Rules{
