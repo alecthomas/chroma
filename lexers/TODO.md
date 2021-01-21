@@ -223,7 +223,7 @@
 | Monkey                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Monte                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MoonScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Mosel                         |                                     |                    |                    |
+| Mosel                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | mozhashpreproc                |                                     |                    |                    |
 | mozpercentpreproc             |                                     |                    |                    |
 | MQL                           |                                     |                    |                    |
