@@ -212,7 +212,7 @@
 | MOOCode                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MSDOS Session                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Makefile                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| MAQL                          |                                     |                    |                    |
+| MAQL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | markdown                      |  Lexer exists in chroma             | :heavy_check_mark: |                    |
 | Mask                          |                                     |                    |                    |
 | Matlab session                |                                     |                    |                    |
