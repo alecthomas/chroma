@@ -283,7 +283,7 @@
 | Ragel Embedded                |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Raw token data                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Rd                            | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| REBOL                         |                                     |                    |                    |
+| REBOL                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Red                           |                                     |                    |                    |
 | Redcode                       |                                     |                    |                    |
 | ResourceBundle                |                                     |                    |                    |
