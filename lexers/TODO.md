@@ -221,7 +221,7 @@
 | Modula-2                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | MoinMoin/Trac Wiki markup     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Monkey                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Monte                         |                                     |                    |                    |
+| Monte                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MoonScript                    |                                     |                    |                    |
 | Mosel                         |                                     |                    |                    |
 | mozhashpreproc                |                                     |                    |                    |
