@@ -207,7 +207,8 @@
 | LLVM-MIR Body                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Logos                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Logtalk                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| MIME                          |                                     | :heavy_check_mark: |                    |
+| MIME                          | analyse_text at Pygments is broken  | :heavy_check_mark: |                    |
+|                               | Issue https://bit.ly/393s14x        |                    |                    |
 | MOOCode                       |                                     |                    |                    |
 | MSDOS Session                 |                                     |                    |                    |
 | Makefile                      |                                     |                    |                    |
