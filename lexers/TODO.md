@@ -222,7 +222,7 @@
 | MoinMoin/Trac Wiki markup     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Monkey                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Monte                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| MoonScript                    |                                     |                    |                    |
+| MoonScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Mosel                         |                                     |                    |                    |
 | mozhashpreproc                |                                     |                    |                    |
 | mozpercentpreproc             |                                     |                    |                    |
