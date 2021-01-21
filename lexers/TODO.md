@@ -211,7 +211,7 @@
 |                               | Issue https://bit.ly/393s14x        |                    |                    |
 | MOOCode                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MSDOS Session                 | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Makefile                      |                                     | :heavy_check_mark: |                    |
+| Makefile                      |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | MAQL                          |                                     |                    |                    |
 | markdown                      |  Lexer exists in chroma             | :heavy_check_mark: |                    |
 | Mask                          |                                     |                    |                    |
