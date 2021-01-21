@@ -226,7 +226,7 @@
 | Mosel                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | mozhashpreproc                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | mozpercentpreproc             | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| MQL                           |                                     |                    |                    |
+| MQL                           |                                     | :heavy_check_mark: |                    |
 | Mscgen                        |                                     |                    |                    |
 | MuPAD                         |                                     |                    |                    |
 | MXML                          |                                     |                    |                    |
