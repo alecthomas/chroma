@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>A minimal rhtml example</title>
+</head>
+<body>
+	<ul>
+	   <% @products.each do |p| %>
+	      <li><%=  @p.name %></li>
+	   <% end %>
+	</ul>
+</body>
+</html>
