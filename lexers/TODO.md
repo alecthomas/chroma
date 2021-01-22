@@ -291,7 +291,7 @@
 | Ride                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Roboconf Graph                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Roboconf Instances            | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| RobotFramework                |                                     |                    |                    |
+| RobotFramework                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | RQL                           |                                     |                    |                    |
 | RSL                           |                                     |                    |                    |
 | Ruby irb session              |                                     |                    |                    |
