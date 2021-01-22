@@ -230,7 +230,7 @@
 |                               | However the include syntax seems to |                    |                    |
 |                               | always have file extension which is |                    |                    |
 |                               | not validated at C++ text analysis. |                    |                    |
-| Mscgen                        |                                     |                    |                    |
+| Mscgen                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MuPAD                         |                                     |                    |                    |
 | MXML                          |                                     |                    |                    |
 | NASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
