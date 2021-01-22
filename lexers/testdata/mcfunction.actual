@@ -1,0 +1,13 @@
+fill 29 4 26 ~ ~ ~ minecraft:air replace minecraft:water
+
+# NBT (JSON-like) value.
+summon zombie ~ ~ ~ {NoAI:1b}
+
+# Target selector
+gamemode creative @a
+
+# With argument
+kill @e[type=chicken,nested={a0=0,a1=1}]
+
+# Ragne
+kill @e[y_rotation=0..180]
