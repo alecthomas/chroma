@@ -237,7 +237,7 @@
 | nesC                          | Text analysis inherits from C.      | :heavy_check_mark: | :heavy_check_mark: |
 | Nimrod                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Nit                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Notmuch                       |                                     | :heavy_check_mark: |                    |
+| Notmuch                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | NuSMV                         |                                     |                    |                    |
 | NumPy                         |                                     |                    |                    |
 | objdump                       |                                     |                    |                    |
