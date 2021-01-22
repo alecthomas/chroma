@@ -28,6 +28,8 @@ var ObjectiveC = internal.Register(MustNewLazyLexer(
 		Aliases:   []string{"objective-c", "objectivec", "obj-c", "objc"},
 		Filenames: []string{"*.m", "*.h"},
 		MimeTypes: []string{"text/x-objective-c"},
+		// Lower than C.
+		Priority: 0.05,
 	},
 	objectiveCRules,
 ).SetAnalyser(func(text string) float32 {

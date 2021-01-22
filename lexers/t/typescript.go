@@ -12,8 +12,10 @@ var TypeScript = internal.Register(MustNewLazyLexer(
 		Aliases:   []string{"ts", "tsx", "typescript"},
 		Filenames: []string{"*.ts", "*.tsx"},
 		MimeTypes: []string{"text/x-typescript"},
-		DotAll:    true,
-		EnsureNL:  true,
+		// Higher priority than the TypoScriptLexer, as TypeScript is far more common these days.
+		Priority: 0.5,
+		DotAll:   true,
+		EnsureNL: true,
 	},
 	typeScriptRules,
 ))

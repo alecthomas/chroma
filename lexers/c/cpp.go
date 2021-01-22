@@ -19,6 +19,7 @@ var CPP = internal.Register(MustNewLazyLexer(
 		Aliases:   []string{"cpp", "c++"},
 		Filenames: []string{"*.cpp", "*.hpp", "*.c++", "*.h++", "*.cc", "*.hh", "*.cxx", "*.hxx", "*.C", "*.H", "*.cp", "*.CPP"},
 		MimeTypes: []string{"text/x-c++hdr", "text/x-c++src"},
+		Priority:  0.1,
 		EnsureNL:  true,
 	},
 	cppRules,

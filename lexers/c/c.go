@@ -20,6 +20,7 @@ var C = internal.Register(MustNewLazyLexer(
 		Filenames: []string{"*.c", "*.h", "*.idc", "*.x[bp]m"},
 		MimeTypes: []string{"text/x-chdr", "text/x-csrc", "image/x-xbitmap", "image/x-xpixmap"},
 		EnsureNL:  true,
+		Priority:  0.1,
 	},
 	cRules,
 ).SetAnalyser(func(text string) float32 {

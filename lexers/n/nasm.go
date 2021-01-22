@@ -12,10 +12,13 @@ var nasmAnalyzerRe = regexp.MustCompile(`(?i)PROC`)
 // Nasm lexer.
 var Nasm = internal.Register(MustNewLazyLexer(
 	&Config{
-		Name:            "NASM",
-		Aliases:         []string{"nasm"},
-		Filenames:       []string{"*.asm", "*.ASM"},
-		MimeTypes:       []string{"text/x-nasm"},
+		Name:      "NASM",
+		Aliases:   []string{"nasm"},
+		Filenames: []string{"*.asm", "*.ASM"},
+		MimeTypes: []string{"text/x-nasm"},
+		// Tasm uses the same file endings, but TASM is not as common as NASM, so
+		// we prioritize NASM higher by default.
+		Priority:        1.0,
 		CaseInsensitive: true,
 	},
 	nasmRules,
