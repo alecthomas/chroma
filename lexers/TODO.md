@@ -294,7 +294,7 @@
 | RobotFramework                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | RQL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | RSL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Ruby irb session              |                                     |                    |                    |
+| Ruby irb session              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | S                             | It's implemented altogether in r.go | :heavy_check_mark: | :heavy_check_mark: |
 | SARL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Scalate Server Page           |                                     | :heavy_check_mark: | :heavy_check_mark: |
