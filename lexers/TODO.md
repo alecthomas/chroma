@@ -232,7 +232,7 @@
 |                               | not validated at C++ text analysis. |                    |                    |
 | Mscgen                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MuPAD                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| MXML                          |                                     |                    |                    |
+| MXML                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | NASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | NCL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Nemerle                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
