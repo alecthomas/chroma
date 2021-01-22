@@ -1,6 +1,8 @@
 package n
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
@@ -14,4 +16,10 @@ var Notmuch = internal.Register(MustNewLexer(
 	Rules{
 		"root": {},
 	},
-))
+).SetAnalyser(func(text string) float32 {
+	if strings.HasPrefix(text, "\fmessage{") {
+		return 1.0
+	}
+
+	return 0
+}))
