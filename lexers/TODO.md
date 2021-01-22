@@ -234,8 +234,8 @@
 | Nemerle                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | NSIS                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | objdump-nasm                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| nesC                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Nimrod                        |                                     |                    |                    |
+| nesC                          | Text analysis inherits from C.      | :heavy_check_mark: | :heavy_check_mark: |
+| Nimrod                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Nit                           |                                     |                    |                    |
 | Notmuch                       |                                     |                    |                    |
 | NuSMV                         |                                     |                    |                    |
