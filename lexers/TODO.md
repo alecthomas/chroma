@@ -248,7 +248,7 @@
 | Objective-J                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | ODIN                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Ooc                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Opa                           |                                     |                    |                    |
+| Opa                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | OpenEdge ABL                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Pan                           |                                     |                    |                    |
 | ParaSail                      |                                     |                    |                    |
