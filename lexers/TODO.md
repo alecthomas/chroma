@@ -293,7 +293,7 @@
 | Roboconf Instances            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | RobotFramework                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | RQL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| RSL                           |                                     |                    |                    |
+| RSL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Ruby irb session              |                                     |                    |                    |
 | S                             | It's implemented altogether in r.go | :heavy_check_mark: | :heavy_check_mark: |
 | SARL                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
