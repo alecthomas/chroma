@@ -247,7 +247,7 @@
 | objdump                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Objective-J                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | ODIN                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Ooc                           |                                     |                    |                    |
+| Ooc                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Opa                           |                                     |                    |                    |
 | OpenEdge ABL                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Pan                           |                                     |                    |                    |
