@@ -231,7 +231,7 @@
 |                               | always have file extension which is |                    |                    |
 |                               | not validated at C++ text analysis. |                    |                    |
 | Mscgen                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| MuPAD                         |                                     |                    |                    |
+| MuPAD                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | MXML                          |                                     |                    |                    |
 | NASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | NCL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
