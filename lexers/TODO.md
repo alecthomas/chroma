@@ -233,7 +233,7 @@
 | NCL                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Nemerle                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | NSIS                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| objdump-nasm                  |                                     |                    |                    |
+| objdump-nasm                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | nesC                          |                                     |                    |                    |
 | Nimrod                        |                                     |                    |                    |
 | Nit                           |                                     |                    |                    |
