@@ -289,7 +289,7 @@
 | ResourceBundle                |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | RHTML                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Ride                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Roboconf Graph                |                                     |                    |                    |
+| Roboconf Graph                | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Roboconf Instances            |                                     |                    |                    |
 | RobotFramework                |                                     |                    |                    |
 | RQL                           |                                     |                    |                    |
