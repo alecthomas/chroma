@@ -238,7 +238,7 @@
 | Nimrod                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Nit                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Notmuch                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| NuSMV                         |                                     |                    |                    |
+| NuSMV                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | NumPy                         |                                     |                    |                    |
 | objdump                       |                                     |                    |                    |
 | Objective-J                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
