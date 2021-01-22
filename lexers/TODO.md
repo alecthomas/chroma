@@ -236,7 +236,7 @@
 | objdump-nasm                  | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | nesC                          | Text analysis inherits from C.      | :heavy_check_mark: | :heavy_check_mark: |
 | Nimrod                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Nit                           |                                     |                    |                    |
+| Nit                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Notmuch                       |                                     |                    |                    |
 | NuSMV                         |                                     |                    |                    |
 | NumPy                         |                                     |                    |                    |
