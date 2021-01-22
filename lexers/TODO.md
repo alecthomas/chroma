@@ -244,7 +244,7 @@
 | Notmuch                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | NuSMV                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | NumPy                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| objdump                       |                                     |                    |                    |
+| objdump                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Objective-J                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | ODIN                          |                                     |                    |                    |
 | Ooc                           |                                     |                    |                    |
