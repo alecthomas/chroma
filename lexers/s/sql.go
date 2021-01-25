@@ -17,7 +17,7 @@ var SQL = internal.Register(MustNewLexer(
 	},
 	Rules{
 		"root": {
-			{`\s+`, Text, nil},
+			{`\s+`, TextWhitespace, nil},
 			{`--.*\n?`, CommentSingle, nil},
 			{`/\*`, CommentMultiline, Push("multiline-comments")},
 			{`'`, LiteralStringSingle, Push("string")},
