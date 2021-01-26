@@ -259,7 +259,7 @@
 | ParaSail                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Pawn                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | PEG                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Perl6                         |                                     |                    |                    |
+| Perl6                         |                                     | :heavy_check_mark: |                    |
 | PHP                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Pike                          |                                     |                    |                    |
 | Pointless                     |                                     |                    |                    |
