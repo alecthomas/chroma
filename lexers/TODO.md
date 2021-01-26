@@ -255,7 +255,7 @@
 | Ooc                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Opa                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | OpenEdge ABL                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Pan                           |                                     |                    |                    |
+| Pan                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ParaSail                      |                                     |                    |                    |
 | Pawn                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | PEG                           |                                     |                    |                    |
