@@ -258,7 +258,7 @@
 | Pan                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ParaSail                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Pawn                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| PEG                           |                                     |                    |                    |
+| PEG                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Perl6                         |                                     |                    |                    |
 | PHP                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Pike                          |                                     |                    |                    |
