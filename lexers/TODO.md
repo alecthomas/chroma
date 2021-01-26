@@ -256,7 +256,7 @@
 | Opa                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | OpenEdge ABL                  |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Pan                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| ParaSail                      |                                     |                    |                    |
+| ParaSail                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Pawn                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | PEG                           |                                     |                    |                    |
 | Perl6                         |                                     |                    |                    |
