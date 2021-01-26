@@ -245,7 +245,10 @@
 | NuSMV                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | NumPy                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | objdump                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Objective-C++                 |                                     | :heavy_check_mark: |                    |
+| Objective-C++                 | Text analysis inherits from C++.    | :heavy_check_mark: | :heavy_check_mark: |
+|                               | However the include syntax seems to |                    |                    |
+|                               | always have file extension which is |                    |                    |
+|                               | not validated at C++ text analysis. |                    |                    |
 | Objective-J                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | objdump                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ODIN                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
