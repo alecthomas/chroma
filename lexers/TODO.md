@@ -245,7 +245,9 @@
 | NuSMV                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | NumPy                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | objdump                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| Objective-C++                 |                                     | :heavy_check_mark: |                    |
 | Objective-J                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
+| objdump                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | ODIN                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Ooc                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Opa                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
