@@ -265,7 +265,7 @@
 |                               | However the include syntax seems to |                    |                    |
 |                               | always have file extension which is |                    |                    |
 |                               | not validated at C++ text analysis. |                    |                    |
-| Pointless                     |                                     |                    |                    |
+| Pointless                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | PostgreSQL console (psql)     |                                     |                    |                    |
 | POVRay                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | PowerShell Session            |                                     |                    |                    |
