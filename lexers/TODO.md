@@ -266,7 +266,7 @@
 |                               | always have file extension which is |                    |                    |
 |                               | not validated at C++ text analysis. |                    |                    |
 | Pointless                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| PostgreSQL console (psql)     |                                     |                    |                    |
+| PostgreSQL console (psql)     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | POVRay                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | PowerShell Session            |                                     |                    |                    |
 | Praat                         |                                     |                    |                    |
