@@ -1,0 +1,1 @@
+my %hash := Hash.new;
