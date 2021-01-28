@@ -269,7 +269,7 @@
 | PostgreSQL console (psql)     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | POVRay                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | PowerShell Session            | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Praat                         |                                     |                    |                    |
+| Praat                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Prolog                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Properties                    |                                     |                    |                    |
 | PsySH console session for PHP |                                     |                    |                    |
