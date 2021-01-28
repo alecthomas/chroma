@@ -274,7 +274,7 @@
 | Properties                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | PsySH console session for PHP | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | PyPy Log                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Python                        |                                     |                    |                    |
+| Python                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Python 2.x                    |                                     |                    |                    |
 | Python 2.x Traceback          |                                     |                    |                    |
 | Python console session        |                                     |                    |                    |
