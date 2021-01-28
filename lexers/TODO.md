@@ -268,7 +268,7 @@
 | Pointless                     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | PostgreSQL console (psql)     | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | POVRay                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| PowerShell Session            |                                     |                    |                    |
+| PowerShell Session            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Praat                         |                                     |                    |                    |
 | Prolog                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Properties                    |                                     |                    |                    |
