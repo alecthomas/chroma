@@ -261,7 +261,10 @@
 | PEG                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Perl6                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | PHP                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Pike                          |                                     | :heavy_check_mark: |                    |
+| Pike                          | Text analysis inherits from C++.    | :heavy_check_mark: | :heavy_check_mark: |
+|                               | However the include syntax seems to |                    |                    |
+|                               | always have file extension which is |                    |                    |
+|                               | not validated at C++ text analysis. |                    |                    |
 | Pointless                     |                                     |                    |                    |
 | PostgreSQL console (psql)     |                                     |                    |                    |
 | POVRay                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
