@@ -271,7 +271,7 @@
 | PowerShell Session            | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Praat                         | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Prolog                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Properties                    |                                     |                    |                    |
+| Properties                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | PsySH console session for PHP |                                     |                    |                    |
 | PyPy Log                      |                                     |                    |                    |
 | Python                        |                                     |                    |                    |
