@@ -278,7 +278,7 @@
 | Python 2.x                    |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Python 2.x Traceback          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Python console session        | No text analysis exists in pygments | :heavy_check_mark: |                    |
-| Python Traceback              |                                     |                    |                    |
+| Python Traceback              | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | QBasic                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | QVTO                          |                                     |                    |                    |
 | RConsole                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
