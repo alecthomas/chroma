@@ -276,7 +276,7 @@
 | PyPy Log                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Python                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Python 2.x                    |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Python 2.x Traceback          |                                     |                    |                    |
+| Python 2.x Traceback          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Python console session        |                                     |                    |                    |
 | Python Traceback              |                                     |                    |                    |
 | QBasic                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
