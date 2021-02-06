@@ -264,6 +264,7 @@ type LexerState struct {
 	MutatorContext map[interface{}]interface{}
 	iteratorStack  []Iterator
 	options        *TokeniseOptions
+	newlineAdded   bool
 }
 
 // Set mutator context.
@@ -278,7 +279,11 @@ func (l *LexerState) Get(key interface{}) interface{} {
 
 // Iterator returns the next Token from the lexer.
 func (l *LexerState) Iterator() Token { // nolint: gocognit
-	for l.Pos < len(l.Text) && len(l.Stack) > 0 {
+	end := len(l.Text)
+	if l.newlineAdded {
+		end--
+	}
+	for l.Pos < end && len(l.Stack) > 0 {
 		// Exhaust the iterator stack, if any.
 		for len(l.iteratorStack) > 0 {
 			n := len(l.iteratorStack) - 1
@@ -432,10 +437,13 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 	if options.EnsureLF {
 		text = ensureLF(text)
 	}
+	newlineAdded := false
 	if !options.Nested && r.config.EnsureNL && !strings.HasSuffix(text, "\n") {
 		text += "\n"
+		newlineAdded = true
 	}
 	state := &LexerState{
+		newlineAdded:   newlineAdded,
 		options:        options,
 		Lexer:          r,
 		Text:           []rune(text),
