@@ -225,33 +225,7 @@ func MustNewLexer(config *Config, rules Rules) *RegexLexer {
 // "rules" is a state machine transitition map. Each key is a state. Values are sets of rules
 // that match input, optionally modify lexer state, and output tokens.
 func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
-	if config == nil {
-		config = &Config{}
-	}
-	if _, ok := rules["root"]; !ok {
-		return nil, fmt.Errorf("no \"root\" state")
-	}
-	compiledRules := map[string][]*CompiledRule{}
-	for state, rules := range rules {
-		compiledRules[state] = nil
-		for _, rule := range rules {
-			flags := ""
-			if !config.NotMultiline {
-				flags += "m"
-			}
-			if config.CaseInsensitive {
-				flags += "i"
-			}
-			if config.DotAll {
-				flags += "s"
-			}
-			compiledRules[state] = append(compiledRules[state], &CompiledRule{Rule: rule, flags: flags})
-		}
-	}
-	return &RegexLexer{
-		config: config,
-		rules:  compiledRules,
-	}, nil
+	return NewLazyLexer(config, func() Rules { return rules })
 }
 
 // Trace enables debug tracing.
@@ -453,7 +427,6 @@ restart:
 }
 
 func (r *RegexLexer) compileRules() error {
-	// TODO: refactor to remove this duplication of code from NewLexer
 	rules := r.compilerFunc()
 	if _, ok := rules["root"]; !ok {
 		return fmt.Errorf("no \"root\" state")
