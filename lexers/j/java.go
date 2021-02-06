@@ -13,6 +13,7 @@ var Java = internal.Register(MustNewLexer(
 		Filenames: []string{"*.java"},
 		MimeTypes: []string{"text/x-java"},
 		DotAll:    true,
+		EnsureNL:  true,
 	},
 	Rules{
 		"root": {

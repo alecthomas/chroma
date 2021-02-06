@@ -12,6 +12,7 @@ var C = internal.Register(MustNewLexer(
 		Aliases:   []string{"c"},
 		Filenames: []string{"*.c", "*.h", "*.idc"},
 		MimeTypes: []string{"text/x-chdr", "text/x-csrc"},
+		EnsureNL:  true,
 	},
 	Rules{
 		"whitespace": {
