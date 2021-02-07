@@ -6,7 +6,7 @@ import (
 )
 
 // C lexer.
-var C = internal.Register(MustNewLexer(
+var C = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "C",
 		Aliases:   []string{"c"},
@@ -14,7 +14,11 @@ var C = internal.Register(MustNewLexer(
 		MimeTypes: []string{"text/x-chdr", "text/x-csrc"},
 		EnsureNL:  true,
 	},
-	Rules{
+	cRules,
+))
+
+func cRules() Rules {
+	return Rules{
 		"whitespace": {
 			{`^#if\s+0`, CommentPreproc, Push("if0")},
 			{`^#`, CommentPreproc, Push("macro")},
@@ -88,5 +92,5 @@ var C = internal.Register(MustNewLexer(
 			{`^\s*#endif.*?(?<!\\)\n`, CommentPreproc, Pop(1)},
 			{`.*?\n`, Comment, nil},
 		},
-	},
-))
+	}
+}

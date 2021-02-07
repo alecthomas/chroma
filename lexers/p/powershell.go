@@ -6,7 +6,7 @@ import (
 )
 
 // Powershell lexer.
-var Powershell = internal.Register(MustNewLexer(
+var Powershell = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:            "PowerShell",
 		Aliases:         []string{"powershell", "posh", "ps1", "psm1", "psd1"},
@@ -15,7 +15,11 @@ var Powershell = internal.Register(MustNewLexer(
 		DotAll:          true,
 		CaseInsensitive: true,
 	},
-	Rules{
+	powershellRules,
+))
+
+func powershellRules() Rules {
+	return Rules{
 		"root": {
 			{`\(`, Punctuation, Push("child")},
 			{`\s+`, Text, nil},
@@ -62,5 +66,5 @@ var Powershell = internal.Register(MustNewLexer(
 			{`[^@\n]+"]`, LiteralStringHeredoc, nil},
 			{`.`, LiteralStringHeredoc, nil},
 		},
-	},
-))
+	}
+}

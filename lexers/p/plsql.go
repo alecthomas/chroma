@@ -6,7 +6,7 @@ import (
 )
 
 // Pl/Pgsql lexer.
-var PLpgSQL = internal.Register(MustNewLexer(
+var PLpgSQL = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:            "PL/pgSQL",
 		Aliases:         []string{"plpgsql"},
@@ -15,7 +15,11 @@ var PLpgSQL = internal.Register(MustNewLexer(
 		NotMultiline:    true,
 		CaseInsensitive: true,
 	},
-	Rules{
+	plpgSQLRules,
+))
+
+func plpgSQLRules() Rules {
+	return Rules{
 		"root": {
 			{`\%[a-z]\w*\b`, NameBuiltin, nil},
 			{`:=`, Operator, nil},
@@ -54,5 +58,5 @@ var PLpgSQL = internal.Register(MustNewLexer(
 			{`""`, LiteralStringName, nil},
 			{`"`, LiteralStringName, Pop(1)},
 		},
-	},
-))
+	}
+}

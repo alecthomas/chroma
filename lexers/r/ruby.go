@@ -6,7 +6,7 @@ import (
 )
 
 // Ruby lexer.
-var Ruby = internal.Register(MustNewLexer(
+var Ruby = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "Ruby",
 		Aliases:   []string{"rb", "ruby", "duby"},
@@ -14,7 +14,11 @@ var Ruby = internal.Register(MustNewLexer(
 		MimeTypes: []string{"text/x-ruby", "application/x-ruby"},
 		DotAll:    true,
 	},
-	Rules{
+	rubyRules,
+))
+
+func rubyRules() Rules {
+	return Rules{
 		"root": {
 			{`\A#!.+?$`, CommentHashbang, nil},
 			{`#.*?$`, CommentSingle, nil},
@@ -246,5 +250,5 @@ var Ruby = internal.Register(MustNewLexer(
 			{`[\\#<>]`, LiteralStringRegex, nil},
 			{`[^\\#<>]+`, LiteralStringRegex, nil},
 		},
-	},
-))
+	}
+}

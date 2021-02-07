@@ -6,14 +6,18 @@ import (
 )
 
 // Python lexer.
-var Python = internal.Register(MustNewLexer(
+var Python = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "Python",
 		Aliases:   []string{"python", "py", "sage"},
 		Filenames: []string{"*.py", "*.pyw", "*.sc", "SConstruct", "SConscript", "*.tac", "*.sage"},
 		MimeTypes: []string{"text/x-python", "application/x-python"},
 	},
-	Rules{
+	pythonRules,
+))
+
+func pythonRules() Rules {
+	return Rules{
 		"root": {
 			{`\n`, Text, nil},
 			{`^(\s*)([rRuUbB]{,2})("""(?:.|\n)*?""")`, ByGroups(Text, LiteralStringAffix, LiteralStringDoc), nil},
@@ -133,5 +137,5 @@ var Python = internal.Register(MustNewLexer(
 			Include("strings-single"),
 			{`\n`, LiteralStringSingle, nil},
 		},
-	},
-))
+	}
+}
