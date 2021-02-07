@@ -146,7 +146,8 @@ func Register(lexer chroma.Lexer) chroma.Lexer {
 	return lexer
 }
 
-// Used for the fallback lexer as well as the explicit plaintext lexer
+// PlaintextRules is used for the fallback lexer as well as the explicit
+// plaintext lexer.
 func PlaintextRules() chroma.Rules {
 	return chroma.Rules{
 		"root": []chroma.Rule{
