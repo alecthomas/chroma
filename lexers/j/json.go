@@ -19,7 +19,7 @@ var JSON = internal.Register(MustNewLazyLexer(
 ))
 
 func jsonRules() Rules {
-	Rules{
+	return Rules{
 		"whitespace": {
 			{`\s+`, Text, nil},
 		},
