@@ -188,7 +188,7 @@ func (r Rules) Merge(rules Rules) Rules {
 	return out
 }
 
-// MustNewLazyLexer creates a new Lexer which deferred rules generation.
+// MustNewLazyLexer creates a new Lexer with deferred rules generation or panics.
 func MustNewLazyLexer(config *Config, rulesFunc func() Rules) *RegexLexer {
 	lexer, err := NewLazyLexer(config, rulesFunc)
 	if err != nil {
@@ -198,9 +198,6 @@ func MustNewLazyLexer(config *Config, rulesFunc func() Rules) *RegexLexer {
 }
 
 // NewLazyLexer creates a new regex-based Lexer with deferred rules generation.
-//
-// "rules" is a state machine transitition map. Each key is a state. Values are sets of rules
-// that match input, optionally modify lexer state, and output tokens.
 func NewLazyLexer(config *Config, rulesFunc func() Rules) (*RegexLexer, error) {
 	if config == nil {
 		config = &Config{}
