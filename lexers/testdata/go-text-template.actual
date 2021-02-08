@@ -8,3 +8,5 @@
 {{ range $idx, $value := $variable }}
 Hello {{ $idx }}
 {{ end }}
+
+{{ $ }}
