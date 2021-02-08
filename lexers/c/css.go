@@ -6,14 +6,18 @@ import (
 )
 
 // CSS lexer.
-var CSS = internal.Register(MustNewLexer(
+var CSS = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "CSS",
 		Aliases:   []string{"css"},
 		Filenames: []string{"*.css"},
 		MimeTypes: []string{"text/css"},
 	},
-	Rules{
+	cssRules,
+))
+
+func cssRules() Rules {
+	return Rules{
 		"root": {
 			Include("basics"),
 		},
@@ -113,5 +117,5 @@ var CSS = internal.Register(MustNewLexer(
 			{`%`, KeywordType, nil},
 			Default(Pop(1)),
 		},
-	},
-))
+	}
+}

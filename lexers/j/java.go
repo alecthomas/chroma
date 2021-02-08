@@ -6,7 +6,7 @@ import (
 )
 
 // Java lexer.
-var Java = internal.Register(MustNewLexer(
+var Java = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "Java",
 		Aliases:   []string{"java"},
@@ -15,7 +15,11 @@ var Java = internal.Register(MustNewLexer(
 		DotAll:    true,
 		EnsureNL:  true,
 	},
-	Rules{
+	javaRules,
+))
+
+func javaRules() Rules {
+	return Rules{
 		"root": {
 			{`[^\S\n]+`, Text, nil},
 			{`//.*?\n`, CommentSingle, nil},
@@ -48,5 +52,5 @@ var Java = internal.Register(MustNewLexer(
 		"import": {
 			{`[\w.]+\*?`, NameNamespace, Pop(1)},
 		},
-	},
-))
+	}
+}

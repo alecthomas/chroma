@@ -6,7 +6,7 @@ import (
 )
 
 // MySQL lexer.
-var MySQL = internal.Register(MustNewLexer(
+var MySQL = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:            "MySQL",
 		Aliases:         []string{"mysql"},
@@ -15,7 +15,11 @@ var MySQL = internal.Register(MustNewLexer(
 		NotMultiline:    true,
 		CaseInsensitive: true,
 	},
-	Rules{
+	mySQLRules,
+))
+
+func mySQLRules() Rules {
+	return Rules{
 		"root": {
 			{`\s+`, TextWhitespace, nil},
 			{`(#|--\s+).*\n?`, CommentSingle, nil},
@@ -50,5 +54,5 @@ var MySQL = internal.Register(MustNewLexer(
 			{`""`, LiteralStringDouble, nil},
 			{`"`, LiteralStringDouble, Pop(1)},
 		},
-	},
-))
+	}
+}

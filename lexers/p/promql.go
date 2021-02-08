@@ -6,14 +6,18 @@ import (
 )
 
 // Promql lexer.
-var Promql = internal.Register(MustNewLexer(
+var Promql = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "PromQL",
 		Aliases:   []string{"promql"},
 		Filenames: []string{"*.promql"},
 		MimeTypes: []string{},
 	},
-	Rules{
+	promqlRules,
+))
+
+func promqlRules() Rules {
+	return Rules{
 		"root": {
 			{`\n`, TextWhitespace, nil},
 			{`\s+`, TextWhitespace, nil},
@@ -51,5 +55,5 @@ var Promql = internal.Register(MustNewLexer(
 			{`\(`, Operator, Push()},
 			Default(Pop(1)),
 		},
-	},
-))
+	}
+}

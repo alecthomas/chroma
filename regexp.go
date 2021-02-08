@@ -188,6 +188,26 @@ func (r Rules) Merge(rules Rules) Rules {
 	return out
 }
 
+// MustNewLazyLexer creates a new Lexer with deferred rules generation or panics.
+func MustNewLazyLexer(config *Config, rulesFunc func() Rules) *RegexLexer {
+	lexer, err := NewLazyLexer(config, rulesFunc)
+	if err != nil {
+		panic(err)
+	}
+	return lexer
+}
+
+// NewLazyLexer creates a new regex-based Lexer with deferred rules generation.
+func NewLazyLexer(config *Config, rulesFunc func() Rules) (*RegexLexer, error) {
+	if config == nil {
+		config = &Config{}
+	}
+	return &RegexLexer{
+		config:       config,
+		compilerFunc: rulesFunc,
+	}, nil
+}
+
 // MustNewLexer creates a new Lexer or panics.
 func MustNewLexer(config *Config, rules Rules) *RegexLexer {
 	lexer, err := NewLexer(config, rules)
@@ -202,33 +222,7 @@ func MustNewLexer(config *Config, rules Rules) *RegexLexer {
 // "rules" is a state machine transitition map. Each key is a state. Values are sets of rules
 // that match input, optionally modify lexer state, and output tokens.
 func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
-	if config == nil {
-		config = &Config{}
-	}
-	if _, ok := rules["root"]; !ok {
-		return nil, fmt.Errorf("no \"root\" state")
-	}
-	compiledRules := map[string][]*CompiledRule{}
-	for state, rules := range rules {
-		compiledRules[state] = nil
-		for _, rule := range rules {
-			flags := ""
-			if !config.NotMultiline {
-				flags += "m"
-			}
-			if config.CaseInsensitive {
-				flags += "i"
-			}
-			if config.DotAll {
-				flags += "s"
-			}
-			compiledRules[state] = append(compiledRules[state], &CompiledRule{Rule: rule, flags: flags})
-		}
-	}
-	return &RegexLexer{
-		config: config,
-		rules:  compiledRules,
-	}, nil
+	return NewLazyLexer(config, func() Rules { return rules })
 }
 
 // Trace enables debug tracing.
@@ -358,9 +352,11 @@ type RegexLexer struct {
 	analyser func(text string) float32
 	trace    bool
 
-	mu       sync.Mutex
-	compiled bool
-	rules    map[string][]*CompiledRule
+	mu           sync.Mutex
+	compiled     bool
+	rules        map[string][]*CompiledRule
+	compilerFunc func() Rules
+	compileOnce  sync.Once
 }
 
 // SetAnalyser sets the analyser function used to perform content inspection.
@@ -427,7 +423,43 @@ restart:
 	return nil
 }
 
+func (r *RegexLexer) compileRules() error {
+	rules := r.compilerFunc()
+	if _, ok := rules["root"]; !ok {
+		return fmt.Errorf("no \"root\" state")
+	}
+	compiledRules := map[string][]*CompiledRule{}
+	for state, rules := range rules {
+		compiledRules[state] = nil
+		for _, rule := range rules {
+			flags := ""
+			if !r.config.NotMultiline {
+				flags += "m"
+			}
+			if r.config.CaseInsensitive {
+				flags += "i"
+			}
+			if r.config.DotAll {
+				flags += "s"
+			}
+			compiledRules[state] = append(compiledRules[state], &CompiledRule{Rule: rule, flags: flags})
+		}
+	}
+
+	r.rules = compiledRules
+	return nil
+}
+
 func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint
+	var err error
+	if r.compilerFunc != nil {
+		r.compileOnce.Do(func() {
+			err = r.compileRules()
+		})
+	}
+	if err != nil {
+		return nil, err
+	}
 	if err := r.maybeCompile(); err != nil {
 		return nil, err
 	}

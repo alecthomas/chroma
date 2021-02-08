@@ -6,7 +6,7 @@ import (
 )
 
 // CSharp lexer.
-var CSharp = internal.Register(MustNewLexer(
+var CSharp = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "C#",
 		Aliases:   []string{"csharp", "c#"},
@@ -15,7 +15,11 @@ var CSharp = internal.Register(MustNewLexer(
 		DotAll:    true,
 		EnsureNL:  true,
 	},
-	Rules{
+	cSharpRules,
+))
+
+func cSharpRules() Rules {
+	return Rules{
 		"root": {
 			{`^\s*\[.*?\]`, NameAttribute, nil},
 			{`[^\S\n]+`, Text, nil},
@@ -47,5 +51,5 @@ var CSharp = internal.Register(MustNewLexer(
 			{`(?=\()`, Text, Pop(1)},
 			{`(@?[_a-zA-Z]\w*|\.)+`, NameNamespace, Pop(1)},
 		},
-	},
-))
+	}
+}

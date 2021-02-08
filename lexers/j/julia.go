@@ -6,14 +6,18 @@ import (
 )
 
 // Julia lexer.
-var Julia = internal.Register(MustNewLexer(
+var Julia = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "Julia",
 		Aliases:   []string{"julia", "jl"},
 		Filenames: []string{"*.jl"},
 		MimeTypes: []string{"text/x-julia", "application/x-julia"},
 	},
-	Rules{
+	juliaRules,
+))
+
+func juliaRules() Rules {
+	return Rules{
 		"root": {
 			{`\n`, Text, nil},
 			{`[^\S\n]+`, Text, nil},
@@ -91,5 +95,5 @@ var Julia = internal.Register(MustNewLexer(
 			{`\)`, Punctuation, Pop(1)},
 			Include("root"),
 		},
-	},
-))
+	}
+}
