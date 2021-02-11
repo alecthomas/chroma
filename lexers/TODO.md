@@ -17,7 +17,7 @@
 | GAS                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Gosu                          |                                     | :heavy_check_mark: |                    |
 | HTML                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Lasso                         |                                     | :heavy_check_mark: |                    |
+| Lasso                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | LessCss                       |                                     | :heavy_check_mark: |                    |
 | liquid                        |                                     | :heavy_check_mark: |                    |
 | Marko                         |                                     | :heavy_check_mark: |                    |
