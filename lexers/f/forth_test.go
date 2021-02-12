@@ -16,5 +16,5 @@ func TestForth_AnalyseText(t *testing.T) {
 	analyser, ok := f.Forth.(chroma.Analyser)
 	assert.True(t, ok)
 
-	assert.Equal(t, float32(0.1), analyser.AnalyseText(string(data)))
+	assert.Equal(t, float32(0.3), analyser.AnalyseText(string(data)))
 }
