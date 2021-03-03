@@ -51,7 +51,7 @@ func phpCommonRules() Rules {
 			{`(\d+\.\d*|\d*\.\d+)(e[+-]?[0-9]+)?`, LiteralNumberFloat, nil},
 			{`\d+e[+-]?[0-9]+`, LiteralNumberFloat, nil},
 			{`0[0-7]+`, LiteralNumberOct, nil},
-			{`0x[a-f0-9]+`, LiteralNumberHex, nil},
+			{`0x[a-f0-9_]+`, LiteralNumberHex, nil},
 			{`[\d_]+`, LiteralNumberInteger, nil},
 			{`0b[01]+`, LiteralNumberBin, nil},
 			{`'([^'\\]*(?:\\.[^'\\]*)*)'`, LiteralStringSingle, nil},

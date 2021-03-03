@@ -69,7 +69,7 @@ func pythonRules() Rules {
 			{`\d+[eE][+-]?[0-9]+j?`, LiteralNumberFloat, nil},
 			{`0[0-7]+j?`, LiteralNumberOct, nil},
 			{`0[bB][01]+`, LiteralNumberBin, nil},
-			{`0[xX][a-fA-F0-9]+`, LiteralNumberHex, nil},
+			{`0[xX][a-fA-F0-9_]+`, LiteralNumberHex, nil},
 			{`\d+L`, LiteralNumberIntegerLong, nil},
 			{`[\d_]+j?`, LiteralNumberInteger, nil},
 		},
