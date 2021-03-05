@@ -1,0 +1,33 @@
+<script lang="typescript">
+	// Nested is defined elsewhere
+	import Nested from './Nested.svelte';
+
+	let src = 'example.png';
+	let name = 'world';
+
+	let names = [
+		{ id: 'id0001', name: 'Name 1' },
+		{ id: 'id0002', name: 'Name 2' },
+		{ id: 'id0003', name: 'Name 3' }
+	];
+</script>
+
+<style>
+	h1 {
+		color: red;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 2em;
+	}
+</style>
+
+<h1>Hello {name}!</h1>
+<img {src} alt="Example image">
+
+<!-- import external component -->
+<Nested/>
+
+<ul>
+	{#each names as { id, name }}
+		<li>{name} ({id})</li>
+	{/each}
+</ul>
