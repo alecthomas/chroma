@@ -12,7 +12,7 @@ var Console = internal.Register(MustNewLazyLexer(
 		Aliases:   []string{"console", "shell-session"},
 		Filenames: []string{},
 		MimeTypes: []string{},
-		EnsureNL: true,
+		EnsureNL:  true,
 	},
 	consoleRules,
 ))
