@@ -35,3 +35,45 @@ var (
 	otherPreprocessorMacros            = "#FD8F3F"
 	heading                            = "#AA0D91"
 )
+
+// Xcode dark style
+var XcodeDark = Register(chroma.MustNewStyle("xcode-dark", chroma.StyleEntries{
+	chroma.Background: plainText + " bg: " + background,
+
+	chroma.Comment:          comments,
+	chroma.CommentMultiline: comments,
+	chroma.CommentPreproc:   preprocessorStatements,
+	chroma.CommentSingle:    comments,
+	chroma.CommentSpecial:   comments + " italic",
+
+	chroma.Error: "#960050",
+
+	chroma.Keyword:            keywords,
+	chroma.KeywordConstant:    keywords,
+	chroma.KeywordDeclaration: keywords,
+	chroma.KeywordReserved:    keywords,
+
+	chroma.LiteralNumber:        numbers,
+	chroma.LiteralNumberBin:     numbers,
+	chroma.LiteralNumberFloat:   numbers,
+	chroma.LiteralNumberHex:     numbers,
+	chroma.LiteralNumberInteger: numbers,
+	chroma.LiteralNumberOct:     numbers,
+
+	chroma.LiteralString:         strings,
+	chroma.LiteralStringEscape:   strings,
+	chroma.LiteralStringInterpol: plainText,
+
+	chroma.Name:              plainText,
+	chroma.NameBuiltin:       otherTypeNames,
+	chroma.NameBuiltinPseudo: otherFunctionAndMethodNames,
+	chroma.NameClass:         typeDeclarations,
+	chroma.NameFunction:      otherDeclarations,
+	chroma.NameVariable:      otherDeclarations,
+
+	chroma.Operator: plainText,
+
+	chroma.Punctuation: plainText,
+
+	chroma.Text: plainText,
+}))
