@@ -1,0 +1,19 @@
+$ ls -lh
+# ls -lh
+% ls -lh
+any@any$ ls -lh
+any@any ~ $ ls -lh
+any@any /home/any $ ls -lh
+[any@any]$ ls -lh
+(chroot)user:/home/user$ ls -lh
+drwxr-xr-x 3 any any 4.0K Mar 20 15:53 Desktop
+drwxr-xr-x 2 any any 4.0K Dec  8 21:46 Documents
+drwxr-xr-x 2 any any 4.0K Mar 20 17:21 Downloads
+[any@any] $ ls -lh
+user@1100-0011:~/Desktop$ diff -u file1 file2
+--- file1	2021-03-21 10:36:57.207170300 -0400
++++ file2	2021-03-21 10:37:03.335200693 -0400
+@@ -1 +1 @@
+-hello world
++goodbye world
+user@1100-0011:~/Desktop$
