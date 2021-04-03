@@ -216,7 +216,7 @@ python3 ~/Projects/chroma/_tools/pygments2chroma.py \
   && gofmt -s -w ~/Projects/chroma/lexers/*.go
 ```
 
-See notes in [pygments-lexers.go](https://github.com/alecthomas/chroma/blob/master/pygments-lexers.txt)
+See notes in [pygments-lexers.txt](https://github.com/alecthomas/chroma/blob/master/pygments-lexers.txt)
 for a list of lexers, and notes on some of the issues importing them.
 
 <a id="markdown-formatters" name="formatters"></a>
