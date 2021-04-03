@@ -1,0 +1,20 @@
+Module: mod
+
+define constant $pi = 3.1415927d0;
+
+define macro moo
+  { moo(?:name, ?e:expression) } => { let ?name = ?e; }
+end;
+
+// abc
+define method foo-bar (n :: <integer>, #rest a, #key k, #all-keys) => (m :: <float>, b :: <boolean>)
+  let x = n + 2.0 + #b10 + #o2 + #x02;
+  format-out("dog // cat\n");
+  local method pi () $pi end;
+  pi()
+end method foo-bar;
+
+/*
+ cow
+ */
+foo-bar(2, k: k, a-b: c);

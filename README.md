@@ -38,7 +38,7 @@ Prefix | Language
 A | ABAP, ABNF, ActionScript, ActionScript 3, Ada, Angular2, ANTLR, ApacheConf, APL, AppleScript, Arduino, Awk
 B | Ballerina, Base Makefile, Bash, Batchfile, BibTeX, BlitzBasic, BNF, Brainfuck
 C | C, C#, C++, Caddyfile, Caddyfile Directives, Cap'n Proto, Cassandra CQL, Ceylon, CFEngine3, cfstatement, ChaiScript, Cheetah, Clojure, CMake, COBOL, CoffeeScript, Common Lisp, Coq, Crystal, CSS, Cython
-D | D, Dart, Diff, Django/Jinja, Docker, DTD
+D | D, Dart, Diff, Django/Jinja, Docker, DTD, Dylan
 E | EBNF, Elixir, Elm, EmacsLisp, Erlang
 F | Factor, Fish, Forth, Fortran, FSharp
 G | GAS, GDScript, Genshi, Genshi HTML, Genshi Text, Gherkin, GLSL, Gnuplot, Go, Go HTML Template, Go Text Template, GraphQL, Groovy
