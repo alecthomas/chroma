@@ -55,6 +55,7 @@ func TestSynthesisedStyleClone(t *testing.T) {
 		LineHighlight: "bg:#ffffff",
 		LineNumbers:   "bg:#fffff1",
 	})
+	assert.NoError(t, err)
 	style, err = style.Builder().Build()
 	assert.NoError(t, err)
 	assert.True(t, style.Has(LineHighlight))
