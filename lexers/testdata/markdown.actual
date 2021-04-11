@@ -4,18 +4,20 @@
 
 Multiple **bold** on the **same line**.
 
+Multiple _italic_ on the *same_line*.
+
 ## user defined function in cql
 
 ```javascript
-  column.substring(0,num) 
+  column.substring(0,num)
 ```
 
 ```cql
 CREATE FUNCTION IF NOT EXISTS cycling.left (column TEXT,num int)
 RETURNS NULL ON NULL INPUT
 RETURNS text
-LANGUAGE javascript AS $$ 
-  column.substring(0,num) 
+LANGUAGE javascript AS $$
+  column.substring(0,num)
 $$;
 
 CREATE OR REPLACE FUNCTION cycling.fLog (input double)
@@ -34,7 +36,7 @@ CREATE TABLE emp (
   last_user text
 );
 
-select 
+select
   $my_tag$aoeuaoeu$my_tag$ as blah
 ;
 
