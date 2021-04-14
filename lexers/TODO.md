@@ -8,58 +8,58 @@
 | ActionScript 3                |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | C                             |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | C++                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Coldfusion HTML               |                                     | :heavy_check_mark: |                    |
+| Coldfusion HTML               | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Coq                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Crontab                       |                                     | :heavy_check_mark: |                    |
-| Delphi                        |                                     | :heavy_check_mark: |                    |
+| Crontab                       | Lexer does not exist in pygments    | :heavy_check_mark: |                    |
+| Delphi                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Forth                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | FSharp                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | GAS                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Gosu                          |                                     | :heavy_check_mark: |                    |
+| Gosu                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | HTML                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Lasso                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| LessCss                       |                                     | :heavy_check_mark: |                    |
-| liquid                        |                                     | :heavy_check_mark: |                    |
-| Marko                         |                                     | :heavy_check_mark: |                    |
+| LessCss                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| liquid                        | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| Marko                         | Lexer does not exist in pygments    | :heavy_check_mark: |                    |
 | Mason                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Matlab                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Modelica                      |                                     | :heavy_check_mark: |                    |
-| MonkeyC                       |                                     |                    |                    |
-| Mustache                      |                                     | :heavy_check_mark: |                    |
+| Modelica                      | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| MonkeyC                       | Language unclear                    |                    |                    |
+| Mustache                      | Lexer does not exist in pygments    | :heavy_check_mark: |                    |
 | MySQL                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | NASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| NewLisp                       |                                     | :heavy_check_mark: |                    |
+| NewLisp                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | Objective-C                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Objective-J                   |                                     | :heavy_check_mark: |                    |
+| Objective-J                   |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Octave                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Pawn                          |                                     | :heavy_check_mark: |                    |
+| Pawn                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Perl                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | PHP                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | POVRay                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Prolog                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Pug                           |                                     | :heavy_check_mark: |                    |
-| QML                           |                                     | :heavy_check_mark: |                    |
+| Pug                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| QML                           | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | R                             |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| RPMSpec                       |                                     | :heavy_check_mark: |                    |
-| Sketch Drawing                |                                     | :heavy_check_mark: |                    |
-| Slim                          |                                     | :heavy_check_mark: |                    |
-| Smali                         |                                     | :heavy_check_mark: |                    |
-| SourcePawn                    |                                     | :heavy_check_mark: |                    |
+| RPMSpec                       | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| Sketch Drawing                | Lexer does not exist in pygments    | :heavy_check_mark: |                    |
+| Slim                          | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| Smali                         |                                     | :heavy_check_mark: | :heavy_check_mark: |
+| SourcePawn                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | SQL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| Sublime Text Config           |                                     | :heavy_check_mark: |                    |
-| Svelte                        |                                     | :heavy_check_mark: |                    |
-| SWIG                          |                                     | :heavy_check_mark: |                    |
-| TypeScript                    |                                     | :heavy_check_mark: |                    |
-| TypoScript                    |                                     | :heavy_check_mark: |                    |
+| Sublime Text Config           | Lexer does not exist in pygments    | :heavy_check_mark: |                    |
+| Svelte                        | Lexer does not exist in pygments    | :heavy_check_mark: |                    |
+| SWIG                          |                                     | :heavy_check_mark: | <TODO>             |
+| TypeScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
+| TypoScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | QBasic                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | TASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | VB.net                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| VCL                           |                                     | :heavy_check_mark: |                    |
-| Velocity                      |                                     | :heavy_check_mark: |                    |
+| VCL                           |                                     | :heavy_check_mark: | <TODO>             |
+| Velocity                      |                                     | :heavy_check_mark: | <TODO>             |
 | verilog                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| XAML                          |                                     | :heavy_check_mark: |                    |
+| XAML                          | Lexer does not exist in pygments    | :heavy_check_mark: |                    |
 | XML                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| XSLT                          |                                     | :heavy_check_mark: |                    |
+| XSLT                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 
 ## Long tail languages
 
