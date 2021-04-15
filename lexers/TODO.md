@@ -54,7 +54,7 @@
 | QBasic                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | TASM                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | VB.net                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
-| VCL                           |                                     | :heavy_check_mark: | <TODO>             |
+| VCL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Velocity                      |                                     | :heavy_check_mark: | <TODO>             |
 | verilog                       |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | XAML                          | Lexer does not exist in pygments    | :heavy_check_mark: |                    |
