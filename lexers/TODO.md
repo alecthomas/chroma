@@ -48,7 +48,7 @@
 | SQL                           |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | Sublime Text Config           | Lexer does not exist in pygments    | :heavy_check_mark: |                    |
 | Svelte                        | Lexer does not exist in pygments    | :heavy_check_mark: |                    |
-| SWIG                          |                                     | :heavy_check_mark: | <TODO>             |
+| SWIG                          |                                     | :heavy_check_mark: | :heavy_check_mark: |
 | TypeScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | TypoScript                    | No text analysis exists in pygments | :heavy_check_mark: |                    |
 | QBasic                        |                                     | :heavy_check_mark: | :heavy_check_mark: |
