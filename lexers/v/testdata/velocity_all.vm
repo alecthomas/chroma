@@ -1,0 +1,27 @@
+#macro (writeTable $productList)
+	#set ($rowCount = 1)
+	#foreach($product in $productList)
+	#if ($rowCount % 2 == 0)
+		#set ($bgcolor = "#FFFFFF")
+	#else
+		#set ($bgcolor = "#CCCCCC")
+	#end
+		<tr>
+			<td bgcolor="$bgcolor">$product.name</td>
+			<td bgcolor="$bgcolor">$product.price</td>
+		</tr>
+		#set ($rowCount = $rowCount + 1)
+	#end
+#end
+
+
+<html>
+	<head>
+		<title>Macros Test</title>
+	</head>
+	<body>
+		<table>
+			#writeTable($products)
+		</table>
+	</body>
+</html>

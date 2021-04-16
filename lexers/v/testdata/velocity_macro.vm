@@ -1,0 +1,4 @@
+
+#macro(getBookListLink, $readingTrackerResult)
+   $readingTrackerResult.getBookListLink()
+#end

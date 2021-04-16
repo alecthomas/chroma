@@ -1,0 +1,5 @@
+<ul>
+  #foreach( $product in $allProducts )
+    <li>$product</li>
+  #end
+</ul>
