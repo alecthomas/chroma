@@ -1,18 +1,179 @@
-% Defining basic types
+## Test keywords are identified
 
-struct Value
-    v::Int
-end
-const r = 33
+mutable struct MutableType end
+struct ImmutableType end
+abstract type AbstractMyType end
+primitive type MyPrimitive 32 end
+(abstract, mutable, type) = true, π, missing
 
-A = zeros(3,3)
-B = rand(4,3)
+abstract    type AbstractMyType end
+primitive   type MyPrimitive 32 end
+mutable     struct MutableType end
 
-type = typeof(B)
-C = A * B'
-res = C' .+ r
+## Test that macros are parsed, including ones which are defined as symbols
 
-const abstract = 33
-abstract type K end
+@generated function
+@. a + b
+@~ a + b
+@± a + b
+@mymacro(a, b)
+@+¹ᵀ a
 
-primitive type MyFloat32 32 end
+## Test that the range of Julia variable names are correctly identified
+
+a # single character variable
+a_simple_name
+_leading_underscore
+5implicit_mul
+6_more_mul
+nums1
+nums_2
+nameswith!
+multiple!!
+embedded!_inthemiddle
+embed!1
+prime_suffix′
+for_each # starts with keyword substring
+
+# variables with characters > \u00A1
+ð # category Ll
+Aʺ # category Lm -- \U02BA (MODIFIER LETTER DOUBLE PRIME), not \U2033 (DOUBLE PRIME)
+א # category Lo
+Ð # category Lu
+A̅ # category Mn -- \U0305 (COMBINING OVERLINE)
+ⅿ # category Nl -- \U217F (SMALL ROMAN NUMERAL ONE THOUSAND)
+A₁ # category No
+A² # category No
+€ # category Sc
+© # category So
+
+# number-like names
+𝟙 # category Nd
+𝟏 # category Nd
+
+## Tests identification of number forms
+
+# floats
+  1e1   1e+1   1e-1
+1.1e1 1.1e+1 1.1e-1 .1e1 .1_1e1 1_1.1e1 1.1_1e1 1.1_11e1
+1.1E1 1.1E+1 1.1E-1 .1E1 .1_1E1 1_1.1E1 1.1_1E1 1.1_11E1
+1.1f1 1.1f+1 1.1f-1 .1f1 .1_1f1 1_1.1f1 1.1_1f1 1.1_11f1
+1E1   1E+1   1E-1
+1f1   1f+1   1f-1
+.1  1.  1.1  1.1_1  1.1_11  .1_1  .1_11 1_1.1_1
+# hex floats
+0x1p1 0xa_bp10 0x01_ap11 0x01_abp1
+0x1.1p1 0xA.Bp10 0x0.1_Ap9 0x0_1.Ap1 0x0_1.A_Bp9
+
+# integers
+1 01 10_1 10_11
+
+# non-decimal
+0xf 0xf_0 0xfff_000
+0o7 0o7_0 0o777_000
+0b1 0b1_0 0b111_000
+
+# invalid in Julia - out of range values
+0xg 0o8 0b2 0x1pA
+# invalid in Julia - no trailing underscores
+1_ 1.1_ 0xf_ 0o7_ 0b1_ 0xF_p1
+# parsed as juxtaposed numeral + variable in Julia (no underscores in exponents)
+1e1_1 1E1_1 1f1_1 0xfp1_1
+
+# not floats -- range-like expression parts
+1..1  ..1  1..
+
+## Test that operators --- dotted and unicode --- are identified correctly.
+
+a += b.c
+a .÷= .~b.c
+a = !b ⋆ c!
+a = b ? c : d ⊕ e
+a = √(5)
+a -> (a...) .+ 1
+a \ b
+1..2
+a = a === b
+a <: T
+a >: T
+a::T
+[adjoint]'
+(identity)''
+adjoint'''
+transpose'ᵀ
+suffixed +¹ operator
+suffixed +¹²³ operator
+
+%% Test string forms
+
+"global function"
+"An $interpolated variable"
+"An $(a + 1) expression"
+"""a"""
+"""
+global function
+de e f
+"inner string"
+"""
+raw"\\ a \" $interp $(1 + 1) \""
+raw"""
+"inner string"
+$interp
+$(1 + 1)
+"""
+# commented "string"
+
+@sprintf "%0.2f" var
+v"1.0"
+var"#nonstandard#"
+
+r"^[abs]+$"m
+arbi"trary"suff
+arbi"trary"1234
+
+`global function`
+`abc \` \$ $interpolated`
+`abc $(a + 1)`
+```a```
+```
+global function
+"thing" ` \$
+`now` $(now())
+```
+# commented `command`
+
+arbi`trary`suff
+arbi`trary`1234
+
+## Tests that symbols are parsed as special literals
+
+:abc_123
+:abc_def
+:α
+Val{:mysymbol}
+
+# non-symbols
+a:b
+1:b
+1.:b
+a::T
+a<:T
+a>:T
+UInt(1):UInt(2)
+
+## Tests identifying names which must be types from context
+
+Union{}
+MyType{Nothing, Any}
+f(::Union{T,S}) where S where T = 1
+f(::T) where {T} = 1
+f(::Type{<:T}) = 1
+f(::AT) where AT <: AbstractArray{MyType,1} = 1
+f(::Val{:named}) = 1
+f(::typeof(sin)) = 1
+MyInt <: Integer
+Number >: MyInt
+AT{T,1} <: B
+B>:AT{T,1}
+A <: f(B)
+g(C) <: T
