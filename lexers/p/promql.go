@@ -44,7 +44,7 @@ func promqlRules() Rules {
 			{`\n`, TextWhitespace, nil},
 			{`\s+`, TextWhitespace, nil},
 			{`,`, Punctuation, nil},
-			{`([_a-zA-Z][a-zA-Z0-9_]*?)(\s*?)(=~|!=|=|~!)(\s*?)("|')(.*?)("|')`, ByGroups(NameLabel, TextWhitespace, Operator, TextWhitespace, Punctuation, LiteralString, Punctuation), nil},
+			{`([_a-zA-Z][a-zA-Z0-9_]*?)(\s*?)(=~|!=|=|!~)(\s*?)("|')(.*?)("|')`, ByGroups(NameLabel, TextWhitespace, Operator, TextWhitespace, Punctuation, LiteralString, Punctuation), nil},
 		},
 		"range": {
 			{`\]`, Punctuation, Pop(1)},

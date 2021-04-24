@@ -180,5 +180,15 @@
   {"type":"Punctuation","value":"'"},
   {"type":"LiteralString","value":"web"},
   {"type":"Punctuation","value":"'}"},
+  {"type":"TextWhitespace","value":"\n\n"},
+  {"type":"CommentSingle","value":"# Use label matching operator `!~`"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"NameVariable","value":"metric_test_app"},
+  {"type":"Punctuation","value":"{"},
+  {"type":"NameLabel","value":"status"},
+  {"type":"Operator","value":"!~"},
+  {"type":"Punctuation","value":"'"},
+  {"type":"LiteralString","value":"(4|5).."},
+  {"type":"Punctuation","value":"'}"},
   {"type":"TextWhitespace","value":"\n"}
 ]
