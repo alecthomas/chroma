@@ -1,15 +1,14 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"sort"
 	"strings"
 
-	rice "github.com/GeertJohan/go.rice"
 	"github.com/alecthomas/kong"
 	konghcl "github.com/alecthomas/kong-hcl"
 	"github.com/gorilla/csrf"
@@ -23,10 +22,14 @@ import (
 )
 
 var (
-	templateFiles = rice.MustFindBox("templates")
-	staticFiles   = rice.MustFindBox("static")
+	version = "devel"
 
-	htmlTemplate = template.Must(template.New("html").Parse(templateFiles.MustString("index.html.tmpl")))
+	//go:embed templates/index.html.tmpl
+	indexTemplate string
+	//go:embed static
+	staticFiles embed.FS
+
+	htmlTemplate = template.Must(template.New("html").Parse(indexTemplate))
 )
 
 type context struct {
@@ -124,7 +127,7 @@ func newContext(r *http.Request) context {
 	ctx := context{
 		SelectedStyle: "monokailight",
 		CSRFField:     csrf.TemplateField(r),
-		Version:       fmt.Sprintf("%d", staticFiles.Time().Unix()),
+		Version:       version,
 	}
 	style := styles.Get(ctx.SelectedStyle)
 	if style == nil {
@@ -147,18 +150,19 @@ func newContext(r *http.Request) context {
 
 func main() {
 	var cli struct {
-		Config  kong.ConfigFlag `help:"Load configuration." placeholder:"FILE"`
-		Bind    string          `help:"HTTP bind address." default:"127.0.0.1:8080"`
-		CSRFKey string          `help:"CSRF key." default:""`
+		Version kong.VersionFlag `help:"Show version."`
+		Config  kong.ConfigFlag  `help:"Load configuration." placeholder:"FILE"`
+		Bind    string           `help:"HTTP bind address." default:"127.0.0.1:8080"`
+		CSRFKey string           `help:"CSRF key." default:""`
 	}
-	ctx := kong.Parse(&cli, kong.Configuration(konghcl.Loader))
+	ctx := kong.Parse(&cli, kong.Configuration(konghcl.Loader), kong.Vars{"version": version})
 
-	log.Printf("Starting on http://%s\n", cli.Bind)
+	log.Printf("Starting chromad %s on http://%s\n", version, cli.Bind)
 
 	router := mux.NewRouter()
 	router.Handle("/", http.HandlerFunc(index)).Methods("GET")
 	router.Handle("/api/render", http.HandlerFunc(renderHandler)).Methods("POST")
-	router.Handle("/static/{file:.*}", http.StripPrefix("/static/", http.FileServer(staticFiles.HTTPBox()))).Methods("GET")
+	router.Handle("/static/{file:.*}", http.FileServer(http.FS(staticFiles))).Methods("GET")
 
 	options := []csrf.Option{}
 	if cli.CSRFKey == "" {

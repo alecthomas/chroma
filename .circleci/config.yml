@@ -15,7 +15,7 @@ jobs:
     environment:
       GO111MODULE: "on"
     docker:
-      - image: circleci/golang:1.15
+      - image: circleci/golang:1.16
     working_directory: /go/src/github.com/alecthomas/chroma
     steps:
       - checkout
@@ -36,7 +36,7 @@ jobs:
             ./bin/golangci-lint run
   release:
     docker:
-      - image: circleci/golang:1.15
+      - image: circleci/golang:1.16
     steps:
       - checkout
       - run: curl -sL https://git.io/goreleaser | bash
