@@ -28,3 +28,6 @@ label_replace(
     "instance",
     ".*"
 )
+
+# Values for labels enclosed within single quotes
+metric_test_app{app='turtle',proc='web'}
