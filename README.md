@@ -52,7 +52,7 @@ N | NASM, Newspeak, Nginx configuration file, Nim, Nix
 O | Objective-C, OCaml, Octave, OpenSCAD, Org Mode
 P | PacmanConf, Perl, PHP, PHTML, Pig, PkgConfig, PL/pgSQL, plaintext, Pony, PostgreSQL SQL dialect, PostScript, POVRay, PowerShell, Prolog, PromQL, Protocol Buffer, Puppet, Python, Python 3
 Q | QBasic
-R | R, Racket, Ragel, react, ReasonML, reg, reStructuredText, Rexx, Ruby, Rust
+R | R, Racket, Ragel, Raku, react, ReasonML, reg, reStructuredText, Rexx, Ruby, Rust
 S | SAS, Sass, Scala, Scheme, Scilab, SCSS, Smalltalk, Smarty, Snobol, Solidity, SPARQL, SQL, SquidConf, Standard ML, Stylus, Swift, SYSTEMD, systemverilog
 T | TableGen, TASM, Tcl, Tcsh, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, Turing, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData
 V | VB.net, verilog, VHDL, VimL, vue
@@ -260,7 +260,7 @@ go get -u github.com/alecthomas/chroma/cmd/chroma
 
 - Quite a few lexers, for various reasons (pull-requests welcome):
     - Pygments lexers for complex languages often include custom code to
-      handle certain aspects, such as Perl6's ability to nest code inside
+      handle certain aspects
       regular expressions. These require time and effort to convert.
     - I mostly only converted languages I had heard of, to reduce the porting cost.
 - Some more esoteric features of Pygments are omitted for simplicity.
