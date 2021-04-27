@@ -260,7 +260,7 @@ go get -u github.com/alecthomas/chroma/cmd/chroma
 
 - Quite a few lexers, for various reasons (pull-requests welcome):
     - Pygments lexers for complex languages often include custom code to
-      handle certain aspects
+      handle certain aspects, such as Raku's ability to nest code inside
       regular expressions. These require time and effort to convert.
     - I mostly only converted languages I had heard of, to reduce the porting cost.
 - Some more esoteric features of Pygments are omitted for simplicity.
