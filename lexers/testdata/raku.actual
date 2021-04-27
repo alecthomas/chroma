@@ -1,0 +1,390 @@
+#!/usr/bin/env raku
+
+=begin pod
+=head1 Some test data for B<Chroma>
+
+=begin code :lang<go>
+fmt.Println("Hello from Go")
+=end code
+
+=for defn :numbered
+               We
+               Need
+               Numbers
+
+=end pod
+
+say $=pod[0].config<numbered>;
+
+#| Fibonacci with Multiple dispatch
+multi sub fib (0 --> 0) {}
+multi sub fib (1 --> 1) {}
+multi sub fib (\n where * > 1) {
+    fib(n - 1) + fib(n - 2)
+}
+say fib 10;
+# OUTPUT: 55
+
+#| C<Shape> role
+role Shape {
+    method area { ... }
+
+    method print_area {
+        say "Area of {self.^name} is {self.area}.";
+    }
+}
+
+class Rectangle does Shape {
+    has $.width is required;
+    has $.height is required;
+
+    method area {
+        $!width * $!height
+    }
+}
+
+Rectangle.new(width => 5, height => 7).print_area;
+
+# Inifinite and lazy list
+my @fib = 0, 1, * + * ... ∞;
+say @fib[^11];
+# OUTPUT: (0 1 1 2 3 5 8 13 21 34 55)
+
+# Feed operator
+@fib[^20] ==> grep(&is-prime) ==> say();
+# OUTPUT: (2 3 5 13 89 233 1597)
+
+# Function composition
+my &reverse_primes = &reverse ∘ &grep.assuming(&is-prime);
+say reverse_primes ^20;
+# OUTPUT: (19 17 13 11 7 5 3 2)
+
+my @a = 1..4;
+my @b = 'a'..'d';
+# Zip two lists using Z meta operator
+say @a Z @b;
+# OUTPUT: ((1 a) (2 b) (3 c) (4 d))
+say @a Z=> @b;
+# OUTPUT: (1 => a 2 => b 3 => c 4 => d)
+say [\R<] 1, 5, 6;
+
+# Hyper Operators
+say @b «~» @a;
+# OUTPUT: [a1 b2 c3 d4]
+
+# Junctions
+say 'Find all the words starting with a lowercase vowel'.words.grep: *.starts-with: any <a e i o u>;
+
+sub MAIN(
+    Str   $file where *.IO.f = 'file.dat',  #= an existing file to frobnicate
+    Int  :size(:$length) = 24,              #= length/size needed for frobnication
+    Bool :$verbose,                         #= required verbosity
+) {
+    say $length if $length.defined;
+    say $file   if $file.defined;
+    say 'Verbosity ', ($verbose ?? 'on' !! 'off');
+}
+
+#|｢[
+INI Parser
+C<SomeCode>
+=head1 heading
+]｣
+grammar INIParser {
+    token TOP { <block> <section>* }
+    token section { <header> <block> }
+    token header { '[' ~ ']' \w+ \n+ }
+    token block { [<pair> | <comment>]* }
+    rule pair { <key> '=' <value> }
+    token comment { ';' \N* \n+ }
+    token key { \w+ }
+    token value { <-[\n ;]>+ }
+}
+
+my $match = INIParser.parse: q:to/END/;
+; Comment
+key1=value1
+key2 = value2
+
+; Section 1
+[section1]
+key3=value3
+END
+
+
+say $match<block><pair>[0]<value>;
+# OUTPUT: ｢value1｣
+
+say $match<section>[0]<block><pair>[0]<value>;
+# OUTPUT: ｢value3｣
+
+# Promise
+my $promise = start {
+    my $i = 0;
+    for 1 .. 10 {
+        $i += $_
+    }
+    $i
+}
+my $result = await $promise;
+say $result;
+# OUTPUT: 55
+
+# Supply
+my $bread-supplier = Supplier.new;
+my $vegetable-supplier = Supplier.new;
+
+my $supply = supply {
+    whenever $bread-supplier.Supply {
+        emit("We've got bread: " ~ $_);
+    };
+    whenever $vegetable-supplier.Supply {
+        emit("We've got a vegetable: " ~ $_);
+    };
+}
+$supply.tap(-> $v { say "$v" });
+
+$vegetable-supplier.emit("Radish");
+# OUTPUT: «We've got a vegetable: Radish␤»
+$bread-supplier.emit("Thick sliced");
+# OUTPUT: «We've got bread: Thick sliced␤»
+$vegetable-supplier.emit("Lettuce");
+# OUTPUT: «We've got a vegetable: Lettuce␤»
+
+say (1, 2, 3) »+« (4, 5, 6);
+say (1, 2, 3, 4) »~» <a b>;
+say (&sin, &cos, &sqrt)».(0.5);
+say (<a b>, <c d e>)».&{ .elems };
+say << '>>' >>;
+say "stuff here!!!".subst(:g, /<</, '|');
+my @array = <<an 'array of' {"many"} items>>;
+
+say [1,2,3] (&) [2,5,7];
+say [1,2,3] ∩ [2,5,7];
+say 2 =:= 3;
+say [1,2,3] Z [4,5,6];
+[1,2,3] RZ[=>] [4,5,6];
+
+rx/:i
+        \w+ # some comment
+        'text'
+        \d ** 2..5
+        "double quotes!"
+        <alnum>
+        <:N + alpha>+
+        <{1 + 2}>
+        <:madeup>
+        '[' \w+ ']' || \S+ \s* '=' \s* \S*
+        || '[' \w+ ']'
+        || \S+ \s* '=' \s* \S*
+        <:Script('Latin')>
+        <:Block<Basic Latin>>
+        if | if <.ws> else $0
+        <:Lu+:N>
+        < f fo foo food >
+        <:L + :!N>
+        <[ a .. c 1 2 3 ]>*
+        @variable
+        <[\d] - [13579]>
+        <?before a $0> && .
+        <:Zs + [\x9] - [\xA0]>
+        ^ raku $
+        ^ raku$
+        [^raku$|something$]else$
+        <[ \x[00C0] .. \x[00C6] ]>*
+        two<|w>\-<|w>words
+        <[\c[GREEK SMALL LETTER ALPHA]..\c[GREEK SMALL LETTER GAMMA]]>*
+        two<!|w><!|w>words
+        << br >>
+        own »
+        ^^ <?alnum> \d+
+        ^^ \d+ <!:Script<Tamil>>
+        abc <?[ d..f ]>
+        abc <?@some-array>
+        <?after ^^ | "." \s+> <:Lu>\S+
+        [ ab || cbc ]
+        (a || b)+
+        [a||b] (c)
+        (\d) ($0)
+        (\d) {} :my $c = $0; ($c)
+        :my $counter = 0; ( \V* { ++$counter } ) *%% \n
+        (a) b {} :my $c2 = $/;
+        test
+        (a) {say "Check so far ", ~$/} b :my $c3 = ~$0;
+        { say 'hi' }
+
+        $<myname> = [ \w+ ]
+
+        $<string>=( [ $<part>=[abc] ]* % '-' )
+        $<variable>=\w+ '=' $<value>=\w+
+        a <( b )> c
+        <(a <( b )> c)>
+        '(' ~ ')' <expression>
+        $<OPEN> = '(' <SETGOAL: ')'> <some-expression> [ $GOAL || <FAILGOAL> ]
+        <?> ~ ')' \d+
+        '(' <-[()]>* ')' || '('[ <-[()]>* <~~> <-[()]>* ]* ')'
+        @<named-regex>=<.ident>
+        <.named-regex>
+        <&named-regex>
+        <someregex('a')>
+        <capture-name=named-regex>
+        <capture-name=named-regex(2)>
+        <$test>
+        <@test>
+        $(1 + 2; $test)
+        $pattern3.flip # Nil
+        "$pattern3.flip()"
+        $([~] $pattern3.comb.reverse)
+        @(%h.keys)
+        \d ** 1..3 <?{ $/.Int <= 255 && $/.Int >= 0 }>
+        $/;
+
+constant \something:some<adverb> = 'something';
+
+my %hash = %(
+    query => something,
+    qq => 'something',
+    :23year,
+    m => $test,
+    :yes,
+    :!yes,
+    (Less) => $test,
+);
+
+my %hash2 = %(
+    :query(something),
+    :qq<something>,
+    :m(something),
+    :23('a'),
+    :test<something>,
+    :query1{1 + 2}
+    :list[1,2,3]
+);
+
+=for comment
+some comment
+
+=table
+  |col|
+  |row|
+
+say Q[｢some $text｣];
+say qq｢｢some $regex text｣｣;
+say qww｢｢some $variable 'some text' text｣｣;
+say q:ww｢｢some $variable 'some text' text｣｣;
+say q:w｢｢some $variable 'some text' text｣｣;
+say qq:w｢｢some $regex 'some text' text｣｣;
+say Q:c｢｢some $regex 'some text' { 2 + 1 } text｣｣;
+say q:a｢｢some @array 'some text' { 2 + 1 } text｣｣;
+say Q:a:c｢｢some @array 'some text' { 2 + 1 } text｣｣;
+Q[some \qq[$variable.method()] testing]
+Q:a:c[some \qq[$variable.method()] testing]
+say Q:c:h｢Testing {'toasting'} %h<one>｣;
+say Q:c:h｢Testing {'toasting'} %h<one><two>｣;
+say Q:c:h｢Testing {'toasting'} %h<<one>>｣;
+say Q:c:h｢Testing {'toasting'} %h«one»｣;
+say Q:b[Testing];
+'some \qq[$variable.method()] testing';
+'somes\' testing';
+"some \qq[$variable.method()] testing";
+"some $variable.method() testing";
+"some $variable:some<adverb>.method() testing";
+"some $variable:some('adverb').method() testing";
+"some func() testing";
+"some func:some<adverb>() testing";
+say "Something foo(2) $a.succ(2+3, $some_variable) $a.some-method()  @more $_.Str(2) $_: { $_ * 2 }";
+
+#`[[
+multiline comment]
+]]
+
+my $regex = /'match' \s* <[:-]> \s* \w 'something'/;
+
+say S/some/a/ given $text;
+say s/some/a/;
+say S%some%a% given $text;
+say $text ~~ s/(some) \d+ $<var>=<alnum>/a $0/;
+say $text ~~ s:Pos(2)/(some)/$0/;
+say $text ~~ s%some%a%;
+say $text ~~ s%s(.)me%a$0%;
+say $text ~~ s:r/some/a/;
+say $text ~~ m/^text [:i \d+]$/;
+say $text ~~ m:s/^<{2+5}>$/;
+say $text ~~ m%^text$%;
+say $text ~~ /^text$/;
+say $text ~~ tr/abcde/12345/;
+s{\w+} = 'test';
+
+say 1+1i;
+
+CATCH {
+    when X::AdHoc {}
+    when CX::Warn {}
+}
+
+say Q:heredoc｢FINISH｣;
+some long
+text
+here.
+FINISH
+
+$*IN.lines.first: { .say and .so with %a{.Int cmp n}}
+
+#| Grammar C<G>
+grammar G {
+    rule TOP { <function-define> }
+    rule function-define {
+        :my \var = 'something';
+        'sub' <identifier>
+        {
+            say "func " ~ $<identifier>.made;
+            make $<identifier>.made;
+        }
+        '(' <parameter> ')' '{' '}'
+        { say "end " ~ $/.made; }
+    }
+    token identifier { \w+ { make ~$/; } }
+    token parameter { \w+ { say "param " ~ $/; } }
+    token token { \w+ { say "param " ~ $/; } }
+}
+
+use Some::Module;
+use Some::Module:auth<author>:ver(v1.0.0);
+
+notes $trip: "Almost there";
+
+LABEL:
+for <a b c> {
+}
+
+#|[[
+multiline pod declaration]
+]]
+
+grammar Calculator {
+    token TOP { <calc-op> }
+
+    proto rule calc-op          {*}
+    proto rule calc-op($a)          {*}
+    rule calc-op:sym<add> { <num> '+' <num> }
+    rule calc-op:sym<add> { <num> ':' '+' <num> }
+    rule calc-op:sym<sub>($a) { <num> '-' <num> }
+
+    token num { \d+ }
+}
+
+class Calculations {
+    method TOP              ($/) { make $<calc-op>.made; }
+    method calc-op:sym<add> ($/) { make [+] $<num>; }
+    method calc-op:sym<sub> ($/) { make [-] $<num>; }
+    method calc-op:sym<sub>($/) { make [-] $<num>; }
+    method calc-op:sym($/) { make [-] $<num>; }
+    method calc-op:sym<sub> { make [-] $<num>; }
+}
+
+say Calculator.parse('2 + 3', actions => Calculations).made;
+
+=finish
+C<say> Date.today.year;
+# Output: 2020
+B<say> Date.today.later(:2years).year;
