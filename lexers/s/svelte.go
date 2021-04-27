@@ -1,4 +1,4 @@
-package s;
+package s
 
 import (
 	. "github.com/alecthomas/chroma" // nolint
@@ -10,17 +10,17 @@ import (
 // Svelte lexer.
 var Svelte = internal.Register(DelegatingLexer(h.HTML, MustNewLazyLexer(
 	&Config{
-		Name:            "Svelte",
-		Aliases:         []string{"svelte"},
-		Filenames:       []string{"*.svelte"},
-		MimeTypes:       []string{"application/x-svelte"},
-		DotAll:          true,
+		Name:      "Svelte",
+		Aliases:   []string{"svelte"},
+		Filenames: []string{"*.svelte"},
+		MimeTypes: []string{"application/x-svelte"},
+		DotAll:    true,
 	},
 	svelteRules,
 )))
 
 func svelteRules() Rules {
-	return Rules {
+	return Rules{
 		"root": {
 			{`(<\s*script\s*lang\s*=\s*['"](?:ts|typescript)['"]\s*>)(.+?)(<\s*/\s*script\s*>)`, ByGroups(Other, Using(t.TypeScript), Other), nil},
 			{`\{`, Punctuation, Push("templates")},
