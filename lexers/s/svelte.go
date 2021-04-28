@@ -28,22 +28,22 @@ func svelteRules() Rules {
 				// Highlight script and style tags based on lang attribute
 				// and allow attributes besides lang
 				`(<\s*(?:script|style).*?lang\s*=\s*['"])` +
-				`(.+?)(['"].*?>)` +
-				`(.+?)` +
-				`(<\s*/\s*(?:script|style)\s*>)`,
+					`(.+?)(['"].*?>)` +
+					`(.+?)` +
+					`(<\s*/\s*(?:script|style)\s*>)`,
 				UsingByGroup(internal.Get, 2, 4, Other, Other, Other, Other, Other),
 				nil,
 			},
 			{
 				// Make sure `{` is not inside script or style tags
 				`(?<!<\s*(?:script|style)(?:(?!(?:script|style)\s*>).)*?)` +
-				`{` +
-				`(?!(?:(?!<\s*(?:script|style)).)*?(?:script|style)\s*>)`,
+					`{` +
+					`(?!(?:(?!<\s*(?:script|style)).)*?(?:script|style)\s*>)`,
 				Punctuation,
 				Push("templates"),
 			},
 			// on:submit|preventDefault
-			{`(?<=\s+on:\w+(?:\|\w+)*)\|(?=\w+)`, Operator , nil},
+			{`(?<=\s+on:\w+(?:\|\w+)*)\|(?=\w+)`, Operator, nil},
 			{`.+?`, Other, nil},
 		},
 		"comment": {
