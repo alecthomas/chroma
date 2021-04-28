@@ -650,14 +650,14 @@ const (
 	rakuRegexInsideToken
 )
 
-const namePattern = `((?:(?!` + colonPairPattern + `)[\w':-])+)`
-
-const colonPairOpeningBrackets = `(?:<<|<|«|\(|\[|\{)`
-const colonPairClosingBrackets = `(?:>>|>|»|\)|\]|\})`
-const colonPairPattern = `(:)(\w[\w'-]*)(` + colonPairOpeningBrackets + `)()()`
-
-const variablePattern = `[$@%&]+[.^:?=!~]?` + namePattern
-const globalVariablePattern = `[$@%&]+\*` + namePattern
+const (
+	colonPairOpeningBrackets = `(?:<<|<|«|\(|\[|\{)`
+	colonPairClosingBrackets = `(?:>>|>|»|\)|\]|\})`
+	colonPairPattern         = `(:)(\w[\w'-]*)(` + colonPairOpeningBrackets + `)()()`
+	namePattern              = `((?:(?!` + colonPairPattern + `)[\w':-])+)`
+	variablePattern          = `[$@%&]+[.^:?=!~]?` + namePattern
+	globalVariablePattern    = `[$@%&]+\*` + namePattern
+)
 
 var keywords = []string{
 	`BEGIN`, `CATCH`, `CHECK`, `CLOSE`, `CONTROL`, `DOC`, `END`, `ENTER`, `FIRST`, `INIT`,
@@ -963,7 +963,7 @@ func sortWords(words []string) []string {
 
 // Finds the index of substring in the string starting at position n
 func indexAt(str []rune, substr []rune, pos int) int {
-	var text = string(str[pos:])
+	text := string(str[pos:])
 
 	idx := strings.Index(text, string(substr))
 	if idx > -1 {
@@ -1016,9 +1016,9 @@ func bracketsFinder(tokenClass RakuToken) MutatorFunc {
 			openingChars = []rune(state.Groups[1])
 		}
 
-		var openingChar = openingChars[0]
+		openingChar := openingChars[0]
 
-		var nChars = len(openingChars)
+		nChars := len(openingChars)
 
 		var closingChar rune
 		var closingCharExists bool
@@ -1034,11 +1034,11 @@ func bracketsFinder(tokenClass RakuToken) MutatorFunc {
 
 		switch tokenClass {
 		case rakuPodFormatter:
-			var stack, ok = state.Get("pod_formatter_stack").([]RakuFormatterRules)
+			stack, ok := state.Get("pod_formatter_stack").([]RakuFormatterRules)
 			if !ok {
 				stack = []RakuFormatterRules{}
 			}
-			var popRule = makeRuleAndPushMaybe(RuleMakingConfig{
+			popRule := makeRuleAndPushMaybe(RuleMakingConfig{
 				delimiter:              []rune{closingChar},
 				numberOfDelimiterChars: nChars,
 				tokenType:              Punctuation,
@@ -1053,7 +1053,7 @@ func bracketsFinder(tokenClass RakuToken) MutatorFunc {
 			case "U":
 				formatter = GenericUnderline
 			}
-			var formattingRule = makeRuleAndPushMaybe(RuleMakingConfig{
+			formattingRule := makeRuleAndPushMaybe(RuleMakingConfig{
 				pattern:   `.+?`,
 				tokenType: formatter,
 				mutator:   nil,
@@ -1111,7 +1111,7 @@ func bracketsFinder(tokenClass RakuToken) MutatorFunc {
 			}
 		}
 
-		var text = state.Text
+		text := state.Text
 
 		var endPos int
 
@@ -1129,14 +1129,14 @@ func bracketsFinder(tokenClass RakuToken) MutatorFunc {
 
 			// we need to look for the corresponding closing character,
 			// keep nesting in mind
-			var nestingLevel = 1
+			nestingLevel := 1
 
-			var searchPos = state.Pos - nChars
+			searchPos := state.Pos - nChars
 
 			var nextClosePos int
 
 			for nestingLevel > 0 {
-				var nextOpenPos = indexAt(text, openingChars, searchPos+nChars)
+				nextOpenPos := indexAt(text, openingChars, searchPos+nChars)
 				nextClosePos = indexAt(text, closingChars, searchPos+nChars)
 
 				switch {
@@ -1163,12 +1163,12 @@ func bracketsFinder(tokenClass RakuToken) MutatorFunc {
 			endPos = len(text)
 		}
 
-		var adverbre = regexp.MustCompile(`:to\b|:heredoc\b`)
+		adverbre := regexp.MustCompile(`:to\b|:heredoc\b`)
 		var heredocTerminator []rune
 		if adverbre.MatchString(string(adverbs)) {
 			heredocTerminator = text[state.Pos-1+nChars : endPos]
 			if len(heredocTerminator) > 0 {
-				var endHeredocPos = indexAt(text[endPos:], heredocTerminator, 0)
+				endHeredocPos := indexAt(text[endPos:], heredocTerminator, 0)
 				nChars = len(heredocTerminator)
 				endPos += endHeredocPos
 			} else {
@@ -1176,7 +1176,7 @@ func bracketsFinder(tokenClass RakuToken) MutatorFunc {
 			}
 		}
 
-		var textBetweenBrackets = string(text[state.Pos:endPos])
+		textBetweenBrackets := string(text[state.Pos:endPos])
 		switch tokenClass {
 		case rakuPodDeclaration:
 			state.Groups[3] = ""
@@ -1191,7 +1191,7 @@ func bracketsFinder(tokenClass RakuToken) MutatorFunc {
 			state.Groups[8] = ""
 			if len(heredocTerminator) > 0 {
 				// Length of heredoc terminator + closing chars + `;`
-				var heredocFristPunctuationLen = len(heredocTerminator) + len(openingChars) + 1
+				heredocFristPunctuationLen := len(heredocTerminator) + len(openingChars) + 1
 
 				state.Groups[6] = string(openingChars) +
 					string(text[state.Pos:state.Pos+heredocFristPunctuationLen])
@@ -1223,7 +1223,7 @@ type RakuFormatterRules struct {
 
 // Pop from the pod_formatter_stack and reformat the pod code
 func podFormatterPopper(state *LexerState) error {
-	var stack, ok = state.Get("pod_formatter_stack").([]RakuFormatterRules)
+	stack, ok := state.Get("pod_formatter_stack").([]RakuFormatterRules)
 
 	if ok && len(stack) > 0 {
 		// Pop from stack
@@ -1241,9 +1241,9 @@ func podFormatterPopper(state *LexerState) error {
 
 // Use the rules from pod_formatter_stack to format the pod code
 func podFormatter(state *LexerState) error {
-	var stack, ok = state.Get("pod_formatter_stack").([]RakuFormatterRules)
+	stack, ok := state.Get("pod_formatter_stack").([]RakuFormatterRules)
 	if ok && len(stack) > 0 {
-		var rules = stack[len(stack)-1]
+		rules := stack[len(stack)-1]
 		state.Rules["pod-formatter"][0] = rules.pop
 		state.Rules["pod-formatter"][len(state.Rules["pod-formatter"])-1] = rules.formatter
 	}
@@ -1275,19 +1275,19 @@ type RuleMakingConfig struct {
 func makeRuleAndPushMaybe(config RuleMakingConfig) *CompiledRule {
 	var rePattern string
 	if len(config.delimiter) > 0 {
-		var delimiter = strings.Repeat(string(config.delimiter), config.numberOfDelimiterChars)
+		delimiter := strings.Repeat(string(config.delimiter), config.numberOfDelimiterChars)
 		rePattern = regexp2.Escape(delimiter)
 	} else {
 		rePattern = config.pattern
 	}
-	var regex = regexp2.MustCompile(rePattern, regexp2.None)
+	regex := regexp2.MustCompile(rePattern, regexp2.None)
 
-	var cRule = &CompiledRule{
+	cRule := &CompiledRule{
 		Rule:   Rule{rePattern, config.tokenType, config.mutator},
 		Regexp: regex,
 	}
-	var state = config.state
-	var stateName = config.stateName
+	state := config.state
+	stateName := config.stateName
 	switch config.rulePosition {
 	case topRule:
 		state.Rules[stateName] =
@@ -1322,7 +1322,7 @@ func colonPair(tokenClass TokenType) Emitter {
 			iterators = append(iterators, Literator(Token{NameAttribute, groups[2]}))
 		} else {
 			var keyTokenState string
-			var keyre = regexp.MustCompile(`^\d+$`)
+			keyre := regexp.MustCompile(`^\d+$`)
 			if keyre.MatchString(groups[2]) {
 				keyTokenState = "common"
 			} else {
@@ -1331,7 +1331,7 @@ func colonPair(tokenClass TokenType) Emitter {
 
 			// Use token state to Tokenise key
 			if keyTokenState != "" {
-				var iterator, err = lexer.Tokenise(
+				iterator, err := lexer.Tokenise(
 					&TokeniseOptions{
 						State:  keyTokenState,
 						Nested: true,
@@ -1362,7 +1362,7 @@ func colonPair(tokenClass TokenType) Emitter {
 
 		// Use token state to Tokenise value
 		if valueTokenState != "" {
-			var iterator, err = lexer.Tokenise(
+			iterator, err := lexer.Tokenise(
 				&TokeniseOptions{
 					State:  valueTokenState,
 					Nested: true,
@@ -1397,7 +1397,7 @@ func quote(groups []string, lexer Lexer) Iterator {
 	var tokenStates []string
 
 	// Set tokenStates based on adverbs
-	var adverbs = strings.Split(groups[4], ":")
+	adverbs := strings.Split(groups[4], ":")
 	for _, adverb := range adverbs {
 		switch adverb {
 		case "c", "closure":
@@ -1431,7 +1431,7 @@ func quote(groups []string, lexer Lexer) Iterator {
 		tokenState = "Q"
 	}
 
-	var iterator, err = lexer.Tokenise(
+	iterator, err := lexer.Tokenise(
 		&TokeniseOptions{
 			State:  tokenState,
 			Nested: true,
@@ -1452,7 +1452,7 @@ func quote(groups []string, lexer Lexer) Iterator {
 // Emitter for pod config, tokenises the properties with "colon-pair-attribute" state
 func podConfig(groups []string, lexer Lexer) Iterator {
 	// Tokenise pod config
-	var iterator, err = lexer.Tokenise(
+	iterator, err := lexer.Tokenise(
 		&TokeniseOptions{
 			State:  "colon-pair-attribute",
 			Nested: true,
@@ -1486,16 +1486,16 @@ func podCode(groups []string, lexer Lexer) Iterator {
 	// Tokenise pod config
 	iterators = append(iterators, podConfig([]string{groups[5]}, lexer))
 
-	var langMatch = regexp.MustCompile(`:lang\W+(\w+)`).FindStringSubmatch(groups[5])
+	langMatch := regexp.MustCompile(`:lang\W+(\w+)`).FindStringSubmatch(groups[5])
 	var lang string
 	if len(langMatch) > 1 {
 		lang = langMatch[1]
 	}
 
 	// Tokenise code based on lang property
-	var sublexer = internal.Get(lang)
+	sublexer := internal.Get(lang)
 	if sublexer != nil {
-		var codeIterator, codeIteratorError = sublexer.Tokenise(nil, groups[6])
+		codeIterator, codeIteratorError := sublexer.Tokenise(nil, groups[6])
 
 		if codeIteratorError != nil {
 			panic(codeIteratorError)
