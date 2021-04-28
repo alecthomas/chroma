@@ -10,8 +10,8 @@ var PHP = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:            "PHP",
 		Aliases:         []string{"php", "php3", "php4", "php5"},
-		Filenames:       []string{},
-		MimeTypes:       []string{},
+		Filenames:       []string{"*.php", "*.php[345]", "*.inc"},
+		MimeTypes:       []string{"text/x-php"},
 		DotAll:          true,
 		CaseInsensitive: true,
 		EnsureNL:        true,
