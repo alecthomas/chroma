@@ -1,0 +1,338 @@
+$roboto-font-path: "../fonts/roboto";
+
+@font-face {
+    // This is parsed as a normal function call that takes a quoted string.
+    src: url("#{$roboto-font-path}/Roboto-Thin.woff2") format("woff2");
+
+    font-family: "Roboto";
+    font-weight: 100;
+}
+
+@use 'base';
+$primary-color: red;
+.inverse {
+    background-color: base.$primary-color;
+    color: white;
+}
+
+ul > {
+    li {
+        list-style-type: none;
+    }
+}
+
+h2 {
+    + p {
+        border-top: 1px solid gray;
+    }
+}
+
+p {
+    ~ {
+        span {
+            opacity: 0.8;
+        }
+    }
+}
+
+.button {
+    border: 1px solid black;
+    border-radius: if($rounded-corners, 5px, null);
+}
+
+$base-color: #036;
+
+@for $i from 1 through 3 {
+    ul:nth-child(3n + #{$i}) {
+        background-color: lighten($base-color, $i * 5%);
+    }
+}
+
+@function scale-below($value, $base, $ratio: 1.618) {
+    @while $value > $base {
+        $value: $value / $ratio;
+    }
+    @return $value;
+}
+
+$normal-font-size: 16px;
+sup {
+    font-size: scale-below(20px, 16px);
+}
+
+$sizes: 40px, 50px, 80px;
+
+@each $size in $sizes {
+    .icon-#{$size} {
+        font-size: $size;
+        height: $size;
+        width: $size;
+    }
+}
+
+@each $name, $glyph in $icons {
+    .icon-#{$name}:before {
+        display: inline-block;
+        font-family: "Icon Font";
+        content: $glyph;
+    }
+}
+
+$icons:
+    "eye" "\f112" 12px,
+    "start" "\f12e" 16px,
+    "stop" "\f12f" 10px;
+
+@each $name, $glyph, $size in $icons {
+    .icon-#{$name}:before {
+        display: inline-block;
+        font-family: "Icon Font";
+        content: $glyph;
+        font-size: $size;
+    }
+}
+
+@mixin triangle($size, $color, $direction) {
+    height: 0;
+    width: 0;
+
+    border-color: transparent;
+    border-style: solid;
+    border-width: $size / 2;
+
+    @if $direction == up {
+        border-bottom-color: $color;
+    } @else if $direction == right {
+        border-left-color: $color;
+    } @else if $direction == down {
+        border-top-color: $color;
+    } @else if $direction == left {
+        border-right-color: $color;
+    } @else {
+        @error "Unknown direction #{$direction}.";
+    }
+}
+
+.next {
+    @include triangle(5px, black, right);
+}
+
+$icons: ("eye": "\f112", "start": "\f12e", "stop": "\f12f");
+
+@each $name, $glyph in $icons {
+    .icon-#{$name}:before {
+        display: inline-block;
+        font-family: "Icon Font";
+        content: $glyph;
+    }
+}
+
+/* This CSS will print because %message-shared is extended. */
+%message-shared {
+    border: 1px solid #ccc;
+    padding: 10px;
+    color: #333;
+}
+
+// This CSS won't print because %equal-heights is never extended.
+%equal-heights {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.message {
+    @extend %message-shared;
+}
+
+.success {
+    @extend %message-shared;
+    border-color: green;
+}
+
+.error {
+    @extend %message-shared;
+    border-color: red;
+}
+
+.warning {
+    @extend %message-shared;
+    border-color: yellow;
+}
+
+$grid-gutter-width : 1rem;
+
+// lightbox
+$lightbox_small_maxHeight: calc(100vh - 1rem);
+$lightbox_small_maxWidth: calc(100vw - 1rem);
+
+$lightbox_medium_mediaMinWidth: 400px;
+$lightbox_medium_maxHeight: 90vh;
+$lightbox_medium_maxWidth: 90vw;
+
+$lightbox_large_mediaMinWidth: 1200px;
+$lightbox_large_maxHeight: 90vh;
+$lightbox_large_maxWidth: 70vw;
+
+$lightbox_xxl_mediaMinWidth: 1600px;
+$lightbox_xxl_maxHeight: 90vh;
+$lightbox_xxl_maxWidth: 1100px;
+
+$lightbox_padding: $grid-gutter-width / 2;
+$lightbox_header-height: 1rem;
+$lightbox_border_radius: 3px;
+
+// lightbox colors
+$eee: #eee;
+$lightbox_close-color: #333;
+$lightbox_background_content: white;
+$lightbox_background_header: #f5f5f5;
+$lightbox_border: 1px solid $eee;
+$lightbox_overlay_color: transparentize(black, .4);
+$lightbox_shadow: 0 2px 5px rgba(0, 0, 0, .2);
+
+.hffLightbox {
+    @mixin lb_styles_background {
+        background: $lightbox_overlay_color;
+    }
+    @mixin lb_styles {
+        border-radius: $lightbox_border_radius;
+        border: $lightbox_border;
+        background: $lightbox_background_content;
+        box-shadow: 0 2px 5px $lightbox_shadow;
+    }
+    @mixin lb_styles-header {
+        background: $lightbox_background_header;
+        border-bottom: $lightbox_border;
+    }
+    @mixin lb_styles-headline {
+        font-weight: bold;
+    }
+    @mixin lb_styles-content {
+    }
+
+    &, & * {
+        box-sizing: border-box;
+    }
+    position: fixed;
+    height: 200vh;
+    width: 200vw;
+    left: -50vw;
+    top: -50vh;
+    @include lb_styles_background();
+    z-index: 1000;
+
+    &-wrapper {
+        transition: all ease-in-out .5s;
+        animation-name: fadeInLightbox;
+        animation-duration: .5s;
+        overflow: hidden;
+        left: 50%;
+        top: 50%;
+        max-width: 2000px;
+        max-height: $lightbox_small_maxHeight;
+        width: $lightbox_small_maxWidth;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        @include lb_styles();
+    }
+    &-content {
+        overflow: auto;
+        @include lb_styles-content();
+        max-height: calc(#{$lightbox_small_maxHeight} - 4rem);
+    }
+    &-header {
+        overflow: hidden;
+        @include lb_styles-header();
+        &-headline{
+            line-height: 1rem;
+            padding-right: calc(#{$lightbox_header-height} * 2);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-height: $lightbox_header-height;
+            text-transform: uppercase;
+            @include lb_styles-headline();
+        }
+    }
+    &-footer > .class {
+
+    }
+    &-footer .class {
+
+    }
+    &-footer, .class > #id {
+
+    }
+    &-content, &-header, &-footer {
+        padding: $lightbox_padding;
+    }
+    &-close {
+        cursor: pointer;
+        position: absolute;
+        right: $lightbox_padding;
+        top: $lightbox_padding;
+        width: $lightbox_header-height;
+        height: $lightbox_header-height;
+        opacity: 0.7;
+        text-indent: -1000;
+        font-size: 0;
+        &:hover {
+            opacity: 1;
+        }
+        &:before, &:after {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translate(-50%, -50%);
+            content: ' ';
+            height: $lightbox_header-height;
+            width: 2px;
+            background-color: $lightbox_close-color;
+        }
+        &:before {
+            transform: rotate(45deg);
+        }
+        &:after {
+            transform: rotate(-45deg);
+        }
+    }
+}
+
+@media (min-width: #{$lightbox_medium_mediaMinWidth}) {
+    .hffLightbox-wrapper {
+        max-height: $lightbox_medium_maxHeight;
+        width: $lightbox_medium_maxWidth;
+    }
+    .hffLightbox-content {
+        max-height: calc(#{$lightbox_medium_maxHeight} - 4rem);
+    }
+}
+
+@media (min-width: #{$lightbox_large_mediaMinWidth}) {
+    .hffLightbox-wrapper {
+        max-height: $lightbox_large_maxHeight;
+        width: $lightbox_large_maxWidth;
+    }
+    .hffLightbox-content {
+        max-height: calc(#{$lightbox_large_maxHeight} - 4rem);
+    }
+}
+$wrapper: 'wrapper';
+$max: 'max';
+$hffLightBox: '.hfflightbox';
+$hffLightBox2: '.hfflightbox';
+@media (min-width: #{$lightbox_xxl_mediaMinWidth}) {
+    .hffLightbox-#{$wrapper} {
+        max-height: $lightbox_xxl_maxHeight;
+        #{$max}-height: $lightbox_xxl_maxHeight;
+        width: $lightbox_xxl_maxWidth;
+    }
+    .hffLightbox-content {
+        max-height: calc(#{$lightbox_xxl_maxHeight} - 4rem);
+    }
+    #{$hffLightBox}-content {
+        max-height: calc(#{$lightbox_xxl_maxHeight} - 4rem);
+    }
+    .#{$hffLightBox2}-content {
+        max-height: calc(#{$lightbox_xxl_maxHeight} - 4rem);
+    }
+}
