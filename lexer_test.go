@@ -13,7 +13,7 @@ func TestTokenTypeClassifiers(t *testing.T) {
 }
 
 func TestSimpleLexer(t *testing.T) {
-	lexer, err := NewLexer(
+	lexer, err := NewLexer( // nolint: forbidigo
 		&Config{
 			Name:      "INI",
 			Aliases:   []string{"ini", "cfg"},

@@ -7,7 +7,7 @@ import (
 )
 
 func TestNewlineAtEndOfFile(t *testing.T) {
-	l := Coalesce(MustNewLexer(&Config{EnsureNL: true}, Rules{
+	l := Coalesce(MustNewLexer(&Config{EnsureNL: true}, Rules{ // nolint: forbidigo
 		"root": {
 			{`(\w+)(\n)`, ByGroups(Keyword, Whitespace), nil},
 		},
@@ -16,7 +16,7 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Keyword, "hello"}, {Whitespace, "\n"}}, it.Tokens())
 
-	l = Coalesce(MustNewLexer(nil, Rules{
+	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
 		"root": {
 			{`(\w+)(\n)`, ByGroups(Keyword, Whitespace), nil},
 		},
@@ -27,7 +27,7 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 }
 
 func TestMatchingAtStart(t *testing.T) {
-	l := Coalesce(MustNewLexer(&Config{}, Rules{
+	l := Coalesce(MustNewLexer(&Config{}, Rules{ // nolint: forbidigo
 		"root": {
 			{`\s+`, Whitespace, nil},
 			{`^-`, Punctuation, Push("directive")},
@@ -45,7 +45,7 @@ func TestMatchingAtStart(t *testing.T) {
 }
 
 func TestEnsureLFOption(t *testing.T) {
-	l := Coalesce(MustNewLexer(&Config{}, Rules{
+	l := Coalesce(MustNewLexer(&Config{}, Rules{ // nolint: forbidigo
 		"root": {
 			{`(\w+)(\r?\n|\r)`, ByGroups(Keyword, Whitespace), nil},
 		},
@@ -62,7 +62,7 @@ func TestEnsureLFOption(t *testing.T) {
 		{Whitespace, "\n"},
 	}, it.Tokens())
 
-	l = Coalesce(MustNewLexer(nil, Rules{
+	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
 		"root": {
 			{`(\w+)(\r?\n|\r)`, ByGroups(Keyword, Whitespace), nil},
 		},

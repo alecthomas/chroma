@@ -7,7 +7,7 @@ import (
 )
 
 func TestCoalesce(t *testing.T) {
-	lexer := Coalesce(MustNewLexer(nil, Rules{
+	lexer := Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
 		"root": []Rule{
 			{`[!@#$%^&*()]`, Punctuation, nil},
 		},

@@ -7,7 +7,7 @@ import (
 )
 
 func TestRemappingLexer(t *testing.T) {
-	var lexer Lexer = MustNewLexer(nil, Rules{
+	var lexer Lexer = MustNewLexer(nil, Rules{ // nolint: forbidigo
 		"root": {
 			{`\s+`, Whitespace, nil},
 			{`\w+`, Name, nil},

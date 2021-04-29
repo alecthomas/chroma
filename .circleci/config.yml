@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Prepare
           command: |
-            curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s v1.26.0
+            curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s v1.37.0
             mkdir ~/report
           when: always
       - run:

@@ -162,10 +162,10 @@ func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, erro
 type Rules map[string][]Rule
 
 // Rename clones rules then a rule.
-func (r Rules) Rename(old, new string) Rules {
+func (r Rules) Rename(oldRule, newRule string) Rules {
 	r = r.Clone()
-	r[new] = r[old]
-	delete(r, old)
+	r[newRule] = r[oldRule]
+	delete(r, oldRule)
 	return r
 }
 
@@ -209,8 +209,10 @@ func NewLazyLexer(config *Config, rulesFunc func() Rules) (*RegexLexer, error) {
 }
 
 // MustNewLexer creates a new Lexer or panics.
-func MustNewLexer(config *Config, rules Rules) *RegexLexer {
-	lexer, err := NewLexer(config, rules)
+//
+// Deprecated: Use MustNewLazyLexer instead.
+func MustNewLexer(config *Config, rules Rules) *RegexLexer { // nolint: forbidigo
+	lexer, err := NewLexer(config, rules) // nolint: forbidigo
 	if err != nil {
 		panic(err)
 	}
@@ -221,7 +223,9 @@ func MustNewLexer(config *Config, rules Rules) *RegexLexer {
 //
 // "rules" is a state machine transitition map. Each key is a state. Values are sets of rules
 // that match input, optionally modify lexer state, and output tokens.
-func NewLexer(config *Config, rules Rules) (*RegexLexer, error) {
+//
+// Deprecated: Use NewLazyLexer instead.
+func NewLexer(config *Config, rules Rules) (*RegexLexer, error) { // nolint: forbidigo
 	return NewLazyLexer(config, func() Rules { return rules })
 }
 

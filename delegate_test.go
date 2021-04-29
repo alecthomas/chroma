@@ -7,7 +7,7 @@ import (
 )
 
 func makeDelegationTestLexers() (lang Lexer, root Lexer) {
-	return MustNewLexer(nil, Rules{
+	return MustNewLexer(nil, Rules{ // nolint: forbidigo
 			"root": {
 				{`\<\?`, CommentPreproc, Push("inside")},
 				{`.`, Other, nil},
@@ -18,7 +18,7 @@ func makeDelegationTestLexers() (lang Lexer, root Lexer) {
 				{`\s+`, Whitespace, nil},
 			},
 		}),
-		MustNewLexer(nil, Rules{
+		MustNewLexer(nil, Rules{ // nolint: forbidigo
 			"root": {
 				{`\bhello\b`, Keyword, nil},
 				{`\b(world|there)\b`, Name, nil},
