@@ -20,7 +20,7 @@ import (
 )
 
 // {{upper_name}} lexer.
-var {{upper_name}} = internal.Register(MustNewLexer(
+var {{upper_name}} = internal.Register(MustNewLazyLexer(
     &Config{
         Name:      "{{name}}",
         Aliases:   []string{ {{#aliases}}"{{.}}", {{/aliases}} },
@@ -36,14 +36,16 @@ var {{upper_name}} = internal.Register(MustNewLexer(
         CaseInsensitive: true,
 {{/re_ignorecase}}
     },
-    Rules{
+    func() Rules {
+        return Rules{
 {{#tokens}}
-        "{{state}}": {
-            {{#rules}}
-            {{{.}}},
-            {{/rules}}
-        },
+            "{{state}}": {
+                {{#rules}}
+                {{{.}}},
+                {{/rules}}
+            },
 {{/tokens}}
+        }
     },
 ))
 '''
