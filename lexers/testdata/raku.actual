@@ -16,6 +16,18 @@ fmt.Println("Hello from Go")
 
 say $=pod[0].config<numbered>;
 
+sub f1($a) {
+    $a+1;
+}
+
+2.&f1;
+
+sub f2($a,$b) {
+    $a+1;
+}
+
+2.&f2(3);
+
 #| Fibonacci with Multiple dispatch
 multi sub fib (0 --> 0) {}
 multi sub fib (1 --> 1) {}
