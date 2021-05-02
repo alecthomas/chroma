@@ -577,7 +577,8 @@ func rakuRules() Rules {
 	return Rules{
 		"root": {
 			Include("common"),
-			{`\{|\}|\(|\)|\[|\]`, Punctuation, nil},
+			{`[{}();]`, Punctuation, nil},
+			{`\[|\]`, Operator, nil},
 			{`.+?`, Text, nil},
 		},
 		"common": {
@@ -609,10 +610,16 @@ func rakuRules() Rules {
 			// Hyperoperator | »*«
 			{`(>>)(\S+?)(<<)`, ByGroups(Operator, UsingSelf("root"), Operator), nil},
 			{`(»)(\S+?)(«)`, ByGroups(Operator, UsingSelf("root"), Operator), nil},
+			// Hyperoperator | «*«
+			{`(<<)(\S+?)(<<)`, ByGroups(Operator, UsingSelf("root"), Operator), nil},
+			{`(«)(\S+?)(«)`, ByGroups(Operator, UsingSelf("root"), Operator), nil},
+			// Hyperoperator | »*»
+			{`(>>)(\S+?)(>>)`, ByGroups(Operator, UsingSelf("root"), Operator), nil},
+			{`(»)(\S+?)(»)`, ByGroups(Operator, UsingSelf("root"), Operator), nil},
 			// <<quoted words>>
-			{`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+\s+|[\])}])\s*)(<<)(?!(?:(?!>>)[^\n])+?[},;] *\n)(?!(?:(?!>>).)+?>>\S+?>>)`, Punctuation, Push("<<")},
+			{`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+\s+|[\])}]\s+)\s*)(<<)(?!(?:(?!>>)[^\n])+?[},;] *\n)(?!(?:(?!>>).)+?>>\S+?>>)`, Punctuation, Push("<<")},
 			// «quoted words»
-			{`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+\s+|[\])}])\s*)(«)(?![^»]+?[},;] *\n)(?![^»]+?»\S+?»)`, Punctuation, Push("«")},
+			{`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+\s+|[\])}]\s+)\s*)(«)(?![^»]+?[},;] *\n)(?![^»]+?»\S+?»)`, Punctuation, Push("«")},
 			// [<]
 			{`(?<=\[\\?)<(?=\])`, Operator, nil},
 			// < and > operators | something < onething > something
@@ -623,7 +630,7 @@ func rakuRules() Rules {
 			},
 			// <quoted words>
 			{
-				`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+\s+|[\])}])\s*)(<)((?:(?![,;)}] *(?:#[^\n]+)?\n)[^<>])+?)(>)(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%]\w[\w':-]*[^(]|\[))`,
+				`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+\s+|[\])}]\s+)\s*)(<)((?:(?![,;)}] *(?:#[^\n]+)?\n)[^<>])+?)(>)(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%]\w[\w':-]*[^(]|\s+\[))`,
 				ByGroups(Punctuation, String, Punctuation),
 				nil,
 			},
@@ -707,13 +714,13 @@ func rakuRules() Rules {
 			// Method
 			// Method with adverb
 			{
-				`(?<!\.\.[?^*+]?)(?<=(?:\.[?^*+]?)|self!)['\w:-]+(?=:['\w-]+` +
+				`(?<!\.\.[?^*+]?)(?<=(?:\.[?^*+&]?)|self!)['\w:-]+(?=:['\w-]+` +
 					colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `$)`,
 				NameFunction,
 				Push("name-adverb"),
 			},
 			// Method without adverb
-			{`(?<!\.\.[?^*+]?)(?<=(?:\.[?^*+]?)|self!)['\w:-]+`, NameFunction, nil},
+			{`(?<!\.\.[?^*+]?)(?<=(?:\.[?^*+&]?)|self!)['\w:-]+`, NameFunction, nil},
 			// Indirect invocant
 			{namePattern + `(?=\s+\W?['\w:-]+:\W)`, NameFunction, Push("name-adverb")},
 			{`(?<=\W)(?:∅|i|e|𝑒|tau|τ|pi|π|Inf|∞)(?=\W)`, NameConstant, nil},
@@ -772,27 +779,27 @@ func rakuRules() Rules {
 		"colon-pair": {
 			// :key(value)
 			{colonPairPattern, colonPair(String), bracketsFinder(rakuNameAttribute)},
-			// :key
-			{`(:!?)(\w[\w'-]*)`, ByGroups(Punctuation, String), nil},
 			// :123abc
 			{
 				`(:)(\d+)(\w[\w'-]*)(\s*[,;)]?\s*$)`,
 				ByGroups(Punctuation, UsingSelf("number"), String, Text),
 				nil,
 			},
+			// :key
+			{`(:!?)(\w[\w'-]*)`, ByGroups(Punctuation, String), nil},
 			{`\s+`, Text, nil},
 		},
 		"colon-pair-attribute": {
 			// :key(value)
 			{colonPairPattern, colonPair(NameAttribute), bracketsFinder(rakuNameAttribute)},
-			// :key
-			{`(:!?)(\w[\w'-]*)`, ByGroups(Punctuation, NameAttribute), nil},
 			// :123abc
 			{
 				`(:)(\d+)(\w+)(\s*[,;)]?\s*$)`,
 				ByGroups(Punctuation, UsingSelf("number"), NameAttribute, Text),
 				nil,
 			},
+			// :key
+			{`(:!?)(\w[\w'-]*)`, ByGroups(Punctuation, NameAttribute), nil},
 			{`\s+`, Text, nil},
 		},
 		"colon-pair-attribute-keyvalue": {
@@ -825,6 +832,12 @@ func rakuRules() Rules {
 			// Placeholder, will be overwritten by bracketsFinder, DO NOT REMOVE!
 			{`^$`, nil, nil},
 			Include("regex-escape-class"),
+			// $(code)
+			{
+				`(?<!(?<!\\)\\)([$@])(\()(.*?)(\))`,
+				ByGroups(Keyword, Punctuation, UsingSelf("root"), Punctuation),
+				nil,
+			},
 			// Exclude $/ from variables, because we can't get out of the end of the slash regex: $/;
 			{`\$(?=/)`, NameEntity, nil},
 			// Exclude $ from variables
@@ -848,12 +861,6 @@ func rakuRules() Rules {
 			},
 			// {code}
 			{`(?<!(?<!\\)\\)({)(.*?)(})`, ByGroups(Punctuation, UsingSelf("root"), Punctuation), nil},
-			// $(code)
-			{
-				`(?<!(?<!\\)\\)([$@])(\()(.*?)(\))`,
-				ByGroups(Keyword, Punctuation, UsingSelf("root"), Punctuation),
-				nil,
-			},
 			// Properties
 			{`(:)(\w+)`, ByGroups(Punctuation, NameAttribute), nil},
 			// Operator
@@ -880,7 +887,7 @@ func rakuRules() Rules {
 				nil,
 			},
 			// Capture markers
-			{`(?<!(?<!\\)\\)<\(|\)>`, Punctuation, nil},
+			{`(?<!(?<!\\)\\)<\(|\)>`, Operator, nil},
 			{`(?<!(?<!\\)\\)<`, Punctuation, Push("regex-property")},
 			{`(?<!(?<!\\)\\)"`, Punctuation, Push("double-quotes")},
 			{`(?<!(?<!\\)\\)(?:\]|\)|>)`, Punctuation, Pop(1)},
@@ -1104,11 +1111,11 @@ func rakuRules() Rules {
 			Include("qq"),
 		},
 		"<<": {
-			{`>>(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+|\[))`, Punctuation, Pop(1)},
+			{`>>(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+|\s+\[))`, Punctuation, Pop(1)},
 			Include("ww"),
 		},
 		"«": {
-			{`»(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+|\[))`, Punctuation, Pop(1)},
+			{`»(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+|\s+\[))`, Punctuation, Pop(1)},
 			Include("ww"),
 		},
 		"ww": {
@@ -1116,11 +1123,7 @@ func rakuRules() Rules {
 			Include("qq"),
 		},
 		"qq": {
-			{
-				`(?<!(?<!\\)\\)(?:` + variablePattern + `|` + globalVariablePattern + `)`,
-				NameVariable,
-				Push("qq-variable", "name-adverb"),
-			},
+			Include("qq-variable"),
 			// Function with adverb
 			{
 				`\w[\w:'-]+(?=:['\w-]+` +
@@ -1141,7 +1144,14 @@ func rakuRules() Rules {
 			Default(Pop(1)),
 		},
 		"qq-variable": {
-			{`(?:\[.*?\]|\{.*?\}|<<.*?>>|<.*?>|«*?»)+`, UsingSelf("root"), nil},
+			{
+				`(?<!(?<!\\)\\)(?:` + variablePattern + `|` + globalVariablePattern + `)`,
+				NameVariable,
+				Push("qq-variable-extras", "name-adverb"),
+			},
+		},
+		"qq-variable-extras": {
+			{`(?:\[.*?\]|\{.*?\}|<<.*?>>|<.*?>|«.*?»)+`, UsingSelf("root"), nil},
 			// Method
 			{
 				`(\.)([^(\s]+)(\([^"]*?\))`,
@@ -1161,7 +1171,7 @@ func rakuRules() Rules {
 		},
 		"Q-variable": {
 			Include("escape-qq"),
-			Include("variable"),
+			Include("qq-variable"),
 			{`.+?`, String, nil},
 		},
 		"closure": {
