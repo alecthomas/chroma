@@ -275,7 +275,7 @@ say q:ww｢｢some $variable 'some text' text｣｣;
 say q:w｢｢some $variable 'some text' text｣｣;
 say qq:w｢｢some $regex 'some text' text｣｣;
 say Q:c｢｢some $regex 'some text' { 2 + 1 } text｣｣;
-say q:a｢｢some @array 'some text' { 2 + 1 } text｣｣;
+say q:a｢｢some @array[2] 'some text' { 2 + 1 } text｣｣;
 say Q:a:c｢｢some @array 'some text' { 2 + 1 } text｣｣;
 Q[some \qq[$variable.method()] testing]
 Q:a:c[some \qq[$variable.method()] testing]
