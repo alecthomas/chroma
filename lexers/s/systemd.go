@@ -9,7 +9,8 @@ var SYSTEMD = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "SYSTEMD",
 		Aliases:   []string{"systemd"},
-		Filenames: []string{"*.service"},
+		// Suspects: man systemd.index | grep -E 'systemd\..*configuration'
+		Filenames: []string{"*.automount", "*.device", "*.dnssd", "*.link", "*.mount", "*.netdev", "*.network", "*.path", "*.scope", "*.service", "*.slice", "*.socket", "*.swap", "*.target", "*.timer"},
 		MimeTypes: []string{"text/plain"},
 	},
 	systemdRules,
