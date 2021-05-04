@@ -11,6 +11,17 @@ import (
 	"github.com/alecthomas/chroma"
 )
 
+var (
+	backupSuffixes = [...]string{
+		// Editor backups
+		"~", ".bak", ".old", ".orig",
+		// Debian and derivatives apt/dpkg
+		".dpkg-dist", ".dpkg-old",
+		// Red Hat and derivatives rpm
+		".rpmnew", ".rpmorig", ".rpmsave",
+	}
+)
+
 // Registry of Lexers.
 var Registry = struct {
 	Lexers  chroma.Lexers
@@ -93,6 +104,13 @@ func Match(filename string) chroma.Lexer {
 		for _, glob := range config.Filenames {
 			if fnmatch.Match(glob, filename, 0) {
 				matched = append(matched, lexer)
+			} else {
+				for _, suf := range &backupSuffixes {
+					if fnmatch.Match(glob+suf, filename, 0) {
+						matched = append(matched, lexer)
+						break
+					}
+				}
 			}
 		}
 	}
@@ -107,6 +125,13 @@ func Match(filename string) chroma.Lexer {
 		for _, glob := range config.AliasFilenames {
 			if fnmatch.Match(glob, filename, 0) {
 				matched = append(matched, lexer)
+			} else {
+				for _, suf := range &backupSuffixes {
+					if fnmatch.Match(glob+suf, filename, 0) {
+						matched = append(matched, lexer)
+						break
+					}
+				}
 			}
 		}
 	}
