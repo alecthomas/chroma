@@ -255,6 +255,24 @@ A command-line interface to Chroma is included. It can be installed with:
 go get -u github.com/alecthomas/chroma/cmd/chroma
 ```
 
+The CLI can be used as a preprocessor to colorise output of `less(1)`,
+see documentation for the `LESSOPEN` environment variable.
+
+The `--fail` flag can be used to suppress output and return with exit status
+1 to facilitate falling back to some other preprocessor in case chroma
+does not resolve a specific lexer to use for the given file. For example:
+
+```shell
+export LESSOPEN='| p() { chroma --fail "$1" || cat "$1"; }; p "%s"'
+```
+
+Replace `cat` with your favourite fallback preprocessor.
+
+When invoked as `.lessfilter`, the `--fail` flag is automatically turned
+on under the hood for easy integration with [lesspipe shipping with
+Debian and derivatives](https://manpages.debian.org/lesspipe#USER_DEFINED_FILTERS);
+for that setup the `chroma` executable can be just symlinked to `~/.lessfilter`.
+
 <a id="markdown-whats-missing-compared-to-pygments" name="whats-missing-compared-to-pygments"></a>
 ## What's missing compared to Pygments?
 

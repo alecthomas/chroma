@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/signal"
+	"path"
 	"runtime"
 	"runtime/pprof"
 	"sort"
@@ -43,6 +44,7 @@ command, for Go.
 		Trace      bool             `help:"Trace lexer states as they are traversed."`
 		Check      bool             `help:"Do not format, check for tokenisation errors instead."`
 		Filename   string           `help:"Filename to use for selecting a lexer when reading from stdin."`
+		Fail       bool             `help:"Exit silently with status 1 if no specific lexer was found."`
 
 		Lexer     string `help:"Lexer to use when formatting." default:"autodetect" short:"l" enum:"${lexers}"`
 		Style     string `help:"Style to use for formatting." default:"swapoff" short:"s" enum:"${styles}"`
@@ -104,6 +106,10 @@ func main() {
 			os.Exit(128 + 3)
 		}()
 		defer pprof.StopCPUProfile()
+	}
+	if path.Base(os.Args[0]) == ".lessfilter" {
+		// https://manpages.debian.org/lesspipe#USER_DEFINED_FILTERS
+		cli.Fail = true
 	}
 
 	var out io.Writer = os.Stdout
@@ -238,6 +244,9 @@ func listAll() {
 func lex(ctx *kong.Context, path string, contents string) chroma.Iterator {
 	lexer := selexer(path, contents)
 	if lexer == nil {
+		if cli.Fail {
+			ctx.Exit(1)
+		}
 		lexer = lexers.Fallback
 	}
 	if rel, ok := lexer.(*chroma.RegexLexer); ok {
