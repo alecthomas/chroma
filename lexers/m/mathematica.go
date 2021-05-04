@@ -10,7 +10,7 @@ var Mathematica = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "Mathematica",
 		Aliases:   []string{"mathematica", "mma", "nb"},
-		Filenames: []string{"*.nb", "*.cdf", "*.nbp", "*.ma"},
+		Filenames: []string{"*.cdf", "*.m", "*.ma", "*.mt", "*.mx", "*.nb", "*.nbp", "*.wl"},
 		MimeTypes: []string{"application/mathematica", "application/vnd.wolfram.mathematica", "application/vnd.wolfram.mathematica.package", "application/vnd.wolfram.cdf"},
 	},
 	mathematicaRules,
