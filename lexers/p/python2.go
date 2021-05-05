@@ -11,7 +11,7 @@ var Python2 = internal.Register(MustNewLazyLexer(
 		Name:      "Python 2",
 		Aliases:   []string{"python2", "py2"},
 		Filenames: []string{},
-		MimeTypes: []string{"text/x-python", "application/x-python"},
+		MimeTypes: []string{"text/x-python2", "application/x-python2"},
 	},
 	python2Rules,
 ))
