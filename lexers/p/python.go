@@ -68,7 +68,7 @@ func pythonRules() Rules {
 			{Words(``, `\b`, `__annotations__`, `__bases__`, `__class__`, `__closure__`, `__code__`, `__defaults__`, `__dict__`, `__doc__`, `__file__`, `__func__`, `__globals__`, `__kwdefaults__`, `__module__`, `__mro__`, `__name__`, `__objclass__`, `__qualname__`, `__self__`, `__slots__`, `__weakref__`), NameVariableMagic, nil},
 		},
 		"numbers": {
-                        {`(\d+\.\d*|\d*\.\d+)([eE][+-]?[0-9]+)?j?`, LiteralNumberFloat, nil},
+			{`(\d+\.\d*|\d*\.\d+)([eE][+-]?[0-9]+)?j?`, LiteralNumberFloat, nil},
 			{`\d+[eE][+-]?[0-9]+j?`, LiteralNumberFloat, nil},
 			{`0[0-7]+j?`, LiteralNumberOct, nil},
 			{`0[bB][01]+`, LiteralNumberBin, nil},
