@@ -22,25 +22,27 @@ type Rule struct {
 // An Emitter takes group matches and returns tokens.
 type Emitter interface {
 	// Emit tokens for the given regex groups.
-	Emit(groups []string, lexer Lexer) Iterator
+	Emit(groups []string, state *LexerState) Iterator
 }
 
 // EmitterFunc is a function that is an Emitter.
-type EmitterFunc func(groups []string, lexer Lexer) Iterator
+type EmitterFunc func(groups []string, state *LexerState) Iterator
 
 // Emit tokens for groups.
-func (e EmitterFunc) Emit(groups []string, lexer Lexer) Iterator { return e(groups, lexer) }
+func (e EmitterFunc) Emit(groups []string, state *LexerState) Iterator {
+	return e(groups, state)
+}
 
 // ByGroups emits a token for each matching group in the rule's regex.
 func ByGroups(emitters ...Emitter) Emitter {
-	return EmitterFunc(func(groups []string, lexer Lexer) Iterator {
+	return EmitterFunc(func(groups []string, state *LexerState) Iterator {
 		iterators := make([]Iterator, 0, len(groups)-1)
 		if len(emitters) != len(groups)-1 {
-			iterators = append(iterators, Error.Emit(groups, lexer))
+			iterators = append(iterators, Error.Emit(groups, state))
 			// panic(errors.Errorf("number of groups %q does not match number of emitters %v", groups, emitters))
 		} else {
 			for i, group := range groups[1:] {
-				iterators = append(iterators, emitters[i].Emit([]string{group}, lexer))
+				iterators = append(iterators, emitters[i].Emit([]string{group}, state))
 			}
 		}
 		return Concaterator(iterators...)
@@ -88,7 +90,7 @@ func ByGroups(emitters ...Emitter) Emitter {
 // Note: panic's if the number emitters does not equal the number of matched
 // groups in the regex.
 func UsingByGroup(sublexerGetFunc func(string) Lexer, sublexerNameGroup, codeGroup int, emitters ...Emitter) Emitter {
-	return EmitterFunc(func(groups []string, lexer Lexer) Iterator {
+	return EmitterFunc(func(groups []string, state *LexerState) Iterator {
 		// bounds check
 		if len(emitters) != len(groups)-1 {
 			panic("UsingByGroup expects number of emitters to be the same as len(groups)-1")
@@ -107,7 +109,7 @@ func UsingByGroup(sublexerGetFunc func(string) Lexer, sublexerNameGroup, codeGro
 					panic(err)
 				}
 			} else {
-				iterators[i] = emitters[i].Emit([]string{group}, lexer)
+				iterators[i] = emitters[i].Emit([]string{group}, state)
 			}
 		}
 
@@ -117,7 +119,7 @@ func UsingByGroup(sublexerGetFunc func(string) Lexer, sublexerNameGroup, codeGro
 
 // Using returns an Emitter that uses a given Lexer for parsing and emitting.
 func Using(lexer Lexer) Emitter {
-	return EmitterFunc(func(groups []string, _ Lexer) Iterator {
+	return EmitterFunc(func(groups []string, _ *LexerState) Iterator {
 		it, err := lexer.Tokenise(&TokeniseOptions{State: "root", Nested: true}, groups[0])
 		if err != nil {
 			panic(err)
@@ -127,9 +129,9 @@ func Using(lexer Lexer) Emitter {
 }
 
 // UsingSelf is like Using, but uses the current Lexer.
-func UsingSelf(state string) Emitter {
-	return EmitterFunc(func(groups []string, lexer Lexer) Iterator {
-		it, err := lexer.Tokenise(&TokeniseOptions{State: state, Nested: true}, groups[0])
+func UsingSelf(stateName string) Emitter {
+	return EmitterFunc(func(groups []string, state *LexerState) Iterator {
+		it, err := state.Lexer.Tokenise(&TokeniseOptions{State: stateName, Nested: true}, groups[0])
 		if err != nil {
 			panic(err)
 		}
@@ -329,7 +331,7 @@ func (l *LexerState) Iterator() Token { // nolint: gocognit
 			}
 		}
 		if rule.Type != nil {
-			l.iteratorStack = append(l.iteratorStack, rule.Type.Emit(l.Groups, l.Lexer))
+			l.iteratorStack = append(l.iteratorStack, rule.Type.Emit(l.Groups, l))
 		}
 	}
 	// Exhaust the IteratorStack, if any.

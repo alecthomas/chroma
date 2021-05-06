@@ -1319,7 +1319,7 @@ func makeRuleAndPushMaybe(config RuleMakingConfig) *CompiledRule {
 
 // Emitter for colon pairs, changes token state based on key and brackets
 func colonPair(tokenClass TokenType) Emitter {
-	return EmitterFunc(func(groups []string, lexer Lexer) Iterator {
+	return EmitterFunc(func(groups []string, state *LexerState) Iterator {
 		iterators := []Iterator{}
 		tokens := []Token{
 			{Punctuation, groups[1]},
@@ -1343,7 +1343,7 @@ func colonPair(tokenClass TokenType) Emitter {
 
 			// Use token state to Tokenise key
 			if keyTokenState != "" {
-				iterator, err := lexer.Tokenise(
+				iterator, err := state.Lexer.Tokenise(
 					&TokeniseOptions{
 						State:  keyTokenState,
 						Nested: true,
@@ -1374,7 +1374,7 @@ func colonPair(tokenClass TokenType) Emitter {
 
 		// Use token state to Tokenise value
 		if valueTokenState != "" {
-			iterator, err := lexer.Tokenise(
+			iterator, err := state.Lexer.Tokenise(
 				&TokeniseOptions{
 					State:  valueTokenState,
 					Nested: true,
@@ -1394,7 +1394,7 @@ func colonPair(tokenClass TokenType) Emitter {
 }
 
 // Emitter for quoting constructs, changes token state based on quote name and adverbs
-func quote(groups []string, lexer Lexer) Iterator {
+func quote(groups []string, state *LexerState) Iterator {
 	iterators := []Iterator{}
 	tokens := []Token{
 		{Keyword, groups[1]},
@@ -1443,7 +1443,7 @@ func quote(groups []string, lexer Lexer) Iterator {
 		tokenState = "Q"
 	}
 
-	iterator, err := lexer.Tokenise(
+	iterator, err := state.Lexer.Tokenise(
 		&TokeniseOptions{
 			State:  tokenState,
 			Nested: true,
@@ -1462,9 +1462,9 @@ func quote(groups []string, lexer Lexer) Iterator {
 }
 
 // Emitter for pod config, tokenises the properties with "colon-pair-attribute" state
-func podConfig(groups []string, lexer Lexer) Iterator {
+func podConfig(groups []string, state *LexerState) Iterator {
 	// Tokenise pod config
-	iterator, err := lexer.Tokenise(
+	iterator, err := state.Lexer.Tokenise(
 		&TokeniseOptions{
 			State:  "colon-pair-attribute",
 			Nested: true,
@@ -1478,7 +1478,7 @@ func podConfig(groups []string, lexer Lexer) Iterator {
 }
 
 // Emitter for pod code, tokenises the code based on the lang specified
-func podCode(groups []string, lexer Lexer) Iterator {
+func podCode(groups []string, state *LexerState) Iterator {
 	iterators := []Iterator{}
 	tokens := []Token{
 		{Keyword, groups[1]},
@@ -1496,7 +1496,7 @@ func podCode(groups []string, lexer Lexer) Iterator {
 	iterators = append(iterators, Literator(tokens[:4]...))
 
 	// Tokenise pod config
-	iterators = append(iterators, podConfig([]string{groups[5]}, lexer))
+	iterators = append(iterators, podConfig([]string{groups[5]}, state))
 
 	langMatch := regexp.MustCompile(`:lang\W+(\w+)`).FindStringSubmatch(groups[5])
 	var lang string
