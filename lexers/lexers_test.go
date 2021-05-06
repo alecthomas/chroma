@@ -44,49 +44,76 @@ func BenchmarkGet(b *testing.B) {
 	}
 }
 
+func FileTest(t *testing.T, lexer chroma.Lexer, actualFilename, expectedFilename string) {
+	t.Helper()
+	t.Run(lexer.Config().Name+"/"+actualFilename, func(t *testing.T) {
+		// Read and tokenise source text.
+		actualText, err := ioutil.ReadFile(actualFilename)
+		assert.NoError(t, err)
+		actual, err := chroma.Tokenise(lexer, nil, string(actualText))
+		assert.NoError(t, err)
+
+		if os.Getenv("RECORD") == "true" {
+			// Update the expected file with the generated output of this lexer
+			f, err := os.Create(expectedFilename)
+			defer f.Close() // nolint: gosec
+			assert.NoError(t, err)
+			assert.NoError(t, formatters.JSON.Format(f, nil, chroma.Literator(actual...)))
+		} else {
+			// Read expected JSON into token slice.
+			var expected []chroma.Token
+			r, err := os.Open(expectedFilename)
+			assert.NoError(t, err)
+			err = json.NewDecoder(r).Decode(&expected)
+			assert.NoError(t, err)
+
+			// Equal?
+			assert.Equal(t, expected, actual)
+		}
+	})
+}
+
 // Test source files are in the form <key>.<key> and validation data is in the form <key>.<key>.expected.
 func TestLexers(t *testing.T) {
 	files, err := ioutil.ReadDir("testdata")
 	assert.NoError(t, err)
 
 	for _, file := range files {
-		ext := filepath.Ext(file.Name())[1:]
-		if ext != "actual" {
-			continue
-		}
+		if file.IsDir() {
+			dirname := filepath.Join("testdata", file.Name())
+			lexer := lexers.Get(file.Name())
+			assert.NotNil(t, lexer)
 
-		base := strings.Split(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), ".")[0]
-		lexer := lexers.Get(base)
-		assert.NotNil(t, lexer)
-
-		filename := filepath.Join("testdata", file.Name())
-		expectedFilename := strings.TrimSuffix(filename, filepath.Ext(filename)) + ".expected"
-
-		lexer = chroma.Coalesce(lexer)
-		t.Run(lexer.Config().Name, func(t *testing.T) {
-			// Read and tokenise source text.
-			actualText, err := ioutil.ReadFile(filename)
-			assert.NoError(t, err)
-			actual, err := chroma.Tokenise(lexer, nil, string(actualText))
+			subFiles, err := ioutil.ReadDir(dirname)
 			assert.NoError(t, err)
 
-			if os.Getenv("RECORD") == "true" {
-				// Update the expected file with the generated output of this lexer
-				f, err := os.Create(expectedFilename)
-				defer f.Close() // nolint: gosec
-				assert.NoError(t, err)
-				assert.NoError(t, formatters.JSON.Format(f, nil, chroma.Literator(actual...)))
-			} else {
-				// Read expected JSON into token slice.
-				var expected []chroma.Token
-				r, err := os.Open(expectedFilename)
-				assert.NoError(t, err)
-				err = json.NewDecoder(r).Decode(&expected)
-				assert.NoError(t, err)
+			for _, subFile := range subFiles {
+				ext := filepath.Ext(subFile.Name())[1:]
+				if ext != "actual" {
+					continue
+				}
 
-				// Equal?
-				assert.Equal(t, expected, actual)
+				filename := filepath.Join(dirname, subFile.Name())
+				expectedFilename := strings.TrimSuffix(filename, filepath.Ext(filename)) + ".expected"
+
+				lexer = chroma.Coalesce(lexer)
+				FileTest(t, lexer, filename, expectedFilename)
 			}
-		})
+		} else {
+			ext := filepath.Ext(file.Name())[1:]
+			if ext != "actual" {
+				continue
+			}
+
+			base := strings.Split(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), ".")[0]
+			lexer := lexers.Get(base)
+			assert.NotNil(t, lexer)
+
+			filename := filepath.Join("testdata", file.Name())
+			expectedFilename := strings.TrimSuffix(filename, filepath.Ext(filename)) + ".expected"
+
+			lexer = chroma.Coalesce(lexer)
+			FileTest(t, lexer, filename, expectedFilename)
+		}
 	}
 }
