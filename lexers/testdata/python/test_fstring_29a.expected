@@ -1,0 +1,13 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"math"},
+  {"type":"Operator","value":"."},
+  {"type":"Name","value":"pi"},
+  {"type":"LiteralStringInterpol","value":"=!f:"},
+  {"type":"LiteralStringDouble","value":".2f"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"Text","value":"\n"}
+]

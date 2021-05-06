@@ -1,0 +1,1 @@
+S = (H @ beta - r).T @ inv(H @ V @ H.T) @ (H @ beta - r)

@@ -1,0 +1,21 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringDouble","value":"\"My name is "},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"name"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":", my age next year is "},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"age"},
+  {"type":"Operator","value":"+"},
+  {"type":"LiteralNumberInteger","value":"1"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":", my anniversary is "},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"anniversary"},
+  {"type":"LiteralStringInterpol","value":":"},
+  {"type":"LiteralStringDouble","value":"%A, %B %d, %Y"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":".\""},
+  {"type":"Text","value":"\n"}
+]

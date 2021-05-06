@@ -1,0 +1,18 @@
+[
+  {"type":"Keyword","value":"class"},
+  {"type":"Text","value":" "},
+  {"type":"NameClass","value":"TestClass"},
+  {"type":"Punctuation","value":"():"},
+  {"type":"Text","value":"\n    "},
+  {"type":"NameDecorator","value":"@classmethod"},
+  {"type":"Text","value":"\n    "},
+  {"type":"Keyword","value":"def"},
+  {"type":"Text","value":" "},
+  {"type":"NameFunction","value":"hello"},
+  {"type":"Punctuation","value":"("},
+  {"type":"NameBuiltinPseudo","value":"cls"},
+  {"type":"Punctuation","value":"):"},
+  {"type":"Text","value":"\n        "},
+  {"type":"Keyword","value":"pass"},
+  {"type":"Text","value":"\n"}
+]

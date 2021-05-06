@@ -1,0 +1,13 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringSingle","value":"'"},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"NameBuiltin","value":"chr"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralNumberInteger","value":"65"},
+  {"type":"Punctuation","value":")"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralStringInterpol","value":"= }"},
+  {"type":"LiteralStringSingle","value":"'"},
+  {"type":"Text","value":"\n"}
+]

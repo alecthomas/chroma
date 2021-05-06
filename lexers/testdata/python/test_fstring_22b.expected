@@ -1,0 +1,9 @@
+[
+  {"type":"LiteralStringAffix","value":"fr"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"header"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":":\\s+\""},
+  {"type":"Text","value":"\n"}
+]

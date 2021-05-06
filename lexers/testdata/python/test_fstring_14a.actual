@@ -1,0 +1,1 @@
+f'result: {value:{width}.{precision}}'

@@ -1,0 +1,12 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringSingle","value":"'''abc "},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"a"},
+  {"type":"Punctuation","value":"["},
+  {"type":"LiteralStringSingle","value":"'x'"},
+  {"type":"Punctuation","value":"]"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringSingle","value":" def'''"},
+  {"type":"Text","value":"\n"}
+]
