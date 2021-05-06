@@ -258,6 +258,8 @@ type LexerState struct {
 	Rule  int
 	// Group matches.
 	Groups []string
+	// Named Group matches.
+	NamedGroups map[string]string
 	// Custum context for mutators.
 	MutatorContext map[interface{}]interface{}
 	iteratorStack  []Iterator
@@ -301,7 +303,7 @@ func (l *LexerState) Iterator() Token { // nolint: gocognit
 		if !ok {
 			panic("unknown state " + l.State)
 		}
-		ruleIndex, rule, groups := matchRules(l.Text, l.Pos, selectedRule)
+		ruleIndex, rule, groups, namedGroups := matchRules(l.Text, l.Pos, selectedRule)
 		// No match.
 		if groups == nil {
 			// From Pygments :\
@@ -319,6 +321,7 @@ func (l *LexerState) Iterator() Token { // nolint: gocognit
 		}
 		l.Rule = ruleIndex
 		l.Groups = groups
+		l.NamedGroups = namedGroups
 		l.Pos += utf8.RuneCountInString(groups[0])
 		if rule.Mutator != nil {
 			if err := rule.Mutator.Mutate(l); err != nil {
@@ -490,18 +493,22 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 	return state.Iterator, nil
 }
 
-func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule, []string) {
+func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule, []string, map[string]string) {
 	for i, rule := range rules {
 		match, err := rule.Regexp.FindRunesMatchStartingAt(text, pos)
 		if match != nil && err == nil && match.Index == pos {
 			groups := []string{}
+			namedGroups := map[string]string{}
 			for _, g := range match.Groups() {
+				if g.Name != `` {
+					namedGroups[g.Name] = g.String()
+				}
 				groups = append(groups, g.String())
 			}
-			return i, rule, groups
+			return i, rule, groups, namedGroups
 		}
 	}
-	return 0, &CompiledRule{}, nil
+	return 0, &CompiledRule{}, nil, nil
 }
 
 // replace \r and \r\n with \n
