@@ -1,0 +1,16 @@
+[
+  {"type":"Name","value":"message"},
+  {"type":"Operator","value":"."},
+  {"type":"Name","value":"append"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringSingle","value":"' [line "},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"lineno"},
+  {"type":"LiteralStringInterpol","value":":"},
+  {"type":"LiteralStringSingle","value":"2d"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringSingle","value":"]'"},
+  {"type":"Punctuation","value":")"},
+  {"type":"Text","value":"\n"}
+]

@@ -1,0 +1,20 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Punctuation","value":"("},
+  {"type":"Keyword","value":"lambda"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"x"},
+  {"type":"Punctuation","value":":"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"x"},
+  {"type":"Operator","value":"*"},
+  {"type":"LiteralNumberInteger","value":"2"},
+  {"type":"Punctuation","value":")("},
+  {"type":"LiteralNumberInteger","value":"3"},
+  {"type":"Punctuation","value":")"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"Text","value":"\n"}
+]

@@ -1,0 +1,14 @@
+[
+  {"type":"LiteralNumberInteger","value":"1_000_000"},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralNumberFloat","value":"1_000.000_001"},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralNumberFloat","value":"1_000e1_000j"},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralNumberHex","value":"0xCAFE_F00D"},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralNumberBin","value":"0b_0011_1111_0100_1110"},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralNumberOct","value":"0o_777_123"},
+  {"type":"Text","value":"\n"}
+]

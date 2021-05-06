@@ -1,0 +1,9 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringDouble","value":"\"He said his name is "},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"name"},
+  {"type":"LiteralStringInterpol","value":"!r}"},
+  {"type":"LiteralStringDouble","value":".\""},
+  {"type":"Text","value":"\n"}
+]

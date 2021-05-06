@@ -1,0 +1,1 @@
+f"input={value:#06x}"

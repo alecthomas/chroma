@@ -1,0 +1,14 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringSingle","value":"'"},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"inner"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringSingle","value":"'"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"Text","value":"\n"}
+]

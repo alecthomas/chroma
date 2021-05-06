@@ -1,0 +1,11 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringSingle","value":"'*"},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"n"},
+  {"type":"LiteralStringInterpol","value":"=!r:"},
+  {"type":"LiteralStringSingle","value":"30"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringSingle","value":"*'"},
+  {"type":"Text","value":"\n"}
+]

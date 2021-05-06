@@ -1,0 +1,4 @@
+class TestClass():
+    @classmethod
+    def hello(cls):
+        pass

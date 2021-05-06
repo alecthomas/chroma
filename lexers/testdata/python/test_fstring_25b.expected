@@ -1,0 +1,22 @@
+[
+  {"type":"Name","value":"extra"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"extra"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":",waiters:"},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"NameBuiltin","value":"len"},
+  {"type":"Punctuation","value":"("},
+  {"type":"NameBuiltinPseudo","value":"self"},
+  {"type":"Operator","value":"."},
+  {"type":"Name","value":"_waiters"},
+  {"type":"Punctuation","value":")"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"Text","value":"\n"}
+]

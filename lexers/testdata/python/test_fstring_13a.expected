@@ -1,0 +1,13 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringSingle","value":"'''"},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"d"},
+  {"type":"Punctuation","value":"["},
+  {"type":"LiteralNumberInteger","value":"0"},
+  {"type":"Text","value":"\n"},
+  {"type":"Punctuation","value":"]"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringSingle","value":"'''"},
+  {"type":"Text","value":"\n"}
+]

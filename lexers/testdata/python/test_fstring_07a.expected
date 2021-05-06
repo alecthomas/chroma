@@ -1,0 +1,15 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringSingle","value":"'"},
+  {"type":"LiteralStringEscape","value":"{{"},
+  {"type":"LiteralStringSingle","value":" "},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"LiteralNumberInteger","value":"4"},
+  {"type":"Operator","value":"*"},
+  {"type":"LiteralNumberInteger","value":"10"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringSingle","value":" "},
+  {"type":"LiteralStringEscape","value":"}}"},
+  {"type":"LiteralStringSingle","value":"'"},
+  {"type":"Text","value":"\n"}
+]

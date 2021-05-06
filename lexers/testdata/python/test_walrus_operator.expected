@@ -1,0 +1,17 @@
+[
+  {"type":"Keyword","value":"if"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"("},
+  {"type":"Name","value":"a"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":":="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralNumberInteger","value":"2"},
+  {"type":"Punctuation","value":")"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"\u003e"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralNumberInteger","value":"4"},
+  {"type":"Punctuation","value":":"},
+  {"type":"Text","value":"\n"}
+]

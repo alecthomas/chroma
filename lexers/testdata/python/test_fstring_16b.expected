@@ -1,0 +1,16 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"i"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":":"},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"d"},
+  {"type":"Punctuation","value":"["},
+  {"type":"Name","value":"i"},
+  {"type":"Punctuation","value":"]"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"Text","value":"\n"}
+]

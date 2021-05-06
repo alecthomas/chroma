@@ -1,0 +1,1 @@
+f"mapping is { {a:b for (a, b) in ((1, 2), (3, 4))} }"

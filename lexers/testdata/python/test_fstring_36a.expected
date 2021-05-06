@@ -1,0 +1,13 @@
+[
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringSingle","value":"'''"},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Name","value":"foo"},
+  {"type":"Text","value":"\n      "},
+  {"type":"LiteralStringInterpol","value":"= !s:"},
+  {"type":"LiteralStringSingle","value":"20"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringSingle","value":"'''"},
+  {"type":"Text","value":"\n"}
+]

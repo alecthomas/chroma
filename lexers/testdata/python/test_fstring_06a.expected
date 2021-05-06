@@ -1,0 +1,10 @@
+[
+  {"type":"LiteralStringAffix","value":"f"},
+  {"type":"LiteralStringSingle","value":"'"},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"Error","value":"\\"},
+  {"type":"LiteralStringSingle","value":"'quoted string"},
+  {"type":"LiteralStringEscape","value":"\\'"},
+  {"type":"LiteralStringSingle","value":"}'"},
+  {"type":"Text","value":"\n"}
+]
