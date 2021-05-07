@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -141,6 +142,9 @@ func UsingSelf(stateName string) Emitter {
 
 // Words creates a regex that matches any of the given literal words.
 func Words(prefix, suffix string, words ...string) string {
+	sort.Slice(words, func(i, j int) bool {
+		return len(words[j]) < len(words[i])
+	})
 	for i, word := range words {
 		words[i] = regexp.QuoteMeta(word)
 	}
