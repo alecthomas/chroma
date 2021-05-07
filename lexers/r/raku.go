@@ -2,7 +2,6 @@ package r
 
 import (
 	"regexp"
-	"sort"
 	"strings"
 	"unicode/utf8"
 
@@ -70,7 +69,7 @@ func rakuRules() Rules {
 		`dynamic-scope`, `built`, `temp`,
 	}
 
-	keywordsPattern := Words(`(?<!['\w:-])`, `(?!['\w:-])`, sortWords(keywords)...)
+	keywordsPattern := Words(`(?<!['\w:-])`, `(?!['\w:-])`, keywords...)
 
 	wordOperators := []string{
 		`X`, `Z`, `R`, `after`, `and`, `andthen`, `before`, `cmp`, `div`, `eq`, `eqv`, `extra`, `ge`,
@@ -80,7 +79,7 @@ func rakuRules() Rules {
 		`(cont)`, `(<)`, `(<=)`, `(>)`, `(>=)`, `minmax`, `notandthen`, `S`,
 	}
 
-	wordOperatorsPattern := Words(`(?<=^|\b|\s)`, `(?=$|\b|\s)`, sortWords(wordOperators)...)
+	wordOperatorsPattern := Words(`(?<=^|\b|\s)`, `(?=$|\b|\s)`, wordOperators...)
 
 	operators := []string{
 		`++`, `--`, `-`, `**`, `!`, `+`, `~`, `?`, `+^`, `~^`, `?^`, `^`, `*`, `/`, `%`, `%%`, `+&`,
@@ -93,7 +92,7 @@ func rakuRules() Rules {
 		`⊃`, `⊅`, `⊇`, `⊉`, `:`, `!!!`, `???`, `¯`, `×`, `÷`, `−`, `⁺`, `⁻`,
 	}
 
-	operatorsPattern := Words(``, ``, sortWords(operators)...)
+	operatorsPattern := Words(``, ``, operators...)
 
 	builtinTypes := []string{
 		`False`, `True`, `Order`, `More`, `Less`, `Same`, `Any`, `Array`, `Associative`, `AST`,
@@ -142,7 +141,7 @@ func rakuRules() Rules {
 		`strict`, `trace`, `variables`,
 	}
 
-	builtinTypesPattern := Words(`(?<!['\w:-])`, `(?::[_UD])?(?!['\w:-])`, sortWords(builtinTypes)...)
+	builtinTypesPattern := Words(`(?<!['\w:-])`, `(?::[_UD])?(?!['\w:-])`, builtinTypes...)
 
 	builtinRoutines := []string{
 		`ACCEPTS`, `abs`, `abs2rel`, `absolute`, `accept`, `accepts_type`, `accessed`, `acos`,
@@ -266,7 +265,7 @@ func rakuRules() Rules {
 		`yyyy-mm-dd`, `z`, `zip`, `zip-latest`, `HOW`, `s`, `DEPRECATED`, `trait_mod`,
 	}
 
-	builtinRoutinesPattern := Words(`(?<!['\w:-])`, `(?!['\w-])`, sortWords(builtinRoutines)...)
+	builtinRoutinesPattern := Words(`(?<!['\w:-])`, `(?!['\w-])`, builtinRoutines...)
 
 	// A map of opening and closing brackets
 	brackets := map[rune]rune{
@@ -1195,15 +1194,6 @@ func joinRuneMap(m map[rune]rune) string {
 	}
 
 	return string(runes)
-}
-
-// Sorts words in descending order
-func sortWords(words []string) []string {
-	sort.Slice(words, func(i, j int) bool {
-		return len([]rune(words[i])) > len([]rune(words[j]))
-	})
-
-	return words
 }
 
 // Finds the index of substring in the string starting at position n
