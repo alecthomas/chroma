@@ -504,11 +504,9 @@ func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule
 		match, err := rule.Regexp.FindRunesMatchStartingAt(text, pos)
 		if match != nil && err == nil && match.Index == pos {
 			groups := []string{}
-			namedGroups := map[string]string{}
+			namedGroups := make(map[string]string)
 			for _, g := range match.Groups() {
-				if g.Name != `` {
-					namedGroups[g.Name] = g.String()
-				}
+				namedGroups[g.Name] = g.String()
 				groups = append(groups, g.String())
 			}
 			return i, rule, groups, namedGroups
