@@ -160,17 +160,66 @@ func main() {
 		configureHTMLFormatter(ctx)
 	}
 	if len(cli.Files) == 0 {
-		contents, err := ioutil.ReadAll(os.Stdin)
+		data, err := ioutil.ReadAll(os.Stdin)
 		ctx.FatalIfErrorf(err)
-		format(ctx, w, style, lex(ctx, cli.Filename, string(contents)))
+
+		contents := string(data)
+		lexer := selexer(cli.Filename, contents)
+		if lexer == nil {
+			lexer = lexers.Fallback
+		}
+		format(ctx, w, style, lex(ctx, lexer, contents))
 	} else {
 		for _, filename := range cli.Files {
-			contents, err := ioutil.ReadFile(filename)
-			ctx.FatalIfErrorf(err)
 			if cli.Check {
-				check(filename, lex(ctx, filename, string(contents)))
+				data, err := ioutil.ReadFile(filename)
+				ctx.FatalIfErrorf(err)
+				contents := string(data)
+				lexer := selexer(filename, contents)
+				if lexer == nil {
+					lexer = lexers.Fallback
+				}
+				check(filename, lex(ctx, lexer, contents))
 			} else {
-				format(ctx, w, style, lex(ctx, filename, string(contents)))
+				fi, err := os.Stat(filename)
+				ctx.FatalIfErrorf(err)
+
+				var contents string
+				var lexer chroma.Lexer
+				peekSize := 1024
+				if !cli.Fail || peekSize > int(fi.Size()) {
+					data, err := ioutil.ReadFile(filename)
+					ctx.FatalIfErrorf(err)
+					contents = string(data)
+					lexer = selexer(filename, contents)
+					if lexer == nil {
+						lexer = lexers.Fallback
+					}
+				} else {
+					file, err := os.Open(filename)
+					ctx.FatalIfErrorf(err)
+
+					data := make([]byte, peekSize)
+					_, err = io.ReadFull(file, data)
+					ctx.FatalIfErrorf(err)
+
+					lexer = selexer(filename, string(data))
+					if lexer == nil {
+						ctx.Exit(1)
+					}
+
+					ndata := make([]byte, int(fi.Size()))
+					copy(ndata, data)
+					_, err = io.ReadFull(file, ndata[len(data):])
+					ctx.FatalIfErrorf(err)
+
+					err = file.Close()
+					ctx.FatalIfErrorf(err)
+
+					contents = string(ndata)
+				}
+
+				format(ctx, w, style, lex(ctx, lexer, contents))
 			}
 		}
 	}
@@ -241,14 +290,7 @@ func listAll() {
 	fmt.Println()
 }
 
-func lex(ctx *kong.Context, path string, contents string) chroma.Iterator {
-	lexer := selexer(path, contents)
-	if lexer == nil {
-		if cli.Fail {
-			ctx.Exit(1)
-		}
-		lexer = lexers.Fallback
-	}
+func lex(ctx *kong.Context, lexer chroma.Lexer, contents string) chroma.Iterator {
 	if rel, ok := lexer.(*chroma.RegexLexer); ok {
 		rel.Trace(cli.Trace)
 	}
