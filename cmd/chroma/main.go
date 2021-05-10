@@ -82,6 +82,46 @@ type nopFlushableWriter struct{ io.Writer }
 
 func (n *nopFlushableWriter) Flush() error { return nil }
 
+// prepareLenient prepares contents and lexer for input, using fallback lexer if no specific one is available for it.
+func prepareLenient(ctx *kong.Context, r io.Reader, filename string) (string, chroma.Lexer) {
+	data, err := ioutil.ReadAll(r)
+	ctx.FatalIfErrorf(err)
+
+	contents := string(data)
+	lexer := selexer(filename, contents)
+	if lexer == nil {
+		lexer = lexers.Fallback
+	}
+
+	return contents, lexer
+}
+
+// prepareSpecific prepares contents and lexer for input, exiting if there is no specific lexer available for it.
+// Input is consumed only up to peekSize for lexer selection.
+func prepareSpecific(ctx *kong.Context, r io.Reader, filename string, peekSize, fullSize int) (string, chroma.Lexer) {
+	data := make([]byte, peekSize)
+	n, err := io.ReadFull(r, data)
+	if err != nil && !errors.Is(err, io.ErrUnexpectedEOF) {
+		ctx.FatalIfErrorf(err)
+	}
+
+	lexer := selexer(filename, string(data[:n]))
+	if lexer == nil {
+		ctx.Exit(1)
+	}
+
+	if n < peekSize {
+		return string(data[:n]), lexer
+	}
+
+	ndata := make([]byte, fullSize)
+	copy(ndata, data[:n])
+	_, err = io.ReadFull(r, ndata[n:])
+	ctx.FatalIfErrorf(err)
+
+	return string(ndata), lexer
+}
+
 func main() {
 	ctx := kong.Parse(&cli, kong.Description(description), kong.Vars{
 		"version":    fmt.Sprintf("%s-%s-%s", version, commit, date),
@@ -160,67 +200,31 @@ func main() {
 		configureHTMLFormatter(ctx)
 	}
 	if len(cli.Files) == 0 {
-		data, err := ioutil.ReadAll(os.Stdin)
-		ctx.FatalIfErrorf(err)
-
-		contents := string(data)
-		lexer := selexer(cli.Filename, contents)
-		if lexer == nil {
-			lexer = lexers.Fallback
-		}
+		contents, lexer := prepareLenient(ctx, os.Stdin, cli.Filename)
 		format(ctx, w, style, lex(ctx, lexer, contents))
 	} else {
 		for _, filename := range cli.Files {
+			file, err := os.Open(filename)
+			ctx.FatalIfErrorf(err)
+
 			if cli.Check {
-				data, err := ioutil.ReadFile(filename)
-				ctx.FatalIfErrorf(err)
-				contents := string(data)
-				lexer := selexer(filename, contents)
-				if lexer == nil {
-					lexer = lexers.Fallback
-				}
+				contents, lexer := prepareLenient(ctx, file, filename)
 				check(filename, lex(ctx, lexer, contents))
 			} else {
-				fi, err := os.Stat(filename)
-				ctx.FatalIfErrorf(err)
-
 				var contents string
 				var lexer chroma.Lexer
-				peekSize := 1024
-				if !cli.Fail || peekSize > int(fi.Size()) {
-					data, err := ioutil.ReadFile(filename)
+				if cli.Fail {
+					fi, err := file.Stat()
 					ctx.FatalIfErrorf(err)
-					contents = string(data)
-					lexer = selexer(filename, contents)
-					if lexer == nil {
-						lexer = lexers.Fallback
-					}
+					contents, lexer = prepareSpecific(ctx, file, filename, 1024, int(fi.Size()))
 				} else {
-					file, err := os.Open(filename)
-					ctx.FatalIfErrorf(err)
-
-					data := make([]byte, peekSize)
-					_, err = io.ReadFull(file, data)
-					ctx.FatalIfErrorf(err)
-
-					lexer = selexer(filename, string(data))
-					if lexer == nil {
-						ctx.Exit(1)
-					}
-
-					ndata := make([]byte, int(fi.Size()))
-					copy(ndata, data)
-					_, err = io.ReadFull(file, ndata[len(data):])
-					ctx.FatalIfErrorf(err)
-
-					err = file.Close()
-					ctx.FatalIfErrorf(err)
-
-					contents = string(ndata)
+					contents, lexer = prepareLenient(ctx, file, filename)
 				}
-
 				format(ctx, w, style, lex(ctx, lexer, contents))
 			}
+
+			err = file.Close()
+			ctx.FatalIfErrorf(err)
 		}
 	}
 }
