@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -97,7 +98,7 @@ func prepareLenient(ctx *kong.Context, r io.Reader, filename string) (string, ch
 }
 
 // prepareSpecific prepares contents and lexer for input, exiting if there is no specific lexer available for it.
-// Input is consumed only up to peekSize for lexer selection.
+// Input is consumed only up to peekSize for lexer selection. With fullSize -1, consume r until EOF.
 func prepareSpecific(ctx *kong.Context, r io.Reader, filename string, peekSize, fullSize int) (string, chroma.Lexer) {
 	data := make([]byte, peekSize)
 	n, err := io.ReadFull(r, data)
@@ -113,11 +114,19 @@ func prepareSpecific(ctx *kong.Context, r io.Reader, filename string, peekSize, 
 	if n < peekSize {
 		return string(data[:n]), lexer
 	}
-
-	ndata := make([]byte, fullSize)
-	copy(ndata, data[:n])
-	_, err = io.ReadFull(r, ndata[n:])
-	ctx.FatalIfErrorf(err)
+	var ndata []byte
+	if fullSize == -1 {
+		rest, err := io.ReadAll(r)
+		ctx.FatalIfErrorf(err)
+		ndata = make([]byte, n + len(rest))
+		copy(ndata, data[:n])
+		copy(ndata[n:], rest)
+	} else {
+		ndata = make([]byte, fullSize)
+		copy(ndata, data[:n])
+		_, err = io.ReadFull(r, ndata[n:])
+		ctx.FatalIfErrorf(err)
+	}
 
 	return string(ndata), lexer
 }
@@ -200,7 +209,13 @@ func main() {
 		configureHTMLFormatter(ctx)
 	}
 	if len(cli.Files) == 0 {
-		contents, lexer := prepareLenient(ctx, os.Stdin, cli.Filename)
+		var contents string
+		var lexer chroma.Lexer
+		if cli.Fail {
+			contents, lexer = prepareSpecific(ctx, os.Stdin, cli.Filename, 1024, -1)
+		} else {
+			contents, lexer = prepareLenient(ctx, os.Stdin, cli.Filename)
+		}
 		format(ctx, w, style, lex(ctx, lexer, contents))
 	} else {
 		for _, filename := range cli.Files {
