@@ -118,7 +118,7 @@ func prepareSpecific(ctx *kong.Context, r io.Reader, filename string, peekSize, 
 	if fullSize == -1 {
 		rest, err := io.ReadAll(r)
 		ctx.FatalIfErrorf(err)
-		ndata = make([]byte, n + len(rest))
+		ndata = make([]byte, n+len(rest))
 		copy(ndata, data[:n])
 		copy(ndata[n:], rest)
 	} else {
