@@ -17,7 +17,7 @@ var DoomOne = Register(chroma.MustNewStyle("doom-one", chroma.StyleEntries{
 	chroma.OperatorWord:         "bold #b756ff",
 	chroma.Punctuation:          "#b0c4de",
 	chroma.Name:                 "#c1abea",
-	chroma.NameAttribute:        "#cebc3a",
+	chroma.NameAttribute:        "#b3d23c",
 	chroma.NameBuiltin:          "#ef8383",
 	chroma.NameClass:            "#76a9f9",
 	chroma.NameConstant:         "bold #b756ff",
