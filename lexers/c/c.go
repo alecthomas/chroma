@@ -10,8 +10,8 @@ var C = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "C",
 		Aliases:   []string{"c"},
-		Filenames: []string{"*.c", "*.h", "*.idc"},
-		MimeTypes: []string{"text/x-chdr", "text/x-csrc"},
+		Filenames: []string{"*.c", "*.h", "*.idc", "*.x[bp]m"},
+		MimeTypes: []string{"text/x-chdr", "text/x-csrc", "image/x-xbitmap", "image/x-xpixmap"},
 		EnsureNL:  true,
 	},
 	cRules,
