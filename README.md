@@ -212,8 +212,8 @@ the following:
 ```sh
 python3 _tools/pygments2chroma.py \
   pygments.lexers.jvm.KotlinLexer \
-  > lexers/kotlin.go \
-  && gofmt -s -w lexers/kotlin.go
+  > lexers/k/kotlin.go \
+  && gofmt -s -w lexers/k/kotlin.go
 ```
 
 See notes in [pygments-lexers.txt](https://github.com/alecthomas/chroma/blob/master/pygments-lexers.txt)

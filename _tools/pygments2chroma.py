@@ -12,7 +12,7 @@ from pygments.token import _TokenType
 
 
 TEMPLATE = r'''
-package lexers
+package {{package}}
 
 import (
     . "github.com/alecthomas/chroma" // nolint
@@ -185,6 +185,7 @@ def main():
     assert issubclass(lexer_cls, pygments_lexer.RegexLexer), 'can only translate from RegexLexer'
 
     print(pystache.render(TEMPLATE, TemplateView(
+        package=lexer_cls.name.lower()[0],
         name=lexer_cls.name,
         regex_flags=lexer_cls.flags,
         upper_name=to_camel_case(lexer_cls.name),
