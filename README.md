@@ -210,10 +210,10 @@ using the included Python 3 script `pygments2chroma.py`. I use something like
 the following:
 
 ```sh
-python3 ~/Projects/chroma/_tools/pygments2chroma.py \
+python3 _tools/pygments2chroma.py \
   pygments.lexers.jvm.KotlinLexer \
-  > ~/Projects/chroma/lexers/kotlin.go \
-  && gofmt -s -w ~/Projects/chroma/lexers/*.go
+  > lexers/k/kotlin.go \
+  && gofmt -s -w lexers/k/kotlin.go
 ```
 
 See notes in [pygments-lexers.txt](https://github.com/alecthomas/chroma/blob/master/pygments-lexers.txt)
