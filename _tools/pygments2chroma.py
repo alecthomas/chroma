@@ -15,38 +15,40 @@ TEMPLATE = r'''
 package {{package}}
 
 import (
-    . "github.com/alecthomas/chroma" // nolint
-    "github.com/alecthomas/chroma/lexers/internal"
+	. "github.com/alecthomas/chroma" // nolint
+	"github.com/alecthomas/chroma/lexers/internal"
 )
 
 // {{upper_name}} lexer.
 var {{upper_name}} = internal.Register(MustNewLazyLexer(
-    &Config{
-        Name:      "{{name}}",
-        Aliases:   []string{ {{#aliases}}"{{.}}", {{/aliases}} },
-        Filenames: []string{ {{#filenames}}"{{.}}", {{/filenames}} },
-        MimeTypes: []string{ {{#mimetypes}}"{{.}}", {{/mimetypes}} },
+	&Config{
+		Name:      "{{name}}",
+		{{=<% %>=}}
+		Aliases:   []string{<%#aliases%>"<%.%>", <%/aliases%>},
+		Filenames: []string{<%#filenames%>"<%.%>", <%/filenames%>},
+		MimeTypes: []string{<%#mimetypes%>"<%.%>", <%/mimetypes%>},
+		<%={{ }}=%>
 {{#re_not_multiline}}
-        NotMultiline: true,
+		NotMultiline: true,
 {{/re_not_multiline}}
 {{#re_dotall}}
-        DotAll: true,
+		DotAll: true,
 {{/re_dotall}}
 {{#re_ignorecase}}
-        CaseInsensitive: true,
+		CaseInsensitive: true,
 {{/re_ignorecase}}
-    },
-    func() Rules {
-        return Rules{
+	},
+	func() Rules {
+		return Rules{
 {{#tokens}}
-            "{{state}}": {
-                {{#rules}}
-                {{{.}}},
-                {{/rules}}
-            },
+			"{{state}}": {
+				{{#rules}}
+				{{{.}}},
+				{{/rules}}
+			},
 {{/tokens}}
-        }
-    },
+		}
+	},
 ))
 '''
 
@@ -150,7 +152,7 @@ def translate_rules(rules):
                 modifier = 'Push("%s")' % '", "'.join(rule[2])
             else:
                 raise ValueError('unsupported modifier %r' % (rule[2],))
-            out.append('{{ {}, {}, {} }}'.format(regex, emitter, modifier))
+            out.append('{{{}, {}, {}}}'.format(regex, emitter, modifier))
         elif isinstance(rule, pygments_lexer.include):
             out.append('Include("{}")'.format(rule))
         elif isinstance(rule, pygments_lexer.default):
