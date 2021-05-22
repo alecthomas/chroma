@@ -12,7 +12,6 @@ var HrDark = Register(chroma.MustNewStyle("hrdark", chroma.StyleEntries{
 	chroma.Name : "#58a1dd",
 	chroma.Literal : "#a6be9d",
 	chroma.Operator : "#ff636f",
-	chroma.Error : "",
 	chroma.Background : "#1d2432",
 	chroma.Other : "#fff",
 })) 
