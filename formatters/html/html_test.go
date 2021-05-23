@@ -202,7 +202,7 @@ func TestWithPreWrapper(t *testing.T) {
 
 	t.Run("Regular", func(t *testing.T) {
 		s := format(New(WithClasses(true)))
-		assert.Equal(t, s, `<pre class="chroma"><span class="nb">echo</span> FOO</pre>`)
+		assert.Equal(t, s, `<pre tabindex="0" class="chroma"><span class="nb">echo</span> FOO</pre>`)
 	})
 
 	t.Run("PreventSurroundingPre", func(t *testing.T) {
@@ -246,7 +246,7 @@ func TestReconfigureOptions(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 
 	assert.NoError(t, err)
-	assert.Equal(t, `<pre class="chroma"><span class="nb">echo</span> FOO</pre>`, buf.String())
+	assert.Equal(t, `<pre tabindex="0" class="chroma"><span class="nb">echo</span> FOO</pre>`, buf.String())
 }
 
 func TestWriteCssWithAllClasses(t *testing.T) {
