@@ -38,14 +38,15 @@ command, for Go.
 `
 
 	cli struct {
-		Version    kong.VersionFlag `help:"Show version."`
-		Profile    string           `hidden:"" help:"Enable profiling to file."`
-		List       bool             `help:"List lexers, styles and formatters."`
-		Unbuffered bool             `help:"Do not buffer output."`
-		Trace      bool             `help:"Trace lexer states as they are traversed."`
-		Check      bool             `help:"Do not format, check for tokenisation errors instead."`
-		Filename   string           `help:"Filename to use for selecting a lexer when reading from stdin."`
-		Fail       bool             `help:"Exit silently with status 1 if no specific lexer was found."`
+		Version        kong.VersionFlag `help:"Show version."`
+		Profile        string           `hidden:"" help:"Enable profiling to file."`
+		List           bool             `help:"List lexers, styles and formatters."`
+		Unbuffered     bool             `help:"Do not buffer output."`
+		Trace          bool             `help:"Trace lexer states as they are traversed."`
+		Check          bool             `help:"Do not format, check for tokenisation errors instead."`
+		Filename       string           `help:"Filename to use for selecting a lexer when reading from stdin."`
+		Fail           bool             `help:"Exit silently with status 1 if no specific lexer was found."`
+		KeepLineSplits bool             `help:"Do not coalesce tokens at line splits."`
 
 		Lexer     string `help:"Lexer to use when formatting." default:"autodetect" short:"l" enum:"${lexers}"`
 		Style     string `help:"Style to use for formatting." default:"swapoff" short:"s" enum:"${styles}"`
@@ -159,6 +160,7 @@ func main() {
 	if path.Base(os.Args[0]) == ".lessfilter" {
 		// https://manpages.debian.org/lesspipe#USER_DEFINED_FILTERS
 		cli.Fail = true
+		cli.KeepLineSplits = true
 	}
 
 	var out io.Writer = os.Stdout
@@ -313,7 +315,7 @@ func lex(ctx *kong.Context, lexer chroma.Lexer, contents string) chroma.Iterator
 	if rel, ok := lexer.(*chroma.RegexLexer); ok {
 		rel.Trace(cli.Trace)
 	}
-	lexer = chroma.Coalesce(lexer)
+	lexer = chroma.Coalesce(lexer, cli.KeepLineSplits)
 	it, err := lexer.Tokenise(nil, contents)
 	ctx.FatalIfErrorf(err)
 	return it

@@ -138,7 +138,7 @@ mitigate this, you can use the coalescing lexer to coalesce runs of identical
 token types into a single token:
 
 ```go
-lexer = chroma.Coalesce(lexer)
+lexer = chroma.Coalesce(lexer, false)
 ```
 
 <a id="markdown-formatting-the-output" name="formatting-the-output"></a>
@@ -260,15 +260,22 @@ see documentation for the `LESSOPEN` environment variable.
 
 The `--fail` flag can be used to suppress output and return with exit status
 1 to facilitate falling back to some other preprocessor in case chroma
-does not resolve a specific lexer to use for the given file. For example:
+does not resolve a specific lexer to use for the given file.
+
+The `--keep-line-splits` option can be used to avoid coalescing consecutive
+tokens of the same type split at newlines. The default is to coalesce them,
+but that confuses `less` and may result in prematurely stopping colorise runs
+that should span multiple lines.
+
+For example:
 
 ```shell
-export LESSOPEN='| p() { chroma --fail "$1" || cat "$1"; }; p "%s"'
+export LESSOPEN='| p() { chroma --fail --keep-line-splits "$1" || cat "$1"; }; p "%s"'
 ```
 
 Replace `cat` with your favourite fallback preprocessor.
 
-When invoked as `.lessfilter`, the `--fail` flag is automatically turned
+When invoked as `.lessfilter`, the `--fail` and `--keep-line-splits` flags are automatically turned
 on under the hood for easy integration with [lesspipe shipping with
 Debian and derivatives](https://manpages.debian.org/lesspipe#USER_DEFINED_FILTERS);
 for that setup the `chroma` executable can be just symlinked to `~/.lessfilter`.

@@ -11,7 +11,7 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 		"root": {
 			{`(\w+)(\n)`, ByGroups(Keyword, Whitespace), nil},
 		},
-	}))
+	}), false)
 	it, err := l.Tokenise(nil, `hello`)
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Keyword, "hello"}, {Whitespace, "\n"}}, it.Tokens())
@@ -20,7 +20,7 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 		"root": {
 			{`(\w+)(\n)`, ByGroups(Keyword, Whitespace), nil},
 		},
-	}))
+	}), false)
 	it, err = l.Tokenise(nil, `hello`)
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Error, "hello"}}, it.Tokens())
@@ -36,7 +36,7 @@ func TestMatchingAtStart(t *testing.T) {
 		"directive": {
 			{"module", NameEntity, Pop(1)},
 		},
-	}))
+	}), false)
 	it, err := l.Tokenise(nil, `-module ->`)
 	assert.NoError(t, err)
 	assert.Equal(t,
@@ -49,7 +49,7 @@ func TestEnsureLFOption(t *testing.T) {
 		"root": {
 			{`(\w+)(\r?\n|\r)`, ByGroups(Keyword, Whitespace), nil},
 		},
-	}))
+	}), false)
 	it, err := l.Tokenise(&TokeniseOptions{
 		State:    "root",
 		EnsureLF: true,
@@ -66,7 +66,7 @@ func TestEnsureLFOption(t *testing.T) {
 		"root": {
 			{`(\w+)(\r?\n|\r)`, ByGroups(Keyword, Whitespace), nil},
 		},
-	}))
+	}), false)
 	it, err = l.Tokenise(&TokeniseOptions{
 		State:    "root",
 		EnsureLF: false,

@@ -102,7 +102,7 @@ func TestLexers(t *testing.T) {
 				filename := filepath.Join(dirname, subFile.Name())
 				expectedFilename := strings.TrimSuffix(filename, filepath.Ext(filename)) + ".expected"
 
-				lexer = chroma.Coalesce(lexer)
+				lexer = chroma.Coalesce(lexer, false)
 				FileTest(t, lexer, filename, expectedFilename)
 			}
 		} else {
@@ -118,7 +118,7 @@ func TestLexers(t *testing.T) {
 			filename := filepath.Join("testdata", file.Name())
 			expectedFilename := strings.TrimSuffix(filename, filepath.Ext(filename)) + ".expected"
 
-			lexer = chroma.Coalesce(lexer)
+			lexer = chroma.Coalesce(lexer, false)
 			FileTest(t, lexer, filename, expectedFilename)
 		}
 	}
