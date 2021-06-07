@@ -43,7 +43,9 @@ func ByGroups(emitters ...Emitter) Emitter {
 			// panic(errors.Errorf("number of groups %q does not match number of emitters %v", groups, emitters))
 		} else {
 			for i, group := range groups[1:] {
-				iterators = append(iterators, emitters[i].Emit([]string{group}, state))
+				if emitters[i] != nil {
+					iterators = append(iterators, emitters[i].Emit([]string{group}, state))
+				}
 			}
 		}
 		return Concaterator(iterators...)
@@ -109,7 +111,7 @@ func UsingByGroup(sublexerGetFunc func(string) Lexer, sublexerNameGroup, codeGro
 				if err != nil {
 					panic(err)
 				}
-			} else {
+			} else if emitters[i] != nil {
 				iterators[i] = emitters[i].Emit([]string{group}, state)
 			}
 		}
