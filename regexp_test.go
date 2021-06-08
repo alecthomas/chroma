@@ -99,3 +99,88 @@ func TestEnsureLFFunc(t *testing.T) {
 		assert.Equal(t, out, test.out)
 	}
 }
+
+func TestByGroupNames(t *testing.T) {
+	l := Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+		"root": {
+			{
+				`(?<key>\w+)(?<operator>=)(?<value>\w+)`,
+				ByGroupNames(map[string]Emitter{
+					`key`:      String,
+					`operator`: Operator,
+					`value`:    String,
+				}),
+				nil,
+			},
+		},
+	}))
+	it, err := l.Tokenise(nil, `abc=123`)
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{String, `abc`}, {Operator, `=`}, {String, `123`}}, it.Tokens())
+
+	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+		"root": {
+			{
+				`(?<key>\w+)(?<operator>=)(?<value>\w+)`,
+				ByGroupNames(map[string]Emitter{
+					`key`:   String,
+					`value`: String,
+				}),
+				nil,
+			},
+		},
+	}))
+	it, err = l.Tokenise(nil, `abc=123`)
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{String, `abc`}, {Error, `=`}, {String, `123`}}, it.Tokens())
+
+	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+		"root": {
+			{
+				`(?<key>\w+)=(?<value>\w+)`,
+				ByGroupNames(map[string]Emitter{
+					`key`:   String,
+					`value`: String,
+				}),
+				nil,
+			},
+		},
+	}))
+	it, err = l.Tokenise(nil, `abc=123`)
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{String, `abc123`}}, it.Tokens())
+
+	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+		"root": {
+			{
+				`(?<key>\w+)(?<op>=)(?<value>\w+)`,
+				ByGroupNames(map[string]Emitter{
+					`key`:      String,
+					`operator`: Operator,
+					`value`:    String,
+				}),
+				nil,
+			},
+		},
+	}))
+	it, err = l.Tokenise(nil, `abc=123`)
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{String, `abc`}, {Error, `=`}, {String, `123`}}, it.Tokens())
+
+	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+		"root": {
+			{
+				`\w+=\w+`,
+				ByGroupNames(map[string]Emitter{
+					`key`:      String,
+					`operator`: Operator,
+					`value`:    String,
+				}),
+				nil,
+			},
+		},
+	}))
+	it, err = l.Tokenise(nil, `abc=123`)
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{Error, `abc=123`}}, it.Tokens())
+}
