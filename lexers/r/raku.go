@@ -49,7 +49,7 @@ func rakuRules() Rules {
 	const (
 		colonPairOpeningBrackets = `(?:<<|<|«|\(|\[|\{)`
 		colonPairClosingBrackets = `(?:>>|>|»|\)|\]|\})`
-		colonPairPattern         = `(:)(\w[\w'-]*)(` + colonPairOpeningBrackets + `)()()`
+		colonPairPattern         = `(?<colon>:)(?<key>\w[\w'-]*)(?<opening_delimiters>` + colonPairOpeningBrackets + `)`
 		namePattern              = `((?:(?!` + colonPairPattern + `)[\w':-])+)`
 		variablePattern          = `[$@%&]+[.^:?=!~]?` + namePattern
 		globalVariablePattern    = `[$@%&]+\*` + namePattern
@@ -344,29 +344,13 @@ func rakuRules() Rules {
 			var openingChars []rune
 			var adverbs []rune
 			switch tokenClass {
-			case rakuPodDeclaration:
-				openingChars = []rune(state.Groups[2])
-			case rakuPod:
-				openingChars = []rune(strings.Join(state.Groups[1:5], ``))
-			case rakuPodFormatter:
-				openingChars = []rune(state.Groups[2])
-			case rakuMultilineComment:
-				openingChars = []rune(state.Groups[1])
-			case rakuQuote:
-				adverbs = []rune(state.Groups[4])
-				openingChars = []rune(state.Groups[6])
-			case rakuSlashRegex:
-				openingChars = []rune(state.Groups[1])
-			case rakuSubstitutionSingleRegex, rakuSubstitutionRegex:
-				openingChars = []rune(state.Groups[2])
-			case rakuMatchRegex:
-				openingChars = []rune(state.Groups[2])
 			case rakuRegexInsideToken:
 				openingChars = []rune("{")
-			case rakuNameAttribute:
-				openingChars = []rune(state.Groups[3])
-			case rakuName:
-				openingChars = []rune(state.Groups[1])
+			case rakuPod:
+				openingChars = []rune(strings.Join(state.Groups[1:5], ``))
+			default:
+				adverbs = []rune(state.NamedGroups[`adverbs`])
+				openingChars = []rune(state.NamedGroups[`opening_delimiters`])
 			}
 
 			openingChar := openingChars[0]
@@ -379,7 +363,7 @@ func rakuRules() Rules {
 
 			switch tokenClass {
 			case rakuPod:
-				closingChars = []rune(state.Groups[1] + `=end ` + state.Groups[4])
+				closingChars = []rune(state.NamedGroups[`ws`] + `=end ` + state.NamedGroups[`name`])
 				closingCharExists = true
 			default:
 				closingChar, closingCharExists = brackets[openingChar]
@@ -398,7 +382,7 @@ func rakuRules() Rules {
 					mutator:                Mutators(Pop(1), MutatorFunc(podFormatterPopper)),
 				})
 				var formatter TokenType = StringOther
-				switch state.Groups[1] {
+				switch state.NamedGroups[`keyword`] {
 				case "B":
 					formatter = GenericStrong
 				case "I":
@@ -415,53 +399,30 @@ func rakuRules() Rules {
 					append(stack, RakuFormatterRules{popRule, formattingRule}))
 
 				return nil
-			case rakuSlashRegex, rakuMatchRegex, rakuSubstitutionRegex,
-				rakuSubstitutionSingleRegex, rakuRegexInsideToken:
-				// We're inside a regex!
-
-				switch tokenClass {
-				// If the regex knows its own delimiter and uses `UsingSelf("regex")`, then we only
-				// put a placeholder rule at the top of "regex" state and return
-				case rakuSlashRegex, rakuSubstitutionRegex:
-					makeRuleAndPushMaybe(RuleMakingConfig{
-						pattern:      `^$`,
-						rulePosition: topRule,
-						state:        state,
-						stateName:    "regex",
-					})
-
-					return nil
-				default:
-					// While matching a regex, the closing chars may have been used inside the regex
-					// so we have to push to regex state and pop on the matched closing chars
-					// and return
-					var delimiter []rune
-					if closingCharExists {
-						delimiter = []rune{closingChar}
-					} else {
-						delimiter = openingChars
-					}
-
-					makeRuleAndPushMaybe(RuleMakingConfig{
-						delimiter:              delimiter,
-						tokenType:              Punctuation,
-						mutator:                Pop(1),
-						rulePosition:           topRule,
-						state:                  state,
-						stateName:              "regex",
-						pushToStack:            true,
-						numberOfDelimiterChars: nChars,
-					})
-
-					// Remove inner punctuation matches
-					switch tokenClass {
-					case rakuMatchRegex, rakuSubstitutionSingleRegex:
-						state.Groups[3] = ""
-						state.Groups[4] = ""
-					}
-
-					return nil
+			case rakuMatchRegex, rakuSubstitutionSingleRegex, rakuRegexInsideToken:
+				// We're inside a regex
+				// While matching a regex, the closing chars may have been used inside the regex
+				// so we have to push to regex state and pop on the matched closing chars
+				// and return
+				var delimiter []rune
+				if closingCharExists {
+					delimiter = []rune{closingChar}
+				} else {
+					delimiter = openingChars
 				}
+
+				makeRuleAndPushMaybe(RuleMakingConfig{
+					delimiter:              delimiter,
+					tokenType:              Punctuation,
+					mutator:                Pop(1),
+					rulePosition:           topRule,
+					state:                  state,
+					stateName:              "regex",
+					pushToStack:            true,
+					numberOfDelimiterChars: nChars,
+				})
+
+				return nil
 			}
 
 			text := state.Text
@@ -519,7 +480,7 @@ func rakuRules() Rules {
 			adverbre := regexp.MustCompile(`:to\b|:heredoc\b`)
 			var heredocTerminator []rune
 			if adverbre.MatchString(string(adverbs)) {
-				heredocTerminator = text[state.Pos-1+nChars : endPos]
+				heredocTerminator = text[state.Pos:endPos]
 				if len(heredocTerminator) > 0 {
 					endHeredocPos := indexAt(text[endPos:], heredocTerminator, 0)
 					nChars = len(heredocTerminator)
@@ -531,35 +492,25 @@ func rakuRules() Rules {
 
 			textBetweenBrackets := string(text[state.Pos:endPos])
 			switch tokenClass {
-			case rakuPodDeclaration:
-				state.Groups[3] = ""
-				state.Groups[4] = ""
-				state.Groups[5] = textBetweenBrackets
-				state.Groups[6] = string(closingChars)
-			case rakuPod:
-				state.Groups[6] = textBetweenBrackets
-				state.Groups[7] = string(closingChars)
+			case rakuPod, rakuPodDeclaration, rakuNameAttribute:
+				state.NamedGroups[`value`] = textBetweenBrackets
+				state.NamedGroups[`closing_delimiters`] = string(closingChars)
 			case rakuQuote:
-				state.Groups[7] = ""
-				state.Groups[8] = ""
 				if len(heredocTerminator) > 0 {
 					// Length of heredoc terminator + closing chars + `;`
 					heredocFristPunctuationLen := len(heredocTerminator) + len(openingChars) + 1
 
-					state.Groups[6] = string(openingChars) +
+					state.NamedGroups[`opening_delimiters`] = string(openingChars) +
 						string(text[state.Pos:state.Pos+heredocFristPunctuationLen])
 
-					state.Groups[9] =
+					state.NamedGroups[`value`] =
 						string(text[state.Pos+heredocFristPunctuationLen : endPos])
 
-					state.Groups[10] = string(heredocTerminator)
+					state.NamedGroups[`closing_delimiters`] = string(heredocTerminator)
 				} else {
-					state.Groups[9] = textBetweenBrackets
-					state.Groups[10] = string(closingChars)
+					state.NamedGroups[`value`] = textBetweenBrackets
+					state.NamedGroups[`closing_delimiters`] = string(closingChars)
 				}
-			case rakuNameAttribute:
-				state.Groups[4] = textBetweenBrackets
-				state.Groups[5] = string(closingChars)
 			default:
 				state.Groups = []string{state.Groups[0] + string(text[state.Pos:endPos+nChars])}
 			}
@@ -585,7 +536,7 @@ func rakuRules() Rules {
 			Include("pod"),
 			// Multi-line, Embedded comment
 			{
-				"#`((" + bracketsPattern + `)(\2)*)`,
+				"#`(?<opening_delimiters>(?<delimiter>" + bracketsPattern + `)\k<delimiter>*)`,
 				CommentMultiline,
 				bracketsFinder(rakuMultilineComment),
 			},
@@ -594,7 +545,7 @@ func rakuRules() Rules {
 			{
 				`(?<=(?:^|\(|=|:|~~|\[|,|=>)\s*)(/)(?!\]|\))((?:\\\\|\\/|.)*?)((?<!(?<!\\)\\)/(?!'|"))`,
 				ByGroups(Punctuation, UsingSelf("regex"), Punctuation),
-				bracketsFinder(rakuSlashRegex),
+				MutatorFunc(makeRegexPoppingRule),
 			},
 			Include("variable"),
 			// ::?VARIABLE
@@ -698,7 +649,7 @@ func rakuRules() Rules {
 			{`(?<=^|\b|\s)(ms|m|rx)\b(\s*)`, ByGroups(Keyword, Text), Push("rx")},
 			// Quote constructs
 			{
-				`(?<=^|\b|\s)(qq|q|Q)((?:qq|ww|q|w|s|a|h|f|c|b|to|v|x)*)(\s*)(:[\w\s:]+)?(\s*)(([^0-9a-zA-Z:\s])(\7)*)()()`,
+				`(?<=^|\b|\s)(?<keyword>(?:qq|q|Q))(?<adverbs>(?::?(?:heredoc|to|qq|ww|q|w|s|a|h|f|c|b|to|v|x))*)(?<ws>\s*)(?<opening_delimiters>(?<delimiter>[^0-9a-zA-Z:\s])\k<delimiter>*)`,
 				EmitterFunc(quote),
 				bracketsFinder(rakuQuote),
 			},
@@ -736,8 +687,11 @@ func rakuRules() Rules {
 		"rx": {
 			Include("colon-pair-attribute"),
 			{
-				`(\s*)(([^\w:\s])(\3)*)`,
-				ByGroups(Text, Punctuation, Punctuation, Punctuation),
+				`(?<opening_delimiters>(?<delimiter>[^\w:\s])\k<delimiter>*)`,
+				ByGroupNames(map[string]Emitter{
+					`opening_delimiters`: Punctuation,
+					`delimiter`:          nil,
+				}),
 				Mutators(Pop(1), bracketsFinder(rakuMatchRegex)),
 			},
 		},
@@ -745,17 +699,20 @@ func rakuRules() Rules {
 			Include("colon-pair-attribute"),
 			// Substitution | s{regex} = value
 			{
-				`(\s*)((` + bracketsPattern + `)(\3)*)`,
-				ByGroups(Text, Punctuation, Punctuation, Punctuation),
+				`(?<opening_delimiters>(?<delimiter>` + bracketsPattern + `)\k<delimiter>*)`,
+				ByGroupNames(map[string]Emitter{
+					`opening_delimiters`: Punctuation,
+					`delimiter`:          nil,
+				}),
 				Mutators(Pop(1), bracketsFinder(rakuSubstitutionSingleRegex)),
 			},
-			// s/regex/string/
+			// Substitution | s/regex/string/
 			{
-				`(\s*)([^\w:\s])((?:\\\\|\\/|.)*?)(\2)((?:\\\\|\\/|.)*?)(\2)`,
+				`([^\w:\s])((?:\\\\|\\/|.)*?)(\1)((?:\\\\|\\/|.)*?)(\1)`,
 				ByGroups(
-					Text, Punctuation, UsingSelf("regex"), Punctuation, UsingSelf("qq"), Punctuation,
+					Punctuation, UsingSelf("regex"), Punctuation, UsingSelf("qq"), Punctuation,
 				),
-				Mutators(Pop(1), bracketsFinder(rakuSubstitutionRegex)),
+				Mutators(Pop(1), MutatorFunc(makeRegexPoppingRule)),
 			},
 		},
 		"number": {
@@ -960,11 +917,15 @@ func rakuRules() Rules {
 			{`(#[|=])\s`, Keyword, Push("pod-single")},
 			// Multi-line pod declaration
 			{
-				"(#[|=])((" + bracketsPattern + `)(\3)*)()()`,
-				ByGroups(
-					Keyword, Punctuation, Punctuation, Punctuation, UsingSelf("pod-begin"),
-					Punctuation,
-				),
+				"(?<keyword>#[|=])(?<opening_delimiters>(?<delimiter>" + bracketsPattern + `)\k<delimiter>*)(?<value>)(?<closing_delimiters>)`,
+				ByGroupNames(
+					map[string]Emitter{
+						`keyword`:            Keyword,
+						`opening_delimiters`: Punctuation,
+						`delimiter`:          nil,
+						`value`:              UsingSelf("pod-begin"),
+						`closing_delimiters`: Punctuation,
+					}),
 				bracketsFinder(rakuPodDeclaration),
 			},
 			Include("pod-blocks"),
@@ -972,75 +933,81 @@ func rakuRules() Rules {
 		"pod-blocks": {
 			// =begin code
 			{
-				`(?<=^ *)( *)(=begin)( +)(code)([^\n]*)(.*?)(^\1=)(end)( +)(\4)`,
+				`(?<=^ *)(?<ws> *)(?<keyword>=begin)(?<ws2> +)(?<name>code)(?<config>[^\n]*)(?<value>.*?)(?<ws3>^\k<ws>)(?<end_keyword>=end)(?<ws4> +)\k<name>`,
 				EmitterFunc(podCode),
 				nil,
 			},
 			// =begin
 			{
-				`(?<=^ *)( *)(=begin)( +)(?!code)(\w[\w'-]*)([^\n]*)()()`,
-				ByGroups(
-					Comment, Keyword, Comment, Keyword, EmitterFunc(podConfig),
-					UsingSelf("pod-begin"), Keyword,
-				),
+				`(?<=^ *)(?<ws> *)(?<keyword>=begin)(?<ws2> +)(?!code)(?<name>\w[\w'-]*)(?<config>[^\n]*)(?<value>)(?<closing_delimiters>)`,
+				ByGroupNames(
+					map[string]Emitter{
+						`ws`:                 Comment,
+						`keyword`:            Keyword,
+						`ws2`:                StringDoc,
+						`name`:               Keyword,
+						`config`:             EmitterFunc(podConfig),
+						`value`:              UsingSelf("pod-begin"),
+						`closing_delimiters`: Keyword,
+					}),
 				bracketsFinder(rakuPod),
 			},
 			// =for ...
 			{
-				`(?<=^ *)( *=)(for|defn)( +)(\w[\w'-]*)([^\n]*\n)`,
-				ByGroups(Keyword, Keyword, StringDoc, Keyword, EmitterFunc(podConfig)),
+				`(?<=^ *)(?<ws> *)(?<keyword>=(?:for|defn))(?<ws2> +)(?<name>\w[\w'-]*)(?<config>[^\n]*\n)`,
+				ByGroups(Comment, Keyword, StringDoc, Keyword, EmitterFunc(podConfig)),
 				Push("pod-paragraph"),
 			},
 			// =config
 			{
-				`(?<=^ *)( *=)(config)( +)(\w[\w'-]*)([^\n]*\n)`,
-				ByGroups(Keyword, Keyword, StringDoc, Keyword, EmitterFunc(podConfig)),
+				`(?<=^ *)(?<ws> *)(?<keyword>=config)(?<ws2> +)(?<name>\w[\w'-]*)(?<config>[^\n]*\n)`,
+				ByGroups(Comment, Keyword, StringDoc, Keyword, EmitterFunc(podConfig)),
 				nil,
 			},
 			// =alias
 			{
-				`(?<=^ *)( *=)(alias)( +)(\w[\w'-]*)([^\n]*\n)`,
-				ByGroups(Keyword, Keyword, StringDoc, Keyword, StringDoc),
+				`(?<=^ *)(?<ws> *)(?<keyword>=alias)(?<ws2> +)(?<name>\w[\w'-]*)(?<value>[^\n]*\n)`,
+				ByGroups(Comment, Keyword, StringDoc, Keyword, StringDoc),
 				nil,
 			},
 			// =encoding
 			{
-				`(?<=^ *)( *=)(encoding)( +)([^\n]+)`,
-				ByGroups(Keyword, Keyword, StringDoc, Name),
+				`(?<=^ *)(?<ws> *)(?<keyword>=encoding)(?<ws2> +)(?<name>[^\n]+)`,
+				ByGroups(Comment, Keyword, StringDoc, Name),
 				nil,
 			},
 			// =para ...
 			{
-				`(?<=^ *)( *=)(para|table|pod)((?<!\n\s*)[^\n]*\n)`,
-				ByGroups(Keyword, Keyword, EmitterFunc(podConfig)),
+				`(?<=^ *)(?<ws> *)(?<keyword>=(?:para|table|pod))(?<config>(?<!\n\s*)[^\n]*\n)`,
+				ByGroups(Comment, Keyword, EmitterFunc(podConfig)),
 				Push("pod-paragraph"),
 			},
 			// =head1 ...
 			{
-				`(?<=^ *)( *=)(head\d+)( *)(#?)`,
-				ByGroups(Keyword, Keyword, GenericHeading, Keyword),
+				`(?<=^ *)(?<ws> *)(?<keyword>=head\d+)(?<ws2> *)(?<config>#?)`,
+				ByGroups(Comment, Keyword, GenericHeading, Keyword),
 				Push("pod-single-heading"),
 			},
 			// =item ...
 			{
-				`(?<=^ *)( *=)(item\d*|comment|data|[A-Z]+)( *)(#?)`,
-				ByGroups(Keyword, Keyword, StringDoc, Keyword),
+				`(?<=^ *)(?<ws> *)(?<keyword>=(?:item\d*|comment|data|[A-Z]+))(?<ws2> *)(?<config>#?)`,
+				ByGroups(Comment, Keyword, StringDoc, Keyword),
 				Push("pod-single"),
 			},
 			{
-				`(?<=^ *)( *=)(finish)([^\n]*)`,
-				ByGroups(Keyword, Keyword, EmitterFunc(podConfig)),
+				`(?<=^ *)(?<ws> *)(?<keyword>=finish)(?<config>[^\n]*)`,
+				ByGroups(Comment, Keyword, EmitterFunc(podConfig)),
 				Push("pod-finish"),
 			},
 			// ={custom} ...
 			{
-				`(?<=^ *)( *=)(\w[\w'-]*)( *)(#?)`,
-				ByGroups(Keyword, Name, StringDoc, Keyword),
+				`(?<=^ *)(?<ws> *)(?<name>=\w[\w'-]*)(?<ws2> *)(?<config>#?)`,
+				ByGroups(Comment, Name, StringDoc, Keyword),
 				Push("pod-single"),
 			},
 			// = podconfig
 			{
-				`(?<=^ *)( *=)( *)((?::\w[\w'-]*(?:` + colonPairOpeningBrackets + `.+?` +
+				`(?<=^ *)(?<keyword> *=)(?<ws> *)(?<config>(?::\w[\w'-]*(?:` + colonPairOpeningBrackets + `.+?` +
 					colonPairClosingBrackets + `) *)*\n)`,
 				ByGroups(Keyword, StringDoc, EmitterFunc(podConfig)),
 				nil,
@@ -1074,7 +1041,7 @@ func rakuRules() Rules {
 		"pre-pod-formatter": {
 			// C<code>, B<bold>, ...
 			{
-				`([CBIUDTKRPAELZVMSXN])(<+|«)`,
+				`(?<keyword>[CBIUDTKRPAELZVMSXN])(?<opening_delimiters><+|«)`,
 				ByGroups(Keyword, Punctuation),
 				Mutators(
 					bracketsFinder(rakuPodFormatter),
@@ -1307,25 +1274,38 @@ func makeRuleAndPushMaybe(config RuleMakingConfig) *CompiledRule {
 	return cRule
 }
 
+// Used when the regex knows its own delimiter and uses `UsingSelf("regex")`,
+// it only puts a placeholder rule at the top of "regex" state
+func makeRegexPoppingRule(state *LexerState) error {
+	makeRuleAndPushMaybe(RuleMakingConfig{
+		pattern:      `^$`,
+		rulePosition: topRule,
+		state:        state,
+		stateName:    "regex",
+	})
+
+	return nil
+}
+
 // Emitter for colon pairs, changes token state based on key and brackets
 func colonPair(tokenClass TokenType) Emitter {
 	return EmitterFunc(func(groups []string, state *LexerState) Iterator {
 		iterators := []Iterator{}
 		tokens := []Token{
-			{Punctuation, groups[1]},
-			{Punctuation, groups[3]},
-			{Punctuation, groups[5]},
+			{Punctuation, state.NamedGroups[`colon`]},
+			{Punctuation, state.NamedGroups[`opening_delimiters`]},
+			{Punctuation, state.NamedGroups[`closing_delimiters`]},
 		}
 
 		// Append colon
 		iterators = append(iterators, Literator(tokens[0]))
 
 		if tokenClass == NameAttribute {
-			iterators = append(iterators, Literator(Token{NameAttribute, groups[2]}))
+			iterators = append(iterators, Literator(Token{NameAttribute, state.NamedGroups[`key`]}))
 		} else {
 			var keyTokenState string
 			keyre := regexp.MustCompile(`^\d+$`)
-			if keyre.MatchString(groups[2]) {
+			if keyre.MatchString(state.NamedGroups[`key`]) {
 				keyTokenState = "common"
 			} else {
 				keyTokenState = "Q"
@@ -1337,7 +1317,7 @@ func colonPair(tokenClass TokenType) Emitter {
 					&TokeniseOptions{
 						State:  keyTokenState,
 						Nested: true,
-					}, groups[2])
+					}, state.NamedGroups[`key`])
 
 				if err != nil {
 					panic(err)
@@ -1353,7 +1333,7 @@ func colonPair(tokenClass TokenType) Emitter {
 
 		var valueTokenState string
 
-		switch groups[3] {
+		switch state.NamedGroups[`opening_delimiters`] {
 		case "(", "{", "[":
 			valueTokenState = "root"
 		case "<<", "«":
@@ -1368,7 +1348,7 @@ func colonPair(tokenClass TokenType) Emitter {
 				&TokeniseOptions{
 					State:  valueTokenState,
 					Nested: true,
-				}, groups[4])
+				}, state.NamedGroups[`value`])
 
 			if err != nil {
 				panic(err)
@@ -1377,6 +1357,7 @@ func colonPair(tokenClass TokenType) Emitter {
 				iterators = append(iterators, iterator)
 			}
 		}
+		// Append last punctuation
 		iterators = append(iterators, Literator(tokens[2]))
 
 		return Concaterator(iterators...)
@@ -1385,21 +1366,24 @@ func colonPair(tokenClass TokenType) Emitter {
 
 // Emitter for quoting constructs, changes token state based on quote name and adverbs
 func quote(groups []string, state *LexerState) Iterator {
+	keyword := state.NamedGroups[`keyword`]
+	adverbsStr := state.NamedGroups[`adverbs`]
 	iterators := []Iterator{}
 	tokens := []Token{
-		{Keyword, groups[1]},
-		{StringAffix, groups[2]},
-		{Text, groups[3]},
-		{StringAffix, groups[4]},
-		{Text, groups[5]},
-		{Punctuation, groups[6]},
-		{Punctuation, groups[10]},
+		{Keyword, keyword},
+		{StringAffix, adverbsStr},
+		{Text, state.NamedGroups[`ws`]},
+		{Punctuation, state.NamedGroups[`opening_delimiters`]},
+		{Punctuation, state.NamedGroups[`closing_delimiters`]},
 	}
+
+	// Append all tokens before dealing with the main string
+	iterators = append(iterators, Literator(tokens[:4]...))
 
 	var tokenStates []string
 
 	// Set tokenStates based on adverbs
-	adverbs := strings.Split(groups[4], ":")
+	adverbs := strings.Split(adverbsStr, ":")
 	for _, adverb := range adverbs {
 		switch adverb {
 		case "c", "closure":
@@ -1413,15 +1397,12 @@ func quote(groups []string, state *LexerState) Iterator {
 		}
 	}
 
-	// Append all tokens before dealing with the main string
-	iterators = append(iterators, Literator(tokens[:6]...))
-
 	var tokenState string
 
 	switch {
-	case groups[1] == "qq" || contains(tokenStates, "qq"):
+	case keyword == "qq" || contains(tokenStates, "qq"):
 		tokenState = "qq"
-	case groups[2] == "ww" || contains(tokenStates, "ww"):
+	case adverbsStr == "ww" || contains(tokenStates, "ww"):
 		tokenState = "ww"
 	case contains(tokenStates, "Q-closure") && contains(tokenStates, "Q-variable"):
 		tokenState = "qq"
@@ -1437,7 +1418,7 @@ func quote(groups []string, state *LexerState) Iterator {
 		&TokeniseOptions{
 			State:  tokenState,
 			Nested: true,
-		}, groups[9])
+		}, state.NamedGroups[`value`])
 
 	if err != nil {
 		panic(err)
@@ -1446,7 +1427,7 @@ func quote(groups []string, state *LexerState) Iterator {
 	}
 
 	// Append the last punctuation
-	iterators = append(iterators, Literator(tokens[6]))
+	iterators = append(iterators, Literator(tokens[4]))
 
 	return Concaterator(iterators...)
 }
@@ -1471,24 +1452,24 @@ func podConfig(groups []string, state *LexerState) Iterator {
 func podCode(groups []string, state *LexerState) Iterator {
 	iterators := []Iterator{}
 	tokens := []Token{
-		{Keyword, groups[1]},
-		{Keyword, groups[2]},
-		{Keyword, groups[3]},
-		{Keyword, groups[4]},
-		{StringDoc, groups[6]},
-		{Keyword, groups[7]},
-		{Keyword, groups[8]},
-		{Keyword, groups[9]},
-		{Keyword, groups[10]},
+		{Comment, state.NamedGroups[`ws`]},
+		{Keyword, state.NamedGroups[`keyword`]},
+		{Keyword, state.NamedGroups[`ws2`]},
+		{Keyword, state.NamedGroups[`name`]},
+		{StringDoc, state.NamedGroups[`value`]},
+		{Comment, state.NamedGroups[`ws3`]},
+		{Keyword, state.NamedGroups[`end_keyword`]},
+		{Keyword, state.NamedGroups[`ws4`]},
+		{Keyword, state.NamedGroups[`name`]},
 	}
 
 	// Append all tokens before dealing with the pod config
 	iterators = append(iterators, Literator(tokens[:4]...))
 
 	// Tokenise pod config
-	iterators = append(iterators, podConfig([]string{groups[5]}, state))
+	iterators = append(iterators, podConfig([]string{state.NamedGroups[`config`]}, state))
 
-	langMatch := regexp.MustCompile(`:lang\W+(\w+)`).FindStringSubmatch(groups[5])
+	langMatch := regexp.MustCompile(`:lang\W+(\w+)`).FindStringSubmatch(state.NamedGroups[`config`])
 	var lang string
 	if len(langMatch) > 1 {
 		lang = langMatch[1]
@@ -1497,12 +1478,12 @@ func podCode(groups []string, state *LexerState) Iterator {
 	// Tokenise code based on lang property
 	sublexer := internal.Get(lang)
 	if sublexer != nil {
-		codeIterator, codeIteratorError := sublexer.Tokenise(nil, groups[6])
+		iterator, err := sublexer.Tokenise(nil, state.NamedGroups[`value`])
 
-		if codeIteratorError != nil {
-			panic(codeIteratorError)
+		if err != nil {
+			panic(err)
 		} else {
-			iterators = append(iterators, codeIterator)
+			iterators = append(iterators, iterator)
 		}
 	} else {
 		iterators = append(iterators, Literator(tokens[4]))
