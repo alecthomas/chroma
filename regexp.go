@@ -56,8 +56,12 @@ func ByGroups(emitters ...Emitter) Emitter {
 func ByGroupNames(emitters map[string]Emitter) Emitter {
 	return EmitterFunc(func(groups []string, state *LexerState) Iterator {
 		iterators := make([]Iterator, 0, len(state.NamedGroups)-1)
-		if len(emitters) != len(state.NamedGroups)-1 {
-			iterators = append(iterators, Error.Emit(groups, state))
+		if len(state.NamedGroups)-1 == 0 {
+			if emitter, ok := emitters[`0`]; ok {
+				iterators = append(iterators, emitter.Emit(groups, state))
+			} else {
+				iterators = append(iterators, Error.Emit(groups, state))
+			}
 		} else {
 			ruleRegex := state.Rules[state.State][state.Rule].Regexp
 			for i := 1; i < len(state.NamedGroups); i++ {
