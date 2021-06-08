@@ -52,6 +52,34 @@ func ByGroups(emitters ...Emitter) Emitter {
 	})
 }
 
+// ByGroupNames emits a token for each named matching group in the rule's regex.
+func ByGroupNames(emitters map[string]Emitter) Emitter {
+	return EmitterFunc(func(groups []string, state *LexerState) Iterator {
+		iterators := make([]Iterator, 0, len(state.NamedGroups)-1)
+		if len(state.NamedGroups)-1 == 0 {
+			if emitter, ok := emitters[`0`]; ok {
+				iterators = append(iterators, emitter.Emit(groups, state))
+			} else {
+				iterators = append(iterators, Error.Emit(groups, state))
+			}
+		} else {
+			ruleRegex := state.Rules[state.State][state.Rule].Regexp
+			for i := 1; i < len(state.NamedGroups); i++ {
+				groupName := ruleRegex.GroupNameFromNumber(i)
+				group := state.NamedGroups[groupName]
+				if emitter, ok := emitters[groupName]; ok {
+					if emitter != nil {
+						iterators = append(iterators, emitter.Emit([]string{group}, state))
+					}
+				} else {
+					iterators = append(iterators, Error.Emit([]string{group}, state))
+				}
+			}
+		}
+		return Concaterator(iterators...)
+	})
+}
+
 // UsingByGroup emits tokens for the matched groups in the regex using a
 // "sublexer". Used when lexing code blocks where the name of a sublexer is
 // contained within the block, for example on a Markdown text block or SQL
