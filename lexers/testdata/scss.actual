@@ -1,3 +1,35 @@
+@use "src/corners" as c;
+@use "src/corners" as *;
+
+/* private vars */
+$-radius: 3px;
+$_radius: 3px;
+
+$black: #000 !default;
+
+@use 'library' with (
+     $black: #222,
+     $config: (
+         important: true,
+         utility: (
+             leading-trim: trim,
+             properties: (leading-trim),
+             variants: (
+                 both: both
+             )
+         )
+     )
+);
+
+@use 'library' as * with (
+     $black: #222;
+);
+
+.content {
+    $variable: value !global;
+    value: $variable;
+}
+
 $roboto-font-path: "../fonts/roboto";
 
 @font-face {
@@ -243,7 +275,7 @@ $lightbox_shadow: 0 2px 5px rgba(0, 0, 0, .2);
     &-header {
         overflow: hidden;
         @include lb_styles-header();
-        &-headline{
+        &-headline {
             line-height: 1rem;
             padding-right: calc(#{$lightbox_header-height} * 2);
             overflow: hidden;
