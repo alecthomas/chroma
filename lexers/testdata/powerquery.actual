@@ -1,0 +1,21 @@
+let
+  GetLabel = (subject as text) as nullable table =>
+    let 
+      // Request Ntriples from the LDF Service
+      Options = [Headers = [#"Accept"="text/csv"]],
+      FixedSubject = if Text.At(subject,0) <> "<" then Text.Combine({"<",subject,">"}) else subject,
+      Query = Text.Combine({"SELECT ?label WHERE {
+        SERVICE wikibase:label {
+        bd:serviceParam wikibase:language ""en"" .
+        ",FixedSubject," <http://www.w3.org/2000/01/rdf-schema#label> ?label
+        }
+      }"}),
+      /* this is a multiline comment, see https://docs.microsoft.com/en-us/powerquery-m/comments
+      */
+      url = Text.Combine({"https://query.wikidata.org/sparql?",Uri.BuildQueryString([query=Query])}),
+      data = Csv.Document(Web.Contents(url,Options)),
+      promoted = Table.PromoteHeaders(data, [PromoteAllScalars=true])
+    in 
+      promoted 
+in
+  GetLabel 
