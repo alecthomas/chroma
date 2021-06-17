@@ -24,6 +24,8 @@ set data (cat data | string split0)
 
 grep fish myanimallist1 | wc -l
 
+command some-arg-with-dash
+
 echo input.{c,h,txt}
 
 echo {$dogs}dog
