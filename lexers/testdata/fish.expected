@@ -94,6 +94,8 @@
   {"type":"Text","value":" "},
   {"type":"NameAttribute","value":"-l"},
   {"type":"Text","value":"\n\n"},
+  {"type":"NameBuiltin","value":"command "},
+  {"type":"Text","value":"some-arg-with-dash\n\n"},
   {"type":"Keyword","value":"echo"},
   {"type":"Text","value":" input."},
   {"type":"Operator","value":"{"},
@@ -865,7 +867,7 @@
   {"type":"Text","value":" "},
   {"type":"Operator","value":"("},
   {"type":"NameBuiltin","value":"status fish"},
-  {"type":"NameAttribute","value":"-path"},
+  {"type":"Text","value":"-path"},
   {"type":"Operator","value":")"},
   {"type":"Text","value":"\n                "},
   {"type":"Keyword","value":"set"},
@@ -1261,5 +1263,6 @@
   {"type":"Text","value":" "},
   {"type":"LiteralNumber","value":"0"},
   {"type":"Text","value":"\n    "},
-  {"type":"Keyword","value":"end"}
+  {"type":"Keyword","value":"end"},
+  {"type":"Text","value":"\n"}
 ]
