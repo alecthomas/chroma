@@ -18,7 +18,8 @@ builds:
     - "386"
   goarm:
     - "6"
-  main: ./cmd/chroma/main.go
+  dir: ./cmd/chroma
+  main: .
   ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
   binary: chroma
 archives:

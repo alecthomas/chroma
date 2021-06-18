@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/alecthomas/assert"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/lexers"

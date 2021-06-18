@@ -3,8 +3,8 @@ package g
 import (
 	"testing"
 
-	"github.com/alecthomas/assert"
 	"github.com/alecthomas/chroma"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGoHTMLTemplateIssue126(t *testing.T) {

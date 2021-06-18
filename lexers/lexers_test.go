@@ -9,13 +9,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/alecthomas/assert"
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/lexers/a"
 	"github.com/alecthomas/chroma/lexers/x"
 	"github.com/alecthomas/chroma/styles"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCompileAllRegexes(t *testing.T) {
