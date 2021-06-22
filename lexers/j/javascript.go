@@ -30,7 +30,7 @@ var JavascriptRules = Rules{
 		{`0[bB][01]+`, LiteralNumberBin, nil},
 		{`0[oO][0-7]+`, LiteralNumberOct, nil},
 		{`0[xX][0-9a-fA-F]+`, LiteralNumberHex, nil},
-		{`[0-9_]+`, LiteralNumberInteger, nil},
+		{`[0-9][0-9_]*`, LiteralNumberInteger, nil},
 		{`\.\.\.|=>`, Punctuation, nil},
 		{`\+\+|--|~|&&|\?|:|\|\||\\(?=\n)|(<<|>>>?|==?|!=?|[-<>+*%&|^/])=?`, Operator, Push("slashstartsregex")},
 		{`[{(\[;,]`, Punctuation, Push("slashstartsregex")},
