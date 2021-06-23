@@ -249,11 +249,9 @@ For a quick overview of the available styles and how they look, check out the [C
 <a id="markdown-command-line-interface" name="command-line-interface"></a>
 ## Command-line interface
 
-A command-line interface to Chroma is included. It can be installed with:
+A command-line interface to Chroma is included.
 
-```sh
-go get -u github.com/alecthomas/chroma/cmd/chroma
-```
+Binaries are available to install from [the releases page](https://github.com/alecthomas/chroma/releases).
 
 The CLI can be used as a preprocessor to colorise output of `less(1)`,
 see documentation for the `LESSOPEN` environment variable.
