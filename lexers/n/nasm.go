@@ -1,21 +1,35 @@
 package n
 
 import (
+	"regexp"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
+var nasmAnalyzerRe = regexp.MustCompile(`(?i)PROC`)
+
 // Nasm lexer.
 var Nasm = internal.Register(MustNewLazyLexer(
 	&Config{
-		Name:            "NASM",
-		Aliases:         []string{"nasm"},
-		Filenames:       []string{"*.asm", "*.ASM"},
-		MimeTypes:       []string{"text/x-nasm"},
+		Name:      "NASM",
+		Aliases:   []string{"nasm"},
+		Filenames: []string{"*.asm", "*.ASM"},
+		MimeTypes: []string{"text/x-nasm"},
+		// Tasm uses the same file endings, but TASM is not as common as NASM, so
+		// we prioritize NASM higher by default.
+		Priority:        1.0,
 		CaseInsensitive: true,
 	},
 	nasmRules,
-))
+).SetAnalyser(func(text string) float32 {
+	// Probably TASM
+	if nasmAnalyzerRe.MatchString(text) {
+		return 0
+	}
+
+	return 0
+}))
 
 func nasmRules() Rules {
 	return Rules{

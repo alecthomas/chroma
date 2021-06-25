@@ -1,6 +1,8 @@
 package q
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
@@ -14,7 +16,13 @@ var Qbasic = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/basic"},
 	},
 	qbasicRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if strings.Contains(text, "$DYNAMIC") || strings.Contains(text, "$STATIC") {
+		return 0.9
+	}
+
+	return 0
+}))
 
 func qbasicRules() Rules {
 	return Rules{

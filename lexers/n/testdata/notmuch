@@ -1,0 +1,15 @@
+message{ id:5d0693e2.1c69fb81.d5fc9.1f6e@mx.google.com depth:0 match:1 excluded:0 filename:/home/user/mail/INBOX/new/1560712171_0.11014.blue,U=20254,FMD5=7e33429f656f1e6e9d79b29c3f82c57e:2,
+header{
+John Doe <john.doe@example.com> (1 mins. ago) (inbox unread)
+Subject: Hello world!
+From: john.doe@example.com
+Date: Sun, 16 Jun 2019 16:00:00 -0300
+header}
+body{
+part{ ID: 1, Content-type: text/plain
+#!/bin/sh
+
+echo 'Hello world!'
+part}
+body}
+message}

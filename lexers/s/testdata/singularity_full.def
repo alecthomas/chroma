@@ -1,0 +1,12 @@
+BoOtStRaP: library  # pass: headers are case-insensitive
+# pass: do not highlight '%'
+MirrorURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/$basearch/
+ From: ubuntu:18.04 # pass: leading whitespace allowed
+
+%setup
+    touch /file1
+touch ${SINGULARITY_ROOTFS}/file2 # pass: leading whitespace optional
+
+%files
+    /file1
+    /file1 /opt

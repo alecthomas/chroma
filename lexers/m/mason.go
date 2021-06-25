@@ -1,10 +1,17 @@
 package m
 
 import (
+	"regexp"
+
 	. "github.com/alecthomas/chroma"          // nolint
 	. "github.com/alecthomas/chroma/lexers/h" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 	. "github.com/alecthomas/chroma/lexers/p" // nolint
+)
+
+var (
+	masonAnalyserUnnamedBlockRe     = regexp.MustCompile(`</%(class|doc|init)>`)
+	masonAnalyzerCallingComponentRe = regexp.MustCompile(`(?s)<&.+&>`)
 )
 
 // Mason lexer.
@@ -17,7 +24,17 @@ var Mason = internal.Register(MustNewLazyLexer(
 		Priority:  0.1,
 	},
 	masonRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if masonAnalyserUnnamedBlockRe.MatchString(text) {
+		return 1.0
+	}
+
+	if masonAnalyzerCallingComponentRe.MatchString(text) {
+		return 0.11
+	}
+
+	return 0
+}))
 
 func masonRules() Rules {
 	return Rules{

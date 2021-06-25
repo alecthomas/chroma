@@ -14,7 +14,10 @@ var Octave = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/octave"},
 	},
 	octaveRules,
-))
+).SetAnalyser(func(text string) float32 {
+	// Octave is quite hard to spot, and it looks like Matlab as well.
+	return 0
+}))
 
 func octaveRules() Rules {
 	return Rules{

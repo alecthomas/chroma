@@ -1,0 +1,3 @@
+private method isBinary(){
+    return me.mode.find("b") != false;
+}

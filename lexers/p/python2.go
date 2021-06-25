@@ -3,6 +3,7 @@ package p
 import (
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
+	"github.com/alecthomas/chroma/pkg/shebang"
 )
 
 // Python2 lexer.
@@ -14,7 +15,13 @@ var Python2 = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/x-python2", "application/x-python2"},
 	},
 	python2Rules,
-))
+).SetAnalyser(func(text string) float32 {
+	if matched, _ := shebang.MatchString(text, `pythonw?2(\.\d)?`); matched {
+		return 1.0
+	}
+
+	return 0
+}))
 
 func python2Rules() Rules {
 	return Rules{

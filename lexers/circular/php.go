@@ -3,7 +3,11 @@ package circular
 import (
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
+	"github.com/alecthomas/chroma/pkg/shebang"
+	"github.com/dlclark/regexp2"
 )
+
+var phpAnalyserRe = regexp2.MustCompile(`<\?(?!xml)`, regexp2.None)
 
 // PHP lexer for pure PHP code (not embedded in HTML).
 var PHP = internal.Register(MustNewLazyLexer(
@@ -17,7 +21,17 @@ var PHP = internal.Register(MustNewLazyLexer(
 		EnsureNL:        true,
 	},
 	phpRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if matched, _ := shebang.MatchString(text, "php"); matched {
+		return 1.0
+	}
+
+	if matched, _ := phpAnalyserRe.MatchString(text); matched {
+		return 0.3
+	}
+
+	return 0
+}))
 
 func phpRules() Rules {
 	return phpCommonRules().Rename("php", "root")

@@ -1,0 +1,12 @@
+scheme SET_DATABASE =
+    class
+        type
+            Database = Person-set,
+            Person = Text
+        value
+            empty : Database = {} ,
+            register : Person × Database → Database
+            register(p,db) ≡ db ∪ { p } ,
+            is_in : Person × Database → Bool
+            is_in(p,db) ≡ p ∈ db
+    end

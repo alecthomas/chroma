@@ -16,7 +16,12 @@ var Actionscript = internal.Register(MustNewLazyLexer(
 		DotAll:       true,
 	},
 	actionscriptRules,
-))
+).SetAnalyser(func(text string) float32 {
+	// This is only used to disambiguate between ActionScript and
+	// ActionScript3. We return 0 here; the ActionScript3 lexer will match
+	// AS3 variable definitions and that will hopefully suffice.
+	return 0
+}))
 
 func actionscriptRules() Rules {
 	return Rules{

@@ -1,9 +1,13 @@
 package v
 
 import (
+	"regexp"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
+
+var vbnetAnalyserRe = regexp.MustCompile(`(?m)^\s*(#If|Module|Namespace)`)
 
 const vbName = `[_\w][\w]*`
 
@@ -17,7 +21,13 @@ var VBNet = internal.Register(MustNewLazyLexer(
 		CaseInsensitive: true,
 	},
 	vbNetRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if vbnetAnalyserRe.MatchString(text) {
+		return 0.5
+	}
+
+	return 0
+}))
 
 func vbNetRules() Rules {
 	return Rules{

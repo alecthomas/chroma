@@ -1,0 +1,2 @@
+
+#ifndef LPL_SLEEP_INTERVAL

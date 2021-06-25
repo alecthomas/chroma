@@ -1,0 +1,3 @@
+
+!rmdir oldtests
+

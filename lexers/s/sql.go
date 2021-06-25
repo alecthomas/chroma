@@ -16,7 +16,9 @@ var SQL = internal.Register(MustNewLazyLexer(
 		CaseInsensitive: true,
 	},
 	sqlRules,
-))
+).SetAnalyser(func(text string) float32 {
+	return 0.01
+}))
 
 func sqlRules() Rules {
 	return Rules{

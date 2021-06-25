@@ -17,3 +17,7 @@ chromad:
 upload: chromad
 	scp chromad root@swapoff.org: && \
 		ssh root@swapoff.org 'install -m755 ./chromad /srv/http/swapoff.org/bin && service chromad restart'
+
+.PHONY: test
+test:
+	go test -cover -race ./...

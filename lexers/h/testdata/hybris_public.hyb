@@ -1,0 +1,3 @@
+public method File ( file ){
+    me.file = file;
+}

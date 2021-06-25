@@ -3,7 +3,10 @@ package r
 import (
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
+	"github.com/dlclark/regexp2"
 )
+
+var rAnalyzerRe = regexp2.MustCompile(`[a-z0-9_\])\s]<-(?!-)`, regexp2.None)
 
 // R/S lexer.
 var R = internal.Register(MustNewLazyLexer(
@@ -12,9 +15,18 @@ var R = internal.Register(MustNewLazyLexer(
 		Aliases:   []string{"splus", "s", "r"},
 		Filenames: []string{"*.S", "*.R", "*.r", ".Rhistory", ".Rprofile", ".Renviron"},
 		MimeTypes: []string{"text/S-plus", "text/S", "text/x-r-source", "text/x-r", "text/x-R", "text/x-r-history", "text/x-r-profile"},
+		// Higher priority than Rebol
+		Priority: 0.1,
 	},
 	rRules,
-))
+).SetAnalyser(func(text string) float32 {
+	matched, _ := rAnalyzerRe.MatchString(text)
+	if matched {
+		return 0.11
+	}
+
+	return 0
+}))
 
 func rRules() Rules {
 	return Rules{

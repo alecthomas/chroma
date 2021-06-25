@@ -1,0 +1,4 @@
+timeout(3.2s) detach({ 
+  freezeif(b) every(500ms) echo("tick"), 
+  freezeif(!b) every(500ms) echo("tack") 
+  })|;

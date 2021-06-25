@@ -1,0 +1,10 @@
+strcompare c "thing"
+if result = 1 then
+    goto label_
+elseif result > -1 then
+    goto 10
+elseif d > (1+2*3)/7 then
+    messagebox "thing"
+else
+    messagebox "done"
+endif

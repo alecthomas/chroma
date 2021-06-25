@@ -1,6 +1,8 @@
 package i
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
@@ -14,7 +16,18 @@ var Ini = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/x-ini", "text/inf"},
 	},
 	iniRules,
-))
+).SetAnalyser(func(text string) float32 {
+	npos := strings.Count(text, "\n")
+	if npos < 3 {
+		return 0
+	}
+
+	if text[0] == '[' && text[npos-1] == ']' {
+		return 1.0
+	}
+
+	return 0
+}))
 
 func iniRules() Rules {
 	return Rules{

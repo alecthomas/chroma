@@ -1,6 +1,8 @@
 package c
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
@@ -14,7 +16,13 @@ var Coq = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/x-coq"},
 	},
 	coqRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if strings.Contains(text, "Qed") && strings.Contains(text, "Proof") {
+		return 1.0
+	}
+
+	return 0
+}))
 
 func coqRules() Rules {
 	return Rules{

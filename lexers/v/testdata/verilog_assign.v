@@ -1,0 +1,1 @@
+assign A = B & C ;

@@ -5,8 +5,8 @@ import (
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
-// Qml lexer.
-var Qml = internal.Register(MustNewLazyLexer(
+// QML lexer.
+var QML = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "QML",
 		Aliases:   []string{"qml", "qbs"},

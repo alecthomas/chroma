@@ -1,0 +1,9 @@
+var x[N];
+
+model {
+    for (i in 1:D[1]) {
+        for (j in 1:D[2]) {
+            Z[i,j] <- dnorm(alpha[i] + beta[j], tau)
+        }
+    }
+}

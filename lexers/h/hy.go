@@ -1,6 +1,8 @@
 package h
 
 import (
+	"strings"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
@@ -14,7 +16,13 @@ var Hy = internal.Register(MustNewLazyLexer(
 		MimeTypes: []string{"text/x-hy", "application/x-hy"},
 	},
 	hyRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if strings.Contains(text, "(import ") || strings.Contains(text, "(defn ") {
+		return 0.9
+	}
+
+	return 0
+}))
 
 func hyRules() Rules {
 	return Rules{

@@ -1,0 +1,1 @@
+DECLARE @find VARCHAR(30);

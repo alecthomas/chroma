@@ -1,0 +1,3 @@
+<script language="vb" type="text/vb" runat="server">
+    // stuff goes here...
+</script>

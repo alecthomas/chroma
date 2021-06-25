@@ -1,8 +1,15 @@
 package c
 
 import (
+	"regexp"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
+)
+
+var (
+	cAnalyserIncludeRe = regexp.MustCompile(`(?m)^\s*#include [<"]`)
+	cAnalyserIfdefRe   = regexp.MustCompile(`(?m)^\s*#ifn?def `)
 )
 
 // C lexer.
@@ -13,9 +20,20 @@ var C = internal.Register(MustNewLazyLexer(
 		Filenames: []string{"*.c", "*.h", "*.idc", "*.x[bp]m"},
 		MimeTypes: []string{"text/x-chdr", "text/x-csrc", "image/x-xbitmap", "image/x-xpixmap"},
 		EnsureNL:  true,
+		Priority:  0.1,
 	},
 	cRules,
-))
+).SetAnalyser(func(text string) float32 {
+	if cAnalyserIncludeRe.MatchString(text) {
+		return 0.1
+	}
+
+	if cAnalyserIfdefRe.MatchString(text) {
+		return 0.1
+	}
+
+	return 0
+}))
 
 func cRules() Rules {
 	return Rules{

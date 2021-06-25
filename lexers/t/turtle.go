@@ -1,9 +1,13 @@
 package t
 
 import (
+	"regexp"
+
 	. "github.com/alecthomas/chroma" // nolint
 	"github.com/alecthomas/chroma/lexers/internal"
 )
+
+var turtleAnalyserRe = regexp.MustCompile(`^\s*(@base|BASE|@prefix|PREFIX)`)
 
 // Turtle lexer.
 var Turtle = internal.Register(MustNewLazyLexer(
@@ -16,7 +20,15 @@ var Turtle = internal.Register(MustNewLazyLexer(
 		CaseInsensitive: true,
 	},
 	turtleRules,
-))
+).SetAnalyser(func(text string) float32 {
+	// Turtle and Tera Term macro files share the same file extension
+	// but each has a recognizable and distinct syntax.
+	if turtleAnalyserRe.MatchString(text) {
+		return 0.8
+	}
+
+	return 0
+}))
 
 func turtleRules() Rules {
 	return Rules{

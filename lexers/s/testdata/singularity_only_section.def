@@ -1,0 +1,16 @@
+%setup
+    touch /file1
+touch ${SINGULARITY_ROOTFS}/file2 # pass: leading whitespace optional
+
+%files
+    /file1
+    /file1 /opt
+
+%environment
+    export LISTEN_PORT=12345
+    export LC_ALL=C
+
+%runscript
+    echo "Container was created $NOW"
+    echo "Arguments received: $*"
+    exec echo "$@"

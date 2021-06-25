@@ -10,7 +10,7 @@ var Elixir = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "Elixir",
 		Aliases:   []string{"elixir", "ex", "exs"},
-		Filenames: []string{"*.ex", "*.exs"},
+		Filenames: []string{"*.ex", "*.exs", "*.eex"},
 		MimeTypes: []string{"text/x-elixir"},
 	},
 	elixirRules,
