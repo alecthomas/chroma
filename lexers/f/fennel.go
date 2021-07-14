@@ -44,6 +44,7 @@ func fennelRules() Rules {
 	return Rules{
 		"root": {
 			{`;.*$`, CommentSingle, nil},
+			{`\s+`, Whitespace, nil},
 			{`-?\d+\.\d+`, LiteralNumberFloat, nil},
 			{`-?\d+`, LiteralNumberInteger, nil},
 			{`0x-?[abcdef\d]+`, LiteralNumberHex, nil},
