@@ -22,7 +22,7 @@ func Highlight(w io.Writer, source, lexer, formatter, style string) error {
 	if l == nil {
 		l = lexers.Fallback
 	}
-	l = chroma.Coalesce(l)
+	l = chroma.Coalesce(l, false)
 
 	// Determine formatter.
 	f := formatters.Get(formatter)

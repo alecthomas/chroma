@@ -35,7 +35,7 @@ type insertion struct {
 }
 
 func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint: gocognit
-	tokens, err := Tokenise(Coalesce(d.language), options, text)
+	tokens, err := Tokenise(Coalesce(d.language, false), options, text)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 	}
 
 	// Lex the other tokens.
-	rootTokens, err := Tokenise(Coalesce(d.root), options, others.String())
+	rootTokens, err := Tokenise(Coalesce(d.root, false), options, others.String())
 	if err != nil {
 		return nil, err
 	}
