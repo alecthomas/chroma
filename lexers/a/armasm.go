@@ -6,7 +6,7 @@ import (
 )
 
 // Diff lexer.
-var ArmAsm = internal.Register(MustNewLexer(
+var ArmAsm = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "ArmAsm",
 		Aliases:   []string{"armasm"},
@@ -25,9 +25,9 @@ var ArmAsm = internal.Register(MustNewLexer(
 			{`0b[01]+`, NumberBin, Pop(1)},
 			// Hex
 			{`0x\w{1,8}`, NumberHex, Pop(1)},
-			//Octal
+			// Octal
 			{`0\d+`, NumberOct, Pop(1)},
-			//Float
+			// Float
 			{`\d+?\.\d+?`, NumberFloat, Pop(1)},
 			// Integer
 			{`\d+`, NumberInteger, Pop(1)},
@@ -41,7 +41,7 @@ var ArmAsm = internal.Register(MustNewLexer(
 			{`\n`, Text, Pop(1)},
 			// Comment
 			{`(@|;).*\n`, CommentSingle, Pop(1)},
-			// Whitespace 
+			// Whitespace
 			{`(\s+|,)`, Text, nil},
 			// Register by number
 			{`[rapcfxwbhsdqv]\d{1,2}`, NameClass, nil},
@@ -53,17 +53,17 @@ var ArmAsm = internal.Register(MustNewLexer(
 			{`#`, Text, Push("literal")},
 		},
 		"root": {
-			Include("commentsandwhitespace"), 
+			Include("commentsandwhitespace"),
 			// Directive with optional param
 			{`(\.\w+)([ \t]+\w+\s+?)?`, ByGroups(KeywordNamespace, NameLabel), nil},
-			// Label with data 
+			// Label with data
 			{`(\w+)(:)(\s+\.\w+\s+)`, ByGroups(NameLabel, Punctuation, KeywordNamespace), Push("literal")},
 			// Label
 			{`(\w+)(:)`, ByGroups(NameLabel, Punctuation), nil},
-			// Syscall Op 
+			// Syscall Op
 			{`svc\s+\w+`, NameNamespace, nil},
 			// Opcode
-			{`[a-zA-Z]+`, Text, Push("opcode")},		
+			{`[a-zA-Z]+`, Text, Push("opcode")},
 		},
 	},
 ))
