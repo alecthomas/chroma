@@ -5,7 +5,6 @@ import (
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
-// Diff lexer.
 var ArmAsm = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "ArmAsm",
@@ -14,7 +13,11 @@ var ArmAsm = internal.Register(MustNewLazyLexer(
 		Filenames: []string{"*.s", "*.S"},
 		MimeTypes: []string{"text/x-armasm", "text/x-asm"},
 	},
-	Rules{
+	armasmRules,
+))
+
+func armasmRules() Rules {
+	return Rules{
 		"commentsandwhitespace": {
 			{`\s+`, Text, nil},
 			{`[@;].*?\n`, CommentSingle, nil},
@@ -65,5 +68,5 @@ var ArmAsm = internal.Register(MustNewLazyLexer(
 			// Opcode
 			{`[a-zA-Z]+`, Text, Push("opcode")},
 		},
-	},
-))
+	}
+}
