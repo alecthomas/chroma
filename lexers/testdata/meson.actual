@@ -1,0 +1,11 @@
+project('foo', 'cpp', default_options : ['warning_level=3'])
+
+required_modules = ['gnome']
+
+foreach mod in required_modules
+  import(mod)
+endforeach
+
+# Comment
+zlib_dep = dependency('zlib')
+executable('''bar''', 'main.cc', dependencies : zlib_dep)
