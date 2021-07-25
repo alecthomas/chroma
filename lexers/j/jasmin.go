@@ -1,6 +1,7 @@
 package j
 
 import (
+	"math"
 	"regexp"
 
 	. "github.com/alecthomas/chroma" // nolint
@@ -25,7 +26,7 @@ var Jasmin = internal.Register(MustNewLexer(
 		"root": {},
 	},
 ).SetAnalyser(func(text string) float32 {
-	var result float32
+	var result float64
 
 	if jasminAnalyserClassRe.MatchString(text) {
 		result += 0.5
@@ -39,5 +40,5 @@ var Jasmin = internal.Register(MustNewLexer(
 		result += 0.6
 	}
 
-	return result
+	return float32(math.Min(result, float64(1.0)))
 }))
