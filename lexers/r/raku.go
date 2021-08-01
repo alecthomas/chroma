@@ -603,7 +603,7 @@ func rakuRules() Rules {
 			{
 				// Token with adverbs
 				`(?<=(?:^|\s)(?:regex|token|rule)(\s+))(['\w:-]+)(?=:['\w-]+` +
-					colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `[({])`,
+					colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `\s*[({])`,
 				NameFunction,
 				Push("token", "name-adverb"),
 			},
@@ -628,7 +628,7 @@ func rakuRules() Rules {
 			{
 				// Routine with adverbs
 				`(?<=(?:^|\s)(?:sub|method|multi sub|multi)\s+)!?['\w:-]+(?=:['\w-]+` +
-					colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `[({])`,
+					colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `\s*[({])`,
 				NameFunction,
 				Push("name-adverb"),
 			},
@@ -737,8 +737,8 @@ func rakuRules() Rules {
 			{colonPairPattern, colonPair(String), bracketsFinder(rakuNameAttribute)},
 			// :123abc
 			{
-				`(:)(\d+)(\w[\w'-]*)(\s*[,;)]?\s*$)`,
-				ByGroups(Punctuation, UsingSelf("number"), String, Text),
+				`(:)(\d+)(\w[\w'-]*)`,
+				ByGroups(Punctuation, UsingSelf("number"), String),
 				nil,
 			},
 			// :key
@@ -750,8 +750,8 @@ func rakuRules() Rules {
 			{colonPairPattern, colonPair(NameAttribute), bracketsFinder(rakuNameAttribute)},
 			// :123abc
 			{
-				`(:)(\d+)(\w+)(\s*[,;)]?\s*$)`,
-				ByGroups(Punctuation, UsingSelf("number"), NameAttribute, Text),
+				`(:)(\d+)(\w[\w'-]*)`,
+				ByGroups(Punctuation, UsingSelf("number"), NameAttribute),
 				nil,
 			},
 			// :key
@@ -923,7 +923,7 @@ func rakuRules() Rules {
 						`keyword`:            Keyword,
 						`opening_delimiters`: Punctuation,
 						`delimiter`:          nil,
-						`value`:              UsingSelf("pod-begin"),
+						`value`:              UsingSelf("pod-declaration"),
 						`closing_delimiters`: Punctuation,
 					}),
 				bracketsFinder(rakuPodDeclaration),
@@ -986,13 +986,13 @@ func rakuRules() Rules {
 			{
 				`(?<=^ *)(?<ws> *)(?<keyword>=head\d+)(?<ws2> *)(?<config>#?)`,
 				ByGroups(Comment, Keyword, GenericHeading, Keyword),
-				Push("pod-single-heading"),
+				Push("pod-heading"),
 			},
 			// =item ...
 			{
 				`(?<=^ *)(?<ws> *)(?<keyword>=(?:item\d*|comment|data|[A-Z]+))(?<ws2> *)(?<config>#?)`,
 				ByGroups(Comment, Keyword, StringDoc, Keyword),
-				Push("pod-single"),
+				Push("pod-paragraph"),
 			},
 			{
 				`(?<=^ *)(?<ws> *)(?<keyword>=finish)(?<config>[^\n]*)`,
@@ -1003,7 +1003,7 @@ func rakuRules() Rules {
 			{
 				`(?<=^ *)(?<ws> *)(?<name>=\w[\w'-]*)(?<ws2> *)(?<config>#?)`,
 				ByGroups(Comment, Name, StringDoc, Keyword),
-				Push("pod-single"),
+				Push("pod-paragraph"),
 			},
 			// = podconfig
 			{
@@ -1018,8 +1018,12 @@ func rakuRules() Rules {
 			Include("pre-pod-formatter"),
 			{`.+?`, StringDoc, nil},
 		},
+		"pod-declaration": {
+			Include("pre-pod-formatter"),
+			{`.+?`, StringDoc, nil},
+		},
 		"pod-paragraph": {
-			{`\n\s*?\n`, StringDoc, Pop(1)},
+			{`\n *\n|\n(?=^ *=)`, StringDoc, Pop(1)},
 			Include("pre-pod-formatter"),
 			{`.+?`, StringDoc, nil},
 		},
@@ -1028,8 +1032,8 @@ func rakuRules() Rules {
 			Include("pre-pod-formatter"),
 			{`.+?`, StringDoc, nil},
 		},
-		"pod-single-heading": {
-			{`\n`, GenericHeading, Pop(1)},
+		"pod-heading": {
+			{`\n *\n|\n(?=^ *=)`, GenericHeading, Pop(1)},
 			Include("pre-pod-formatter"),
 			{`.+?`, GenericHeading, nil},
 		},
