@@ -3,6 +3,10 @@
 =begin pod
 =head1 Some test data for B<Chroma>
 
+=head2 Multi-line
+heading
+
+=head2 One-line heading
 =begin code :lang<go>
 fmt.Println("Hello from Go")
 =end code
@@ -395,6 +399,8 @@ class Calculations {
 }
 
 say Calculator.parse('2 + 3', actions => Calculations).made;
+
+put Date.today.later(:2years).year;
 
 =finish
 C<say> Date.today.year;
