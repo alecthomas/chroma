@@ -1156,12 +1156,11 @@ func rakuRules() Rules {
 	}
 }
 
-// Joins keys and values of rune map
+// Joins keys of rune map
 func joinRuneMap(m map[rune]rune) string {
-	runes := make([]rune, 0, len(m)*2)
-	for k, v := range m {
+	runes := make([]rune, 0, len(m))
+	for k := range m {
 		runes = append(runes, k)
-		runes = append(runes, v)
 	}
 
 	return string(runes)

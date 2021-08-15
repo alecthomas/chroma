@@ -67,6 +67,8 @@
   {"type":"Operator","value":"+"},
   {"type":"LiteralNumberInteger","value":"1"},
   {"type":"Punctuation","value":";"},
+  {"type":"Text","value":" "},
+  {"type":"CommentSingle","value":"#=\u003e Comment looking like a pod declaration, but with a closing bracket!"},
   {"type":"Text","value":"\n"},
   {"type":"Punctuation","value":"}"},
   {"type":"Text","value":"\n\n"},

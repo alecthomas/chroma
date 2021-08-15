@@ -21,7 +21,7 @@ fmt.Println("Hello from Go")
 say $=pod[0].config<numbered>;
 
 sub f1($a) {
-    $a+1;
+    $a+1; #=> Comment looking like a pod declaration, but with a closing bracket!
 }
 
 2.&f1;
