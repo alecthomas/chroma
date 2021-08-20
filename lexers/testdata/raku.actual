@@ -32,6 +32,8 @@ sub f2($a,$b) {
 
 2.&f2(3);
 
+Module::function($var);
+
 #| Fibonacci with Multiple dispatch
 multi sub fib (0 --> 0) {}
 multi sub fib (1 --> 1) {}
