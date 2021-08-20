@@ -49,8 +49,10 @@ func rakuRules() Rules {
 	const (
 		colonPairOpeningBrackets = `(?:<<|<|«|\(|\[|\{)`
 		colonPairClosingBrackets = `(?:>>|>|»|\)|\]|\})`
-		colonPairPattern         = `(?<colon>:)(?<key>\w[\w'-]*)(?<opening_delimiters>` + colonPairOpeningBrackets + `)`
-		namePattern              = `((?:(?!` + colonPairPattern + `)[\w':-])+)`
+		colonPairPattern         = `(?<!:)(?<colon>:)(?<key>\w[\w'-]*)(?<opening_delimiters>` + colonPairOpeningBrackets + `)`
+		colonPairLookahead       = `(?=(:['\w-]+` +
+			colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `)?`
+		namePattern              = `((?:(?!` + colonPairPattern + `)(?:::|[\w':-]))+)`
 		variablePattern          = `[$@%&]+[.^:?=!~]?` + namePattern
 		globalVariablePattern    = `[$@%&]+\*` + namePattern
 	)
@@ -601,17 +603,9 @@ func rakuRules() Rules {
 			Include("colon-pair"),
 			// Token
 			{
-				// Token with adverbs
-				`(?<=(?:^|\s)(?:regex|token|rule)(\s+))(['\w:-]+)(?=:['\w-]+` +
-					colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `\s*[({])`,
+				`(?<=(?:^|\s)(?:regex|token|rule)(\s+))` + namePattern + colonPairLookahead + `\s*[({])`,
 				NameFunction,
 				Push("token", "name-adverb"),
-			},
-			{
-				// Token without adverbs
-				`(?<=(?:^|\s)(?:regex|token|rule)(?:\s+))(['\w:-]+)`,
-				NameFunction,
-				Push("token"),
 			},
 			// Substitution
 			{`(?<=^|\b|\s)(?<!\.)(ss|S|s|TR|tr)\b(\s*)`, ByGroups(Keyword, Text), Push("substitution")},
@@ -626,17 +620,9 @@ func rakuRules() Rules {
 			},
 			//  Routine
 			{
-				// Routine with adverbs
-				`(?<=(?:^|\s)(?:sub|method|multi sub|multi)\s+)!?['\w:-]+(?=:['\w-]+` +
-					colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `\s*[({])`,
+				`(?<=(?:^|\s)(?:sub|method|multi sub|multi)\s+)!?` + namePattern + colonPairLookahead + `\s*[({])`,
 				NameFunction,
 				Push("name-adverb"),
-			},
-			{
-				// Routine without adverbs
-				`(?<=(?:^|\s)(?:sub|submethod|method|multi)\s+)!?['\w:-]+`,
-				NameFunction,
-				nil,
 			},
 			// Constant
 			{`(?<=\bconstant\s+)` + namePattern, NameConstant, Push("name-adverb")},
@@ -655,22 +641,16 @@ func rakuRules() Rules {
 			},
 			// Function
 			{
-				`\b(?:\w['\w:-]*)(?=:['\w-]+` +
-					colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `\()`,
+				`\b` + namePattern + colonPairLookahead + `\()`,
 				NameFunction,
 				Push("name-adverb"),
 			},
-			{`\b(?:\w['\w:-]*)(?=\()`, NameFunction, nil},
 			// Method
-			// Method with adverb
 			{
-				`(?<!\.\.[?^*+]?)(?<=(?:\.[?^*+&]?)|self!)['\w:-]+(?=:['\w-]+` +
-					colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `$)`,
+				`(?<!\.\.[?^*+]?)(?<=(?:\.[?^*+&]?)|self!)` + namePattern + colonPairLookahead + `\b)`,
 				NameFunction,
 				Push("name-adverb"),
 			},
-			// Method without adverb
-			{`(?<!\.\.[?^*+]?)(?<=(?:\.[?^*+&]?)|self!)['\w:-]+`, NameFunction, nil},
 			// Indirect invocant
 			{namePattern + `(?=\s+\W?['\w:-]+:\W)`, NameFunction, Push("name-adverb")},
 			{`(?<=\W)(?:∅|i|e|𝑒|tau|τ|pi|π|Inf|∞)(?=\W)`, NameConstant, nil},
