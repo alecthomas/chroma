@@ -233,6 +233,10 @@ rx/:i
 
         $<myname> = [ \w+ ]
 
+        <!!{ $*LANG := $*LEAF := $/.clone_braid_from(self); 1 }>
+
+        <?before <.[\)\]\}]>>
+
         $<string>=( [ $<part>=[abc] ]* % '-' )
         $<variable>=\w+ '=' $<value>=\w+
         a <( b )> c
