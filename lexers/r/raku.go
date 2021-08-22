@@ -1043,7 +1043,7 @@ func rakuRules() Rules {
 		"variable": {
 			{variablePattern, NameVariable, Push("name-adverb")},
 			{globalVariablePattern, NameVariableGlobal, Push("name-adverb")},
-			{`[$@](?:<.*?>)+`, NameVariable, nil},
+			{`[$@]<[^>]+>`, NameVariable, nil},
 			{`\$/`, NameVariable, nil},
 			{`\$!`, NameVariable, nil},
 			{`[$@%]`, NameVariable, nil},
