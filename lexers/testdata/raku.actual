@@ -261,6 +261,8 @@ rx/:i
         \d ** 1..3 <?{ $/.Int <= 255 && $/.Int >= 0 }>
         $/;
 
+$<variable><key>;
+
 constant \something:some<adverb> = 'something';
 
 my %hash = %(
