@@ -791,7 +791,7 @@ func rakuRules() Rules {
 			},
 			// <{code}>
 			{
-				`(?<!(?<!\\)\\)(<)([?!])?((?<!(?<!\\)\\){)(.*?)(}>)`,
+				`(?<!(?<!\\)\\)(<)([?!.]*)((?<!(?<!\\)\\){)(.*?)(}>)`,
 				ByGroups(Punctuation, Operator, Punctuation, UsingSelf("root"), Punctuation),
 				nil,
 			},
@@ -807,7 +807,7 @@ func rakuRules() Rules {
 			{`#[^\n]*\n`, CommentSingle, nil},
 			// Lookaround
 			{
-				`(?<!(?<!\\)\\)(<)(\s*)([?!.])(\s*)(after|before)`,
+				`(?<!(?<!\\)\\)(<)(\s*)([?!.]+)(\s*)(after|before)`,
 				ByGroups(Punctuation, Text, Operator, Text, OperatorWord),
 				Push("regex"),
 			},
@@ -818,8 +818,8 @@ func rakuRules() Rules {
 			},
 			// <$variable>
 			{
-				`(?<!(?<!\\)\\)(<)([$@]\w[\w-:]*)(>)`,
-				ByGroups(Punctuation, NameVariable, Punctuation),
+				`(?<!(?<!\\)\\)(<)([?!.]*)([$@]\w[\w-:]*)(>)`,
+				ByGroups(Punctuation, Operator, NameVariable, Punctuation),
 				nil,
 			},
 			// Capture markers
@@ -841,6 +841,7 @@ func rakuRules() Rules {
 			{`(?<!(?<!\\)\\)>`, Punctuation, Pop(1)},
 			Include("regex-class-builtin"),
 			Include("variable"),
+			{`(?<=<)[|!?.]+`, Operator, nil},
 			// <regexfunc> | <regexfunc(parameter)> | <variable=regexfunc>
 			{
 				`(?:(\w[\w-:]*)(=\.?))?(&?\w[\w'-:]+?)(\(.+?\))?(?=>)`,
@@ -861,7 +862,6 @@ func rakuRules() Rules {
 			{`(?<!(?<!\\)\\)\[`, Punctuation, Push("regex-character-class")},
 			{`\+|\-`, Operator, nil},
 			{`@[\w'-:]+`, NameVariable, nil},
-			{`(?<=<)[|!?.]`, Operator, nil},
 			{`.+?`, StringRegex, nil},
 		},
 		"regex-escape-class": {
