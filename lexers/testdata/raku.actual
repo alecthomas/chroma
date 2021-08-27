@@ -11,12 +11,17 @@ heading
 fmt.Println("Hello from Go")
 =end code
 
+    =begin DESCRIPTION
+    Some description
+    =item one item
+    =end DESCRIPTION
+
 =for defn :numbered
                We
                Need
                Numbers
 
-=end pod
+=end  pod
 
 say $=pod[0].config<numbered>;
 
@@ -43,7 +48,7 @@ multi sub fib (\n where * > 1) {
 say fib 10;
 # OUTPUT: 55
 
-#| C<Shape> role
+#| B<A C<<uh U<Shape> umm>> role>
 role Shape {
     method area { ... }
 
@@ -129,6 +134,82 @@ key2 = value2
 key3=value3
 END
 
+grammar Nested {
+    token TOP { <block> <section>* { if $/ { say $/ } } }
+    token block {
+        <?before <.[\)\]\}]>>
+    }
+
+    token you_are_here {
+    <?{ nqp::getlexdyn('$?FILES') ~~ /\.setting$/ }> ||
+    \w+ 'some text' \d+
+        { self.typed_panic('X::Syntax::Reserved',
+                reserved => 'use of {YOU_ARE_HERE} outside of a setting',
+                instead => ' (use whitespace if not a setting, or rename file with .setting extension?)');
+        }
+    }
+
+    rule statement_control:sym<if> {
+        $<sym>=[if|with]<.kok> {}
+        <xblock(~$<sym>[0] ~~ /with/ ?? $PBLOCK_REQUIRED_TOPIC !! $PBLOCK_NO_TOPIC)>
+        [
+            [
+            | 'else'\h*'if' <.typed_panic: 'X::Syntax::Malformed::Elsif'>
+            | 'elif' { $/.typed_panic('X::Syntax::Malformed::Elsif', what => "elif") }
+            | $<sym>='elsif'  <xblock>
+            | $<sym>='orwith' <xblock($PBLOCK_REQUIRED_TOPIC)>
+            ]
+        ]*
+        {}
+        [
+            'else'
+            <else=.pblock(~$<sym>[-1] ~~ /with/ ?? $PBLOCK_REQUIRED_TOPIC !! $PBLOCK_NO_TOPIC)>
+        ]?
+    }
+
+    token special_variable:sym<$\\> {
+        '$\\' <?before \s | ',' | '=' | <.terminator> >
+        <.obsvar('$\\')>
+    }
+
+    token type_declarator:sym<enum> {
+        :my %*MYSTERY;
+        [ <?[<(«]> <term> <.ws> || <.panic: 'An enum must supply an expression using <>, «», or ()'> ]
+        <.explain_mystery> <.cry_sorrows>
+        <?{
+            elsif !($text ~~ /^(\w|\:)+$/) {
+                $/.obs($bad, "$sigil\($text) for hard ref or $sigil\::($text) for symbolic ref");
+            }
+        }>
+    }
+
+    token rad_number {
+        :my $rad_digits := token rad_digits { <rad_digit>+ [ _ <rad_digit>+ ]* };
+        <O(|%methodcall)>
+        <O=.revO($<infixish>)>
+        <code=[A..Z]>
+    }
+
+    token pod_balanced_braces {
+        <?{ nqp::chars($<start>) == $*POD_ANGLE_COUNT || $*POD_ANGLE_COUNT < 0 }>
+    }
+
+    token routine_declarator:sym<macro> {
+        :my $*LINE_NO := HLL::Compiler.lineof(self.orig(), self.from(), :cache(1));
+        <!!{ nqp::rebless($/, self.slang_grammar('MAIN')); 1 }>
+        <sym> <.end_keyword> <macro_def()>
+    }
+
+    token routine_declarator:sym<macro> {
+        :my $*LINE_NO := HLL::Compiler.lineof(self.orig(), self.from(), :cache(1));
+        <sym> <.end_keyword> <macro_def()>
+    }
+
+    token integer {
+       <!!before ['.' <?before \s | ',' | '=' | ':' <!before  <coloncircumfix <OPER=prefix> > > | <.terminator> | $ > <.typed_sorry: 'X::Syntax::Number::IllegalDecimal'>]? >
+       [ <?before '_' '_'+\d> <.sorry: "Only isolated underscores are allowed inside numbers"> ]?
+    }
+}
 
 say $match<block><pair>[0]<value>;
 # OUTPUT: ｢value1｣
@@ -237,6 +318,8 @@ rx/:i
 
         <?before <.[\)\]\}]>>
 
+        \/
+
         $<string>=( [ $<part>=[abc] ]* % '-' )
         $<variable>=\w+ '=' $<value>=\w+
         a <( b )> c
@@ -316,6 +399,9 @@ say Q:b[Testing];
 "some $variable:some('adverb').method() testing";
 "some func() testing";
 "some func:some<adverb>() testing";
+"some &func() testing";
+"some &func($test) testing";
+"some &func:some<adverb>() testing";
 say "Something foo(2) $a.succ(2+3, $some_variable) $a.some-method()  @more $_.Str(2) $_: { $_ * 2 }";
 
 #`[[
@@ -384,7 +470,6 @@ for <a b c> {
 #|[[
 multiline pod declaration]
 ]]
-
 grammar Calculator {
     token TOP { <calc-op> }
 
