@@ -33,17 +33,13 @@ func rakuRules() Rules {
 
 	const (
 		rakuQuote RakuToken = iota
-		rakuName
 		rakuNameAttribute
 		rakuPod
 		rakuPodFormatter
 		rakuPodDeclaration
 		rakuMultilineComment
-		rakuSlashRegex
 		rakuMatchRegex
 		rakuSubstitutionRegex
-		rakuSubstitutionSingleRegex
-		rakuRegexInsideToken
 	)
 
 	const (
@@ -52,9 +48,9 @@ func rakuRules() Rules {
 		colonPairPattern         = `(?<!:)(?<colon>:)(?<key>\w[\w'-]*)(?<opening_delimiters>` + colonPairOpeningBrackets + `)`
 		colonPairLookahead       = `(?=(:['\w-]+` +
 			colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `)?`
-		namePattern              = `((?:(?!` + colonPairPattern + `)(?:::|[\w':-]))+)`
-		variablePattern          = `[$@%&]+[.^:?=!~]?` + namePattern
-		globalVariablePattern    = `[$@%&]+\*` + namePattern
+		namePattern           = `(?:(?!` + colonPairPattern + `)(?:::|[\w':-]))+`
+		variablePattern       = `[$@%&]+[.^:?=!~]?` + namePattern
+		globalVariablePattern = `[$@%&]+\*` + namePattern
 	)
 
 	keywords := []string{
@@ -341,13 +337,11 @@ func rakuRules() Rules {
 
 	// Finds opening brackets and their closing counterparts (including pod and heredoc)
 	// and modifies state groups and position accordingly
-	bracketsFinder := func(tokenClass RakuToken) MutatorFunc {
+	findBrackets := func(tokenClass RakuToken) MutatorFunc {
 		return func(state *LexerState) error {
 			var openingChars []rune
 			var adverbs []rune
 			switch tokenClass {
-			case rakuRegexInsideToken:
-				openingChars = []rune("{")
 			case rakuPod:
 				openingChars = []rune(strings.Join(state.Groups[1:5], ``))
 			default:
@@ -365,7 +359,6 @@ func rakuRules() Rules {
 
 			switch tokenClass {
 			case rakuPod:
-				closingChars = []rune(state.NamedGroups[`ws`] + `=end ` + state.NamedGroups[`name`])
 				closingCharExists = true
 			default:
 				closingChar, closingCharExists = brackets[openingChar]
@@ -373,17 +366,8 @@ func rakuRules() Rules {
 
 			switch tokenClass {
 			case rakuPodFormatter:
-				stack, ok := state.Get("pod_formatter_stack").([]RakuFormatterRules)
-				if !ok {
-					stack = []RakuFormatterRules{}
-				}
-				popRule := makeRuleAndPushMaybe(RuleMakingConfig{
-					delimiter:              []rune{closingChar},
-					numberOfDelimiterChars: nChars,
-					tokenType:              Punctuation,
-					mutator:                Mutators(Pop(1), MutatorFunc(podFormatterPopper)),
-				})
-				var formatter TokenType = StringOther
+				formatter := StringOther
+
 				switch state.NamedGroups[`keyword`] {
 				case "B":
 					formatter = GenericStrong
@@ -392,20 +376,34 @@ func rakuRules() Rules {
 				case "U":
 					formatter = GenericUnderline
 				}
-				formattingRule := makeRuleAndPushMaybe(RuleMakingConfig{
-					pattern:   `.+?`,
-					tokenType: formatter,
-					mutator:   nil,
-				})
-				state.Set("pod_formatter_stack",
-					append(stack, RakuFormatterRules{popRule, formattingRule}))
+
+				formatterRule := ruleReplacingConfig{
+					pattern:      `.+?`,
+					tokenType:    formatter,
+					mutator:      nil,
+					stateName:    `pod-formatter`,
+					rulePosition: bottomRule,
+				}
+
+				err := replaceRule(formatterRule)(state)
+				if err != nil {
+					panic(err)
+				}
+
+				err = replaceRule(ruleReplacingConfig{
+					delimiter:              []rune{closingChar},
+					tokenType:              Punctuation,
+					stateName:              `pod-formatter`,
+					pushState:              true,
+					numberOfDelimiterChars: nChars,
+					appendMutator:          popRule(formatterRule),
+				})(state)
+				if err != nil {
+					panic(err)
+				}
 
 				return nil
-			case rakuMatchRegex, rakuSubstitutionSingleRegex, rakuRegexInsideToken:
-				// We're inside a regex
-				// While matching a regex, the closing chars may have been used inside the regex
-				// so we have to push to regex state and pop on the matched closing chars
-				// and return
+			case rakuMatchRegex:
 				var delimiter []rune
 				if closingCharExists {
 					delimiter = []rune{closingChar}
@@ -413,16 +411,32 @@ func rakuRules() Rules {
 					delimiter = openingChars
 				}
 
-				makeRuleAndPushMaybe(RuleMakingConfig{
-					delimiter:              delimiter,
-					tokenType:              Punctuation,
-					mutator:                Pop(1),
-					rulePosition:           topRule,
-					state:                  state,
-					stateName:              "regex",
-					pushToStack:            true,
-					numberOfDelimiterChars: nChars,
-				})
+				err := replaceRule(ruleReplacingConfig{
+					delimiter: delimiter,
+					tokenType: Punctuation,
+					stateName: `regex`,
+					popState:  true,
+					pushState: true,
+				})(state)
+				if err != nil {
+					panic(err)
+				}
+
+				return nil
+			case rakuSubstitutionRegex:
+				delimiter := regexp2.Escape(string(openingChars))
+
+				err := replaceRule(ruleReplacingConfig{
+					pattern:      `(` + delimiter + `)` + `((?:\\\\|\\/|.)*?)` + `(` + delimiter + `)`,
+					tokenType:    ByGroups(Punctuation, UsingSelf(`qq`), Punctuation),
+					rulePosition: topRule,
+					stateName:    `regex`,
+					popState:     true,
+					pushState:    true,
+				})(state)
+				if err != nil {
+					panic(err)
+				}
 
 				return nil
 			}
@@ -436,10 +450,17 @@ func rakuRules() Rules {
 			if !closingCharExists {
 				// it's not a mirrored character, which means we
 				// just need to look for the next occurrence
-				nonMirroredOpeningCharPosition = indexAt(text, openingChars, state.Pos)
+				closingChars = openingChars
+				nonMirroredOpeningCharPosition = indexAt(text, closingChars, state.Pos)
 				endPos = nonMirroredOpeningCharPosition
 			} else {
-				if tokenClass != rakuPod {
+				var podRegex *regexp2.Regexp
+				if tokenClass == rakuPod {
+					podRegex = regexp2.MustCompile(
+						state.NamedGroups[`ws`]+`=end`+`\s+`+regexp2.Escape(state.NamedGroups[`name`]),
+						0,
+					)
+				} else {
 					closingChars = []rune(strings.Repeat(string(closingChar), nChars))
 				}
 
@@ -452,8 +473,19 @@ func rakuRules() Rules {
 				var nextClosePos int
 
 				for nestingLevel > 0 {
+					if tokenClass == rakuPod {
+						match, err := podRegex.FindRunesMatchStartingAt(text, searchPos+nChars)
+						if err == nil {
+							closingChars = match.Runes()
+							nextClosePos = match.Index
+						} else {
+							nextClosePos = -1
+						}
+					} else {
+						nextClosePos = indexAt(text, closingChars, searchPos+nChars)
+					}
+
 					nextOpenPos := indexAt(text, openingChars, searchPos+nChars)
-					nextClosePos = indexAt(text, closingChars, searchPos+nChars)
 
 					switch {
 					case nextClosePos == -1:
@@ -524,12 +556,17 @@ func rakuRules() Rules {
 	}
 
 	// Raku rules
-	// Empty capture groups are placeholders and will be replaced by bracketsFinder.
+	// Empty capture groups are placeholders and will be replaced by mutators
 	// DO NOT REMOVE THEM!
 	return Rules{
 		"root": {
+			// Placeholder, will be overwritten by mutators, DO NOT REMOVE!
+			{`\A\z`, nil, nil},
 			Include("common"),
-			{`[{}();]`, Punctuation, nil},
+			{`{`, Punctuation, Push(`root`)},
+			{`\(`, Punctuation, Push(`root`)},
+			{`[)}]`, Punctuation, Pop(1)},
+			{`;`, Punctuation, nil},
 			{`\[|\]`, Operator, nil},
 			{`.+?`, Text, nil},
 		},
@@ -540,14 +577,14 @@ func rakuRules() Rules {
 			{
 				"#`(?<opening_delimiters>(?<delimiter>" + bracketsPattern + `)\k<delimiter>*)`,
 				CommentMultiline,
-				bracketsFinder(rakuMultilineComment),
+				findBrackets(rakuMultilineComment),
 			},
 			{`#[^\n]*$`, CommentSingle, nil},
 			// /regex/
 			{
-				`(?<=(?:^|\(|=|:|~~|\[|,|=>)\s*)(/)(?!\]|\))((?:\\\\|\\/|.)*?)((?<!(?<!\\)\\)/(?!'|"))`,
+				`(?<=(?:^|\(|=|:|~~|\[|{|,|=>)\s*)(/)(?!\]|\))((?:\\\\|\\/|.)*?)((?<!(?<!\\)\\)/(?!'|"))`,
 				ByGroups(Punctuation, UsingSelf("regex"), Punctuation),
-				MutatorFunc(makeRegexPoppingRule),
+				nil,
 			},
 			Include("variable"),
 			// ::?VARIABLE
@@ -569,9 +606,9 @@ func rakuRules() Rules {
 			{`(>>)(\S+?)(>>)`, ByGroups(Operator, UsingSelf("root"), Operator), nil},
 			{`(»)(\S+?)(»)`, ByGroups(Operator, UsingSelf("root"), Operator), nil},
 			// <<quoted words>>
-			{`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+\s+|[\])}]\s+)\s*)(<<)(?!(?:(?!>>)[^\n])+?[},;] *\n)(?!(?:(?!>>).)+?>>\S+?>>)`, Punctuation, Push("<<")},
+			{`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%]\*?[\w':-]+\s+|[\])}]\s+)\s*)(<<)(?!(?:(?!>>)[^\n])+?[},;] *\n)(?!(?:(?!>>).)+?>>\S+?>>)`, Punctuation, Push("<<")},
 			// «quoted words»
-			{`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+\s+|[\])}]\s+)\s*)(«)(?![^»]+?[},;] *\n)(?![^»]+?»\S+?»)`, Punctuation, Push("«")},
+			{`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%]\*?[\w':-]+\s+|[\])}]\s+)\s*)(«)(?![^»]+?[},;] *\n)(?![^»]+?»\S+?»)`, Punctuation, Push("«")},
 			// [<]
 			{`(?<=\[\\?)<(?=\])`, Operator, nil},
 			// < and > operators | something < onething > something
@@ -582,22 +619,16 @@ func rakuRules() Rules {
 			},
 			// <quoted words>
 			{
-				`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+\s+|[\])}]\s+)\s*)(<)((?:(?![,;)}] *(?:#[^\n]+)?\n)[^<>])+?)(>)(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%]\w[\w':-]*[^(]|\s+\[))`,
+				`(?<!(?:\d+|\.(?:Int|Numeric)|[$@%]\*?[\w':-]+\s+|[\])}]\s+)\s*)(<)((?:(?![,;)}] *(?:#[^\n]+)?\n)[^<>])+?)(>)(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%]\*?\w[\w':-]*[^(]|\s+\[))`,
 				ByGroups(Punctuation, String, Punctuation),
 				nil,
 			},
 			{`C?X::['\w:-]+`, NameException, nil},
 			Include("metaoperator"),
-			// Pair | (key) => value
-			{
-				`(\([^)]+\))(\s*)(=>)(\s*)([^,\n]+)(,?\n*)`,
-				ByGroups(UsingSelf("root"), Text, Operator, Text, UsingSelf("root"), Text),
-				nil,
-			},
 			// Pair | key => value
 			{
-				`(\w[\w'-]*)(\s*)(=>)(\s*)([^,\n]+)(,?\n*)`,
-				ByGroups(String, Text, Operator, Text, UsingSelf("root"), Text),
+				`(\w[\w'-]*)(\s*)(=>)`,
+				ByGroups(String, Text, Operator),
 				nil,
 			},
 			Include("colon-pair"),
@@ -637,7 +668,7 @@ func rakuRules() Rules {
 			{
 				`(?<=^|\b|\s)(?<keyword>(?:qq|q|Q))(?<adverbs>(?::?(?:heredoc|to|qq|ww|q|w|s|a|h|f|c|b|to|v|x))*)(?<ws>\s*)(?<opening_delimiters>(?<delimiter>[^0-9a-zA-Z:\s])\k<delimiter>*)`,
 				EmitterFunc(quote),
-				bracketsFinder(rakuQuote),
+				findBrackets(rakuQuote),
 			},
 			// Function
 			{
@@ -668,11 +699,13 @@ func rakuRules() Rules {
 			Include("colon-pair-attribute"),
 			{
 				`(?<opening_delimiters>(?<delimiter>[^\w:\s])\k<delimiter>*)`,
-				ByGroupNames(map[string]Emitter{
-					`opening_delimiters`: Punctuation,
-					`delimiter`:          nil,
-				}),
-				Mutators(Pop(1), bracketsFinder(rakuMatchRegex)),
+				ByGroupNames(
+					map[string]Emitter{
+						`opening_delimiters`: Punctuation,
+						`delimiter`:          nil,
+					},
+				),
+				findBrackets(rakuMatchRegex),
 			},
 		},
 		"substitution": {
@@ -684,15 +717,13 @@ func rakuRules() Rules {
 					`opening_delimiters`: Punctuation,
 					`delimiter`:          nil,
 				}),
-				Mutators(Pop(1), bracketsFinder(rakuSubstitutionSingleRegex)),
+				findBrackets(rakuMatchRegex),
 			},
 			// Substitution | s/regex/string/
 			{
-				`([^\w:\s])((?:\\\\|\\/|.)*?)(\1)((?:\\\\|\\/|.)*?)(\1)`,
-				ByGroups(
-					Punctuation, UsingSelf("regex"), Punctuation, UsingSelf("qq"), Punctuation,
-				),
-				Mutators(Pop(1), MutatorFunc(makeRegexPoppingRule)),
+				`(?<opening_delimiters>[^\w:\s])`,
+				Punctuation,
+				findBrackets(rakuSubstitutionRegex),
 			},
 		},
 		"number": {
@@ -714,7 +745,7 @@ func rakuRules() Rules {
 		},
 		"colon-pair": {
 			// :key(value)
-			{colonPairPattern, colonPair(String), bracketsFinder(rakuNameAttribute)},
+			{colonPairPattern, colonPair(String), findBrackets(rakuNameAttribute)},
 			// :123abc
 			{
 				`(:)(\d+)(\w[\w'-]*)`,
@@ -722,12 +753,12 @@ func rakuRules() Rules {
 				nil,
 			},
 			// :key
-			{`(:!?)(\w[\w'-]*)`, ByGroups(Punctuation, String), nil},
+			{`(:)(!?)(\w[\w'-]*)`, ByGroups(Punctuation, Operator, String), nil},
 			{`\s+`, Text, nil},
 		},
 		"colon-pair-attribute": {
 			// :key(value)
-			{colonPairPattern, colonPair(NameAttribute), bracketsFinder(rakuNameAttribute)},
+			{colonPairPattern, colonPair(NameAttribute), findBrackets(rakuNameAttribute)},
 			// :123abc
 			{
 				`(:)(\d+)(\w[\w'-]*)`,
@@ -735,12 +766,12 @@ func rakuRules() Rules {
 				nil,
 			},
 			// :key
-			{`(:!?)(\w[\w'-]*)`, ByGroups(Punctuation, NameAttribute), nil},
+			{`(:)(!?)(\w[\w'-]*)`, ByGroups(Punctuation, Operator, NameAttribute), nil},
 			{`\s+`, Text, nil},
 		},
 		"colon-pair-attribute-keyvalue": {
 			// :key(value)
-			{colonPairPattern, colonPair(NameAttribute), bracketsFinder(rakuNameAttribute)},
+			{colonPairPattern, colonPair(NameAttribute), findBrackets(rakuNameAttribute)},
 		},
 		"escape-qq": {
 			{
@@ -748,6 +779,12 @@ func rakuRules() Rules {
 				ByGroups(StringEscape, Punctuation, UsingSelf("qq"), Punctuation),
 				nil,
 			},
+		},
+		`escape-char`: {
+			{`(?<!(?<!\\)\\)(\\[abfrnrt])`, StringEscape, nil},
+		},
+		`escape-single-quote`: {
+			{`(?<!(?<!\\)\\)(\\)(['\\])`, ByGroups(StringEscape, StringSingle), nil},
 		},
 		"escape-c-name": {
 			{
@@ -765,14 +802,20 @@ func rakuRules() Rules {
 			{`(\\[x|X])([0-9a-fA-F]+)`, ByGroups(StringEscape, NumberHex), nil},
 		},
 		"regex": {
-			// Placeholder, will be overwritten by bracketsFinder, DO NOT REMOVE!
-			{`^$`, nil, nil},
+			// Placeholder, will be overwritten by mutators, DO NOT REMOVE!
+			{`\A\z`, nil, nil},
 			Include("regex-escape-class"),
+			Include(`regex-character-escape`),
 			// $(code)
 			{
-				`(?<!(?<!\\)\\)([$@])(\()(.*?)(\))`,
-				ByGroups(Keyword, Punctuation, UsingSelf("root"), Punctuation),
-				nil,
+				`([$@])((?<!(?<!\\)\\)\()`,
+				ByGroups(Keyword, Punctuation),
+				replaceRule(ruleReplacingConfig{
+					delimiter: []rune(`)`),
+					tokenType: Punctuation,
+					stateName: `root`,
+					pushState: true,
+				}),
 			},
 			// Exclude $/ from variables, because we can't get out of the end of the slash regex: $/;
 			{`\$(?=/)`, NameEntity, nil},
@@ -785,18 +828,28 @@ func rakuRules() Rules {
 			Include("single-quote"),
 			// :my variable code ...
 			{
-				`(?<!(?<!\\)\\)(:)(my|our|state|constant|temp|let)(.+?;)`,
-				ByGroups(Operator, KeywordDeclaration, UsingSelf("root")),
-				nil,
+				`(?<!(?<!\\)\\)(:)(my|our|state|constant|temp|let)`,
+				ByGroups(Operator, KeywordDeclaration),
+				replaceRule(ruleReplacingConfig{
+					delimiter: []rune(`;`),
+					tokenType: Punctuation,
+					stateName: `root`,
+					pushState: true,
+				}),
 			},
 			// <{code}>
 			{
-				`(?<!(?<!\\)\\)(<)([?!.]*)((?<!(?<!\\)\\){)(.*?)(}>)`,
-				ByGroups(Punctuation, Operator, Punctuation, UsingSelf("root"), Punctuation),
-				nil,
+				`(?<!(?<!\\)\\)(<)([?!.]*)((?<!(?<!\\)\\){)`,
+				ByGroups(Punctuation, Operator, Punctuation),
+				replaceRule(ruleReplacingConfig{
+					delimiter: []rune(`}>`),
+					tokenType: Punctuation,
+					stateName: `root`,
+					pushState: true,
+				}),
 			},
 			// {code}
-			{`(?<!(?<!\\)\\)({)(.*?)(})`, ByGroups(Punctuation, UsingSelf("root"), Punctuation), nil},
+			Include(`closure`),
 			// Properties
 			{`(:)(\w+)`, ByGroups(Punctuation, NameAttribute), nil},
 			// Operator
@@ -809,7 +862,12 @@ func rakuRules() Rules {
 			{
 				`(?<!(?<!\\)\\)(<)(\s*)([?!.]+)(\s*)(after|before)`,
 				ByGroups(Punctuation, Text, Operator, Text, OperatorWord),
-				Push("regex"),
+				replaceRule(ruleReplacingConfig{
+					delimiter: []rune(`>`),
+					tokenType: Punctuation,
+					stateName: `regex`,
+					pushState: true,
+				}),
 			},
 			{
 				`(?<!(?<!\\)\\)(<)([|!?.]*)(wb|ww|ws|w)(>)`,
@@ -818,15 +876,25 @@ func rakuRules() Rules {
 			},
 			// <$variable>
 			{
-				`(?<!(?<!\\)\\)(<)([?!.]*)([$@]\w[\w-:]*)(>)`,
+				`(?<!(?<!\\)\\)(<)([?!.]*)([$@]\w[\w:-]*)(>)`,
 				ByGroups(Punctuation, Operator, NameVariable, Punctuation),
 				nil,
 			},
 			// Capture markers
 			{`(?<!(?<!\\)\\)<\(|\)>`, Operator, nil},
+			{
+				`(?<!(?<!\\)\\)(<)(\w[\w:-]*)(=\.?)`,
+				ByGroups(Punctuation, NameVariable, Operator),
+				Push(`regex-variable`),
+			},
+			{
+				`(?<!(?<!\\)\\)(<)([|!?.&]*)(\w(?:(?!:\s)[\w':-])*)`,
+				ByGroups(Punctuation, Operator, NameFunction),
+				Push(`regex-function`),
+			},
 			{`(?<!(?<!\\)\\)<`, Punctuation, Push("regex-property")},
 			{`(?<!(?<!\\)\\)"`, Punctuation, Push("double-quotes")},
-			{`(?<!(?<!\\)\\)(?:\]|\)|>)`, Punctuation, Pop(1)},
+			{`(?<!(?<!\\)\\)(?:\]|\))`, Punctuation, Pop(1)},
 			{`(?<!(?<!\\)\\)(?:\[|\()`, Punctuation, Push("regex")},
 			{`.+?`, StringRegex, nil},
 		},
@@ -837,41 +905,85 @@ func rakuRules() Rules {
 				nil,
 			},
 		},
+		"regex-function": {
+			// <function>
+			{`(?<!(?<!\\)\\)>`, Punctuation, Pop(1)},
+			// <function(parameter)>
+			{
+				`\(`,
+				Punctuation,
+				replaceRule(ruleReplacingConfig{
+					delimiter: []rune(`)>`),
+					tokenType: Punctuation,
+					stateName: `root`,
+					popState:  true,
+					pushState: true,
+				}),
+			},
+			// <function value>
+			{
+				`\s+`,
+				StringRegex,
+				replaceRule(ruleReplacingConfig{
+					delimiter: []rune(`>`),
+					tokenType: Punctuation,
+					stateName: `regex`,
+					popState:  true,
+					pushState: true,
+				}),
+			},
+			// <function: value>
+			{
+				`:`,
+				Punctuation,
+				replaceRule(ruleReplacingConfig{
+					delimiter: []rune(`>`),
+					tokenType: Punctuation,
+					stateName: `root`,
+					popState:  true,
+					pushState: true,
+				}),
+			},
+		},
+		"regex-variable": {
+			Include(`regex-starting-operators`),
+			// <var=function(
+			{
+				`(&)?(\w(?:(?!:\s)[\w':-])*)(?=\()`,
+				ByGroups(Operator, NameFunction),
+				Mutators(Pop(1), Push(`regex-function`)),
+			},
+			// <var=function>
+			{`(&)?(\w[\w':-]*)(>)`, ByGroups(Operator, NameFunction, Punctuation), Pop(1)},
+			// <var=
+			Default(Pop(1), Push(`regex-property`)),
+		},
 		"regex-property": {
 			{`(?<!(?<!\\)\\)>`, Punctuation, Pop(1)},
 			Include("regex-class-builtin"),
 			Include("variable"),
-			{`(?<=<)[|!?.]+`, Operator, nil},
-			// <regexfunc> | <regexfunc(parameter)> | <variable=regexfunc>
-			{
-				`(?:(\w[\w-:]*)(=\.?))?(&?\w[\w'-:]+?)(\(.+?\))?(?=>)`,
-				ByGroups(
-					NameVariable, Operator, NameFunction, UsingSelf("root"),
-				),
-				nil,
-			},
-			// <func: value>
-			{
-				`(&?\w[\w':-]*?)(:)((?:.*?(?:\$<\w[\w':-]*>)?.*?)*?)(?=>)`,
-				ByGroups(
-					NameFunction, Punctuation, UsingSelf("root"),
-				),
-				nil,
-			},
+			Include(`regex-starting-operators`),
 			Include("colon-pair-attribute"),
 			{`(?<!(?<!\\)\\)\[`, Punctuation, Push("regex-character-class")},
 			{`\+|\-`, Operator, nil},
-			{`@[\w'-:]+`, NameVariable, nil},
+			{`@[\w':-]+`, NameVariable, nil},
 			{`.+?`, StringRegex, nil},
+		},
+		`regex-starting-operators`: {
+			{`(?<=<)[|!?.]+`, Operator, nil},
 		},
 		"regex-escape-class": {
 			{`(?i)\\n|\\t|\\h|\\v|\\s|\\d|\\w`, StringEscape, nil},
+		},
+		`regex-character-escape`: {
+			{`(?<!(?<!\\)\\)(\\)(.)`, ByGroups(StringEscape, StringRegex), nil},
 		},
 		"regex-character-class": {
 			{`(?<!(?<!\\)\\)\]`, Punctuation, Pop(1)},
 			Include("regex-escape-class"),
 			Include("escape-c-name"),
 			Include("escape-hexadecimal"),
+			Include(`regex-character-escape`),
 			Include("number"),
 			{`\.\.`, Operator, nil},
 			{`.+?`, StringRegex, nil},
@@ -906,7 +1018,7 @@ func rakuRules() Rules {
 						`value`:              UsingSelf("pod-declaration"),
 						`closing_delimiters`: Punctuation,
 					}),
-				bracketsFinder(rakuPodDeclaration),
+				findBrackets(rakuPodDeclaration),
 			},
 			Include("pod-blocks"),
 		},
@@ -930,7 +1042,7 @@ func rakuRules() Rules {
 						`value`:              UsingSelf("pod-begin"),
 						`closing_delimiters`: Keyword,
 					}),
-				bracketsFinder(rakuPod),
+				findBrackets(rakuPod),
 			},
 			// =for ...
 			{
@@ -1027,25 +1139,21 @@ func rakuRules() Rules {
 			{
 				`(?<keyword>[CBIUDTKRPAELZVMSXN])(?<opening_delimiters><+|«)`,
 				ByGroups(Keyword, Punctuation),
-				Mutators(
-					bracketsFinder(rakuPodFormatter),
-					Push("pod-formatter"), MutatorFunc(podFormatter),
-				),
+				findBrackets(rakuPodFormatter),
 			},
 		},
 		"pod-formatter": {
-			// Placeholder rule, will be replaced by podFormatter. DO NOT REMOVE!
+			// Placeholder rule, will be replaced by mutators. DO NOT REMOVE!
 			{`>`, Punctuation, Pop(1)},
 			Include("pre-pod-formatter"),
-			// Placeholder rule, will be replaced by podFormatter. DO NOT REMOVE!
+			// Placeholder rule, will be replaced by mutators. DO NOT REMOVE!
 			{`.+?`, StringOther, nil},
 		},
 		"variable": {
 			{variablePattern, NameVariable, Push("name-adverb")},
 			{globalVariablePattern, NameVariableGlobal, Push("name-adverb")},
 			{`[$@]<[^>]+>`, NameVariable, nil},
-			{`\$/`, NameVariable, nil},
-			{`\$!`, NameVariable, nil},
+			{`\$[/!¢]`, NameVariable, nil},
 			{`[$@%]`, NameVariable, nil},
 		},
 		"single-quote": {
@@ -1053,6 +1161,7 @@ func rakuRules() Rules {
 		},
 		"single-quote-inner": {
 			{`(?<!(?<!(?<!\\)\\)\\)'`, Punctuation, Pop(1)},
+			Include("escape-single-quote"),
 			Include("escape-qq"),
 			{`(?:\\\\|\\[^\\]|[^'\\])+?`, StringSingle, nil},
 		},
@@ -1061,11 +1170,11 @@ func rakuRules() Rules {
 			Include("qq"),
 		},
 		"<<": {
-			{`>>(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+|\s+\[))`, Punctuation, Pop(1)},
+			{`>>(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%]\*?[\w':-]+|\s+\[))`, Punctuation, Pop(1)},
 			Include("ww"),
 		},
 		"«": {
-			{`»(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%][\w':-]+|\s+\[))`, Punctuation, Pop(1)},
+			{`»(?!\s*(?:\d+|\.(?:Int|Numeric)|[$@%]\*?[\w':-]+|\s+\[))`, Punctuation, Pop(1)},
 			Include("ww"),
 		},
 		"ww": {
@@ -1074,39 +1183,39 @@ func rakuRules() Rules {
 		},
 		"qq": {
 			Include("qq-variable"),
-			// Function with adverb
-			{
-				`\w[\w:'-]+(?=:['\w-]+` +
-					colonPairOpeningBrackets + `.+?` + colonPairClosingBrackets + `\()`,
-				NameFunction,
-				Push("qq-function", "name-adverb"),
-			},
-			// Function without adverb
-			{`\w[\w:'-]+(?=\((?!"))`, NameFunction, Push("qq-function")},
 			Include("closure"),
+			Include(`escape-char`),
 			Include("escape-hexadecimal"),
 			Include("escape-c-name"),
 			Include("escape-qq"),
 			{`.+?`, StringDouble, nil},
 		},
-		"qq-function": {
-			{`(\([^"]*?\))`, UsingSelf("root"), nil},
-			Default(Pop(1)),
-		},
 		"qq-variable": {
 			{
-				`(?<!(?<!\\)\\)(?:` + variablePattern + `|` + globalVariablePattern + `)`,
+				`(?<!(?<!\\)\\)(?:` + variablePattern + `|` + globalVariablePattern + `)` + colonPairLookahead + `)`,
 				NameVariable,
 				Push("qq-variable-extras", "name-adverb"),
 			},
 		},
 		"qq-variable-extras": {
-			{`(?:\[.*?\]|\{.*?\}|<<.*?>>|<.*?>|«.*?»)+`, UsingSelf("root"), nil},
 			// Method
 			{
-				`(\.)([^(\s]+)(\([^"]*?\))`,
-				ByGroups(Operator, NameFunction, UsingSelf("root")),
-				nil,
+				`(?<operator>\.)(?<method_name>` + namePattern + `)` + colonPairLookahead + `\()`,
+				ByGroupNames(map[string]Emitter{
+					`operator`:    Operator,
+					`method_name`: NameFunction,
+				}),
+				Push(`name-adverb`),
+			},
+			// Function/Signature
+			{
+				`\(`, Punctuation, replaceRule(
+					ruleReplacingConfig{
+						delimiter: []rune(`)`),
+						tokenType: Punctuation,
+						stateName: `root`,
+						pushState: true,
+					}),
 			},
 			Default(Pop(1)),
 		},
@@ -1125,13 +1234,36 @@ func rakuRules() Rules {
 			{`.+?`, String, nil},
 		},
 		"closure": {
-			{`(?<!(?<!\\)\\)\{.+?\}`, UsingSelf("root"), nil},
+			{`(?<!(?<!\\)\\){`, Punctuation, replaceRule(
+				ruleReplacingConfig{
+					delimiter: []rune(`}`),
+					tokenType: Punctuation,
+					stateName: `root`,
+					pushState: true,
+				}),
+			},
 		},
 		"token": {
 			// Token signature
-			{`(\()(.+?)(\))`, ByGroups(Punctuation, UsingSelf("root"), Punctuation), nil},
-			{`\{`, Punctuation, Mutators(Pop(1), bracketsFinder(rakuRegexInsideToken))},
-			{`.+?`, Text, nil},
+			{`\(`, Punctuation, replaceRule(
+				ruleReplacingConfig{
+					delimiter: []rune(`)`),
+					tokenType: Punctuation,
+					stateName: `root`,
+					pushState: true,
+				}),
+			},
+			{`{`, Punctuation, replaceRule(
+				ruleReplacingConfig{
+					delimiter: []rune(`}`),
+					tokenType: Punctuation,
+					stateName: `regex`,
+					popState:  true,
+					pushState: true,
+				}),
+			},
+			{`\s*`, Text, nil},
+			Default(Pop(1)),
 		},
 	}
 }
@@ -1148,11 +1280,24 @@ func joinRuneMap(m map[rune]rune) string {
 
 // Finds the index of substring in the string starting at position n
 func indexAt(str []rune, substr []rune, pos int) int {
-	text := string(str[pos:])
+	strFromPos := str[pos:]
+	text := string(strFromPos)
 
 	idx := strings.Index(text, string(substr))
 	if idx > -1 {
 		idx = utf8.RuneCountInString(text[:idx])
+
+		// Search again if the substr is escaped with backslash
+		if (idx > 1 && strFromPos[idx-1] == '\\' && strFromPos[idx-2] != '\\') ||
+			(idx == 1 && strFromPos[idx-1] == '\\') {
+			idx = indexAt(str[pos:], substr, idx+1)
+
+			idx = utf8.RuneCountInString(text[:idx])
+
+			if idx < 0 {
+				return idx
+			}
+		}
 		idx += pos
 	}
 
@@ -1169,105 +1314,188 @@ func contains(s []string, e string) bool {
 	return false
 }
 
-type RakuFormatterRules struct {
-	pop, formatter *CompiledRule
-}
-
-// Pop from the pod_formatter_stack and reformat the pod code
-func podFormatterPopper(state *LexerState) error {
-	stack, ok := state.Get("pod_formatter_stack").([]RakuFormatterRules)
-
-	if ok && len(stack) > 0 {
-		// Pop from stack
-		stack = stack[:len(stack)-1]
-		state.Set("pod_formatter_stack", stack)
-		// Call podFormatter to use the last formatter rules
-		err := podFormatter(state)
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	return nil
-}
-
-// Use the rules from pod_formatter_stack to format the pod code
-func podFormatter(state *LexerState) error {
-	stack, ok := state.Get("pod_formatter_stack").([]RakuFormatterRules)
-	if ok && len(stack) > 0 {
-		rules := stack[len(stack)-1]
-		state.Rules["pod-formatter"][0] = rules.pop
-		state.Rules["pod-formatter"][len(state.Rules["pod-formatter"])-1] = rules.formatter
-	}
-
-	return nil
-}
-
-type RulePosition int
+type rulePosition int
 
 const (
-	topRule RulePosition = iota + 1000
-	bottomRule
+	topRule    rulePosition = 0
+	bottomRule              = -1
 )
 
-type RuleMakingConfig struct {
+type ruleMakingConfig struct {
 	delimiter              []rune
 	pattern                string
-	tokenType              TokenType
+	tokenType              Emitter
 	mutator                Mutator
-	rulePosition           RulePosition
-	state                  *LexerState
-	stateName              string
-	pushToStack            bool
 	numberOfDelimiterChars int
 }
 
-// Makes compiled rules and returns them, If rule position is given, rules are added to the state
-// If pushToStack is true, state name will be added to the state stack
-func makeRuleAndPushMaybe(config RuleMakingConfig) *CompiledRule {
+type ruleReplacingConfig struct {
+	delimiter              []rune
+	pattern                string
+	tokenType              Emitter
+	numberOfDelimiterChars int
+	mutator                Mutator
+	appendMutator          Mutator
+	rulePosition           rulePosition
+	stateName              string
+	pop                    bool
+	popState               bool
+	pushState              bool
+}
+
+// Pops rule from state-stack and replaces the rule with the previous rule
+func popRule(rule ruleReplacingConfig) MutatorFunc {
+	return func(state *LexerState) error {
+		stackName := genStackName(rule.stateName, rule.rulePosition)
+
+		stack, ok := state.Get(stackName).([]ruleReplacingConfig)
+
+		if ok && len(stack) > 0 {
+			// Pop from stack
+			stack = stack[:len(stack)-1]
+			lastRule := stack[len(stack)-1]
+			lastRule.pushState = false
+			lastRule.popState = false
+			lastRule.pop = true
+			state.Set(stackName, stack)
+
+			// Call replaceRule to use the last rule
+			err := replaceRule(lastRule)(state)
+			if err != nil {
+				panic(err)
+			}
+		}
+
+		return nil
+	}
+}
+
+// Replaces a state's rule based on the rule config and position
+func replaceRule(rule ruleReplacingConfig) MutatorFunc {
+	return func(state *LexerState) error {
+		stateName := rule.stateName
+		stackName := genStackName(rule.stateName, rule.rulePosition)
+
+		stack, ok := state.Get(stackName).([]ruleReplacingConfig)
+		if !ok {
+			stack = []ruleReplacingConfig{}
+		}
+
+		// If state-stack is empty fill it with the placeholder rule
+		if len(stack) == 0 {
+			stack = []ruleReplacingConfig{
+				{
+					// Placeholder, will be overwritten by mutators, DO NOT REMOVE!
+					pattern:      `\A\z`,
+					tokenType:    nil,
+					mutator:      nil,
+					stateName:    stateName,
+					rulePosition: rule.rulePosition,
+				},
+			}
+			state.Set(stackName, stack)
+		}
+
+		var mutator Mutator
+		mutators := []Mutator{}
+
+		switch {
+		case rule.rulePosition == topRule && rule.mutator == nil:
+			// Default mutator for top rule
+			mutators = []Mutator{Pop(1), popRule(rule)}
+		case rule.rulePosition == topRule && rule.mutator != nil:
+			// Default mutator for top rule, when rule.mutator is set
+			mutators = []Mutator{rule.mutator, popRule(rule)}
+		case rule.mutator != nil:
+			mutators = []Mutator{rule.mutator}
+		}
+
+		if rule.appendMutator != nil {
+			mutators = append(mutators, rule.appendMutator)
+		}
+
+		if len(mutators) > 0 {
+			mutator = Mutators(mutators...)
+		} else {
+			mutator = nil
+		}
+
+		ruleConfig := ruleMakingConfig{
+			pattern:                rule.pattern,
+			delimiter:              rule.delimiter,
+			numberOfDelimiterChars: rule.numberOfDelimiterChars,
+			tokenType:              rule.tokenType,
+			mutator:                mutator,
+		}
+
+		cRule := makeRule(ruleConfig)
+
+		switch rule.rulePosition {
+		case topRule:
+			state.Rules[stateName][0] = cRule
+		case bottomRule:
+			state.Rules[stateName][len(state.Rules[stateName])-1] = cRule
+		}
+
+		// Pop state name from stack if asked. State should be popped first before Pushing
+		if rule.popState {
+			err := Pop(1)(state)
+			if err != nil {
+				panic(err)
+			}
+		}
+
+		// Push state name to stack if asked
+		if rule.pushState {
+			err := Push(stateName)(state)
+			if err != nil {
+				panic(err)
+			}
+		}
+
+		if !rule.pop {
+			state.Set(stackName, append(stack, rule))
+		}
+
+		return nil
+	}
+}
+
+// Generates rule replacing stack using state name and rule position
+func genStackName(stateName string, rulePosition rulePosition) (stackName string) {
+	switch rulePosition {
+	case topRule:
+		stackName = stateName + `-top-stack`
+	case bottomRule:
+		stackName = stateName + `-bottom-stack`
+	}
+	return
+}
+
+// Makes a compiled rule and returns it
+func makeRule(config ruleMakingConfig) *CompiledRule {
 	var rePattern string
+
 	if len(config.delimiter) > 0 {
-		delimiter := strings.Repeat(string(config.delimiter), config.numberOfDelimiterChars)
-		rePattern = regexp2.Escape(delimiter)
+		delimiter := string(config.delimiter)
+
+		if config.numberOfDelimiterChars > 1 {
+			delimiter = strings.Repeat(delimiter, config.numberOfDelimiterChars)
+		}
+
+		rePattern = `(?<!(?<!\\)\\)` + regexp2.Escape(delimiter)
 	} else {
 		rePattern = config.pattern
 	}
+
 	regex := regexp2.MustCompile(rePattern, regexp2.None)
 
 	cRule := &CompiledRule{
 		Rule:   Rule{rePattern, config.tokenType, config.mutator},
 		Regexp: regex,
 	}
-	state := config.state
-	stateName := config.stateName
-	switch config.rulePosition {
-	case topRule:
-		state.Rules[stateName] =
-			append([]*CompiledRule{cRule}, state.Rules[stateName][1:]...)
-	case bottomRule:
-		state.Rules[stateName] =
-			append(state.Rules[stateName][:len(state.Rules[stateName])-1], cRule)
-	}
-
-	// Push state name to stack if asked
-	if config.pushToStack {
-		state.Stack = append(state.Stack, config.stateName)
-	}
 
 	return cRule
-}
-
-// Used when the regex knows its own delimiter and uses `UsingSelf("regex")`,
-// it only puts a placeholder rule at the top of "regex" state
-func makeRegexPoppingRule(state *LexerState) error {
-	makeRuleAndPushMaybe(RuleMakingConfig{
-		pattern:      `^$`,
-		rulePosition: topRule,
-		state:        state,
-		stateName:    "regex",
-	})
-
-	return nil
 }
 
 // Emitter for colon pairs, changes token state based on key and brackets
