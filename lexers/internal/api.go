@@ -15,8 +15,8 @@ var (
 	ignoredSuffixes = [...]string{
 		// Editor backups
 		"~", ".bak", ".old", ".orig",
-		// Debian and derivatives apt/dpkg backups
-		".dpkg-dist", ".dpkg-old",
+		// Debian and derivatives apt/dpkg/ucf backups
+		".dpkg-dist", ".dpkg-old", ".ucf-dist", ".ucf-new", ".ucf-old",
 		// Red Hat and derivatives rpm backups
 		".rpmnew", ".rpmorig", ".rpmsave",
 		// Build system input/template files
