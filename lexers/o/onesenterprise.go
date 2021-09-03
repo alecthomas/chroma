@@ -6,7 +6,7 @@ import (
 )
 
 // 1S:Enterprise lexer.
-var OnecEnterprise = internal.Register(MustNewLazyLexer(
+var OnesEnterprise = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:            "OnesEnterprise",
 		Aliases:         []string{"ones", "onesenterprise", "1S", "1S:Enterprise"},
@@ -14,10 +14,10 @@ var OnecEnterprise = internal.Register(MustNewLazyLexer(
 		MimeTypes:       []string{"application/octet-stream"},
 		CaseInsensitive: true,
 	},
-	onecRules,
+	onesRules,
 ))
 
-func onecRules() Rules {
+func onesRules() Rules {
 	return Rules{
 		"root": {
 			{`\n`, Text, nil},
