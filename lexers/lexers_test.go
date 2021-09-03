@@ -80,6 +80,7 @@ func TestLexers(t *testing.T) {
 	assert.NoError(t, err)
 
 	for _, file := range files {
+
 		// skip text analysis test files
 		if file.Name() == "analysis" {
 			continue
