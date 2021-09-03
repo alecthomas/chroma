@@ -12,6 +12,8 @@
   {"type":"Text","value":" "},
   {"type":"Keyword","value":"Экспорт"},
   {"type":"Text","value":"\n\t\n\t"},
+  {"type":"Comment","value":"//Создает новый архив\n"},
+  {"type":"Text","value":"\n\t"},
   {"type":"Name","value":"Инфо"},
   {"type":"Text","value":" "},
   {"type":"Operator","value":"="},

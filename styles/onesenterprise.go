@@ -13,5 +13,5 @@ var OnesEnterprise = Register(chroma.MustNewStyle("onesenterprise", chroma.Style
 	chroma.Keyword:        "#FF0000",
 	chroma.Punctuation:    "#FF0000",
 	chroma.LiteralString:  "#000000",
-	chroma.Name:           "#FF0000",
+	chroma.Name:           "#0000FF",
 }))
