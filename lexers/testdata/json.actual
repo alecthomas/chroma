@@ -1,0 +1,11 @@
+{
+	"list": [1, 2, 3],
+	"map": {
+		"key": "value",
+	},
+	// A comment
+	"number": 1.23,
+	"string": "string",
+	"positive": true,
+	"negative": false
+}
