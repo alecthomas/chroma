@@ -513,14 +513,24 @@ func rakuRules() Rules {
 
 			adverbre := regexp.MustCompile(`:to\b|:heredoc\b`)
 			var heredocTerminator []rune
+			var endHeredocPos int
 			if adverbre.MatchString(string(adverbs)) {
-				heredocTerminator = text[state.Pos:endPos]
-				if len(heredocTerminator) > 0 {
-					endHeredocPos := indexAt(text[endPos:], heredocTerminator, 0)
+				if endPos != len(text) {
+					heredocTerminator = text[state.Pos:endPos]
 					nChars = len(heredocTerminator)
-					endPos += endHeredocPos
 				} else {
-					endPos = len(text)
+					endPos = state.Pos + 1
+					heredocTerminator = []rune{}
+					nChars = 0
+				}
+
+				if nChars > 0 {
+					endHeredocPos = indexAt(text[endPos:], heredocTerminator, 0)
+					if endHeredocPos > -1 {
+						endPos += endHeredocPos
+					} else {
+						endPos = len(text)
+					}
 				}
 			}
 
@@ -532,7 +542,7 @@ func rakuRules() Rules {
 			case rakuQuote:
 				if len(heredocTerminator) > 0 {
 					// Length of heredoc terminator + closing chars + `;`
-					heredocFristPunctuationLen := len(heredocTerminator) + len(openingChars) + 1
+					heredocFristPunctuationLen := nChars + len(openingChars) + 1
 
 					state.NamedGroups[`opening_delimiters`] = string(openingChars) +
 						string(text[state.Pos:state.Pos+heredocFristPunctuationLen])
@@ -540,10 +550,14 @@ func rakuRules() Rules {
 					state.NamedGroups[`value`] =
 						string(text[state.Pos+heredocFristPunctuationLen : endPos])
 
-					state.NamedGroups[`closing_delimiters`] = string(heredocTerminator)
+					if endHeredocPos > -1 {
+						state.NamedGroups[`closing_delimiters`] = string(heredocTerminator)
+					}
 				} else {
 					state.NamedGroups[`value`] = textBetweenBrackets
-					state.NamedGroups[`closing_delimiters`] = string(closingChars)
+					if nChars > 0 {
+						state.NamedGroups[`closing_delimiters`] = string(closingChars)
+					}
 				}
 			default:
 				state.Groups = []string{state.Groups[0] + string(text[state.Pos:endPos+nChars])}
