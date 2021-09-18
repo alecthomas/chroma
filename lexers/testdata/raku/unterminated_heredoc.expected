@@ -1,0 +1,23 @@
+[
+  {"type":"NameBuiltin","value":"say"},
+  {"type":"Text","value":" "},
+  {"type":"Keyword","value":"q"},
+  {"type":"LiteralStringAffix","value":":to"},
+  {"type":"Punctuation","value":"//"},
+  {"type":"LiteralString","value":";"},
+  {"type":"Text","value":"\n\n"},
+  {"type":"NameBuiltin","value":"say"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"'"},
+  {"type":"LiteralStringSingle","value":"something"},
+  {"type":"Punctuation","value":"';"},
+  {"type":"Text","value":"\n\n"},
+  {"type":"CommentSingle","value":"# Unterminated heredoc"},
+  {"type":"Text","value":"\n"},
+  {"type":"NameBuiltin","value":"say"},
+  {"type":"Text","value":" "},
+  {"type":"Keyword","value":"q"},
+  {"type":"LiteralStringAffix","value":":to"},
+  {"type":"Punctuation","value":"/Foo/;"},
+  {"type":"LiteralString","value":"\n\nsay 'something';\n"}
+]
