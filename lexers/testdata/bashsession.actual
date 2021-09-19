@@ -1,0 +1,7 @@
+$ echo "Hello, world!"
+Hello, world!
+%	pwd
+/User/foo
+>  make -j build
+%ls | wc -l
+5

@@ -1,0 +1,19 @@
+[
+  {"type":"GenericPrompt","value":"$ "},
+  {"type":"NameBuiltin","value":"echo"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralStringDouble","value":"\"Hello, world!\""},
+  {"type":"Text","value":"\n"},
+  {"type":"GenericOutput","value":"Hello, world!\n"},
+  {"type":"GenericPrompt","value":"%\t"},
+  {"type":"NameBuiltin","value":"pwd"},
+  {"type":"Text","value":"\n"},
+  {"type":"GenericOutput","value":"/User/foo\n"},
+  {"type":"GenericPrompt","value":">  "},
+  {"type":"Text","value":"make -j build\n"},
+  {"type":"GenericPrompt","value":"%"},
+  {"type":"Text","value":"ls "},
+  {"type":"Punctuation","value":"|"},
+  {"type":"Text","value":" wc -l\n"},
+  {"type":"GenericOutput","value":"5\n"}
+]
