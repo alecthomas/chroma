@@ -6,8 +6,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/danwakefield/fnmatch"
-
 	"github.com/alecthomas/chroma"
 )
 
@@ -104,11 +102,17 @@ func Match(filename string) chroma.Lexer {
 	for _, lexer := range Registry.Lexers {
 		config := lexer.Config()
 		for _, glob := range config.Filenames {
-			if fnmatch.Match(glob, filename, 0) {
+			ok, err := filepath.Match(glob, filename)
+			if err != nil {
+				panic(err)
+			} else if ok {
 				matched = append(matched, lexer)
 			} else {
 				for _, suf := range &ignoredSuffixes {
-					if fnmatch.Match(glob+suf, filename, 0) {
+					ok, err := filepath.Match(glob+suf, filename)
+					if err != nil {
+						panic(err)
+					} else if ok {
 						matched = append(matched, lexer)
 						break
 					}
@@ -125,11 +129,17 @@ func Match(filename string) chroma.Lexer {
 	for _, lexer := range Registry.Lexers {
 		config := lexer.Config()
 		for _, glob := range config.AliasFilenames {
-			if fnmatch.Match(glob, filename, 0) {
+			ok, err := filepath.Match(glob, filename)
+			if err != nil {
+				panic(err)
+			} else if ok {
 				matched = append(matched, lexer)
 			} else {
 				for _, suf := range &ignoredSuffixes {
-					if fnmatch.Match(glob+suf, filename, 0) {
+					ok, err := filepath.Match(glob+suf, filename)
+					if err != nil {
+						panic(err)
+					} else if ok {
 						matched = append(matched, lexer)
 						break
 					}
