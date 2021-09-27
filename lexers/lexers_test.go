@@ -9,13 +9,15 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/lexers/a"
 	"github.com/alecthomas/chroma/lexers/x"
 	"github.com/alecthomas/chroma/styles"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestCompileAllRegexes(t *testing.T) {
@@ -37,6 +39,21 @@ func TestGet(t *testing.T) {
 	t.Run("ViaFilename", func(t *testing.T) {
 		assert.Equal(t, lexers.Get("svg"), x.XML)
 	})
+}
+
+func TestGlobs(t *testing.T) {
+	filename := "main.go"
+	for _, lexer := range lexers.Registry.Lexers {
+		config := lexer.Config()
+		for _, glob := range config.Filenames {
+			_, err := filepath.Match(glob, filename)
+			require.NoError(t, err)
+		}
+		for _, glob := range config.AliasFilenames {
+			_, err := filepath.Match(glob, filename)
+			require.NoError(t, err)
+		}
+	}
 }
 
 func BenchmarkGet(b *testing.B) {
