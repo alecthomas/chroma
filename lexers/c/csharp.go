@@ -24,7 +24,7 @@ func cSharpRules() Rules {
 			{`^\s*\[.*?\]`, NameAttribute, nil},
 			{`[^\S\n]+`, Text, nil},
 			{`\\\n`, Text, nil},
-			{`///.*?\n`, CommentSpecial, nil},
+			{`\+///.*?\n`, CommentSpecial, nil},
 			{`//[^\n\r]+`, CommentSingle, nil},
 			{`/[*].*?[*]/`, CommentMultiline, nil},
 			{`\n`, Text, nil},
