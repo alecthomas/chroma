@@ -1,0 +1,7 @@
+targetScope = 'resourceGroup'
+
+targetScope = 'subscription'
+
+targetScope = 'managementGroup'
+
+targetScope = 'tenant'

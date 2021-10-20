@@ -1,0 +1,4 @@
+@description('The name of the instance.')
+param name string
+@sys.description('The description of the instance to display.')
+param description string

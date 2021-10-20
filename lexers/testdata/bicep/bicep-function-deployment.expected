@@ -1,0 +1,12 @@
+[
+  {"type":"KeywordDeclaration","value":"output"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Text","value":"deploymentOutput"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"KeywordType","value":"object"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"="},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameFunction","value":"deployment"},
+  {"type":"Punctuation","value":"()"}
+]

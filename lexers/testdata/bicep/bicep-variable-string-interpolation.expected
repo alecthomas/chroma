@@ -1,0 +1,17 @@
+[
+  {"type":"KeywordDeclaration","value":"var"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Text","value":"storagePrefix"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"="},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"LiteralStringInterpol","value":"'dev'"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"KeywordDeclaration","value":"var"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Text","value":"uniqueStorageName"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"="},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"LiteralStringInterpol","value":"'${storagePrefix}${uniqueString(resourceGroup().id)}'"}
+]

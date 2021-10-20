@@ -1,0 +1,4 @@
+output trueString bool = bool('true')
+output falseString bool = bool('false')
+output trueInt bool = bool(1)
+output falseInt bool = bool(0)

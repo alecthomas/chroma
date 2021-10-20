@@ -1,0 +1,1 @@
+output storageEndpoint object = stg.properties.primaryEndpoints

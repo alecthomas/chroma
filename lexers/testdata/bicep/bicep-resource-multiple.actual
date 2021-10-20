@@ -1,0 +1,12 @@
+@batchSize(3)
+resource sa 'Microsoft.Storage/storageAccounts@2019-06-01' = [for storageName in storageAccounts: {
+  name: storageName
+  location: location
+  sku: {
+    name: storageSKU
+  }
+  kind: 'StorageV2'
+  properties: {
+    supportsHttpsTrafficOnly: true
+  }
+}]
