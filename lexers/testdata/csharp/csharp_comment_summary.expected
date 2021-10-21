@@ -1,0 +1,7 @@
+[
+  {"type":"CommentSpecial","value":"/// \u003csummary\u003e"},
+  {"type":"Text","value":"\n"},
+  {"type":"CommentSpecial","value":"/// Class \u003cc\u003ePoint\u003c/c\u003e models a point in a two-dimensional plane."},
+  {"type":"Text","value":"\n"},
+  {"type":"CommentSpecial","value":"/// \u003c/summary\u003e"}
+]

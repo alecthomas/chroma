@@ -1,0 +1,17 @@
+[
+  {"type":"Keyword","value":"public"},
+  {"type":"Text","value":" "},
+  {"type":"Keyword","value":"record"},
+  {"type":"Text","value":" "},
+  {"type":"NameClass","value":"Person"},
+  {"type":"Punctuation","value":"("},
+  {"type":"KeywordType","value":"string"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"FirstName"},
+  {"type":"Punctuation","value":","},
+  {"type":"Text","value":" "},
+  {"type":"KeywordType","value":"string"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"LastName"},
+  {"type":"Punctuation","value":");"}
+]

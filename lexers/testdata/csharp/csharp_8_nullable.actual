@@ -1,0 +1,10 @@
+using System;
+
+#nullable enable
+
+public struct Student
+{
+    public string FirstName;
+    public string? MiddleName;
+    public string LastName;
+}
