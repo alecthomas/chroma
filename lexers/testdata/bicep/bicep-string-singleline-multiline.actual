@@ -1,0 +1,6 @@
+param exampleString string = 'test value'
+
+var comments = '''
+comments // are included
+/* because everything is read as-is */
+'''

@@ -1,0 +1,9 @@
+// This is your primary NIC.
+resource nic1 'Microsoft.Network/networkInterfaces@2020-06-01' = {
+}
+
+/*
+  This Bicep file assumes the key vault already exists and
+  is in same subscription and resource group as the deployment.
+*/
+param existingKeyVaultName string

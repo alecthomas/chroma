@@ -1,0 +1,3 @@
+publicIPAddress: any((pipId == '') ? null : {
+  id: pipId
+})
