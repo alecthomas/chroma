@@ -1,0 +1,29 @@
+/**
+ * Project is a project.
+ */
+definition test/project {
+	relation issue_creator: role#member
+	relation issue_assigner: role#member
+	relation any_issue_resolver: role#member
+	relation assigned_issue_resolver: role#member
+	relation comment_creator: role#member
+	relation comment_deleter: role#member
+	relation role_manager: role#member
+	
+	permission create_issue = issue_creator
+	permission create_role = role_manager
+}
+
+definition role {
+    /** project is the project */
+	relation project: project
+	relation member: user
+	relation built_in_role: project
+	
+	permission delete = project->role_manager - built_in_role->role_manager
+	permission add_user = project->role_manager
+	permission add_permission = project->role_manager & built_in_role->role_manager
+
+    // with arrows!
+	permission remove_permission = project->role_manager + built_in_role->role_manager
+}
