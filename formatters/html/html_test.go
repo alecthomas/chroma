@@ -108,6 +108,56 @@ func TestTableLineNumberNewlines(t *testing.T) {
 </span>`)
 }
 
+func TestWrapLongLines(t *testing.T) {
+	f := New(WithClasses(false), WrapLongLines(true))
+	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+
+	assert.Regexp(t, `<pre.*style=".*white-space:pre-wrap;word-break:break-word;`, buf.String())
+}
+
+func TestHighlightLines(t *testing.T) {
+	f := New(WithClasses(true), HighlightLines([][2]int{{4, 5}}))
+	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+
+	assert.Contains(t, buf.String(), `<div class="line hl"><span class="cl">`)
+}
+
+func TestLineNumbers(t *testing.T) {
+	f := New(WithClasses(true), WithLineNumbers(true))
+	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+
+	assert.Contains(t, buf.String(), `<div class="line"><span class="ln">1</span><span class="cl"><span class="nb">echo</span> FOO</span></div>`)
+}
+
+func TestPreWrapper(t *testing.T) {
+	f := New(Standalone(true), WithClasses(true))
+	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+
+	assert.Regexp(t, "<body class=\"bg\">\n<pre.*class=\"chroma\"><div class=\"line\"><span class=\"cl\"><span class=\"nb\">echo</span> FOO</span></div></pre>\n</body>\n</html>", buf.String())
+	assert.Regexp(t, `\.bg { .+ }`, buf.String())
+	assert.Regexp(t, `\.chroma { .+ }`, buf.String())
+}
+
 func TestLinkeableLineNumbers(t *testing.T) {
 	f := New(WithClasses(true), WithLineNumbers(true), LinkableLineNumbers(true, "line"))
 	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
@@ -202,17 +252,17 @@ func TestWithPreWrapper(t *testing.T) {
 
 	t.Run("Regular", func(t *testing.T) {
 		s := format(New(WithClasses(true)))
-		assert.Equal(t, s, `<pre tabindex="0" class="chroma"><span class="nb">echo</span> FOO</pre>`)
+		assert.Equal(t, s, `<pre tabindex="0" class="chroma"><div class="line"><span class="cl"><span class="nb">echo</span> FOO</span></div></pre>`)
 	})
 
 	t.Run("PreventSurroundingPre", func(t *testing.T) {
 		s := format(New(PreventSurroundingPre(true), WithClasses(true)))
-		assert.Equal(t, s, `<span class="nb">echo</span> FOO`)
+		assert.Equal(t, s, `<div class="line"><span class="cl"><span class="nb">echo</span> FOO</span></div>`)
 	})
 
 	t.Run("Wrapper", func(t *testing.T) {
 		s := format(New(WithPreWrapper(wrapper), WithClasses(true)))
-		assert.Equal(t, s, `<foo class="chroma" id="code-true"><span class="nb">echo</span> FOO</foo>`)
+		assert.Equal(t, s, `<foo class="chroma" id="code-true"><div class="line"><span class="cl"><span class="nb">echo</span> FOO</span></div></foo>`)
 	})
 
 	t.Run("Wrapper, LineNumbersInTable", func(t *testing.T) {
@@ -223,7 +273,7 @@ func TestWithPreWrapper(t *testing.T) {
 <foo class="chroma" id="code-false"><span class="lnt">1
 </span></foo></td>
 <td class="lntd">
-<foo class="chroma" id="code-true"><span class="nb">echo</span> FOO</foo></td></tr></table>
+<foo class="chroma" id="code-true"><div class="line"><span class="cl"><span class="nb">echo</span> FOO</span></div></foo></td></tr></table>
 </div>
 `)
 	})
@@ -246,7 +296,7 @@ func TestReconfigureOptions(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 
 	assert.NoError(t, err)
-	assert.Equal(t, `<pre tabindex="0" class="chroma"><span class="nb">echo</span> FOO</pre>`, buf.String())
+	assert.Equal(t, `<pre tabindex="0" class="chroma"><div class="line"><span class="cl"><span class="nb">echo</span> FOO</span></div></pre>`, buf.String())
 }
 
 func TestWriteCssWithAllClasses(t *testing.T) {
