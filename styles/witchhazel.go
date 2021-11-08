@@ -48,5 +48,5 @@ var WitchHazel = Register(chroma.MustNewStyle("witchhazel", chroma.StyleEntries{
 	chroma.GenericInserted:   "#a6e22e",
 	chroma.GenericStrong:     "bold",
 	chroma.GenericSubheading: "#75715e",
-	chroma.Background:        "#433e56",
+	chroma.Background:        " bg:#433e56",
 }))
