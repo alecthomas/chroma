@@ -139,17 +139,17 @@ var (
 	defaultPreWrapper = preWrapper{
 		start: func(code bool, styleAttr string) string {
 			if code {
-				return fmt.Sprintf(`<pre tabindex="0"%s>`, styleAttr)
+				return fmt.Sprintf(`<pre tabindex="0"%s><code>`, styleAttr)
 			}
 
-			return fmt.Sprintf(`<div tabindex="0"%s>`, styleAttr)
+			return fmt.Sprintf(`<pre tabindex="0"%s>`, styleAttr)
 		},
 		end: func(code bool) string {
 			if code {
-				return `</pre>`
+				return `</code></pre>`
 			}
 
-			return `</div>`
+			return `</pre>`
 		},
 	}
 )
@@ -250,7 +250,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		}
 
 		// Start of Line
-		fmt.Fprint(w, `<div`)
+		fmt.Fprint(w, `<span`)
 		if highlight {
 			// Line + LineHighlight
 			if f.Classes {
@@ -281,7 +281,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 
 		fmt.Fprint(w, `</span>`) // End of CodeLine
 
-		fmt.Fprint(w, `</div>`) // End of Line
+		fmt.Fprint(w, `</span>`) // End of Line
 	}
 
 	fmt.Fprintf(w, f.preWrapper.End(true))
@@ -454,8 +454,8 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 	// All rules begin with default rules followed by user provided rules
 	classes[chroma.Line] = `display: flex;` + classes[chroma.Line]
 	classes[chroma.LineNumbers] = lineNumbersStyle + classes[chroma.LineNumbers]
-	classes[chroma.LineNumbersTable] = `font-family: monospace; font-size: inherit;` + lineNumbersStyle + classes[chroma.LineNumbersTable]
-	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block;" + classes[chroma.LineTable]
+	classes[chroma.LineNumbersTable] = lineNumbersStyle + classes[chroma.LineNumbersTable]
+	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTable]
 	classes[chroma.LineTableTD] = "vertical-align: top; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTableTD]
 	return classes
 }
