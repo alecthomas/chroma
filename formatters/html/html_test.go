@@ -129,7 +129,7 @@ func TestHighlightLines(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Contains(t, buf.String(), `<div class="line hl"><span class="cl">`)
+	assert.Contains(t, buf.String(), `<span class="line hl"><span class="cl">`)
 }
 
 func TestLineNumbers(t *testing.T) {
@@ -141,7 +141,7 @@ func TestLineNumbers(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Contains(t, buf.String(), `<div class="line"><span class="ln">1</span><span class="cl"><span class="nb">echo</span> FOO</span></div>`)
+	assert.Contains(t, buf.String(), `<span class="line"><span class="ln">1</span><span class="cl"><span class="nb">echo</span> FOO</span></span>`)
 }
 
 func TestPreWrapper(t *testing.T) {
@@ -153,7 +153,7 @@ func TestPreWrapper(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Regexp(t, "<body class=\"bg\">\n<pre.*class=\"chroma\"><div class=\"line\"><span class=\"cl\"><span class=\"nb\">echo</span> FOO</span></div></pre>\n</body>\n</html>", buf.String())
+	assert.Regexp(t, "<body class=\"bg\">\n<pre.*class=\"chroma\"><code><span class=\"line\"><span class=\"cl\"><span class=\"nb\">echo</span> FOO</span></span></code></pre>\n</body>\n</html>", buf.String())
 	assert.Regexp(t, `\.bg { .+ }`, buf.String())
 	assert.Regexp(t, `\.chroma { .+ }`, buf.String())
 }
@@ -252,17 +252,17 @@ func TestWithPreWrapper(t *testing.T) {
 
 	t.Run("Regular", func(t *testing.T) {
 		s := format(New(WithClasses(true)))
-		assert.Equal(t, s, `<pre tabindex="0" class="chroma"><div class="line"><span class="cl"><span class="nb">echo</span> FOO</span></div></pre>`)
+		assert.Equal(t, s, `<pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></code></pre>`)
 	})
 
 	t.Run("PreventSurroundingPre", func(t *testing.T) {
 		s := format(New(PreventSurroundingPre(true), WithClasses(true)))
-		assert.Equal(t, s, `<div class="line"><span class="cl"><span class="nb">echo</span> FOO</span></div>`)
+		assert.Equal(t, s, `<span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span>`)
 	})
 
 	t.Run("Wrapper", func(t *testing.T) {
 		s := format(New(WithPreWrapper(wrapper), WithClasses(true)))
-		assert.Equal(t, s, `<foo class="chroma" id="code-true"><div class="line"><span class="cl"><span class="nb">echo</span> FOO</span></div></foo>`)
+		assert.Equal(t, s, `<foo class="chroma" id="code-true"><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></foo>`)
 	})
 
 	t.Run("Wrapper, LineNumbersInTable", func(t *testing.T) {
@@ -273,7 +273,7 @@ func TestWithPreWrapper(t *testing.T) {
 <foo class="chroma" id="code-false"><span class="lnt">1
 </span></foo></td>
 <td class="lntd">
-<foo class="chroma" id="code-true"><div class="line"><span class="cl"><span class="nb">echo</span> FOO</span></div></foo></td></tr></table>
+<foo class="chroma" id="code-true"><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></foo></td></tr></table>
 </div>
 `)
 	})
@@ -296,7 +296,7 @@ func TestReconfigureOptions(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 
 	assert.NoError(t, err)
-	assert.Equal(t, `<pre tabindex="0" class="chroma"><div class="line"><span class="cl"><span class="nb">echo</span> FOO</span></div></pre>`, buf.String())
+	assert.Equal(t, `<pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></code></pre>`, buf.String())
 }
 
 func TestWriteCssWithAllClasses(t *testing.T) {
