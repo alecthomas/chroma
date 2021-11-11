@@ -13,7 +13,6 @@ var Bicep = internal.Register(MustNewLazyLexer(
 		Name:      "Bicep",
 		Aliases:   []string{"bicep"},
 		Filenames: []string{"*.bicep"},
-		MimeTypes: []string{"text/plain"},
 	},
 	bicepRules,
 ))
