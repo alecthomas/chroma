@@ -1,0 +1,6 @@
+(program 1.0.0
+    [
+        (lam x (force x))
+        (delay [[(builtin addInteger) (con integer 4)] (con integer 8)])
+    ]
+)
