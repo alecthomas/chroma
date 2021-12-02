@@ -46,17 +46,31 @@ func plutusCoreRules() Rules {
             {`(program )(\S+)`, ByGroups(Keyword, LiteralString), nil},
 
             // Built-in Types. Figure 12.
-            {`(unit|boolean|integer|bytestring|str)`, KeywordType, nil},
+            {`(unit|bool|integer|bytestring|string)`, KeywordType, nil},
 
-            // Built-ins Functions. Figure 14.
-            {`(ifThenElse)`, NameBuiltin, nil},
-            {`(addInteger|subtractInteger|multiplyInteger|divideInteger|modInteger|quotientInteger|remainderInteger)`, NameBuiltin, nil},
-            {`(lessThanInteger|lessThanEqualsInteger|greaterThanInteger|greaterThanEqualsInteger|equalsInteger)`, NameBuiltin, nil},
-            {`(concatenate|equalsByteString|lessThanByteString|greaterThanByteString|takeByteString|dropByteString|sha2_256|sha3_256)`, NameBuiltin, nil},
-            {`(verifySignature)`, NameBuiltin, nil},
+            // Built-ins Functions. Figure 14 but, more importantly, implementation:
+            // https://github.com/input-output-hk/plutus/blob/6d759c4/plutus-core/plutus-core/src/PlutusCore/Default/Builtins.hs#L42-L111
+            {`(addInteger |subtractInteger |multiplyInteger |divideInteger |quotientInteger |remainderInteger |modInteger |equalsInteger |lessThanInteger |lessThanEqualsInteger )`, NameBuiltin, nil},
+            {`(appendByteString |consByteString |sliceByteString |lengthOfByteString |indexByteString |equalsByteString |lessThanByteString |lessThanEqualsByteString )`, NameBuiltin, nil},
+            {`(sha2_256 |sha3_256 |blake2b_256 |verifySignature )`, NameBuiltin, nil},
+            {`(appendString |equalsString |encodeUtf8 |decodeUtf8 )`, NameBuiltin, nil},
+            {`(ifThenElse )`, NameBuiltin, nil},
+            {`(chooseUnit )`, NameBuiltin, nil},
+            {`(trace )`, NameBuiltin, nil},
+            {`(fstPair |sndPair )`, NameBuiltin, nil},
+            {`(chooseList |mkCons |headList |tailList |nullList )`, NameBuiltin, nil},
+            {`(chooseData |constrData |mapData |listData |iData |bData |unConstrData |unMapData |unListData |unIData |unBData |equalsData )`, NameBuiltin, nil},
+            {`(mkPairData |mkNilData |mkNilPairData )`, NameBuiltin, nil},
 
             // Name. Figure 1.
             {`([a-zA-Z][a-zA-Z0-9_']*)`, Name, nil},
+
+            // Unicode String. Not in the specification.
+            {`"`, LiteralStringDouble, Push("string")},
+        },
+        "string": {
+            {`[^\\"]+`, LiteralStringDouble, nil},
+            {`"`, LiteralStringDouble, Pop(1)},
         },
     }
 }
