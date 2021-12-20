@@ -5,3 +5,11 @@ Hello, world!
 >  make -j build
 %ls | wc -l
 5
+[user@host]$ whoami
+user
+[user@host] # id
+uid=1000(user) gid=1000(user) groups=1000(user)
+[super user :D@super host :D] %if [ 1 -eq 1 ]; then uname; fi
+Linux
+[user@host]%echo $((1+1))
+2
