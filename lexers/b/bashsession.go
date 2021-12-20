@@ -20,7 +20,7 @@ var BashSession = internal.Register(MustNewLazyLexer(
 func bashsessionRules() Rules {
 	return Rules{
 		"root": {
-			{`^((?:\[[^]]*\]\s*)?[#$%>])\s*(.*\n?)`, ByGroups(GenericPrompt, Using(Bash)), nil},
+			{`^((?:\[[^]]+@[^]]+\]\s?)?[#$%>])\s*(.*\n?)`, ByGroups(GenericPrompt, Using(Bash)), nil},
 			{`^.+\n?`, GenericOutput, nil},
 		},
 	}
