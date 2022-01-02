@@ -10,7 +10,7 @@ var OpenEdgeABL = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "OpenEdge ABL",
 		Aliases:   []string{"openedge", "abl", "progress", "openedgeabl"},
-		Filenames: []string{"*.p", "*.cls"},
+		Filenames: []string{"*.p", "*.cls", "*.w", "*.i"},
 		MimeTypes: []string{"text/x-openedge", "application/x-openedge"},
 	},
 	func() Rules {
