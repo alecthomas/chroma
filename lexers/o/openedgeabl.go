@@ -9,7 +9,7 @@ import (
 var OpenEdgeABL = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:      "OpenEdge ABL",
-		Aliases:   []string{"openedge", "abl", "progress"},
+		Aliases:   []string{"openedge", "abl", "progress", "openedgeabl"},
 		Filenames: []string{"*.p", "*.cls"},
 		MimeTypes: []string{"text/x-openedge", "application/x-openedge"},
 	},
