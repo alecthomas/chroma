@@ -1,9 +1,9 @@
-module github.com/alecthomas/chroma/cmd/chromad
+module github.com/alecthomas/chroma/v2/cmd/chromad
 
-go 1.16
+go 1.17
 
 require (
-	github.com/alecthomas/chroma v0.0.0-00010101000000-000000000000
+	github.com/alecthomas/chroma/v2 v2.0.0-00010101000000-000000000000
 	github.com/alecthomas/kong v0.2.4
 	github.com/alecthomas/kong-hcl v0.2.0
 	github.com/gorilla/csrf v1.6.2
@@ -11,4 +11,4 @@ require (
 	github.com/gorilla/mux v1.7.3
 )
 
-replace github.com/alecthomas/chroma => ../../
+replace github.com/alecthomas/chroma/v2 => ../../

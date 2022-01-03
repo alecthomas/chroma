@@ -1,7 +1,7 @@
 package styles
 
 import (
-	"github.com/alecthomas/chroma"
+	"github.com/alecthomas/chroma/v2"
 )
 
 // Theme based on HackerRank Dark Editor theme

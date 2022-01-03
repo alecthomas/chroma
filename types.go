@@ -1,7 +1,6 @@
 package chroma
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
@@ -11,22 +10,6 @@ import (
 //
 // It is also an Emitter, emitting a single token of itself
 type TokenType int
-
-func (t TokenType) MarshalJSON() ([]byte, error) { return json.Marshal(t.String()) }
-func (t *TokenType) UnmarshalJSON(data []byte) error {
-	key := ""
-	err := json.Unmarshal(data, &key)
-	if err != nil {
-		return err
-	}
-	for tt, text := range _TokenType_map {
-		if text == key {
-			*t = tt
-			return nil
-		}
-	}
-	return fmt.Errorf("unknown TokenType %q", data)
-}
 
 // Set of TokenTypes.
 //
@@ -353,4 +336,17 @@ func (t TokenType) InSubCategory(other TokenType) bool {
 
 func (t TokenType) Emit(groups []string, _ *LexerState) Iterator {
 	return Literator(Token{Type: t, Value: groups[0]})
+}
+
+func (t TokenType) EmitterKind() string          { return "token" }
+func (t TokenType) MarshalText() ([]byte, error) { return []byte(t.String()), nil }
+func (t *TokenType) UnmarshalText(data []byte) error {
+	key := string(data)
+	for tt, text := range _TokenType_map {
+		if text == key {
+			*t = tt
+			return nil
+		}
+	}
+	return fmt.Errorf("unknown TokenType %q", data)
 }

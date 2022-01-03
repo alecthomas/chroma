@@ -9,6 +9,8 @@ import (
 	"os"
 	"os/signal"
 	"path"
+	"path/filepath"
+	"regexp"
 	"runtime"
 	"runtime/pprof"
 	"sort"
@@ -16,14 +18,14 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"github.com/mattn/go-colorable"
-	"github.com/mattn/go-isatty"
+	colorable "github.com/mattn/go-colorable"
+	isatty "github.com/mattn/go-isatty"
 
-	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/formatters"
-	"github.com/alecthomas/chroma/formatters/html"
-	"github.com/alecthomas/chroma/lexers"
-	"github.com/alecthomas/chroma/styles"
+	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma/v2/formatters"
+	"github.com/alecthomas/chroma/v2/formatters/html"
+	"github.com/alecthomas/chroma/v2/lexers"
+	"github.com/alecthomas/chroma/v2/styles"
 )
 
 var (
@@ -52,6 +54,8 @@ command, for Go.
 		Formatter string `help:"Formatter to use." default:"terminal" short:"f" enum:"${formatters}"`
 
 		JSON bool `help:"Output JSON representation of tokens."`
+
+		XML string `help:"Generate XML lexer definitions." type:"existingdir" placeholder:"DIR"`
 
 		HTML                      bool   `help:"Enable HTML mode (equivalent to '--formatter html')."`
 		HTMLPrefix                string `help:"HTML CSS class prefix." placeholder:"PREFIX"`
@@ -138,6 +142,11 @@ func main() {
 		"styles":     strings.Join(styles.Names(), ","),
 		"formatters": strings.Join(formatters.Names(), ","),
 	})
+	if cli.XML != "" {
+		err := dumpXMLLexerDefinitions(cli.XML)
+		ctx.FatalIfErrorf(err)
+		return
+	}
 	if cli.List {
 		listAll()
 		return
@@ -279,8 +288,8 @@ func configureHTMLFormatter(ctx *kong.Context) {
 
 func listAll() {
 	fmt.Println("lexers:")
-	sort.Sort(lexers.Registry.Lexers)
-	for _, l := range lexers.Registry.Lexers {
+	sort.Sort(lexers.GlobalLexerRegistry.Lexers)
+	for _, l := range lexers.GlobalLexerRegistry.Lexers {
 		config := l.Config()
 		fmt.Printf("  %s\n", config.Name)
 		filenames := []string{}
@@ -351,4 +360,34 @@ func check(filename string, it chroma.Iterator) {
 			}
 		}
 	}
+}
+
+var nameCleanRe = regexp.MustCompile(`[^A-Za-z0-9_#+-]`)
+
+func dumpXMLLexerDefinitions(dir string) error {
+	for _, name := range lexers.Names(false) {
+		lex := lexers.Get(name)
+		if rlex, ok := lex.(*chroma.RegexLexer); ok {
+			data, err := chroma.Marshal(rlex)
+			if err != nil {
+				if errors.Is(err, chroma.ErrNotSerialisable) {
+					fmt.Fprintf(os.Stderr, "warning: %q: %s\n", name, err)
+					continue
+				}
+				return err
+			}
+			name := strings.ToLower(nameCleanRe.ReplaceAllString(lex.Config().Name, "_"))
+			filename := filepath.Join(dir, name) + ".xml"
+			// fmt.Println(name)
+			_, err = os.Stat(filename)
+			if err == nil {
+				return fmt.Errorf("%s already exists", filename)
+			}
+			err = ioutil.WriteFile(filename, data, 0600)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }

@@ -24,6 +24,21 @@ func DelegatingLexer(root Lexer, language Lexer) Lexer {
 	}
 }
 
+func (d *delegatingLexer) AnalyseText(text string) float32 {
+	return d.root.AnalyseText(text)
+}
+
+func (d *delegatingLexer) SetAnalyser(analyser func(text string) float32) Lexer {
+	d.root.SetAnalyser(analyser)
+	return d
+}
+
+func (d *delegatingLexer) SetRegistry(r *LexerRegistry) Lexer {
+	d.root.SetRegistry(r)
+	d.language.SetRegistry(r)
+	return d
+}
+
 func (d *delegatingLexer) Config() *Config {
 	return d.language.Config()
 }

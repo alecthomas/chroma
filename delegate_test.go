@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func makeDelegationTestLexers() (lang Lexer, root Lexer) {
-	return MustNewLexer(nil, Rules{ // nolint: forbidigo
+func makeDelegationTestLexers(t *testing.T) (lang Lexer, root Lexer) {
+	return mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 			"root": {
 				{`\<\?`, CommentPreproc, Push("inside")},
 				{`.`, Other, nil},
@@ -18,7 +18,7 @@ func makeDelegationTestLexers() (lang Lexer, root Lexer) {
 				{`\s+`, Whitespace, nil},
 			},
 		}),
-		MustNewLexer(nil, Rules{ // nolint: forbidigo
+		mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 			"root": {
 				{`\bhello\b`, Keyword, nil},
 				{`\b(world|there)\b`, Name, nil},
@@ -97,7 +97,7 @@ func TestDelegate(t *testing.T) {
 			{Keyword, "hello"},
 		}},
 	}
-	lang, root := makeDelegationTestLexers()
+	lang, root := makeDelegationTestLexers(t)
 	delegate := DelegatingLexer(root, lang)
 	for _, test := range testdata {
 		// nolint: scopelint
