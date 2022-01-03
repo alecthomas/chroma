@@ -1,7 +1,7 @@
 package styles
 
 import (
-	"github.com/alecthomas/chroma"
+	"github.com/alecthomas/chroma/v2"
 )
 
 // Doom One 2 style. Inspired by Atom One and Doom Emacs's Atom One theme

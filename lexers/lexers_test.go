@@ -9,19 +9,18 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/alecthomas/repr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/formatters"
-	"github.com/alecthomas/chroma/lexers"
-	"github.com/alecthomas/chroma/lexers/a"
-	"github.com/alecthomas/chroma/lexers/x"
-	"github.com/alecthomas/chroma/styles"
+	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma/v2/formatters"
+	"github.com/alecthomas/chroma/v2/lexers"
+	"github.com/alecthomas/chroma/v2/styles"
 )
 
 func TestCompileAllRegexes(t *testing.T) {
-	for _, lexer := range lexers.Registry.Lexers {
+	for _, lexer := range lexers.GlobalLexerRegistry.Lexers {
 		it, err := lexer.Tokenise(nil, "")
 		assert.NoError(t, err, "%s failed", lexer.Config().Name)
 		err = formatters.NoOp.Format(ioutil.Discard, styles.SwapOff, it)
@@ -31,19 +30,23 @@ func TestCompileAllRegexes(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	t.Run("ByName", func(t *testing.T) {
-		assert.Equal(t, lexers.Get("xml"), x.XML)
+		assert.Equal(t, lexers.Get("xml"), lexers.GlobalLexerRegistry.Get("XML"))
 	})
 	t.Run("ByAlias", func(t *testing.T) {
-		assert.Equal(t, lexers.Get("as"), a.Actionscript)
+		assert.Equal(t, lexers.Get("as"), lexers.GlobalLexerRegistry.Get("Actionscript"))
 	})
 	t.Run("ViaFilename", func(t *testing.T) {
-		assert.Equal(t, lexers.Get("svg"), x.XML)
+		expected := lexers.Get("XML")
+		actual := lexers.GlobalLexerRegistry.Get("test.svg")
+		assert.Equal(t,
+			repr.String(expected.Config(), repr.Indent("  ")),
+			repr.String(actual.Config(), repr.Indent("  ")))
 	})
 }
 
 func TestGlobs(t *testing.T) {
 	filename := "main.go"
-	for _, lexer := range lexers.Registry.Lexers {
+	for _, lexer := range lexers.GlobalLexerRegistry.Lexers {
 		config := lexer.Config()
 		for _, glob := range config.Filenames {
 			_, err := filepath.Match(glob, filename)
@@ -86,7 +89,9 @@ func FileTest(t *testing.T, lexer chroma.Lexer, actualFilename, expectedFilename
 			assert.NoError(t, err)
 
 			// Equal?
-			assert.Equal(t, expected, actual)
+			assert.Equal(t,
+				repr.String(expected, repr.Indent(" ")),
+				repr.String(actual, repr.Indent(" ")))
 		}
 	})
 }
@@ -130,7 +135,7 @@ func TestLexers(t *testing.T) {
 
 			base := strings.Split(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), ".")[0]
 			lexer := lexers.Get(base)
-			assert.NotNil(t, lexer)
+			assert.NotNil(t, lexer, base)
 
 			filename := filepath.Join("testdata", file.Name())
 			expectedFilename := strings.TrimSuffix(filename, filepath.Ext(filename)) + ".expected"

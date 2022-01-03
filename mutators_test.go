@@ -44,7 +44,7 @@ func TestInclude(t *testing.T) {
 }
 
 func TestCombine(t *testing.T) {
-	l := MustNewLexer(nil, Rules{ // nolint: forbidigo
+	l := mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root":  {{`hello`, String, Combined("world", "bye", "space")}},
 		"world": {{`world`, Name, nil}},
 		"bye":   {{`bye`, Name, nil}},

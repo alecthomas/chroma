@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/lexers/j"
+	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma/v2/lexers"
 )
 
 const lexerBenchSource = `/*
@@ -210,7 +210,7 @@ public class CheckpointFile<T> {
 func Benchmark(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		it, err := j.Java.Tokenise(nil, lexerBenchSource)
+		it, err := lexers.GlobalLexerRegistry.Get("Java").Tokenise(nil, lexerBenchSource)
 		assert.NoError(b, err)
 		for t := it(); t != chroma.EOF; t = it() {
 		}

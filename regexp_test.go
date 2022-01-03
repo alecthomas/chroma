@@ -4,10 +4,19 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
+func mustNewLexer(t *testing.T, config *Config, rules Rules) *RegexLexer { // nolint: forbidigo
+	lexer, err := NewLexer(config, func() Rules {
+		return rules
+	})
+	require.NoError(t, err)
+	return lexer
+}
+
 func TestNewlineAtEndOfFile(t *testing.T) {
-	l := Coalesce(MustNewLexer(&Config{EnsureNL: true}, Rules{ // nolint: forbidigo
+	l := Coalesce(mustNewLexer(t, &Config{EnsureNL: true}, Rules{ // nolint: forbidigo
 		"root": {
 			{`(\w+)(\n)`, ByGroups(Keyword, Whitespace), nil},
 		},
@@ -16,7 +25,7 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Keyword, "hello"}, {Whitespace, "\n"}}, it.Tokens())
 
-	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
 			{`(\w+)(\n)`, ByGroups(Keyword, Whitespace), nil},
 		},
@@ -27,7 +36,7 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 }
 
 func TestMatchingAtStart(t *testing.T) {
-	l := Coalesce(MustNewLexer(&Config{}, Rules{ // nolint: forbidigo
+	l := Coalesce(mustNewLexer(t, &Config{}, Rules{ // nolint: forbidigo
 		"root": {
 			{`\s+`, Whitespace, nil},
 			{`^-`, Punctuation, Push("directive")},
@@ -45,7 +54,7 @@ func TestMatchingAtStart(t *testing.T) {
 }
 
 func TestEnsureLFOption(t *testing.T) {
-	l := Coalesce(MustNewLexer(&Config{}, Rules{ // nolint: forbidigo
+	l := Coalesce(mustNewLexer(t, &Config{}, Rules{ // nolint: forbidigo
 		"root": {
 			{`(\w+)(\r?\n|\r)`, ByGroups(Keyword, Whitespace), nil},
 		},
@@ -62,7 +71,7 @@ func TestEnsureLFOption(t *testing.T) {
 		{Whitespace, "\n"},
 	}, it.Tokens())
 
-	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
 			{`(\w+)(\r?\n|\r)`, ByGroups(Keyword, Whitespace), nil},
 		},
@@ -101,7 +110,7 @@ func TestEnsureLFFunc(t *testing.T) {
 }
 
 func TestByGroupNames(t *testing.T) {
-	l := Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+	l := Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
 			{
 				`(?<key>\w+)(?<operator>=)(?<value>\w+)`,
@@ -118,7 +127,7 @@ func TestByGroupNames(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{String, `abc`}, {Operator, `=`}, {String, `123`}}, it.Tokens())
 
-	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
 			{
 				`(?<key>\w+)(?<operator>=)(?<value>\w+)`,
@@ -134,7 +143,7 @@ func TestByGroupNames(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{String, `abc`}, {Error, `=`}, {String, `123`}}, it.Tokens())
 
-	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
 			{
 				`(?<key>\w+)=(?<value>\w+)`,
@@ -150,7 +159,7 @@ func TestByGroupNames(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{String, `abc123`}}, it.Tokens())
 
-	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
 			{
 				`(?<key>\w+)(?<op>=)(?<value>\w+)`,
@@ -167,7 +176,7 @@ func TestByGroupNames(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{String, `abc`}, {Error, `=`}, {String, `123`}}, it.Tokens())
 
-	l = Coalesce(MustNewLexer(nil, Rules{ // nolint: forbidigo
+	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
 			{
 				`\w+=\w+`,

@@ -36,6 +36,7 @@ linters:
     - ifshort
     - wrapcheck
     - stylecheck
+    - thelper
 
 linters-settings:
   govet:
@@ -48,8 +49,8 @@ linters-settings:
     min-len: 8
     min-occurrences: 3
   forbidigo:
-    forbid:
-      - (Must)?NewLexer
+    #forbid:
+    #  - (Must)?NewLexer$
     exclude_godoc_examples: false
 
 
@@ -74,3 +75,4 @@ issues:
     - 'methods on the same type should have the same receiver name'
     - '_TokenType_name should be _TokenTypeName'
     - '`_TokenType_map` should be `_TokenTypeMap`'
+    - 'rewrite if-else to switch statement'

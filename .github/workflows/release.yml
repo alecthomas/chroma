@@ -12,6 +12,8 @@ jobs:
       with:
         fetch-depth: 0
     - run: ./bin/hermit env --raw >> $GITHUB_ENV
-    - run: goreleaser release --rm-dist
+    - run: find ./lexers -name '*.xml' | xargs gzip -9
+    - run: git add lexers
+    - run: goreleaser release --rm-dist --skip-validate
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
