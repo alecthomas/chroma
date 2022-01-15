@@ -16,9 +16,9 @@ var (
 var MySQL = internal.Register(MustNewLazyLexer(
 	&Config{
 		Name:            "MySQL",
-		Aliases:         []string{"mysql"},
+		Aliases:         []string{"mysql", "mariadb"},
 		Filenames:       []string{"*.sql"},
-		MimeTypes:       []string{"text/x-mysql"},
+		MimeTypes:       []string{"text/x-mysql", "text/x-mariadb"},
 		NotMultiline:    true,
 		CaseInsensitive: true,
 	},
