@@ -29,7 +29,7 @@ var Friendly = Register(chroma.MustNewStyle("friendly", chroma.StyleEntries{
 	chroma.NameDecorator:         "bold #555555",
 	chroma.LiteralString:         "#4070a0",
 	chroma.LiteralStringDoc:      "italic",
-	chroma.LiteralStringInterpol: "italic #70a0d0",
+	chroma.LiteralStringInterpol: "#70a0d0",
 	chroma.LiteralStringEscape:   "bold #4070a0",
 	chroma.LiteralStringRegex:    "#235388",
 	chroma.LiteralStringSymbol:   "#517918",
