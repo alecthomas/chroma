@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -euo pipefail
+
+(cd cmd/chromad ; go build -o $TMPDIR/chromad .) && exec $TMPDIR/chromad "$@"

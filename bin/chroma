@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -euo pipefail
+
+(cd cmd/chroma ; go build -o $TMPDIR/chroma .) && exec $TMPDIR/chroma "$@"
