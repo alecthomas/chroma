@@ -191,6 +191,7 @@ def main():
         name=lexer_cls.name,
         regex_flags=lexer_cls.flags,
         upper_name=to_camel_case(re.sub(r'\W', '_', lexer_cls.name)),
+        upper_name=to_camel_case(re.sub(r'\W', '_', lexer_cls.name)),
         aliases=lexer_cls.aliases,
         filenames=lexer_cls.filenames,
         mimetypes=lexer_cls.mimetypes,

@@ -48,31 +48,29 @@ command, for Go.
 		Check      bool             `help:"Do not format, check for tokenisation errors instead."`
 		Filename   string           `help:"Filename to use for selecting a lexer when reading from stdin."`
 		Fail       bool             `help:"Exit silently with status 1 if no specific lexer was found."`
+		XML        string           `hidden:"" help:"Generate XML lexer definitions." type:"existingdir" placeholder:"DIR"`
 
-		Lexer     string `help:"Lexer to use when formatting." default:"autodetect" short:"l" enum:"${lexers}"`
-		Style     string `help:"Style to use for formatting." default:"swapoff" short:"s" enum:"${styles}"`
-		Formatter string `help:"Formatter to use." default:"terminal" short:"f" enum:"${formatters}"`
+		Lexer string `group:"select" help:"Lexer to use when formatting." default:"autodetect" short:"l" enum:"${lexers}"`
+		Style string `group:"select" help:"Style to use for formatting." default:"swapoff" short:"s" enum:"${styles}"`
 
-		JSON bool `help:"Output JSON representation of tokens."`
+		Formatter string `group:"format" help:"Formatter to use." default:"terminal" short:"f" enum:"${formatters}"`
+		JSON      bool   `group:"format" help:"Convenience flag to use JSON formatter."`
+		HTML      bool   `group:"format" help:"Convenience flag to use HTML formatter."`
+		SVG       bool   `group:"format" help:"Convenience flag to use SVG formatter."`
 
-		XML string `help:"Generate XML lexer definitions." type:"existingdir" placeholder:"DIR"`
-
-		HTML                      bool   `help:"Enable HTML mode (equivalent to '--formatter html')."`
-		HTMLPrefix                string `help:"HTML CSS class prefix." placeholder:"PREFIX"`
-		HTMLStyles                bool   `help:"Output HTML CSS styles."`
-		HTMLAllStyles             bool   `help:"Output all HTML CSS styles, including redundant ones."`
-		HTMLOnly                  bool   `help:"Output HTML fragment."`
-		HTMLInlineStyles          bool   `help:"Output HTML with inline styles (no classes)."`
-		HTMLTabWidth              int    `help:"Set the HTML tab width." default:"8"`
-		HTMLLines                 bool   `help:"Include line numbers in output."`
-		HTMLLinesTable            bool   `help:"Split line numbers and code in a HTML table"`
-		HTMLLinesStyle            string `help:"Style for line numbers."`
-		HTMLHighlight             string `help:"Highlight these lines." placeholder:"N[:M][,...]"`
-		HTMLHighlightStyle        string `help:"Style used for highlighting lines."`
-		HTMLBaseLine              int    `help:"Base line number." default:"1"`
-		HTMLPreventSurroundingPre bool   `help:"Prevent the surrounding pre tag."`
-
-		SVG bool `help:"Output SVG representation of tokens."`
+		HTMLPrefix                string `group:"html" help:"HTML CSS class prefix." placeholder:"PREFIX"`
+		HTMLStyles                bool   `group:"html" help:"Output HTML CSS styles."`
+		HTMLAllStyles             bool   `group:"html" help:"Output all HTML CSS styles, including redundant ones."`
+		HTMLOnly                  bool   `group:"html" help:"Output HTML fragment."`
+		HTMLInlineStyles          bool   `group:"html" help:"Output HTML with inline styles (no classes)."`
+		HTMLTabWidth              int    `group:"html" help:"Set the HTML tab width." default:"8"`
+		HTMLLines                 bool   `group:"html" help:"Include line numbers in output."`
+		HTMLLinesTable            bool   `group:"html" help:"Split line numbers and code in a HTML table"`
+		HTMLLinesStyle            string `group:"html" help:"Style for line numbers."`
+		HTMLHighlight             string `group:"html" help:"Highlight these lines." placeholder:"N[:M][,...]"`
+		HTMLHighlightStyle        string `group:"html" help:"Style used for highlighting lines."`
+		HTMLBaseLine              int    `group:"html" help:"Base line number." default:"1"`
+		HTMLPreventSurroundingPre bool   `group:"html" help:"Prevent the surrounding pre tag."`
 
 		Files []string `arg:"" optional:"" help:"Files to highlight." type:"existingfile"`
 	}
@@ -141,6 +139,10 @@ func main() {
 		"lexers":     "autodetect," + strings.Join(lexers.Names(true), ","),
 		"styles":     strings.Join(styles.Names(), ","),
 		"formatters": strings.Join(formatters.Names(), ","),
+	}, kong.Groups{
+		"format": "Output format:",
+		"select": "Select lexer and style:",
+		"html":   "HTML formatter options:",
 	})
 	if cli.XML != "" {
 		err := dumpXMLLexerDefinitions(cli.XML)
