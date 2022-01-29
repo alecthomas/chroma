@@ -192,7 +192,7 @@ following constructor options:
 If `WithClasses()` is used, the corresponding CSS can be obtained from the formatter with:
 
 ```go
-formatter := html.New(html.WithClasses())
+formatter := html.New(html.WithClasses(true))
 err := formatter.WriteCSS(w, style)
 ```
 
