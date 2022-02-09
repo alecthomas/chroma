@@ -92,7 +92,7 @@
       </rule>
       <rule pattern="&#34;">
         <token type="LiteralString"/>
-        <push state="string"/>
+        <push state="doublequotestring"/>
       </rule>
       <rule pattern="(\w+)(\()">
         <bygroups>
@@ -137,7 +137,7 @@
         <token type="Text"/>
       </rule>
     </state>
-    <state name="string">
+    <state name="doublequotestring">
       <rule pattern="\$[{(]">
         <token type="LiteralStringInterpol"/>
         <push state="interpol"/>
