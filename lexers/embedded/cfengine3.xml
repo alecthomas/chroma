@@ -38,6 +38,9 @@
       <rule pattern="#.*?\n">
         <token type="Comment"/>
       </rule>
+      <rule pattern="@.*?\n">
+        <token type="CommentPreproc"/>
+      </rule>
       <rule pattern="(body)(\s+)(\S+)(\s+)(control)">
         <bygroups>
           <token type="Keyword"/>
