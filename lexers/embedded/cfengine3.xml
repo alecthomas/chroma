@@ -94,6 +94,10 @@
         <token type="LiteralString"/>
         <push state="doublequotestring"/>
       </rule>
+      <rule pattern="&#39;">
+        <token type="LiteralString"/>
+        <push state="singlequotestring"/>
+      </rule>
       <rule pattern="(\w+)(\()">
         <bygroups>
           <token type="NameFunction"/>
@@ -146,6 +150,25 @@
         <token type="LiteralStringEscape"/>
       </rule>
       <rule pattern="&#34;">
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern=".">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="singlequotestring">
+      <rule pattern="\$[{(]">
+        <token type="LiteralStringInterpol"/>
+        <push state="interpol"/>
+      </rule>
+      <rule pattern="\\.">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="&#39;">
         <token type="LiteralString"/>
         <pop depth="1"/>
       </rule>
