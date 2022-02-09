@@ -47,7 +47,7 @@
           <token type="Keyword"/>
         </bygroups>
       </rule>
-      <rule pattern="(body|bundle)(\s+)(\S+)(\s+)(\w+)(\()">
+      <rule pattern="(body|bundle|promise)(\s+)(\S+)(\s+)(\w+)(\()">
         <bygroups>
           <token type="Keyword"/>
           <token type="Text"/>
@@ -58,7 +58,7 @@
         </bygroups>
         <push state="arglist"/>
       </rule>
-      <rule pattern="(body|bundle)(\s+)(\S+)(\s+)(\w+)">
+      <rule pattern="(body|bundle|promise)(\s+)(\S+)(\s+)(\w+)">
         <bygroups>
           <token type="Keyword"/>
           <token type="Text"/>
