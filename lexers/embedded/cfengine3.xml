@@ -38,6 +38,9 @@
       <rule pattern="#.*?\n">
         <token type="Comment"/>
       </rule>
+      <rule pattern="@.*?\n">
+        <token type="CommentPreproc"/>
+      </rule>
       <rule pattern="(body)(\s+)(\S+)(\s+)(control)">
         <bygroups>
           <token type="Keyword"/>
@@ -47,7 +50,7 @@
           <token type="Keyword"/>
         </bygroups>
       </rule>
-      <rule pattern="(body|bundle)(\s+)(\S+)(\s+)(\w+)(\()">
+      <rule pattern="(body|bundle|promise)(\s+)(\S+)(\s+)(\w+)(\()">
         <bygroups>
           <token type="Keyword"/>
           <token type="Text"/>
@@ -58,7 +61,7 @@
         </bygroups>
         <push state="arglist"/>
       </rule>
-      <rule pattern="(body|bundle)(\s+)(\S+)(\s+)(\w+)">
+      <rule pattern="(body|bundle|promise)(\s+)(\S+)(\s+)(\w+)">
         <bygroups>
           <token type="Keyword"/>
           <token type="Text"/>
@@ -89,7 +92,15 @@
       </rule>
       <rule pattern="&#34;">
         <token type="LiteralString"/>
-        <push state="string"/>
+        <push state="doublequotestring"/>
+      </rule>
+      <rule pattern="&#39;">
+        <token type="LiteralString"/>
+        <push state="singlequotestring"/>
+      </rule>
+      <rule pattern="&#96;">
+        <token type="LiteralString"/>
+        <push state="backtickstring"/>
       </rule>
       <rule pattern="(\w+)(\()">
         <bygroups>
@@ -134,7 +145,7 @@
         <token type="Text"/>
       </rule>
     </state>
-    <state name="string">
+    <state name="doublequotestring">
       <rule pattern="\$[{(]">
         <token type="LiteralStringInterpol"/>
         <push state="interpol"/>
@@ -143,6 +154,44 @@
         <token type="LiteralStringEscape"/>
       </rule>
       <rule pattern="&#34;">
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern=".">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="singlequotestring">
+      <rule pattern="\$[{(]">
+        <token type="LiteralStringInterpol"/>
+        <push state="interpol"/>
+      </rule>
+      <rule pattern="\\.">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="&#39;">
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern=".">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="backtickstring">
+      <rule pattern="\$[{(]">
+        <token type="LiteralStringInterpol"/>
+        <push state="interpol"/>
+      </rule>
+      <rule pattern="\\.">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="&#96;">
         <token type="LiteralString"/>
         <pop depth="1"/>
       </rule>

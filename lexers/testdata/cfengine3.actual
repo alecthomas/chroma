@@ -1,0 +1,27 @@
+@if minimum_version(3.20)
+body members foo
+{
+  include => { "alice", "bob" };
+  exclude => { "malcom" };
+}
+@endif
+
+@if minimum_version(3.20)
+promise agent blah
+{
+  path => "/some/path";
+}
+@endif
+
+bundle agent __main__
+{
+  groups:
+    "foo"
+      policy => "present",
+@if minimum_version(3.20)
+      members => foo;
+@else
+      members => '{ "include": ["alice", "bob"],
+                    "exclude": ["malcom"] }';
+@endif
+}
