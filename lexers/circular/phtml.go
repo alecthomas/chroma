@@ -18,7 +18,7 @@ var PHTML = internal.Register(DelegatingLexer(h.HTML, MustNewLazyLexer(
 		DotAll:          true,
 		CaseInsensitive: true,
 		EnsureNL:        true,
-		Priority:        2,
+		Priority:        0.9,
 	},
 	phtmlRules,
 ).SetAnalyser(func(text string) float32 {

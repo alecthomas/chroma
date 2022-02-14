@@ -15,6 +15,7 @@ var PHP = internal.Register(MustNewLazyLexer(
 		DotAll:          true,
 		CaseInsensitive: true,
 		EnsureNL:        true,
+		Priority:        1,
 	},
 	phpRules,
 ))
