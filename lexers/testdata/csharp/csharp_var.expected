@@ -1,0 +1,11 @@
+[
+  {"type":"KeywordType","value":"var"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"_abc"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralNumber","value":"123"},
+  {"type":"Punctuation","value":";"},
+  {"type":"Text","value":"\n"}
+]

@@ -49,7 +49,7 @@
       <rule pattern="&#39;\\.&#39;|&#39;[^\\]&#39;">
         <token type="LiteralStringChar"/>
       </rule>
-      <rule pattern="0[xX][0-9a-fA-F]+[Ll]?|[0-9_](\.[0-9]*)?([eE][+-]?[0-9]+)?[flFLdD]?">
+      <rule pattern="0[xX][0-9a-fA-F]+[Ll]?|\d[_\d]*(\.\d*)?([eE][+-]?\d+)?[flFLdD]?">
         <token type="LiteralNumber"/>
       </rule>
       <rule pattern="#[ \t]*(if|endif|else|elif|define|undef|line|error|warning|region|endregion|pragma|nullable)\b[^\n\r]+">
