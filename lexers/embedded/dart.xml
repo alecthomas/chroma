@@ -97,7 +97,7 @@
       <rule pattern="\b(assert|break|case|catch|continue|default|do|else|finally|for|if|in|is|new|return|super|switch|this|throw|try|while)\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(abstract|async|await|const|extends|factory|final|get|implements|native|operator|set|static|sync|typedef|var|with|yield)\b">
+      <rule pattern="\b(abstract|async|await|const|extends|factory|final|get|implements|native|operator|required|set|static|sync|typedef|var|with|yield)\b">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule pattern="\b(bool|double|dynamic|int|num|Object|String|void)\b">
