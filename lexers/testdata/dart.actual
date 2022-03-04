@@ -3,8 +3,8 @@ import 'dart:html';
 import 'dart:math' show Random;
 
 // We changed 5 lines of code to make this sample nicer on
-// the web (so that the execution waits for animation frame, 
-// the number gets updated in the DOM, and the program ends 
+// the web (so that the execution waits for animation frame,
+// the number gets updated in the DOM, and the program ends
 // after 500 iterations).
 
 main() async {
@@ -39,12 +39,12 @@ Stream<double> computePi({int batch: 100000}) async* {
 Iterable<Point> generateRandom([int seed]) sync* {
   final random = new Random(seed);
   while (true) {
-    yield new Point(random.nextDouble(), random.nextDouble());
+    yield new Point(x: random.nextDouble(), y: random.nextDouble());
   }
 }
 
 class Point {
   final double x, y;
-  const Point(this.x, this.y);
+  const Point({required this.x, required this.y});
   bool get isInsideUnitCircle => x * x + y * y <= 1;
 }
