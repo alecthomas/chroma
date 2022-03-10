@@ -38,10 +38,35 @@ func TabWidth(width int) Option { return func(f *Formatter) { f.tabWidth = width
 // PreventSurroundingPre prevents the surrounding pre tags around the generated code.
 func PreventSurroundingPre(b bool) Option {
 	return func(f *Formatter) {
+		f.preventSurroundingPre = b
+
 		if b {
 			f.preWrapper = nopPreWrapper
 		} else {
 			f.preWrapper = defaultPreWrapper
+		}
+	}
+}
+
+// InlineCode creates inline code wrapped in a code tag.
+func InlineCode(b bool) Option {
+	return func(f *Formatter) {
+		f.inlineCode = b
+		f.preWrapper = preWrapper{
+			start: func(code bool, styleAttr string) string {
+				if code {
+					return fmt.Sprintf(`<code%s>`, styleAttr)
+				}
+
+				return ``
+			},
+			end: func(code bool) string {
+				if code {
+					return `</code>`
+				}
+
+				return ``
+			},
 		}
 	}
 }
@@ -163,20 +188,22 @@ var (
 
 // Formatter that generates HTML.
 type Formatter struct {
-	standalone          bool
-	prefix              string
-	Classes             bool // Exported field to detect when classes are being used
-	allClasses          bool
-	customCSS           map[chroma.TokenType]string
-	preWrapper          PreWrapper
-	tabWidth            int
-	wrapLongLines       bool
-	lineNumbers         bool
-	lineNumbersInTable  bool
-	linkableLineNumbers bool
-	lineNumbersIDPrefix string
-	highlightRanges     highlightRanges
-	baseLineNumber      int
+	standalone            bool
+	prefix                string
+	Classes               bool // Exported field to detect when classes are being used
+	allClasses            bool
+	customCSS             map[chroma.TokenType]string
+	preWrapper            PreWrapper
+	inlineCode            bool
+	preventSurroundingPre bool
+	tabWidth              int
+	wrapLongLines         bool
+	lineNumbers           bool
+	lineNumbersInTable    bool
+	linkableLineNumbers   bool
+	lineNumbersIDPrefix   string
+	highlightRanges       highlightRanges
+	baseLineNumber        int
 }
 
 type highlightRanges [][2]int
@@ -257,26 +284,29 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 			highlightIndex++
 		}
 
-		// Start of Line
-		fmt.Fprint(w, `<span`)
-		if highlight {
-			// Line + LineHighlight
-			if f.Classes {
-				fmt.Fprintf(w, ` class="%s %s"`, f.class(chroma.Line), f.class(chroma.LineHighlight))
+		if !(f.preventSurroundingPre || f.inlineCode) {
+			// Start of Line
+			fmt.Fprint(w, `<span`)
+
+			if highlight {
+				// Line + LineHighlight
+				if f.Classes {
+					fmt.Fprintf(w, ` class="%s %s"`, f.class(chroma.Line), f.class(chroma.LineHighlight))
+				} else {
+					fmt.Fprintf(w, ` style="%s %s"`, css[chroma.Line], css[chroma.LineHighlight])
+				}
+				fmt.Fprint(w, `>`)
 			} else {
-				fmt.Fprintf(w, ` style="%s %s"`, css[chroma.Line], css[chroma.LineHighlight])
+				fmt.Fprintf(w, "%s>", f.styleAttr(css, chroma.Line))
 			}
-			fmt.Fprint(w, `>`)
-		} else {
-			fmt.Fprintf(w, "%s>", f.styleAttr(css, chroma.Line))
-		}
 
-		// Line number
-		if f.lineNumbers && !wrapInTable {
-			fmt.Fprintf(w, "<span%s%s>%s</span>", f.styleAttr(css, chroma.LineNumbers), f.lineIDAttribute(line), f.lineTitleWithLinkIfNeeded(lineDigits, line))
-		}
+			// Line number
+			if f.lineNumbers && !wrapInTable {
+				fmt.Fprintf(w, "<span%s%s>%s</span>", f.styleAttr(css, chroma.LineNumbers), f.lineIDAttribute(line), f.lineTitleWithLinkIfNeeded(lineDigits, line))
+			}
 
-		fmt.Fprintf(w, `<span%s>`, f.styleAttr(css, chroma.CodeLine))
+			fmt.Fprintf(w, `<span%s>`, f.styleAttr(css, chroma.CodeLine))
+		}
 
 		for _, token := range tokens {
 			html := html.EscapeString(token.String())
@@ -287,11 +317,12 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 			fmt.Fprint(w, html)
 		}
 
-		fmt.Fprint(w, `</span>`) // End of CodeLine
+		if !(f.preventSurroundingPre || f.inlineCode) {
+			fmt.Fprint(w, `</span>`) // End of CodeLine
 
-		fmt.Fprint(w, `</span>`) // End of Line
+			fmt.Fprint(w, `</span>`) // End of Line
+		}
 	}
-
 	fmt.Fprintf(w, f.preWrapper.End(true))
 
 	if wrapInTable {
