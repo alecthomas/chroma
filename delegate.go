@@ -2,6 +2,7 @@ package chroma
 
 import (
 	"bytes"
+	"fmt"
 )
 
 type delegatingLexer struct {
@@ -50,9 +51,45 @@ type insertion struct {
 }
 
 func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint: gocognit
-	tokens, err := Tokenise(Coalesce(d.language), options, text)
+	tokeniseFn := func(lexer Lexer, options *TokeniseOptions, text string) ([]Token, OriginalLenIterator, error) {
+		tokens, err := Tokenise(lexer, options, text)
+		return tokens, OriginalLenIterator{}, err
+	}
+
+	tokenizeRootFn := func(options *TokeniseOptions, text string) (Iterator, OriginalLenIterator, error) {
+		it, err := d.root.Tokenise(options, text)
+		return it, OriginalLenIterator{}, err
+	}
+
+	tokens, _, err := d.tokenise(options, tokeniseFn, tokenizeRootFn, text)
+	return tokens, err
+}
+
+func (d *delegatingLexer) TokeniseWithOriginalLen(options *TokeniseOptions, text string) (Iterator, OriginalLenIterator, error) { // nolint: gocognit
+	tokeniseFn := TokeniseWithOriginalLen
+
+	tokenizeRootFn := func(options *TokeniseOptions, text string) (Iterator, OriginalLenIterator, error) {
+		lex, ok := d.root.(TokeniserWithOriginalLen)
+
+		if !ok {
+			err := fmt.Errorf("lexer does not support tokenizing with offsets")
+			return nil, OriginalLenIterator{}, err
+		}
+
+		it, offsetIter, err := lex.TokeniseWithOriginalLen(options, text)
+		return it, offsetIter, err
+	}
+
+	return d.tokenise(options, tokeniseFn, tokenizeRootFn, text)
+}
+
+type tokenizeWithOriginalLen func(lexer Lexer, options *TokeniseOptions, text string) ([]Token, OriginalLenIterator, error)
+type tokenizeRootWithOriginalLen func(options *TokeniseOptions, text string) (Iterator, OriginalLenIterator, error)
+
+func (d *delegatingLexer) tokenise(options *TokeniseOptions, tokeniseFn tokenizeWithOriginalLen, tokenizeRootFn tokenizeRootWithOriginalLen, text string) (Iterator, OriginalLenIterator, error) { // nolint: gocognit
+	tokens, offsetIter, err := tokeniseFn(Coalesce(d.language), options, text)
 	if err != nil {
-		return nil, err
+		return nil, OriginalLenIterator{}, err
 	}
 	// Compute insertions and gather "Other" tokens.
 	others := &bytes.Buffer{}
@@ -78,13 +115,14 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 	}
 
 	if len(insertions) == 0 {
-		return d.root.Tokenise(options, text)
+		// No insertions, so just return the iterator from the root lexer
+		return tokenizeRootFn(options, text)
 	}
 
 	// Lex the other tokens.
 	rootTokens, err := Tokenise(Coalesce(d.root), options, others.String())
 	if err != nil {
-		return nil, err
+		return nil, OriginalLenIterator{}, err
 	}
 
 	// Interleave the two sets of tokens.
@@ -131,7 +169,7 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 			t = nextToken()
 		}
 	}
-	return Literator(out...), nil
+	return Literator(out...), offsetIter, nil
 }
 
 func splitToken(t Token, offset int) (l Token, r Token) {

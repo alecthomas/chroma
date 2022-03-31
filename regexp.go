@@ -45,6 +45,28 @@ func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, erro
 	return out, nil
 }
 
+// TokeniseWithOriginalLen tokenizes the text as Tokenise does, bit also returns an OriginalLenIterator that
+// can be used to calculate the original input token lengths.
+func TokeniseWithOriginalLen(lexer Lexer, options *TokeniseOptions, text string) ([]Token, OriginalLenIterator, error) {
+	lex, ok := lexer.(TokeniserWithOriginalLen)
+
+	if !ok {
+		err := fmt.Errorf("lexer does not support tokenizing with offsets")
+		return nil, OriginalLenIterator{}, err
+	}
+
+	var out []Token
+	it, offsetIter, err := lex.TokeniseWithOriginalLen(options, text)
+
+	if err != nil {
+		return nil, offsetIter, err
+	}
+	for t := it(); t != EOF; t = it() {
+		out = append(out, t)
+	}
+	return out, offsetIter, nil
+}
+
 // Rules maps from state to a sequence of Rules.
 type Rules map[string][]Rule
 
@@ -406,17 +428,25 @@ func (r *RegexLexer) needRules() error {
 	return err
 }
 
-func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint
+func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
+	i, _, err := r.TokeniseWithOriginalLen(options, text)
+	return i, err
+}
+
+func (r *RegexLexer) TokeniseWithOriginalLen(options *TokeniseOptions, text string) (Iterator, OriginalLenIterator, error) { // nolint
 	err := r.needRules()
 	if err != nil {
-		return nil, err
+		return nil, OriginalLenIterator{}, err
 	}
 	if options == nil {
 		options = defaultOptions
 	}
+
+	var offsets offsetMap
 	if options.EnsureLF {
-		text = ensureLF(text)
+		text, offsets = ensureLF(text)
 	}
+
 	newlineAdded := false
 	if !options.Nested && r.config.EnsureNL && !strings.HasSuffix(text, "\n") {
 		text += "\n"
@@ -432,7 +462,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 		Rules:          r.rules,
 		MutatorContext: map[interface{}]interface{}{},
 	}
-	return state.Iterator, nil
+	return state.Iterator, offsets.iterator(), nil
 }
 
 // MustRules is like Rules() but will panic on error.
@@ -462,13 +492,16 @@ func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule
 
 // replace \r and \r\n with \n
 // same as strings.ReplaceAll but more efficient
-func ensureLF(text string) string {
+func ensureLF(text string) (string, offsetMap) {
+	var m offsetMap
+
 	buf := make([]byte, len(text))
 	var j int
 	for i := 0; i < len(text); i++ {
 		c := text[i]
 		if c == '\r' {
 			if i < len(text)-1 && text[i+1] == '\n' {
+				m.push(i)
 				continue
 			}
 			c = '\n'
@@ -476,5 +509,81 @@ func ensureLF(text string) string {
 		buf[j] = c
 		j++
 	}
-	return string(buf[:j])
+	return string(buf[:j]), m
+}
+
+type offsetMap struct {
+	transitions []int
+}
+
+func (o *offsetMap) push(i int) {
+	o.transitions = append(o.transitions, i)
+}
+
+func (o *offsetMap) iterator() OriginalLenIterator {
+	return OriginalLenIterator{transitions: o.transitions}
+}
+
+// OriginalLenIterator is used to get the original length of tokens
+// before any transformations on the input text. Currently it
+// can return the original length of tokens from input text that has been
+// transformed by converting the sequence \r\n to \n (the default behaviour for
+// most lexers).
+type OriginalLenIterator struct {
+	transitions []int
+	offset      int
+}
+
+// OriginalLen returns the original length of the token tok in bytes.
+// This function must be called with each token being iterated over in order.
+// Only one of OriginalLen or OriginalLenRunes may be called on a single token
+// in the steam.
+func (o *OriginalLenIterator) OriginalLen(tok *Token) int {
+	off := o.offset
+	o.advance(len(tok.Value))
+	return o.offset - off
+}
+
+func (o *OriginalLenIterator) advance(length int) {
+	newOffset := o.offset + length
+	newOffset += o.transitionsCrossed(newOffset)
+	o.offset = newOffset
+}
+
+func (o *OriginalLenIterator) transitionsCrossed(newOffset int) int {
+	c := 0
+	for len(o.transitions) > 0 && o.transitions[0] < newOffset {
+		c++
+		newOffset++
+		o.transitions = o.transitions[1:]
+	}
+	return c
+}
+
+// OriginalLenRunes returns the original length of the token tok in runes.
+// This function must be called with each token being iterated over in order.
+// Only one of OriginalLen or OriginalLenRunes may be called on a single token
+// in the steam.
+func (o *OriginalLenIterator) OriginalLenRunes(tok *Token) (int, error) {
+	newOffset := o.offset
+	count := 0
+
+	bytes := []byte(tok.Value)
+	for len(bytes) > 0 {
+		r, size := utf8.DecodeRune(bytes)
+		if r == utf8.RuneError {
+			return 0, fmt.Errorf("invalid UTF-8 character encountered")
+		}
+		bytes = bytes[size:]
+
+		newOffset += size
+		count++
+
+		crossed := o.transitionsCrossed(newOffset)
+		newOffset += crossed
+		count += crossed
+	}
+
+	o.offset = newOffset
+	return count, nil
 }

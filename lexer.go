@@ -110,6 +110,10 @@ type Lexer interface {
 	AnalyseText(text string) float32
 }
 
+type TokeniserWithOriginalLen interface {
+	TokeniseWithOriginalLen(options *TokeniseOptions, text string) (Iterator, OriginalLenIterator, error)
+}
+
 // Lexers is a slice of lexers sortable by name.
 type Lexers []Lexer
 

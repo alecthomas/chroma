@@ -104,7 +104,7 @@ func TestEnsureLFFunc(t *testing.T) {
 		{in: "\r\r\r\n\r", out: "\n\n\n\n"},
 	}
 	for _, test := range tests {
-		out := ensureLF(test.in)
+		out, _ := ensureLF(test.in)
 		assert.Equal(t, out, test.out)
 	}
 }
@@ -192,4 +192,177 @@ func TestByGroupNames(t *testing.T) {
 	it, err = l.Tokenise(nil, `abc=123`)
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Error, `abc=123`}}, it.Tokens())
+}
+
+func TestTokenizeWithOffsets(t *testing.T) {
+	type testCase struct {
+		name                           string
+		input                          string
+		expected                       []Token
+		expectedOriginalLengths        []int
+		expectedOriginalLengthsInRunes []int
+	}
+
+	tests := []testCase{
+		{
+			name:  "empty",
+			input: "",
+		},
+		{
+			name:                           "-m ->",
+			input:                          "-m ->",
+			expected:                       []Token{{Punctuation, "-"}, {NameEntity, "m"}, {Whitespace, " "}, {Operator, "->"}},
+			expectedOriginalLengths:        []int{1, 1, 1, 2},
+			expectedOriginalLengthsInRunes: []int{1, 1, 1, 2},
+		},
+		{
+			name:                           `-m\r\n-m`,
+			input:                          "-m\r\n-m",
+			expected:                       []Token{{Punctuation, "-"}, {NameEntity, "m"}, {Whitespace, "\n"}, {Punctuation, "-"}, {NameEntity, "m"}},
+			expectedOriginalLengths:        []int{1, 1, 2, 1, 1},
+			expectedOriginalLengthsInRunes: []int{1, 1, 2, 1, 1},
+		},
+		{
+			name:                           `-m\r\n\r\n\r\n`,
+			input:                          "-m\r\n\r\n\r\n",
+			expected:                       []Token{{Punctuation, "-"}, {NameEntity, "m"}, {Whitespace, "\n\n\n"}},
+			expectedOriginalLengths:        []int{1, 1, 6},
+			expectedOriginalLengthsInRunes: []int{1, 1, 6},
+		},
+		{
+			name:                           `\r\n-m\r\n`,
+			input:                          "\r\n-m\r\n",
+			expected:                       []Token{{Whitespace, "\n"}, {Punctuation, "-"}, {NameEntity, "m"}, {Whitespace, "\n"}},
+			expectedOriginalLengths:        []int{2, 1, 1, 2},
+			expectedOriginalLengthsInRunes: []int{2, 1, 1, 2},
+		},
+		{
+			name:                           `\n-m\r\n-m\n`,
+			input:                          "\n-m\r\n-m\n",
+			expected:                       []Token{{Whitespace, "\n"}, {Punctuation, "-"}, {NameEntity, "m"}, {Whitespace, "\n"}, {Punctuation, "-"}, {NameEntity, "m"}, {Whitespace, "\n"}},
+			expectedOriginalLengths:        []int{1, 1, 1, 2, 1, 1, 1},
+			expectedOriginalLengthsInRunes: []int{1, 1, 1, 2, 1, 1, 1},
+		},
+		{
+			name:                           `\n  \r\n  ->`,
+			input:                          "\n  \r\n  ->",
+			expected:                       []Token{{Whitespace, "\n  \n  "}, {Operator, "->"}},
+			expectedOriginalLengths:        []int{7, 2},
+			expectedOriginalLengthsInRunes: []int{7, 2},
+		},
+		{
+			// Note: the first space in this input is an enspace (U+2002) taking 3 bytes in unicode
+			name:                           `\n \r\n  ->`,
+			input:                          "\n \r\n  ->",
+			expected:                       []Token{{Whitespace, "\n \n  "}, {Operator, "->"}},
+			expectedOriginalLengths:        []int{8, 2},
+			expectedOriginalLengthsInRunes: []int{6, 2},
+		},
+	}
+
+	l := Coalesce(mustNewLexer(t, &Config{}, Rules{ // nolint: forbidigo
+		"root": {
+			{`\s+`, Whitespace, nil},
+			{`^-`, Punctuation, Push("directive")},
+			{`->`, Operator, nil},
+		},
+		"directive": {
+			{"m", NameEntity, Pop(1)},
+		},
+	}))
+
+	lex, ok := l.(TokeniserWithOriginalLen)
+	if !ok {
+		assert.True(t, ok, "lexer is not a TokenizerWithOffsets")
+	}
+
+	type checkCountFunc func(tok *Token, lengthsIter *OriginalLenIterator, tc testCase, tokenIndex int)
+
+	checkLenInBytes := func(tok *Token, lengthsIter *OriginalLenIterator, tc testCase, tokenIndex int) {
+		ln := lengthsIter.OriginalLen(tok)
+		assert.Equal(t, tc.expectedOriginalLengths[tokenIndex], ln, "testcase %s byte lengths token %d", tc.name, tokenIndex)
+	}
+
+	checkLenInRunes := func(tok *Token, lengthsIter *OriginalLenIterator, tc testCase, tokenIndex int) {
+		ln, err := lengthsIter.OriginalLenRunes(tok)
+		assert.NoError(t, err)
+		assert.Equal(t, tc.expectedOriginalLengthsInRunes[tokenIndex], ln, "testcase %s rune lengths token %d", tc.name, tokenIndex)
+	}
+
+	checkCountTypes := []checkCountFunc{
+		checkLenInBytes,
+		checkLenInRunes,
+	}
+
+	for _, checkCountType := range checkCountTypes {
+		for _, tc := range tests {
+			t.Run(tc.name, func(t *testing.T) {
+				tc := tc
+
+				it, lengthsIter, err := lex.TokeniseWithOriginalLen(nil, tc.input)
+				assert.NoError(t, err)
+
+				for i := 0; ; i++ {
+					tok := it()
+					if tok == EOF {
+						break
+					}
+
+					assert.Less(t, i, len(tc.expected))
+					assert.Equal(t, tc.expected[i], tok)
+
+					checkCountType(&tok, &lengthsIter, tc, i)
+				}
+			})
+		}
+	}
+}
+
+func TestTokenizeWithOffsetsForDelegatingLexer(t *testing.T) {
+	outerLexer := mustNewLexer(t, &Config{}, Rules{ // nolint: forbidigo
+		"root": {
+			{`\s+`, Whitespace, nil},
+			{`\d+`, Other, nil},
+			{`->`, Operator, nil},
+		},
+	})
+
+	innerLexer := mustNewLexer(t, &Config{}, Rules{ // nolint: forbidigo
+		"root": {
+			{`[0-5]+`, NumberInteger, nil},
+			{`[6-9]+`, NumberHex, nil},
+		},
+	})
+
+	input := "->\r\n2399"
+	expected := []Token{{Operator, "->"}, {Whitespace, "\n"}, {LiteralNumberInteger, "23"}, {LiteralNumberHex, "99"}}
+	expectedOriginalLengths := []int{2, 2, 2, 2}
+
+	checkLenInBytes := func(tok *Token, lengthsIter *OriginalLenIterator, tokenIndex int) {
+		ln := lengthsIter.OriginalLen(tok)
+		assert.Equal(t, expectedOriginalLengths[tokenIndex], ln, "byte lengths token %d", tokenIndex)
+	}
+
+	l := DelegatingLexer(innerLexer, outerLexer)
+
+	lex, ok := l.(TokeniserWithOriginalLen)
+	if !ok {
+		assert.True(t, ok, "lexer is not a TokenizerWithOffsets")
+	}
+
+	it, lengthsIter, err := lex.TokeniseWithOriginalLen(nil, input)
+	assert.NoError(t, err)
+
+	for i := 0; ; i++ {
+
+		tok := it()
+		if tok == EOF {
+			break
+		}
+
+		assert.Less(t, i, len(expected))
+		assert.Equal(t, expected[i], tok)
+
+		checkLenInBytes(&tok, &lengthsIter, i)
+	}
 }
