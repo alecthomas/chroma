@@ -1,0 +1,19 @@
+; /etc/bind/zones/example.org
+$TTL 3h;
+@	IN	SOA	ns.example.org. example.org. (
+	1 ; serial
+	3h; refresh timeout
+	1h; retry timeout
+	1w; expire timeout
+	1h; negative caching TTL
+)
+@	IN	NS		ns.example.org.  ; name server
+@	IN	MX	10	example.org.     ; mail exchange server
+
+ns	IN	A		1.2.3.4
+@	IN	A		1.2.3.4
+
+ns	IN	AAAA	ef::1
+@	IN	AAAA	ef::1
+
+www	IN	CNAME	example.org.
