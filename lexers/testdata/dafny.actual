@@ -1,0 +1,20 @@
+/* Sample dafny code /* nested */ */
+method Fib(n: int) returns (b: nat)
+    requires n >= 0
+    ensures b == fib(n)
+{
+    // Change the method body to instead use c as described.
+    // You will need to change both the initialization and the loop.
+    if n == 0 { return 0; }
+    var i: int := 1;
+    var c := 1;
+        b := 1;
+    while i < n
+        invariant 0 < i <= n
+        invariant b == fib(i)
+        invariant c == fib(i + 1)
+    {
+        b, c := c, b + c;
+        i := i + 1;
+    }
+}
