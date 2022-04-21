@@ -1,0 +1,54 @@
+<lexer>
+  <config>
+    <name>Whiley</name>
+    <alias>whiley</alias>
+    <filename>*.whiley</filename>
+    <mime_type>text/x-whiley</mime_type>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\n">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\\\n">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="/[*](.|\n)*?[*]/">
+        <token type="CommentMultiline"/>
+      </rule>
+      <rule pattern="//.*?\n">
+        <token type="CommentSingle"/>
+      </rule>      
+      <rule pattern="(function|method|property|type|variant)\b">
+        <token type="KeywordDeclaration"/>
+      </rule>
+      <rule pattern="(assert|assume|break|case|continue|debug|default|do|else|ensures|export|fail|final|for|if|is|native|private|protected|public|return|requires|skip|switch|unsafe|where|while)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="(true|false|null)\b">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="(bool|byte|int|void)\b">
+        <token type="KeywordType"/>
+      </rule>
+      <rule pattern="0b(?:_?[01])+">
+        <token type="LiteralNumberBin"/>
+      </rule>      
+      <rule pattern="0[xX][0-9a-fA-F]+">
+        <token type="LiteralNumberHex"/>
+      </rule>
+      <rule pattern="(0|[1-9][0-9]*)">
+        <token type="LiteralNumberInteger"/>
+      </rule>
+      <rule pattern="[+%=&gt;&lt;|^!?/\-*&amp;~:]">
+        <token type="Operator"/>
+      </rule>      
+      <rule pattern="[{}()\[\],.;\|]">
+        <token type="Punctuation"/>
+      </rule>      
+    </state>
+  </rules>
+</lexer>
