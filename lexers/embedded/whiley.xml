@@ -25,7 +25,7 @@
       <rule pattern="(function|import|from|method|property|type|with|variant)\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(assert|assume|break|case|continue|debug|default|do|else|ensures|export|fail|final|for|if|is|native|private|protected|public|return|requires|skip|switch|unsafe|where|while)\b">
+      <rule pattern="(assert|assume|all|break|case|continue|debug|default|do|else|ensures|export|fail|final|for|if|in|is|native|no|new|private|protected|public|return|requires|skip|some|switch|unsafe|where|while)\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(true|false|null)\b">
