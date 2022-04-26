@@ -169,6 +169,9 @@
       <rule pattern="``([^`\n\r\t]|`[^`\n\r\t])+``">
         <token type="Name"/>
       </rule>
+      <rule pattern="#[ \t]*(if|endif|else|line|nowarn|light|r|\d+)\b">
+        <token type="CommentPreproc"/>
+      </rule>
       <rule pattern="(!=|#|&amp;&amp;|&amp;|\(|\)|\*|\+|,|-\.|-&gt;|-|\.\.|\.|::|:=|:&gt;|:|;;|;|&lt;-|&lt;\]|&lt;|&gt;\]|&gt;|\?\?|\?|\[&lt;|\[\||\[|\]|_|`|\{|\|\]|\||\}|~|&lt;@@|&lt;@|=|@&gt;|@@&gt;)">
         <token type="Operator"/>
       </rule>
@@ -180,9 +183,6 @@
       </rule>
       <rule pattern="\b(sbyte|byte|char|nativeint|unativeint|float32|single|float|double|int8|uint8|int16|uint16|int32|uint32|int64|uint64|decimal|unit|bool|string|list|exn|obj|enum)\b">
         <token type="KeywordType"/>
-      </rule>
-      <rule pattern="#[ \t]*(if|endif|else|line|nowarn|light|\d+)\b.*?\n">
-        <token type="CommentPreproc"/>
       </rule>
       <rule pattern="[^\W\d][\w&#39;]*">
         <token type="Name"/>
