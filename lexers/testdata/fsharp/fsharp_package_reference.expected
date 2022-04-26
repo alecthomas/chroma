@@ -1,0 +1,6 @@
+[
+  {"type":"CommentPreproc","value":"#r"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralString","value":"\"nuget: Newtonsoft.Json\""},
+  {"type":"Text","value":"\n"}
+]
