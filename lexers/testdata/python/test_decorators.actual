@@ -1,0 +1,15 @@
+@decorator1
+def foo():
+    print("foo")
+
+@decorator2.member
+def bar():
+    print("bar")
+
+@decorator3 . member(param=1)
+def baz():
+    print("baz")
+
+@decorator4 . member1 .member2 (param=1)
+def bat():
+    print("bat")
