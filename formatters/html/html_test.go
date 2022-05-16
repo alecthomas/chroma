@@ -108,6 +108,18 @@ func TestTableLineNumberNewlines(t *testing.T) {
 </span>`)
 }
 
+func TestWithCustomCSS(t *testing.T) {
+	f := New(WithClasses(false), WithCustomCSS(map[chroma.TokenType]string{chroma.Line: `display: inline;`}))
+	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+
+	assert.Regexp(t, `<span style="display:flex;display:inline;"><span><span style=".*">echo</span> FOO</span></span>`, buf.String())
+}
+
 func TestWrapLongLines(t *testing.T) {
 	f := New(WithClasses(false), WrapLongLines(true))
 	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")

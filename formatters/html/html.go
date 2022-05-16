@@ -25,6 +25,13 @@ func WithClasses(b bool) Option { return func(f *Formatter) { f.Classes = b } }
 // WithAllClasses disables an optimisation that omits redundant CSS classes.
 func WithAllClasses(b bool) Option { return func(f *Formatter) { f.allClasses = b } }
 
+// WithCustomCSS sets user's custom CSS styles.
+func WithCustomCSS(css map[chroma.TokenType]string) Option {
+	return func(f *Formatter) {
+		f.customCSS = css
+	}
+}
+
 // TabWidth sets the number of characters for a tab. Defaults to 8.
 func TabWidth(width int) Option { return func(f *Formatter) { f.tabWidth = width } }
 
@@ -160,6 +167,7 @@ type Formatter struct {
 	prefix              string
 	Classes             bool // Exported field to detect when classes are being used
 	allClasses          bool
+	customCSS           map[chroma.TokenType]string
 	preWrapper          PreWrapper
 	tabWidth            int
 	wrapLongLines       bool
@@ -435,15 +443,15 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 		if t != chroma.Background {
 			entry = entry.Sub(bg)
 		}
-		if !f.allClasses && entry.IsZero() {
+		if !f.allClasses && entry.IsZero() && f.customCSS[t] == `` {
 			continue
 		}
-		classes[t] = StyleEntryToCSS(entry)
+		classes[t] = f.customCSS[t] + StyleEntryToCSS(entry)
 	}
 	classes[chroma.Background] += f.tabWidthStyle()
 	classes[chroma.PreWrapper] += classes[chroma.Background] + `;`
 	// Make PreWrapper a grid to show highlight style with full width.
-	if len(f.highlightRanges) > 0 {
+	if len(f.highlightRanges) > 0 && f.customCSS[chroma.PreWrapper] == `` {
 		classes[chroma.PreWrapper] += `display: grid;`
 	}
 	// Make PreWrapper wrap long lines.
