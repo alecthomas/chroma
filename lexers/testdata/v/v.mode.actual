@@ -1,0 +1,6 @@
+Module {
+	name: 'mymodule',
+	description: 'My nice module wraps a simple C library.',
+	version: '0.0.1'
+	dependencies: []
+}
