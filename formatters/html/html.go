@@ -443,13 +443,37 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 		if t != chroma.Background {
 			entry = entry.Sub(bg)
 		}
-		if !f.allClasses && entry.IsZero() && f.customCSS[t] == `` {
+
+		// Inherit from custom CSS provided by user
+		tokenCategory := t.Category()
+		tokenSubCategory := t.SubCategory()
+		if t != tokenCategory {
+			if css, ok := f.customCSS[tokenCategory]; ok {
+				classes[t] = css
+			}
+		}
+		if tokenCategory != tokenSubCategory {
+			if css, ok := f.customCSS[tokenSubCategory]; ok {
+				classes[t] += css
+			}
+		}
+		// Add custom CSS provided by user
+		if css, ok := f.customCSS[t]; ok {
+			classes[t] += css
+		}
+
+		if !f.allClasses && entry.IsZero() && classes[t] == `` {
 			continue
 		}
-		classes[t] = f.customCSS[t] + StyleEntryToCSS(entry)
+
+		styleEntryCSS := StyleEntryToCSS(entry)
+		if styleEntryCSS != `` {
+			styleEntryCSS += `;`
+		}
+		classes[t] = styleEntryCSS + classes[t]
 	}
 	classes[chroma.Background] += f.tabWidthStyle()
-	classes[chroma.PreWrapper] += classes[chroma.Background] + `;`
+	classes[chroma.PreWrapper] += classes[chroma.Background]
 	// Make PreWrapper a grid to show highlight style with full width.
 	if len(f.highlightRanges) > 0 && f.customCSS[chroma.PreWrapper] == `` {
 		classes[chroma.PreWrapper] += `display: grid;`
