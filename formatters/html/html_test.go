@@ -120,6 +120,21 @@ func TestWithCustomCSS(t *testing.T) {
 	assert.Regexp(t, `<span style="display:flex;display:inline;"><span><span style=".*">echo</span> FOO</span></span>`, buf.String())
 }
 
+func TestWithCustomCSSStyleInheritance(t *testing.T) {
+	f := New(WithClasses(false), WithCustomCSS(map[chroma.TokenType]string{
+		chroma.String:              `background: blue;`,
+		chroma.LiteralStringDouble: `color: tomato;`,
+	}))
+	it, err := lexers.Get("bash").Tokenise(nil, `echo "FOO"`)
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+
+	assert.Regexp(t, ` <span style=".*;background:blue;color:tomato;">&#34;FOO&#34;</span>`, buf.String())
+}
+
 func TestWrapLongLines(t *testing.T) {
 	f := New(WithClasses(false), WrapLongLines(true))
 	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
