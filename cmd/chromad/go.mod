@@ -11,4 +11,11 @@ require (
 	github.com/gorilla/mux v1.7.3
 )
 
+require (
+	github.com/dlclark/regexp2 v1.4.0 // indirect
+	github.com/gorilla/securecookie v1.1.1 // indirect
+	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/pkg/errors v0.8.1 // indirect
+)
+
 replace github.com/alecthomas/chroma/v2 => ../../
