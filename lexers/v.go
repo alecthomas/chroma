@@ -70,8 +70,7 @@ func vRules() Rules {
 			{`0b[01_]+`, LiteralNumberBin, nil},
 			{`(0|[1-9][0-9_]*)`, LiteralNumberInteger, nil},
 			{"`", StringChar, Push(`char`)},
-			{`(r|c)?(")`, ByGroups(StringAffix, StringDouble), Push(`string-double`)},
-			{`(r|c)?(')`, ByGroups(StringAffix, StringSingle), Push(`string-single`)},
+			Include(`strings`),
 			{`@?` + typeNamePattern, NameClass, nil},
 			{`(?<=` + namePattern + `)(<)(` + typeNamePattern + `)(>)`, ByGroups(Punctuation, NameClass, Punctuation), nil},
 			{`@?` + namePattern + `(?=\()`, NameFunction, nil},
@@ -81,17 +80,23 @@ func vRules() Rules {
 			{`[<>()\[\]{}.,;:]`, Punctuation, nil},
 			{`@?` + namePattern, NameVariable, nil},
 		},
+		"strings": {
+			{`(c)?(")`, ByGroups(StringAffix, StringDouble), Push(`string-double`)},
+			{`(c)?(')`, ByGroups(StringAffix, StringSingle), Push(`string-single`)},
+			{`(r)("[^"]+")`, ByGroups(StringAffix, String), nil},
+			{`(r)('[^']+')`, ByGroups(StringAffix, String), nil},
+		},
 		"string-double": {
 			{`"`, StringDouble, Pop(1)},
 			Include(`char-escape`),
-			{`(\$)({)`, ByGroups(Operator, Punctuation), Push(`string-curly-interpolation`)},
+			{`(\$)((?!\\){)`, ByGroups(Operator, Punctuation), Push(`string-curly-interpolation`)},
 			{`\$`, Operator, Push(`string-interpolation`)},
 			{`[^"]+?`, StringDouble, nil},
 		},
 		"string-single": {
 			{`'`, StringSingle, Pop(1)},
 			Include(`char-escape`),
-			{`(\$)({)`, ByGroups(Operator, Punctuation), Push(`string-curly-interpolation`)},
+			{`(\$)((?!\\){)`, ByGroups(Operator, Punctuation), Push(`string-curly-interpolation`)},
 			{`\$`, Operator, Push(`string-interpolation`)},
 			{`[^']+?`, StringSingle, nil},
 		},
@@ -101,7 +106,7 @@ func vRules() Rules {
 			{`[^\\]`, StringChar, nil},
 		},
 		"char-escape": {
-			{"\\\\[`'\"\\\\abfnrtv]|\\\\x[0-9a-fA-F]{2}|\\\\[0-7]{1,3}|\\\\u[0-9a-fA-F]{4}|\\\\U[0-9a-fA-F]{8}", StringEscape, nil},
+			{"\\\\[`'\"\\\\abfnrtv$]|\\\\x[0-9a-fA-F]{2}|\\\\[0-7]{1,3}|\\\\u[0-9a-fA-F]{4}|\\\\U[0-9a-fA-F]{8}", StringEscape, nil},
 		},
 		"string-doc": {
 			{`(// *)(#+ [^\n]+)(\n)`, ByGroups(StringDoc, GenericHeading, Text), nil},
@@ -115,8 +120,9 @@ func vRules() Rules {
 		},
 		"string-curly-interpolation": {
 			{`}`, Punctuation, Pop(1)},
-			{`(?<=:)( *?)([ 0'#+-])?(?:(\.)?([0-9]+))?([fFgeEGxXobsd])?`, ByGroups(Text, Operator, Punctuation, Number, StringAffix), nil},
-			{`.+?`, UsingSelf(`root`), nil},
+			Include(`strings`),
+			{`(:)( *?)([ 0'#+-])?(?:(\.)?([0-9]+))?([fFgeEGxXobsd])?`, ByGroups(Punctuation, Text, Operator, Punctuation, Number, StringAffix), nil},
+			{`[^}"':]+`, UsingSelf(`root`), nil},
 		},
 		"attribute": {
 			{`\]`, Punctuation, Pop(1)},

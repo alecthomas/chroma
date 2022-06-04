@@ -1277,6 +1277,8 @@ fn test_subtest() {
 	assert res.output.contains('other_test.v does not exist')
 }
 
+os.execute('${os.quoted_path("{test}. \${another test}. \{and another\}")} other_test.v')
+
 struct RefStruct {
 mut:
 	r &MyStruct
