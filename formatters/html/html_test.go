@@ -108,6 +108,18 @@ func TestTableLineNumberNewlines(t *testing.T) {
 </span>`)
 }
 
+func TestTabWidthStyle(t *testing.T) {
+	f := New(TabWidth(4), WithClasses(false))
+	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	assert.NoError(t, err)
+
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Fallback, it)
+	assert.NoError(t, err)
+
+	assert.Regexp(t, `<pre.*style=".*background-color:[^;]+;-moz-tab-size:4;-o-tab-size:4;tab-size:4[^"]*".+`, buf.String())
+}
+
 func TestWithCustomCSS(t *testing.T) {
 	f := New(WithClasses(false), WithCustomCSS(map[chroma.TokenType]string{chroma.Line: `display: inline;`}))
 	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
