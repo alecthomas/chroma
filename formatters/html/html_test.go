@@ -117,7 +117,7 @@ func TestTabWidthStyle(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Regexp(t, `<pre.*style=".*background-color:[^;]+;-moz-tab-size:4;-o-tab-size:4;tab-size:4[^"]*".+`, buf.String())
+	assert.Regexp(t, `<pre.*style=".*background-color:[^;]+;-moz-tab-size:4;-o-tab-size:4;tab-size:4;[^"]*".+`, buf.String())
 }
 
 func TestWithCustomCSS(t *testing.T) {

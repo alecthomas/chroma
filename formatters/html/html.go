@@ -381,7 +381,7 @@ func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.Toke
 
 func (f *Formatter) tabWidthStyle() string {
 	if f.tabWidth != 0 && f.tabWidth != 8 {
-		return fmt.Sprintf("-moz-tab-size: %[1]d; -o-tab-size: %[1]d; tab-size: %[1]d", f.tabWidth)
+		return fmt.Sprintf("-moz-tab-size: %[1]d; -o-tab-size: %[1]d; tab-size: %[1]d;", f.tabWidth)
 	}
 	return ""
 }
