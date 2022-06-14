@@ -467,12 +467,12 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 		}
 
 		styleEntryCSS := StyleEntryToCSS(entry)
-		if styleEntryCSS != `` {
+		if styleEntryCSS != `` && classes[t] != `` {
 			styleEntryCSS += `;`
 		}
 		classes[t] = styleEntryCSS + classes[t]
 	}
-	classes[chroma.Background] += f.tabWidthStyle()
+	classes[chroma.Background] += `;` + f.tabWidthStyle()
 	classes[chroma.PreWrapper] += classes[chroma.Background]
 	// Make PreWrapper a grid to show highlight style with full width.
 	if len(f.highlightRanges) > 0 && f.customCSS[chroma.PreWrapper] == `` {
