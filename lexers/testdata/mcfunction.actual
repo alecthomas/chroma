@@ -9,5 +9,9 @@ gamemode creative @a
 # With argument
 kill @e[type=chicken,nested={a0=0,a1=1}]
 
-# Ragne
+# Range
 kill @e[y_rotation=0..180]
+
+# Legacy and new style
+placefeature minecraft:bonus_chest ~ ~ ~
+place feature minecraft:bonus_chest ~ ~ ~
