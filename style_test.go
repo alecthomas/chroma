@@ -63,3 +63,41 @@ func TestSynthesisedStyleClone(t *testing.T) {
 	assert.Equal(t, "bg:#ffffff", style.Get(LineHighlight).String())
 	assert.Equal(t, "bg:#fffff1", style.Get(LineNumbers).String())
 }
+
+func TestStyleBuilderTransform(t *testing.T) {
+	orig, err := NewStyle("test", StyleEntries{
+		Name:         "#000",
+		NameVariable: "bold #f00",
+	})
+	assert.NoError(t, err)
+
+	// Derive a style that inherits entries from orig.
+	builder := orig.Builder()
+	builder.Add(NameVariableGlobal, "#f30")
+	deriv, err := builder.Build()
+	assert.NoError(t, err)
+
+	// Use Transform to brighten or darken all of the colours in the derived style.
+	light, err := deriv.Builder().Transform(func(se StyleEntry) StyleEntry {
+		se.Colour = se.Colour.ClampBrightness(0.9, 1)
+		return se
+	}).Build()
+	assert.Nilf(t, err, "Transform failed: %v", err)
+	assert.GreaterOrEqual(t, light.Get(Name).Colour.Brightness(), 0.89)
+	assert.GreaterOrEqual(t, light.Get(NameVariable).Colour.Brightness(), 0.89)
+	assert.GreaterOrEqual(t, light.Get(NameVariableGlobal).Colour.Brightness(), 0.89)
+
+	dark, err := deriv.Builder().Transform(func(se StyleEntry) StyleEntry {
+		se.Colour = se.Colour.ClampBrightness(0, 0.1)
+		return se
+	}).Build()
+	assert.Nilf(t, err, "Transform failed: %v", err)
+	assert.LessOrEqual(t, dark.Get(Name).Colour.Brightness(), 0.11)
+	assert.LessOrEqual(t, dark.Get(NameVariable).Colour.Brightness(), 0.11)
+	assert.LessOrEqual(t, dark.Get(NameVariableGlobal).Colour.Brightness(), 0.11)
+
+	// The original styles should be unchanged.
+	assert.Equal(t, "#000000", orig.Get(Name).Colour.String())
+	assert.Equal(t, "#ff0000", orig.Get(NameVariable).Colour.String())
+	assert.Equal(t, "#ff3300", deriv.Get(NameVariableGlobal).Colour.String())
+}
