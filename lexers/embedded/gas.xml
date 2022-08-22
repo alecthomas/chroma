@@ -49,7 +49,7 @@
         <token type="LiteralNumberInteger"/>
       </rule>
       <rule pattern="%(?:[a-zA-Z$_][\w$.@-]*|\.[\w$.@-]+)">
-        <token type="NameVariable">
+        <token type="NameVariable"/>
       </rule>
       <rule pattern="[\r\n]+">
         <token type="Text"/>
