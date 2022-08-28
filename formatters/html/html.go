@@ -419,18 +419,28 @@ func (f *Formatter) tabWidthStyle() string {
 
 // WriteCSS writes CSS style definitions (without any surrounding HTML).
 func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
+	return f.WriteCSSCustom(w, style, true)
+}
+
+func (f *Formatter) WriteCSSCustom(w io.Writer, style *chroma.Style, comments bool) error {
+	var prefix string
+	if comments {
+		prefix = "/* %s */ "
+	} else {
+		prefix = "%.0s"
+	}
 	css := f.styleToCSS(style)
 	// Special-case background as it is mapped to the outer ".chroma" class.
-	if _, err := fmt.Fprintf(w, "/* %s */ .%sbg { %s }\n", chroma.Background, f.prefix, css[chroma.Background]); err != nil {
+	if _, err := fmt.Fprintf(w, prefix + ".%sbg { %s }\n", chroma.Background, f.prefix, css[chroma.Background]); err != nil {
 		return err
 	}
 	// Special-case PreWrapper as it is the ".chroma" class.
-	if _, err := fmt.Fprintf(w, "/* %s */ .%schroma { %s }\n", chroma.PreWrapper, f.prefix, css[chroma.PreWrapper]); err != nil {
+	if _, err := fmt.Fprintf(w, prefix + ".%schroma { %s }\n", chroma.PreWrapper, f.prefix, css[chroma.PreWrapper]); err != nil {
 		return err
 	}
 	// Special-case code column of table to expand width.
 	if f.lineNumbers && f.lineNumbersInTable {
-		if _, err := fmt.Fprintf(w, "/* %s */ .%schroma .%s:last-child { width: 100%%; }",
+		if _, err := fmt.Fprintf(w, prefix + ".%schroma .%s:last-child { width: 100%%; }",
 			chroma.LineTableTD, f.prefix, f.class(chroma.LineTableTD)); err != nil {
 			return err
 		}
@@ -439,7 +449,7 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 	if f.lineNumbers || f.lineNumbersInTable {
 		targetedLineCSS := StyleEntryToCSS(style.Get(chroma.LineHighlight))
 		for _, tt := range []chroma.TokenType{chroma.LineNumbers, chroma.LineNumbersTable} {
-			fmt.Fprintf(w, "/* %s targeted by URL anchor */ .%schroma .%s:target { %s }\n", tt, f.prefix, f.class(tt), targetedLineCSS)
+			fmt.Fprintf(w, prefix + ".%schroma .%s:target { %s }\n", tt, f.prefix, f.class(tt), targetedLineCSS)
 		}
 	}
 	tts := []int{}
@@ -458,7 +468,7 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 			continue
 		}
 		styles := css[tt]
-		if _, err := fmt.Fprintf(w, "/* %s */ .%schroma .%s { %s }\n", tt, f.prefix, class, styles); err != nil {
+		if _, err := fmt.Fprintf(w, prefix + ".%schroma .%s { %s }\n", tt, f.prefix, class, styles); err != nil {
 			return err
 		}
 	}
