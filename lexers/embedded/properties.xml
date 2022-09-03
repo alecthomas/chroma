@@ -1,0 +1,27 @@
+<lexer>
+  <config>
+    <name>properties</name>
+    <alias>java-properties</alias>
+    <filename>*.properties</filename>
+    <mime_type>text/x-java-properties</mime_type>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="^[;#!].*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="^(.+?)([ \t]*)([=:])([ \t]*)(.*)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="Text"/>
+          <token type="Operator"/>
+          <token type="Text"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+    </state>
+  </rules>
+</lexer>

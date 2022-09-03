@@ -1,0 +1,22 @@
+# You are reading a comment in ".properties" file.
+! The exclamation mark can also be used for comments.
+# Lines with "properties" contain a key and a value separated by a delimiting character.
+# There are 3 delimiting characters: '=' (equal), ':' (colon) and whitespace (space, \t and \f).
+website = https://en.wikipedia.org/
+language : English
+# White space that appears between the key, the value and the delimiter is ignored.
+# This means that the following are equivalent (other than for readability).
+hello=hello
+hello = hello
+# Keys with the same name will be overwritten by the key that is the furthest in a file.
+# For example the final value for "duplicateKey" will be "second".
+duplicateKey = first
+duplicateKey = second
+# If you need to add newlines and carriage returns, they need to be escaped using \n and \r respectively.
+# You can also optionally escape tabs with \t for readability purposes.
+valueWithEscapes = This is a newline\n and a carriage return\r and a tab\t.
+# You can also use Unicode escape characters (maximum of four hexadecimal digits).
+# In the following example, the value for "encodedHelloInJapanese" is "こんにちは".
+encodedHelloInJapanese = \u3053\u3093\u306b\u3061\u306f
+# But with more modern file encodings like UTF-8, you can directly use supported characters.
+helloInJapanese = こんにちは
