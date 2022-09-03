@@ -7,14 +7,15 @@
   </config>
   <rules>
     <state name="root">
-      <rule pattern="\s+">
-        <token type="Text"/>
-      </rule>
-      <rule pattern="^([#!].*)">
-        <token type="CommentSingle"/>
-      </rule>
-      <rule pattern="^(.+?)([ \t\f]*)([=:])([ \t\f]*)(.*)">
+      <rule pattern="^([ \t\f]*)([#!].*)">
         <bygroups>
+          <token type="Text"/>
+          <token type="CommentSingle"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^([ \t\f]*)(.+?)([ \t\f]*)([=:])([ \t\f]*)(.*)">
+        <bygroups>
+          <token type="Text"/>
           <token type="NameAttribute"/>
           <token type="Text"/>
           <token type="Operator"/>
@@ -22,17 +23,22 @@
           <token type="LiteralString"/>
         </bygroups>
       </rule>
-      <rule pattern="^(.+?)([ \t\f]+)(.*)">
+      <rule pattern="^([ \t\f]*)(.+?)([ \t\f]+)(.*)">
         <bygroups>
+          <token type="Text"/>
           <token type="NameAttribute"/>
           <token type="Text"/>
           <token type="LiteralString"/>
         </bygroups>
       </rule>
-      <rule pattern="^(\w+)$">
+      <rule pattern="^([ \t\f]*)(\w+)$">
         <bygroups>
+          <token type="Text"/>
           <token type="NameAttribute"/>
         </bygroups>
+      </rule>
+      <rule pattern="[\n\r]*">
+        <token type="Text"/>
       </rule>
     </state>
   </rules>

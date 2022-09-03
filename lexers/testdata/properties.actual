@@ -23,3 +23,7 @@ valueWithEscapes = This is a newline\n and a carriage return\r and a tab\t.
 encodedHelloInJapanese = \u3053\u3093\u306b\u3061\u306f
 # But with more modern file encodings like UTF-8, you can directly use supported characters.
 helloInJapanese = こんにちは
+  # Comments and keys can have leading whitespace
+  foo = I have leading whitespace
+# Comments and keys can have trailing whitespace as part of the comment   
+bar = I have trailing whitespace as part of the value  
