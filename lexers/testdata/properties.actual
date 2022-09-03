@@ -15,6 +15,12 @@ empty
 # For example the final value for "duplicateKey" will be "second".
 duplicateKey = first
 duplicateKey = second
+# Adding a \ at the end of a line means that the value continues to the next line.
+towLines = This line \
+           continues
+threeLines: This value \
+            has even \
+            three lines
 # If you need to add newlines and carriage returns, they need to be escaped using \n and \r respectively.
 # You can also optionally escape tabs with \t for readability purposes.
 valueWithEscapes = This is a newline\n and a carriage return\r and a tab\t.
