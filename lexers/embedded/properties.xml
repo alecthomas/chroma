@@ -13,7 +13,7 @@
           <token type="CommentSingle"/>
         </bygroups>
       </rule>
-      <rule pattern="^([ \t\f]*)(.+?)([ \t\f]*)([=:])([ \t\f]*)(.*)">
+      <rule pattern="^([ \t\f]*)(\S+?)([ \t\f]*)([=:])([ \t\f]*)(.*)">
         <bygroups>
           <token type="Text"/>
           <token type="NameAttribute"/>
@@ -23,7 +23,7 @@
           <token type="LiteralString"/>
         </bygroups>
       </rule>
-      <rule pattern="^([ \t\f]*)(.+?)([ \t\f]+)(.*)">
+      <rule pattern="^([ \t\f]*)(\S+)([ \t\f]+)(.*)">
         <bygroups>
           <token type="Text"/>
           <token type="NameAttribute"/>
