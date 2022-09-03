@@ -8,6 +8,7 @@ language : English
 # This means that the following are equivalent (other than for readability).
 hello=hello
 hello = hello
+topic .properties files
 # Keys with the same name will be overwritten by the key that is the furthest in a file.
 # For example the final value for "duplicateKey" will be "second".
 duplicateKey = first
