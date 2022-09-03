@@ -10,7 +10,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="^[#!].*">
+      <rule pattern="^([#!].*)">
         <token type="CommentSingle"/>
       </rule>
       <rule pattern="^(.+?)([ \t\f]*)([=:])([ \t\f]*)(.*)">
@@ -27,6 +27,11 @@
           <token type="NameAttribute"/>
           <token type="Text"/>
           <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\w+)$">
+        <bygroups>
+          <token type="NameAttribute"/>
         </bygroups>
       </rule>
     </state>

@@ -9,6 +9,8 @@ language : English
 hello=hello
 hello = hello
 topic .properties files
+# A word on a line will just create a key with no value.
+empty
 # Keys with the same name will be overwritten by the key that is the furthest in a file.
 # For example the final value for "duplicateKey" will be "second".
 duplicateKey = first
