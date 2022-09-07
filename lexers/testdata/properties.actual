@@ -8,10 +8,19 @@ language : English
 # This means that the following are equivalent (other than for readability).
 hello=hello
 hello = hello
+topic .properties files
+# A word on a line will just create a key with no value.
+empty
 # Keys with the same name will be overwritten by the key that is the furthest in a file.
 # For example the final value for "duplicateKey" will be "second".
 duplicateKey = first
 duplicateKey = second
+# Adding a \ at the end of a line means that the value continues to the next line.
+towLines = This line \
+           continues
+threeLines: This value \
+            has even \
+            three lines
 # If you need to add newlines and carriage returns, they need to be escaped using \n and \r respectively.
 # You can also optionally escape tabs with \t for readability purposes.
 valueWithEscapes = This is a newline\n and a carriage return\r and a tab\t.
@@ -20,3 +29,7 @@ valueWithEscapes = This is a newline\n and a carriage return\r and a tab\t.
 encodedHelloInJapanese = \u3053\u3093\u306b\u3061\u306f
 # But with more modern file encodings like UTF-8, you can directly use supported characters.
 helloInJapanese = こんにちは
+  # Comments and keys can have leading whitespace
+  foo = I have leading whitespace
+# Comments and keys can have trailing whitespace as part of the comment   
+bar = I have trailing whitespace as part of the value  
