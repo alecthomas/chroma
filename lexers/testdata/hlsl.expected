@@ -33,11 +33,7 @@
   {"type":"Punctuation","value":","},
   {"type":"Text","value":" "},
   {"type":"LiteralNumberFloat","value":"1.0"},
-  {"type":"Punctuation","value":")"},
-  {"type":"Punctuation","value":")"},
-  {"type":"Punctuation","value":")"},
-  {"type":"Punctuation","value":")"},
-  {"type":"Punctuation","value":";"},
+  {"type":"Punctuation","value":"))));"},
   {"type":"Text","value":"\n"},
   {"type":"Punctuation","value":"}"},
   {"type":"Text","value":"\n"}
