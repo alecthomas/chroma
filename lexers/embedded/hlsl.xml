@@ -82,7 +82,7 @@
         <token type="CommentPreproc"/>
       </rule>
       <rule pattern="\s+">
-        <token type="TextWhitespace"/>
+        <token type="Text"/>
       </rule>
     </state>
     <state name="string">
