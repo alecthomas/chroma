@@ -71,6 +71,7 @@ command, for Go.
 		HTMLHighlightStyle        string `group:"html" help:"Style used for highlighting lines."`
 		HTMLBaseLine              int    `group:"html" help:"Base line number." default:"1"`
 		HTMLPreventSurroundingPre bool   `group:"html" help:"Prevent the surrounding pre tag."`
+		HTMLLinkableLines         bool   `group:"html" help:"Make the line numbers linkable and be a link to themselves."`
 
 		Files []string `arg:"" optional:"" help:"Files to highlight." type:"existingfile"`
 	}
@@ -266,6 +267,7 @@ func configureHTMLFormatter(ctx *kong.Context) {
 		html.WithLineNumbers(cli.HTMLLines),
 		html.LineNumbersInTable(cli.HTMLLinesTable),
 		html.PreventSurroundingPre(cli.HTMLPreventSurroundingPre),
+		html.LinkableLineNumbers(cli.HTMLLinkableLines, "L"),
 	}
 	if len(cli.HTMLHighlight) > 0 {
 		ranges := [][2]int{}
