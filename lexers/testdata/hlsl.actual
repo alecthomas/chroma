@@ -1,0 +1,3 @@
+float4 vertex(float3 position) {
+    return mul(projection, mul(view, mul(model, float4(position, 1.0))));
+}

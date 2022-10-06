@@ -43,7 +43,7 @@ D | D, Dart, Diff, Django/Jinja, Docker, DTD, Dylan
 E | EBNF, Elixir, Elm, EmacsLisp, Erlang
 F | Factor, Fish, Forth, Fortran, FSharp
 G | GAS, GDScript, Genshi, Genshi HTML, Genshi Text, Gherkin, GLSL, Gnuplot, Go, Go HTML Template, Go Text Template, GraphQL, Groff, Groovy
-H | Handlebars, Haskell, Haxe, HCL, Hexdump, HLB, HTML, HTTP, Hy
+H | Handlebars, Haskell, Haxe, HCL, Hexdump, HLB, HLSL, HTML, HTTP, Hy
 I | Idris, Igor, INI, Io
 J | J, Java, JavaScript, JSON, Julia, Jungle
 K | Kotlin
