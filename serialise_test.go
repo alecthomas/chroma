@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	assert "github.com/alecthomas/assert/v2"
 )
 
 func TestEmitterSerialisationRoundTrip(t *testing.T) {
@@ -26,12 +26,12 @@ func TestEmitterSerialisationRoundTrip(t *testing.T) {
 		// nolint: scopelint
 		t.Run(test.name, func(t *testing.T) {
 			data, err := xml.Marshal(test.emitter)
-			require.NoError(t, err)
+			assert.NoError(t, err)
 			t.Logf("%s", data)
 			value, target := newFromTemplate(test.emitter)
 			err = xml.Unmarshal(data, target)
-			require.NoError(t, err)
-			require.Equal(t, test.emitter, value())
+			assert.NoError(t, err)
+			assert.Equal(t, test.emitter, value().(Emitter))
 		})
 	}
 }
@@ -51,12 +51,12 @@ func TestMutatorSerialisationRoundTrip(t *testing.T) {
 		// nolint: scopelint
 		t.Run(test.name, func(t *testing.T) {
 			data, err := xml.Marshal(test.mutator)
-			require.NoError(t, err)
+			assert.NoError(t, err)
 			t.Logf("%s", data)
 			value, target := newFromTemplate(test.mutator)
 			err = xml.Unmarshal(data, target)
-			require.NoError(t, err)
-			require.Equal(t, test.mutator, value())
+			assert.NoError(t, err)
+			assert.Equal(t, test.mutator, value().(Mutator))
 		})
 	}
 }
@@ -94,17 +94,17 @@ func TestMarshal(t *testing.T) {
 		}
 	})
 	data, err := Marshal(actual)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	expected, err := Unmarshal(data)
-	require.NoError(t, err)
-	require.Equal(t, expected.Config(), actual.Config())
-	require.Equal(t, mustRules(t, expected), mustRules(t, actual))
+	assert.NoError(t, err)
+	assert.Equal(t, expected.Config(), actual.Config())
+	assert.Equal(t, mustRules(t, expected), mustRules(t, actual))
 }
 
 func mustRules(t testing.TB, r *RegexLexer) Rules {
 	t.Helper()
 	rules, err := r.Rules()
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	return rules
 }
 
@@ -116,12 +116,12 @@ func TestRuleSerialisation(t *testing.T) {
 	}
 	for _, test := range tests {
 		data, err := xml.Marshal(test)
-		require.NoError(t, err)
+		assert.NoError(t, err)
 		t.Log(string(data))
 		actual := Rule{}
 		err = xml.Unmarshal(data, &actual)
-		require.NoError(t, err)
-		require.Equal(t, test, actual)
+		assert.NoError(t, err)
+		assert.Equal(t, test, actual)
 	}
 }
 
@@ -152,7 +152,7 @@ func TestRulesSerialisation(t *testing.T) {
 		},
 	}
 	data, err := xml.MarshalIndent(expected, "  ", "  ")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	re := regexp.MustCompile(`></[a-zA-Z]+>`)
 	data = re.ReplaceAll(data, []byte(`/>`))
 	b := &bytes.Buffer{}
@@ -161,6 +161,6 @@ func TestRulesSerialisation(t *testing.T) {
 	w.Close()
 	actual := Rules{}
 	err = xml.Unmarshal(data, &actual)
-	require.NoError(t, err)
-	require.Equal(t, expected, actual)
+	assert.NoError(t, err)
+	assert.Equal(t, expected, actual)
 }

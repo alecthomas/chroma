@@ -3,7 +3,7 @@ package chroma
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	assert "github.com/alecthomas/assert/v2"
 )
 
 func TestCoalesce(t *testing.T) {

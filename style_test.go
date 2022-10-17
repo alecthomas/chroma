@@ -3,7 +3,7 @@ package chroma
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	assert "github.com/alecthomas/assert/v2"
 )
 
 func TestStyleInherit(t *testing.T) {
@@ -82,19 +82,19 @@ func TestStyleBuilderTransform(t *testing.T) {
 		se.Colour = se.Colour.ClampBrightness(0.9, 1)
 		return se
 	}).Build()
-	assert.Nilf(t, err, "Transform failed: %v", err)
-	assert.GreaterOrEqual(t, light.Get(Name).Colour.Brightness(), 0.89)
-	assert.GreaterOrEqual(t, light.Get(NameVariable).Colour.Brightness(), 0.89)
-	assert.GreaterOrEqual(t, light.Get(NameVariableGlobal).Colour.Brightness(), 0.89)
+	assert.NoError(t, err, "Transform failed: %v", err)
+	assert.True(t, light.Get(Name).Colour.Brightness() >= 0.89)
+	assert.True(t, light.Get(NameVariable).Colour.Brightness() >= 0.89)
+	assert.True(t, light.Get(NameVariableGlobal).Colour.Brightness() >= 0.89)
 
 	dark, err := deriv.Builder().Transform(func(se StyleEntry) StyleEntry {
 		se.Colour = se.Colour.ClampBrightness(0, 0.1)
 		return se
 	}).Build()
-	assert.Nilf(t, err, "Transform failed: %v", err)
-	assert.LessOrEqual(t, dark.Get(Name).Colour.Brightness(), 0.11)
-	assert.LessOrEqual(t, dark.Get(NameVariable).Colour.Brightness(), 0.11)
-	assert.LessOrEqual(t, dark.Get(NameVariableGlobal).Colour.Brightness(), 0.11)
+	assert.NoError(t, err, "Transform failed: %v", err)
+	assert.True(t, dark.Get(Name).Colour.Brightness() <= 0.11)
+	assert.True(t, dark.Get(NameVariable).Colour.Brightness() <= 0.11)
+	assert.True(t, dark.Get(NameVariableGlobal).Colour.Brightness() <= 0.11)
 
 	// The original styles should be unchanged.
 	assert.Equal(t, "#000000", orig.Get(Name).Colour.String())

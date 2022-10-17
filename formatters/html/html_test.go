@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"regexp"
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	assert "github.com/alecthomas/assert/v2"
 
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/lexers"
@@ -117,7 +118,7 @@ func TestTabWidthStyle(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Regexp(t, `<pre.*style=".*background-color:[^;]+;-moz-tab-size:4;-o-tab-size:4;tab-size:4;[^"]*".+`, buf.String())
+	assert.True(t, regexp.MustCompile(`<pre.*style=".*background-color:[^;]+;-moz-tab-size:4;-o-tab-size:4;tab-size:4;[^"]*".+`).MatchString(buf.String()))
 }
 
 func TestWithCustomCSS(t *testing.T) {
@@ -129,7 +130,7 @@ func TestWithCustomCSS(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Regexp(t, `<span style="display:flex;display:inline;"><span><span style=".*">echo</span> FOO</span></span>`, buf.String())
+	assert.True(t, regexp.MustCompile(`<span style="display:flex;display:inline;"><span><span style=".*">echo</span> FOO</span></span>`).MatchString(buf.String()))
 }
 
 func TestWithCustomCSSStyleInheritance(t *testing.T) {
@@ -144,7 +145,7 @@ func TestWithCustomCSSStyleInheritance(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Regexp(t, ` <span style=".*;background:blue;color:tomato;">&#34;FOO&#34;</span>`, buf.String())
+	assert.True(t, regexp.MustCompile(` <span style=".*;background:blue;color:tomato;">&#34;FOO&#34;</span>`).MatchString(buf.String()))
 }
 
 func TestWrapLongLines(t *testing.T) {
@@ -156,7 +157,7 @@ func TestWrapLongLines(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Regexp(t, `<pre.*style=".*white-space:pre-wrap;word-break:break-word;`, buf.String())
+	assert.True(t, regexp.MustCompile(`<pre.*style=".*white-space:pre-wrap;word-break:break-word;`).MatchString(buf.String()))
 }
 
 func TestHighlightLines(t *testing.T) {
@@ -192,9 +193,9 @@ func TestPreWrapper(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Regexp(t, "<body class=\"bg\">\n<pre.*class=\"chroma\"><code><span class=\"line\"><span class=\"cl\"><span class=\"nb\">echo</span> FOO</span></span></code></pre>\n</body>\n</html>", buf.String())
-	assert.Regexp(t, `\.bg { .+ }`, buf.String())
-	assert.Regexp(t, `\.chroma { .+ }`, buf.String())
+	assert.True(t, regexp.MustCompile("<body class=\"bg\">\n<pre.*class=\"chroma\"><code><span class=\"line\"><span class=\"cl\"><span class=\"nb\">echo</span> FOO</span></span></code></pre>\n</body>\n</html>").MatchString(buf.String()))
+	assert.True(t, regexp.MustCompile(`\.bg { .+ }`).MatchString(buf.String()))
+	assert.True(t, regexp.MustCompile(`\.chroma { .+ }`).MatchString(buf.String()))
 }
 
 func TestLinkeableLineNumbers(t *testing.T) {
@@ -306,7 +307,7 @@ func TestWithPreWrapper(t *testing.T) {
 
 	t.Run("InlineCode, inline styles", func(t *testing.T) {
 		s := format(New(InlineCode(true)))
-		assert.Regexp(t, `<code style=".+?"><span style=".+?">echo</span> FOO</code>`, s)
+		assert.True(t, regexp.MustCompile(`<code style=".+?"><span style=".+?">echo</span> FOO</code>`).MatchString(s))
 	})
 
 	t.Run("Wrapper", func(t *testing.T) {

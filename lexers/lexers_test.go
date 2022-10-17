@@ -9,9 +9,8 @@ import (
 	"strings"
 	"testing"
 
+	assert "github.com/alecthomas/assert/v2"
 	"github.com/alecthomas/repr"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/formatters"
@@ -50,11 +49,11 @@ func TestGlobs(t *testing.T) {
 		config := lexer.Config()
 		for _, glob := range config.Filenames {
 			_, err := filepath.Match(glob, filename)
-			require.NoError(t, err)
+			assert.NoError(t, err)
 		}
 		for _, glob := range config.AliasFilenames {
 			_, err := filepath.Match(glob, filename)
-			require.NoError(t, err)
+			assert.NoError(t, err)
 		}
 	}
 }
@@ -110,7 +109,7 @@ func TestLexers(t *testing.T) {
 		if file.IsDir() {
 			dirname := filepath.Join("testdata", file.Name())
 			lexer := lexers.Get(file.Name())
-			assert.NotNil(t, lexer)
+			assert.NotZero(t, lexer)
 
 			subFiles, err := ioutil.ReadDir(dirname)
 			assert.NoError(t, err)
@@ -135,7 +134,7 @@ func TestLexers(t *testing.T) {
 
 			base := strings.Split(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), ".")[0]
 			lexer := lexers.Get(base)
-			assert.NotNil(t, lexer, base)
+			assert.NotZero(t, lexer, base)
 
 			filename := filepath.Join("testdata", file.Name())
 			expectedFilename := strings.TrimSuffix(filename, filepath.Ext(filename)) + ".expected"
@@ -187,7 +186,7 @@ func TestLexersTextAnalyser(t *testing.T) {
 		lexerName := strings.Split(baseFilename, ".")[0]
 
 		lexer := lexers.Get(lexerName)
-		assert.NotNil(t, lexer, "no lexer found for name %q", lexerName)
+		assert.NotZero(t, lexer, "no lexer found for name %q", lexerName)
 
 		expectedFilepath := "testdata/analysis/" + baseFilename + ".expected"
 
