@@ -1,10 +1,13 @@
-
-public void SumMethod() {
-
+public Number SumMethod() {
+    // this is a comment
     type public Number x
+    set x = 10.0
+    type String thisIsAString = "this"_x_"conjoined"
     type String i = ""
     for  set i = ^UTBL("test",i).order() quit:i.isNull()  {
         set x = x + i
     }
+    set x = x + $$getMore^ProcedureName("AAA")
+    do finishTask(x, "AAA")
 
     quit

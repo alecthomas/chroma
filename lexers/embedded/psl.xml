@@ -9,6 +9,7 @@
     <mime_type>text/x-psl</mime_type>
   </config>
   <rules>
+  <!-- NameFunction|TypeName -->
     <state name="root">
       <rule pattern="//.*$">
         <token type="CommentSingle"/>
@@ -16,69 +17,49 @@
       <rule pattern="/(\\\n)?[*](.|\n)*?[*](\\\n)?/">
         <token type="CommentMultiline"/>
       </rule>
-      <rule pattern="\+|-|\*|/|%|'?&lt;|'?&gt;|'?=|and|or|_|:|.">
-        <token type="Operator"/>
-      </rule>
-      <!-- <rule pattern="[?:]">
-        <token type="Operator"/>
-      </rule> -->
-      <rule pattern="\bdefined\b">
+      <rule pattern="\+|-|\*|/|%|'?&lt;|'?&gt;|'?=|\band\b|\bor\b|_|:">
         <token type="Operator"/>
       </rule>
       <rule pattern="[{}(),\[\]]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="[+-]?\d*\.\d+([eE][-+]?\d+)?f?">
-        <token type="LiteralNumberFloat"/>
-      </rule>
-      <rule pattern="[+-]?\d+\.\d*([eE][-+]?\d+)?f?">
-        <token type="LiteralNumberFloat"/>
-      </rule>
-      <rule pattern="0[xX][0-9a-fA-F]*">
-        <token type="LiteralNumberHex"/>
-      </rule>
-      <rule pattern="0[0-7]*">
-        <token type="LiteralNumberOct"/>
-      </rule>
-      <rule pattern="[1-9][0-9]*">
-        <token type="LiteralNumberInteger"/>
+      <rule pattern="[+-]?\d*\.\d+">
+        <token type="LiteralNumber"/>
       </rule>
       <rule pattern="&quot;">
         <token type="LiteralString"/>
         <push state="string"/>
       </rule>
-      <rule pattern="\b(asm|asm_fragment|break|case|cbuffer|centroid|class|column_major|compile|compile_fragment|const|continue|default|discard|do|else|export|extern|for|fxgroup|globallycoherent|groupshared|if|in|inline|inout|interface|line|lineadj|linear|namespace|nointerpolation|noperspective|NULL|out|packoffset|pass|pixelfragment|point|precise|return|register|row_major|sample|sampler|shared|stateblock|stateblock_state|static|struct|switch|tbuffer|technique|technique10|technique11|texture|typedef|triangle|triangleadj|uniform|vertexfragment|volatile|while)\b">
+      <rule pattern="\.">
+        <token type="Operator"/>
+        <push state="method"/>
+      </rule>
+      <rule pattern="\$\$">
+        <token type="NameFunction"/>
+        <push state="method"/>
+      </rule>
+      <rule pattern="\bdo\b">
+        <token type="KeywordReserved"/>
+        <push state="callmethod"/>
+      </rule>
+      <rule pattern="\b(do|set|if|for|while|quit|catch|return|while)\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="\b(true|false)\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="\b(auto|catch|char|const_cast|delete|dynamic_cast|enum|explicit|friend|goto|long|mutable|new|operator|private|protected|public|reinterpret_cast|short|signed|sizeof|static_cast|template|this|throw|try|typename|union|unsigned|using|virtual)\b">
-        <token type="KeywordReserved"/>
+      <rule pattern="\btype\b">
+        <token type="KeywordDeclaration"/>
+        <push state="typename"/>
       </rule>
-      <rule pattern="\b(dword|matrix|snorm|string|unorm|unsigned|void|vector|BlendState|Buffer|ByteAddressBuffer|ComputeShader|DepthStencilState|DepthStencilView|DomainShader|GeometryShader|HullShader|InputPatch|LineStream|OutputPatch|PixelShader|PointStream|RasterizerState|RenderTargetView|RasterizerOrderedBuffer|RasterizerOrderedByteAddressBuffer|RasterizerOrderedStructuredBuffer|RasterizerOrderedTexture1D|RasterizerOrderedTexture1DArray|RasterizerOrderedTexture2D|RasterizerOrderedTexture2DArray|RasterizerOrderedTexture3D|RWBuffer|RWByteAddressBuffer|RWStructuredBuffer|RWTexture1D|RWTexture1DArray|RWTexture2D|RWTexture2DArray|RWTexture3D|SamplerState|SamplerComparisonState|StructuredBuffer|Texture1D|Texture1DArray|Texture2D|Texture2DArray|Texture2DMS|Texture2DMSArray|Texture3D|TextureCube|TextureCubeArray|TriangleStream|VertexShader)\b">
+      <rule pattern="\b(public|req|private|void)\b">
+        <token type="KeywordDeclaration"/>
+      </rule>
+      <rule pattern="\b(Boolean|String|Number|Date)\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="\b(bool|double|float|int|half|min16float|min10float|min16int|min12int|min16uint|uint)([1-4](x[1-4])?)?\b">
-        <token type="KeywordType"/>
-      </rule>
-      <rule pattern="\b(abort|abs|acos|all|AllMemoryBarrier|AllMemoryBarrierWithGroupSync|any|AppendStructuredBuffer|asdouble|asfloat|asin|asint|asuint|asuint|atan|atan2|ceil|CheckAccessFullyMapped|clamp|clip|CompileShader|ConsumeStructuredBuffer|cos|cosh|countbits|cross|D3DCOLORtoUBYTE4|ddx|ddx_coarse|ddx_fine|ddy|ddy_coarse|ddy_fine|degrees|determinant|DeviceMemoryBarrier|DeviceMemoryBarrierWithGroupSync|distance|dot|dst|errorf|EvaluateAttributeAtCentroid|EvaluateAttributeAtSample|EvaluateAttributeSnapped|exp|exp2|f16tof32|f32tof16|faceforward|firstbithigh|firstbitlow|floor|fma|fmod|frac|frexp|fwidth|GetRenderTargetSampleCount|GetRenderTargetSamplePosition|GlobalOrderedCountIncrement|GroupMemoryBarrier|GroupMemoryBarrierWithGroupSync|InterlockedAdd|InterlockedAnd|InterlockedCompareExchange|InterlockedCompareStore|InterlockedExchange|InterlockedMax|InterlockedMin|InterlockedOr|InterlockedXor|isfinite|isinf|isnan|ldexp|length|lerp|lit|log|log10|log2|mad|max|min|modf|msad4|mul|noise|normalize|pow|printf|Process2DQuadTessFactorsAvg|Process2DQuadTessFactorsMax|Process2DQuadTessFactorsMin|ProcessIsolineTessFactors|ProcessQuadTessFactorsAvg|ProcessQuadTessFactorsMax|ProcessQuadTessFactorsMin|ProcessTriTessFactorsAvg|ProcessTriTessFactorsMax|ProcessTriTessFactorsMin|QuadReadLaneAt|QuadSwapX|QuadSwapY|radians|rcp|reflect|refract|reversebits|round|rsqrt|saturate|sign|sin|sincos|sinh|smoothstep|sqrt|step|tan|tanh|tex1D|tex1D|tex1Dbias|tex1Dgrad|tex1Dlod|tex1Dproj|tex2D|tex2D|tex2Dbias|tex2Dgrad|tex2Dlod|tex2Dproj|tex3D|tex3D|tex3Dbias|tex3Dgrad|tex3Dlod|tex3Dproj|texCUBE|texCUBE|texCUBEbias|texCUBEgrad|texCUBElod|texCUBEproj|transpose|trunc|WaveAllBitAnd|WaveAllMax|WaveAllMin|WaveAllBitOr|WaveAllBitXor|WaveAllEqual|WaveAllProduct|WaveAllSum|WaveAllTrue|WaveAnyTrue|WaveBallot|WaveGetLaneCount|WaveGetLaneIndex|WaveGetOrderedIndex|WaveIsHelperLane|WaveOnce|WavePrefixProduct|WavePrefixSum|WaveReadFirstLane|WaveReadLaneAt)\b">
-        <token type="NameBuiltin"/>
-      </rule>
-      <rule pattern="\b(SV_ClipDistance|SV_ClipDistance0|SV_ClipDistance1|SV_Culldistance|SV_CullDistance0|SV_CullDistance1|SV_Coverage|SV_Depth|SV_DepthGreaterEqual|SV_DepthLessEqual|SV_DispatchThreadID|SV_DomainLocation|SV_GroupID|SV_GroupIndex|SV_GroupThreadID|SV_GSInstanceID|SV_InnerCoverage|SV_InsideTessFactor|SV_InstanceID|SV_IsFrontFace|SV_OutputControlPointID|SV_Position|SV_PrimitiveID|SV_RenderTargetArrayIndex|SV_SampleIndex|SV_StencilRef|SV_TessFactor|SV_VertexID|SV_ViewportArrayIndex)\b">
-        <token type="NameDecorator"/>
-      </rule>
-      <rule pattern="\bSV_Target[0-7]?\b">
-        <token type="NameDecorator"/>
-      </rule>
-      <rule pattern="\b(allow_uav_condition|branch|call|domain|earlydepthstencil|fastopt|flatten|forcecase|instance|loop|maxtessfactor|numthreads|outputcontrolpoints|outputtopology|partitioning|patchconstantfunc|unroll)\b">
-        <token type="NameDecorator"/>
-      </rule>
-      <rule pattern="[a-zA-Z_]\w*">
+      <rule pattern="\^?[a-zA-Z][a-zA-Z0-9]*">
         <token type="Name"/>
-      </rule>
-      <rule pattern="\\$">
-        <token type="CommentPreproc"/>
       </rule>
       <rule pattern="\s+">
         <token type="Text"/>
@@ -100,6 +81,45 @@
       </rule>
       <rule pattern="\\">
         <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="method">
+      <rule pattern="\(">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\^[a-zA-Z][a-zA-Z0-9]*">
+        <token type="NameClass"/>
+      </rule>
+      <rule pattern="[a-zA-Z][a-zA-Z0-9]*">
+        <token type="NameFunction"/>
+      </rule>
+    </state>
+    <state name="callmethod">
+      <rule pattern="\(|{">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\^[a-zA-Z][a-zA-Z0-9]*">
+        <token type="NameClass"/>
+      </rule>
+      <rule pattern="[a-zA-Z][a-zA-Z0-9]*">
+        <token type="NameFunction"/>
+      </rule>
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="typename">
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\b(public|req|private|void)\b">
+        <token type="KeywordDeclaration"/>
+      </rule>
+      <rule pattern="[a-zA-Z][a-zA-Z0-9]*">
+        <token type="NameClass"/>
+        <pop depth="1"/>
       </rule>
     </state>
   </rules>
