@@ -3,15 +3,14 @@ package chroma
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	assert "github.com/alecthomas/assert/v2"
 )
 
 func mustNewLexer(t *testing.T, config *Config, rules Rules) *RegexLexer { // nolint: forbidigo
 	lexer, err := NewLexer(config, func() Rules {
 		return rules
 	})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	return lexer
 }
 

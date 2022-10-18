@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	assert "github.com/alecthomas/assert/v2"
 )
 
 func TestColourRGB(t *testing.T) {
@@ -62,12 +62,10 @@ func hue(c Colour) float64 {
 }
 
 func TestColourClampBrightness(t *testing.T) {
-	const delta = 0.01 // used for brightness and hue comparisons
-
 	// Start with a colour with a brightness close to 0.5.
 	initial := NewColour(0, 128, 255)
 	br := initial.Brightness()
-	assert.InDelta(t, 0.5, br, delta)
+	assertInDelta(t, 0.5, br)
 
 	// Passing a range that includes the colour's brightness should be a no-op.
 	assert.Equal(t, initial.String(), initial.ClampBrightness(br-0.01, br+0.01).String())
@@ -79,10 +77,15 @@ func TestColourClampBrightness(t *testing.T) {
 	// Clamping to a brighter or darker range should produce the requested
 	// brightness while preserving the colour's hue.
 	brighter := initial.ClampBrightness(0.75, 1)
-	assert.InDelta(t, 0.75, brighter.Brightness(), delta)
-	assert.InDelta(t, hue(initial), hue(brighter), delta)
+	assertInDelta(t, 0.75, brighter.Brightness())
+	assertInDelta(t, hue(initial), hue(brighter))
 
 	darker := initial.ClampBrightness(0, 0.25)
-	assert.InDelta(t, 0.25, darker.Brightness(), delta)
-	assert.InDelta(t, hue(initial), hue(darker), delta)
+	assertInDelta(t, 0.25, darker.Brightness())
+	assertInDelta(t, hue(initial), hue(darker))
+}
+
+func assertInDelta(t *testing.T, expected, actual float64) {
+	const delta = 0.01 // used for brightness and hue comparisons
+	assert.True(t, actual > (expected-delta) && actual < (expected+delta))
 }

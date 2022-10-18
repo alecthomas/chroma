@@ -1,6 +1,6 @@
 module github.com/alecthomas/chroma/v2/cmd/chroma
 
-go 1.17
+go 1.19
 
 replace github.com/alecthomas/chroma/v2 => ../../
 
