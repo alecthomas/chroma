@@ -1,0 +1,10 @@
+
+public void SumMethod() {
+
+    type public Number x
+    type String i = ""
+    for  set i = ^UTBL("test",i).order() quit:i.isNull()  {
+        set x = x + i
+    }
+
+    quit
