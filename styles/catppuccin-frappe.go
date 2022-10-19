@@ -5,7 +5,6 @@ import (
 )
 
 var (
-	ctpFrappeFlamingo = "#eebebe"
 	ctpFrappePink     = "#f4b8e4"
 	ctpFrappeMauve    = "#ca9ee6"
 	ctpFrappeRed      = "#e78284"
@@ -13,7 +12,6 @@ var (
 	ctpFrappePeach    = "#ef9f76"
 	ctpFrappeYellow   = "#e5c890"
 	ctpFrappeGreen    = "#a6d189"
-	ctpFrappeTeal     = "#81c8be"
 	ctpFrappeSky      = "#99d1db"
 	ctpFrappeBlue     = "#8caaee"
 	ctpFrappeLavender = "#babbf1"

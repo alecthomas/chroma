@@ -5,7 +5,6 @@ import (
 )
 
 var (
-	ctpMacchiatoFlamingo = "#f0c6c6"
 	ctpMacchiatoPink     = "#f5bde6"
 	ctpMacchiatoMauve    = "#c6a0f6"
 	ctpMacchiatoRed      = "#ed8796"
@@ -13,7 +12,6 @@ var (
 	ctpMacchiatoPeach    = "#f5a97f"
 	ctpMacchiatoYellow   = "#eed49f"
 	ctpMacchiatoGreen    = "#a6da95"
-	ctpMacchiatoTeal     = "#8bd5ca"
 	ctpMacchiatoSky      = "#91d7e3"
 	ctpMacchiatoBlue     = "#8aadf4"
 	ctpMacchiatoLavender = "#b7bdf8"

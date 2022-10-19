@@ -5,7 +5,6 @@ import (
 )
 
 var (
-	ctpLatteFlamingo = "#dd7878"
 	ctpLattePink     = "#ea76cb"
 	ctpLatteMauve    = "#8839ef"
 	ctpLatteRed      = "#d20f39"
@@ -13,7 +12,6 @@ var (
 	ctpLattePeach    = "#fe640b"
 	ctpLatteYellow   = "#df8e1d"
 	ctpLatteGreen    = "#40a02b"
-	ctpLatteTeal     = "#179299"
 	ctpLatteSky      = "#04a5e5"
 	ctpLatteBlue     = "#1e66f5"
 	ctpLatteLavender = "#7287fd"

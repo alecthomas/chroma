@@ -5,7 +5,6 @@ import (
 )
 
 var (
-	ctpMochaFlamingo = "#f2cdcd"
 	ctpMochaPink     = "#f5c2e7"
 	ctpMochaMauve    = "#cba6f7"
 	ctpMochaRed      = "#f38ba8"
@@ -13,7 +12,6 @@ var (
 	ctpMochaPeach    = "#fab387"
 	ctpMochaYellow   = "#f9e2af"
 	ctpMochaGreen    = "#a6e3a1"
-	ctpMochaTeal     = "#94e2d5"
 	ctpMochaSky      = "#89dceb"
 	ctpMochaBlue     = "#89b4fa"
 	ctpMochaLavender = "#b4befe"
