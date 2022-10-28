@@ -1,4 +1,8 @@
-# Lexer tests
+# Chroma lexers
+
+All lexers in Chroma should now be defined in XML unless they require custom code.
+
+## Lexer tests
 
 The tests in this directory feed a known input `testdata/<name>.actual` into the parser for `<name>` and check
 that its output matches `<name>.exported`.
@@ -6,14 +10,15 @@ that its output matches `<name>.exported`.
 It is also possible to perform several tests on a same parser `<name>`, by placing know inputs `*.actual` into a
 directory `testdata/<name>/`.
 
-## Running the tests
+### Running the tests
 
 Run the tests as normal:
 ```go
 go test ./lexers
 ```
 
-## Update existing tests
+### Update existing tests
+
 When you add a new test data file (`*.actual`), you need to regenerate all tests. That's how Chroma creates the `*.expected` test file based on the corresponding lexer.
 
 To regenerate all tests, type in your terminal:
@@ -26,7 +31,8 @@ This first sets the `RECORD` environment variable to `true`. Then it runs `go te
 
 (That environment variable tells Chroma it needs to output test data. After running `go test ./lexers` you can remove or reset that variable.)
 
-### Windows users
+#### Windows users
+
 Windows users will find that the `RECORD=true go test ./lexers` command fails in both the standard command prompt terminal and in PowerShell.
 
 Instead we have to perform both steps separately:

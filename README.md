@@ -207,14 +207,13 @@ for details on implementing lexers. Most concepts apply directly to Chroma,
 but see existing lexer implementations for real examples.
 
 In many cases lexers can be automatically converted directly from Pygments by
-using the included Python 3 script `pygments2chroma.py`. I use something like
+using the included Python 3 script `pygments2chroma_xml.py`. I use something like
 the following:
 
 ```sh
-python3 _tools/pygments2chroma.py \
+python3 _tools/pygments2chroma_xml.py \
   pygments.lexers.jvm.KotlinLexer \
-  > lexers/k/kotlin.go \
-  && gofmt -s -w lexers/k/kotlin.go
+  > lexers/embedded/kotlin.xml
 ```
 
 See notes in [pygments-lexers.txt](https://github.com/alecthomas/chroma/blob/master/pygments-lexers.txt)
