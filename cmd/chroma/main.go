@@ -205,21 +205,18 @@ func main() {
 	style, err := builder.Build()
 	ctx.FatalIfErrorf(err)
 
+	if cli.Formatter == "html" {
+		configureHTMLFormatter(ctx)
+	}
+
 	// Dump styles.
 	if cli.HTMLStyles {
-		options := []html.Option{html.WithClasses(true)}
-		if cli.HTMLAllStyles {
-			options = append(options, html.WithAllClasses(true))
-		}
-		formatter := html.New(options...)
+		formatter := formatters.Get("html").(*html.Formatter)
 		err = formatter.WriteCSS(w, style)
 		ctx.FatalIfErrorf(err)
 		return
 	}
 
-	if cli.Formatter == "html" {
-		configureHTMLFormatter(ctx)
-	}
 	if len(cli.Files) == 0 {
 		var contents string
 		var lexer chroma.Lexer
