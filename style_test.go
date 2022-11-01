@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"encoding/xml"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -100,4 +101,22 @@ func TestStyleBuilderTransform(t *testing.T) {
 	assert.Equal(t, "#000000", orig.Get(Name).Colour.String())
 	assert.Equal(t, "#ff0000", orig.Get(NameVariable).Colour.String())
 	assert.Equal(t, "#ff3300", deriv.Get(NameVariableGlobal).Colour.String())
+}
+
+func TestStyleMarshaller(t *testing.T) {
+	expected, err := NewStyle("test", StyleEntries{
+		Whitespace: "bg:#ffffff",
+		Text:       "#000000 underline",
+	})
+	assert.NoError(t, err)
+	data, err := xml.MarshalIndent(expected, "", "  ")
+	assert.NoError(t, err)
+	assert.Equal(t, `<style name="test">
+  <entry type="Text" style="underline #000000"></entry>
+  <entry type="TextWhitespace" style="bg:#ffffff"></entry>
+</style>`, string(data))
+	actual := &Style{}
+	err = xml.Unmarshal(data, actual)
+	assert.NoError(t, err)
+	assert.Equal(t, expected, actual)
 }
