@@ -199,7 +199,7 @@ func TestPreWrapper(t *testing.T) {
 }
 
 func TestLinkeableLineNumbers(t *testing.T) {
-	f := New(WithClasses(true), WithLineNumbers(true), LinkableLineNumbers(true, "line"))
+	f := New(WithClasses(true), WithLineNumbers(true), WithLinkableLineNumbers(true, "line"), WithClasses(false))
 	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
 	assert.NoError(t, err)
 
@@ -207,12 +207,12 @@ func TestLinkeableLineNumbers(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Contains(t, buf.String(), `id="line1"><a style="outline: none; text-decoration:none; color:inherit" href="#line1">1</a>`)
-	assert.Contains(t, buf.String(), `id="line5"><a style="outline: none; text-decoration:none; color:inherit" href="#line5">5</a>`)
+	assert.Contains(t, buf.String(), `id="line1"><a style="outline:none;text-decoration:none;color:inherit" href="#line1">1</a>`)
+	assert.Contains(t, buf.String(), `id="line5"><a style="outline:none;text-decoration:none;color:inherit" href="#line5">5</a>`)
 }
 
 func TestTableLinkeableLineNumbers(t *testing.T) {
-	f := New(WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true), LinkableLineNumbers(true, "line"))
+	f := New(Standalone(true), WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true), WithLinkableLineNumbers(true, "line"))
 	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
 	assert.NoError(t, err)
 
@@ -220,8 +220,9 @@ func TestTableLinkeableLineNumbers(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.Contains(t, buf.String(), `id="line1"><a style="outline: none; text-decoration:none; color:inherit" href="#line1">1</a>`)
-	assert.Contains(t, buf.String(), `id="line5"><a style="outline: none; text-decoration:none; color:inherit" href="#line5">5</a>`)
+	assert.Contains(t, buf.String(), `id="line1"><a class="lnlinks" href="#line1">1</a>`)
+	assert.Contains(t, buf.String(), `id="line5"><a class="lnlinks" href="#line5">5</a>`)
+	assert.Contains(t, buf.String(), `/* LineLinks */ .chroma .lnlinks { outline: none; text-decoration:none; color:inherit }`, buf.String())
 }
 
 func TestTableLineNumberSpacing(t *testing.T) {

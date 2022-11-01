@@ -35,6 +35,8 @@ const (
 	LineTable
 	// Line numbers table TD wrapper style.
 	LineTableTD
+	// Line number links.
+	LineLink
 	// Code line wrapper style.
 	CodeLine
 	// Input that could not be tokenised.
@@ -216,6 +218,7 @@ var (
 		LineHighlight:    "hl",
 		LineTable:        "lntable",
 		LineTableTD:      "lntd",
+		LineLink:         "lnlinks",
 		CodeLine:         "cl",
 		Text:             "",
 		Whitespace:       "w",

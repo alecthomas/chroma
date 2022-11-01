@@ -267,7 +267,7 @@ func configureHTMLFormatter(ctx *kong.Context) {
 		html.WithLineNumbers(cli.HTMLLines),
 		html.LineNumbersInTable(cli.HTMLLinesTable),
 		html.PreventSurroundingPre(cli.HTMLPreventSurroundingPre),
-		html.LinkableLineNumbers(cli.HTMLLinkableLines, "L"),
+		html.WithLinkableLineNumbers(cli.HTMLLinkableLines, "L"),
 	}
 	if len(cli.HTMLHighlight) > 0 {
 		ranges := [][2]int{}
