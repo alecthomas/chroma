@@ -1,7 +1,7 @@
 package styles
 
 import (
-	"embed" // Imported for side-effects.
+	"embed"
 	"io/fs"
 	"sort"
 

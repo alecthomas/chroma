@@ -230,6 +230,15 @@ func NewXMLStyle(r io.Reader) (*Style, error) {
 	return style, dec.Decode(style)
 }
 
+// MustNewXMLStyle is like NewXMLStyle but panics on error.
+func MustNewXMLStyle(r io.Reader) *Style {
+	style, err := NewXMLStyle(r)
+	if err != nil {
+		panic(err)
+	}
+	return style
+}
+
 // NewStyle creates a new style definition.
 func NewStyle(name string, entries StyleEntries) (*Style, error) {
 	return NewStyleBuilder(name).AddAll(entries).Build()
