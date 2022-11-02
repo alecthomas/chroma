@@ -230,17 +230,22 @@ formatter outputs raw tokens. The latter is useful for debugging lexers.
 <a id="markdown-styles" name="styles"></a>
 ### Styles
 
-Chroma styles use the [same syntax](http://pygments.org/docs/styles/) as Pygments.
+Chroma styles are defined in XML. The style entries use the
+[same syntax](http://pygments.org/docs/styles/) as Pygments.
 
-All Pygments styles have been converted to Chroma using the `_tools/style.py` script.
+All Pygments styles have been converted to Chroma using the `_tools/style.py`
+script.
 
-When you work with one of [Chroma's styles](https://github.com/alecthomas/chroma/tree/master/styles), know that the `chroma.Background` token type provides the default style for tokens. It does so by defining a foreground color and background color.
+When you work with one of [Chroma's styles](https://github.com/alecthomas/chroma/tree/master/styles), 
+know that the `Background` token type provides the default style for tokens. It does so
+by defining a foreground color and background color.
 
-For example, this gives each token name not defined in the style a default color of `#f8f8f8` and uses `#000000` for the highlighted code block's background:
+For example, this gives each token name not defined in the style a default color
+of `#f8f8f8` and uses `#000000` for the highlighted code block's background:
 
-~~~go
-chroma.Background: "#f8f8f2 bg:#000000",
-~~~
+```xml
+<entry type="Background" style="#f8f8f2 bg:#000000"/>
+```
 
 Also, token types in a style file are hierarchical. For instance, when `CommentSpecial` is not defined, Chroma uses the token style from `Comment`. So when several comment tokens use the same color, you'll only need to define `Comment` and override the one that has a different color.
 

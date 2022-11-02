@@ -372,13 +372,12 @@ func (t *TokenType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	if err := d.DecodeElement(&el, &start); err != nil {
 		return err
 	}
-	for tt, text := range _TokenType_map {
-		if text == el.Type {
-			*t = tt
-			return nil
-		}
+	tt, err := TokenTypeString(el.Type)
+	if err != nil {
+		return err
 	}
-	return fmt.Errorf("unknown TokenType %q", el.Type)
+	*t = tt
+	return nil
 }
 
 func (t TokenType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

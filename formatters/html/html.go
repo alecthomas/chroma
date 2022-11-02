@@ -520,7 +520,7 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 	classes[chroma.LineNumbersTable] = lineNumbersStyle + classes[chroma.LineNumbersTable]
 	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTable]
 	classes[chroma.LineTableTD] = "vertical-align: top; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTableTD]
-	classes[chroma.LineLink] = "outline: none; text-decoration:none; color:inherit" + classes[chroma.LineLink]
+	classes[chroma.LineLink] = "outline: none; text-decoration: none; color: inherit" + classes[chroma.LineLink]
 	return classes
 }
 
