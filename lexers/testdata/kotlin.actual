@@ -48,6 +48,8 @@ fun someOperators(a: Int, b: Int) {
     println( a % b)
     println(c in a..b)
     
+    Logger.info("Hello World")
+    
     a %= 2
 	a && b
 	a *= 2
