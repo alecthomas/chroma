@@ -1,0 +1,402 @@
+include 'std.stas'
+
+reserve debug_symbols  1
+reserve verbose_mode   1
+auto    backend_type   1
+
+const StasBackend.fasm { 1 }
+const StasBackend.nasm { 2 }
+
+; (StasBackend -- str len)
+fn StasBackend.to_str 1 2 {
+	dup StasBackend.fasm = if {
+		"fasm"
+	} elif dup StasBackend.nasm = {
+		"nasm"
+	} else {
+		0 0 0 assert -> 'unreachable'
+	}
+	rot rot drop
+}
+
+include 'src/stringbuffer.stas' ; handling strings
+include 'src/tokens.stas'       ; stas token definitions
+include 'src/util.stas'         ; utility functions, error handling
+include 'src/scanner.stas'      ; lexer/scanner, creates tokens
+include 'src/parserdefs.stas'   ; stas parser definitions, very large file
+include 'src/eval.stas'         ; constant evaluation
+include 'src/parser.stas'       ; stas parser, creates IR instructions
+include 'src/write.stas'        ; buffers + writing to files
+include 'src/dce.stas'          ; dead code elimination compiler pass
+include 'src/x86.stas'          ; stas codegen definitions and reg allocator
+include 'src/gen.stas'          ; stas code generator, creates x86_64 asm
+
+fn usage 0 0 {
+	"stas 0.1.1 Copyright (C) 2022  l-m.dev\n\n"                                   eputs
+	"USAGE: ./stas [OPTIONS] [FILE]\n\n"                                           eputs
+
+	"	-o <output>       Specify '-o -' to dump assembly to stdout\n"             eputs
+	"	-g                Debug info. Most effective with the `nasm` backend\n"    eputs
+	"	-b <backend>      Assemblers `nasm` or `fasm` as compiler backend\n"       eputs
+	"	-r                Execute file after compiling. Arguments after this\n"    eputs
+	"	                  switch will ignored and passed to the program\n"         eputs
+	"	-v, --verbose     Activate verbose mode\n"                                 eputs
+	"	--dump-tok        Dump token information after scanning stage\n"           eputs
+	"	--dump-ir         Dump intermediate representation after parsing stage\n"  eputs
+	"	-h, --help        Show this message\n\n"                                   eputs
+}
+
+fn help_and_exit 0 0 {
+	usage
+	0 exit
+}
+
+fn usage_and_exit 0 0 {
+	usage
+	1 exit
+}
+
+fn usage_msg_and_exit 2 0 {
+	error.generic_fatal_noexit
+	usage_and_exit
+}
+
+fn parse_backend_type 2 0 {
+	over over "fasm" streq if {
+		StasBackend.fasm pop backend_type
+	} elif over over "nasm" streq {
+		StasBackend.nasm pop backend_type
+	} else {
+		"unknown backend" usage_msg_and_exit
+	}
+	drop drop
+}
+
+const sizeof(fasm_arg_buf) { sizeof(u64) 32 * }
+
+; (infile.str infile.len outfile.str outfile.len is_blocking)
+fn execute_backend 5 0 {
+	auto is_blocking 1 pop is_blocking
+	auto outfile     2 pop outfile
+	auto infile      2 pop infile
+
+	reserve arg_buf sizeof(fasm_arg_buf)
+
+	backend_type StasBackend.fasm = if {
+		arg_buf       dup "fasm"    drop w64
+		sizeof(u64) + dup infile    drop w64
+		sizeof(u64) + dup outfile   drop w64
+		sizeof(u64) + dup "-m"      drop w64
+		sizeof(u64) + dup "1048576" drop w64
+		sizeof(u64) +     NULL           w64
+
+		"/usr/bin/fasm"
+	} elif backend_type StasBackend.nasm = {
+		arg_buf       dup "nasm"    drop w64
+		sizeof(u64) + dup infile    drop w64
+		sizeof(u64) + dup "-o"      drop w64
+		sizeof(u64) + dup outfile   drop w64
+		sizeof(u64) + dup "-O0"     drop w64
+		sizeof(u64) + dup "-felf64" drop w64
+
+		debug_symbols r8 if {
+			sizeof(u64) + dup "-Fdwarf" drop w64
+			sizeof(u64) + dup "-g"      drop w64
+		}
+
+		sizeof(u64) +     NULL           w64
+		"/usr/bin/nasm"
+	}
+
+	verbose_mode r8 if {
+		log.msg.start
+		"`" eputs
+			arg_buf argp_print
+		"`\n" eputs	
+	}
+
+	arg_buf is_blocking child_execve_and_shut_up
+}
+
+const ArgParseMode.none    { 0 }
+const ArgParseMode.output  { 1 }
+const ArgParseMode.backend { 2 }
+
+fn main 0 0 {
+	argc 1 = if {
+		usage_and_exit
+	}
+
+	reserve dump_ir   1
+	reserve dump_tok  1
+	reserve to_stdout 1
+
+	to_stdout      0 w8
+	dump_ir        0 w8
+	dump_tok       0 w8
+
+	auto run_exec_arg  1
+	0 pop run_exec_arg
+	
+	UINT64_MAX       pop fwrite_buffer.fd_loc
+	StasBackend.fasm pop backend_type            
+
+	auto argparse_mode 1
+	auto argstr        2
+
+	auto out_file 2
+	auto in_file  2
+	NULL 0 pop out_file
+	NULL 0 pop in_file
+
+	ArgParseMode.none pop argparse_mode
+	debug_symbols false w8
+
+	1
+	while dup argc < {
+		dup args[] pop argstr
+
+		argstr "-o" streq if {
+			argparse_mode ArgParseMode.none != if {
+				usage_and_exit
+			}
+			ArgParseMode.output pop argparse_mode
+		} elif argstr "-b" streq {
+			argparse_mode ArgParseMode.none != if {
+				usage_and_exit
+			}
+			ArgParseMode.backend pop argparse_mode
+		} elif argstr "-g" streq {
+			argparse_mode ArgParseMode.none != if {
+				usage_and_exit
+			}
+			debug_symbols r8 if {
+				usage_and_exit
+			}
+			debug_symbols true w8
+		} elif argstr "--verbose" streq argstr "-v" streq | {
+			argparse_mode ArgParseMode.none != if {
+				usage_and_exit
+			}
+			verbose_mode r8 if {
+				usage_and_exit
+			}
+			verbose_mode true w8
+		} elif argstr "-r" streq {
+			argparse_mode ArgParseMode.none != if {
+				usage_and_exit
+			}
+			pop run_exec_arg
+			argc
+		} elif argstr "--help" streq argstr "-h" streq | {
+			help_and_exit
+		} elif argstr "--dump-ir" streq argstr "-h" streq | {
+			argparse_mode ArgParseMode.none != dump_ir r8 | dump_tok r8 | if {
+				usage_and_exit
+			}
+			dump_ir true w8
+		} elif argstr "--dump-tok" streq argstr "-h" streq | {
+			argparse_mode ArgParseMode.none != dump_ir r8 | dump_tok r8 | if {
+				usage_and_exit
+			}
+			dump_tok true w8
+		} else {
+			argparse_mode ArgParseMode.none = if {
+				in_file drop NULL != if {
+					usage_and_exit
+				}
+				argstr pop in_file
+			} elif argparse_mode ArgParseMode.output = {
+				out_file drop NULL != if {
+					usage_and_exit
+				}
+				argstr pop out_file
+			} elif argparse_mode ArgParseMode.backend = {
+				argstr parse_backend_type
+			} else {
+				0 assert
+			}
+			ArgParseMode.none pop argparse_mode
+		}
+		++
+	}
+	drop
+
+	argparse_mode ArgParseMode.none != if {
+		argparse_mode ArgParseMode.output = if {
+			"supply output file" usage_msg_and_exit
+		} elif argparse_mode ArgParseMode.backend = {
+			"supply backend type" usage_msg_and_exit
+		}
+	}
+
+	in_file drop NULL = if {
+		"supply stas file" usage_msg_and_exit
+	}
+
+	out_file drop NULL = if {
+		debug_symbols r8 backend_type StasBackend.nasm = | if {
+			"a.o"
+		} else {
+			"a.out"
+		}
+		pop out_file
+	} else {
+		out_file "-" streq if {
+			to_stdout true w8
+		}
+	}
+
+	verbose_mode r8 if {
+		log.msg.start
+		"scanning file `" eputs in_file eputs "`\n" eputs
+	}
+	
+	log.time.start
+		in_file stas.scan_file
+	"scanning took " log.time.end
+
+	dump_tok r8 if {
+		token_stream.dump
+		ret
+	}
+
+	verbose_mode r8 if {
+		log.msg.start
+		"parsing " eputs token_stream.len eputu " tokens\n" eputs
+	}
+	log.time.start
+		stas.parse
+	"parsing took " log.time.end
+	verbose_mode r8 if {
+		log.msg.start
+		functions.len eputu " functions, " eputs label_c ++ eputu " labels\n" eputs
+		log.msg.start
+		global_var_context.len eputu " global variables, " eputs toplevel_constants.len eputu " constants\n" eputs
+	}
+	
+	dump_ir r8 if {
+		ir_stream.dump
+		ret
+	}
+
+	verbose_mode r8 if {
+		log.msg.start
+		"dce pass started\n" eputs
+	}
+	log.time.start
+		stas.dce
+	"dce took " log.time.end
+	verbose_mode r8 if {
+		log.msg.start
+		used_functions eputu " used functions, of which " eputs inlined_functions eputu " are eligible for inline\n" eputs
+		log.msg.start
+		slits.len eputu " string literals\n" eputs
+	}
+	
+	auto out_file_asm_sv 1 
+
+	to_stdout r8 ! if {
+		out_file new_string_view
+		dup ".tmp" push_string_view
+		dup pop out_file_asm_sv
+
+		string_view_to_str fd_new_file_for_writing
+		pop fwrite_buffer.fd_loc
+	} else {
+		stdout pop fwrite_buffer.fd_loc
+	}
+
+	verbose_mode r8 if {
+		log.msg.start
+		"generating code from " eputs ir_stream.len eputu " IR instructions\n" eputs
+	}
+	log.time.start
+		in_file stas.gen
+	"gen took " log.time.end
+
+	to_stdout r8 if {
+		ret
+	}
+	verbose_mode r8 if {
+		log.msg.start
+		"generated " eputs
+
+		fwrite_buffer.fd_loc fd_stat_size
+
+		dup 1024 / 0 > if {
+			eputu " KiBs of code\n" eputs
+		} else {
+			eputu " bytes of code\n" eputs
+		}
+	}
+
+	fwrite_buffer.fd_loc close 0 <s if {
+		"FATAL: Failed to close file descriptor\n" eputs
+		1 exit
+	}
+	verbose_mode r8 if {
+		log.msg.start
+		"wrote code to `" eputs out_file_asm_sv string_view_to_str eputs "`\n" eputs
+	}
+
+	verbose_mode r8 if {
+		log.msg.start
+		"executing assembler backend `" eputs backend_type StasBackend.to_str eputs "`\n" eputs
+	}
+
+	log.time.start
+		out_file_asm_sv string_view_to_str out_file run_exec_arg 0 != execute_backend
+	"backend took " log.time.end
+	
+	verbose_mode r8 if {
+		log.msg.start
+		"created binary `" eputs out_file eputs "`\n" eputs
+	}
+
+	debug_symbols r8 backend_type StasBackend.nasm = | if {
+		ret
+	}
+
+	run_exec_arg 0 != if {
+		reserve null_p sizeof(u64)
+		null_p NULL w64
+
+		auto argp 1
+
+		{
+			string_buffer string_buffer.len + pop argp
+
+			out_file drop string_buffer.generic_append_u64
+
+			run_exec_arg 1 +
+			while dup argc < {
+				dup sizeof(u64) * argv + r64 string_buffer.generic_append_u64
+				++
+			}
+			drop
+
+			NULL string_buffer.generic_append_u64
+		}
+
+		out_file drop
+		argp
+		null_p
+
+		verbose_mode r8 if {
+			log.msg.start
+			
+			"exceve binary `" eputs 
+
+			argp
+			argp_print
+
+			"`\n" eputs
+		}
+		
+		execve 0 <s if {
+			"FATAL: Could not execve file\n" eputs
+			1 exit
+		}
+	}
+}
