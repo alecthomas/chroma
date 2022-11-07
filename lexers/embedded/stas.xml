@@ -8,7 +8,7 @@
       <rule pattern="\\.">
         <token type="LiteralStringEscape"/>
       </rule>
-      <rule pattern="[^\\(&#34;)]+">
+      <rule pattern="[^\\&#34;]+">
         <token type="LiteralString"/>
       </rule>
       <rule pattern="&#34;">
@@ -20,7 +20,7 @@
       <rule pattern="\\.">
         <token type="LiteralStringEscape"/>
       </rule>
-      <rule pattern="[^\\(&#39;)]+">
+      <rule pattern="[^\\&#39;]+">
         <token type="LiteralString"/>
       </rule>
       <rule pattern="&#39;">
@@ -32,15 +32,18 @@
       <rule pattern="\\.">
         <token type="LiteralStringEscape"/>
       </rule>
-      <rule pattern="[^\\(`)]+">
+      <rule pattern="[^\\`]+">
         <token type="LiteralString"/>
       </rule>
       <rule pattern="`">
         <token type="LiteralStringChar"/>
         <pop depth="1"/>
       </rule>
-    </state>>
+    </state>
     <state name="root">
+      <rule pattern="(\n|\s)+">
+        <token type="Text"/>
+      </rule>
       <rule pattern="(?&lt;!\S)(fn|argc|argv|swap|dup|over|over2|rot|rot4|drop|w8|w16|w32|w64|r8|r16|r32|r64|syscall0|syscall1|syscall2|syscall3|syscall4|syscall5|syscall6|_breakpoint|assert|const|auto|reserve|pop|include|addr|if|else|elif|while|break|continue|ret)(?!\S)">
         <token type="Keyword"/>
       </rule>
@@ -56,7 +59,7 @@
       <rule pattern="(?&lt;!\S)\-?(\d+)(?!\S)">
         <token type="LiteralNumber"/>
       </rule>
-      <rule pattern="(?&lt;!\S);.*(\S|$)">
+      <rule pattern="(?&lt;!\S);.*(\S|\n)">
         <token type="Comment"/>
       </rule>
       <rule pattern="&#39;">
