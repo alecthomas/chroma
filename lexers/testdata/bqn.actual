@@ -1,0 +1,31 @@
+#! /usr/bin/env bqn
+
+# From BQN documentation / quick start:
+# https://mlochbaum.github.io/BQN/doc/quick.html
+
+# Case conversion utilities
+case ← {
+  diff ← -´ "Aa"
+  Lower ⇐ -⟜diff
+  Upper ⇐ Lower⁼
+}
+
+hw ← <˘ 2‿∘ ⥊ "helloworld"
+hw case.Upper⌾(⊑¨)↩
+•Out hw ↩ ∾ ⥊⍉ [hw, ", "‿"!"]  # Hello, World!
+
+# Split at spaces and repeated characters
+Split ← {
+  !1==𝕩 ⋄ (!2=•Type)¨𝕩
+  Proc ← {
+    · 𝕊 ' ': spl⇐1 ;             # Space: break and delete it
+    prev Fn cur: ⟨spl,str⟩⇐
+      spl←0 ⋄ str←⟨cur⟩          # Include and don't break...
+      { prev=cur ? spl+↩1 ; @ }  # except at equal characters
+  }
+  GV‿GS ← {𝕏¨}¨ ⟨ {⟨s⇐str⟩:s;""}
+                  {𝕩.spl} ⟩
+  r ← Proc{»𝔽¨⊢} 𝕩
+  (∾¨ GV ⊔˜ ·+`GS) r
+}
+•Show Split hw  # ⟨ "Hel" "lo," "World!" ⟩
