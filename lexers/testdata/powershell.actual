@@ -1,1 +1,5 @@
 Get-ChildItem -Recurse -Force -ErrorAction SilentlyContinue -Name -Path C:\ *.txt
+$x = "Here is a $var inside a string"
+$x = @"
+Here is a $var inside a here-string
+"@

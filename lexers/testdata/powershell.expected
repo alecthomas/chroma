@@ -18,5 +18,20 @@
   {"type":"Text","value":" "},
   {"type":"Punctuation","value":"*."},
   {"type":"Name","value":"txt"},
-  {"type":"Text","value":"\n"}
+  {"type":"Text","value":"\n"},
+  {"type":"NameVariable","value":"$x"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralStringDouble","value":"\"Here is a "},
+  {"type":"NameVariable","value":"$var"},
+  {"type":"LiteralStringDouble","value":" inside a string\""},
+  {"type":"Text","value":"\n"},
+  {"type":"NameVariable","value":"$x"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralStringHeredoc","value":"@\"\nHere is a "},
+  {"type":"NameVariable","value":"$var"},
+  {"type":"LiteralStringHeredoc","value":" inside a here-string\n\"@"}
 ]
