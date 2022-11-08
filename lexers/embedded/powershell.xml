@@ -119,6 +119,9 @@
         <token type="Punctuation"/>
         <push state="child"/>
       </rule>
+      <rule pattern="(\$)((global|script|private|env):)?\w+">
+        <token type="NameVariable"/>
+      </rule>
       <rule pattern="&#34;&#34;">
         <token type="LiteralStringDouble"/>
       </rule>
@@ -138,6 +141,9 @@
       <rule pattern="\$\(">
         <token type="Punctuation"/>
         <push state="child"/>
+      </rule>
+      <rule pattern="(\$)((global|script|private|env):)?\w+">
+        <token type="NameVariable"/>
       </rule>
       <rule pattern="[^@\n]+&#34;]">
         <token type="LiteralStringHeredoc"/>
