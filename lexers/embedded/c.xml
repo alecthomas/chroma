@@ -196,7 +196,7 @@
       <rule pattern="(restricted|volatile|continue|register|default|typedef|struct|extern|switch|sizeof|static|return|union|while|const|break|goto|enum|else|case|auto|for|asm|if|do)\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(bool|int|long|float|short|double|char((8|16|32)_t)?|unsigned|signed|void|u?int(_fast|_least|)(8|16|32|64)_t)\b">
+      <rule pattern="(bool|int|long|float|short|double|char((8|16|32)_t)?|unsigned|signed|void|u?int(_fast|_least|)(8|16|32|64)_t)\b|\b[a-z]\w*_t\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="(typename|__inline|restrict|_inline|thread|inline|naked)\b">
@@ -226,7 +226,7 @@
       <rule>
         <include state="whitespace"/>
       </rule>
-      <rule pattern="((?:[\w*\s])+?(?:\s|[*]))([a-zA-Z_]\w*)(\s*\([^;]*?\))([^;{]*)(\{)">
+      <rule pattern="((?:[\w*\s])+?(?:\s|[*]))([a-zA-Z_]\w*)(\s*\([^;]*?\))([^;{]*)(\{)|\b[a-z_]\w*(?=\s*\()">
         <bygroups>
           <usingself state="root"/>
           <token type="NameFunction"/>
