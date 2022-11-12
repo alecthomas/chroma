@@ -2,6 +2,7 @@ package chroma
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -100,6 +101,7 @@ func NewLexer(config *Config, rulesFunc func() Rules) (*RegexLexer, error) {
 	}
 	r := &RegexLexer{
 		config:         config,
+		regexTimeout:   time.Millisecond * 250,
 		fetchRulesFunc: func() (Rules, error) { return rulesFunc(), nil },
 	}
 	// One-off code to generate XML lexers in the Chroma source tree.
@@ -261,10 +263,11 @@ func (l *LexerState) Iterator() Token { // nolint: gocognit
 
 // RegexLexer is the default lexer implementation used in Chroma.
 type RegexLexer struct {
-	registry *LexerRegistry // The LexerRegistry this Lexer is associated with, if any.
-	config   *Config
-	analyser func(text string) float32
-	trace    bool
+	registry     *LexerRegistry // The LexerRegistry this Lexer is associated with, if any.
+	config       *Config
+	regexTimeout time.Duration
+	analyser     func(text string) float32
+	trace        bool
 
 	mu             sync.Mutex
 	compiled       bool
@@ -284,6 +287,12 @@ func (r *RegexLexer) Rules() (Rules, error) {
 		return nil, err
 	}
 	return r.rawRules, nil
+}
+
+// SetTimeout sets the timeout after which the lexer gives up. The default
+// timeout is 250 ms. To disable the timeout, set it to zero.
+func (r *RegexLexer) SetTimeout(timeout time.Duration) {
+	r.regexTimeout = timeout
 }
 
 // SetRegistry the lexer will use to lookup other lexers if necessary.
@@ -334,7 +343,12 @@ func (r *RegexLexer) maybeCompile() (err error) {
 				if err != nil {
 					return fmt.Errorf("failed to compile rule %s.%d: %s", state, i, err)
 				}
-				rule.Regexp.MatchTimeout = time.Millisecond * 250
+
+				timeout := r.regexTimeout
+				if timeout == 0 {
+					timeout = time.Duration(math.MaxInt64)
+				}
+				rule.Regexp.MatchTimeout = timeout
 			}
 		}
 	}
