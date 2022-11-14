@@ -37,7 +37,7 @@ translators for Pygments lexers and styles.
 Prefix | Language
 :----: | --------
 A | ABAP, ABNF, ActionScript, ActionScript 3, Ada, Angular2, ANTLR, ApacheConf, APL, AppleScript, Arduino, Awk
-B | Ballerina, Base Makefile, Bash, Batchfile, BibTeX, Bicep, BlitzBasic, BNF, Brainfuck, BQN
+B | Ballerina, Bash, Batchfile, BibTeX, Bicep, BlitzBasic, BNF, Brainfuck, BQN
 C | C, C#, C++, Caddyfile, Caddyfile Directives, Cap'n Proto, Cassandra CQL, Ceylon, CFEngine3, cfstatement, ChaiScript, Chapel, Cheetah, Clojure, CMake, COBOL, CoffeeScript, Common Lisp, Coq, Crystal, CSS, Cython
 D | D, Dart, Diff, Django/Jinja, Docker, DTD, Dylan
 E | EBNF, Elixir, Elm, EmacsLisp, Erlang
@@ -48,7 +48,7 @@ I | Idris, Igor, INI, Io
 J | J, Java, JavaScript, JSON, Julia, Jungle
 K | Kotlin
 L | Lighttpd configuration file, LLVM, Lua
-M | Mako, markdown, Mason, Mathematica, Matlab, MiniZinc, MLIR, Modula-2, MonkeyC, MorrowindScript, Myghty, MySQL
+M | Makefile, Mako, markdown, Mason, Mathematica, Matlab, MiniZinc, MLIR, Modula-2, MonkeyC, MorrowindScript, Myghty, MySQL
 N | NASM, Newspeak, Nginx configuration file, Nim, Nix
 O | Objective-C, OCaml, Octave, OnesEnterprise, OpenEdge ABL, OpenSCAD, Org Mode
 P | PacmanConf, Perl, PHP, PHTML, Pig, PkgConfig, PL/pgSQL, plaintext, Pony, PostgreSQL SQL dialect, PostScript, POVRay, PowerShell, Prolog, PromQL, Properties, Protocol Buffer, PSL, Puppet, Python 2, Python
