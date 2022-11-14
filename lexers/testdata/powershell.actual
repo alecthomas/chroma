@@ -1,5 +1,82 @@
-Get-ChildItem -Recurse -Force -ErrorAction SilentlyContinue -Name -Path C:\ *.txt
-$x = "Here is a $var inside a string"
-$x = @"
-Here is a $var inside a here-string
+Get-ChildItem -Recurse -Force -ErrorAction SilentlyContinue -Name -Path  C:\ *.txt
+
+#Requires -modules ModuleName
+#Requires -Assembly "System.Management.Automation, Version=1.0.0.0,Culture=neutral, PublicKeyToken=31bf3856ad364e35"
+#Requires -Modules @{ ModuleName="ModuleName"; ModuleVersion="1.2.3" }
+#Requires -PSSnapin SnapinName -version 1.2
+#Requires -RunAsAdministrator
+#Requires -WrongParameter ParamValue
+
+<#
+    Multiline comment
+    .DESCRIPTION
+    This is a description
+#>
+
+# this is a comment
+
+function test { }
+class test {}
+class test2 : test { }
+
+@"
+double quoted $MyVar here string
 "@
+
+@"
+double quoted ${MyVar} here string
+"@
+
+@"
+double quoted $(Get-Stuff -Param1 $MyVar ) here string
+"@
+
+@'
+single quoted $(Get-Stuff -Param1 $MyVar ) here string
+'@
+
+'Single quoted string $MyVar'
+"Double quoted string $MyVar"
+"Double quoted string $(Get-Stuff -Param1 $MyVar )"
+"Double quoted string ${var}"
+
+$HashTable =  @{
+    'Something' = $Var
+    'Else'      = 'string'
+}
+
+$myvar.'property name in string'
+[string]::UseMethod(12.34)
+15gb
+@{}
+@()
+$()
+$test = C:\test
+$MyVar = Get-Something -SwitchParam:$false
+$MyVar.property
+$MyVar.property.property.somemethod()
+$global:test
+$null
+$true
+$false
+
+Configuration ConfigurationName
+{
+    Import-DSCResource -ModuleName MyModule
+}
+
+function Get-Stuff {
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param (
+        [Parameter(Mandatory=$true, DontShow)]
+        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ $_ -ne $null })]
+        [ValidateRange(0, [int]::MaxValue)]
+        [Microsoft.PowerShell.Commands.WebRequestMethod]$Param1 = 'Get'
+    )
+
+    Process
+    {
+        if ($MyVar -lt (Get-Date).AddSeconds([int](12.4 / 2))) {}
+    }
+}
