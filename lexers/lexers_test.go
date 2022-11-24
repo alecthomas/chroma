@@ -193,3 +193,17 @@ func TestLexersTextAnalyser(t *testing.T) {
 		FileTestAnalysis(t, lexer, actualFilepath, expectedFilepath)
 	}
 }
+
+func BenchmarkLexersGet(b *testing.B) {
+	b.Run("Known", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			lexers.Get("go")
+		}
+	})
+
+	b.Run("Unknown", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			lexers.Get("unknown")
+		}
+	})
+}
