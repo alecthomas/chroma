@@ -29,7 +29,29 @@ var (
 	//go:embed static
 	staticFiles embed.FS
 
-	htmlTemplate = template.Must(template.New("html").Parse(indexTemplate))
+	htmlTemplate = template.Must(template.New("html").
+			Funcs(template.FuncMap{
+			"JS": func(filename string) template.JS {
+				if version == "devel" {
+					return template.JS(`import "./static/` + filename + "\";\n")
+				}
+				content, err := staticFiles.ReadFile("static/" + strings.TrimSuffix(filename, ".js") + ".min.js")
+				if err != nil {
+					panic(err)
+				}
+				return template.JS(content)
+			},
+			"CSS": func(filename string) template.CSS {
+				if version == "devel" {
+					return template.CSS(`@import url("./static/` + filename + "\");")
+				}
+				content, err := staticFiles.ReadFile("static/" + strings.TrimSuffix(filename, ".css") + ".min.css")
+				if err != nil {
+					panic(err)
+				}
+				return template.CSS(content)
+			},
+		}).Parse(indexTemplate))
 )
 
 type context struct {
