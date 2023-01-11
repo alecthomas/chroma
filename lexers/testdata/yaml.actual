@@ -105,7 +105,9 @@ e: |+
 f: >+
  multiline folded keep one space
  line 2
-g: test
+g: |
+  multiline literal with only one line
+h: test
 
 block_scalars_with_indent:
   a: |
@@ -129,7 +131,9 @@ block_scalars_with_indent:
   f: >+
     multiline folded keep
     line 2
-  g: test
+  g: |
+    multiline literal with only one line
+  h: test
 
 ####################
 # COLLECTION TYPES #
