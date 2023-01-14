@@ -15,9 +15,11 @@ fn main() {
     let r#type = "valid";
     let i: i128 = 1117;
 
-    let s = "March
+    let s = "March\n
 April";
-    let s = r"March
+    let s = r"March \
 April";
 
+    let s = "String split over\n multiple \
+    lines";
 }
