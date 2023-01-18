@@ -1,0 +1,12 @@
+[
+  {"type":"GenericDeleted","value":"--- old.txt\t2023-01-17 20:59:02.687400701 -0700\n"},
+  {"type":"GenericInserted","value":"+++ new.txt\t2023-01-17 21:00:40.760132465 -0700\n"},
+  {"type":"GenericSubheading","value":"@@ -1,4 +1,7 @@\n"},
+  {"type":"GenericDeleted","value":"-A\n"},
+  {"type":"GenericInserted","value":"+\n+\n+\n"},
+  {"type":"Text","value":" B\n"},
+  {"type":"GenericDeleted","value":"-C\n"},
+  {"type":"GenericInserted","value":"+F\n"},
+  {"type":"Text","value":" D\n"},
+  {"type":"GenericInserted","value":"+E\n"}
+]

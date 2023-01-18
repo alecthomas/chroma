@@ -1,0 +1,10 @@
+[
+  {"type":"GenericSubheading","value":"1,2d0\n"},
+  {"type":"GenericDeleted","value":"\u003c A\n\u003c A\n"},
+  {"type":"GenericSubheading","value":"4c2\n"},
+  {"type":"GenericDeleted","value":"\u003c C\n"},
+  {"type":"GenericStrong","value":"---\n"},
+  {"type":"GenericInserted","value":"\u003e F\n"},
+  {"type":"GenericSubheading","value":"5a4\n"},
+  {"type":"GenericInserted","value":"\u003e E\n"}
+]
