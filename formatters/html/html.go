@@ -171,10 +171,10 @@ var (
 	defaultPreWrapper = preWrapper{
 		start: func(code bool, styleAttr string) string {
 			if code {
-				return fmt.Sprintf(`<pre tabindex="0"%s><code>`, styleAttr)
+				return fmt.Sprintf(`<pre%s><code>`, styleAttr)
 			}
 
-			return fmt.Sprintf(`<pre tabindex="0"%s>`, styleAttr)
+			return fmt.Sprintf(`<pre%s>`, styleAttr)
 		},
 		end: func(code bool) string {
 			if code {
