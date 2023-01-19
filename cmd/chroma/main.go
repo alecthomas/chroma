@@ -72,6 +72,8 @@ command, for Go.
 		HTMLBaseLine              int    `group:"html" help:"Base line number." default:"1"`
 		HTMLPreventSurroundingPre bool   `group:"html" help:"Prevent the surrounding pre tag."`
 		HTMLLinkableLines         bool   `group:"html" help:"Make the line numbers linkable and be a link to themselves."`
+		HTMLNoTabindex            bool   `group:"html" help:"Remove the 'tabindex' attribute from HTML <pre> elements." default:"false"`
+		HTMLTabindexValue         int    `group:"html" help:"The value of the 'tabindex' attribute for HTML <pre> elements." default:"0"`
 
 		Files []string `arg:"" optional:"" help:"Files to highlight." type:"existingfile"`
 	}
@@ -265,6 +267,8 @@ func configureHTMLFormatter(ctx *kong.Context) {
 		html.LineNumbersInTable(cli.HTMLLinesTable),
 		html.PreventSurroundingPre(cli.HTMLPreventSurroundingPre),
 		html.WithLinkableLineNumbers(cli.HTMLLinkableLines, "L"),
+		html.NoTabIndex(cli.HTMLNoTabindex),
+		html.TabIndexValue(cli.HTMLTabindexValue),
 	}
 	if len(cli.HTMLHighlight) > 0 {
 		ranges := [][2]int{}

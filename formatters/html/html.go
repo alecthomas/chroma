@@ -53,7 +53,7 @@ func InlineCode(b bool) Option {
 	return func(f *Formatter) {
 		f.inlineCode = b
 		f.preWrapper = preWrapper{
-			start: func(code bool, styleAttr string) string {
+			start: func(code bool, noTabIndex bool, tabIndexValue int, styleAttr string) string {
 				if code {
 					return fmt.Sprintf(`<code%s>`, styleAttr)
 				}
@@ -126,6 +126,20 @@ func BaseLineNumber(n int) Option {
 	}
 }
 
+// NoTabIndex removes the 'tabindex' attribute from HTML '<pre>' elements. Defaults to false.
+func NoTabIndex(b bool) Option {
+	return func(f *Formatter) {
+		f.noTabIndex = b
+	}
+}
+
+// TabIndexValue sets the value of the 'tabindex' attribute of HTML '<pre>' elements. Defaults to 0.
+func TabIndexValue(n int) Option {
+	return func(f *Formatter) {
+		f.tabIndexValue = n
+	}
+}
+
 // New HTML formatter.
 func New(options ...Option) *Formatter {
 	f := &Formatter{
@@ -144,19 +158,19 @@ type PreWrapper interface {
 	// The code flag tells whether this block surrounds
 	// highlighted code. This will be false when surrounding
 	// line numbers.
-	Start(code bool, styleAttr string) string
+	Start(code bool, noTabIndex bool, tabIndexValue int, styleAttr string) string
 
 	// End is called to write the end </pre> element.
 	End(code bool) string
 }
 
 type preWrapper struct {
-	start func(code bool, styleAttr string) string
+	start func(code bool, noTabIndex bool, tabIndexValue int, styleAttr string) string
 	end   func(code bool) string
 }
 
-func (p preWrapper) Start(code bool, styleAttr string) string {
-	return p.start(code, styleAttr)
+func (p preWrapper) Start(code bool, noTabIndex bool, tabIndexValue int, styleAttr string) string {
+	return p.start(code, noTabIndex, tabIndexValue, styleAttr)
 }
 
 func (p preWrapper) End(code bool) string {
@@ -165,16 +179,21 @@ func (p preWrapper) End(code bool) string {
 
 var (
 	nopPreWrapper = preWrapper{
-		start: func(code bool, styleAttr string) string { return "" },
+		start: func(code bool, noTabIndex bool, tabIndexValue int, styleAttr string) string { return "" },
 		end:   func(code bool) string { return "" },
 	}
 	defaultPreWrapper = preWrapper{
-		start: func(code bool, styleAttr string) string {
+		start: func(code bool, noTabIndex bool, tabIndexValue int, styleAttr string) string {
+			pre := "<pre"
+			if !noTabIndex {
+				pre = fmt.Sprintf(`%s tabindex="%d"`, pre, tabIndexValue)
+			}
+			pre = fmt.Sprintf(`%s%s>`, pre, styleAttr)
 			if code {
-				return fmt.Sprintf(`<pre tabindex="0"%s><code>`, styleAttr)
+				pre = fmt.Sprintf(`%s<code>`, pre)
 			}
 
-			return fmt.Sprintf(`<pre tabindex="0"%s>`, styleAttr)
+			return pre
 		},
 		end: func(code bool) string {
 			if code {
@@ -204,6 +223,8 @@ type Formatter struct {
 	lineNumbersIDPrefix   string
 	highlightRanges       highlightRanges
 	baseLineNumber        int
+	noTabIndex            bool
+	tabIndexValue         int
 }
 
 type highlightRanges [][2]int
@@ -251,7 +272,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprintf(w, "<div%s>\n", f.styleAttr(css, chroma.PreWrapper))
 		fmt.Fprintf(w, "<table%s><tr>", f.styleAttr(css, chroma.LineTable))
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD))
-		fmt.Fprintf(w, f.preWrapper.Start(false, f.styleAttr(css, chroma.PreWrapper)))
+		fmt.Fprintf(w, f.preWrapper.Start(false, f.noTabIndex, f.tabIndexValue, f.styleAttr(css, chroma.PreWrapper)))
 		for index := range lines {
 			line := f.baseLineNumber + index
 			highlight, next := f.shouldHighlight(highlightIndex, line)
@@ -273,7 +294,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD, "width:100%"))
 	}
 
-	fmt.Fprintf(w, f.preWrapper.Start(true, f.styleAttr(css, chroma.PreWrapper)))
+	fmt.Fprintf(w, f.preWrapper.Start(true, f.noTabIndex, f.tabIndexValue, f.styleAttr(css, chroma.PreWrapper)))
 
 	highlightIndex = 0
 	for index, tokens := range lines {

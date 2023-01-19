@@ -272,7 +272,7 @@ func TestTableLineNumberSpacing(t *testing.T) {
 
 func TestWithPreWrapper(t *testing.T) {
 	wrapper := preWrapper{
-		start: func(code bool, styleAttr string) string {
+		start: func(code bool, tabIndexAttr bool, tabIndexValue int, styleAttr string) string {
 			return fmt.Sprintf("<foo%s id=\"code-%t\">", styleAttr, code)
 		},
 		end: func(code bool) string {
@@ -299,6 +299,16 @@ func TestWithPreWrapper(t *testing.T) {
 	t.Run("PreventSurroundingPre", func(t *testing.T) {
 		s := format(New(PreventSurroundingPre(true), WithClasses(true)))
 		assert.Equal(t, s, `<span class="nb">echo</span> FOO`)
+	})
+
+	t.Run("PreventTabIndex", func(t *testing.T) {
+		s := format(New(NoTabIndex(true), WithClasses(true)))
+		assert.Equal(t, s, `<pre class="chroma"><code><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></code></pre>`)
+	})
+
+	t.Run("OverrideTabIndex", func(t *testing.T) {
+		s := format(New(TabIndexValue(-1), WithClasses(true)))
+		assert.Equal(t, s, `<pre tabindex="-1" class="chroma"><code><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></code></pre>`)
 	})
 
 	t.Run("InlineCode", func(t *testing.T) {
