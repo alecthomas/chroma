@@ -1,0 +1,9 @@
+struct Bar<'b>(&'b str);
+
+struct Foo<'b, 'a: 'b>(&'a Bar<'b>);
+
+fn foo<'some_name>(_: Bar<'_>, _: impl Iterator<Item = Bar<'static>> + 'static) {
+    'im_a_loop_label: loop {
+        break 'im_a_loop_label;
+    }
+}
