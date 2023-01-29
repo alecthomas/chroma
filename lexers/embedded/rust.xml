@@ -238,7 +238,7 @@
       <rule pattern="&#39;(\\[&#39;&#34;\\nrt]|\\x[0-7][0-9a-fA-F]|\\0|\\u\{[0-9a-fA-F]{1,6}\}|.)&#39;">
         <token type="LiteralStringChar"/>
       </rule>
-      <rule pattern="(b)(&#39;(\\[&#39;&#34;\\nrt]|\\x[0-9a-fA-F]{2}|\\0|\\u\{[0-9a-fA-F]{1,6}\}|.)&#39;)">
+      <rule pattern="(b)(&#39;(?:\\[&#39;&#34;\\nrt]|\\x[0-9a-fA-F]{2}|\\0|.)&#39;)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralStringChar"/>
