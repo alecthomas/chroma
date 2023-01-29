@@ -1,0 +1,10 @@
+const IM_A_CONST: () = ();
+
+fn main() {
+    dbg!(IM_A_CONST);
+}
+
+// None of this should be considered const
+fn foo<T0, T1, U>(_: (T0, T1, U)) {
+    let _: std::collections::BTreeSet<()> = todo!();
+}

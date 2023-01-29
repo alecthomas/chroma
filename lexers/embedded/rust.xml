@@ -294,6 +294,9 @@
       <rule pattern="[+\-*/%&amp;|&lt;&gt;^!~@=:?]">
         <token type="Operator"/>
       </rule>
+      <rule pattern="\b(r#)?_?([A-Z][A-Z0-9_]*){2,}\b">
+        <token type="NameConstant"/>
+      </rule>
       <rule pattern="(r#)?[a-zA-Z_]\w*">
         <token type="Name"/>
       </rule>
