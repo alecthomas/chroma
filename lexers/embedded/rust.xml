@@ -23,9 +23,6 @@
       </rule>
     </state>
     <state name="lifetime">
-      <rule pattern="(static|_)">
-        <token type="NameBuiltin"/>
-      </rule>
       <rule pattern="[a-zA-Z_]+\w*">
         <token type="NameAttribute"/>
       </rule>
@@ -281,8 +278,11 @@
           <token type="LiteralString"/>
         </bygroups>
       </rule>
+      <rule pattern="&#39;(static|_)">
+        <token type="NameBuiltin"/>
+      </rule>
       <rule pattern="&#39;">
-        <token type="Operator"/>
+        <token type="NameAttribute"/>
         <push state="lifetime"/>
       </rule>
       <rule pattern="\.\.=?">
@@ -315,8 +315,11 @@
       <rule pattern="&amp;">
         <token type="KeywordPseudo"/>
       </rule>
+      <rule pattern="&#39;(static|_)">
+        <token type="NameBuiltin"/>
+      </rule>
       <rule pattern="&#39;">
-        <token type="Operator"/>
+        <token type="NameAttribute"/>
         <push state="lifetime"/>
       </rule>
       <rule pattern="(DoubleEndedIterator|ExactSizeIterator|IntoIterator|PartialOrd|PartialEq|ToString|Iterator|ToOwned|Default|Result|String|FnOnce|Extend|Option|FnMut|Unpin|Sized|AsRef|AsMut|Clone|None|From|Into|Sync|drop|Send|Drop|Copy|Some|Ord|Err|Box|Vec|Eq|Ok|Fn)\b">

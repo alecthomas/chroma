@@ -1,0 +1,16 @@
+struct Bar<'b>(&'b str);
+
+struct Foo<'b, 'a: 'b>(&'a Bar<'b>);
+
+fn foo<'some_name>(_: Bar<'_>, _: impl Iterator<Item = Bar<'static>> + 'static) {
+    'im_a_loop_label: loop {
+        break 'im_a_loop_label;
+    }
+
+    // None of these should have lifetimes
+    let _ = 'a';
+    let _ = b'a';
+    let _ = "
+        'not_a_lifetime_or_label
+    ";
+}
