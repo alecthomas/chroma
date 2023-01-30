@@ -1,0 +1,14 @@
+use smallvec::{smallvec, SmallVec};
+
+lazy_static::lazy_static! {
+    static ref ONE: usize = 1;
+}
+
+fn main() {
+    pretty_assertions::assert_eq!(*ONE, *ONE);
+    let _: SmallVec<[_; 16]> = smallvec![1, 2, 3];
+
+    // And some builtin ones
+    println!("Hello, world!");
+    panic!();
+}
