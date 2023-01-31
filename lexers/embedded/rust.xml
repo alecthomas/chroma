@@ -105,6 +105,24 @@
         <pop depth="1"/>
       </rule>
     </state>
+    <state name="formatted_string">
+      <rule pattern="&#34;">
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\\[&#39;&#34;\\nrt]|\\(?=\n)|\\x[0-7][0-9a-fA-F]|\\0|\\u\{[0-9a-fA-F]{1,6}\}|\{\{|\}\}">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="\{[^}]*\}">
+        <token type="LiteralStringInterpol"/>
+      </rule>
+      <rule pattern="[^\\&#34;\{\}]+">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="\\">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
     <state name="string">
       <rule pattern="&#34;">
         <token type="LiteralString"/>
@@ -293,6 +311,16 @@
       </rule>
       <rule pattern="\b(r#)?_?([A-Z][A-Z0-9_]*){2,}\b">
         <token type="NameConstant"/>
+      </rule>
+      <rule pattern="((?:e?print(?:ln)?|format(?:_args)?|panic|todo|un(?:reachable|implemented))!)(\s*)(\()(\s*)(&#34;)">
+        <bygroups>
+          <token type="NameFunctionMagic"/>
+          <token type="TextWhitespace"/>
+          <token type="Punctuation"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralString"/>
+        </bygroups>
+        <push state="formatted_string"/>
       </rule>
       <rule pattern="([a-zA-Z_]\w*!)(\s*)(\(|\[|\{)">
         <bygroups>
