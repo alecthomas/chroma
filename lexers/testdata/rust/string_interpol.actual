@@ -1,0 +1,29 @@
+fn main() {
+    let foo = 'x';
+
+    println!(
+        "
+        Kitchen sink
+        {{ }} - Escaped
+        {{{}}} - Escaped with inner interpol
+        {foo:#?} - Ident with pretty debug format
+        {0:-<5} - Positional with complex fill/alignment
+        ",
+        foo,
+    );
+
+    // Unconventional formatting
+    println!	(	"Hello, {foo}!");
+
+    // Exhausting the supported macros
+    eprintln!("{foo}");
+    eprint!("{foo}");
+    println!("{foo}");
+    print!("{foo}");
+    format!("{foo}");
+    format_args!("{foo}");
+    panic!("{foo}");
+    todo!("{foo}");
+    unreachable!("{foo}");
+    unimplemented!("{foo}");
+}
