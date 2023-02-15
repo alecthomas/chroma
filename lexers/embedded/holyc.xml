@@ -198,7 +198,7 @@
       <rule pattern="(break|case|continue|default|do|else|for|goto|if|return|switch|while|throw|try|catch|extern|MOV|CALL|PUSH|LEAVE|RET|SUB|SHR|ADD|RETF|CMP|JNE|BTS|INT|XOR|JC|JZ|LOOP|POP|TEST|SHL|ADC|SBB|JMP|INC)\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(U0|I8|U8|I16|U16|I32|U32|I64|U64|F64|Bool|class|union|DU8|DU16|DU32|DU64|RAX|RCX|RDX|RBX|RSP|RBP|RSI|RDI|EAX|ECX|EDX|EBX|ESP|EBP|ESI|EDI|AX|CX|DX|BX|SP|BP|SI|DI|SS|CS|DS|ES|FS|GS|CH|(asm|const|extern|register|restrict|static|volatile|inline|_extern|_import|IMPORT|public)\b">
+      <rule pattern="(U0|I8|U8|I16|U16|I32|U32|I64|U64|F64|Bool|class|union|DU8|DU16|DU32|DU64|RAX|RCX|RDX|RBX|RSP|RBP|RSI|RDI|EAX|ECX|EDX|EBX|ESP|EBP|ESI|EDI|AX|CX|DX|BX|SP|BP|SI|DI|SS|CS|DS|ES|FS|GS|CH|asm|const|extern|register|restrict|static|volatile|inline|_extern|_import|IMPORT|public)\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="__()\b">
