@@ -1,0 +1,5 @@
+[
+  {"type":"Error","value":"test\n\n"},
+  {"type":"CommentSingle","value":"# comment"},
+  {"type":"Error","value":"\ntest2\n"}
+]
