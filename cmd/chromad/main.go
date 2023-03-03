@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"html/template"
 	"log"
+	"mime"
 	"net/http"
 	"sort"
 	"strings"
@@ -180,6 +181,8 @@ func main() {
 	ctx := kong.Parse(&cli, kong.Configuration(konghcl.Loader), kong.Vars{"version": version})
 
 	log.Printf("Starting chromad %s on http://%s\n", version, cli.Bind)
+
+	mime.AddExtensionType(".js", "application/javascript")
 
 	router := mux.NewRouter()
 	router.Handle("/", http.HandlerFunc(index)).Methods("GET")
