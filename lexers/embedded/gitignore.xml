@@ -1,0 +1,13 @@
+<lexer>
+  <config>
+    <name>Gitignore</name>
+    <filename>.gitignore</filename>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="^#.*">
+        <token type="CommentSingle"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
