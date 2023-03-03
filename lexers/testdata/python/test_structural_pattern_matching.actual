@@ -1,0 +1,5 @@
+var = 1
+
+match var:
+    case 1:
+        print("Test")
