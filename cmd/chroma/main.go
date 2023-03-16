@@ -50,8 +50,8 @@ command, for Go.
 		Fail       bool             `help:"Exit silently with status 1 if no specific lexer was found."`
 		XML        string           `hidden:"" help:"Generate XML lexer definitions." type:"existingdir" placeholder:"DIR"`
 
-		Lexer string `group:"select" help:"Lexer to use when formatting." default:"autodetect" short:"l" enum:"${lexers}"`
-		Style string `group:"select" help:"Style to use for formatting." default:"swapoff" short:"s" enum:"${styles}"`
+		Lexer string `group:"select" help:"Lexer to use when formatting or path to an XML file to load." default:"autodetect" short:"l"`
+		Style string `group:"select" help:"Style to use for formatting or path to an XML file to load." default:"swapoff" short:"s"`
 
 		Formatter string `group:"format" help:"Formatter to use." default:"terminal" short:"f" enum:"${formatters}"`
 		JSON      bool   `group:"format" help:"Convenience flag to use JSON formatter."`
@@ -87,17 +87,22 @@ type nopFlushableWriter struct{ io.Writer }
 func (n *nopFlushableWriter) Flush() error { return nil }
 
 // prepareLenient prepares contents and lexer for input, using fallback lexer if no specific one is available for it.
-func prepareLenient(ctx *kong.Context, r io.Reader, filename string) (string, chroma.Lexer) {
+func prepareLenient(r io.Reader, filename string) (string, chroma.Lexer, error) {
 	data, err := ioutil.ReadAll(r)
-	ctx.FatalIfErrorf(err)
+	if err != nil {
+		return "", nil, err
+	}
 
 	contents := string(data)
-	lexer := selexer(filename, contents)
+	lexer, err := selexer(filename, contents)
+	if err != nil {
+		return "", nil, err
+	}
 	if lexer == nil {
 		lexer = lexers.Fallback
 	}
 
-	return contents, lexer
+	return contents, lexer, nil
 }
 
 // prepareSpecific prepares contents and lexer for input, exiting if there is no specific lexer available for it.
@@ -109,7 +114,10 @@ func prepareSpecific(ctx *kong.Context, r io.Reader, filename string, peekSize, 
 		ctx.FatalIfErrorf(err)
 	}
 
-	lexer := selexer(filename, string(data[:n]))
+	lexer, err := selexer(filename, string(data[:n]))
+	if err != nil {
+		ctx.FatalIfErrorf(err)
+	}
 	if lexer == nil {
 		ctx.Exit(1)
 	}
@@ -195,7 +203,9 @@ func main() {
 	}
 
 	// Retrieve user-specified style, clone it, and add some overrides.
-	builder := styles.Get(cli.Style).Builder()
+	selectedStyle, err := selectStyle()
+	ctx.FatalIfErrorf(err)
+	builder := selectedStyle.Builder()
 	if cli.HTMLHighlightStyle != "" {
 		builder.Add(chroma.LineHighlight, cli.HTMLHighlightStyle)
 	}
@@ -223,7 +233,8 @@ func main() {
 		if cli.Fail {
 			contents, lexer = prepareSpecific(ctx, os.Stdin, cli.Filename, 1024, -1)
 		} else {
-			contents, lexer = prepareLenient(ctx, os.Stdin, cli.Filename)
+			contents, lexer, err = prepareLenient(os.Stdin, cli.Filename)
+			ctx.FatalIfErrorf(err)
 		}
 		format(ctx, w, style, lex(ctx, lexer, contents))
 	} else {
@@ -232,7 +243,8 @@ func main() {
 			ctx.FatalIfErrorf(err)
 
 			if cli.Check {
-				contents, lexer := prepareLenient(ctx, file, filename)
+				contents, lexer, err := prepareLenient(file, filename)
+				ctx.FatalIfErrorf(err)
 				check(filename, lex(ctx, lexer, contents))
 			} else {
 				var contents string
@@ -242,7 +254,8 @@ func main() {
 					ctx.FatalIfErrorf(err)
 					contents, lexer = prepareSpecific(ctx, file, filename, 1024, int(fi.Size()))
 				} else {
-					contents, lexer = prepareLenient(ctx, file, filename)
+					contents, lexer, err = prepareLenient(file, filename)
+					ctx.FatalIfErrorf(err)
 				}
 				format(ctx, w, style, lex(ctx, lexer, contents))
 			}
@@ -251,6 +264,19 @@ func main() {
 			ctx.FatalIfErrorf(err)
 		}
 	}
+}
+
+func selectStyle() (*chroma.Style, error) {
+	style, ok := styles.Registry[cli.Style]
+	if ok {
+		return style, nil
+	}
+	r, err := os.Open(cli.Style)
+	if err != nil {
+		return nil, err
+	}
+	defer r.Close()
+	return chroma.NewXMLStyle(r)
 }
 
 func configureHTMLFormatter(ctx *kong.Context) {
@@ -329,17 +355,22 @@ func lex(ctx *kong.Context, lexer chroma.Lexer, contents string) chroma.Iterator
 	return it
 }
 
-func selexer(path, contents string) (lexer chroma.Lexer) {
-	if cli.Lexer != "autodetect" {
-		return lexers.Get(cli.Lexer)
-	}
-	if path != "" {
-		lexer := lexers.Match(path)
-		if lexer != nil {
-			return lexer
+func selexer(path, contents string) (lexer chroma.Lexer, err error) {
+	if cli.Lexer == "autodetect" {
+		if path != "" {
+			lexer := lexers.Match(path)
+			if lexer != nil {
+				return lexer, nil
+			}
 		}
+		return lexers.Analyse(contents), nil
 	}
-	return lexers.Analyse(contents)
+
+	if lexer := lexers.Get(cli.Lexer); lexer != nil {
+		return lexer, nil
+	}
+	lexerPath, err := filepath.Abs(cli.Lexer)
+	return chroma.NewXMLLexer(os.DirFS("/"), lexerPath)
 }
 
 func format(ctx *kong.Context, w io.Writer, style *chroma.Style, it chroma.Iterator) {
