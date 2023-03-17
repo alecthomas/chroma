@@ -111,6 +111,9 @@
       <rule pattern="@[{(][^)}]+[})]">
         <token type="NameVariable"/>
       </rule>
+      <rule pattern="\$[(][^)]+[)]">
+        <token type="NameVariable"/>
+      </rule>
       <rule pattern="[(){},;]">
         <token type="Punctuation"/>
       </rule>
