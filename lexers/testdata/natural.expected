@@ -16,9 +16,9 @@
   {"type":"Other","value":"(A10)"},
   {"type":"Text","value":" "},
   {"type":"Keyword","value":"INIT"},
-  {"type":"Operator","value":"<"},
+  {"type":"Operator","value":"\u003c"},
   {"type":"LiteralStringSingle","value":"'Hello'"},
-  {"type":"Operator","value":">"},
+  {"type":"Operator","value":"\u003e"},
   {"type":"Text","value":"\n"},
   {"type":"LiteralNumberInteger","value":"1"},
   {"type":"Text","value":" "},
@@ -48,14 +48,12 @@
   {"type":"Text","value":" "},
   {"type":"NameVariable","value":"#VAR-NAME-1"},
   {"type":"Text","value":"\n\n"},
-
   {"type":"Keyword","value":"DEFINE"},
   {"type":"Text","value":" "},
   {"type":"Keyword","value":"SUBROUTINE"},
   {"type":"Text","value":" "},
   {"type":"NameFunction","value":"MY-SUBROUTINE"},
   {"type":"Text","value":"\n"},
-
   {"type":"Keyword","value":"FOR"},
   {"type":"Text","value":" "},
   {"type":"NameVariable","value":"#I"},
@@ -68,17 +66,13 @@
   {"type":"Text","value":" "},
   {"type":"LiteralNumberInteger","value":"10"},
   {"type":"Text","value":"\n"},
-
   {"type":"Keyword","value":"ESCAPE"},
   {"type":"Text","value":" "},
   {"type":"Keyword","value":"MODULE"},
   {"type":"Text","value":"\n"},
-
   {"type":"Keyword","value":"END-FOR"},
   {"type":"Text","value":"\n"},
-
   {"type":"Keyword","value":"END-SUBROUTINE"},
-
   {"type":"Text","value":"\n\n"},
   {"type":"Keyword","value":"END"},
   {"type":"Text","value":"\n\n"}
