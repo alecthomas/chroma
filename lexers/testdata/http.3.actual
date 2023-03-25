@@ -1,4 +1,4 @@
-GET /foo HTTP/2
+GET /foo HTTP/3
 Content-Type: application/json
 User-Agent: foo
 
