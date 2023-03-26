@@ -1,0 +1,11 @@
+[
+  {"type":"TextWhitespace","value":" "},
+  {"type":"CommentMultiline","value":"/**/"},
+  {"type":"TextWhitespace","value":"\n "},
+  {"type":"CommentMultiline","value":"/*block with newline\n  */"},
+  {"type":"TextWhitespace","value":"\n "},
+  {"type":"CommentMultiline","value":"/*block with line\n ending comment//  */"},
+  {"type":"TextWhitespace","value":"\n "},
+  {"type":"CommentMultiline","value":"/* nested /*\n  */\n  */"},
+  {"type":"TextWhitespace","value":"\n"}
+]
