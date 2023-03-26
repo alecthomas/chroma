@@ -281,7 +281,7 @@ for that setup the `chroma` executable can be just symlinked to `~/.lessfilter`.
 
 <a id="markdown-testing-lexers" name="testing-lexers"></a>
 ## Testing lexers
-If you edit some lexers and want to test it, open a shell in `cmd/chromad` and run:
+If you edit some lexers and want to try it, open a shell in `cmd/chromad` and run:
 ```shell
 go run .
 ```
@@ -291,6 +291,7 @@ If you want to run the tests and the lexers, open a shell in the root directory 
 ```shell
 go test ./lexers
 ```
+When updating or adding a lexer, please add tests. See [lexers/README.md](lexers/README.md) for more.
 
 ## What's missing compared to Pygments?
 
