@@ -1,0 +1,5 @@
+@id(0) override x:i32 = 1;
+@ id(1) override y:i32 = 2;
+@//comment
+id(1) override z:i32 = 3;
+@must_use fn foo() -> i32 { return 32; }

@@ -1,0 +1,9 @@
+@vertex
+fn vmain(@location(0) v: vec4<f32>) -> @builtin(position) vec4f {
+  return v;
+}
+
+@fragment
+fn fmain(@builtin(position) pos: vec4f) -> @location(0) vec4f {
+  return vec4f(0.25,0.25,1.0,1.0);
+}
