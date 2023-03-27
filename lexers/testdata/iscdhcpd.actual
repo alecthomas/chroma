@@ -32,6 +32,7 @@ subnet 10.254.239.32 netmask 255.255.255.224 {
   option routers rtr-239-32-1.example.org;
 }
 
+
 # A slightly different configuration for an internal subnet.
 subnet 10.5.5.0 netmask 255.255.255.224 {
   range 10.5.5.26 10.5.5.30;
@@ -57,6 +58,7 @@ host fantasia {
 
 class "foo" {
   match if substring (option vendor-class-identifier, 0, 4) = "S\"UNW";
+  log(info,concat("SUN request from ",host-decl-name));
 }
 
 shared-network 224-29 {
