@@ -1,0 +1,17 @@
+[
+  {"type":"NameDecorator","value":"@group"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralNumberInteger","value":"0"},
+  {"type":"Punctuation","value":")"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameDecorator","value":"@binding"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralNumberInteger","value":"5"},
+  {"type":"Punctuation","value":")"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"KeywordDeclaration","value":"var"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameBuiltin","value":"texture_external"},
+  {"type":"Punctuation","value":";"},
+  {"type":"TextWhitespace","value":"\n"}
+]

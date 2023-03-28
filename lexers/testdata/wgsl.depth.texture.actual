@@ -1,0 +1,5 @@
+@group(0) @binding(1) var texture_depth_2d;
+@group(0) @binding(2) var texture_depth_2d_array;
+@group(0) @binding(4) var texture_depth_cube;
+@group(0) @binding(5) var texture_depth_cube_array;
+@group(0) @binding(5) var texture_depth_multisampled_2d;

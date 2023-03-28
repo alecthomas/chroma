@@ -1,0 +1,1 @@
+@group(0) @binding(5) var texture_external;

@@ -1,0 +1,5 @@
+alias a=ptr<function,i32>;
+alias b=ptr<private,i32>;
+alias c=ptr<workgroup,i32>;
+alias d=ptr<uniform,i32>;
+alias e=ptr<storage,i32>;
