@@ -1,0 +1,4 @@
+@group(0) @binding(0) var texture_storage_1d<rgba8unorm,write>;
+@group(0) @binding(1) var texture_storage_2d<rgba8unorm,write>;
+@group(0) @binding(2) var texture_storage_2d_array<rgba8unorm,write>;
+@group(0) @binding(3) var texture_storage_3d<rgba8unorm,write>;

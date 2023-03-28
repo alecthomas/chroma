@@ -2,5 +2,5 @@
   {"type":"TextWhitespace","value":"  "},
   {"type":"CommentSingle","value":"// this is a line-ending comment\n"},
   {"type":"TextWhitespace","value":" "},
-  {"type":"CommentSingle","value":"//* embed a bock comment start, after gap of space\n// /* embed a bock comment start, v2\n"}
+  {"type":"CommentSingle","value":"//* embed a bock comment start, after a space\n// /* embed a bock comment start, v2\n"}
 ]

@@ -1,0 +1,4 @@
+alias boolean=bool;
+alias bvec2=vec2<bool>;
+alias bvec3=vec3<bool>;
+alias bvec4=vec4<bool>;

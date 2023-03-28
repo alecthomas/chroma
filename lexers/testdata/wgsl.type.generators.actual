@@ -1,0 +1,4 @@
+// Test predeclared type generators, other than vector, matrix, and texture.
+alias a=array<f32>;
+alias b=atomic<i32>;
+alias c=ptr<function,i32>;
