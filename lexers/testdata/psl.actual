@@ -1,9 +1,15 @@
+    #PACKAGE custom
+    #ACCEPT Date = 04/03/2021;
+    #OPTION ResultClass ON
+
 public Number SumMethod() {
     // this is a comment
     type public Number x
     set x = 10.0
     type String thisIsAString = "this"_x_"conjoined"
     type String i = ""
+    type Date sysDate = %SystemDate
+    type Boolean publicVar = .PubBoolean
     for  set i = ^UTBL("test",i).order() quit:i.isNull()  {
         set x = x + i
     }
