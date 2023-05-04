@@ -2,6 +2,7 @@ package chroma
 
 import (
 	"bytes"
+	"io"
 )
 
 type delegatingLexer struct {
@@ -47,6 +48,91 @@ func (d *delegatingLexer) Config() *Config {
 type insertion struct {
 	start, end int
 	tokens     []Token
+}
+
+func (d *delegatingLexer) TokeniseStream(options *TokeniseOptions, textReader io.Reader, blockSize, textSize int) (Iterator, error) {
+	tokens, err := TokeniseStream(Coalesce(d.language), options, textReader, blockSize, textSize)
+	if err != nil {
+		return nil, err
+	}
+	// Compute insertions and gather "Other" tokens.
+	others := &bytes.Buffer{}
+	insertions := []*insertion{}
+	var insert *insertion
+	offset := 0
+	var last Token
+	for _, t := range tokens {
+		if t.Type == Other {
+			if last != EOF && insert != nil && last.Type != Other {
+				insert.end = offset
+			}
+			others.WriteString(t.Value)
+		} else {
+			if last == EOF || last.Type == Other {
+				insert = &insertion{start: offset}
+				insertions = append(insertions, insert)
+			}
+			insert.tokens = append(insert.tokens, t)
+		}
+		last = t
+		offset += len(t.Value)
+	}
+
+	if len(insertions) == 0 {
+		return d.root.TokeniseStream(options, textReader, blockSize, textSize)
+	}
+
+	// Lex the other tokens.
+	rootTokens, err := Tokenise(Coalesce(d.root), options, others.String())
+	if err != nil {
+		return nil, err
+	}
+
+	// Interleave the two sets of tokens.
+	var out []Token
+	offset = 0 // Offset into text.
+	tokenIndex := 0
+	nextToken := func() Token {
+		if tokenIndex >= len(rootTokens) {
+			return EOF
+		}
+		t := rootTokens[tokenIndex]
+		tokenIndex++
+		return t
+	}
+	insertionIndex := 0
+	nextInsertion := func() *insertion {
+		if insertionIndex >= len(insertions) {
+			return nil
+		}
+		i := insertions[insertionIndex]
+		insertionIndex++
+		return i
+	}
+	t := nextToken()
+	i := nextInsertion()
+	for t != EOF || i != nil {
+		// fmt.Printf("%d->%d:%q   %d->%d:%q\n", offset, offset+len(t.Value), t.Value, i.start, i.end, Stringify(i.tokens...))
+		if t == EOF || (i != nil && i.start < offset+len(t.Value)) {
+			var l Token
+			l, t = splitToken(t, i.start-offset)
+			if l != EOF {
+				out = append(out, l)
+				offset += len(l.Value)
+			}
+			out = append(out, i.tokens...)
+			offset += i.end - i.start
+			if t == EOF {
+				t = nextToken()
+			}
+			i = nextInsertion()
+		} else {
+			out = append(out, t)
+			offset += len(t.Value)
+			t = nextToken()
+		}
+	}
+	return Literator(out...), nil
 }
 
 func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint: gocognit

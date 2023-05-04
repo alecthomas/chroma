@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"strings"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -103,6 +104,18 @@ func TestDelegate(t *testing.T) {
 		// nolint: scopelint
 		t.Run(test.name, func(t *testing.T) {
 			it, err := delegate.Tokenise(nil, test.source)
+			assert.NoError(t, err)
+			actual := it.Tokens()
+			assert.Equal(t, test.expected, actual)
+		})
+	}
+
+	for _, test := range testdata {
+		// nolint: scopelint
+		t.Run(test.name, func(t *testing.T) {
+			code := strings.NewReader(test.source)
+
+			it, err := delegate.TokeniseStream(nil, code, 20, int(code.Size()))
 			assert.NoError(t, err)
 			actual := it.Tokens()
 			assert.Equal(t, test.expected, actual)
