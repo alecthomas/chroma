@@ -1,5 +1,9 @@
 package chroma
 
+import (
+	"io"
+)
+
 type remappingLexer struct {
 	lexer  Lexer
 	mapper func(Token) []Token
@@ -26,6 +30,28 @@ func (r *remappingLexer) SetRegistry(registry *LexerRegistry) Lexer {
 
 func (r *remappingLexer) Config() *Config {
 	return r.lexer.Config()
+}
+
+func (r *remappingLexer) TokeniseStream(options *TokeniseOptions, textReader io.Reader, blockSize, textSize int) (Iterator, error) {
+	it, err := r.lexer.TokeniseStream(options, textReader, blockSize, textSize)
+	if err != nil {
+		return nil, err
+	}
+	var buffer []Token
+	return func() Token {
+		for {
+			if len(buffer) > 0 {
+				t := buffer[0]
+				buffer = buffer[1:]
+				return t
+			}
+			t := it()
+			if t == EOF {
+				return t
+			}
+			buffer = r.mapper(t)
+		}
+	}, nil
 }
 
 func (r *remappingLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {

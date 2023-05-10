@@ -1,10 +1,35 @@
 package chroma
 
 import (
+	"strings"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
 )
+
+type mockReader struct {
+	reader    strings.Reader
+	t         *testing.T
+	blockSize int
+}
+
+func (r *mockReader) Read(b []byte) (int, error) {
+	r.t.Helper()
+	assert.True(r.t, len(b) <= r.blockSize)
+	return r.reader.Read(b)
+}
+
+func testAssertReader(t *testing.T, lexer Lexer, options *TokeniseOptions, text string, blockSize int) (Iterator, error) {
+	t.Helper()
+
+	reader := &mockReader{
+		reader: *strings.NewReader(text),
+		t:      t,
+	}
+	reader.blockSize = blockSize
+
+	return lexer.TokeniseStream(options, reader, blockSize, int(reader.reader.Size()))
+}
 
 func mustNewLexer(t *testing.T, config *Config, rules Rules) *RegexLexer { // nolint: forbidigo
 	lexer, err := NewLexer(config, func() Rules {
@@ -34,6 +59,27 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 	assert.Equal(t, []Token{{Error, "hello"}}, it.Tokens())
 }
 
+func TestNewlineAtEndOfFileStream(t *testing.T) {
+	l := Coalesce(mustNewLexer(t, &Config{EnsureNL: true}, Rules{ // nolint: forbidigo
+		"root": {
+			{`(\w+)(\n)`, ByGroups(Keyword, Whitespace), nil},
+		},
+	}))
+
+	it, err := testAssertReader(t, l, nil, `hello`, 128)
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{Keyword, "hello"}, {Whitespace, "\n"}}, it.Tokens())
+
+	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
+		"root": {
+			{`(\w+)(\n)`, ByGroups(Keyword, Whitespace), nil},
+		},
+	}))
+	it, err = testAssertReader(t, l, nil, `hello`, 128)
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{Error, "hello"}}, it.Tokens())
+}
+
 func TestMatchingAtStart(t *testing.T) {
 	l := Coalesce(mustNewLexer(t, &Config{}, Rules{ // nolint: forbidigo
 		"root": {
@@ -49,6 +95,37 @@ func TestMatchingAtStart(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t,
 		[]Token{{Punctuation, "-"}, {NameEntity, "module"}, {Whitespace, " "}, {Operator, "->"}},
+		it.Tokens())
+}
+
+func TestMatchingAtStartStream(t *testing.T) {
+	l := Coalesce(mustNewLexer(t, &Config{}, Rules{ // nolint: forbidigo
+		"root": {
+			{`\s+`, Whitespace, nil},
+			{`^-`, Punctuation, Push("directive")},
+			{`->`, Operator, nil},
+		},
+		"directive": {
+			{"module", NameEntity, Pop(1)},
+		},
+	}))
+
+	it, err := testAssertReader(t, l, nil, `-module ->`, 6)
+	assert.NoError(t, err)
+	assert.Equal(t,
+		[]Token{{Punctuation, "-"}, {NameEntity, "module"}, {Whitespace, " "}, {Operator, "->"}},
+		it.Tokens())
+
+	it, err = testAssertReader(t, l, nil, `-module ->`, 7)
+	assert.NoError(t, err)
+	assert.Equal(t,
+		[]Token{{Punctuation, "-"}, {NameEntity, "module"}, {Whitespace, " "}, {Operator, "->"}},
+		it.Tokens())
+
+	it, err = testAssertReader(t, l, nil, `-module ->`, 3)
+	assert.NoError(t, err)
+	assert.Equal(t,
+		[]Token{{Punctuation, "-"}, {Error, "module ->"}},
 		it.Tokens())
 }
 

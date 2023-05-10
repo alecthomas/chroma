@@ -2,6 +2,7 @@ package chroma
 
 import (
 	"fmt"
+	"io"
 	"strings"
 )
 
@@ -108,6 +109,8 @@ type Lexer interface {
 	// AnalyseText scores how likely a fragment of text is to match
 	// this lexer, between 0.0 and 1.0. A value of 1 indicates high confidence.
 	AnalyseText(text string) float32
+	// TokeniseStream returns an Iterator over tokens in text reader.
+	TokeniseStream(options *TokeniseOptions, textReader io.Reader, blockSize, textSize int) (Iterator, error)
 }
 
 // Lexers is a slice of lexers sortable by name.

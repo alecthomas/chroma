@@ -1,7 +1,9 @@
 package chroma
 
 import (
+	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -36,6 +38,19 @@ func Words(prefix, suffix string, words ...string) string {
 func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, error) {
 	var out []Token
 	it, err := lexer.Tokenise(options, text)
+	if err != nil {
+		return nil, err
+	}
+	for t := it(); t != EOF; t = it() {
+		out = append(out, t)
+	}
+	return out, nil
+}
+
+// Tokenise reader using lexer, returning tokens as a slice.
+func TokeniseStream(lexer Lexer, options *TokeniseOptions, textReader io.Reader, blockSize, textSize int) ([]Token, error) {
+	var out []Token
+	it, err := lexer.TokeniseStream(options, textReader, blockSize, textSize)
 	if err != nil {
 		return nil, err
 	}
@@ -171,6 +186,53 @@ type LexerState struct {
 	iteratorStack  []Iterator
 	options        *TokeniseOptions
 	newlineAdded   bool
+
+	reader     io.Reader
+	isEOF      bool
+	len        int
+	ReadBuffer []byte
+	TotalSize  int
+	ReadSize   int
+}
+
+func (l *LexerState) AddPreReadenData(buffer []byte) error {
+	if l.ReadSize > 0 {
+		return errors.New("can't do it after read data")
+	}
+
+	if len(buffer) > len(l.ReadBuffer) {
+		return errors.New("too long data than read buffer")
+	}
+
+	for i, c := range buffer {
+		l.Text[i] = rune(c)
+	}
+
+	l.len = len(buffer)
+	l.ReadSize = l.len
+	l.Pos = 0
+
+	return nil
+}
+
+func (l *LexerState) isEnd() bool {
+	if l.reader == nil {
+		if l.newlineAdded {
+			return l.Pos >= len(l.Text)-1
+		} else {
+			return l.Pos >= len(l.Text)
+		}
+	}
+
+	if !l.isEOF {
+		return false
+	}
+
+	if l.newlineAdded {
+		return l.Pos >= l.len-1
+	} else {
+		return l.Pos >= l.len
+	}
 }
 
 // Set mutator context.
@@ -183,13 +245,68 @@ func (l *LexerState) Get(key interface{}) interface{} {
 	return l.MutatorContext[key]
 }
 
+func (l *LexerState) ReadText(reRead bool) error {
+	if l.reader == nil || l.isEOF {
+		return nil
+	}
+
+	if l.len-l.Pos >= len(l.Text) {
+		return errors.New("can't read more data because of big token: " + string(l.ReadBuffer))
+	}
+
+	if !reRead && l.Pos > 0 && l.Pos < l.len {
+		return nil
+	}
+
+	for i := l.Pos; i < l.len; i++ {
+		l.Text[i-l.Pos] = l.Text[i]
+	}
+	l.len = l.len - l.Pos
+	l.Pos = 0
+
+	len, err := l.reader.Read(l.ReadBuffer[l.len:])
+	if err != nil && err != io.EOF {
+		return err
+	}
+	for i := 0; i < len; i++ {
+		l.Text[l.len+i] = rune(l.ReadBuffer[l.len+i])
+	}
+	l.len += len
+	l.ReadSize += len
+
+	hasNL := false
+	if l.len > 0 {
+		hasNL = strings.HasSuffix(string(l.Buffer()), "\n")
+	}
+
+	l.isEOF = l.ReadSize == l.TotalSize || err == io.EOF
+	if l.isEOF && !l.newlineAdded {
+		if !l.options.Nested && l.Lexer.config.EnsureNL && !hasNL {
+			l.Text[l.len] = '\n'
+			l.len++
+			l.newlineAdded = true
+		}
+	}
+
+	return nil
+}
+
+func (l *LexerState) Buffer() []rune {
+	if l.reader == nil {
+		return l.Text
+	}
+
+	return l.Text[:l.len]
+}
+
 // Iterator returns the next Token from the lexer.
 func (l *LexerState) Iterator() Token { // nolint: gocognit
-	end := len(l.Text)
-	if l.newlineAdded {
-		end--
+	err := l.ReadText(false)
+	if err != nil {
+		return Token{Error, "io error: " + err.Error()}
 	}
-	for l.Pos < end && len(l.Stack) > 0 {
+
+	for !l.isEnd() && len(l.Stack) > 0 {
 		// Exhaust the iterator stack, if any.
 		for len(l.iteratorStack) > 0 {
 			n := len(l.iteratorStack) - 1
@@ -203,15 +320,26 @@ func (l *LexerState) Iterator() Token { // nolint: gocognit
 
 		l.State = l.Stack[len(l.Stack)-1]
 		if l.Lexer.trace {
-			fmt.Fprintf(os.Stderr, "%s: pos=%d, text=%q\n", l.State, l.Pos, string(l.Text[l.Pos:]))
+			fmt.Fprintf(os.Stderr, "%s: pos=%d, text=%q\n", l.State, l.Pos, string(l.Buffer()[l.Pos:]))
 		}
 		selectedRule, ok := l.Rules[l.State]
 		if !ok {
 			panic("unknown state " + l.State)
 		}
-		ruleIndex, rule, groups, namedGroups := matchRules(l.Text, l.Pos, selectedRule)
+	recheck:
+		ruleIndex, rule, groups, namedGroups := matchRules(l.Buffer(), l.Pos, selectedRule)
 		// No match.
 		if groups == nil {
+			// try read some new data and recheck
+			if !l.isEOF && l.reader != nil && l.Pos != 0 {
+				err = l.ReadText(true)
+				if err != nil {
+					return Token{Error, "io error: " + err.Error()}
+				}
+
+				goto recheck
+			}
+
 			// From Pygments :\
 			//
 			// If the RegexLexer encounters a newline that is flagged as an error token, the stack is
@@ -404,6 +532,55 @@ func (r *RegexLexer) needRules() error {
 		return err
 	}
 	return err
+}
+
+func (r *RegexLexer) TokeniseStream(options *TokeniseOptions, textReader io.Reader, blockSize, textSize int) (Iterator, error) {
+	err := r.needRules()
+	if err != nil {
+		return nil, err
+	}
+	if options == nil {
+		options = defaultOptions
+	}
+
+	state := &LexerState{
+		Registry:       r.registry,
+		newlineAdded:   false,
+		options:        options,
+		Lexer:          r,
+		Text:           make([]rune, blockSize),
+		ReadBuffer:     make([]byte, blockSize),
+		TotalSize:      textSize,
+		Stack:          []string{options.State},
+		Rules:          r.rules,
+		MutatorContext: map[interface{}]interface{}{},
+		reader:         textReader,
+	}
+	return state.Iterator, nil
+}
+
+func (r *RegexLexer) NewLexerStateStream(options *TokeniseOptions, textReader io.Reader, blockSize, textSize int) (*LexerState, error) {
+	err := r.needRules()
+	if err != nil {
+		return nil, err
+	}
+	if options == nil {
+		options = defaultOptions
+	}
+
+	return &LexerState{
+		Registry:       r.registry,
+		newlineAdded:   false,
+		options:        options,
+		Lexer:          r,
+		Text:           make([]rune, blockSize),
+		ReadBuffer:     make([]byte, blockSize),
+		Stack:          []string{options.State},
+		Rules:          r.rules,
+		TotalSize:      textSize,
+		MutatorContext: map[interface{}]interface{}{},
+		reader:         textReader,
+	}, nil
 }
 
 func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint
