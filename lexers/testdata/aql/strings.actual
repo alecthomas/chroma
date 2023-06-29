@@ -1,0 +1,12 @@
+"double"
+'single'
+"multi
+line"
+'multi
+line'
+"escaped\"
+quote"
+'escaped\'
+quote'
+"backtick\\'"
+'backtick\\"'

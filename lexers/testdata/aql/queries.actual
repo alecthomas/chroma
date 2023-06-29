@@ -1,0 +1,12 @@
+FOR doc IN @@coll
+  FILTER doc.value >= @val && doc["value"] < COUNT ([.1, FALSE])
+  COLLECT ´v a l´ /* legal! */ = doc.value WITH COUNT INTO count // blarg
+  RETURN MERGE(doc, { [CONCAT("new", 0.125)]: true } )
+
+LET arr = [[1,2],3,[0]]
+RETURN arr[** FILTER CURRENT % 2 == 0 RETURN CURRENT||null]
+
+FOR v,e,p IN 2..4 OUTBOUND "components/S" GRAPH "g"
+  PRUNE e != null AND p.edges[-1].text =~ @AND
+  OPTIONS { vertexCollections: ['components'] }
+  RETURN v.´sort´ ?: 0xBEEF

@@ -1,0 +1,13 @@
+[
+  {"type":"Name","value":"code"},
+  {"type":"CommentSingle","value":"//comment\n"},
+  {"type":"Name","value":"code"},
+  {"type":"CommentMultiline","value":"/*comment*/"},
+  {"type":"Text","value":"\n"},
+  {"type":"CommentMultiline","value":"/* comment RETURN 42 \"'` *\nmultiline */"},
+  {"type":"Name","value":"code"},
+  {"type":"Text","value":"\n"},
+  {"type":"Name","value":"white"},
+  {"type":"Text","value":" \t"},
+  {"type":"Name","value":"space"}
+]
