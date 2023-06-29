@@ -1,0 +1,17 @@
+[
+  {"type":"LiteralStringDouble","value":"\"double\""},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralStringSingle","value":"'single'"},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralStringDouble","value":"\"multi\nline\""},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralStringSingle","value":"'multi\nline'"},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralStringDouble","value":"\"escaped\\\"\nquote\""},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralStringSingle","value":"'escaped\\'\nquote'"},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralStringDouble","value":"\"backtick\\\\'\""},
+  {"type":"Text","value":"\n"},
+  {"type":"LiteralStringSingle","value":"'backtick\\\\\"'"}
+]
