@@ -4,6 +4,8 @@
     <name>dns</name>
     <alias>zone</alias>
     <alias>bind</alias>
+    <filename>*.zone</filename>
+    <mime_type>text/dns</mime_type>
   </config>
   <rules>
     <state name="root">
