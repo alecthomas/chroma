@@ -2,7 +2,7 @@ package lexers_test
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -22,7 +22,7 @@ func TestCompileAllRegexes(t *testing.T) {
 	for _, lexer := range lexers.GlobalLexerRegistry.Lexers {
 		it, err := lexer.Tokenise(nil, "")
 		assert.NoError(t, err, "%s failed", lexer.Config().Name)
-		err = formatters.NoOp.Format(ioutil.Discard, styles.SwapOff, it)
+		err = formatters.NoOp.Format(io.Discard, styles.SwapOff, it)
 		assert.NoError(t, err, "%s failed", lexer.Config().Name)
 	}
 }
@@ -68,7 +68,7 @@ func FileTest(t *testing.T, lexer chroma.Lexer, actualFilename, expectedFilename
 	t.Helper()
 	t.Run(lexer.Config().Name+"/"+actualFilename, func(t *testing.T) {
 		// Read and tokenise source text.
-		actualText, err := ioutil.ReadFile(actualFilename)
+		actualText, err := os.ReadFile(actualFilename)
 		assert.NoError(t, err)
 		actual, err := chroma.Tokenise(lexer, nil, string(actualText))
 		assert.NoError(t, err)
@@ -97,7 +97,7 @@ func FileTest(t *testing.T, lexer chroma.Lexer, actualFilename, expectedFilename
 
 // Test source files are in the form <key>.<key> and validation data is in the form <key>.<key>.expected.
 func TestLexers(t *testing.T) {
-	files, err := ioutil.ReadDir("testdata")
+	files, err := os.ReadDir("testdata")
 	assert.NoError(t, err)
 
 	for _, file := range files {
@@ -111,7 +111,7 @@ func TestLexers(t *testing.T) {
 			lexer := lexers.Get(file.Name())
 			assert.NotZero(t, lexer)
 
-			subFiles, err := ioutil.ReadDir(dirname)
+			subFiles, err := os.ReadDir(dirname)
 			assert.NoError(t, err)
 
 			for _, subFile := range subFiles {
@@ -148,13 +148,13 @@ func TestLexers(t *testing.T) {
 func FileTestAnalysis(t *testing.T, lexer chroma.Lexer, actualFilepath, expectedFilepath string) {
 	t.Helper()
 	t.Run(lexer.Config().Name+"/"+actualFilepath, func(t *testing.T) {
-		expectedData, err := ioutil.ReadFile(expectedFilepath)
+		expectedData, err := os.ReadFile(expectedFilepath)
 		assert.NoError(t, err)
 
 		analyser, ok := lexer.(chroma.Analyser)
 		assert.True(t, ok, "lexer %q does not set analyser", lexer.Config().Name)
 
-		data, err := ioutil.ReadFile(actualFilepath)
+		data, err := os.ReadFile(actualFilepath)
 		assert.NoError(t, err)
 
 		actual := analyser.AnalyseText(string(data))
