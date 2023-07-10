@@ -276,7 +276,7 @@ func TestWithPreWrapper(t *testing.T) {
 			return fmt.Sprintf("<foo%s id=\"code-%t\">", styleAttr, code)
 		},
 		end: func(code bool) string {
-			return fmt.Sprintf("</foo>")
+			return "</foo>"
 		},
 	}
 
