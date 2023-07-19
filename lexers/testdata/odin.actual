@@ -1,0 +1,90 @@
+package main
+
+import "core:fmt"
+
+/*
+some comments in odin can
+ /* be nested! */
+and it should still work
+*/
+
+Data :: struct {
+	c: complex,
+	q: quaternion,
+}
+
+/* some other comment */
+
+E :: enum(u32) {
+	First,
+	Second,
+	Third,
+}
+
+E_Set :: distinct bit_set[E; u32]
+
+foo_int :: proc(x: int) -> bool {
+	return false
+}
+
+foo_float :: proc(f: f32) -> bool {
+	return true
+}
+
+foo_en :: proc(e: E) -> bool {
+	return e == .Third
+}
+
+foo :: proc{foo_int, foo_float, foo_en}
+
+SOME_CONSTANT :: #config(COMMAND_LINE_ARG, 3)
+main :: proc() {
+	loc := #caller_location
+
+	m: map[string]struct{}
+	da: [dynamic]f64
+
+	len(da)
+	cap(da)
+
+	foo(32)
+
+	#panic("oof")
+
+	y := &da
+	y^ = make([dynamic]f64, 100)
+	defer delete(da)
+
+	x := []int{1, 2, 3, 4}
+	for v, i in x {
+		fmt.println(i, "-", v)
+	}
+
+	z := E_Set{.First, .Second}
+	z2 := E_Set{.Third}
+
+	assert(z | z2 == {.First, .Second, .Third})
+}
+
+@(test)
+a_test_proc :: proc(t: ^testing.T) {
+	value: int
+	value = 3
+	testing.errnof("a format: %s", value)
+}
+
+@(disable = ODIN_DEBUG)
+debug_thing :: proc(x, y, z: int) {
+	fmt.println(x, y, z)
+}
+
+@private
+program := `
+foo :: proc() {
+	fmt.println("hellope!")
+}
+`
+
+@(private = "file")
+pkg: int
+
