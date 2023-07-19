@@ -9,8 +9,8 @@ and it should still work
 */
 
 Data :: struct {
-	c: complex,
-	q: quaternion,
+	c: complex64,
+	q: quaternion256,
 }
 
 /* some other comment */
