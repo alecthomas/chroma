@@ -102,7 +102,7 @@
         <rule pattern = "&quot;(\\\\|\\&quot;|[^&quot;])*&quot;" >
             <token type = "LiteralString"/>
         </rule>
-        <rule pattern = "(&lt;&lt;=|&gt;&gt;=|&lt;&lt;|&gt;&gt;|&lt;=|&gt;=|&amp;=|&amp;|\+=|-=|\*=|/=|%=|\||\^|=|&amp;&amp;|\|\||--|-&gt;|=|==|!=|:=|:|::|\.\.\&lt;|\.\.=|[+\-*/%&amp;])" >
+        <rule pattern = "(&lt;&lt;=|&gt;&gt;=|&lt;&lt;|&gt;&gt;|&lt;=|&gt;=|&amp;=|&amp;|\+=|-=|\*=|/=|%=|\||\^|=|&amp;&amp;|\|\||--|-&gt;|=|==|!=|:=|:|::|\.\.\&lt;|\.\.=|[&lt;&gt;+\-*/%&amp;])" >
             <token type = "Operator"/>
         </rule>
         <rule pattern="[{}()\[\],.;]">
