@@ -51,7 +51,7 @@
         <rule pattern = "\#[a-zA-Z_]+\b">
             <token type = "NameDecorator"/>
         </rule>
-        <rule pattern = "\@\(?[a-zA-Z_]+\b\s*(=\s*&quot;?[0-9a-zA-Z_.]+&quot;?)?\)?">
+        <rule pattern = "\@(\([a-zA-Z_]+\b\s*.*\)|\(?[a-zA-Z_]+\)?)">
             <token type = "NameAttribute"/>
         </rule>
         <rule pattern="[a-zA-Z_]\w*">
