@@ -73,7 +73,7 @@ a_test_proc :: proc(t: ^testing.T) {
 	testing.errnof("a format: %s", value)
 }
 
-@(disable = ODIN_DEBUG)
+@(disable = LOG_LEVEL >= .Debug)
 debug_thing :: proc(x, y, z: int) {
 	fmt.println(x, y, z)
 }

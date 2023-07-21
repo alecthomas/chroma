@@ -51,7 +51,7 @@
         <rule pattern = "\#[a-zA-Z_]+\b">
             <token type = "NameDecorator"/>
         </rule>
-        <rule pattern = "\@\(?[a-zA-Z_]+\b\s*(=\s*&quot;?[0-9a-zA-Z_.]+&quot;?)?\)?">
+        <rule pattern = "\@(\([a-zA-Z_]+\b\s*.*\)|\(?[a-zA-Z_]+\)?)">
             <token type = "NameAttribute"/>
         </rule>
         <rule pattern="[a-zA-Z_]\w*">
@@ -102,7 +102,7 @@
         <rule pattern = "&quot;(\\\\|\\&quot;|[^&quot;])*&quot;" >
             <token type = "LiteralString"/>
         </rule>
-        <rule pattern = "(&lt;&lt;=|&gt;&gt;=|&lt;&lt;|&gt;&gt;|&lt;=|&gt;=|&amp;=|&amp;|\+=|-=|\*=|/=|%=|\||\^|=|&amp;&amp;|\|\||--|-&gt;|=|==|!=|:=|:|::|\.\.\&lt;|\.\.=|[+\-*/%&amp;])" >
+        <rule pattern = "(&lt;&lt;=|&gt;&gt;=|&lt;&lt;|&gt;&gt;|&lt;=|&gt;=|&amp;=|&amp;|\+=|-=|\*=|/=|%=|\||\^|=|&amp;&amp;|\|\||--|-&gt;|=|==|!=|:=|:|::|\.\.\&lt;|\.\.=|[&lt;&gt;+\-*/%&amp;])" >
             <token type = "Operator"/>
         </rule>
         <rule pattern="[{}()\[\],.;]">
