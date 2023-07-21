@@ -1,0 +1,22 @@
+#include "a"
+#include <b>
+
+public void foo();
+
+enum class E { A, B };
+
+enum class {
+  a, b,
+  c,
+} e;
+
+enum E { A, B };
+
+class A {
+  void foo();
+  void bar();
+};
+
+int main() {
+    return 0 + 13 + 1.4;
+}
