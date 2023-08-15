@@ -62,7 +62,7 @@
           <token type="Keyword"/>
         </bygroups>
       </rule>
-      <rule pattern="(as|await|base|break|by|case|catch|checked|continue|default|delegate|do|else|event|finally|fixed|for|foreach|goto|if|in|init|is|let|lock|new|on|out|params|readonly|ref|return|sizeof|stackalloc|static|switch|this|throw|try|typeof|unchecked|virtual|void|while|get|set|new|yield|add|remove|value|alias|ascending|descending|from|group|into|orderby|select|thenby|where|join|equals)\b">
+      <rule pattern="(as|await|base|break|by|case|catch|checked|continue|default|delegate|do|else|event|finally|fixed|for|foreach|goto|if|in|init|is|let|lock|new|on|out|params|readonly|ref|return|sizeof|stackalloc|switch|this|throw|try|typeof|unchecked|virtual|void|while|get|set|new|yield|add|remove|value|alias|ascending|descending|from|group|into|orderby|select|thenby|where|join|equals)\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(global)(::)">
