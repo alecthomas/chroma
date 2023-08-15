@@ -52,7 +52,7 @@
       <rule pattern="0[xX][0-9a-fA-F]+[Ll]?|\d[_\d]*(\.\d*)?([eE][+-]?\d+)?[flFLdD]?">
         <token type="LiteralNumber"/>
       </rule>
-      <rule pattern="#[ \t]*(if|endif|else|elif|define|undef|line|error|warning|region|endregion|pragma|nullable)\b[^\n\r]+">
+      <rule pattern="#[ \t]*(if|endif|else|elif|define|undef|line|error|warning|region|endregion|pragma|nullable)\b">
         <token type="CommentPreproc"/>
       </rule>
       <rule pattern="\b(extern)(\s+)(alias)\b">
