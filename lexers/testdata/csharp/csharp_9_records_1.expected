@@ -1,5 +1,5 @@
 [
-  {"type":"Keyword","value":"public"},
+  {"type":"KeywordDeclaration","value":"public"},
   {"type":"Text","value":" "},
   {"type":"Keyword","value":"record"},
   {"type":"Text","value":" "},

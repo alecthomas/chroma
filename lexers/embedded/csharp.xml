@@ -52,7 +52,7 @@
       <rule pattern="0[xX][0-9a-fA-F]+[Ll]?|\d[_\d]*(\.\d*)?([eE][+-]?\d+)?[flFLdD]?">
         <token type="LiteralNumber"/>
       </rule>
-      <rule pattern="#[ \t]*(if|endif|else|elif|define|undef|line|error|warning|region|endregion|pragma|nullable)\b[^\n\r]+">
+      <rule pattern="#[ \t]*(if|endif|else|elif|define|undef|line|error|warning|region|endregion|pragma|nullable)\b">
         <token type="CommentPreproc"/>
       </rule>
       <rule pattern="\b(extern)(\s+)(alias)\b">
@@ -62,7 +62,7 @@
           <token type="Keyword"/>
         </bygroups>
       </rule>
-      <rule pattern="(abstract|as|async|await|base|break|by|case|catch|checked|const|continue|default|delegate|do|else|enum|event|explicit|extern|false|finally|fixed|for|foreach|goto|if|implicit|in|init|internal|is|let|lock|new|null|on|operator|out|override|params|private|protected|public|readonly|ref|return|sealed|sizeof|stackalloc|static|switch|this|throw|true|try|typeof|unchecked|unsafe|virtual|void|while|get|set|new|partial|yield|add|remove|value|alias|ascending|descending|from|group|into|orderby|select|thenby|where|join|equals)\b">
+      <rule pattern="(as|await|base|break|by|case|catch|checked|continue|default|delegate|do|else|event|finally|fixed|for|foreach|goto|if|in|init|is|let|lock|new|on|out|params|readonly|ref|return|sizeof|stackalloc|switch|this|throw|try|typeof|unchecked|virtual|void|while|get|set|new|yield|add|remove|value|alias|ascending|descending|from|group|into|orderby|select|thenby|where|join|equals)\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(global)(::)">
@@ -71,8 +71,14 @@
           <token type="Punctuation"/>
         </bygroups>
       </rule>
+      <rule pattern="(abstract|async|const|enum|explicit|extern|implicit|internal|operator|override|partial|private|protected|public|static|sealed|unsafe|volatile)\b">
+        <token type="KeywordDeclaration"/>
+      </rule>
       <rule pattern="(bool|byte|char|decimal|double|dynamic|float|int|long|object|sbyte|short|string|uint|ulong|ushort|var)\b\??">
         <token type="KeywordType"/>
+      </rule>
+      <rule pattern="(true|false|null)\b">
+        <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(class|struct|record|interface)(\s+)">
         <bygroups>
