@@ -1,13 +1,43 @@
 package lexers_test
 
 import (
+	"os"
 	"testing"
-
-	assert "github.com/alecthomas/assert/v2"
 
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/lexers"
+
+	"github.com/alecthomas/assert/v2"
 )
+
+func TestCpp_AnalyseText(t *testing.T) {
+	tests := map[string]struct {
+		Filepath string
+		Expected float32
+	}{
+		"include": {
+			Filepath: "testdata/cpp_include.cpp",
+			Expected: 0.2,
+		},
+		"namespace": {
+			Filepath: "testdata/cpp_namespace.cpp",
+			Expected: 0.4,
+		},
+	}
+
+	for name, test := range tests {
+		test := test
+		t.Run(name, func(t *testing.T) {
+			data, err := os.ReadFile(test.Filepath)
+			assert.NoError(t, err)
+
+			analyser, ok := lexers.CPP.(chroma.Analyser)
+			assert.True(t, ok)
+
+			assert.Equal(t, test.Expected, analyser.AnalyseText(string(data)))
+		})
+	}
+}
 
 func TestIssue290(t *testing.T) {
 	input := `// 64-bit floats have 53 digits of precision, including the whole-number-part.
