@@ -15,9 +15,12 @@
     <filename>*.H</filename>
     <filename>*.cp</filename>
     <filename>*.CPP</filename>
+    <filename>*.tpp</filename>
     <mime_type>text/x-c++hdr</mime_type>
     <mime_type>text/x-c++src</mime_type>
     <ensure_nl>true</ensure_nl>
+    <analyse regex="#include &lt;[a-z_]+>" score="0.2" />
+    <analyse regex="using namespace " score="0.4" />
   </config>
   <rules>
     <state name="classname">

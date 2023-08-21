@@ -11,6 +11,8 @@
     <mime_type>image/x-xbitmap</mime_type>
     <mime_type>image/x-xpixmap</mime_type>
     <ensure_nl>true</ensure_nl>
+    <analyse regex="(?m)^\s*#include &lt;" score="0.1"/>
+    <analyse regex="(?m)^\s*#ifn?def " score="0.1" />
   </config>
   <rules>
     <state name="statement">

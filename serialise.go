@@ -11,6 +11,8 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+
+	"github.com/dlclark/regexp2"
 )
 
 // Serialisation of Chroma rules to XML. The format is:
@@ -107,7 +109,7 @@ func fastUnmarshalConfig(from fs.FS, path string) (*Config, error) {
 			var config Config
 			err = dec.DecodeElement(&config, &se)
 			if err != nil {
-				panic(err)
+				return nil, fmt.Errorf("%s: %w", path, err)
 			}
 			return &config, nil
 		}
@@ -135,8 +137,29 @@ func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 			return nil, fmt.Errorf("%s: %q is not a valid glob: %w", config.Name, glob, err)
 		}
 	}
+	type regexAnalyse struct {
+		re    *regexp2.Regexp
+		score float32
+	}
+	regexAnalysers := make([]regexAnalyse, 0, len(config.Analyse))
+	for _, ra := range config.Analyse {
+		re, err := regexp2.Compile(ra.Regex, regexp2.None)
+		if err != nil {
+			return nil, fmt.Errorf("%s: %q is not a valid analyser regex: %w", config.Name, ra.Regex, err)
+		}
+		regexAnalysers = append(regexAnalysers, regexAnalyse{re, ra.Score})
+	}
 	return &RegexLexer{
 		config: config,
+		analyser: func(text string) float32 {
+			var score float32
+			for _, ra := range regexAnalysers {
+				if ok, _ := ra.re.MatchString(text); ok {
+					score += ra.score
+				}
+			}
+			return score
+		},
 		fetchRulesFunc: func() (Rules, error) {
 			var lexer struct {
 				Config

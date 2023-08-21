@@ -57,6 +57,18 @@ type Config struct {
 	//
 	// If this is 0 it will be treated as a default of 1.
 	Priority float32 `xml:"priority,omitempty"`
+
+	// Analyse is a list of regexes to match against the input.
+	//
+	// The sum of all the score of matching patterns will be
+	// used as the final score.
+	Analyse []AnalyseConfig `xml:"analyse,omitempty"`
+}
+
+// AnalyseConfig defines a single regex analyser pattern.
+type AnalyseConfig struct {
+	Regex string  `xml:"regex,attr"`
+	Score float32 `xml:"score,attr"`
 }
 
 // Token output to formatter.
