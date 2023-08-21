@@ -76,8 +76,8 @@ func (r Rules) Merge(rules Rules) Rules {
 }
 
 // MustNewLexer creates a new Lexer with deferred rules generation or panics.
-func MustNewLexer(config *Config, rulesFunc func() Rules) *RegexLexer {
-	lexer, err := NewLexer(config, rulesFunc)
+func MustNewLexer(config *Config, rules func() Rules) *RegexLexer {
+	lexer, err := NewLexer(config, rules)
 	if err != nil {
 		panic(err)
 	}

@@ -30,9 +30,10 @@ func vimlRules() Rules {
 			{`#[0-9a-f]{6}`, LiteralNumberHex, nil},
 			{`^:`, Punctuation, nil},
 			{`[()<>+=!|,~-]`, Punctuation, nil},
-			{`\b(let|if|else|endif|elseif|fun|function|endfunction)\b`, Keyword, nil},
+			{`\b(let|if|else|endif|elseif|fun|function|endfunction|set|map|autocmd|filetype|hi(ghlight)?|execute|syntax|colorscheme)\b`, Keyword, nil},
 			{`\b(NONE|bold|italic|underline|dark|light)\b`, NameBuiltin, nil},
 			{`\b\w+\b`, NameOther, nil},
+			{`\n`, Text, nil},
 			{`.`, Text, nil},
 		},
 	}

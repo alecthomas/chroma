@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	assert "github.com/alecthomas/assert/v2"
+	"github.com/alecthomas/assert/v2"
 	"github.com/alecthomas/repr"
 
 	"github.com/alecthomas/chroma/v2"
@@ -73,11 +73,16 @@ func FileTest(t *testing.T, lexer chroma.Lexer, actualFilename, expectedFilename
 		actual, err := chroma.Tokenise(lexer, nil, string(actualText))
 		assert.NoError(t, err)
 
-		if os.Getenv("RECORD") == "true" {
+		if os.Getenv("RECORD") != "" {
 			// Update the expected file with the generated output of this lexer
 			f, err := os.Create(expectedFilename)
 			defer f.Close() // nolint: gosec
 			assert.NoError(t, err)
+			for _, token := range actual {
+				if token.Type == chroma.Error {
+					t.Logf("Found Error token in lexer %s output: %s", lexer.Config().Name, repr.String(token))
+				}
+			}
 			assert.NoError(t, formatters.JSON.Format(f, nil, chroma.Literator(actual...)))
 		} else {
 			// Read expected JSON into token slice.
@@ -87,10 +92,14 @@ func FileTest(t *testing.T, lexer chroma.Lexer, actualFilename, expectedFilename
 			err = json.NewDecoder(r).Decode(&expected)
 			assert.NoError(t, err)
 
-			// Equal?
-			assert.Equal(t,
-				repr.String(expected, repr.Indent(" ")),
-				repr.String(actual, repr.Indent(" ")))
+			assert.Equal(t, expected, actual)
+
+			// Check for error tokens.
+			for _, token := range actual {
+				if token.Type == chroma.Error {
+					t.Logf("Found Error token in lexer %s output: %s", lexer.Config().Name, repr.String(token))
+				}
+			}
 		}
 	})
 }

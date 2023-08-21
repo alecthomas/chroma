@@ -1,0 +1,88 @@
+execute pathogen#infect()
+
+syntax on
+colorscheme swapoff
+
+" Turn off status line.
+set laststatus=0
+
+" Turn off annoying beeps
+set vb
+set noeb
+set vb t_vb=
+
+set mouse=r
+set visualbell
+
+" Force latin1 terminal encoding?
+set fileencoding=utf-8
+set encoding=utf-8
+set termencoding=utf-8
+
+" Allows ~<motion>
+set tildeop
+
+" Stupid backspace
+set backspace=eol,indent,start
+
+" 99% of the time, wrap is shit
+set nowrap
+
+" Map U to 'redo', which I like better than U being 'undo changes to this line'
+map U <C-R>
+
+" Indentation defaults
+set ts=2 sts=2 sw=2 et
+
+" Abbreviate status messages
+set shortmess=aTI
+
+" No 'Press ENTER...' message when using man
+map K K<CR>
+
+" Filetypes that need real tabs
+autocmd FileType make :set ts=4 noet nolist
+
+" Set some formatoptions
+set formatoptions=tcrqn
+
+" Incremental search is good
+set incsearch
+set hlsearch
+hi MatchParen cterm=NONE ctermfg=LightGreen ctermbg=NONE
+
+" Disable highlighted search on redraw
+map <silent> <C-l> :nohlsearch<CR>:redraw!<CR>
+
+autocmd Syntax * syntax sync fromstart
+
+filetype plugin on
+filetype indent on
+
+" Always show cursor position
+set ruler
+
+" Fucking visual-select copying to clipboard! WTF!
+set clipboard=
+
+" C-d when file-completing
+set wildmenu
+
+highlight SpellBad cterm=NONE ctermfg=darkred ctermbg=none
+
+" Show trailing whitepace and spaces before a tab:
+highlight ExtraWhitespace cterm=NONE ctermbg=red guibg=red
+autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+
+" Round shifting to nearest shiftwidth
+set shiftround
+
+" Insert blanks according to shiftwidth
+set smarttab
+
+" Disable toolbar
+set go-=T
+
+set wildignore=*.o,*.a,*.so,*.pyc,*~,*.class,build/*,build-*,tags,cscope*,third_party/*,java/*,users/*,data/*,3rdparty/*,*.jar,target/*,dist/*
+
+autocmd BufRead,BufNewFile *.bk set filetype=python
