@@ -10,22 +10,22 @@ import (
 	"github.com/alecthomas/assert/v2"
 )
 
-func TestC_AnalyseText(t *testing.T) {
+func TestActionscript3_AnalyseText(t *testing.T) {
 	tests := map[string]struct {
 		Filepath string
 		Expected float32
 	}{
-		"include": {
-			Filepath: "testdata/c_include.c",
-			Expected: 0.1,
+		"basic": {
+			Filepath: "testdata/actionscript3.as",
+			Expected: 0.3,
 		},
-		"ifdef": {
-			Filepath: "testdata/c_ifdef.c",
-			Expected: 0.1,
+		"capital letters": {
+			Filepath: "testdata/actionscript3_capital_letter.as",
+			Expected: 0.3,
 		},
-		"ifndef": {
-			Filepath: "testdata/c_ifndef.c",
-			Expected: 0.1,
+		"spaces": {
+			Filepath: "testdata/actionscript3_spaces.as",
+			Expected: 0.3,
 		},
 	}
 
@@ -35,7 +35,7 @@ func TestC_AnalyseText(t *testing.T) {
 			data, err := os.ReadFile(test.Filepath)
 			assert.NoError(t, err)
 
-			analyser, ok := lexers.C.(chroma.Analyser)
+			analyser, ok := lexers.Actionscript3.(chroma.Analyser)
 			assert.True(t, ok)
 
 			assert.Equal(t, test.Expected, analyser.AnalyseText(string(data)))
