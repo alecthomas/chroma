@@ -60,15 +60,23 @@ type Config struct {
 
 	// Analyse is a list of regexes to match against the input.
 	//
-	// The sum of all the score of matching patterns will be
+	// If a match is found, the score is returned if single attribute is set to true,
+	// otherwise the sum of all the score of matching patterns will be
 	// used as the final score.
-	Analyse []AnalyseConfig `xml:"analyse,omitempty"`
+	Analyse *AnalyseConfig `xml:"analyse,omitempty"`
 }
 
-// AnalyseConfig defines a single regex analyser pattern.
+// AnalyseConfig defines the list of regexes analysers.
 type AnalyseConfig struct {
-	Regex string  `xml:"regex,attr"`
-	Score float32 `xml:"score,attr"`
+	Regexes []RegexConfig `xml:"regex,omitempty"`
+	// If true, the score is returned despite other matches.
+	Single bool `xml:"single,attr"`
+}
+
+// RegexConfig defines a single regex pattern and its score in case of match.
+type RegexConfig struct {
+	Pattern string  `xml:"pattern,attr"`
+	Score   float32 `xml:"score,attr"`
 }
 
 // Token output to formatter.

@@ -298,11 +298,12 @@ func (r *RegexLexer) SetAnalyser(analyser func(text string) float32) Lexer {
 	return r
 }
 
-func (r *RegexLexer) AnalyseText(text string) float32 { // nolint
+// AnalyseText scores how likely a fragment of text is to match this lexer, between 0.0 and 1.0.
+func (r *RegexLexer) AnalyseText(text string) float32 {
 	if r.analyser != nil {
 		return r.analyser(text)
 	}
-	return 0.0
+	return 0
 }
 
 // SetConfig replaces the Config for this Lexer.
@@ -311,7 +312,8 @@ func (r *RegexLexer) SetConfig(config *Config) *RegexLexer {
 	return r
 }
 
-func (r *RegexLexer) Config() *Config { // nolint
+// Config returns the Config for this Lexer.
+func (r *RegexLexer) Config() *Config {
 	return r.config
 }
 
@@ -406,7 +408,8 @@ func (r *RegexLexer) needRules() error {
 	return err
 }
 
-func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint
+// Tokenise text using lexer, returning an iterator.
+func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
 	err := r.needRules()
 	if err != nil {
 		return nil, err

@@ -131,35 +131,58 @@ func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	for _, glob := range append(config.Filenames, config.AliasFilenames...) {
 		_, err := filepath.Match(glob, "")
 		if err != nil {
 			return nil, fmt.Errorf("%s: %q is not a valid glob: %w", config.Name, glob, err)
 		}
 	}
-	type regexAnalyse struct {
-		re    *regexp2.Regexp
-		score float32
-	}
-	regexAnalysers := make([]regexAnalyse, 0, len(config.Analyse))
-	for _, ra := range config.Analyse {
-		re, err := regexp2.Compile(ra.Regex, regexp2.None)
-		if err != nil {
-			return nil, fmt.Errorf("%s: %q is not a valid analyser regex: %w", config.Name, ra.Regex, err)
+
+	var analyserFn func(string) float32
+
+	if config.Analyse != nil {
+		type regexAnalyse struct {
+			re    *regexp2.Regexp
+			score float32
 		}
-		regexAnalysers = append(regexAnalysers, regexAnalyse{re, ra.Score})
-	}
-	return &RegexLexer{
-		config: config,
-		analyser: func(text string) float32 {
+
+		regexAnalysers := make([]regexAnalyse, 0, len(config.Analyse.Regexes))
+
+		for _, ra := range config.Analyse.Regexes {
+			re, err := regexp2.Compile(ra.Pattern, regexp2.None)
+			if err != nil {
+				return nil, fmt.Errorf("%s: %q is not a valid analyser regex: %w", config.Name, ra.Pattern, err)
+			}
+
+			regexAnalysers = append(regexAnalysers, regexAnalyse{re, ra.Score})
+		}
+
+		analyserFn = func(text string) float32 {
 			var score float32
+
 			for _, ra := range regexAnalysers {
-				if ok, _ := ra.re.MatchString(text); ok {
+				ok, err := ra.re.MatchString(text)
+				if err != nil {
+					return 0
+				}
+
+				if ok && config.Analyse.Single {
+					return ra.score
+				}
+
+				if ok {
 					score += ra.score
 				}
 			}
+
 			return score
-		},
+		}
+	}
+
+	return &RegexLexer{
+		config:   config,
+		analyser: analyserFn,
 		fetchRulesFunc: func() (Rules, error) {
 			var lexer struct {
 				Config

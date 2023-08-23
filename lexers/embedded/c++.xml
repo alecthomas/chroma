@@ -19,8 +19,10 @@
     <mime_type>text/x-c++hdr</mime_type>
     <mime_type>text/x-c++src</mime_type>
     <ensure_nl>true</ensure_nl>
-    <analyse regex="#include &lt;[a-z_]+>" score="0.2" />
-    <analyse regex="using namespace " score="0.4" />
+    <analyse single="true">
+      <regex pattern="#include &lt;[a-z_]+>" score="0.2" />
+      <regex pattern="using namespace " score="0.4" />
+    </analyse>
   </config>
   <rules>
     <state name="classname">
