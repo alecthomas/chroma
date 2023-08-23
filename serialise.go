@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"math"
 	"path/filepath"
 	"reflect"
 	"regexp"
@@ -168,7 +169,7 @@ func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 				}
 
 				if ok && config.Analyse.Single {
-					return ra.score
+					return float32(math.Min(float64(ra.score), 1.0))
 				}
 
 				if ok {
@@ -176,7 +177,7 @@ func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 				}
 			}
 
-			return score
+			return float32(math.Min(float64(score), 1.0))
 		}
 	}
 
