@@ -172,16 +172,37 @@ func (l *LexerRegistry) Analyse(text string) Lexer {
 	return picked
 }
 
-// Register a Lexer with the LexerRegistry.
+// Register a Lexer with the LexerRegistry. If the lexer is already registered
+// it will be replaced.
 func (l *LexerRegistry) Register(lexer Lexer) Lexer {
 	lexer.SetRegistry(l)
 	config := lexer.Config()
+
 	l.byName[config.Name] = lexer
 	l.byName[strings.ToLower(config.Name)] = lexer
+
 	for _, alias := range config.Aliases {
 		l.byAlias[alias] = lexer
 		l.byAlias[strings.ToLower(alias)] = lexer
 	}
-	l.Lexers = append(l.Lexers, lexer)
+
+	l.Lexers = add(l.Lexers, lexer)
+
 	return lexer
+}
+
+// add adds a lexer to a slice of lexers if it doesn't already exist, or if found will replace it.
+func add(lexers Lexers, lexer Lexer) Lexers {
+	for i, val := range lexers {
+		if val == nil {
+			continue
+		}
+
+		if val.Config().Name == lexer.Config().Name {
+			lexers[i] = lexer
+			return lexers
+		}
+	}
+
+	return append(lexers, lexer)
 }
