@@ -1,6 +1,6 @@
 <lexer>
   <config>
-    <name>BashSession</name>
+    <name>Bash Session</name>
     <alias>bash-session</alias>
     <alias>console</alias>
     <alias>shell-session</alias>
