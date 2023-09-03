@@ -37,7 +37,7 @@
       <rule pattern="(?&lt;!\w)(is|in|as|not|or|and)\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="(?&lt;!\w)(var|const|enum|signal|static|extends)\b">
+      <rule pattern="(?&lt;!\w)(var|const|enum|signal|static)\b">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule pattern="(?&lt;!\w)(if|elif|else|for|while|match|break|continue|pass|return|breakpoint|await|yield|super)\b">
@@ -204,7 +204,7 @@
         </bygroups>
         <push state="funcname"/>
       </rule>
-      <rule pattern="(class|class_name)((?:\s|\\\s)+)">
+      <rule pattern="(class|class_name|extends)((?:\s|\\\s)+)">
         <bygroups>
           <token type="Keyword"/>
           <token type="Text"/>
