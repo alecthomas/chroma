@@ -49,10 +49,10 @@
     </state>
     <state name="builtin_funcs">
       <rule pattern="(?&lt;!\w)(assert|char|convert|dict_to_inst|get_stack|inst_to_dict|is_instance_of|len|load|preload|print_debug|print_stack|range|type_exists)\b">
-        <token type="NameFunction"/>
+        <token type="NameBuiltin"/>
       </rule>
       <rule pattern="(?&lt;!\w)(abs[fi]?|acos|asin|atan2?|bezier_(derivative|interpolate)|bytes_to_var(_with_objects)?|ceil[fi]?|clamp[fi]?|cosh?|cubic_interpolate(_angle)?(_in_time)?|db_to_linear|deg_to_rad|ease|error_string|exp|floor[fi]?|fmod|fposmod|hash|instance_from_id|inverse_lerp|is_equal_approx|is_finite|is_instance(_id)?_valid|is_nan|is_same|is_zero_approx|lerp|lerp_angle|lerpf|linear_to_db|log|max[fi]?|min[fi]?|move_toward|nearest_po2|pingpong|posmod|pow|print|print_rich|print_verbose|printerr|printraw|prints|printt|push_error|push_warning|rad_to_deg|rand_from_seed|randf|randf_range|randfn|randi|randi_range|randomize|remap|rid_allocate_id|rid_from_int64|round[fi]?|seed|sign[fi]?|sinh?|smoothstep|snapped[fi]?|sqrt|step_decimals|str|str_to_var|tanh?|typeof|var_to_bytes(_with_objects)?|var_to_str|weakref|wrap[fi]?)\b">
-        <token type="NameFunction"/>
+        <token type="NameBuiltin"/>
       </rule>
     </state>
     <state name="tsqs">
@@ -199,14 +199,14 @@
       </rule>
       <rule pattern="(func)((?:\s|\\\s)+)">
         <bygroups>
-          <token type="Keyword"/>
+          <token type="KeywordDeclaration"/>
           <token type="Text"/>
         </bygroups>
         <push state="funcname"/>
       </rule>
       <rule pattern="(class|class_name|extends)((?:\s|\\\s)+)">
         <bygroups>
-          <token type="Keyword"/>
+          <token type="KeywordDeclaration"/>
           <token type="Text"/>
         </bygroups>
         <push state="classname"/>
@@ -228,6 +228,12 @@
       </rule>
       <rule>
         <include state="numbers"/>
+      </rule>
+      <rule pattern="(\b[a-zA-Z_]\w*)([(])">
+        <bygroups>
+          <token type="NameFunction"/>
+          <token type="Punctuation"/>
+        </bygroups>
       </rule>
       <rule pattern="&#39;">
         <token type="LiteralStringSingle"/>
