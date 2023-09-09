@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/alecthomas/assert/v2 v2.2.1
 	github.com/alecthomas/repr v0.2.0
-	github.com/dlclark/regexp2 v1.4.0
+	github.com/dlclark/regexp2 v1.10.0
 )
 
 require github.com/hexops/gotextdiff v1.0.3 // indirect

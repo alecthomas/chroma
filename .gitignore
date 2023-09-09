@@ -1,4 +1,8 @@
 # Binaries for programs and plugins
+.git
+.idea
+.vscode
+.hermit
 *.exe
 *.dll
 *.so
