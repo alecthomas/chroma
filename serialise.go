@@ -168,7 +168,7 @@ func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 					return 0
 				}
 
-				if ok && config.Analyse.Single {
+				if ok && config.Analyse.First {
 					return float32(math.Min(float64(ra.score), 1.0))
 				}
 

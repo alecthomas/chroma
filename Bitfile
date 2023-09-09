@@ -12,10 +12,10 @@ README.md: lexers/*.go lexers/*/*.xml table.py
 implicit %{1}%{2}.min.%{3}: **/*.{css,js}
   build: esbuild --bundle %{IN} --minify --outfile=%{OUT}
 
-implicit %{1}: cmd/*
+implicit build/%{1}: cmd/*
   cd cmd/%{1}
   inputs: cmd/%{1}/**/* **/*.go
-  build: go build -ldflags="-X 'main.version=%{VERSION}'" -o ../../%{1} .
+  build: go build -ldflags="-X 'main.version=%{VERSION}'" -o ../../build/%{1} .
 
 #upload: chromad
 #  build:

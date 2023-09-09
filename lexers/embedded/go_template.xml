@@ -1,7 +1,7 @@
 <lexer>
   <config>
-    <name>Go HTML Template</name>
-    <alias>go-html-template</alias>
+    <name>Go Template</name>
+    <alias>go-template</alias>
   </config>
   <rules>
     <state name="template">

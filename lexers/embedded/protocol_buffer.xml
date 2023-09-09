@@ -6,6 +6,33 @@
     <filename>*.proto</filename>
   </config>
   <rules>
+    <state name="package">
+      <rule pattern="[a-zA-Z_]\w*">
+        <token type="NameNamespace"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="message">
+      <rule pattern="[a-zA-Z_]\w*">
+        <token type="NameClass"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="type">
+      <rule pattern="[a-zA-Z_]\w*">
+        <token type="Name"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <pop depth="1"/>
+      </rule>
+    </state>
     <state name="root">
       <rule pattern="[ \t]+">
         <token type="Text"/>
@@ -85,33 +112,6 @@
       </rule>
       <rule pattern="[a-zA-Z_][\w.]*">
         <token type="Name"/>
-      </rule>
-    </state>
-    <state name="package">
-      <rule pattern="[a-zA-Z_]\w*">
-        <token type="NameNamespace"/>
-        <pop depth="1"/>
-      </rule>
-      <rule>
-        <pop depth="1"/>
-      </rule>
-    </state>
-    <state name="message">
-      <rule pattern="[a-zA-Z_]\w*">
-        <token type="NameClass"/>
-        <pop depth="1"/>
-      </rule>
-      <rule>
-        <pop depth="1"/>
-      </rule>
-    </state>
-    <state name="type">
-      <rule pattern="[a-zA-Z_]\w*">
-        <token type="Name"/>
-        <pop depth="1"/>
-      </rule>
-      <rule>
-        <pop depth="1"/>
       </rule>
     </state>
   </rules>

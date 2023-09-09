@@ -6,7 +6,7 @@
     <filename>*.gd</filename>
     <mime_type>text/x-gdscript</mime_type>
     <mime_type>application/x-gdscript</mime_type>
-    <analyse single="true">
+    <analyse first="true">
       <regex pattern="^export" score="0.1"/>
     </analyse>
   </config>

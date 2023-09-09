@@ -10,7 +10,7 @@
   </config>
   <rules>
     <state name="root">
-      <rule pattern="^((?:\[[^]]+@[^]]+\]\s?)?[#$%>])(\s*)(.*\n?)">
+      <rule pattern="^((?:\[[^]]+@[^]]+\]\s?)?[#$%&gt;])(\s*)(.*\n?)">
         <bygroups>
           <token type="GenericPrompt"/>
           <token type="Text"/>

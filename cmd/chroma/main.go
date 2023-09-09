@@ -413,9 +413,10 @@ func dumpXMLLexerDefinitions(dir string) error {
 			// fmt.Println(name)
 			_, err = os.Stat(filename)
 			if err == nil {
-				return fmt.Errorf("%s already exists", filename)
+				fmt.Fprintf(os.Stderr, "warning: %s already exists\n", filename)
+				continue
 			}
-			err = ioutil.WriteFile(filename, data, 0600)
+			err = os.WriteFile(filename, data, 0600)
 			if err != nil {
 				return err
 			}

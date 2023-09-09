@@ -69,8 +69,8 @@ type Config struct {
 // AnalyseConfig defines the list of regexes analysers.
 type AnalyseConfig struct {
 	Regexes []RegexConfig `xml:"regex,omitempty"`
-	// If true, the score is returned despite other matches.
-	Single bool `xml:"single,attr"`
+	// If true, the first matching score is returned.
+	First bool `xml:"first,attr"`
 }
 
 // RegexConfig defines a single regex pattern and its score in case of match.
