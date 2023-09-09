@@ -80,6 +80,9 @@
       <rule pattern="&#39;\\.&#39;|&#39;[^\\]&#39;|&#39;\\u[0-9a-fA-F]{4}&#39;">
         <token type="LiteralStringChar"/>
       </rule>
+      <rule pattern="\d+[LlUu]*">
+        <token type="LiteralNumberInteger"/>
+      </rule>
       <rule pattern="(\.)((?:[^\W\d]|\$)[\w$]*)">
         <bygroups>
           <token type="Operator"/>
