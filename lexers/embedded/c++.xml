@@ -84,7 +84,7 @@
       </rule>
     </state>
     <state name="macro">
-      <rule pattern="(include)(\s*(?:/[*].*?[*]/\s*)?)([^\n]+)">
+      <rule pattern="(include)(\s+)(&quot;[^&quot;]+?&quot;|&lt;[^&gt;]+?&gt;)">
         <bygroups>
           <token type="CommentPreproc"/>
           <token type="Text"/>

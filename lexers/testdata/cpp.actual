@@ -1,5 +1,5 @@
-#include "a"
-#include <b>
+#include "a" // comment
+#include <b> // comment
 
 [[nodiscard]] void foo() noexcept;
 void foo();
