@@ -1,9 +1,9 @@
 [
   {"type":"KeywordDeclaration","value":"output"},
   {"type":"TextWhitespace","value":" "},
-  {"type":"Text","value":"deploymentOutput"},
+  {"type":"NameVariable","value":"deploymentOutput"},
   {"type":"TextWhitespace","value":" "},
-  {"type":"KeywordType","value":"object"},
+  {"type":"NameVariable","value":"object"},
   {"type":"TextWhitespace","value":" "},
   {"type":"Punctuation","value":"="},
   {"type":"TextWhitespace","value":" "},
