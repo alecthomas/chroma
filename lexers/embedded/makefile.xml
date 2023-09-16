@@ -14,6 +14,7 @@
     <filename>BSDmakefile</filename>
     <filename>Justfile</filename>
     <filename>justfile</filename>
+    <filename>.justfile</filename>
     <mime_type>text/x-makefile</mime_type>
     <ensure_nl>true</ensure_nl>
   </config>
