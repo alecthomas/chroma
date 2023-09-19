@@ -1,0 +1,29 @@
+name: Lexer request
+description: Suggest the addition of a lexer
+title: "<title>"
+labels: ["help wanted", "lexer missing"]
+body:
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the lexer you're requesting.
+      options:
+        - label: I have searched the existing issues
+          required: true
+  - type: textarea
+    attributes:
+      label: What is the missing lexer?
+      description: |
+        Please note that lexers are contributed by the community. Your best option is to contribute this yourself.
+
+        Lexers are defined in XML (see the [existing lexers](https://github.com/alecthomas/chroma/tree/master/lexers/embedded) for examples).
+        You can test your lexer with the Chroma command-line, `chroma --lexer=my-lexer.xml example-file.lang`
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Links to existing syntax definitions
+      description: |
+        Provide links to existing syntax definitions in Textmate, etc.
+    validations:
+      required: true

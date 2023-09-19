@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest an idea for this project
+title: "<title>"
+labels: ["feature request"]
+body:
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the feature you're requesting.
+      options:
+        - label: I have searched the existing issues
+          required: true
+  - type: textarea
+    attributes:
+      label: What problem does this feature solve?
+      description: |
+        Please check the Chroma [README](https://github.com/alecthomas/chroma) and command-line tool to ensure this isn't an already solved problem.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What feature do you propose?
+      description: |
+        The feature should describe a change to Chroma's code, not lexers.
+        For lexers, fill out the "Lexer request" form.
+    validations:
+      required: true
