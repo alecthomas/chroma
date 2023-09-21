@@ -179,7 +179,6 @@ func FileTestAnalysis(t *testing.T, lexer chroma.Lexer, actualFilepath, expected
 				assert.NoError(t, err)
 				assert.NoError(t, f.Close())
 			} else {
-				// fail via an assertion of string comparison for nicer diff output
 				assert.Equal(t, string(expectedData), actualData.String())
 			}
 		}
