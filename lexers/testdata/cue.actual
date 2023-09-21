@@ -1,0 +1,31 @@
+"this is a test"
+5
+false
+
+// This is a comment
+a: {
+    foo:      string  // foo is a string
+    [=~"^i"]: int     // all other fields starting with i are integers
+    [=~"^b"]: bool    // all other fields starting with b are booleans
+    [>"c"]:   string  // all other fields lexically after c are strings
+
+    ...string         // all other fields must be a string. Note: default constraints are not yet implemented.
+}
+
+x: #"""
+
+ \#(test)
+
+"""
+
+b: a & {
+    i3:    3
+    bar:   true
+    other: "a string"
+}
+
+A: close({
+    field1: string
+    field2: string
+})
+
