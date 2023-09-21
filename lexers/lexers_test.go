@@ -2,6 +2,7 @@ package lexers_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -174,7 +175,7 @@ func FileTestAnalysis(t *testing.T, lexer chroma.Lexer, actualFilepath, expected
 			defer f.Close() // nolint: gosec
 			assert.NoError(t, err)
 
-			_, err = f.WriteString(strconv.FormatFloat(float64(actual), 'f', -1, 32))
+			_, err = fmt.Fprintf(f, "%s\n", strconv.FormatFloat(float64(actual), 'f', -1, 32))
 			assert.NoError(t, err)
 		} else {
 			expected, err := strconv.ParseFloat(strings.TrimSpace(string(expectedData)), 32)
