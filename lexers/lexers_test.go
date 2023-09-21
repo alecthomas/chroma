@@ -1,7 +1,7 @@
 package lexers_test
 
 import (
-	"encoding/json"
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -65,41 +65,41 @@ func BenchmarkGet(b *testing.B) {
 	}
 }
 
-func FileTest(t *testing.T, lexer chroma.Lexer, actualFilename, expectedFilename string) {
+func FileTest(t *testing.T, lexer chroma.Lexer, sourceFile, expectedFilename string) {
 	t.Helper()
-	t.Run(lexer.Config().Name+"/"+actualFilename, func(t *testing.T) {
+	t.Run(lexer.Config().Name+"/"+sourceFile, func(t *testing.T) {
 		// Read and tokenise source text.
-		actualText, err := os.ReadFile(actualFilename)
+		sourceBytes, err := os.ReadFile(sourceFile)
 		assert.NoError(t, err)
-		actual, err := chroma.Tokenise(lexer, nil, string(actualText))
+		actualTokens, err := chroma.Tokenise(lexer, nil, string(sourceBytes))
 		assert.NoError(t, err)
 
-		if os.Getenv("RECORD") != "" {
-			// Update the expected file with the generated output of this lexer
-			f, err := os.Create(expectedFilename)
-			defer f.Close() // nolint: gosec
-			assert.NoError(t, err)
-			for _, token := range actual {
-				if token.Type == chroma.Error {
-					t.Logf("Found Error token in lexer %s output: %s", lexer.Config().Name, repr.String(token))
-				}
+		// Check for error tokens early
+		for _, token := range actualTokens {
+			if token.Type == chroma.Error {
+				t.Logf("Found Error token in lexer %s output: %s", lexer.Config().Name, repr.String(token))
 			}
-			assert.NoError(t, formatters.JSON.Format(f, nil, chroma.Literator(actual...)))
-		} else {
-			// Read expected JSON into token slice.
-			var expected []chroma.Token
-			r, err := os.Open(expectedFilename)
-			assert.NoError(t, err)
-			err = json.NewDecoder(r).Decode(&expected)
-			assert.NoError(t, err)
+		}
 
-			assert.Equal(t, expected, actual)
+		// Use a bytes.Buffer to "render" the actual bytes
+		var actualBytes bytes.Buffer
+		err = formatters.JSON.Format(&actualBytes, nil, chroma.Literator(actualTokens...))
+		assert.NoError(t, err)
 
-			// Check for error tokens.
-			for _, token := range actual {
-				if token.Type == chroma.Error {
-					t.Logf("Found Error token in lexer %s output: %s", lexer.Config().Name, repr.String(token))
-				}
+		expectedBytes, err := os.ReadFile(expectedFilename)
+		assert.NoError(t, err)
+
+		// Check that the expected bytes are identical
+		if !bytes.Equal(actualBytes.Bytes(), expectedBytes) {
+			if os.Getenv("RECORD") == "true" {
+				f, err := os.Create(expectedFilename)
+				assert.NoError(t, err)
+				_, err = f.Write(actualBytes.Bytes())
+				assert.NoError(t, err)
+				assert.NoError(t, f.Close())
+			} else {
+				// fail via an assertion of string values for diff output
+				assert.Equal(t, string(expectedBytes), actualBytes.String())
 			}
 		}
 	})
@@ -168,20 +168,20 @@ func FileTestAnalysis(t *testing.T, lexer chroma.Lexer, actualFilepath, expected
 		assert.NoError(t, err)
 
 		actual := analyser.AnalyseText(string(data))
+		var actualData bytes.Buffer
+		fmt.Fprintf(&actualData, "%s\n", strconv.FormatFloat(float64(actual), 'f', -1, 32))
 
-		if os.Getenv("RECORD") == "true" {
-			// Update the expected file with the generated output of this lexer
-			f, err := os.Create(expectedFilepath)
-			defer f.Close() // nolint: gosec
-			assert.NoError(t, err)
-
-			_, err = fmt.Fprintf(f, "%s\n", strconv.FormatFloat(float64(actual), 'f', -1, 32))
-			assert.NoError(t, err)
-		} else {
-			expected, err := strconv.ParseFloat(strings.TrimSpace(string(expectedData)), 32)
-			assert.NoError(t, err)
-
-			assert.Equal(t, float32(expected), actual)
+		if !bytes.Equal(expectedData, actualData.Bytes()) {
+			if os.Getenv("RECORD") == "true" {
+				f, err := os.Create(expectedFilepath)
+				assert.NoError(t, err)
+				_, err = f.Write(actualData.Bytes())
+				assert.NoError(t, err)
+				assert.NoError(t, f.Close())
+			} else {
+				// fail via an assertion of string comparison for nicer diff output
+				assert.Equal(t, string(expectedData), actualData.String())
+			}
 		}
 	})
 }
