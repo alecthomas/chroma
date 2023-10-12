@@ -6,6 +6,7 @@
     <filename>Dockerfile</filename>
     <filename>Dockerfile.*</filename>
     <filename>*.docker</filename>
+    <filename>*.Dockerfile</filename>
     <mime_type>text/x-dockerfile-config</mime_type>
     <case_insensitive>true</case_insensitive>
   </config>
