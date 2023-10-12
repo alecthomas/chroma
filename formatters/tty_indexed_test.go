@@ -6,7 +6,6 @@ import (
 
 	assert "github.com/alecthomas/assert/v2"
 	"github.com/alecthomas/chroma/v2"
-	"github.com/alecthomas/chroma/v2/styles"
 )
 
 func TestClosestColour(t *testing.T) {
@@ -15,20 +14,23 @@ func TestClosestColour(t *testing.T) {
 }
 
 func TestNoneColour(t *testing.T) {
-	style := styles.Registry["gruvbox"]
 	formatter := TTY256
 	tokenType := chroma.None
 
+	style, err := chroma.NewStyle("test", chroma.StyleEntries{
+		chroma.Background: "#D0ab1e",
+	})
+	assert.NoError(t, err)
+
 	stringBuilder := strings.Builder{}
-	err := formatter.Format(&stringBuilder, style, chroma.Literator(chroma.Token{
+	err = formatter.Format(&stringBuilder, style, chroma.Literator(chroma.Token{
 		Type:  tokenType,
 		Value: "WORD",
 	}))
 	assert.NoError(t, err)
 
-	// "187" = #d7d7af approximates #ebdbb2, which is the Gruvbox foreground
-	// color of the "Background" type, see gruvbox.xml in this repo.
+	// "178" = #d7af00 approximates #d0ab1e
 	//
-	// 187 color ref: https://jonasjacek.github.io/colors/
-	assert.Equal(t, "\033[38;5;187mWORD\033[0m", stringBuilder.String())
+	// 178 color ref: https://jonasjacek.github.io/colors/
+	assert.Equal(t, "\033[38;5;178mWORD\033[0m", stringBuilder.String())
 }
