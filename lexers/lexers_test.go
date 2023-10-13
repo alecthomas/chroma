@@ -23,7 +23,7 @@ func TestCompileAllRegexes(t *testing.T) {
 	for _, lexer := range lexers.GlobalLexerRegistry.Lexers {
 		it, err := lexer.Tokenise(nil, "")
 		assert.NoError(t, err, "%s failed", lexer.Config().Name)
-		err = formatters.NoOp.Format(io.Discard, styles.SwapOff, it)
+		err = formatters.NoOp.Format(io.Discard, styles.Get("SwapOff"), it)
 		assert.NoError(t, err, "%s failed", lexer.Config().Name)
 	}
 }

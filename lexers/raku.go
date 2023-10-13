@@ -1332,7 +1332,7 @@ type rulePosition int
 
 const (
 	topRule    rulePosition = 0
-	bottomRule              = -1
+	bottomRule rulePosition = -1
 )
 
 type ruleMakingConfig struct {
