@@ -23,4 +23,13 @@ final class TargetUnsafeRefArrayAccess {
     @Alias
     @RecomputeFieldValue(kind = RecomputeFieldValue.Kind.ArrayIndexShift, declClass = Object[].class)
     public static int REF_ELEMENT_SHIFT;
+
+    public static void test() {
+        System.out.println("""
+                Hello, world!
+                This is a multi-line string!
+                It can also contain "quotes" and 'apostrophes' without breaking.
+                We only need to escape \""" inside it.
+                """);
+    }
 }
