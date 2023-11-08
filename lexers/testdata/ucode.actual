@@ -1,0 +1,61 @@
+#!/usr/bin/env ucode
+
+import { open } from "fs";
+import * as o from "fs";
+
+// This is a comment on a line of its own.
+function abcd(x, ...values) {
+	print(...values, "\n");
+	return null;
+}
+
+let x_5 = 5; // This is a comment on a line of code.
+
+let id = x => x;
+let empty = () => 0;
+let add = (a, b) => a + b;
+
+if (true) {
+	abcd(0);
+} else if (false) {
+	abcd("a");
+} else {
+	abcd([0, 1, 2]);
+}
+
+for (let i in [0, 1, 2]) {
+}
+
+for (let i = 0; i < 10; i++) {
+}
+
+let count = 5;
+while (count--) {
+	continue;
+}
+
+switch (x) {
+case 6:
+	x = 8.8;
+	break;
+default:
+	x = -9.7e2;
+}
+
+try {
+	die("");
+} catch {
+}
+
+match("foobarbaz", /b.(.)/)
+
+let obj = {a: abcd, b: -1, c: (x) => 2*x, d: [], e: {}, f: function(n) {return this;}};
+delete obj.a;
+
+let a = Infinity;
+let b = NaN;
+let c = "abc";
+let d = 'abc';
+let e = `aaa ${id(5)} bbb \u2600`;
+
+export id;
