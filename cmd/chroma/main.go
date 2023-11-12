@@ -366,11 +366,19 @@ func selexer(path, contents string) (lexer chroma.Lexer, err error) {
 		return lexers.Analyse(contents), nil
 	}
 
-	if lexer := lexers.Get(cli.Lexer); lexer != nil {
-		return lexer, nil
+	if _, err := os.Stat(cli.Lexer); err == nil {
+		cwd, err := os.Getwd()
+		if err != nil {
+			return nil, err
+		}
+		path, err := filepath.Rel(cwd, cli.Lexer)
+		if err != nil {
+			return nil, err
+		}
+		return chroma.NewXMLLexer(os.DirFS("."), path)
 	}
-	lexerPath, err := filepath.Abs(cli.Lexer)
-	return chroma.NewXMLLexer(os.DirFS("/"), lexerPath)
+
+	return lexers.Get(cli.Lexer), nil
 }
 
 func format(ctx *kong.Context, w io.Writer, style *chroma.Style, it chroma.Iterator) {
