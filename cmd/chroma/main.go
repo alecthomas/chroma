@@ -371,7 +371,11 @@ func selexer(path, contents string) (lexer chroma.Lexer, err error) {
 		if err != nil {
 			return nil, err
 		}
-		path, err := filepath.Rel(cwd, cli.Lexer)
+		absPath, err := filepath.Abs(cli.Lexer)
+		if err != nil {
+			return nil, err
+		}
+		path, err := filepath.Rel(cwd, absPath)
 		if err != nil {
 			return nil, err
 		}
