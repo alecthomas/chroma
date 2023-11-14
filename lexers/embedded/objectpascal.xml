@@ -51,6 +51,9 @@
         pattern="([0-9][0-9_]*\.([0-9][0-9_]*)?|\.[0-9][0-9_]*)([eE][+\-]?[0-9][0-9_]*)?[fFdD]?|[0-9][eE][+\-]?[0-9][0-9_]*[fFdD]?|[0-9]([eE][+\-]?[0-9][0-9_]*)?[fFdD]|0[xX]([0-9a-fA-F][0-9a-fA-F_]*\.?|([0-9a-fA-F][0-9a-fA-F_]*)?\.[0-9a-fA-F][0-9a-fA-F_]*)[pP][+\-]?[0-9][0-9_]*[fFdD]?">
         <token type="LiteralNumberFloat" />
       </rule>
+      <rule pattern="[\$][0-9a-fA-F]*[xX][0-9a-fA-F]*"> <!-- FPC asm -->
+        <token type="LiteralNumberHex" />
+      </rule>
       <rule pattern="[\$][0-9a-fA-F]*">
         <token type="LiteralNumberHex" />
       </rule>
@@ -96,14 +99,14 @@
       </rule>
       <!-- Special Symbols -->
       <rule
-        pattern="[#$\&#38;'\(\)\*\+,-\.\/:;&#60;=&#62;@\[\]\^{}]">
+        pattern="[\%\#\$\&#38;'\(\)\*\+\,\-\.\/\:\;&#60;\=&#62;\@\[\]\^\{\}]">
         <token type="Punctuation" />
       </rule>
       <!-- Special Symbol Pairs -->
-      <rule
-        pattern="[\(\*][\(\.][\*\)][\.\)][\.\.][\/\/][:=][&#60;=][&#62;=][&#60;&#62;]">
+      <!-- <rule
+        pattern="[\(\*][\(\.][\*\)][\.\)][\.\.][\/\/][\:\=][&#60;\=][&#62;\=][&#60;&#62;]">
         <token type="KeywordReserved" />
-      </rule>      
+      </rule> -->
       <!-- Reserved Words -->
       <rule
         pattern="\b(?!=\.)(?i:(and|end|interface|record|var|array|except|is|repeat|while|as|exports|label|resourcestring|with|asm|file|library|set|xor|begin|finalization|mod|shl|case|finally|nil|shr|class|for|not|string|const|function|object|then|constructor|goto|of|threadvar|destructor|if|or|to|dispinterface|implementation|packed|try|div|in|procedure|type|do|inherited|program|unit|downto|initialization|property|until|else|inline|raise|uses))\b(?![&#60;\/(])">
