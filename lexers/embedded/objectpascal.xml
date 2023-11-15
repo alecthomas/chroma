@@ -29,7 +29,7 @@
       </rule>
       <!-- Compiler Directive -->
       <rule pattern="\{[$].*?\}">
-        <token type="GenericInserted" />
+        <token type="CommentPreproc" />
       </rule>
       <!-- Comment Single -->
       <rule pattern="(//.*?)(\n)">
@@ -47,11 +47,13 @@
         <token type="CommentMultiline"/>
       </rule>
       <!-- Numbers -->
-      <rule
-        pattern="([0-9][0-9_]*\.([0-9][0-9_]*)?|\.[0-9][0-9_]*)([eE][+\-]?[0-9][0-9_]*)?[fFdD]?|[0-9][eE][+\-]?[0-9][0-9_]*[fFdD]?|[0-9]([eE][+\-]?[0-9][0-9_]*)?[fFdD]|0[xX]([0-9a-fA-F][0-9a-fA-F_]*\.?|([0-9a-fA-F][0-9a-fA-F_]*)?\.[0-9a-fA-F][0-9a-fA-F_]*)[pP][+\-]?[0-9][0-9_]*[fFdD]?">
+      <rule pattern="([0-9][0-9_]*\.([0-9][0-9_]*)?|\.[0-9][0-9_]*)([eE][+\-]?[0-9][0-9_]*)?[fFdD]?|[0-9][eE][+\-]?[0-9][0-9_]*[fFdD]?|[0-9]([eE][+\-]?[0-9][0-9_]*)?[fFdD]|0[xX]([0-9a-fA-F][0-9a-fA-F_]*\.?|([0-9a-fA-F][0-9a-fA-F_]*)?\.[0-9a-fA-F][0-9a-fA-F_]*)[pP][+\-]?[0-9][0-9_]*[fFdD]?">
         <token type="LiteralNumberFloat" />
       </rule>
-      <rule pattern="[\$][0-9a-fA-F]*[xX][0-9a-fA-F]*"> <!-- FPC asm -->
+      <rule pattern="[\$][0-9a-fA-F]*[xX][0-9a-fA-F]*">
+        <token type="LiteralNumberHex" />
+      </rule>
+      <rule pattern="[0-9]*[xX][0-9a-fA-F]*">
         <token type="LiteralNumberHex" />
       </rule>
       <rule pattern="[\$][0-9a-fA-F]*">
@@ -68,145 +70,69 @@
       <rule pattern="(?i:(\')).*?(?i:(\'))">
         <token type="LiteralString" />
       </rule>
-      <!-- Assembler -->
-      <!-- <rule pattern="\b^(?i:(asm))(.|\n)*?(?i:(end\;))$">
-        <token type="GenericInserted" />
-      </rule> -->
+      <!-- string (Special case for Delphi Assembler)-->
+      <rule pattern="(?i:(&#34;)).*?(?i:(&#34;))">
+        <token type="LiteralString" />
+      </rule>
       <!-- Simple Types -->
-      <rule
-        pattern="\b(?!=\.)(?i:(NativeInt|NativeUInt|LongInt|LongWord|Integer|Int64|Cardinal|UInt64|ShortInt|SmallInt|FixedInt|Byte|Word|FixedUInt|Int8|Int16|Int32|UInt8|UInt16|UInt32|Real48|Single|Double|Real|Extended|Comp|Currency|Char|AnsiChar|WideChar|UCS2Char|UCS4Char|string|ShortString|AnsiString|UnicodeString|WideString|RawByteString|UTF8String|File|TextFile|Text|Boolean|ByteBool|WordBool|LongBool|Pointer|Variant|OleVariant))\b(?![&#60;\/(])">
+      <rule pattern="\b(?!=\.)(?i:(NativeInt|NativeUInt|LongInt|LongWord|Integer|Int64|Cardinal|UInt64|ShortInt|SmallInt|FixedInt|Byte|Word|FixedUInt|Int8|Int16|Int32|UInt8|UInt16|UInt32|Real48|Single|Double|Real|Extended|Comp|Currency|Char|AnsiChar|WideChar|UCS2Char|UCS4Char|string|ShortString|AnsiString|UnicodeString|WideString|RawByteString|UTF8String|File|TextFile|Text|Boolean|ByteBool|WordBool|LongBool|Pointer|Variant|OleVariant))\b(?![&#60;\/(])">
         <token type="KeywordType" />
       </rule>
       <!-- T Types -->
-      <rule
-        pattern="\b(?!=\.)(?i:(TSingleRec|TDoubleRec|TExtended80Rec|TByteArray|TTextBuf|TVarRec|TWordArray))\b(?![&#60;\/(])">
+      <rule pattern="\b(?!=\.)(?i:(TSingleRec|TDoubleRec|TExtended80Rec|TByteArray|TTextBuf|TVarRec|TWordArray))\b(?![&#60;\/(])">
         <token type="KeywordType" />
       </rule>
       <!-- Pointer Types -->
-      <rule
-        pattern="\b(?!=\.)(?i:(PChar|PAnsiChar|PWideChar|PRawByteString|PUnicodeString|PString|PAnsiString|PShortString|PTextBuf|PWideString|PByte|PShortInt|PWord|PSmallInt|PCardinal|PLongWord|PFixedUInt|PLongint|PFixedInt|PUInt64|PInt64|PNativeUInt|PNativeInt|PByteArray|PCurrency|PDouble|PExtended|PSingle|PInteger|POleVariant|PVarRec|PVariant|PWordArray|PBoolean|PWordBool|PLongBool|PPointer))\b(?![&#60;\/(])">
+      <rule pattern="\b(?!=\.)(?i:(PChar|PAnsiChar|PWideChar|PRawByteString|PUnicodeString|PString|PAnsiString|PShortString|PTextBuf|PWideString|PByte|PShortInt|PWord|PSmallInt|PCardinal|PLongWord|PFixedUInt|PLongint|PFixedInt|PUInt64|PInt64|PNativeUInt|PNativeInt|PByteArray|PCurrency|PDouble|PExtended|PSingle|PInteger|POleVariant|PVarRec|PVariant|PWordArray|PBoolean|PWordBool|PLongBool|PPointer))\b(?![&#60;\/(])">
         <token type="KeywordType" />
       </rule>
       <!-- Result -->
-      <rule
-        pattern="\b(?!=\.)(?i:(Result))\b(?![&#60;\/(])">
+      <rule pattern="\b(?!=\.)(?i:(Result))\b(?![&#60;\/(])">
         <token type="GenericEmph" />
       </rule>      
       <!-- Result Constants -->
-      <rule
-        pattern="\b(?!=\.)(?i:(True|False))\b(?![&#60;\/(])">
+      <rule pattern="\b(?!=\.)(?i:(True|False))\b(?![&#60;\/(])">
         <token type="NameConstant" />
       </rule>
-      <!-- Special Symbols -->
-      <rule
-        pattern="[\%\#\$\&#38;'\(\)\*\+\,\-\.\/\:\;&#60;\=&#62;\@\[\]\^\{\}]">
+      <!-- Operator (Assign) -->
+      <rule pattern="[(\:\=)]">
+        <token type="Operator" />
+      </rule>      
+      <!-- Operators (Arithmetic, Unary Arithmetic, String, Pointer, Set, Relational, Address) -->
+      <rule pattern="[\+\-\*\/\^&#60;&#62;\=\@]">
+        <token type="Operator" />
+      </rule>
+      <!-- Operators (Arithmetic, Boolean, Logical (Bitwise), Set) -->
+      <rule pattern="\b(?i:([div][mod][not][and][or][xor][shl][shr][in]))\b">
+        <token type="OperatorWord" />
+      </rule>
+      <!-- Special Symbols (Escape, Literal Chr, Hex Value, Binary Numeral Expression Indicator) -->
+      <rule pattern="[&#38;\#\$\%]">
+        <token type="Operator" />
+      </rule>
+      <!-- Special Symbols (Punctuation) -->
+      <rule pattern="[\(\)\,\.\:\;\[\]]">
         <token type="Punctuation" />
       </rule>
-      <!-- Special Symbol Pairs -->
-      <!-- <rule
-        pattern="[\(\*][\(\.][\*\)][\.\)][\.\.][\/\/][\:\=][&#60;\=][&#62;\=][&#60;&#62;]">
-        <token type="KeywordReserved" />
-      </rule> -->
       <!-- Reserved Words -->
-      <rule
-        pattern="\b(?!=\.)(?i:(and|end|interface|record|var|array|except|is|repeat|while|as|exports|label|resourcestring|with|asm|file|library|set|xor|begin|finalization|mod|shl|case|finally|nil|shr|class|for|not|string|const|function|object|then|constructor|goto|of|threadvar|destructor|if|or|to|dispinterface|implementation|packed|try|div|in|procedure|type|do|inherited|program|unit|downto|initialization|property|until|else|inline|raise|uses))\b(?![&#60;\/(])">
+      <rule pattern="\b(?!=\.)(?i:(and|end|interface|record|var|array|except|is|repeat|while|as|exports|label|resourcestring|with|asm|file|library|set|xor|begin|finalization|mod|shl|case|finally|nil|shr|class|for|not|string|const|function|object|then|constructor|goto|of|threadvar|destructor|if|or|to|dispinterface|implementation|packed|try|div|in|procedure|type|do|inherited|program|unit|downto|initialization|property|until|else|inline|raise|uses))\b(?![&#60;\/(])">
         <token type="KeywordReserved" />
       </rule>
       <!-- Directives -->
-      <rule
-        pattern="\b(?!=\.)(?i:(absolute|export|name|public|stdcall|abstract|external|published|strict|assembler|nodefault|read|stored|automated|final|operator|readonly|unsafe|cdecl|forward|out|reference|varargs|contains|helper|overload|register|virtual|default|implements|override|reintroduce|winapi|delayed|index|package|requires|write|deprecated|inline|pascal|writeonly|dispid|library|platform|safecall|dynamic|local|private|sealed|experimental|message|protected|static))\b(?![&#60;\/(])">
+      <rule pattern="\b(?!=\.)(?i:(absolute|export|name|public|stdcall|abstract|external|published|strict|assembler|nodefault|read|stored|automated|final|operator|readonly|unsafe|cdecl|forward|out|reference|varargs|contains|helper|overload|register|virtual|default|implements|override|reintroduce|winapi|delayed|index|package|requires|write|deprecated|inline|pascal|writeonly|dispid|library|platform|safecall|dynamic|local|private|sealed|experimental|message|protected|static))\b(?![&#60;\/(])">
         <token type="Keyword" />
       </rule>
       <!-- Directives obsolete -->
-      <rule
-        pattern="\b(?!=\.)(?i:(near|far|resident))\b(?![&#60;\/(])">
+      <rule pattern="\b(?!=\.)(?i:(near|far|resident))\b(?![&#60;\/(])">
         <token type="Keyword" />
       </rule>
-      <!-- Intrinsic Routines -->
-      <!-- <rule
-        pattern="\b(?!=\.)(?i:(Abs|Addr|Append|Assert|Assign|Assigned|AssignFile|AtomicCmpExchange|AtomicDecrement|AtomicExchange|AtomicIncrement|BlockRead|BlockWrite|Break|BuiltInArcTan|BuiltInArcTan2|BuiltInCos|BuiltInLn|BuiltInLnXPlus1|BuiltInLog10|BuiltInLog2|BuiltInSin|BuiltInSqrt|BuiltInTan|Chr|Close|CloseFile|Concat|Continue|Copy|Dec|Default|Delete|Dispose|Eof|Eoln|Erase|Exclude|Exit|Fail|FilePos|FileSize|FillChar|Finalize|Flush|FreeMem|GetDir|GetMem|GetTypeKind|Halt|Hi|High|Inc|Include|Initialize|Insert|IsManagedType|Length|Lo|Low|MemoryBarrier|MulDivInt64|New|Odd|Ord|Pi|Pred|Ptr|Read|Readln|ReallocMem|Rename|Reset|Rewrite|Round|RunError|Seek|SeekEof|SeekEoln|SetLength|SetString|SetTextBuf|SizeOf|Slice|Sqr|Str|Succ|Swap|Trunc|Truncate|TypeHandle|TypeInfo|TypeOf|Val|VarArrayRedim|VarCast|VarClear|VarCopy|Write|Writeln))\b(?![&#60;\/(])">
-        <token type="OperatorWord" />
-      </rule> -->
       <!-- Constant Expressions -->
-      <rule
-        pattern="\b(?!=\.)(?i:(Abs|High|Low|Pred|Succ|Chr|Length|Odd|Round|Swap|Hi|Lo|Ord|SizeOf|Trunc))\b(?![&#60;\/(])">
+      <rule pattern="\b(?!=\.)(?i:(Abs|High|Low|Pred|Succ|Chr|Length|Odd|Round|Swap|Hi|Lo|Ord|SizeOf|Trunc))\b(?![&#60;\/(])">
         <token type="KeywordConstant" />
-      </rule>
-      <!-- Operators (Arithmetic) -->
-      <rule
-        pattern="\b(?i:([\+][\-][\*][\/][div][mod]))\b">
-        <token type="Operator" />
-      </rule>
-      <!-- Operators (Unary Arithmetic) -->
-      <rule
-        pattern="\b(?i:([\+][\-]))\b">
-        <token type="Operator" />
-      </rule>
-      <!-- Operators (Boolean) -->
-      <rule
-        pattern="\b(?i:([not][and][or][xor]))\b">
-        <token type="OperatorWord" />
-      </rule>
-      <!-- Operators (Logical (Bitwise)) -->
-      <rule
-        pattern="\b(?i:([not][and][or][xor][shl][shr]))\b">
-        <token type="OperatorWord" />
-      </rule>
-      <!-- Operators (string) -->
-      <rule
-        pattern="\b(?i:([\+]))\b">
-        <token type="Operator" />
-      </rule>
-      <!-- Operators (Pointer) -->
-      <rule
-        pattern="\b(?i:([\+][\-][\^][\=][&#60;&#62;]))\b">
-        <token type="Operator" />
-      </rule>
-      <!-- Operators (Set) -->
-      <rule
-        pattern="\b(?i:([\+][\-][\*][&#60;\=][&#62;\=][\=][&#60;&#62;][in]))\b">
-        <token type="Operator" />
-      </rule>
-      <!-- Operators (Relational) -->
-      <rule
-        pattern="\b(?i:([\=][&#60;&#62;][&#60;][&#62;][&#60;\=][&#62;\=]))\b">
-        <token type="Operator" />
-      </rule>
-      <!-- Operators (Address) -->
-      <rule
-        pattern="\b(?i:([\@]))\b">
-        <token type="Operator" />
       </rule>
       <!-- everything else -->
       <rule pattern="([^\W\d]|\$)[\w$]*">
         <token type="Text" />
-      </rule>
-    </state>
-    <state name="assembler">
-      <!-- Assembler (Operands) -->
-      <rule
-        pattern="\b(?!=\.)(AH|AL|BH|BL|CH|CL|DH|DL|AX|BX|CX|DX|DI|SI|SP|BP|CS|DS|SS|ES|IP|EAX|EBX|ECX|EDX|EDI|ESI|ESP|EBP|FS|GS|EIP|RAX|RBX|RCX|RDX|RDI|RSI|RSP|RBP|RIP|R8|R9|R10|R111|R12|R13|R14|R15|ST0|ST1|ST2|ST3|ST4|ST5|ST6|ST7|MM0|MM1|MM2|MM3|MM4|MM5|MM6|MM7|XMM0|XMM1|XMM2|XMM3|XMM4|XMM5|XMM6|XMM7|XMM8|XMM9|XMM10|XMM11|XMM12|XMM13|XMM14|XMM15)\b(?![&#60;\/(])">
-        <token type="NameOther" />
-      </rule>
-      <!-- Assembler (Directives) -->
-      <rule
-        pattern="\b(?!=\.)(DB|DW|DD|DQ)\b(?![&#60;\/(])">
-        <token type="NameTag" />
-      </rule>
-      <!-- Assembler (Data) -->
-      <rule
-        pattern="\b(?!=\.)(BYTE|WORD|DWORD|QWORD|TBYTE)\b(?![&#60;\/(])">
-        <token type="NameTag" />
-      </rule>
-      <!-- Assembler (Pseudo-Ops) -->
-      <rule
-        pattern="\b(?!=\.)(\.PARAMS|\.PUSHNV|\.SAVENV|\.NOFRAME)\b(?![&#60;\/(])">
-        <token type="NameTag" />
-      </rule>
-      <!-- Assembler (Operators) -->
-      <rule
-        pattern="\b(?!=\.)(NOT|AND|OR|XOR|SHL|SHR|MOD|LOW|HIGH|OFFSET|PTR|TYPE|VMTOFFSET|DMTINDEX|SMALL|LARGE)\b(?![&#60;\/(])">
-        <token type="NameTag" />
       </rule>
     </state>
   </rules>
