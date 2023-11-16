@@ -1,0 +1,363 @@
+﻿{*******************************************************}
+{            a totally senseless test unit              }
+{*******************************************************}
+
+unit UnitLexerTest;
+
+interface
+
+uses
+  System.Classes,
+  System.SysUtils;
+
+{$SCOPEDENUMS ON}
+
+resourcestring
+  sEIsRunning = 'Cannot perform this operation when test is running.';
+  sENotRunning = 'Test not running.';
+
+const
+  CUNICODE = '��';
+  CBUFFERSIZE = 1024;
+  CLITERALNUMBERFLOAT = 0.123;
+  CLITERALNUMBERHEX = $1F2A3C platform deprecated;
+  CInteger = 123;
+  CLo = $0A7640000;
+  CHi = $00DE0B6B3;
+  CEXTENDED: Extended = 1E18;
+
+const
+  EmptyString: string = '';
+  NullString: PString = @EmptyString;
+
+  (*
+    This is
+    a multiline
+    comment block
+  *)
+
+type
+  TState = (undefined = -1, hidden, showing);
+  TDataBuffer = array [0 .. CBUFFERSIZE - 1] of AnsiChar;
+
+  TFlag = (Default, Unicode);
+  TFlags = set of TFlag;
+
+  TIntSet = set of 0 .. SizeOf(Integer) * 8 - 1;
+
+  { This is
+    another multiline
+    comment block }
+
+  WRec = packed record
+    case Integer of
+      0: (Lo, Hi: Byte);
+      1: (Bytes: array [0 .. 1] of Byte);
+  end;
+
+  { Comment }
+  // Comment Single
+
+const
+  cMultiLineString1 = '''
+    some text
+    and now '''
+    some more text
+  ''';
+  
+const
+  cMultiLineString2 = '''''
+    some text
+    and now '''
+    some more text
+  ''''';
+var
+  LNativeInt: NativeInt;
+  LNativeUInt: NativeUInt;
+  LLongInt: LongInt;
+  LLongWord: LongWord;
+  LInteger: Integer;
+  LInt64: Int64;
+  LCardinal: Cardinal;
+  LUInt64: UInt64;
+  LShortInt: ShortInt;
+  LSmallInt: SmallInt;
+  LFixedInt: FixedInt;
+  LByte: Byte;
+  LWord: Word;
+  LFixedUInt: FixedUInt;
+  LInt8: Int8;
+  LInt16: Int16;
+  LInt32: Int32;
+  LUInt8: UInt8;
+  LUInt16: UInt16;
+  LUInt32: UInt32;
+  LReal48: Real48;
+  LSingle: Single;
+  LDouble: Double;
+  LReal: Real;
+  LExtended: Extended;
+  LComp: Comp;
+  LCurrency: Currency;
+  LChar: Char;
+  LAnsiChar: AnsiChar;
+  LWideChar: WideChar;
+  LUCS2Char: UCS2Char;
+  LUCS4Char: UCS4Char;
+  Lstring: string;
+  LShortString: ShortString;
+  LAnsiString: AnsiString;
+  LUnicodeString: UnicodeString;
+  LWideString: WideString;
+  LRawByteString: RawByteString;
+  LUTF8String: UTF8String;
+  LFile: File;
+  LTextFile: TextFile;
+  LText: Text;
+  LBoolean: Boolean;
+  LByteBool: ByteBool;
+  LWordBool: WordBool;
+  LLongBool: LongBool;
+  LPointer: Pointer;
+  LVariant: Variant;
+  LOleVariant: OleVariant;
+
+var
+  LTSingleRec: TSingleRec; // deprecated
+  LTDoubleRec: TDoubleRec; // deprecated
+  LTExtended80Rec: TExtended80Rec;
+  LTByteArray: TByteArray;
+  LTTextBuf: TTextBuf;
+  LTVarRec: TVarRec;
+  LTWordArray: TWordArray;
+
+var
+  LPChar: PChar;
+  LPAnsiChar: PAnsiChar;
+  LPWideChar: PWideChar;
+  LPRawByteString: PRawByteString;
+  LPUnicodeString: PUnicodeString;
+  LPString: PString;
+  LPAnsiString: PAnsiString;
+  LPShortString: PShortString;
+  LPTextBuf: PTextBuf;
+  LPWideString: PWideString;
+  LPByte: PByte;
+  LPShortInt: PShortInt;
+  LPWord: PWord;
+  LPSmallInt: PSmallInt;
+  LPCardinal: PCardinal;
+  LPLongWord: PLongWord;
+  LPFixedUInt: PFixedUInt;
+  LPLongint: PLongint;
+  LPFixedInt: PFixedInt;
+  LPUInt64: PUInt64;
+  LPInt64: PInt64;
+  LPNativeUInt: PNativeUInt;
+  LPNativeInt: PNativeInt;
+  LPByteArray: PByteArray;
+  LPCurrency: PCurrency;
+  LPDouble: PDouble;
+  LPExtended: PExtended;
+  LPSingle: PSingle;
+  LPInteger: PInteger;
+  LPOleVariant: POleVariant;
+  LPVarRec: PVarRec;
+  LPVariant: PVariant;
+  LPWordArray: PWordArray;
+  LPBoolean: PBoolean;
+  LPWordBool: PWordBool;
+  LPLongBool: PLongBool;
+  LPPointer: PPointer;
+
+type
+  TLexerPath = class
+  strict private
+  const
+    CLexerFolder = '\LEXER';
+{$IFDEF MSWINDOWS}
+    class function GetSystemDrivePath: string; static;
+    class function GetProgramFilesPath: string; static;
+{$ENDIF}
+    class function GetTempPath: string; static;
+  public
+{$IFDEF MSWINDOWS}
+    class property SystemDrivePath: string read GetSystemDrivePath;
+    class property ProgramFilesPath: string read GetProgramFilesPath;
+{$ENDIF}
+    class property TempPath: string read GetTempPath;
+  end;
+
+type
+  ILexerTest = interface
+    ['{F2A3AC58-4CBD-4AFB-8ACC-5AA0DCB6E23E}']
+    function GetLexerHandle: THandle;
+  end;
+
+  [ComponentPlatformsAttribute(pfidWindows)]
+  TLexerTest = class(TComponent, ILexerTest)
+  private
+    FLexerHandle: THandle;
+    FTag: NativeInt;
+    procedure SetTag(const Value: NativeInt);
+  protected
+    function GetLexerHandle: THandle;
+    property LexerHandle: THandle read GetLexerHandle;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Run;
+  published
+    property Tag: NativeInt read FTag write SetTag default 0;
+  end;
+
+implementation
+
+uses
+  System.IOUtils;
+
+function AllocateLexer: THandle;
+begin
+  Result := 1; // ???
+end;
+
+function GetResult(const AInputString: string): Boolean; // this is hurting
+var
+  LResult: Boolean;
+  LInt: Integer;
+  LIntPtr: PInteger;
+begin
+  Result := False;
+  var
+    Lstring: string := 'string';
+  var
+    LString2: string := '''a '' string''';
+  if string(Lstring + LString2).Equals(AInputString) then Exit(True)
+  else
+  begin
+    var
+      LRes: Integer := 1;
+    LResult := (AInputString <> ('some input' + LRes.ToString));
+  end;
+  if LResult then
+  begin
+    LInt := 66;
+    LIntPtr := @LInt;
+    Result := ((Round(1 + 2 - 0.45 * 7 / 10) > Ord(#10).ToExtended)) = True;
+    if Result then Result := (LIntPtr^ + PInteger(LInt)^) <> 13;
+  end;
+  Beep;
+  try
+    if @Result <> nil then
+    begin
+      Result := 1 = 2;
+    end;
+  finally
+    Beep;
+  end;
+  var
+    s: string := '<rule pattern="\b(?i:([div][mod][not][and][or][xor][shl][shr][in]))\b">';
+  s := s + ' ... this will just work, I''m sure';
+  for var res in [1, 2] do
+  begin
+    s := res.ToString + ' ' + s;
+  end;
+  var
+    start: Integer := 0;
+  var
+    &end: Integer := 9;
+  var
+    LChar: Char;
+  Beep;
+  asm
+    test  %eax,%eax // fpc
+    mov   %fs:(0x2c),%edx // fpc
+    mov   $0x1000000,%eax // fpc assembler
+    DB    'a string...',0DH,0AH
+    DW    0FFFFH
+    DD    0FFFFFFFFH
+    CMP   AL,"'"
+    JE    @@fd3
+  @@fd1:  CALL    @@fd3
+    SUB   EAX,7FFFH
+  @@fd3:  MOV     AL,[EBX]
+    MOV   EAX, [LARGE $42]
+    MOV&LChar, 1
+  end;
+end;
+
+{ TLexerPath }
+
+{$IFDEF MSWINDOWS}
+class function TLexerPath.GetProgramFilesPath: string;
+{$IFDEF WIN32}
+const
+  CBACKUPPATH = '\Program Files (x86)';
+{$ENDIF}
+{$IFDEF WIN64}
+const
+  CBACKUPPATH = '\Program Files';
+{$ENDIF}
+begin
+{$IFDEF WIN32}
+  Result := GetEnvironmentVariable('ProgramFiles(x86)') + CLexerFolder;
+  if Result.IsEmpty then Result := GetSystemDrivePath + CBACKUPPATH + CLexerFolder;
+{$ENDIF}
+{$IFDEF WIN64}
+  Result := GetEnvironmentVariable('ProgramW6432') + CLexerFolder;
+  if Result.IsEmpty then Result := GetSystemDrivePath + CBACKUPPATH + CLexerFolder;
+{$ENDIF}
+end;
+
+class function TLexerPath.GetSystemDrivePath: string;
+const
+  CBACKUPPATH = 'C:';
+begin
+  Result := GetEnvironmentVariable('SystemDrive');
+  if Result.IsEmpty then Result := CBACKUPPATH;
+end;
+{$ENDIF}
+
+class function TLexerPath.GetTempPath: string;
+begin
+  Result := System.IOUtils.TPath.GetTempPath + CLexerFolder;
+end;
+
+{ TLexerTest }
+
+constructor TLexerTest.Create(AOwner: TComponent);
+begin
+  inherited Create(nil);
+  FTag := 10;
+end;
+
+destructor TLexerTest.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TLexerTest.GetLexerHandle: THandle;
+begin
+  if FLexerHandle = 0 then FLexerHandle := AllocateLexer;
+  Result := FLexerHandle;
+end;
+
+procedure TLexerTest.Run;
+begin
+  // DoIt
+end;
+
+procedure TLexerTest.SetTag(const Value: NativeInt);
+begin
+  if FTag <> Value then FTag := Value;
+end;
+
+initialization
+
+// Unit initialization code...
+
+finalization
+
+// Unit finalization code...
+
+end.
