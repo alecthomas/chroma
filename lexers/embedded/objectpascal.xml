@@ -46,6 +46,10 @@
       <rule pattern="[{](.|\n)*?[}]">
         <token type="CommentMultiline"/>
       </rule>
+      <!-- Range Indicator -->
+      <rule pattern="(?i:(\.\.))">
+        <token type="Operator" />
+      </rule>
       <!-- Numbers -->
       <rule pattern="[0-9][0-9a-fA-F]*">
         <token type="LiteralNumberHex" />
