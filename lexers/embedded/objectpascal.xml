@@ -28,7 +28,7 @@
         <token type="Text"/>
       </rule>
       <!-- Compiler Directive -->
-      <rule pattern="\{[$].*?\}|\{[-](NOD|EXT|OBJ).*?\}">
+      <rule pattern="\{[$].*?\}|\{[-](NOD|EXT|OBJ).*?\}|\([*][$].*?[*]\)">
         <token type="CommentPreproc" />
       </rule>
       <!-- Comment Single -->
