@@ -64,13 +64,38 @@ const
     and now '''
     some more text
   ''';
-  
+
 const
   cMultiLineString2 = '''''
     some text
     and now '''
     some more text
   ''''';
+
+var
+  fp1: real := 6.123e-22;
+  fp2: real := 612.3e-24;
+  fp3: real := 61.23e-23;
+  fp4: real := 1.1e-8;
+  Epsilon: Single = 1E-40;
+
+{$NODEFINE    string       'UnicodeString' } {$OBJTYPENAME string   'NUnicodeString'} { defined in ustring.h }
+{-NODEFINE    string       'String'        } {$OBJTYPENAME string   'NUnicodeString'} { defined in ustring.h }
+{-EXTERNALSYM ShortInt     'signed char'   } {-OBJTYPENAME ShortInt 'Bzc'}
+
+const
+   CLineBreak = {$IFDEF POSIX} _AnsiStr(#10) {$ENDIF}
+       {$IFDEF MSWINDOWS} _AnsiStr(#13#10) {$ENDIF};
+
+  IntegerArray  = array[0..$effffff] of Integer;
+  PIntegerArray = ^IntegerArray;
+
+  PointerArray = array [0..512*1024*1024 - 2] of Pointer;
+  PPointerArray = ^PointerArray;
+
+  TPCharArray = packed array[0..(High(Integer) div SizeOf(PChar))-1] of PChar;
+  PPCharArray = ^TPCharArray;
+
 var
   LNativeInt: NativeInt;
   LNativeUInt: NativeUInt;
