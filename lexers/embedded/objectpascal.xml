@@ -28,7 +28,7 @@
         <token type="Text"/>
       </rule>
       <!-- Compiler Directive -->
-      <rule pattern="\{[$].*?\}|\{[-](NOD|EXT|OBJ).*?\}">
+      <rule pattern="\{[$].*?\}|\{[-](NOD|EXT|OBJ).*?\}|\([*][$].*?[*]\)">
         <token type="CommentPreproc" />
       </rule>
       <!-- Comment Single -->
@@ -50,8 +50,12 @@
       <rule pattern="(?i:(\.\.))">
         <token type="Operator" />
       </rule>
+      <!-- Control Character -->
+      <rule pattern="[\#][0-9a-fA-F]*|[0-9]+[xX][0-9a-fA-F]*">
+        <token type="LiteralStringEscape" />
+      </rule>
       <!-- Numbers -->
-      <rule pattern="[\$][0-9a-fA-F]*[xX][0-9a-fA-F]*|[\$][0-9a-fA-F]*|[\#][0-9a-fA-F]*|[0-9]+[xX][0-9a-fA-F]*|([0-9]+[0-9a-fA-F]+(?=[hH]))">
+      <rule pattern="[\$][0-9a-fA-F]*[xX][0-9a-fA-F]*|[\$][0-9a-fA-F]*|([0-9]+[0-9a-fA-F]+(?=[hH]))">
         <token type="LiteralNumberHex" />
       </rule>
       <rule pattern="[0-9]+(\&#39;[0-9]+)*\.[0-9]+(\&#39;[0-9]+)*[eE][+-]?[0-9]+(\&#39;[0-9]+)*|[0-9]+(\&#39;[0-9]+)*\.[0-9]+(\&#39;[0-9]+)*|\d+[eE][+-]?[0-9]+">

@@ -83,6 +83,8 @@ var
 {-NODEFINE    string       'String'        } {$OBJTYPENAME string   'NUnicodeString'} { defined in ustring.h }
 {-EXTERNALSYM ShortInt     'signed char'   } {-OBJTYPENAME ShortInt 'Bzc'}
 
+(*$hints off*) // another valid compiler directive
+
 const
    CLineBreak = {$IFDEF POSIX} _AnsiStr(#10) {$ENDIF}
        {$IFDEF MSWINDOWS} _AnsiStr(#13#10) {$ENDIF};
