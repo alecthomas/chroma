@@ -38,7 +38,7 @@ translators for Pygments lexers and styles.
 
 | Prefix | Language                                                                                                                                                                                                                             |
 | :----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-|   A    | ABAP, ABNF, ActionScript, ActionScript 3, Ada, Agda, AL, Angular2, ANTLR, ApacheConf, APL, AppleScript, ArangoDB AQL, Arduino, ArmAsm, AutoHotkey, AutoIt, Awk                                                                             |
+|   A    | ABAP, ABNF, ActionScript, ActionScript 3, Ada, Agda, AL, Alloy, Angular2, ANTLR, ApacheConf, APL, AppleScript, ArangoDB AQL, Arduino, ArmAsm, AutoHotkey, AutoIt, Awk                                                                             |
 |   B    | Ballerina, Bash, Bash Session, Batchfile, BibTeX, Bicep, BlitzBasic, BNF, BQN, Brainfuck                                                                                                                                             |
 |   C    | C, C#, C++, Caddyfile, Caddyfile Directives, Cap'n Proto, Cassandra CQL, Ceylon, CFEngine3, cfstatement, ChaiScript, Chapel, Cheetah, Clojure, CMake, COBOL, CoffeeScript, Common Lisp, Coq, Crystal, CSS, Cython                    |
 |   D    | D, Dart, Dax, Diff, Django/Jinja, dns, Docker, DTD, Dylan                                                                                                                                                                                 |
