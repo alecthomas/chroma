@@ -1,0 +1,16 @@
+sig Node {
+  edges: set Node
+}
+
+fact "Connected graph" {
+  some n: Node | n.*edges = Node
+}
+
+fact "No self edges" {
+  no iden & edges
+}
+
+one sig Ball {
+  -- note the var
+  var loc: Node
+}
