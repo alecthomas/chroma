@@ -5,6 +5,7 @@ import (
 	"html"
 	"io"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/alecthomas/chroma/v2"
@@ -243,7 +244,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 	wrapInTable := f.lineNumbers && f.lineNumbersInTable
 
 	lines := chroma.SplitTokensIntoLines(tokens)
-	lineDigits := len(fmt.Sprintf("%d", f.baseLineNumber+len(lines)-1))
+	lineDigits := len(strconv.Itoa(f.baseLineNumber + len(lines) - 1))
 	highlightIndex := 0
 
 	if wrapInTable {
@@ -251,7 +252,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprintf(w, "<div%s>\n", f.styleAttr(css, chroma.PreWrapper))
 		fmt.Fprintf(w, "<table%s><tr>", f.styleAttr(css, chroma.LineTable))
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD))
-		fmt.Fprintf(w, f.preWrapper.Start(false, f.styleAttr(css, chroma.PreWrapper)))
+		fmt.Fprintf(w, "%s", f.preWrapper.Start(false, f.styleAttr(css, chroma.PreWrapper)))
 		for index := range lines {
 			line := f.baseLineNumber + index
 			highlight, next := f.shouldHighlight(highlightIndex, line)
@@ -273,7 +274,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD, "width:100%"))
 	}
 
-	fmt.Fprintf(w, f.preWrapper.Start(true, f.styleAttr(css, chroma.PreWrapper)))
+	fmt.Fprintf(w, "%s", f.preWrapper.Start(true, f.styleAttr(css, chroma.PreWrapper)))
 
 	highlightIndex = 0
 	for index, tokens := range lines {
@@ -323,7 +324,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 			fmt.Fprint(w, `</span>`) // End of Line
 		}
 	}
-	fmt.Fprintf(w, f.preWrapper.End(true))
+	fmt.Fprintf(w, "%s", f.preWrapper.End(true))
 
 	if wrapInTable {
 		fmt.Fprint(w, "</td></tr></table>\n")

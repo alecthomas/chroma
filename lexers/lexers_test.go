@@ -30,10 +30,10 @@ func TestCompileAllRegexes(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	t.Run("ByName", func(t *testing.T) {
-		assert.Equal(t, lexers.Get("xml"), lexers.GlobalLexerRegistry.Get("XML"))
+		assert.True(t, lexers.Get("xml") == lexers.GlobalLexerRegistry.Get("XML"))
 	})
 	t.Run("ByAlias", func(t *testing.T) {
-		assert.Equal(t, lexers.Get("as"), lexers.GlobalLexerRegistry.Get("Actionscript"))
+		assert.True(t, lexers.Get("as") == lexers.GlobalLexerRegistry.Get("Actionscript"))
 	})
 	t.Run("ViaFilename", func(t *testing.T) {
 		expected := lexers.Get("XML")
