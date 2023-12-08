@@ -5,10 +5,10 @@ go 1.19
 replace github.com/alecthomas/chroma/v2 => ../../
 
 require (
-	github.com/alecthomas/chroma/v2 v2.0.0-00010101000000-000000000000
-	github.com/alecthomas/kong v0.8.0
+	github.com/alecthomas/chroma/v2 v2.12.0
+	github.com/alecthomas/kong v0.8.1
 	github.com/mattn/go-colorable v0.1.13
-	github.com/mattn/go-isatty v0.0.19
+	github.com/mattn/go-isatty v0.0.20
 )
 
 require (
