@@ -14,21 +14,22 @@ translators for Pygments lexers and styles.
 
 <!-- TOC -->
 
-1. [Table of Contents](#table-of-contents)
-2. [Supported languages](#supported-languages)
-3. [Try it](#try-it)
-4. [Using the library](#using-the-library)
-   1. [Quick start](#quick-start)
-   2. [Identifying the language](#identifying-the-language)
-   3. [Formatting the output](#formatting-the-output)
-   4. [The HTML formatter](#the-html-formatter)
-5. [More detail](#more-detail)
-   1. [Lexers](#lexers)
-   2. [Formatters](#formatters)
-   3. [Styles](#styles)
-6. [Command-line interface](#command-line-interface)
-7. [Testing lexers](#testing-lexers)
-8. [What's missing compared to Pygments?](#whats-missing-compared-to-pygments)
+- [Chroma — A general purpose syntax highlighter in pure Go](#chroma--a-general-purpose-syntax-highlighter-in-pure-go)
+	- [Table of Contents](#table-of-contents)
+	- [Supported languages](#supported-languages)
+	- [Try it](#try-it)
+	- [Using the library](#using-the-library)
+		- [Quick start](#quick-start)
+		- [Identifying the language](#identifying-the-language)
+		- [Formatting the output](#formatting-the-output)
+		- [The HTML formatter](#the-html-formatter)
+	- [More detail](#more-detail)
+		- [Lexers](#lexers)
+		- [Formatters](#formatters)
+		- [Styles](#styles)
+	- [Command-line interface](#command-line-interface)
+	- [Testing lexers](#testing-lexers)
+	- [What's missing compared to Pygments?](#whats-missing-compared-to-pygments)
 
 <!-- /TOC -->
 
@@ -41,7 +42,7 @@ translators for Pygments lexers and styles.
 |   A    | ABAP, ABNF, ActionScript, ActionScript 3, Ada, Agda, AL, Alloy, Angular2, ANTLR, ApacheConf, APL, AppleScript, ArangoDB AQL, Arduino, ArmAsm, AutoHotkey, AutoIt, Awk                                                                             |
 |   B    | Ballerina, Bash, Bash Session, Batchfile, BibTeX, Bicep, BlitzBasic, BNF, BQN, Brainfuck                                                                                                                                             |
 |   C    | C, C#, C++, Caddyfile, Caddyfile Directives, Cap'n Proto, Cassandra CQL, Ceylon, CFEngine3, cfstatement, ChaiScript, Chapel, Cheetah, Clojure, CMake, COBOL, CoffeeScript, Common Lisp, Coq, Crystal, CSS, Cython                    |
-|   D    | D, Dart, Dax, Diff, Django/Jinja, dns, Docker, DTD, Dylan                                                                                                                                                                                 |
+|   D    | D, Dart, Dax, Desktop Entry, Diff, Django/Jinja, dns, Docker, DTD, Dylan                                                                                                                                                                                 |
 |   E    | EBNF, Elixir, Elm, EmacsLisp, Erlang                                                                                                                                                                                                 |
 |   F    | Factor, Fennel, Fish, Forth, Fortran, FortranFixed, FSharp                                                                                                                                                                           |
 |   G    | GAS, GDScript, Genshi, Genshi HTML, Genshi Text, Gherkin, GLSL, Gnuplot, Go, Go HTML Template, Go Text Template, GraphQL, Groff, Groovy                                                                                              |
