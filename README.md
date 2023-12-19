@@ -14,22 +14,21 @@ translators for Pygments lexers and styles.
 
 <!-- TOC -->
 
-- [Chroma — A general purpose syntax highlighter in pure Go](#chroma--a-general-purpose-syntax-highlighter-in-pure-go)
-	- [Table of Contents](#table-of-contents)
-	- [Supported languages](#supported-languages)
-	- [Try it](#try-it)
-	- [Using the library](#using-the-library)
-		- [Quick start](#quick-start)
-		- [Identifying the language](#identifying-the-language)
-		- [Formatting the output](#formatting-the-output)
-		- [The HTML formatter](#the-html-formatter)
-	- [More detail](#more-detail)
-		- [Lexers](#lexers)
-		- [Formatters](#formatters)
-		- [Styles](#styles)
-	- [Command-line interface](#command-line-interface)
-	- [Testing lexers](#testing-lexers)
-	- [What's missing compared to Pygments?](#whats-missing-compared-to-pygments)
+1. [Table of Contents](#table-of-contents)
+2. [Supported languages](#supported-languages)
+3. [Try it](#try-it)
+4. [Using the library](#using-the-library)
+   1. [Quick start](#quick-start)
+   2. [Identifying the language](#identifying-the-language)
+   3. [Formatting the output](#formatting-the-output)
+   4. [The HTML formatter](#the-html-formatter)
+5. [More detail](#more-detail)
+   1. [Lexers](#lexers)
+   2. [Formatters](#formatters)
+   3. [Styles](#styles)
+6. [Command-line interface](#command-line-interface)
+7. [Testing lexers](#testing-lexers)
+8. [What's missing compared to Pygments?](#whats-missing-compared-to-pygments)
 
 <!-- /TOC -->
 
