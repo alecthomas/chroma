@@ -1,0 +1,10 @@
+[
+  {"type":"KeywordDeclaration","value":"init"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"{"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Keyword","value":"skip"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"}"},
+  {"type":"TextWhitespace","value":"\n"}
+]

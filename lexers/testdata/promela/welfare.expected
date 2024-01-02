@@ -1,0 +1,11 @@
+[
+  {"type":"KeywordDeclaration","value":"active"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"KeywordDeclaration","value":"proctype"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Name","value":"cr"},
+  {"type":"Punctuation","value":"()"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"{}"},
+  {"type":"TextWhitespace","value":"\n"}
+]
