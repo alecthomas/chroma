@@ -1,0 +1,19 @@
+[
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"KeywordDeclaration","value":"init"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"{"},
+  {"type":"TextWhitespace","value":"\n  "},
+  {"type":"LiteralNumberInteger","value":"1"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Operator","value":"=="},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"LiteralNumberInteger","value":"1"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Operator","value":"-\u003e"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"LiteralNumberInteger","value":"3"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"Punctuation","value":"}"},
+  {"type":"TextWhitespace","value":"\n"}
+]

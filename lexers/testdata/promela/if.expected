@@ -1,0 +1,20 @@
+[
+  {"type":"KeywordDeclaration","value":"init"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"{"},
+  {"type":"TextWhitespace","value":"\n    "},
+  {"type":"Keyword","value":"if"},
+  {"type":"TextWhitespace","value":" \n    "},
+  {"type":"Operator","value":"::"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Keyword","value":"skip"},
+  {"type":"Punctuation","value":";"},
+  {"type":"TextWhitespace","value":"\n    "},
+  {"type":"Keyword","value":"fi"},
+  {"type":"Punctuation","value":";"},
+  {"type":"TextWhitespace","value":"\n    "},
+  {"type":"Keyword","value":"skip"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"Punctuation","value":"}"},
+  {"type":"TextWhitespace","value":"\n"}
+]

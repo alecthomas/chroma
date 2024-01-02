@@ -1,0 +1,18 @@
+[
+  {"type":"Name","value":"Crypt"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Name","value":"x"},
+  {"type":"Punctuation","value":";"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"KeywordDeclaration","value":"init"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"{"},
+  {"type":"TextWhitespace","value":"\n  "},
+  {"type":"Name","value":"Crypt"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Name","value":"x"},
+  {"type":"Punctuation","value":";"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"Punctuation","value":"}"},
+  {"type":"TextWhitespace","value":"\n"}
+]
