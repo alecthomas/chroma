@@ -7,14 +7,14 @@
     <filename>*.prom</filename>
     <filename>*.prm</filename>
     <filename>*.promela</filename>
-    <filename>*pr</filename>
+    <filename>*.pr</filename>
     <filename>*.pm</filename>
     <mime_type>text/x-promela</mime_type>
   </config>
   <rules>
     <state name="statements">
       <rule pattern="(\[\]|&lt;&gt;|/\\|\\/)|(U|W|V)\b"><token type="Operator"/></rule>
-      <rule pattern="[@]"><token type="Punctuation"/></rule>
+      <rule pattern="@"><token type="Punctuation"/></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)"><bygroups><token type="Operator"/><token type="NameAttribute"/></bygroups></rule>
       <rule><include state="keywords"/></rule>
       <rule><include state="types"/></rule>
@@ -41,11 +41,11 @@
       <rule pattern="(c_code|c_decl|c_expr|c_state|c_track)\b"><token type="Keyword"/></rule>
       <rule pattern="(_|_last|_nr_pr|_pid|_priority|else|np_|STDIN)\b"><token type="NameBuiltin"/></rule>
       <rule pattern="(empty|enabled|eval|full|len|nempty|nfull|pc_value)\b"><token type="NameFunction"/></rule>
-      <rule pattern="(run)\b"><token type="OperatorWord"/></rule>
+      <rule pattern="run\b"><token type="OperatorWord"/></rule>
       <rule pattern="(active|chan|D_proctype|hidden|init|local|mtype|never|notrace|proctype|show|trace|typedef|xr|xs)\b"><token type="KeywordDeclaration"/></rule>
       <rule pattern="(priority|provided)\b"><token type="Keyword"/></rule>
       <rule pattern="(inline|ltl|select)\b"><token type="KeywordDeclaration"/></rule>
-      <rule pattern="(skip)\b"><token type="Keyword"/></rule>
+      <rule pattern="skip\b"><token type="Keyword"/></rule>
     </state>
     <state name="whitespace">
       <rule pattern="^#if\s+0"><token type="CommentPreproc"/><push state="if0"/></rule>
@@ -117,4 +117,3 @@
     </state>
   </rules>
 </lexer>
-
