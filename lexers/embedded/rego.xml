@@ -83,6 +83,12 @@
       <rule pattern=":=">
         <token type="Operator"/>
       </rule>
+      <rule pattern="[[\]{}():;]+">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[$a-zA-Z_]\w*">
+        <token type="NameOther"/>
+      </rule>
     </state>
   </rules>
 </lexer>
