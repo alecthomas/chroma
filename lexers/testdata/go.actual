@@ -16,3 +16,7 @@ func hello(a int) {
         return i
     }
 } // One last thing
+
+type Int interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64
+}
