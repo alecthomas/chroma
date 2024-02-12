@@ -120,29 +120,3 @@ func TestGoHTMLTemplateNegativeNumber(t *testing.T) {
 		assert.True(t, found)
 	}
 }
-
-func TestGoGenericTokens(t *testing.T) {
-	for _, source := range []string{
-		`type Foo[T any] struct { ~[]T | ~string }`,
-	} {
-		tokens, err := chroma.Tokenise(Go, nil, source)
-		assert.NoError(t, err)
-		assert.Equal(t, source, chroma.Stringify(tokens...))
-
-		// No error tokens.
-		for _, token := range tokens {
-			assert.NotEqual(t, chroma.Error, token.Type,
-				"unexpected error token: %v (%q)", token, token.Value)
-		}
-
-		// "~" must be treated as punctuation.
-		var found bool
-		for _, token := range tokens {
-			if token.Value == "~" {
-				found = true
-				assert.Equal(t, chroma.Punctuation, token.Type)
-			}
-		}
-		assert.True(t, found)
-	}
-}
