@@ -4,21 +4,42 @@
 	on_demand_tls {
 		ask https://example.com
 	}
+	log default {
+		output file /var/log/caddy/access.log
+		format json
+	}
+	auto_https disable_redirects
+	renew_interval 20m
+
+	# this is a comment
+	servers 192.168.1.2:8080 {
+		name public
+		trusted_proxies static private_ranges
+		log_credentials
+	}
 }
 
-(blocking) {  
+# top level comment
+
+(blocking) {
 	@blocked {
 		path *.txt *.md *.mdown /site/*
 	}
 	redir @blocked /
 }
 
+http://example.com {
+	respond "http"
+}
+
 example.com, fake.org, {$ENV_SITE} {
 	root * /srv
 
 	respond /get-env {$ENV_VAR}
+	respond /get-env {$ENV_VAR:default}
 
-	tls off
+	tls internal
+	tls /path/to/cert.pem /path/to/key.pem
 
 	route {
 		# Add trailing slash for directory requests
@@ -67,6 +88,55 @@ example.com, fake.org, {$ENV_SITE} {
 	respond @singleLine "Awesome."
 
 	import blocking
+	import blocking foo
+	import glob/*
 
 	file_server
+
+	@named host example.com
+	handle @named {
+		handle /foo* {
+			handle /foo* {
+				respond "{path} foo"
+			}
+		}
+		respond "foo"
+	}
+
+	handle_path /foo* {
+		respond "foo"
+	}
+
+	reverse_proxy /api/* unix//var/run/api.sock {
+		@good status 200
+		handle_response @good {
+			rewrite * /foo{uri}
+			file_server
+		}
+	}
+
+	respond <<HTML
+		<!DOCTYPE html>
+		<html>
+			<head>
+				<title>Test</title>
+			</head>
+			<body>
+				<h1>Hello, world!</h1>
+			</body>
+		</html>
+		HTML 200
+
+	@file `file()`
+	@first `file({'try_files': [{path}, {path} + '/', 'index.html']})`
+	@smallest `file({'try_policy': 'smallest_size', 'try_files': ['a.txt', 'b.txt']})`
+
+	@without-both {
+		not {
+			path /api/*
+			method POST
+		}
+	}
+
+	path_regexp [<name>] <regexp>
 }
