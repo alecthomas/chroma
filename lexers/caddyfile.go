@@ -8,6 +8,7 @@ import (
 // Named matcher: @name, or
 // Path matcher: /foo, or
 // Wildcard path matcher: *
+// nolint: gosec
 var caddyfileMatcherTokenRegexp = `(\[\<matcher\>\]|@[^\s]+|/[^\s]+|\*)`
 
 // Comment at start of line, or
