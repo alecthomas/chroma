@@ -1,0 +1,12 @@
+00000000  B013              mov al,0x13
+00000002  CD10              int 0x10
+00000004  B9027D            mov cx,0x7d02
+00000007  51                push cx
+00000008  6800A0            push word 0xa000
+0000000B  07                pop es
+0000000C  B00F              mov al,0xf
+0000000E  F3AA              rep stosb
+00000010  59                pop cx
+00000011  B004              mov al,0x4
+00000013  F3AA              rep stosb
+00000015  CD16              int 0x16
