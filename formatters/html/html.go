@@ -214,19 +214,32 @@ func (h highlightRanges) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 func (h highlightRanges) Less(i, j int) bool { return h[i][0] < h[j][0] }
 
 func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Iterator) (err error) {
-	return f.writeHTML(w, style, f.StyleToCSS(style), iterator.Tokens())
+	return f.writeHTML(w, style, iterator.Tokens())
 }
 
-// FastFormat is the same as Format, but the caller must precompute and provide the CSS map computed by Formatter.StyleToCSS(style).
-// This avoids expensive reconstruction of the CSS map on repeat calls.
-func (f *Formatter) FastFormat(w io.Writer, style *chroma.Style, css map[chroma.TokenType]string, iterator chroma.Iterator) (err error) {
-	return f.writeHTML(w, style, css, iterator.Tokens())
-}
+var styleCSSCache = make(map[*chroma.Style]map[chroma.TokenType]string)
+var styleCSSCacheLock sync.RWMutex // Read/write lock to allow thread-safe concurrent reads.
 
 // We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
 //
 // OTOH we need to be super careful about correct escaping...
-func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, css map[chroma.TokenType]string, tokens []chroma.Token) (err error) { // nolint: gocyclo
+func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.Token) (err error) { // nolint: gocyclo
+	// Create a compressed CSS map for the given style and cache it.
+	styleCSSCacheLock.RLock()
+	css := styleCSSCache[style]
+	styleCSSCacheLock.RUnlock()
+	if css == nil {
+		styleCSSCacheLock.Lock()
+		defer styleCSSCacheLock.Unlock()
+		css = f.styleToCSS(style)
+		if !f.Classes {
+			for t, style := range css {
+				css[t] = compressStyle(style)
+			}
+		}
+		styleCSSCache[style] = css
+	}
+
 	if f.standalone {
 		fmt.Fprint(w, "<html>\n")
 		if f.Classes {
@@ -464,17 +477,6 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 		}
 	}
 	return nil
-}
-
-// StyleToCSS converts the given chroma Style into a compressed CSS map for re-use by FastFormat.
-func (f *Formatter) StyleToCSS(style *chroma.Style) map[chroma.TokenType]string {
-	css := f.styleToCSS(style) // Does not include compression.
-	if !f.Classes {
-		for t, style := range css {
-			css[t] = compressStyle(style)
-		}
-	}
-	return css
 }
 
 func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string {
