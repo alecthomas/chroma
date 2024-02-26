@@ -29,3 +29,8 @@ A: close({
     field2: string
 })
 
+// Verify that various field types work
+_hidden: int
+regular: int
+$id: int
+#definition: int
