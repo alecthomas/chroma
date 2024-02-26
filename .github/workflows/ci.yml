@@ -13,8 +13,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Init Hermit
         run: ./bin/hermit env -r >> $GITHUB_ENV
+      - name: Ensure cmd/chroma is tidy
+        working-directory: cmd/chroma
+        run: go mod tidy
       - name: Test
         run: go test ./...
+      - name: Check that git is clean at the end of the job
+        run: test -z "$(git status --porcelain)" || (git status; git diff; false)
   lint:
     name: Lint
     runs-on: ubuntu-latest
