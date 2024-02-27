@@ -222,7 +222,7 @@ func TestTableLinkeableLineNumbers(t *testing.T) {
 
 	assert.Contains(t, buf.String(), `id="line1"><a class="lnlinks" href="#line1">1</a>`)
 	assert.Contains(t, buf.String(), `id="line5"><a class="lnlinks" href="#line5">5</a>`)
-	assert.Contains(t, buf.String(), `/* LineLink */ .chroma .lnlinks { outline: none; text-decoration: none; color: inherit }`, buf.String())
+	assert.Contains(t, buf.String(), `/* LineLink */ .chroma .lnlinks { outline:none;text-decoration:none;color:inherit }`, buf.String())
 }
 
 func TestTableLineNumberSpacing(t *testing.T) {
@@ -351,12 +351,25 @@ func TestReconfigureOptions(t *testing.T) {
 }
 
 func TestWriteCssWithAllClasses(t *testing.T) {
-	formatter := New()
-	formatter.allClasses = true
+	formatter := New(WithAllClasses(true))
 
 	var buf bytes.Buffer
 	err := formatter.WriteCSS(&buf, styles.Fallback)
 
 	assert.NoError(t, err)
 	assert.NotContains(t, buf.String(), ".chroma . {", "Generated css doesn't contain invalid css")
+}
+
+func TestStyleCache(t *testing.T) {
+	f := New()
+
+	assert.True(t, len(styles.Registry) > styleCacheLimit)
+
+	for _, style := range styles.Registry {
+		var buf bytes.Buffer
+		err := f.WriteCSS(&buf, style)
+		assert.NoError(t, err)
+	}
+
+	assert.Equal(t, styleCacheLimit, len(f.styleCache.cache))
 }
