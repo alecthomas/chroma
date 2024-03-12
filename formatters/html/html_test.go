@@ -222,7 +222,7 @@ func TestTableLinkeableLineNumbers(t *testing.T) {
 
 	assert.Contains(t, buf.String(), `id="line1"><a class="lnlinks" href="#line1">1</a>`)
 	assert.Contains(t, buf.String(), `id="line5"><a class="lnlinks" href="#line5">5</a>`)
-	assert.Contains(t, buf.String(), `/* LineLink */ .chroma .lnlinks { outline:none;text-decoration:none;color:inherit }`, buf.String())
+	assert.Contains(t, buf.String(), `/* LineLink */ .chroma .lnlinks { outline: none; text-decoration: none; color: inherit }`, buf.String())
 }
 
 func TestTableLineNumberSpacing(t *testing.T) {

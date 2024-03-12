@@ -224,7 +224,7 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Ite
 //
 // OTOH we need to be super careful about correct escaping...
 func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.Token) (err error) { // nolint: gocyclo
-	css := f.styleCache.get(style)
+	css := f.styleCache.get(style, true)
 	if f.standalone {
 		fmt.Fprint(w, "<html>\n")
 		if f.Classes {
@@ -418,7 +418,7 @@ func (f *Formatter) tabWidthStyle() string {
 
 // WriteCSS writes CSS style definitions (without any surrounding HTML).
 func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
-	css := f.styleCache.get(style)
+	css := f.styleCache.get(style, false)
 	// Special-case background as it is mapped to the outer ".chroma" class.
 	if _, err := fmt.Fprintf(w, "/* %s */ .%sbg { %s }\n", chroma.Background, f.prefix, css[chroma.Background]); err != nil {
 		return err
@@ -562,11 +562,12 @@ func compressStyle(s string) string {
 	return strings.Join(out, ";")
 }
 
-const styleCacheLimit = 16
+const styleCacheLimit = 32
 
 type styleCacheEntry struct {
-	style *chroma.Style
-	cache map[chroma.TokenType]string
+	style      *chroma.Style
+	compressed bool
+	cache      map[chroma.TokenType]string
 }
 
 type styleCache struct {
@@ -582,14 +583,14 @@ func newStyleCache(f *Formatter) *styleCache {
 	return &styleCache{f: f}
 }
 
-func (l *styleCache) get(style *chroma.Style) map[chroma.TokenType]string {
+func (l *styleCache) get(style *chroma.Style, compress bool) map[chroma.TokenType]string {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
 	// Look for an existing entry.
 	for i := len(l.cache) - 1; i >= 0; i-- {
 		entry := l.cache[i]
-		if entry.style == style {
+		if entry.style == style && entry.compressed == compress {
 			// Top of the cache, no need to adjust the order.
 			if i == len(l.cache)-1 {
 				return entry.cache
@@ -608,13 +609,15 @@ func (l *styleCache) get(style *chroma.Style) map[chroma.TokenType]string {
 			cached[t] = compressStyle(style)
 		}
 	}
-	for t, style := range cached {
-		cached[t] = compressStyle(style)
+	if compress {
+		for t, style := range cached {
+			cached[t] = compressStyle(style)
+		}
 	}
 	// Evict the oldest entry.
 	if len(l.cache) >= styleCacheLimit {
 		l.cache = l.cache[0:copy(l.cache, l.cache[1:])]
 	}
-	l.cache = append(l.cache, styleCacheEntry{style: style, cache: cached})
+	l.cache = append(l.cache, styleCacheEntry{style: style, cache: cached, compressed: compress})
 	return cached
 }
