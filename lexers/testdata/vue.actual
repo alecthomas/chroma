@@ -1,5 +1,11 @@
 <template>
     <button class="button">This is MyButton</button>
+    <ul-extendded v-if="examples.length" bordered>
+        <li
+            v-for="example in examples"
+            :key="`${example.id}`"
+        />
+    </ul-extendded>
 </template>
 
 <script>
