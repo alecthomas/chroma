@@ -143,3 +143,17 @@ manual/Footnotes.html][page for footnotes]].
 # Local Variables:
 # org-link-file-path-type: relative
 # End:
+
+Generic text.
+
+/Italicized/
+
+*strong*
+
+=Heading=
+
+~Codeblock~
+
++StrikeTrough+
+
+_Underlined_

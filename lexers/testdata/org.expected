@@ -28,7 +28,7 @@
   {"type":"NameClass","value":"=EXPORT_FILE_NAME="},
   {"type":"Text","value":"\nproperty in here. But then you also lose the tag and property\ninheritance Org awesomeness.\n\nline one "},
   {"type":"Operator","value":"\\\\"},
-  {"type":"Text","value":"\nline two\n"},
+  {"type":"Text","value":"\nline two\n\n"},
   {"type":"GenericStrong","value":"*bold*"},
   {"type":"Text","value":" "},
   {"type":"GenericEmph","value":"/italics/"},
@@ -361,5 +361,16 @@
   {"type":"Comment","value":"# org-link-file-path-type: relative"},
   {"type":"Text","value":"\n"},
   {"type":"Comment","value":"# End:"},
-  {"type":"Text","value":"\n"}
+  {"type":"Text","value":"\n\nGeneric text.\n\n"},
+  {"type":"GenericEmph","value":"/Italicized/"},
+  {"type":"Text","value":"\n\n"},
+  {"type":"GenericStrong","value":"*strong*"},
+  {"type":"Text","value":"\n\n"},
+  {"type":"NameClass","value":"=Heading="},
+  {"type":"Text","value":"\n\n"},
+  {"type":"NameClass","value":"~Codeblock~"},
+  {"type":"Text","value":"\n\n"},
+  {"type":"GenericDeleted","value":"+StrikeTrough+"},
+  {"type":"Text","value":"\n\n"},
+  {"type":"GenericUnderline","value":"_Underlined_"}
 ]
