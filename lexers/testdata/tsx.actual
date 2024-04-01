@@ -11,3 +11,18 @@ ReactDOM.render(
   </>,
   document.getElementById('root'),
 )
+
+ReactDOM.render(
+  <p
+  // This is a inline comment.
+  /*
+    This is a
+    Multi line comment
+  */
+  <!-- Another multiline
+  comment !-->
+  data-test-id="outro" disabled>
+	Some text here.
+  </p>,
+  document.getElementById('root'),
+)
