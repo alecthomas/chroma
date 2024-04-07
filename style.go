@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"embed"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -206,22 +207,38 @@ func (s *StyleBuilder) Transform(transform func(StyleEntry) StyleEntry) *StyleBu
 
 func (s *StyleBuilder) Build() (*Style, error) {
 	style := &Style{
-		Name:    s.name,
-		entries: map[TokenType]StyleEntry{},
-		parent:  s.parent,
+		Name:     s.name,
+		_entries: map[TokenType]StyleEntry{},
+		parent:   s.parent,
 	}
 	for ttype, descriptor := range s.entries {
 		entry, err := ParseStyleEntry(descriptor)
 		if err != nil {
 			return nil, fmt.Errorf("invalid entry for %s: %s", ttype, err)
 		}
-		style.entries[ttype] = entry
+		style.entries()[ttype] = entry
 	}
 	return style, nil
 }
 
 // StyleEntries mapping TokenType to colour definition.
 type StyleEntries map[TokenType]string
+
+// FIXME: We don't want this signature to be public
+func NewEmbeddedXMLStyle(fs *embed.FS, fileName string) (*Style, error) {
+	// Check that we can read the file
+	r, err := fs.Open(fileName)
+	if err != nil {
+		return nil, err
+	}
+	r.Close()
+
+	style := &Style{
+		Name:       strings.TrimSuffix(fileName, ".xml"),
+		embeddedFs: fs,
+	}
+	return style, nil
+}
 
 // NewXMLStyle parses an XML style definition.
 func NewXMLStyle(r io.Reader) (*Style, error) {
@@ -257,9 +274,41 @@ func MustNewStyle(name string, entries StyleEntries) *Style {
 //
 // See http://pygments.org/docs/styles/ for details. Semantics are intended to be identical.
 type Style struct {
-	Name    string
-	entries map[TokenType]StyleEntry
-	parent  *Style
+	Name     string
+	_entries map[TokenType]StyleEntry // Access via style.entries()
+	parent   *Style
+
+	// For lazy initialization. If this is set, entries must be read from
+	// "Name.xml" in this FS.
+	embeddedFs *embed.FS
+}
+
+func (s *Style) entries() map[TokenType]StyleEntry {
+	// FIXME: Does this function need locking?
+
+	if s._entries != nil {
+		return s._entries
+	}
+
+	if s.embeddedFs == nil {
+		panic("No entries and no embedded FS to read them from")
+	}
+
+	fileName := s.Name + ".xml"
+	r, err := s.embeddedFs.Open(fileName)
+	if err != nil {
+		panic(fmt.Errorf("opening %s: %w", fileName, err))
+	}
+
+	style, err := NewXMLStyle(r)
+	if err != nil {
+		panic(fmt.Errorf("parsing %s: %w", fileName, err))
+	}
+
+	s._entries = style._entries
+	s.embeddedFs = nil
+
+	return s._entries
 }
 
 func (s *Style) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -271,13 +320,13 @@ func (s *Style) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if err := e.EncodeToken(start); err != nil {
 		return err
 	}
-	sorted := make([]TokenType, 0, len(s.entries))
-	for ttype := range s.entries {
+	sorted := make([]TokenType, 0, len(s.entries()))
+	for ttype := range s.entries() {
 		sorted = append(sorted, ttype)
 	}
 	sort.Slice(sorted, func(i, j int) bool { return sorted[i] < sorted[j] })
 	for _, ttype := range sorted {
-		entry := s.entries[ttype]
+		entry := s.entries()[ttype]
 		el := xml.StartElement{Name: xml.Name{Local: "entry"}}
 		el.Attr = []xml.Attr{
 			{Name: xml.Name{Local: "type"}, Value: ttype.String()},
@@ -304,7 +353,7 @@ func (s *Style) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	if s.Name == "" {
 		return fmt.Errorf("missing style name attribute")
 	}
-	s.entries = map[TokenType]StyleEntry{}
+	s._entries = map[TokenType]StyleEntry{}
 	for {
 		tok, err := d.Token()
 		if err != nil {
@@ -335,7 +384,7 @@ func (s *Style) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 					return fmt.Errorf("unexpected attribute %s", attr.Name.Local)
 				}
 			}
-			s.entries[ttype] = entry
+			s._entries[ttype] = entry
 
 		case xml.EndElement:
 			if el.Name.Local == start.Name.Local {
@@ -348,7 +397,7 @@ func (s *Style) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 // Types that are styled.
 func (s *Style) Types() []TokenType {
 	dedupe := map[TokenType]bool{}
-	for tt := range s.entries {
+	for tt := range s.entries() {
 		dedupe[tt] = true
 	}
 	if s.parent != nil {
@@ -392,7 +441,7 @@ func (s *Style) Get(ttype TokenType) StyleEntry {
 }
 
 func (s *Style) get(ttype TokenType) StyleEntry {
-	out := s.entries[ttype]
+	out := s.entries()[ttype]
 	if out.IsZero() && s.parent != nil {
 		return s.parent.get(ttype)
 	}

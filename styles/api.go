@@ -23,16 +23,11 @@ var Registry = func() map[string]*chroma.Style {
 		if file.IsDir() {
 			continue
 		}
-		r, err := embedded.Open(file.Name())
-		if err != nil {
-			panic(err)
-		}
-		style, err := chroma.NewXMLStyle(r)
+		style, err := chroma.NewEmbeddedXMLStyle(&embedded, file.Name())
 		if err != nil {
 			panic(err)
 		}
 		registry[style.Name] = style
-		_ = r.Close()
 	}
 	return registry
 }()
