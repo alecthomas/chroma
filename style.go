@@ -224,7 +224,6 @@ func (s *StyleBuilder) Build() (*Style, error) {
 // StyleEntries mapping TokenType to colour definition.
 type StyleEntries map[TokenType]string
 
-// FIXME: We don't want this signature to be public
 func NewEmbeddedXMLStyle(fs *embed.FS, fileName string) (*Style, error) {
 	// Check that we can read the file
 	r, err := fs.Open(fileName)
@@ -284,8 +283,6 @@ type Style struct {
 }
 
 func (s *Style) entries() map[TokenType]StyleEntry {
-	// FIXME: Does this function need locking?
-
 	if s._entries != nil {
 		return s._entries
 	}
