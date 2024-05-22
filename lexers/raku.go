@@ -1366,11 +1366,11 @@ func popRule(rule ruleReplacingConfig) MutatorFunc {
 
 		if ok && len(stack) > 0 {
 			// Pop from stack
-			stack = stack[:len(stack)-1]
 			lastRule := stack[len(stack)-1]
 			lastRule.pushState = false
 			lastRule.popState = false
 			lastRule.pop = true
+			stack = stack[:len(stack)-1]
 			state.Set(stackName, stack)
 
 			// Call replaceRule to use the last rule
