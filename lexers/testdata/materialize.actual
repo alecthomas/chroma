@@ -1,0 +1,49 @@
+-- basic statements
+
+CREATE VIEW my_typed_source AS
+  SELECT
+    (data->>'field1')::boolean AS field_1,
+    (data->>'field2')::int AS field_2,
+    (data->>'field3')::float AS field_3
+  FROM my_jsonb_source;
+
+WITH
+  regional_sales (region, total_sales) AS (
+    SELECT region, sum(amount)
+    FROM orders
+    GROUP BY region
+  ),
+  top_regions AS (
+    SELECT region
+    FROM regional_sales
+    ORDER BY total_sales DESC
+    LIMIT 5
+  )
+SELECT region,
+       product,
+       SUM(quantity) AS product_units,
+       SUM(amount) AS product_sales
+FROM orders
+WHERE region IN (SELECT region FROM top_regions)
+GROUP BY region, product;
+
+-- sources
+
+CREATE SOURCE webhook_with_basic_auth
+FROM WEBHOOK
+    BODY FORMAT JSON
+    CHECK (
+      WITH (
+        HEADERS,
+        BODY AS request_body,
+        SECRET basic_hook_auth AS validation_secret
+      )
+      -- The constant_time_eq validation function **does not support** fully
+      -- qualified secret names. We recommend always aliasing the secret name
+      -- for ease of use.
+      constant_time_eq(headers->'authorization', validation_secret)
+    );
+
+CREATE SOURCE mz_source
+  FROM MYSQL CONNECTION mysql_connection
+  FOR TABLES (schema1.table_1 AS s1_table_1, schema2.table_1 AS s2_table_1);

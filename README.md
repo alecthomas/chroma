@@ -272,7 +272,7 @@ for that setup the `chroma` executable can be just symlinked to `~/.lessfilter`.
 If you edit some lexers and want to try it, open a shell in `cmd/chromad` and run:
 
 ```shell
-go run .
+go run . --csrf-key=securekey
 ```
 
 A Link will be printed. Open it in your Browser. Now you can test on the Playground with your local changes.
