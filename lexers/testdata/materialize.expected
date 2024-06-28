@@ -248,7 +248,7 @@
   {"type":"Text","value":"\n  "},
   {"type":"Keyword","value":"FROM"},
   {"type":"Text","value":" "},
-  {"type":"Name","value":"MYSQL"},
+  {"type":"Keyword","value":"MYSQL"},
   {"type":"Text","value":" "},
   {"type":"Keyword","value":"CONNECTION"},
   {"type":"Text","value":" "},
