@@ -128,7 +128,7 @@ def translate_rules(rules):
                 regex = xml_regex(regex)
             elif isinstance(regex, pygments_lexer.words):
                 regex = xml_string('%s(%s)%s' % (regex.prefix,
-                                      '|'.join(w for w in regex.words),
+                                      '|'.join(re.escape(w) for w in regex.words),
                                       regex.suffix))
             else:
                 raise ValueError('expected regex string but got %r' % regex)
