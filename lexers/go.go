@@ -13,7 +13,6 @@ var Go = Register(MustNewLexer(
 		Aliases:   []string{"go", "golang"},
 		Filenames: []string{"*.go"},
 		MimeTypes: []string{"text/x-gosrc"},
-		EnsureNL:  true,
 	},
 	goRules,
 ).SetAnalyser(func(text string) float32 {
@@ -32,7 +31,7 @@ func goRules() Rules {
 			{`\n`, Text, nil},
 			{`\s+`, Text, nil},
 			{`\\\n`, Text, nil},
-			{`//(.*?)\n`, CommentSingle, nil},
+			{`//[^\n\r]*`, CommentSingle, nil},
 			{`/(\\\n)?[*](.|\n)*?[*](\\\n)?/`, CommentMultiline, nil},
 			{`(import|package)\b`, KeywordNamespace, nil},
 			{`(var|func|struct|map|chan|type|interface|const)\b`, KeywordDeclaration, nil},
