@@ -122,6 +122,7 @@ const (
 	LiteralNumberInteger
 	LiteralNumberIntegerLong
 	LiteralNumberOct
+	LiteralNumberByte
 )
 
 // Operators.
