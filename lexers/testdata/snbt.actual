@@ -1,0 +1,13 @@
+{
+    Byte: 40b,
+    Boolean: true,
+    Short: 40s,
+    Int: 40,
+    Long: 40l,
+    Float: 40.0f,
+    Double: 40.0,
+    String: "foo"
+}
+{List: [10, 20, 30]}
+{TypedArrays: {Byte: [B; 1b, 2b, 3b], Int: [I; 1, 2, 3], Long: [L; 1l, 2l, 3l]}}
+{"foo bar": "baz"}
