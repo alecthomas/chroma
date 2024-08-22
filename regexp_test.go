@@ -192,3 +192,14 @@ func TestByGroupNames(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Error, `abc=123`}}, it.Tokens())
 }
+
+func TestIgnoreToken(t *testing.T) {
+	l := Coalesce(mustNewLexer(t, &Config{EnsureNL: true}, Rules{ // nolint: forbidigo
+		"root": {
+			{`(\s*)(\w+)(?:\1)(\n)`, ByGroups(Ignore, Keyword, Whitespace), nil},
+		},
+	}))
+	it, err := l.Tokenise(nil, `  hello  `)
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{Keyword, "hello"}, {TextWhitespace, "\n"}}, it.Tokens())
+}
