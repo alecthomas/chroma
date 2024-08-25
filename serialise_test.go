@@ -157,7 +157,7 @@ func TestRulesSerialisation(t *testing.T) {
 	data = re.ReplaceAll(data, []byte(`/>`))
 	b := &bytes.Buffer{}
 	w := gzip.NewWriter(b)
-	fmt.Fprintln(w, string(data))
+	fmt.Fprintln(w, string(data)) //nolint:errcheck
 	w.Close()
 	actual := Rules{}
 	err = xml.Unmarshal(data, &actual)
