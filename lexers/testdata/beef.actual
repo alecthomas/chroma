@@ -1,0 +1,22 @@
+using System;
+
+class Program
+{
+    public static void Main()
+    {
+        Console.WriteLine("Hello, World!");
+    }
+
+    // Try! propagates file and parsing errors down the call stack
+    static Result<void> Parse(StringView filePath, List<float> outValues)
+    {
+        var fs = scope FileStream();
+        Try!(fs.Open(filePath));
+        for (var lineResult in scope StreamReader(fs).Lines)
+        {
+            for (let elem in Try!(lineResult).Split(','))
+                outValues.Add(Try!(float.Parse(elem)));
+        }
+        return .Ok;
+    }
+}
