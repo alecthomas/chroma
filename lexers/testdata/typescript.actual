@@ -7,3 +7,12 @@ declare module "../../compiler/types" {}
 type TestType<T> = {
   [Key keyof T]: Required<Pick<T, Key>>
 }
+
+const TestComponent = ({ a, b }) => (
+  <Component width={100} prop={{ a, ...b }} attr="text">
+    <span>This is a component</span>
+    <SomethingElse />
+  </Component>
+)
+
+export { TestComponent }
