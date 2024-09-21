@@ -52,6 +52,12 @@
     </state>
     <state name="tag">
       <rule>
+        <include state="jsx"/>
+      </rule>
+      <rule pattern=",">
+        <token type="Punctuation"/>
+      </rule>
+      <rule>
         <include state="commentsandwhitespace"/>
       </rule>
       <rule pattern="\s+">
@@ -171,7 +177,7 @@
       </rule>
       <rule pattern="(?=/)">
         <token type="Text"/>
-        <push state="#pop" state="badregex"/>
+        <push state="badregex"/>
       </rule>
       <rule>
         <pop depth="1"/>
