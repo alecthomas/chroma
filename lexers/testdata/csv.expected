@@ -10,7 +10,7 @@
   {"type":"LiteralStringDouble","value":"\"\""},
   {"type":"Punctuation","value":","},
   {"type":"LiteralStringDouble","value":"\"\""},
-  {"type":"Error","value":"stuff"},
+  {"type":"LiteralString","value":"stuff"},
   {"type":"Punctuation","value":","},
   {"type":"Punctuation","value":","},
   {"type":"LiteralString","value":"1.1"},
