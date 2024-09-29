@@ -3,7 +3,7 @@
   {"type":"Punctuation","value":","},
   {"type":"LiteralStringDouble","value":"\"newline:\nquote: "},
   {"type":"LiteralStringEscape","value":"\"\""},
-  {"type":"LiteralStringDouble","value":" comma: ,"},
+  {"type":"LiteralStringDouble","value":" comma: ,\""},
   {"type":"Punctuation","value":","},
   {"type":"LiteralString","value":"1"},
   {"type":"Punctuation","value":","},

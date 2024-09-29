@@ -42,7 +42,7 @@ Future improvements:
             </rule>
             <rule pattern="&quot;">
                 <token type="LiteralStringDouble" />
-                <pop />
+                <pop depth="1"/>
             </rule>
             <rule pattern="[^&quot;]+">
                 <token type="LiteralStringDouble" />
