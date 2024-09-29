@@ -3,14 +3,15 @@ Lexer for RFC-4180 compliant CSV subject to the following additions:
 - UTF-8 encoding is accepted (the RFC requires 7-bit ASCII)
 - The line terminator character can be LF or CRLF (the RFC allows CRLF only)
 
-Link to the RFC-4180 specification:
-https://tools.ietf.org/html/rfc4180
+Link to the RFC-4180 specification: https://tools.ietf.org/html/rfc4180
 
 Additions inspired by:
 https://github.com/frictionlessdata/datapackage/issues/204#issuecomment-193242077
 
 Future improvements:
 - Identify non-quoted numbers as LiteralNumber
+- Identify y as an error in "x"y. Currently it's identified as another string
+  literal.
 -->
 
 <lexer>
