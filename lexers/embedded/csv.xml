@@ -22,11 +22,30 @@ Future improvements:
     </config>
     <rules>
         <state name="root">
-            <rule pattern="[^,\n]+">
+            <rule pattern="\r?\n">
+                <token type="Punctuation" />
+            </rule>
+            <rule pattern=",">
+                <token type="Punctuation" />
+            </rule>
+            <rule pattern="&quot;">
+                <token type="LiteralStringDouble" />
+                <push state="escaped" />
+            </rule>
+            <rule pattern="[^\r\n,]+">
                 <token type="LiteralString" />
             </rule>
-            <rule pattern=".">
-                <token type="Punctuation" />
+        </state>
+        <state name="escaped">
+            <rule pattern="&quot;&quot;">
+                <token type="LiteralStringEscape"/>
+            </rule>
+            <rule pattern="&quot;">
+                <token type="LiteralStringDouble" />
+                <pop />
+            </rule>
+            <rule pattern="[^&quot;]+">
+                <token type="LiteralStringDouble" />
             </rule>
         </state>
     </rules>

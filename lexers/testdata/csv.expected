@@ -11,5 +11,6 @@
   {"type":"Error", "value": "stuff"},
   {"type":"Punctuation", "value": ","},
   {"type":"Punctuation", "value": ","},
-  {"type":"LiteralString", "value": "1.1"}
+  {"type":"LiteralString", "value": "1.1"},
+  {"type":"Punctuation", "value": "\n"}
 ]
