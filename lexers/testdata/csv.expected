@@ -1,14 +1,12 @@
 [
-    {"type":"LiteralString", "value": "Username"},
-    {"type":"Punctuation", "value": ","},
-    {"type":"LiteralString", "value":" Identifier"},
-    {"type":"Punctuation", "value": ","},
-    {"type":"LiteralString", "value":"First name"},
-    {"type":"Punctuation", "value":"\n"},
-    {"type":"LiteralString", "value":"booker12"},
-    {"type":"Punctuation", "value":","},
-    {"type":"LiteralNumberInteger", "value":"9012"},
-    {"type":"Punctuation", "value":","},
-    {"type":"LiteralStringDouble", "value":"\"Note \"\"quoted\"\" is a quoted word\""},
-    {"type":"Punctuation", "value":"\n"}
+  {"type":"LiteralString", "value": "hello"},
+  {"type":"Punctuation", "value": ","},
+  {"type":"LiteralStringDouble", "value":"\"newline:\nquote: \"\" comma: ,\""},
+  {"type":"Punctuation", "value": ","},
+  {"type":"LiteralString", "value": "1"},
+  {"type":"Punctuation", "value": ","},
+  {"type":"LiteralStringDouble", "value": "\"\""},
+  {"type":"Punctuation", "value": ","},
+  {"type":"Punctuation", "value": ","},
+  {"type":"LiteralString", "value": "1.1"}
 ]
