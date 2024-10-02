@@ -13,10 +13,30 @@ var TTY16m = Register("terminal16m", chroma.FormatterFunc(trueColourFormatter))
 
 var crOrCrLf = regexp.MustCompile(`\r?\n`)
 
+// Print the text with the given formatting, resetting the formatting at the end
+// of each line and resuming it on the next line.
+//
+// This way, a pager (like https://github.com/walles/moar for example) can show
+// any line in the output by itself, and it will get the right formatting.
 func trueColorTokenFormatter(w io.Writer, formatting string, text string) {
-	fmt.Fprint(w, formatting)
-	fmt.Fprint(w, text)
-	fmt.Fprint(w, "\033[0m")
+	newlineIndices := crOrCrLf.FindAllStringIndex(text, -1)
+
+	afterLastNewline := 0
+	for _, indices := range newlineIndices {
+		newlineStart, afterNewline := indices[0], indices[1]
+		fmt.Fprint(w, formatting)
+		fmt.Fprint(w, text[afterLastNewline:newlineStart])
+		fmt.Fprint(w, "\033[0m")
+		fmt.Fprint(w, text[newlineStart:afterNewline])
+		afterLastNewline = afterNewline
+	}
+
+	if afterLastNewline < len(text) {
+		// Print whatever is left after the last newline
+		fmt.Fprint(w, formatting)
+		fmt.Fprint(w, text[afterLastNewline:])
+		fmt.Fprint(w, "\033[0m")
+	}
 }
 
 func trueColourFormatter(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
