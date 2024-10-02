@@ -18,7 +18,12 @@ var crOrCrLf = regexp.MustCompile(`\r?\n`)
 //
 // This way, a pager (like https://github.com/walles/moar for example) can show
 // any line in the output by itself, and it will get the right formatting.
-func trueColorTokenFormatter(w io.Writer, formatting string, text string) {
+func writeToken(w io.Writer, formatting string, text string) {
+	if formatting == "" {
+		fmt.Fprint(w, text)
+		return
+	}
+
 	newlineIndices := crOrCrLf.FindAllStringIndex(text, -1)
 
 	afterLastNewline := 0
@@ -65,7 +70,7 @@ func trueColourFormatter(w io.Writer, style *chroma.Style, it chroma.Iterator) e
 			formatting += fmt.Sprintf("\033[48;2;%d;%d;%dm", entry.Background.Red(), entry.Background.Green(), entry.Background.Blue())
 		}
 
-		trueColorTokenFormatter(w, formatting, token.Value)
+		writeToken(w, formatting, token.Value)
 	}
 	return nil
 }
