@@ -1,0 +1,22 @@
+#let song(
+  title: none,
+  title_index: none,
+  singer: none,
+  singer_index: none,
+  references: (),
+  line_color: rgb(0xd0, 0xd0, 0xd0),
+  header_display: (number, title, singer) => grid(
+    columns: (auto,1fr),
+    inset: 4pt,
+    align: horizon,
+    grid.cell(fill: rgb(0xd0, 0xd0, 0xd0),align: top, inset:(rest:4pt, /*right: 10pt*/), heading(outlined: false,str(number))),
+    [
+      #heading(title)
+      #if singer != none {
+        strong(singer) + "\n"
+      }
+    ],
+  ),
+  // comment
+  doc,
+)
