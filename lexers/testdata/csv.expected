@@ -1,0 +1,17 @@
+[
+  {"type":"LiteralString","value":"hello"},
+  {"type":"Punctuation","value":","},
+  {"type":"LiteralStringDouble","value":"\"newline:\nquote: "},
+  {"type":"LiteralStringEscape","value":"\"\""},
+  {"type":"LiteralStringDouble","value":" comma: ,\""},
+  {"type":"Punctuation","value":","},
+  {"type":"LiteralString","value":"1"},
+  {"type":"Punctuation","value":","},
+  {"type":"LiteralStringDouble","value":"\"\""},
+  {"type":"Punctuation","value":","},
+  {"type":"LiteralStringDouble","value":"\"\""},
+  {"type":"LiteralString","value":"stuff"},
+  {"type":"Punctuation","value":",,"},
+  {"type":"LiteralString","value":"1.1"},
+  {"type":"Punctuation","value":"\n"}
+]
