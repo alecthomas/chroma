@@ -15,4 +15,9 @@ const TestComponent = ({ a, b }) => (
   </Component>
 )
 
+type FirstChar<K extends string> = K extends `${infer X}${infer _}`
+  ? X
+  : never
+type SChar = FirstChar<"stuff">
+
 export { TestComponent }
