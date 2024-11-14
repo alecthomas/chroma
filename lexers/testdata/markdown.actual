@@ -85,3 +85,9 @@ end loop;
 end
 $$;
 ```
+
+## MarkdownLink Test
+[normal link](https://google.com)  
+  [whitespace before link](https://google.com)  
+abc[non-whitespace before link](https://google.com)  
+([first link](https://google.com) and [second link](https://google.com))  
