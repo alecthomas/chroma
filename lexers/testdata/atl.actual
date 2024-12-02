@@ -1,0 +1,61 @@
+module TypeA2TypeB;
+create b : TypeB from a : TypeA;
+
+rule RootA2RootB {
+	from
+		rtA : TypeA!RootA
+	to
+		rtB : TypeB!RootB (
+			defs <- rtA.elms->iterate(e; res : Set(TypeA!ElementA) = Set {} |
+				if (res->collect(f | f.name)->includes(e.name)) then
+					res
+				else
+					res->including(e)
+				endif
+				)-- here we keep only one element of each name value
+				->collect(e | thisModule.Definition(e)),
+				-- then we create a DefinitionB from each selected element
+			elms <- rtA.elms
+		)
+}
+
+lazy rule Definition {
+	from
+		s : TypeA!ElementA
+	to
+		t : TypeB!DefinitionB(
+			name <- s.name
+		)
+}
+
+helper def: nameToAssignHistory : Sequence(TupleType(e : TypeB!ElementB, s : String)) =
+	Sequence {};
+
+rule NameToAssign (e : TypeB!ElementB, s : String) {
+	do {
+		thisModule.nameToAssignHistory <- thisModule.nameToAssignHistory->append(Tuple {e = e, s = s});
+	}
+}
+
+rule Element {
+	from
+		s : TypeA!ElementA
+	to
+		t : TypeB!ElementB(
+		)
+	do {
+		-- The corresponding name for the current ElementB is added in the map.
+		-- This map will be used at the end of the transformation to create a link between ElementB and DefinitionB
+		thisModule.NameToAssign(t, s.name);
+	}
+}
+
+-- execute delayed actions
+endpoint rule EndRule() {
+	do {
+		for(dta in thisModule.nameToAssignHistory) {
+			-- We create a link between an ElementB and the corresponding DefinitionB
+			dta.e.definition <- TypeB!DefinitionB.allInstancesFrom('b')->any(e | e.name = dta.s);
+		}
+	}
+}
