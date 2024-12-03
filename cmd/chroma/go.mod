@@ -6,7 +6,7 @@ replace github.com/alecthomas/chroma/v2 => ../../
 
 require (
 	github.com/alecthomas/chroma/v2 v2.14.0
-	github.com/alecthomas/kong v1.4.0
+	github.com/alecthomas/kong v1.5.1
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mattn/go-isatty v0.0.20
 )
