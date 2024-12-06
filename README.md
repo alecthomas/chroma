@@ -248,6 +248,9 @@ For a quick overview of the available styles and how they look, check out the [C
 
 ## Command-line interface
 
+[`moar`](https://github.com/walles/moar) is a full-blown pager that colorizes
+its input using Chroma.
+
 A command-line interface to Chroma is included.
 
 Binaries are available to install from [the releases page](https://github.com/alecthomas/chroma/releases).
