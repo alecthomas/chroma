@@ -1,0 +1,128 @@
+WEBVTT Test file with invalid WebVTT code
+
+NOTE Comments may not contain the string "dash-dash-greater-than"
+-->
+
+NOTE The REGION keyword has to be on its own line
+
+REGION id:bill
+
+NOTE Some invalid region definition values
+
+REGION
+id:bill with spaces
+id:-->
+width:40
+lines:up
+regionanchor:100%
+regionanchor:100
+regionanchor:word
+regionanchor:100,100
+regionanchor:10%,10
+regionanchor:10,10%
+viewportanchor:100%
+viewportanchor:100
+viewportanchor:word
+viewportanchor:100,100
+viewportanchor:10%,10
+viewportanchor:10,10%
+scroll:down
+scroll: up
+scroll:100%
+
+NOTE Region definition values with invalid decimals
+
+REGION
+width:40,5%
+regionanchor:0,123%,50,123%
+viewportanchor:10,123%,90,123%
+
+NOTE Invalid region definition values with percentages above 100
+
+REGION
+width:140.5%
+regionanchor:123%,123%
+viewportanchor:123%,123%
+
+STYLE
+::cue(v[voice="Mary"]) { color: lime }
+/* A true blank line ends the style block. */
+
+::cue(v[voice="Mary"]) { color: lime } /* This should be lexed as invalid raw text. */
+
+NOTE The STYLE keyword needs to be on its own line.
+
+STYLE /* This is not allowed.*/
+
+NOTE Style blocks must not contain the string dash-dash-greater-than.
+
+STYLE
+-->
+
+NOTE Here are some invalid cues.
+
+IDs may not contain "-->"
+00:00.000 --> 00:01.000
+A cue
+
+IDs may not contain
+line breaks
+00:00.000 --> 00:01.000
+A cue
+
+00:60.000 --> 00:61.000
+A cue in the 61st second of the minute.
+
+60:00.000 --> 61:00.000
+A cue in the 61st minute of the hour second.
+
+00:01.000 -> 00:02.000
+A cue with an incorrect arrow.
+
+00:01.000 --> 00:02.000
+Incorrect cues don't prevent lexing of subsequent cues.
+
+00:01.00 --> 00:02.00
+A cue with incorrect milliseconds
+
+00:01.000 --> 00:02.000
+Disallowed characters in the classes.
+<c.cl	ass>Test</c>
+<i.cl ass>Test</i>
+<b.cl
+ass>Test</b>
+<u.cl&ass>Test</u>
+<u. class>Test</u>
+<u .class>Test</u>
+<i.cl<ass>Test</i>
+<i.cl.ass>Test</i>
+
+00:01.000 --> 00:02.000
+Disallowed characters in the annotations.
+<v Neil deGrasse&Tyson>Test
+<v Neil deGrasse>Tyson>Test
+
+00:01.000 --> 00:02.000
+A cue with an unknown span: <strong>Test</strong>.
+
+00:01.000 --> 00:02.000
+A cue with incorrect end tags:
+<i>Test< /i>.
+<i>Test</ i>.
+<i>Test</i >.
+
+00:01.000 --> 00:02.000
+A cue with annotations on annotation-less spans: <b.class annotation>Span content</b>
+
+00:01.000 --> 00:02.000
+A cue with missing annotations on spans that mandate annotations: <v.class>Span content</v>
+
+02:00.000 --> 02:05.000 vertical:rlr line:-33% position:line-right size:big align:end region: fred
+Invalid cue settings
+
+02:00.000 --> 02:05.000 line:133%,start position:133%,line-right size:133%
+Cue settings with percentages above 100.
+
+02:00.000 --> 02:05.000
+Cue settings with incorrect character references.
+&#8220character references&8220;.

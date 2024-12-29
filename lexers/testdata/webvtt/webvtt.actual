@@ -1,0 +1,210 @@
+WEBVTT
+
+NOTE One-line comment
+
+NOTE
+This is a
+Multi-line
+comment
+
+NOTE Multi-line comment containing keywords: REGION STYLE
+REGION
+STYLE
+
+NOTE Many blank lines
+
+
+
+
+NOTE Valid region definition blocks
+
+REGION
+id:fred
+width:40%
+lines:3
+regionanchor:0%,100%
+viewportanchor:10%,90%
+scroll:up
+
+REGION
+id:bill
+width:40%
+lines:3
+regionanchor:100%,100%
+viewportanchor:90%,90%
+scroll:up
+
+NOTE Region definition values with decimals
+
+REGION
+width:40.5%
+lines:3
+regionanchor:0.123%,50.123%
+viewportanchor:10.123%,90.123%
+scroll:up
+
+NOTE Region keyword followed by combinations of one or more tab or space characters
+
+REGION 
+width:40.5%
+
+REGION	
+width:40.5%
+
+REGION  
+width:40.5%
+
+REGION		
+width:40.5%
+
+REGION 	
+width:40.5%
+
+REGION	 
+width:40.5%
+
+NOTE Region settings don't have to be on separate lines
+
+REGION
+id:bill
+width:40%   lines:3
+regionanchor:100%,100%			viewportanchor:90%,90%
+   scroll:up
+
+STYLE
+/* This is CSS.*/
+::cue(b) {
+  color: peachpuff;
+}
+
+NOTE Style keyword followed by comobinations of one or more tab or space characters
+
+STYLE 
+::cue(v[voice="Esme"]) { color: cyan }
+
+STYLE	
+::cue(v[voice="Esme"]) { color: cyan }
+
+STYLE  
+::cue(v[voice="Esme"]) { color: cyan }
+
+STYLE		
+::cue(v[voice="Esme"]) { color: cyan }
+
+STYLE 	
+::cue(v[voice="Esme"]) { color: cyan }
+
+STYLE	 
+::cue(v[voice="Esme"]) { color: cyan }
+
+STYLE
+::cue(v[voice="Esme"]) { color: cyan }
+::cue(v[voice="Mary"]) { color: lime }
+/* Blank lines can be simulated with a line containing only a space or tab character. */
+ 
+::cue(i) { font-style: italic }
+::cue(.loud) { font-size: 2em }
+
+00:00.000 --> 00:01.000
+A cue
+
+00:00:01.000 --> 00:00:02.000
+A cue with hours
+
+00:00.000   -->   00:01.000
+A cue with more than one space around the arrow
+
+00:00.000	-->	00:01.000
+A cue with tabs around the arrow
+
+00:00.000 	-->	 00:01.000
+A cue with spaces and tabs around the arrow
+
+00:00.000 --> 00:01.000   
+A cue with spaces after the timestamp
+
+00:00.000 --> 00:01.000			
+A cue with tabs after the timestamp
+
+NOTE Comments can be put inbetween cues.
+
+NOTE An empty cue
+
+00:00:01.000 --> 00:00:02.000
+
+This is an id.
+00:02.000 --> 00:03.000
+A cue with an ID.
+
+00:02.000 --> 00:03.000
+A multi-
+line cue.
+
+00:02.000 --> 00:03.000
+A <c>multi-
+line cue
+with</c> a
+span.
+
+00:02.000 --> 00:03.000
+Multiple blank lines after this cue.
+
+
+
+
+
+02:00.000 --> 02:05.000 vertical:lr line:33%,start position:33%,line-right size:33% align:start region:fred
+A cue with all possible cue settings.
+
+02:00.000 --> 02:05.000 vertical:lr	line:33%,start	 position:33%,line-right	 size:33% align:start  region:fred
+Cue settings delimited by combinations of tabs and spaces
+
+02:00.000 --> 02:05.000 verticallr line33%,start position33%,line-right size33% alignstart regionfred
+Cue settings without the optional colons
+
+02:00.000 --> 02:05.000 vertical: line: position: size: align: region:
+Cue settings without the optional values
+
+02:00.000 --> 02:05.000 vertical line position size align region
+Cue settings with neither colons nor values
+
+02:00.000 --> 02:05.000 line:33.344% position:33.344% size:33.344%
+Decimal percentages
+
+02:00.000 --> 02:05.000 line:5 position:5
+Integer values for line and position
+
+02:00.000 --> 02:05.000 line:-5 position:-5
+Negative integer values for line and position
+
+02:00.000 --> 02:05.000
+<c.yellow>One class.</c>
+
+02:00.000 --> 02:05.000
+<c.yellow.bg_blue>Two classes.</c>
+
+04:00.000 --> 04:05.000
+<c.yellow.bg_blue.magenta.bg_black>Three classes.</c>
+
+02:00.000 --> 02:05.000
+Spans can sit <i>inbetween</i> regular text. 
+
+02:00.000 --> 02:05.000
+<ruby>Spans can also be <rt>nested.</rt></ruby>.
+
+02:00.000 --> 02:05.000
+<i.class1.class2>I spans can have classes.</i>
+<b.class1.class2>B spans can have classes.</b>
+<c.class1.class2>C spans can have classes.</c>
+<u.class1.class2>U spans can have classes.</u>
+<ruby.class1.class2>Ruby spans can have classes.</ruby>
+<rt.class1.class2>Rt spans can have classes.</rt>
+<v.class1.class2 V spans must also have annotations>after their classes.</v>
+<lang.class1.class2 Lang spans must have annotations>after their classes.</lang>
+
+02:00.000 --> 02:05.000
+Chapter title text can contain &#8220;character references&#8220;.
+Chapter title text can contain &quot;character references&quot;.
+Chapter title text can contain &x22;character references&x22;.
+
+NOTE Comment at end of file
