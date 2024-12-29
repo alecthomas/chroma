@@ -1,0 +1,10 @@
+[
+  {"type":"Keyword","value":"WEBVTT"},
+  {"type":"Text","value":"\t\t\t\twith some extra text after multiple tab characters\n\n"},
+  {"type":"LiteralDate","value":"00:00.000"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"--\u003e"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralDate","value":"00:01.000"},
+  {"type":"Text","value":"\nMock cue"}
+]
