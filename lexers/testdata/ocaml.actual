@@ -1,0 +1,27 @@
+let create_user =
+    (unit ->. unit)
+    @@ {eos|
+      CREATE TABLE IF NOT EXISTS user (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL CHECK (LENGTH(name) <= 256),
+        password_hash TEXT NOT NULL,
+        created_unix INTEGER NOT NULL DEFAULT (unixepoch()),
+
+        UNIQUE (name COLLATE NOCASE)
+      ) STRICT
+    |eos}
+
+let create_group =
+    (unit ->. unit)
+    @@ {|
+      CREATE TABLE IF NOT EXISTS `group` (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL CHECK (LENGTH(name) <= 256),
+        description TEXT CHECK (description IS NULL OR LENGTH(description) <= 1024),
+        user_id INTEGER NOT NULL, -- Controls the group
+        created_unix INTEGER NOT NULL DEFAULT (unixepoch()),
+
+        FOREIGN KEY (user_id) REFERENCES user(id),
+        UNIQUE (name COLLATE NOCASE)
+      ) STRICT
+    |}
