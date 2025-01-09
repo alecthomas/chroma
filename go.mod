@@ -1,6 +1,6 @@
 module github.com/alecthomas/chroma/v2
 
-go 1.19
+go 1.22
 
 require (
 	github.com/alecthomas/assert/v2 v2.11.0
