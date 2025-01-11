@@ -1,3 +1,6 @@
+#+feature dynamic-literals
+#+build windows,!linux
+#+ignore
 package main
 
 import "core:fmt"
