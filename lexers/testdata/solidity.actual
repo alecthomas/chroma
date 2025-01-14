@@ -9,6 +9,14 @@ contract ReactExample {
         you_awesome = "You're awesome";
     }
     
+    function AssemblyExample() public {
+        assembly {
+            let o := sload(0)
+            call(gas(), o, 5, 0, 0, 0, 0)
+        }
+        require(success, "Failed to send ETH");
+    }
+    
     function kill() public {
         require(msg.sender==owner);
         selfdestruct(owner);
