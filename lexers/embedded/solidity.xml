@@ -247,7 +247,7 @@
         <token type="Punctuation"/>
         <pop depth="1"/>
       </rule>
-      <rule pattern="[(),]">
+      <rule pattern="[(),.]">
         <token type="Punctuation"/>
       </rule>
       <rule pattern=":=|=:">
