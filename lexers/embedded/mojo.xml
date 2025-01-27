@@ -126,7 +126,7 @@
       <rule pattern="[_\p{L}][_\p{L}\p{N}]*(\s*\.\s*[_\p{L}][_\p{L}\p{N}]*)*"><token type="NameClass"/><pop depth="1"/></rule>
     </state>
     <state name="structname">
-      <rule pattern="[_\p{L}][_\p{L}\p{N}]*(\s*\.\s*[_\p{L}][_\p{L}\p{N}]*)*"><token type="NameStruct"/><pop depth="1"/></rule>
+      <rule pattern="[_\p{L}][_\p{L}\p{N}]*(\s*\.\s*[_\p{L}][_\p{L}\p{N}]*)*"><token type="NameClass"/><pop depth="1"/></rule>
     </state>
     <state name="import">
       <rule pattern="(\s+)(as)(\s+)"><bygroups><token type="TextWhitespace"/><token type="Keyword"/><token type="TextWhitespace"/></bygroups></rule>

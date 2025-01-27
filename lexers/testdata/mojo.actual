@@ -1,5 +1,0 @@
-from a import B
-
-struct Struct:
-    """Docstring"""
-    pass
