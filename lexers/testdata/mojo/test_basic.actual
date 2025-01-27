@@ -1,0 +1,42 @@
+from a import B
+from a import C as D
+
+alias ModuleInt = Int
+
+fn my_func[T: Int](a: T) -> T:
+    var s = Struct[Int]()
+    var b = s.test(a=a)
+
+    try:
+        a = raising_func(a)
+    except:
+        return a
+    finally:
+        pass
+
+    return a
+
+fn raising_func(a: Int) raises -> Int:
+    if a == 0:
+        raise ValueError("error message")
+    return a
+
+struct Struct[T: Int]:
+    """
+    Docstring.
+    
+    With multiple lines.
+    """
+    
+    alias MyInt = Int
+    """Simple Docstring."""
+
+    var x: Int
+
+    fn test(self, a: Int) -> Int:
+        return a
+
+
+trait Trait:
+    fn dummy(self):
+        ...
