@@ -14,6 +14,8 @@ github.com/alecthomas/kong v1.5.1 h1:9quB93P2aNGXf5C1kWNei85vjBgITNJQA4dSwJQGCOY
 github.com/alecthomas/kong v1.5.1/go.mod h1:p2vqieVMeTAnaC83txKtXe8FLke2X07aruPWXyMPQrU=
 github.com/alecthomas/kong v1.6.1 h1:/7bVimARU3uxPD0hbryPE8qWrS3Oz3kPQoxA/H2NKG8=
 github.com/alecthomas/kong v1.6.1/go.mod h1:p2vqieVMeTAnaC83txKtXe8FLke2X07aruPWXyMPQrU=
+github.com/alecthomas/kong v1.7.0 h1:MnT8+5JxFDCvISeI6vgd/mFbAJwueJ/pqQNzZMsiqZE=
+github.com/alecthomas/kong v1.7.0/go.mod h1:p2vqieVMeTAnaC83txKtXe8FLke2X07aruPWXyMPQrU=
 github.com/alecthomas/kong-hcl v1.0.1 h1:f4svdFpEoNUwlpZj57CvfhzSnSfP/KBzMDETlwamd/s=
 github.com/alecthomas/kong-hcl v1.0.1/go.mod h1:6Y+MaMTZ/KQe9Qme6aSlKtql65FJE0/1O+Mu56C6UgQ=
 github.com/alecthomas/repr v0.2.0 h1:HAzS41CIzNW5syS8Mf9UwXhNH1J9aix/BvDRf1Ml2Yk=
