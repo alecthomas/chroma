@@ -262,6 +262,15 @@ type Style struct {
 	parent  *Style
 }
 
+func (s *Style) ClearBackground() (*Style, error) {
+	builder := s.Builder()
+	bg := s.get(Background)
+	bg.Background = 0
+	bg.NoInherit = true
+	builder.AddEntry(Background, bg)
+	return builder.Build()
+}
+
 func (s *Style) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if s.parent != nil {
 		return fmt.Errorf("cannot marshal style with parent")

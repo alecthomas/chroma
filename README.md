@@ -149,6 +149,8 @@ style := styles.Get("swapoff")
 if style == nil {
   style = styles.Fallback
 }
+style, _ = ClearBackground()
+
 formatter := formatters.Get("html")
 if formatter == nil {
   formatter = formatters.Fallback
