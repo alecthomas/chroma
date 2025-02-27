@@ -9,7 +9,10 @@ import (
 )
 
 // TTY16m is a true-colour terminal formatter.
-var TTY16m = Register("terminal16m", chroma.FormatterFunc(trueColourFormatter))
+var TTY16m = Register("terminal16m", chroma.FormatterFunc(trueColour))
+
+// TTY16mBG is a true-colour terminal formatter with Background colours enabled.
+var TTY16mBG = Register("terminal16mBG", chroma.FormatterFunc(trueColourBG))
 
 var crOrCrLf = regexp.MustCompile(`\r?\n`)
 
@@ -44,7 +47,15 @@ func writeToken(w io.Writer, formatting string, text string) {
 	}
 }
 
-func trueColourFormatter(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
+func trueColour(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
+	style, _ = style.ClearBackground()
+	return Formatter(w, style, it)
+}
+func trueColourBG(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
+	return Formatter(w, style, it)
+}
+
+func Formatter(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
 	for token := it(); token != chroma.EOF; token = it() {
 		entry := style.Get(token.Type)
 		if entry.IsZero() {

@@ -223,9 +223,13 @@ func styleToEscapeSequence(table *ttyTable, style *chroma.Style) map[chroma.Toke
 
 type indexedTTYFormatter struct {
 	table *ttyTable
+	enabledBackground bool
 }
 
 func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma.Iterator) (err error) {
+	if !c.enabledBackground {
+		style, _ = style.ClearBackground()
+	}
 	theme := styleToEscapeSequence(c.table, style)
 	for token := it(); token != chroma.EOF; token = it() {
 		clr, ok := theme[token.Type]
@@ -252,21 +256,43 @@ func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma
 // TTY is an 8-colour terminal formatter.
 //
 // The Lab colour space is used to map RGB values to the most appropriate index colour.
-var TTY = Register("terminal", &indexedTTYFormatter{ttyTables[8]})
+var TTY = Register("terminal", &indexedTTYFormatter{ttyTables[8], false})
 
 // TTY8 is an 8-colour terminal formatter.
 //
 // The Lab colour space is used to map RGB values to the most appropriate index colour.
-var TTY8 = Register("terminal8", &indexedTTYFormatter{ttyTables[8]})
+var TTY8 = Register("terminal8", &indexedTTYFormatter{ttyTables[8], false})
 
 // TTY16 is a 16-colour terminal formatter.
 //
 // It uses \033[3xm for normal colours and \033[90Xm for bright colours.
 //
 // The Lab colour space is used to map RGB values to the most appropriate index colour.
-var TTY16 = Register("terminal16", &indexedTTYFormatter{ttyTables[16]})
+var TTY16 = Register("terminal16", &indexedTTYFormatter{ttyTables[16], false})
 
 // TTY256 is a 256-colour terminal formatter.
 //
 // The Lab colour space is used to map RGB values to the most appropriate index colour.
-var TTY256 = Register("terminal256", &indexedTTYFormatter{ttyTables[256]})
+var TTY256 = Register("terminal256", &indexedTTYFormatter{ttyTables[256], false})
+
+// TTY BG is an 8-colour terminal formatter with background colour enabled.
+//
+// The Lab colour space is used to map RGB values to the most appropriate index colour.
+var TTYBG = Register("terminalBG", &indexedTTYFormatter{ttyTables[8], true})
+
+// TTY8 BG is an 8-colour terminal formatter with background colour enabled.
+//
+// The Lab colour space is used to map RGB values to the most appropriate index colour.
+var TTY8BG = Register("terminal8BG", &indexedTTYFormatter{ttyTables[8], true})
+
+// TTY16 BG is a 16-colour terminal formatter with background colour enabled.
+//
+// It uses \033[3xm for normal colours and \033[90Xm for bright colours.
+//
+// The Lab colour space is used to map RGB values to the most appropriate index colour.
+var TTY16BG = Register("terminal16BG", &indexedTTYFormatter{ttyTables[16], true})
+
+// TTY256 BG is a 256-colour terminal formatter with background colour enabled.
+//
+// The Lab colour space is used to map RGB values to the most appropriate index colour.
+var TTY256BG = Register("terminal256BG", &indexedTTYFormatter{ttyTables[256], true})
