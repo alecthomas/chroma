@@ -25,7 +25,7 @@ func TestCompressStyle(t *testing.T) {
 func BenchmarkHTMLFormatter(b *testing.B) {
 	formatter := New()
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
 		assert.NoError(b, err)
 		err = formatter.Format(io.Discard, styles.Fallback, it)

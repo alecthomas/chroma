@@ -2,11 +2,11 @@ module github.com/alecthomas/chroma/v2/cmd/chromad
 
 go 1.22
 
-toolchain go1.23.5
+toolchain go1.24.1
 
 require (
 	github.com/alecthomas/chroma/v2 v2.15.0
-	github.com/alecthomas/kong v1.7.0
+	github.com/alecthomas/kong v1.8.1
 	github.com/alecthomas/kong-hcl v1.0.1
 	github.com/gorilla/csrf v1.7.2
 	github.com/gorilla/handlers v1.5.2
