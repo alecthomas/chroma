@@ -1,0 +1,31 @@
+http {
+    upstream app_backend {
+        server 127.0.0.1;
+        server 127.0.0.1:8082;
+        server backend.com;
+        server backend-2.com weight=5;
+        server backend-backup.org backup;
+    }
+
+    map $http_host $site_root {
+        default /var/www/default; # Default root
+        example.com /var/www/example_com;
+        example.org /var/www/example_org;
+    }
+
+    server {
+        listen 80 default_server;
+        server_name _;
+
+        root /var/www/default;
+
+        location / {
+            index index.html;
+        }
+
+        location /status {
+            return 200 "Default server status: OK\n";
+            add_header Content-Type text/plain;
+        }
+    }
+}
