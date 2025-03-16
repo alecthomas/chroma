@@ -44,6 +44,19 @@ func TestGet(t *testing.T) {
 	})
 }
 
+func TestAliases(t *testing.T) {
+	t.Run("UseNameIfNoAliases", func(t *testing.T) {
+		expected := lexers.GlobalLexerRegistry.Aliases(false)
+		actual := lexers.Aliases(false)
+		assert.Equal(t, expected, actual)
+	})
+	t.Run("SkipIfNoAliases", func(t *testing.T) {
+		expected := lexers.GlobalLexerRegistry.Aliases(true)
+		actual := lexers.Aliases(true)
+		assert.Equal(t, expected, actual)
+	})
+}
+
 func TestGlobs(t *testing.T) {
 	filename := "main.go"
 	for _, lexer := range lexers.GlobalLexerRegistry.Lexers {
