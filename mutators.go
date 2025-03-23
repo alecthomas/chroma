@@ -33,7 +33,7 @@ type MutatorFunc func(state *LexerState) error
 func (m MutatorFunc) Mutate(state *LexerState) error { return m(state) } // nolint
 
 type multiMutator struct {
-	Mutators []Mutator `xml:"mutator"`
+	Mutators []Mutator `parser:"(@@ (',' @@)*)?" xml:"mutator"`
 }
 
 func (m *multiMutator) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -86,7 +86,7 @@ func Mutators(modifiers ...Mutator) Mutator {
 }
 
 type includeMutator struct {
-	State string `xml:"state,attr"`
+	State string `parser:"'include' @String" xml:"state,attr"`
 }
 
 // Include the given state.
@@ -110,7 +110,7 @@ func (i *includeMutator) MutateLexer(rules CompiledRules, state string, rule int
 }
 
 type combinedMutator struct {
-	States []string `xml:"state,attr"`
+	States []string `parser:"'combined' @Ident (',' @Ident)*" xml:"state,attr"`
 }
 
 func (c *combinedMutator) MutatorKind() string { return "combined" }
@@ -142,7 +142,7 @@ func (c *combinedMutator) MutateLexer(rules CompiledRules, state string, rule in
 }
 
 type pushMutator struct {
-	States []string `xml:"state,attr"`
+	States []string `parser:"'push' (@Ident (',' @Ident)*)?" xml:"state,attr"`
 }
 
 func (p *pushMutator) MutatorKind() string { return "push" }
@@ -168,7 +168,7 @@ func Push(states ...string) Mutator {
 }
 
 type popMutator struct {
-	Depth int `xml:"depth,attr"`
+	Depth int `parser:"'pop' @Int?" xml:"depth,attr"`
 }
 
 func (p *popMutator) MutatorKind() string { return "pop" }

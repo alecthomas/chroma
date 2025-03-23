@@ -1,11 +1,26 @@
 package chroma
 
+import (
+	"github.com/alecthomas/participle/v2"
+	"github.com/alecthomas/participle/v2/lexer"
+)
+
 //go:generate enumer -text -type TokenType
 
 // TokenType is the type of token to highlight.
 //
 // It is also an Emitter, emitting a single token of itself
 type TokenType int
+
+// Parse implements participle.Parseable.
+func (t *TokenType) Parse(lex *lexer.PeekingLexer) error {
+	tok := lex.Peek()
+	if err := t.UnmarshalText([]byte(tok.Value)); err != nil {
+		return participle.NextMatch
+	}
+	lex.Next()
+	return nil
+}
 
 // Set of TokenTypes.
 //

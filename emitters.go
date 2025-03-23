@@ -27,7 +27,7 @@ func (e EmitterFunc) Emit(groups []string, state *LexerState) Iterator {
 type Emitters []Emitter
 
 type byGroupsEmitter struct {
-	Emitters
+	Emitters `parser:"'by' 'groups' @@ (',' @@)*"`
 }
 
 // ByGroups emits a token for each matching group in the rule's regex.
@@ -171,7 +171,7 @@ func UsingLexer(lexer Lexer) Emitter {
 }
 
 type usingEmitter struct {
-	Lexer string `xml:"lexer,attr"`
+	Lexer string `parser:"'using' @String" xml:"lexer,attr"`
 }
 
 func (u *usingEmitter) EmitterKind() string { return "using" }
@@ -199,7 +199,7 @@ func Using(lexer string) Emitter {
 }
 
 type usingSelfEmitter struct {
-	State string `xml:"state,attr"`
+	State string `parser:"'using' 'self' @String" xml:"state,attr"`
 }
 
 func (u *usingSelfEmitter) EmitterKind() string { return "usingself" }

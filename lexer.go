@@ -15,30 +15,30 @@ var (
 // Config for a lexer.
 type Config struct {
 	// Name of the lexer.
-	Name string `xml:"name,omitempty"`
+	Name string `parser:"('name' @String" xml:"name,omitempty"`
 
 	// Shortcuts for the lexer
-	Aliases []string `xml:"alias,omitempty"`
+	Aliases []string `parser:"| 'aliases' @String (',' @String)*" xml:"alias,omitempty"`
 
 	// File name globs
-	Filenames []string `xml:"filename,omitempty"`
+	Filenames []string `parser:"| 'filenames' @String (',' @String)*" xml:"filename,omitempty"`
 
 	// Secondary file name globs
-	AliasFilenames []string `xml:"alias_filename,omitempty"`
+	AliasFilenames []string `parser:"| 'alias-filenames' @String (',' @String)*" xml:"alias_filename,omitempty"`
 
 	// MIME types
-	MimeTypes []string `xml:"mime_type,omitempty"`
+	MimeTypes []string `parser:"| 'mime-types' @String (',' @String)*" xml:"mime_type,omitempty"`
 
 	// Regex matching is case-insensitive.
-	CaseInsensitive bool `xml:"case_insensitive,omitempty"`
+	CaseInsensitive bool `parser:"| @'case_insensitive'" xml:"case_insensitive,omitempty"`
 
 	// Regex matches all characters.
-	DotAll bool `xml:"dot_all,omitempty"`
+	DotAll bool `parser:"| @'dot-all'" xml:"dot_all,omitempty"`
 
 	// Regex does not match across lines ($ matches EOL).
 	//
 	// Defaults to multiline.
-	NotMultiline bool `xml:"not_multiline,omitempty"`
+	NotMultiline bool `parser:"| @'not-multiline'" xml:"not_multiline,omitempty"`
 
 	// Don't strip leading and trailing newlines from the input.
 	// DontStripNL bool
@@ -48,7 +48,7 @@ type Config struct {
 
 	// Make sure that the input ends with a newline. This
 	// is required for some lexers that consume input linewise.
-	EnsureNL bool `xml:"ensure_nl,omitempty"`
+	EnsureNL bool `parser:"| @'ensure-nl'" xml:"ensure_nl,omitempty"`
 
 	// If given and greater than 0, expand tabs in the input.
 	// TabSize int
@@ -56,27 +56,31 @@ type Config struct {
 	// Priority of lexer.
 	//
 	// If this is 0 it will be treated as a default of 1.
-	Priority float32 `xml:"priority,omitempty"`
+	Priority float32 `parser:"| 'priority' @Float" xml:"priority,omitempty"`
 
 	// Analyse is a list of regexes to match against the input.
 	//
 	// If a match is found, the score is returned if single attribute is set to true,
 	// otherwise the sum of all the score of matching patterns will be
 	// used as the final score.
-	Analyse *AnalyseConfig `xml:"analyse,omitempty"`
+	Analyse *AnalyseConfig `parser:"| @@ )*" xml:"analyse,omitempty"`
 }
 
 // AnalyseConfig defines the list of regexes analysers.
+//
+// Syntax:
+//
+//	analyse /foo/=1.0 /bar/=2.0 first
 type AnalyseConfig struct {
-	Regexes []RegexConfig `xml:"regex,omitempty"`
+	Regexes []RegexConfig `parser:"'analyse' @@*" xml:"regex,omitempty"`
 	// If true, the first matching score is returned.
-	First bool `xml:"first,attr"`
+	First bool `parser:"@'first'" xml:"first,attr"`
 }
 
 // RegexConfig defines a single regex pattern and its score in case of match.
 type RegexConfig struct {
-	Pattern string  `xml:"pattern,attr"`
-	Score   float32 `xml:"score,attr"`
+	Pattern string  `parser:"(@String | @Regex)" xml:"pattern,attr"`
+	Score   float32 `parser:"@Float"             xml:"score,attr"`
 }
 
 // Token output to formatter.

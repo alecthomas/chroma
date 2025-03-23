@@ -16,9 +16,9 @@ import (
 
 // A Rule is the fundamental matching unit of the Regex lexer state machine.
 type Rule struct {
-	Pattern string
-	Type    Emitter
-	Mutator Mutator
+	Pattern string  `parser:"@Regex"`
+	Type    Emitter `parser:"@@"`
+	Mutator Mutator `parser:"@@?"`
 }
 
 // Words creates a regex that matches any of the given literal words.

@@ -8,4 +8,7 @@ require (
 	github.com/dlclark/regexp2 v1.11.5
 )
 
-require github.com/hexops/gotextdiff v1.0.3 // indirect
+require (
+	github.com/alecthomas/participle/v2 v2.1.3
+	github.com/hexops/gotextdiff v1.0.3 // indirect
+)
