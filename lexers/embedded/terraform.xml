@@ -18,18 +18,15 @@
       <rule pattern="\\\\&#34;">
         <token type="LiteralStringDouble"/>
       </rule>
-      <rule pattern="[&#34;\\\\]">
+      <rule pattern="[^&#34;\\\\$]+">
         <token type="LiteralStringDouble"/>
       </rule>
-      <rule pattern="[\\\\&#34;]">
+      <rule pattern="[^\\\\&#34;$]+">
         <token type="LiteralStringDouble"/>
       </rule>
       <rule pattern="\$\{">
         <token type="LiteralStringInterpol"/>
         <push state="interp-inside"/>
-      </rule>
-      <rule pattern=".">
-        <token type="LiteralStringDouble"/>
       </rule>
     </state>
     <state name="interp-inside">
