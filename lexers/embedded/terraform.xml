@@ -39,7 +39,7 @@
       </rule>
     </state>
     <state name="root">
-      <rule pattern="[\[\](),.{}:\/&#38;]">
+      <rule pattern="[\[\](),.{}]">
         <token type="Punctuation"/>
       </rule>
       <rule pattern="&#34;">
