@@ -6,11 +6,11 @@ resource "something" "nice" {
   name        = "hello"
   value       = var.some_var
   x           = var.some_var > 5 ? var.some_var : 10
-
   cidr_blocks = [
     for num in [1,2,3]:
     cidrhost("10.0.0.0/24", num)
   ]
+
   str = <<-EOT
     hello
     world
@@ -19,8 +19,8 @@ resource "something" "nice" {
   /*
     Multiline comment
   */
-  # Single comment
 
+  # Single comment
   dynamic "setting" {
     for_each = var.settings
     content {
@@ -31,9 +31,57 @@ resource "something" "nice" {
   }
 }
 
-
 resource "other" "resource" {
   count = 3
   name = "resource${count.index+1}"
 }
 
+# #988 'Dot in string breaks highlighting in Terraform'
+resource "aws_s3_bucket" "this" {
+  bucket = "my-tf-test-bucket"
+  website {
+    index_document = "index.html"
+    error_document = "error.html"
+  }
+}
+
+# An IAM Policy Document that has a parameter 'variable' that overlaps with the variable class
+# variable = below should be variable (text) = (punctuation). variable above should be NameReserved
+data "aws_iam_policy_document" "example" {
+  statement {
+    sid = "1"
+    actions = [
+      "s3:ListAllMyBuckets",
+      "s3:GetBucketLocation",
+    ]
+    resources = [
+      "arn:aws:s3:::*",
+    ]
+  }
+  statement {
+    actions = [
+      "s3:ListBucket",
+    ]
+    resources = [
+      "arn:aws:s3:::${var.s3_bucket_name}",
+    ]
+    condition {
+      test     = "StringLike"
+      variable = "s3:prefix"
+      values = [
+        "",
+        "home/",
+        "home/&{aws:username}/",
+      ]
+    }
+  }
+  statement {
+    actions = [
+      "s3:*",
+    ]
+    resources = [
+      "arn:aws:s3:::${var.s3_bucket_name}/home/&{aws:username}",
+      "arn:aws:s3:::${var.s3_bucket_name}/home/&{aws:username}/*",
+    ]
+  }
+}

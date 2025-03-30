@@ -15,20 +15,9 @@
         <token type="LiteralStringDouble"/>
         <pop depth="1"/>
       </rule>
-
-      <!-- <rule pattern="\\\\">
-        <token type="LiteralStringDouble"/>
-      </rule> -->
       <rule pattern="\\\\&#34;">
         <token type="LiteralStringDouble"/>
       </rule>
-      <!-- <rule pattern="\$\{">
-        <token type="LiteralStringInterpol"/>
-        <push state="interp-inside"/>
-      </rule> -->
-      <!-- <rule pattern="\$">
-        <token type="LiteralStringDouble"/>
-      </rule> -->
       <rule pattern="[&#34;\\\\]">
         <token type="LiteralStringDouble"/>
       </rule>
@@ -38,17 +27,7 @@
       <rule pattern=".">
         <token type="LiteralStringDouble"/>
       </rule>
-
-
     </state>
-    <!-- <state name="interp-inside">
-      <rule pattern="\}">
-        <token type="LiteralStringInterpol"/>
-      </rule>
-      <rule>
-        <include state="root"/>
-      </rule>
-    </state> -->
     <state name="root">
       <rule pattern="[\[\](),.{}]">
         <token type="Punctuation"/>
@@ -56,9 +35,7 @@
       <rule pattern="&#34;">
         <token type="LiteralStringDouble"/>
         <push state="string"/>
-
       </rule>
-
       <rule pattern="-?[0-9]+">
         <token type="LiteralNumber"/>
       </rule>
@@ -129,7 +106,6 @@
       <rule pattern="[a-zA-Z]\w*">
         <token type="NameOther"/>
       </rule>
-
       <rule pattern="(?s)(&lt;&lt;-?)(\w+)(\n\s*(?:(?!\2).)*\s*\n\s*)(\2)">
         <bygroups>
           <token type="Operator"/>
