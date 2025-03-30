@@ -1,2 +1,0 @@
-pygments==2.19.1
-pystache==0.6.8
