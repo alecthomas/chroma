@@ -24,12 +24,25 @@
       <rule pattern="[\\\\&#34;]">
         <token type="LiteralStringDouble"/>
       </rule>
+      <rule pattern="\$\{">
+        <token type="LiteralStringInterpol"/>
+        <push state="interp-inside"/>
+      </rule>
       <rule pattern=".">
         <token type="LiteralStringDouble"/>
       </rule>
     </state>
+    <state name="interp-inside">
+      <rule pattern="\}">
+        <token type="LiteralStringInterpol"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="root"/>
+      </rule>
+    </state>
     <state name="root">
-      <rule pattern="[\[\](),.{}]">
+      <rule pattern="[\[\](),.{}:\/&#38;]">
         <token type="Punctuation"/>
       </rule>
       <rule pattern="&#34;">
