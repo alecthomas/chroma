@@ -50,9 +50,6 @@
       </rule>
     </state> -->
     <state name="root">
-      <rule pattern="(?!\s*)\{$">
-        <token type="Punctuation"/>
-      </rule>
       <rule pattern="[\[\](),.{}]">
         <token type="Punctuation"/>
       </rule>
@@ -120,7 +117,7 @@
       <rule pattern="(tostring|tonumber|tobool|tolist|tomap|toset|can|try)\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(default|type|description|value)">
+      <rule pattern="(name|x|default|type|description|value)">
         <token type="NameAttribute"/>
       </rule>
       <rule pattern="=(?!&gt;)|\+|-|\*|\/|:|!|%|&gt;|&lt;(?!&lt;)|&gt;=|&lt;=|==|!=|&amp;&amp;|\||\?">
@@ -146,11 +143,14 @@
       <rule pattern="(\s*)(&#34;(?:\\\\|\\&#34;|[^&#34;])*&#34;)(\s*)">
         <bygroups>
           <token type="Text"/>
-          <token type="NameVariable"/>
+          <token type="NameAttribute"/>
           <token type="Text"/>
         </bygroups>
       </rule>
-
+      <rule pattern="\{">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
     </state>
   </rules>
 </lexer>
