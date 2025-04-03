@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-(cd cmd/chromad ; go build -o $TMPDIR/chromad .) && exec $TMPDIR/chromad "$@"
+go build -C cmd/chromad -o $TMPDIR/chromad . && exec $TMPDIR/chromad "$@"

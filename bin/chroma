@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-(cd cmd/chroma ; go build -o $TMPDIR/chroma .) && exec $TMPDIR/chroma "$@"
+go build -C cmd/chroma -o $TMPDIR/chroma . && exec $TMPDIR/chroma "$@"
