@@ -248,9 +248,6 @@ For a quick overview of the available styles and how they look, check out the [C
 
 ## Command-line interface
 
-[`moar`](https://github.com/walles/moar) is a full-blown pager that colorizes
-its input using Chroma.
-
 A command-line interface to Chroma is included.
 
 Binaries are available to install from [the releases page](https://github.com/alecthomas/chroma/releases).
@@ -272,6 +269,13 @@ When invoked as `.lessfilter`, the `--fail` flag is automatically turned
 on under the hood for easy integration with [lesspipe shipping with
 Debian and derivatives](https://manpages.debian.org/lesspipe#USER_DEFINED_FILTERS);
 for that setup the `chroma` executable can be just symlinked to `~/.lessfilter`.
+
+## Projects using Chroma
+
+* [`moar`](https://github.com/walles/moar) is a full-blown pager that colorizes
+  its input using Chroma
+* [Hugo](https://gohugo.io/) is a static site generator that [uses Chroma for syntax
+  highlighting code examples](https://gohugo.io/content-management/syntax-highlighting/)
 
 ## Testing lexers
 
