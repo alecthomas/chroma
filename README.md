@@ -270,6 +270,13 @@ on under the hood for easy integration with [lesspipe shipping with
 Debian and derivatives](https://manpages.debian.org/lesspipe#USER_DEFINED_FILTERS);
 for that setup the `chroma` executable can be just symlinked to `~/.lessfilter`.
 
+## Projects using Chroma
+
+* [`moar`](https://github.com/walles/moar) is a full-blown pager that colorizes
+  its input using Chroma
+* [Hugo](https://gohugo.io/) is a static site generator that [uses Chroma for syntax
+  highlighting code examples](https://gohugo.io/content-management/syntax-highlighting/)
+
 ## Testing lexers
 
 If you edit some lexers and want to try it, open a shell in `cmd/chromad` and run:
