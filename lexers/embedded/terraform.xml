@@ -104,7 +104,7 @@
       <rule pattern="(tostring|tonumber|tobool|tolist|tomap|toset|can|try)\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(name|x|default|type|description|value)">
+      <rule pattern="(name|x|default|type|description|value)(_[a-zA-Z]\w*)*">
         <token type="NameAttribute"/>
       </rule>
       <rule pattern="=(?!&gt;)|\+|-|\*|\/|:|!|%|&gt;|&lt;(?!&lt;)|&gt;=|&lt;=|==|!=|&amp;&amp;|\||\?">
