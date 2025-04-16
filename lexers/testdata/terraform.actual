@@ -90,10 +90,30 @@ data "aws_iam_policy_document" "example" {
 provider "aws" {
   default_tags {
     tags = {
+      name = "My Awesome AWS Environment"
       environment = var.app.environment
       application = var.app.name
       owner       = var.app.owner
       contact     = var.app.contact
     }
   }
+}
+
+# name here is NameAttribute
+resource "aws_lb" "web" {
+	name = "my fancy lb"
+	port = 80
+}
+
+# The first name is NameAttribute the second is not
+resource "aws_s3_bucket" "my_bucket" {
+	name = var.name
+
+}
+
+# type, description, default are all NameAttribute
+variable "my_variable" {
+	type = number
+	description = "The port the application listens on"
+	default = 80
 }
