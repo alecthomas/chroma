@@ -8,6 +8,17 @@
     </ul-extendded>
 </template>
 
+<template v-else>
+	<svg-icon v-if="isViewTag">
+	<svg-icon v-else-if="isViewTree" name="octicon-git-commit"/>
+	<svg-icon v-else name="octicon-git-branch"/>
+</template>
+<template>
+	<input type="hidden" name="_csrf" :value="csrfToken">
+	<a @click.stop>
+    <button @click="menuVisible = !menuVisible" @keyup.enter="menuVisible = !menuVisible"/>
+</template>
+
 <script>
     export default {
         name: "MyButton"
