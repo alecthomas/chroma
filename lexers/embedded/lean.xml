@@ -2,8 +2,10 @@
   <config>
     <name>Lean4</name>
     <alias>lean4</alias>
+    <alias>lean</alias>
     <filename>*.lean</filename>
     <mime_type>text/x-lean4</mime_type>
+    <mime_type>text/x-lean</mime_type>
   </config>
   <rules>
     <state name="expression">
