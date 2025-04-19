@@ -1,0 +1,16 @@
+def f(x : Nat) : Nat := x + 1
+
+-- comment
+
+theorem thm (p q r : Prop) : p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) := by
+  intro ⟨hp, hqr⟩
+  show (p ∧ q) ∨ (p ∧ r)
+  cases hqr with
+  | inl hq =>
+    have hpq : p ∧ q := And.intro hp hq
+    apply Or.inl
+    exact hpq
+  | inr hr =>
+    have hpr : p ∧ r := And.intro hp hr
+    apply Or.inr
+    exact hpr
