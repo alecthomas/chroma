@@ -47,14 +47,14 @@ translators for Pygments lexers and styles.
 |   I    | Idris, Igor, INI, Io, ISCdhcpd                                                                                                                                                                                                                      |
 |   J    | J, Java, JavaScript, JSON, Jsonnet, Julia, Jungle                                                                                                                                                                                                   |
 |   K    | Kotlin                                                                                                                                                                                                                                              |
-|   L    | Lighttpd configuration file, LLVM, Lua                                                                                                                                                                                                              |
-|   M    | Makefile, Mako, markdown, Mason, Materialize SQL dialect, Mathematica, Matlab, MCFunction, Meson, Metal, MiniZinc, MLIR, Modula-2, Mojo, MonkeyC, MorrowindScript, Myghty, MySQL                                                                          |
+|   L    | Lean, Lighttpd configuration file, LLVM, Lua                                                                                                                                                                                                        |
+|   M    | Makefile, Mako, markdown, Mason, Materialize SQL dialect, Mathematica, Matlab, MCFunction, Meson, Metal, MiniZinc, MLIR, Modula-2, Mojo, MonkeyC, MorrowindScript, Myghty, MySQL                                                                    |
 |   N    | NASM, Natural, Newspeak, Nginx configuration file, Nim, Nix, NSIS                                                                                                                                                                                   |
 |   O    | Objective-C, OCaml, Octave, Odin, OnesEnterprise, OpenEdge ABL, OpenSCAD, Org Mode                                                                                                                                                                  |
 |   P    | PacmanConf, Perl, PHP, PHTML, Pig, PkgConfig, PL/pgSQL, plaintext, Plutus Core, Pony, PostgreSQL SQL dialect, PostScript, POVRay, PowerQuery, PowerShell, Prolog, PromQL, Promela, properties, Protocol Buffer, PRQL, PSL, Puppet, Python, Python 2 |
 |   Q    | QBasic, QML                                                                                                                                                                                                                                         |
 |   R    | R, Racket, Ragel, Raku, react, ReasonML, reg, Rego, reStructuredText, Rexx, RPMSpec, Ruby, Rust                                                                                                                                                     |
-|   S    | SAS, Sass, Scala, Scheme, Scilab, SCSS, Sed, Sieve, Smali, Smalltalk, Smarty, SNBT, Snobol, Solidity, SourcePawn, SPARQL, SQL, SquidConf, Standard ML, stas, Stylus, Svelte, Swift, SYSTEMD, systemverilog                                                |
+|   S    | SAS, Sass, Scala, Scheme, Scilab, SCSS, Sed, Sieve, Smali, Smalltalk, Smarty, SNBT, Snobol, Solidity, SourcePawn, SPARQL, SQL, SquidConf, Standard ML, stas, Stylus, Svelte, Swift, SYSTEMD, systemverilog                                          |
 |   T    | TableGen, Tal, TASM, Tcl, Tcsh, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, Turing, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData, Typst                                              |
 |   V    | V, V shell, Vala, VB.net, verilog, VHDL, VHS, VimL, vue                                                                                                                                                                                             |
 |   W    | WDTE, WebGPU Shading Language, Whiley                                                                                                                                                                                                               |
@@ -213,8 +213,7 @@ python3 _tools/pygments2chroma_xml.py \
   > lexers/embedded/kotlin.xml
 ```
 
-See notes in [pygments-lexers.txt](https://github.com/alecthomas/chroma/blob/master/pygments-lexers.txt)
-for a list of lexers, and notes on some of the issues importing them.
+A list of all lexers available in Pygments can be found in [pygments-lexers.txt](https://github.com/alecthomas/chroma/blob/master/pygments-lexers.txt).
 
 ### Formatters
 
