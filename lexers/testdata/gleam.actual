@@ -18,3 +18,17 @@ pub fn main() {
   io.debug(reverse_list([1, 2, 3, 4, 5]))
   io.debug(reverse_list(["a", "b", "c", "d", "e"]))
 }
+
+pub fn plus_one(x: Int) -> Int {
+  x + 1
+}
+
+pub type Message {
+  RegisterFeed(String, Poller)
+}
+
+pub type Table = Subject(Message)
+
+pub fn start() -> Table {
+  todo
+}
