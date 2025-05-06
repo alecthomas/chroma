@@ -1,0 +1,60 @@
+<lexer>
+  <config>
+    <name>RPG IV</name>
+    <alias>rpgle</alias>
+    <alias>sqlrpgle</alias>
+    <filename>*.RPGLE</filename>
+    <filename>*.rpgle</filename>
+    <filename>*.SQLRPGLE</filename>
+    <filename>*.sqlrpgle</filename>
+    <mime_type>text/x-rpgle</mime_type>
+    <mime_type>text/x-sqlrpgle</mime_type>
+    <case_insensitive>true</case_insensitive>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\/\/.*">
+        <token type="Comment"/>
+      </rule>
+      <rule pattern="\*\*free">
+        <token type="CommentSpecial"/>
+      </rule>
+      <rule pattern="%(abs|addr|alloc|bitand|bitnot|bitor|bitxor|char|charcount|check|checkr|concat|concatarr|data|date|days|dec|dech|decpos|diff|div|editc|editflt|editw|elem|eof|equal|error|fields|float|found|gen|graph|handler|hival|hours|int|inth|kds|left|len|list|lookup(lt|ge|gt|le)?|loval|lower|max|maxarr|min|minutes|minarr|months|mseconds|msg|nullind|occur|omitted|open|paddr|parms|parmnum|parser|passed|proc|range|realloc|rem|replace|right|scan|scanr|scanrpl|seconds|shtdn|size|split|sqrt|status|str|subarr|subdt|subst|target|this|time|timestamp|tlookup(lt|ge|gt|le)?|trim(l|r)?|ucs2|uns|unsh|upper|xfoot|xlate|xml|years)">
+        <token type="NameFunctionMagic"/>
+      </rule>
+      <rule pattern="ind|int|uns|char|varchar|bindec|float|packed|zoned|time|timestamp|date|pointer|clob|blob">
+        <token type="KeywordType"/>
+      </rule>
+      <rule pattern="\*(hival|loval|null|utf8|input|output|update|delete|on|off|in([0-9]{2})?|inlr|crtbndrpg|date|month|year|day|blank(s)?|all|start|end|cdmy|cmdy|cymd|dmy|eur|hms|iso|jis|job|jobrun|jul|longjobrun|longjul|mdy|sys|usa|ymd|altseq|equate|file|ftrans|place|nopass|omit|rightadj|string|trim|varsize|nullind|exact|convert|yes|no|(no)?xref|(no)?gen|(no)?seclvl|(no)?showcpy|(no)?expdds|(no)?ext|(no)?showskp|(no)?srcstmt|(no)?debugio|new|caller|librctaut|all|change|use|exclude|n)">
+        <token type="Literal"/>
+      </rule>
+      <rule pattern="dcl\-(ds|pi|proc|pr|[csf])|end\-(ds|pi|proc|pr)|ctl\-opt|const|value|if|elseif|else|endif|for|to|downto|endfor|dou|dow|enddo|return|or|and|not|leave|iter|begsr|exsr|leavesr|endsr|snd\-msg|dsply|setll|chain|open|close|write|read|update|delete|exfmt|monitor|on-error|endmon">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="inz|ccsid|sqltype|like|likerec|likeds|workstn|disk|dftactgrp|rename|infds|reffld|psds|dim|pos|overlay|debug|datedit|option|datfmt|timfmt|actgrp|nomain|aut|bnddir|varying|export|import|extpgm|extproc|extname|occurs|output|dtaara|ctdata|perrcd|static|commit|ignore|include|prefix|sfile|usropn|extmbr|infsr|oflind">
+        <token type="KeywordReserved"/>
+      </rule>
+      <rule pattern="/(copy|define|eject|else|elseif|end-exec|end-free|endif|eof|exec|free|if|include|restore|set|space|title|undefine)">
+        <token type="CommentPreproc"/>
+      </rule>
+      <rule pattern="[0-9]+((\.[0-9]?)(e[+-][0-9]+)?)?">
+        <token type="LiteralNumber"/>
+      </rule>
+      <rule pattern="x?'[^']*'">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="[:;\(\)]+">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="((\*\*)|(&lt;&gt;)|=|([&lt;&gt;\+\-\*\/]=?))+">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="\s">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="[a-zA-Z0-9_]+">
+        <token type="Text"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
