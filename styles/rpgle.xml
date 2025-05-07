@@ -22,6 +22,7 @@
   <entry type="Operator" style="#f92672"/>
   <entry type="Punctuation" style="#ff0000"/>
   <entry type="Comment" style="#75715e"/>
+  <entry type="CommentPreproc" style="#2e7d32"/>
   <entry type="GenericEmph" style="italic"/>
   <entry type="GenericStrong" style="bold"/>
   <entry type="Text" style="#272822"/>
