@@ -29,7 +29,7 @@
       <rule pattern="\b(ind|int|uns|char|varchar|bindec|float|packed|zoned|time|timestamp|date|pointer|clob|blob)\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(\*(hival|loval|null|utf8|input|output|update|delete|on|off|in([0-9]{2})?|inlr|crtbndrpg|date|month|year|day|blank(s)?|all|start|end|cdmy|cmdy|cymd|dmy|eur|hms|iso|jis|job|jobrun|jul|longjobrun|longjul|mdy|sys|usa|ymd|altseq|equate|file|ftrans|place|nopass|omit|rightadj|string|trim|varsize|nullind|exact|convert|yes|no|(no)?xref|(no)?gen|(no)?seclvl|(no)?showcpy|(no)?expdds|(no)?ext|(no)?showskp|(no)?srcstmt|(no)?debugio|new|caller|librctaut|all|change|use|exclude|nounref|n))\b">
+      <rule pattern="(\*(hival|loval|null|utf8|input|output|update|delete|on|off|in|inlr|crtbndrpg|date|month|year|day|blank(s)?|all|start|end|cdmy|cmdy|cymd|dmy|eur|hms|iso|jis|job|jobrun|jul|longjobrun|longjul|mdy|sys|usa|ymd|altseq|equate|file|ftrans|place|nopass|omit|rightadj|string|trim|varsize|nullind|exact|convert|yes|no|(no)?xref|(no)?gen|(no)?seclvl|(no)?showcpy|(no)?expdds|(no)?ext|(no)?showskp|(no)?srcstmt|(no)?debugio|new|caller|librctaut|all|change|use|exclude|nounref|n))\b">
         <token type="Literal"/>
       </rule>
       <rule pattern="\b(dcl\-(ds|pi|proc|pr|[csf])|end\-(ds|pi|proc|pr)|ctl\-opt|const|value|to|downto|not)\b">
