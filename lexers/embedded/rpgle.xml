@@ -32,7 +32,10 @@
       <rule pattern="(\*(hival|loval|null|utf8|input|output|update|delete|on|off|in([0-9]{2})?|inlr|crtbndrpg|date|month|year|day|blank(s)?|all|start|end|cdmy|cmdy|cymd|dmy|eur|hms|iso|jis|job|jobrun|jul|longjobrun|longjul|mdy|sys|usa|ymd|altseq|equate|file|ftrans|place|nopass|omit|rightadj|string|trim|varsize|nullind|exact|convert|yes|no|(no)?xref|(no)?gen|(no)?seclvl|(no)?showcpy|(no)?expdds|(no)?ext|(no)?showskp|(no)?srcstmt|(no)?debugio|new|caller|librctaut|all|change|use|exclude|nounref|n))\b">
         <token type="Literal"/>
       </rule>
-      <rule pattern="\b(dcl\-(ds|pi|proc|pr|[csf])|end\-(ds|pi|proc|pr)|ctl\-opt|const|value|if|elseif|else|endif|for|to|downto|endfor|dou|dow|enddo|return|or|and|not|leave|iter|begsr|exsr|leavesr|endsr|snd\-msg|dsply|clear|setll|chain|open|close|write|read|update|delete|exfmt|monitor|on-error|endmon)\b">
+      <rule pattern="\b(dcl\-(ds|pi|proc|pr|[csf])|end\-(ds|pi|proc|pr)|ctl\-opt|const|value|to|downto|not)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(acq|add|adddur|alloc|and(gt|lt|eq|ne|ge|le)?|bitoff|biton|cab(gt|lt|eq|ne|ge|le)?|call(b|p)?|cas(gt|lt|eq|ne|ge|le)?|cat|chain|check|checkr|clear|close|commit|comp|data-gen|data-into|dealloc|define|delete|div|do((u|w)(gt|lt|eq|ne|ge|le)?)?|dsply|dump|else(if)?|end(cs|do|for|if|mon|sl|sr)?|eval(r|-corr)?|except|exfmt|exsr|extrct|feod|for(-each)?|force|goto|if(gt|lt|eq|ne|ge|le)?|in|iter|kfld|klist|leave(sr)?|lookup|m(hh|hl|lh|ll)zo|monitor|move[al]?|mult|mvr|next|occur|on-(error|excp|exit)|open|or(gt|lt|eq|ne|ge|le)?|other|out|parm|plist|post|read(c|e|p|pe)?|realloc|rel|reset|return|rolbk|scan|select|set(gt|ll|off|on)|shtdn|snd-msg|sorta|sqrt|sub(dur|st)?|tag|test[bnz]?|time|unlock|update|when(gt|lt|eq|ne|ge|le)?|when-i[ns]|write|xfoot|slate|xml-(into|sax)|z-(add|sub))\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="\b(inz|ccsid|sqltype|like|likerec|likeds|workstn|disk|dftactgrp|rename|infds|reffld|psds|dim|pos|overlay|debug|datedit|option|datfmt|timfmt|actgrp|nomain|aut|bnddir|varying|export|import|extpgm|options|keyed|usage|extproc|extname|occurs|output|dtaara|ctdata|perrcd|static|commit|ignore|include|prefix|sfile|usropn|extmbr|infsr|oflind)\b">
