@@ -38,6 +38,12 @@
       <rule pattern="\b(acq|add|adddur|alloc|and(gt|lt|eq|ne|ge|le)?|bitoff|biton|cab(gt|lt|eq|ne|ge|le)?|call(b|p)?|cas(gt|lt|eq|ne|ge|le)?|cat|chain|check|checkr|clear|close|commit|comp|data-gen|data-into|dealloc|define|delete|div|do((u|w)(gt|lt|eq|ne|ge|le)?)?|dsply|dump|else(if)?|end(cs|do|for|if|mon|sl|sr)?|eval(r|-corr)?|except|exfmt|exsr|extrct|feod|for(-each)?|force|goto|if(gt|lt|eq|ne|ge|le)?|in|iter|kfld|klist|leave(sr)?|lookup|m(hh|hl|lh|ll)zo|monitor|move[al]?|mult|mvr|next|occur|on-(error|excp|exit)|open|or(gt|lt|eq|ne|ge|le)?|other|out|parm|plist|post|read(c|e|p|pe)?|realloc|rel|reset|return|rolbk|scan|select|set(gt|ll|off|on)|shtdn|snd-msg|sorta|sqrt|sub(dur|st)?|tag|test[bnz]?|time|unlock|update|when(gt|lt|eq|ne|ge|le)?|when-i[ns]|write|xfoot|slate|xml-(into|sax)|z-(add|sub))\b">
         <token type="Keyword"/>
       </rule>
+      <rule pattern="\b(alloc|altseq|ccsid|copy(nest|right)|cursym|dat(edit|fmt)|debug|dec(edit|prec)|dftname|expropts|extbinint|fltdiv|formsalign|ftrans|intprec|(no)?main|openopt|thread|timfmt|actgrp|alwnull|aut|bnddir|cvtopt|dateyy|dftactgrp|enbpfrcol|fixnbr|genlvl|indent|langid|optimize|option|pgminfo|prfdta|reqprexp|strseq|stgmdl|text|truncnbr|usrprf)\b">
+        <token type="Keyword"/> <!-- ctl-opt (former H spec) -->
+      </rule>
+      <rule pattern="(\*(stgmdl|teraspace|snglvl|none|src|ext|dump|input(only)?|retval|xmlsax|jobrun|maxdigits|resdecpos|alwblanknum|usedecedit|(no)?inzofl|(no)?cvtdata|concurrent|serialize|new|caller|usrctl|librctaut|all|change|use|exclude|(no)?datetime|(no)?graphic|(no)?varchar|(no)?vargraphic|(no)?allow|warn|pep|entryexit|full|(no)?zoned|(no)?inputpacked|job(run)?|basic|full|(no)?xref|(no)?gen|(no)?seclvl|(no)?showcpy|(no)?expdds|(no)?ext|(no)?showskp|(no)?srcstmt|(no)?debugio|(no)?unref|pcml|dclcase|module|v[678]|(no)?col|require|hex|langid(unq|dshr)|inherit|blank|user|owner|yes|no))\b">
+        <token type="Literal"/>
+      </rule>
       <rule pattern="\b(alias|align|alt|altseq|ascend|based|ccsid|class|const|ctdata|datfmt|descend|dim|dtaara|export|ext(fld|fmt|name|pgm|proc)?|fromfile|import|inz|len|like(ds|file|rec)?|noopt|nullind|occurs|opdesc|options|overlay|overload|packeven|perrcd|pos|prefix|procptr|psds|qualified|reqproto|rtnparm|samepos|static|template|timfmt|tofile|value|varying)\b">
         <token type="KeywordReserved"/>
       </rule>
