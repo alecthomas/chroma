@@ -19,7 +19,7 @@
       <rule pattern="^\*\*free$">
         <token type="CommentSpecial"/>
       </rule>
-      <rule pattern="\bexec sql\b">
+      <rule pattern="\bexec\s+sql\b">
         <token type="Keyword"/>
         <push state="exec-sql"/>
       </rule>
