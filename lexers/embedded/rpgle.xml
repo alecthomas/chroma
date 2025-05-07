@@ -26,10 +26,10 @@
       <rule pattern="(%(abs|addr|alloc|bitand|bitnot|bitor|bitxor|char|charcount|check|checkr|concat|concatarr|data|date|days|dec|dech|decpos|diff|div|editc|editflt|editw|elem|eof|equal|error|fields|float|found|gen|graph|handler|hival|hours|int|inth|kds|left|len|list|lookup(lt|ge|gt|le)?|loval|lower|max|maxarr|min|minutes|minarr|months|mseconds|msg|nullind|occur|omitted|open|paddr|parms|parmnum|parser|passed|proc|range|realloc|rem|replace|right|scan|scanr|scanrpl|seconds|shtdn|size|split|sqrt|status|str|subarr|subdt|subst|target|this|time|timestamp|tlookup(lt|ge|gt|le)?|trim(l|r)?|ucs2|uns|unsh|upper|xfoot|xlate|xml|years))\b">
         <token type="NameFunctionMagic"/>
       </rule>
-      <rule pattern="\b(ind|int|uns|char|varchar|bindec|float|packed|zoned|time|timestamp|date|pointer|clob|blob)\b">
+      <rule pattern="\b(ind|int|uns|(var)?char|bindec|float|packed|zoned|time(stamp)?|date|pointer|clob|blob|(var)?graph|object|(var)?ucs2)\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(\*(hival|loval|null|utf8|input|output|update|delete|on|off|in|inlr|crtbndrpg|date|month|year|day|blank(s)?|all|start|end|cdmy|cmdy|cymd|dmy|eur|hms|iso|jis|job|jobrun|jul|longjobrun|longjul|mdy|sys|usa|ymd|altseq|equate|file|ftrans|place|nopass|omit|rightadj|string|trim|varsize|nullind|exact|convert|yes|no|(no)?xref|(no)?gen|(no)?seclvl|(no)?showcpy|(no)?expdds|(no)?ext|(no)?showskp|(no)?srcstmt|(no)?debugio|new|caller|librctaut|all|change|use|exclude|nounref|n))\b">
+      <rule pattern="(\*(hival|loval|null(ind)?|utf8|input|output|update|delete|in(lr)?|crtbndrpg|date|month|year|day|blank(s)?|all|start|end|cdmy|cmdy|(c)?ymd|dmy|eur|hms|iso|jis|job(run)?|jul|long(jobrun|jul)|mdy|sys|usa|altseq|equate|file|ftrans|place|nopass|omit|rightadj|string|trim|exact|convert|(no)?xref|(no)?gen|(no)?seclvl|(no)?showcpy|(no)?expdds|(no)?ext|(no)?showskp|(no)?srcstmt|(no)?debugio|new|caller|librctaut|change|use|exclude|nounref|full|none|java|auto|ctdata|var(size)?|key|cl|c(no)?widen|dclcase|next|proc|allthread|usrctl|yes|no|on|off|n))\b">
         <token type="Literal"/>
       </rule>
       <rule pattern="\b(dcl\-(ds|pi|proc|pr|[csf])|end\-(ds|pi|proc|pr)|ctl\-opt|const|value|to|downto|not)\b">
@@ -38,7 +38,7 @@
       <rule pattern="\b(acq|add|adddur|alloc|and(gt|lt|eq|ne|ge|le)?|bitoff|biton|cab(gt|lt|eq|ne|ge|le)?|call(b|p)?|cas(gt|lt|eq|ne|ge|le)?|cat|chain|check|checkr|clear|close|commit|comp|data-gen|data-into|dealloc|define|delete|div|do((u|w)(gt|lt|eq|ne|ge|le)?)?|dsply|dump|else(if)?|end(cs|do|for|if|mon|sl|sr)?|eval(r|-corr)?|except|exfmt|exsr|extrct|feod|for(-each)?|force|goto|if(gt|lt|eq|ne|ge|le)?|in|iter|kfld|klist|leave(sr)?|lookup|m(hh|hl|lh|ll)zo|monitor|move[al]?|mult|mvr|next|occur|on-(error|excp|exit)|open|or(gt|lt|eq|ne|ge|le)?|other|out|parm|plist|post|read(c|e|p|pe)?|realloc|rel|reset|return|rolbk|scan|select|set(gt|ll|off|on)|shtdn|snd-msg|sorta|sqrt|sub(dur|st)?|tag|test[bnz]?|time|unlock|update|when(gt|lt|eq|ne|ge|le)?|when-i[ns]|write|xfoot|slate|xml-(into|sax)|z-(add|sub))\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(inz|ccsid|sqltype|like|likerec|likeds|workstn|disk|dftactgrp|rename|infds|reffld|psds|dim|pos|overlay|debug|datedit|option|datfmt|timfmt|actgrp|nomain|aut|bnddir|varying|export|import|extpgm|options|keyed|usage|extproc|extname|occurs|output|dtaara|ctdata|perrcd|static|commit|ignore|include|prefix|sfile|usropn|extmbr|infsr|oflind)\b">
+      <rule pattern="\b(alias|align|alt|altseq|ascend|based|ccsid|class|const|ctdata|datfmt|descend|dim|dtaara|export|ext(fld|fmt|name|pgm|proc)?|fromfile|import|inz|len|like(ds|file|rec)?|noopt|nullind|occurs|opdesc|options|overlay|overload|packeven|perrcd|pos|prefix|procptr|psds|qualified|reqproto|rtnparm|samepos|static|template|timfmt|tofile|value|varying)\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="(/(copy|define|eject|else|elseif|end-exec|end-free|endif|eof|exec|free|if|include|restore|set|space|title|undefine))\b">
