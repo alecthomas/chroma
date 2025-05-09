@@ -1,8 +1,8 @@
 <lexer>
   <config>
-    <name>RPG IV</name>
-    <alias>rpgle</alias>
-    <alias>sqlrpgle</alias>
+    <name>RPGLE</name>
+    <alias>SQLRPGLE</alias>
+    <alias>RPG IV</alias>
     <filename>*.RPGLE</filename>
     <filename>*.rpgle</filename>
     <filename>*.SQLRPGLE</filename>
