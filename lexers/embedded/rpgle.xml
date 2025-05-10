@@ -39,7 +39,7 @@
         <token type="Keyword"/> <!-- Operation codes -->
       </rule>
       <rule pattern="\b(alloc|altseq|ccsid|copy(nest|right)|cursym|dat(edit|fmt)|debug|dec(edit|prec)|dftname|expropts|extbinint|fltdiv|formsalign|ftrans|intprec|(no)?main|openopt|thread|timfmt|actgrp|alwnull|aut|bnddir|cvtopt|dateyy|dftactgrp|enbpfrcol|fixnbr|genlvl|indent|langid|optimize|option|pgminfo|prfdta|reqprexp|strseq|stgmdl|text|truncnbr|usrprf)\b">
-        <token type="Keyword"/> <!-- ctl-opt (former H spec) -->
+        <token type="KeywordReserved"/> <!-- ctl-opt (former H spec) -->
       </rule>
       <rule pattern="(\*(stgmdl|teraspace|snglvl|none|src|ext|dump|input(only)?|retval|xmlsax|jobrun|maxdigits|resdecpos|alwblanknum|usedecedit|(no)?inzofl|(no)?cvtdata|concurrent|serialize|new|caller|usrctl|librctaut|all|change|use|exclude|(no)?datetime|(no)?graphic|(no)?varchar|(no)?vargraphic|(no)?allow|warn|pep|entryexit|full|(no)?zoned|(no)?inputpacked|job(run)?|basic|full|(no)?xref|(no)?gen|(no)?seclvl|(no)?showcpy|(no)?expdds|(no)?ext|(no)?showskp|(no)?srcstmt|(no)?debugio|(no)?unref|pcml|dclcase|module|v[678]|(no)?col|require|hex|langid(unq|dshr)|inherit|blank|user|owner|yes|no))\b">
         <token type="Literal"/> <!-- ctl-opt/H spec special values -->
