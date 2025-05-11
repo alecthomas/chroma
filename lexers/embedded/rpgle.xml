@@ -19,6 +19,9 @@
       <rule pattern="^\*\*free$">
         <token type="CommentSpecial"/>
       </rule>
+      <rule pattern="(\*(all(g|oc|ow|sep|thread|u|x)?|altseq|alwblanknum|ascii|astfill|aut[lo]|basic|blank(s)?|caller|cancl|cdmy(0)?|change|char|cl|cmd(y|y0)?|cnowiden|cntrld|col|comp(at)?|concurrent|constants|constructor|convert|copyright|crt(bndrpg|rpgmod)|ct(data|lbdy|lspec)|cur(lib|sym)|cvt(data)?|cwiden|cymd(0)?|data|date(time)?|day(s)?|dclcase|ddm|debugio|dec|delete|det[cl]|dft|diag|dmy|dtaara|dump|end|entry(exit)?|equate|escape|eur(0)?|exact|exclude|excp|exp(dds|include)|ext(desc|dft)?|file(s)?|first|ftrans|full|gen|getin|graph(ic)?|hex|hival|hms|hours|ignore|ilerpg|in([0-9]{2}|H[1-9]|K[A-Y]|L[1-9]|LR|O[AGV]|U[1-8])?|INFO|INHERIT|INIT|INP(UT(ONLY|PACKED)?)?|INZ(OFL|SR)|ISO(0)?|JAVA|JIS|JOB(RUN(0|MIX|_DBCS|_JAVA|_MIXED)?)?|JUL|KEEP|KEY|LANGID(SHR|UNQ)|LDA|LGL|LIB(L|RCRTAUT)|LIKE(DS)?|LIST|LOCK|LONG(JOBRUN(0)?|JUL(0)?)|LOVAL|LVL[12]|MAX(DIGITS)?|MDY(0)?|MINUTES|MIXED(ASCII|EBCDIC)|MN|MODE|MODULE|MONTH(S)?|MS(ECONDS)?|M[A-Z]{3}[0-9]{4}|NATURAL|NEW|NEXT|NO(ALLOW|CHGDSLEN|COL|CVT(DATA)?|DATETIME|DEBUGIO|EXACT|EXPDDS|EXPINCLUDE|EXT|GEN|GRAPHIC|IND|INPUTPACKED|INZOFL|KEY|PASS|RMVCOMMENT|SECLVL|SHOWCPY|SHOWSKP|SRCSTMT|UNREF|VARCHAR|VARGRAPHIC|XREF|ZONED)?|NONE|NOTIFY|NULL(IND)?|OFF|OFL|OMIT|ON(EXIT|LY)?|OPCODE|OUT(PUT)?|OWNER|PARM(S)?|PCML|PDA|PEP|PGM(BDY)?|PLACE|PROC|PROGRAM|PSSR|RECORD|REQUIRE|RESDECPOS|RETVAL|RIGHTADJ|RMVCOMMENT|ROUTINE|SECLVL|SECONDS|SELF|SERIALIZE|SHOW(CPY|SKP)|SIZE|SNGLVL|SRC(MBRTXT|STMT)?|START|STATUS|STDCHARSIZE|STGMDL|STRICTKEYS|STRING|SYS|TBL|TERASPACE|TERM|THREAD_(CONCURRENT|SERIALIZE)|TOT[CL]|TRIM|UCS2|UNIQUE|UNREF|UNSET|UPDATE|USA(0)?|USE(DECEDIT)?|USER|USR(CTL|SPC)|UTF(8|16)?|V[0-9]R[0-9]M[0-9]|V[678]|VAR(CHAR|GRAPHIC|SIZE)?|WARN|XMLSAX|XML_(ATTR_(CHARS|NAME|PREDEF_REF|UCS2_REF)|CHARS|COMMENT|DOCTYPE_DECL|ENCODING_DECL|END_(ATTR|CDATA|DOCUMENT|ELEMENT)|EXCEPTION|PI_(DATA|TARGET)|PREDEF_REF|STANDALONE_DECL|START_(CDATA|DOCUMENT|ELEMENT)|UCS2_REF|UNKNOWN_(ATTR_REF|REF)|VERSION_INFO)|XREF|YEAR(S)?|YES|YMD(0)?|ZERO(S)?|ZONED|[DHMNSY]))\b">
+        <token type="Literal"/> <!-- Special values -->
+      </rule>
       <rule pattern="\bexec\s+sql\b"> <!-- embedded SQL -->
         <token type="Keyword"/>
         <push state="exec-sql"/>
@@ -29,9 +32,6 @@
       <rule pattern="\b(ind|int|uns|(var)?char|bindec|float|packed|zoned|time(stamp)?|date|pointer|clob|blob|(var)?graph|object|(var)?ucs2)\b">
         <token type="KeywordType"/> <!-- variable types -->
       </rule>
-      <rule pattern="(\*(hival|loval|null(ind)?|utf8|input|output|update|delete|in(lr)?|crtbndrpg|date|month|year|day|blank(s)?|all|start|end|cdmy|cmdy|(c)?ymd|dmy|eur|hms|iso|jis|job(run)?|jul|long(jobrun|jul)|mdy|sys|usa|altseq|equate|file|ftrans|place|nopass|omit|rightadj|string|trim|exact|convert|(no)?xref|(no)?gen|(no)?seclvl|(no)?showcpy|(no)?expdds|(no)?ext|(no)?showskp|(no)?srcstmt|(no)?debugio|new|caller|librctaut|change|use|exclude|nounref|full|none|java|auto|ctdata|var(size)?|key|cl|c(no)?widen|dclcase|next|proc|allthread|usrctl|yes|no|on|off|n))\b">
-        <token type="Literal"/> <!-- Special values (except ctl-opt/H spec) -->
-      </rule>
       <rule pattern="\b(dcl\-(ds|pi|proc|pr|[csf])|end\-(ds|pi|proc|pr)|ctl\-opt|const|value|to|downto|not)\b">
         <token type="Keyword"/> <!-- Syntax keywords -->
       </rule>
@@ -40,9 +40,6 @@
       </rule>
       <rule pattern="\b(alloc|altseq|ccsid|copy(nest|right)|cursym|dat(edit|fmt)|debug|dec(edit|prec)|dftname|expropts|extbinint|fltdiv|formsalign|ftrans|intprec|(no)?main|openopt|thread|timfmt|actgrp|alwnull|aut|bnddir|cvtopt|dateyy|dftactgrp|enbpfrcol|fixnbr|genlvl|indent|langid|optimize|option|pgminfo|prfdta|reqprexp|strseq|stgmdl|text|truncnbr|usrprf)\b">
         <token type="KeywordReserved"/> <!-- ctl-opt (former H spec) -->
-      </rule>
-      <rule pattern="(\*(stgmdl|teraspace|snglvl|none|src|ext|dump|input(only)?|retval|xmlsax|jobrun|maxdigits|resdecpos|alwblanknum|usedecedit|(no)?inzofl|(no)?cvtdata|concurrent|serialize|new|caller|usrctl|librctaut|all|change|use|exclude|(no)?datetime|(no)?graphic|(no)?varchar|(no)?vargraphic|(no)?allow|warn|pep|entryexit|full|(no)?zoned|(no)?inputpacked|job(run)?|basic|full|(no)?xref|(no)?gen|(no)?seclvl|(no)?showcpy|(no)?expdds|(no)?ext|(no)?showskp|(no)?srcstmt|(no)?debugio|(no)?unref|pcml|dclcase|module|v[678]|(no)?col|require|hex|langid(unq|dshr)|inherit|blank|user|owner|yes|no))\b">
-        <token type="Literal"/> <!-- ctl-opt/H spec special values -->
       </rule>
       <rule pattern="\b(alias|align|alt|altseq|ascend|based|ccsid|class|const|ctdata|datfmt|descend|dim|dtaara|export|ext(fld|fmt|name|pgm|proc)?|fromfile|import|inz|len|like(ds|file|rec)?|noopt|nullind|occurs|opdesc|options|overlay|overload|packeven|perrcd|pos|prefix|procptr|psds|qualified|reqproto|rtnparm|samepos|static|template|timfmt|tofile|value|varying)\b">
         <token type="KeywordReserved"/> <!-- Other keywords (not operation codes nor ctl-opt/H spec) -> mostly used with variables -->
