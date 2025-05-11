@@ -53,7 +53,7 @@
       <rule pattern="\bx'[0-9a-fA-F]*'">
         <token type="LiteralString"/> <!-- Hex string -->
       </rule>
-      <rule pattern="'[^']*'">
+      <rule pattern="'(''|[^'])*'">
         <token type="LiteralString"/>
       </rule>
       <rule pattern="[,:;\(\)]+">
