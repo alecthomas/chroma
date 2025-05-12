@@ -1,0 +1,12 @@
+**free
+
+dcl-pi *n;
+    n int(10) const;
+end-pi;
+
+dcl-s myvar varchar(52) inz('hello world') ccsid(*utf8);
+
+myvar += %char(n);
+
+dsply myvar;
+return;
