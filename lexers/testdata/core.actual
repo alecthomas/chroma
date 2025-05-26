@@ -1,0 +1,187 @@
+@pub use collections.{Array, BitSet, BitVec, HashMap, HashSet, List, Queue};
+
+@pub mod annotations;
+
+@pub @internal fun unreachable[T](): T
+
+@pub fun unimplemented(): Unit = fatalError("not yet implemented")
+
+fun isValidUtf8(data: Array[UInt8]): Bool {
+  var i = 0i64
+
+  while i < data.size {
+    let by = data(i).toInt32
+    var codepoint = 0i32
+    var bytes = 0i32
+    var min = 0i32
+    var max = 0i32
+
+    if by & 0x80i32 == 0i32 {
+      bytes = 0
+      i = i + 1i64
+    } else {
+      if by
+      ... & 0xC0i32 == 0x80i32 {
+        return false
+      }
+      ... & 0xE0i32 == 0xC0i32 {
+        codepoint = by & 0x1Fi32
+        bytes = 1
+        min = 0x80
+        max = 0x7FFi32
+      }
+      ... & 0xF0i32 == 0xE0i32 {
+        codepoint = by & 0xFi32
+        bytes = 2i32
+        min = 0x800i32
+        max = 0xFFFFi32
+      }
+      ... & 0xF8i32 == 0xF0i32 {
+        codepoint = by & 0x7i32
+        bytes = 3
+        min = 0x10000
+        max = 0x10FFFFi32
+      }
+
+      while bytes > 0i32 {
+        bytes = bytes - 1i32
+        i = i + 1i64
+
+        if i >= data.size {
+          return false
+        }
+
+        let by = data(i).toInt32
+
+        if by & 0xC0i32 != 0x80i32 {
+          return false
+        }
+
+        codepoint = codepoint.shiftLeft(6i32) | (by & 0x3Fi32)
+      }
+
+      if codepoint < min || codepoint > max {
+        return false
+      }
+
+      i = i + 1i64
+    }
+  }
+
+  return true
+}
+
+@internal fun unsafeKillRefs[T](arr: Array[T], idx: Int64): Unit
+
+@pub class Stacktrace {
+  backtrace: Option[Array[Int32]],
+  elements: Option[Array[StacktraceElement]],
+}
+
+impl Stacktrace {
+  @pub @static fun new(): Stacktrace {
+    let trace = Stacktrace(None[Array[Int32]], None[Array[StacktraceElement]])
+    trace.retrieveStacktrace()
+    trace
+  }
+
+  @pub fun getStacktrace(): Array[StacktraceElement] {
+    if self.elements.isSome {
+      return self.elements.getOrPanic()
+    }
+
+    if self.backtrace.isNone {
+      let elements = Array[StacktraceElement]::new()
+      self.elements = Some[Array[StacktraceElement]](elements)
+      return elements
+    }
+
+    let backtraceLength = self.backtrace.getOrPanic().size
+    var i = 0i64
+    let len = backtraceLength / 2i64
+    let elements = List[StacktraceElement]::new()
+    elements.reserve(len)
+
+    while i < len {
+      elements.push(self.getStacktraceElement(i))
+      i = i + 1i64
+    }
+
+    let elements = elements.toArray()
+    self.elements = Some(elements)
+    return elements
+  }
+
+  @pub fun printStacktrace(): Unit {
+    let x = self.getStacktrace()
+    var i = 0i64
+
+    for frame in self.getStacktrace() {
+      println(frame.toString())
+    }
+  }
+
+  @internal fun retrieveStacktrace(): Unit
+  @internal fun getStacktraceElement(idx: Int64): StacktraceElement
+}
+
+class StacktraceElement {
+  name: String,
+  line: Int32,
+}
+
+impl StacktraceElement {
+  fun toString(): String = "${self.name}: ${self.line}"
+}
+
+/* total order */
+@pub trait Sortable {
+  fun sortsAs(other: Self): Int32
+  // ideally we would be able to provide a default implementation for the next 3 methods based on `sortsAs`
+  fun sortsBefore(other: Self): Bool
+  fun sortsAfter(other: Self): Bool
+  fun sortsSame(other: Self): Bool
+}
+
+@pub enum Option[T] {
+  Some(T),
+  None,
+}
+
+use Option.Some
+use Option.None
+
+impl[T] Option[T] {
+  @pub fun isNone: Bool = if self
+    ... is Some(_) { false }
+    ... is None    { true  }
+
+  @pub fun isSome: Bool = if self
+    ... is Some(_) { true  }
+    ... is None    { false }
+}
+
+impl[T] Option[Option[T]] {
+  // WTF -- removing `()` causes memory corruption in main (tests/stdlib/option-flatten.core:6) -- WTF
+  @pub fun flatten(): Option[T] = if self
+    ... is Some(val) { val }
+    ... is None      { None[T] }
+}
+
+@pub enum Result[T, E] {
+  Pass(T),
+  Fail(E),
+}
+
+use Result.Pass
+use Result.Fail
+
+impl[T, E] Result[T, E] {
+  @pub fun isPass: Bool = if self
+    ... is Pass(_) { true  }
+    ... is Fail(_) { false }
+
+  @pub fun isFail: Bool = if self
+    ... is Pass(_) { false }
+    ... is Fail(_) { true  }
+}
