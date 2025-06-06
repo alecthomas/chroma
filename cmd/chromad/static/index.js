@@ -1,6 +1,7 @@
 import * as Base64 from "./base64.js";
 
 document.addEventListener("DOMContentLoaded", function () {
+	var darkMode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
   var style = document.createElement('style');
   var ref = document.querySelector('script');
   ref.parentNode.insertBefore(style, ref);
@@ -150,6 +151,9 @@ document.addEventListener("DOMContentLoaded", function () {
     styleSelect.value = json.style;
     htmlCheckbox.checked = json.classes;
     update(new Event('change'));
+  } else  if (darkMode) {
+  	styleSelect.value = "monokai";
+   	update(new Event("change"));
   }
 
   var eventHandler = (event) => update(event);

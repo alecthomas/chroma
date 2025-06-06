@@ -1,9 +1,17 @@
-@import url("./bulma-0.7.5.css");
+@import url("./bulma.css");
 
 textarea {
-  font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+	font-family:
+		Consolas,
+		Monaco,
+		Lucida Console,
+		Liberation Mono,
+		DejaVu Sans Mono,
+		Bitstream Vera Sans Mono,
+		Courier New,
+		monospace;
 }
 
 #output pre {
-  padding: 0;
+	padding: 0;
 }
