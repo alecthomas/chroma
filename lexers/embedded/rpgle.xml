@@ -25,7 +25,7 @@
       <rule pattern="^\*\*free$">
         <token type="CommentSpecial"/>
       </rule>
-      <rule pattern="\*\*(ctdata|ftrans|altseq)?(\r|\n|\r\n).*">
+      <rule pattern="\*\*((ctdata|ftrans|altseq)(\s+\w+)?)?(\r|\n|\r\n)">
         <token type="CommentSpecial"/> <!-- compile-time arrays at the end of the file, introduced by ** -->
         <push state="compile-time-array"/>
       </rule>
