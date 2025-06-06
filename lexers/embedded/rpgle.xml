@@ -45,6 +45,12 @@
       <rule pattern="\b(alloc|altseq|ccsid|copy(nest|right)|cursym|dat(edit|fmt)|debug|dec(edit|prec)|dftname|expropts|extbinint|fltdiv|formsalign|ftrans|intprec|(no)?main|openopt|thread|timfmt|actgrp|alwnull|aut|bnddir|cvtopt|dateyy|dftactgrp|enbpfrcol|fixnbr|genlvl|indent|langid|optimize|option|pgminfo|prfdta|reqprexp|strseq|stgmdl|text|truncnbr|usrprf)\b">
         <token type="KeywordReserved"/> <!-- ctl-opt (former H spec) -->
       </rule>
+      <rule pattern="\b(alias|block|commit|charcount|data|datfmt|devid|disk|ext(desc|file|ind|mbr)|form(len|ofl)|handler|ignore|include|in(dds|fds|fsr)|keyed|keyloc|likefile|maxdev|oflind|pass|pgmname|plist|prefix|printer|prtctl|qualified|rafdata|recno|rename|save(ds|ind)|seq|sfile|sln|special|static|template|timfmt|usage|usropn|workstn)\b">
+        <token type="KeywordReserved"/> <!-- dcl-f (former F spec) -->
+      </rule>
+      <rule pattern="\b(\*(yes|no|natural|stdcharsize|(no)?cvt|ext(desc)?|inu[1-8]|char|only|file|noind|ext|compat|input|output|update|delete))\b">
+        <token type="Literal"/> <!-- F spec special values-->
+      </rule>
       <rule pattern="\b(alias|align|alt|altseq|ascend|based|ccsid|class|const|ctdata|datfmt|descend|dim|dtaara|export|ext(fld|fmt|name|pgm|proc)?|fromfile|import|inz|len|like(ds|file|rec)?|noopt|nullind|occurs|opdesc|options|overlay|overload|packeven|perrcd|pos|prefix|procptr|psds|qualified|reqproto|rtnparm|samepos|static|template|timfmt|tofile|value|varying)\b">
         <token type="KeywordReserved"/> <!-- Other keywords (not operation codes nor ctl-opt/H spec) -> mostly used with variables -->
       </rule>
