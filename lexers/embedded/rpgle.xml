@@ -56,7 +56,7 @@
       <rule pattern="'(''|[^'])*'">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="[,:;\(\)]+">
+      <rule pattern="[,:;\(\)\.]+">
         <token type="Punctuation"/>
       </rule>
       <rule pattern="((\*\*)|(&lt;&gt;)|=|([&lt;&gt;\+\-\*\/]=?))+">
