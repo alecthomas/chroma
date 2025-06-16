@@ -1,20 +1,71 @@
-// Пример MPL кода
-module Example;
+"Array" use
+"String" use
+"algorithm" use
+"control" use
 
-import System;
+# Пример функции с использованием MPL синтаксиса
+calculateSum: [
+    numbers: Int32 Array;
+    result: 0;
+    
+    numbers each [
+        @result + new @result set
+    ];
+    
+    result
+];
+
+# Пример использования условных операторов
+checkNumber: [
+    n: Int32;
+    result: String;
+    
+    n 0 < [
+        "negative" @result set
+    ] [
+        n 0 = [
+            "zero" @result set
+        ] [
+            "positive" @result set
+        ] if
+    ] if;
+    
+    result
+];
+
+# Пример работы со строками
+formatMessage: [
+    name: "John" toString;
+    age: 25;
+    message: ("Hello, " name "! You are " age toString " years old.") assembleString;
+    message
+];
+
+# Пример использования массивов
+processData: [
+    data: ("apple" "banana" "orange") toArray;
+    result: String Array;
+    
+    data each [
+        item: String;
+        (item " (processed)") assembleString @result.cat
+    ];
+    
+    result
+];
 
 function main() {
-    var x: int = 10;
-    var y: float = 3.14;
-    var z: string = "Hello, MPL!";
+    x: Int32 = 10;
+    y: Real64 = 3.14;
+    z: String = "Hello, MPL!";
     
-    if (x > 5) {
-        print(z);
-    }
+    [x 5 >] [
+        z printList
+    ] when
     
-    for (var i = 0; i < 5; i++) {
-        print(i);
-    }
+    [i: Int32 = 0; i 5 <; i 1 + !i] [
+        i printList
+    ] for
     
-    return 0;
+    0
 } 
