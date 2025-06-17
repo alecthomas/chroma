@@ -4,10 +4,10 @@ package quick
 import (
 	"io"
 
-	"github.com/alecthomas/chroma/v2"
-	"github.com/alecthomas/chroma/v2/formatters"
-	"github.com/alecthomas/chroma/v2/lexers"
-	"github.com/alecthomas/chroma/v2/styles"
+	"github.com/crowyy03/chroma/v2"
+	"github.com/crowyy03/chroma/v2/formatters"
+	"github.com/crowyy03/chroma/v2/lexers"
+	"github.com/crowyy03/chroma/v2/styles"
 )
 
 // Highlight some text.

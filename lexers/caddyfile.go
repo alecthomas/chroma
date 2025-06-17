@@ -1,7 +1,7 @@
 package lexers
 
 import (
-	. "github.com/alecthomas/chroma/v2" // nolint
+	. "github.com/crowyy03/chroma/v2" // nolint
 )
 
 // Matcher token stub for docs, or

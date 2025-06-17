@@ -5,8 +5,8 @@ import (
 
 	assert "github.com/alecthomas/assert/v2"
 
-	"github.com/alecthomas/chroma/v2"
-	"github.com/alecthomas/chroma/v2/lexers"
+	"github.com/crowyy03/chroma/v2"
+	"github.com/crowyy03/chroma/v2/lexers"
 )
 
 const lexerBenchSource = `/*

@@ -1,7 +1,7 @@
 package styles
 
 import (
-	. "github.com/alecthomas/chroma/v2"
+	. "github.com/crowyy03/chroma/v2"
 )
 
 // MPL style.

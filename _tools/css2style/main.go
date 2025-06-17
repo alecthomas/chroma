@@ -10,14 +10,14 @@ import (
 	"github.com/aymerick/douceur/parser"
 	"gopkg.in/alecthomas/kingpin.v3-unstable"
 
-	"github.com/alecthomas/chroma/v2"
+	"github.com/crowyy03/chroma/v2"
 )
 
 const (
 	outputTemplate = `package styles
 
 import (
-	"github.com/alecthomas/chroma/v2"
+	"github.com/crowyy03/chroma/v2"
 )
 
 // {{.Name}} style.

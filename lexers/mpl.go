@@ -1,7 +1,7 @@
 package lexers
 
 import (
-	. "github.com/alecthomas/chroma/v2"
+	. "github.com/crowyy03/chroma/v2"
 )
 
 // MPL lexer.
@@ -27,6 +27,7 @@ func mplRules() Rules {
 			{`\b(use|toArray|toString|joinPath|set|get|new|cast|neg|rshift|and|cat|times|dup|between|within|when|assert|pfunc|overload|same|isCombined|meetsAll|loadString|saveFile|printList|failProc|raiseStaticError|lexicalError|dynamic|struct|fieldCount|toSpan2|toSpanStatic2|toStringView|getCodePointAndSize|splitString|assembleString|uif|while|if|exportFunction|ensure|toCommandLine2|loadString|saveFile|printList|meetsAll|pfunc|overload|same|isCombined|TRUE|FALSE)\b`, Keyword, nil},
 			{`\b(Array|String|Int32|Int64|Nat8|Nat32|Natx|Real64|HashTable|Variant|CommandLine|Function|Process|Text|Cref|Ref|Cond|StringView)\b`, KeywordType, nil},
 			{`\b(LF|CR|TAB)\b`, LiteralStringEscape, nil},
+			{`[a-zA-Z_][a-zA-Z0-9_]*:`, NameFunction, nil},
 			{`[a-zA-Z_][a-zA-Z0-9_]*`, Name, nil},
 			{`\s+`, TextWhitespace, nil},
 		},
