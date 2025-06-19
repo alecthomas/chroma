@@ -51,7 +51,7 @@
       <rule pattern="[^&quot;]+"><token type="LiteralString"/></rule>
     </state>
     <state name="ws">
-      <rule pattern="(?:--\[(?P&lt;level&gt;=*)\[[\w\W]*?\](?P=level)\])"><token type="CommentMultiline"/></rule>
+      <rule pattern="(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](\k&lt;level&gt;)\])"><token type="CommentMultiline"/></rule>
       <rule pattern="(?:--.*$)"><token type="CommentSingle"/></rule>
       <rule pattern="(?:\s+)"><token type="TextWhitespace"/></rule>
     </state>
@@ -59,14 +59,14 @@
       <rule><include state="ws"/></rule>
       <rule pattern="\.\."><token type="Operator"/><pop depth="1"/></rule>
       <rule pattern="[.:]"><token type="Punctuation"/></rule>
-      <rule pattern="(?:[^\W\d]\w*)(?=(?:(?:--\[(?P&lt;level&gt;=*)\[[\w\W]*?\](?P=level)\])|(?:--.*$)|(?:\s+))*[.:])"><token type="NameProperty"/></rule>
-      <rule pattern="(?:[^\W\d]\w*)(?=(?:(?:--\[(?P&lt;level&gt;=*)\[[\w\W]*?\](?P=level)\])|(?:--.*$)|(?:\s+))*\()"><token type="NameFunction"/><pop depth="1"/></rule>
+      <rule pattern="(?:[^\W\d]\w*)(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](\k&lt;level&gt;)\])|(?:--.*$)|(?:\s+))*[.:])"><token type="NameProperty"/></rule>
+      <rule pattern="(?:[^\W\d]\w*)(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](\k&lt;level&gt;)\])|(?:--.*$)|(?:\s+))*\()"><token type="NameFunction"/><pop depth="1"/></rule>
       <rule pattern="(?:[^\W\d]\w*)"><token type="NameProperty"/><pop depth="1"/></rule>
     </state>
     <state name="funcname">
       <rule><include state="ws"/></rule>
       <rule pattern="[.:]"><token type="Punctuation"/></rule>
-      <rule pattern="(?:[^\W\d]\w*)(?=(?:(?:--\[(?P&lt;level&gt;=*)\[[\w\W]*?\](?P=level)\])|(?:--.*$)|(?:\s+))*[.:])"><token type="NameClass"/></rule>
+      <rule pattern="(?:[^\W\d]\w*)(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](\k&lt;level&gt;)\])|(?:--.*$)|(?:\s+))*[.:])"><token type="NameClass"/></rule>
       <rule pattern="(?:[^\W\d]\w*)"><token type="NameFunction"/><pop depth="1"/></rule>
       <rule pattern="\("><token type="Punctuation"/><pop depth="1"/></rule>
     </state>
@@ -81,4 +81,3 @@
     </state>
   </rules>
 </lexer>
-
