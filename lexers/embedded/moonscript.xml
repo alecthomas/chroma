@@ -40,15 +40,15 @@
       <rule pattern="&quot;"><token type="LiteralStringDouble"/><combined state="stringescape" state="dqs"/></rule>
     </state>
     <state name="stringescape">
-      <rule pattern="\\([abfnrtv\\&quot;&#x27;]|\d{1,3})"><token type="LiteralStringEscape"/></rule>
+      <rule pattern="\\([abfnrtv\\&quot;\&#x27;]|\d{1,3})"><token type="LiteralStringEscape"/></rule>
     </state>
     <state name="sqs">
       <rule pattern="&#x27;"><token type="LiteralStringSingle"/><pop depth="1"/></rule>
-      <rule pattern="[^&#x27;]+"><token type="LiteralString"/></rule>
+      <rule pattern="[^\\&#x27;]+"><token type="LiteralString"/></rule>
     </state>
     <state name="dqs">
       <rule pattern="&quot;"><token type="LiteralStringDouble"/><pop depth="1"/></rule>
-      <rule pattern="[^&quot;]+"><token type="LiteralString"/></rule>
+      <rule pattern="[^\\&quot;]+"><token type="LiteralString"/></rule>
     </state>
     <state name="ws">
       <rule pattern="(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](\k&lt;level&gt;)\])"><token type="CommentMultiline"/></rule>
