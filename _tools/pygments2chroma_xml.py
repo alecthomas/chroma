@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
 import functools
 import importlib
-import json
-import os
 import re
 import sys
 import types

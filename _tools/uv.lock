@@ -1,0 +1,36 @@
+version = 1
+revision = 2
+requires-python = ">=3.13"
+
+[[package]]
+name = "chromatools"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "pygments" },
+    { name = "pystache" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pygments", specifier = ">=2.19.1" },
+    { name = "pystache", specifier = ">=0.6.8" },
+]
+
+[[package]]
+name = "pygments"
+version = "2.19.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7c/2d/c3338d48ea6cc0feb8446d8e6937e1408088a72a39937982cc6111d17f84/pygments-2.19.1.tar.gz", hash = "sha256:61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f", size = 4968581, upload-time = "2025-01-06T17:26:30.443Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8a/0b/9fcc47d19c48b59121088dd6da2488a49d5f72dacf8262e2790a1d2c7d15/pygments-2.19.1-py3-none-any.whl", hash = "sha256:9ea1544ad55cecf4b8242fab6dd35a93bbce657034b0611ee383099054ab6d8c", size = 1225293, upload-time = "2025-01-06T17:26:25.553Z" },
+]
+
+[[package]]
+name = "pystache"
+version = "0.6.8"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/85/89/0a712ca22930b8c71bced8703e5bb45669c31690ea81afe15f6cb284550c/pystache-0.6.8.tar.gz", hash = "sha256:3707518e6a4d26dd189b07c10c669b1fc17df72684617c327bd3550e7075c72c", size = 101892, upload-time = "2025-03-18T11:54:47.595Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fa/78/ffd13a516219129cef6a754a11ba2a1c0d69f1e281af4f6bca9ed5327219/pystache-0.6.8-py3-none-any.whl", hash = "sha256:7211e000974a6e06bce2d4d5cad8df03bcfffefd367209117376e4527a1c3cb8", size = 82051, upload-time = "2025-03-18T11:54:45.813Z" },
+]

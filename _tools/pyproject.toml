@@ -1,0 +1,10 @@
+[project]
+name = "chromatools"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pygments>=2.19.1",
+    "pystache>=0.6.8",
+]
