@@ -9,19 +9,13 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Init Hermit
-        run: ./bin/hermit env -r >> $GITHUB_ENV
-      - name: Test
-        run: go test ./...
+      - uses: actions/checkout@v4
+      - uses: cashapp/activate-hermit@v1
+      - run: go test ./...
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Init Hermit
-        run: ./bin/hermit env -r >> $GITHUB_ENV
-      - name: golangci-lint
-        run: golangci-lint run
+      - uses: actions/checkout@v4
+      - uses: cashapp/activate-hermit@v1
+      - run: golangci-lint run

@@ -1,4 +1,5 @@
 import * as Base64 from "./base64.js";
+import { chroma } from "./chroma.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 	var darkMode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -21,6 +22,38 @@ document.addEventListener("DOMContentLoaded", function () {
       notification.parentNode.removeChild(notification);
     });
   });
+
+  async function renderServer(formData) {
+		return (await fetch("api/render", {
+				  method: 'POST',
+					mode: 'cors',
+					cache: 'no-cache',
+					credentials: 'same-origin',
+					headers: {
+						'X-CSRF-Token': csrfToken,
+						'Content-Type': 'application/json',
+					},
+					redirect: 'follow',
+					referrer: 'no-referrer',
+					body: JSON.stringify(formData),
+				})).json();
+  }
+
+  async function renderWasm(formData) {
+		return await chroma.highlight(
+			formData.text,
+			formData.language,
+			formData.style,
+			formData.classes,
+		);
+  }
+
+  async function render(formData) {
+		return chroma !== null
+			? renderWasm(formData)
+			: renderServer(formData);
+  }
+
 
   // https://stackoverflow.com/a/37697925/7980
   function handleTab(e) {
@@ -97,38 +130,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function update(event) {
-    fetch("api/render", {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'X-CSRF-Token': csrfToken,
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrer: 'no-referrer',
-      body: JSON.stringify(getFormJSON()),
-    }).then(data => {
-      data.json().then(
-        value => {
-          if (value.language) {
-            languageSelect.value = value.language;
-          }
-          style.innerHTML = "#output { " + value.background + "}";
-          if (htmlCheckbox.checked) {
-            output.innerText = value.html;
-          } else {
-            output.innerHTML = value.html;
-          }
-        }
-      );
-    }).catch(reason => {
-      console.log(reason);
-    });
+  async function update(event) {
+    try {
+      const formData = getFormJSON();
+      const value = await render(formData);
 
-    event.preventDefault();
+      if (value.language) {
+        languageSelect.value = value.language;
+      }
+      style.innerHTML = "#output { " + value.background + "}";
+      if (htmlCheckbox.checked) {
+        output.innerText = value.html;
+      } else {
+        output.innerHTML = value.html;
+      }
+    } catch (error) {
+      console.error('Error highlighting code:', error);
+      // Fallback: display plain text
+      if (htmlCheckbox.checked) {
+        output.innerText = textArea.value;
+      } else {
+        output.innerHTML = '<pre>' + textArea.value + '</pre>';
+      }
+    }
+
+    if (event) {
+      event.preventDefault();
+    }
   }
 
   function share(event) {
@@ -157,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   var eventHandler = (event) => update(event);
-  var debouncedEventHandler = debounce(eventHandler, 250);
+  var debouncedEventHandler = debounce(eventHandler, chroma === null ? 250 : 100);
 
   languageSelect.addEventListener('change', eventHandler);
   styleSelect.addEventListener('change', eventHandler);
