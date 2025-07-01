@@ -14,26 +14,11 @@ class ChromaWASM {
   async init() {
     try {
       // Create a new Go instance
-      this.go = new Go();
-
-      // Load the WASM module
-      const wasmResponse = await fetch("./static/chroma.wasm");
-      if (!wasmResponse.ok) {
-        throw new Error(`Failed to fetch chroma.wasm: ${wasmResponse.status}`);
-      }
-
-      const wasmBytes = await wasmResponse.arrayBuffer();
-      const wasmModule = await WebAssembly.instantiate(
-        wasmBytes,
-        this.go.importObject,
-      );
-
-      this.wasm = wasmModule.instance;
-
-      // Run the Go program
-      this.go.run(this.wasm);
-
-      this.ready = true;
+      const go = new Go();
+      WebAssembly.instantiateStreaming(fetch("./static/chroma.wasm"), go.importObject).then((result) => {
+          go.run(result.instance);
+          this.ready = true;
+      });
       console.log("Chroma WASM module initialized successfully");
     } catch (error) {
       console.error("Failed to initialize Chroma WASM module:", error);
