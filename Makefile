@@ -12,6 +12,10 @@ README.md: lexers/*/*.go
 tokentype_string.go: types.go
 	go generate
 
+.PHONY: format-js
+format-js:
+	biome format --write cmd/chromad/static/{index.js,chroma.js}
+
 .PHONY: chromad
 chromad: build/chromad
 

@@ -2,12 +2,14 @@ import * as Base64 from "./base64.js";
 import { chroma } from "./chroma.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-	var darkMode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  var style = document.createElement('style');
-  var ref = document.querySelector('script');
+  var darkMode =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+  var style = document.createElement("style");
+  var ref = document.querySelector("script");
   ref.parentNode.insertBefore(style, ref);
 
-  var form = document.getElementById('chroma');
+  var form = document.getElementById("chroma");
   var textArea = form.elements["text"];
   var styleSelect = form.elements["style"];
   var languageSelect = form.elements["language"];
@@ -16,49 +18,62 @@ document.addEventListener("DOMContentLoaded", function () {
   var output = document.getElementById("output");
   var htmlCheckbox = document.getElementById("html");
 
-  (document.querySelectorAll('.notification .delete') || []).forEach((el) => {
+  (document.querySelectorAll(".notification .delete") || []).forEach((el) => {
     const notification = el.parentNode;
-    el.addEventListener('click', () => {
+    el.addEventListener("click", () => {
       notification.parentNode.removeChild(notification);
     });
   });
 
   async function renderServer(formData) {
-		return (await fetch("api/render", {
-				  method: 'POST',
-					mode: 'cors',
-					cache: 'no-cache',
-					credentials: 'same-origin',
-					headers: {
-						'X-CSRF-Token': csrfToken,
-						'Content-Type': 'application/json',
-					},
-					redirect: 'follow',
-					referrer: 'no-referrer',
-					body: JSON.stringify(formData),
-				})).json();
+    return (
+      await fetch("api/render", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "X-CSRF-Token": csrfToken,
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrer: "no-referrer",
+        body: JSON.stringify(formData),
+      })
+    ).json();
   }
 
   async function renderWasm(formData) {
-		return await chroma.highlight(
-			formData.text,
-			formData.language,
-			formData.style,
-			formData.classes,
-		);
+    return await chroma.highlight(
+      formData.text,
+      formData.language,
+      formData.style,
+      formData.classes,
+    );
   }
 
   async function render(formData) {
-		return chroma !== null
-			? renderWasm(formData)
-			: renderServer(formData);
+    return chroma !== null ? renderWasm(formData) : renderServer(formData);
   }
-
 
   // https://stackoverflow.com/a/37697925/7980
   function handleTab(e) {
-    var after, before, end, lastNewLine, changeLength, re, replace, selection, start, val;
-    if ((e.charCode === 9 || e.keyCode === 9) && !e.altKey && !e.ctrlKey && !e.metaKey) {
+    var after,
+      before,
+      end,
+      lastNewLine,
+      changeLength,
+      re,
+      replace,
+      selection,
+      start,
+      val;
+    if (
+      (e.charCode === 9 || e.keyCode === 9) &&
+      !e.altKey &&
+      !e.ctrlKey &&
+      !e.metaKey
+    ) {
       e.preventDefault();
       start = this.selectionStart;
       end = this.selectionEnd;
@@ -68,14 +83,14 @@ document.addEventListener("DOMContentLoaded", function () {
       replace = true;
       if (start !== end) {
         selection = val.substring(start, end);
-        if (~selection.indexOf('\n')) {
+        if (~selection.indexOf("\n")) {
           replace = false;
           changeLength = 0;
-          lastNewLine = before.lastIndexOf('\n');
+          lastNewLine = before.lastIndexOf("\n");
           if (!~lastNewLine) {
             selection = before + selection;
             changeLength = before.length;
-            before = '';
+            before = "";
           } else {
             selection = before.substring(lastNewLine) + selection;
             changeLength = before.length - lastNewLine;
@@ -87,9 +102,9 @@ document.addEventListener("DOMContentLoaded", function () {
               start--;
               changeLength--;
             }
-            selection = selection.replace(re, '$1');
+            selection = selection.replace(re, "$1");
           } else {
-            selection = selection.replace(/(\n|^)/g, '$1\t');
+            selection = selection.replace(/(\n|^)/g, "$1\t");
             start++;
             changeLength++;
           }
@@ -99,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
       if (replace && !e.shiftKey) {
-        this.value = before + '\t' + after;
+        this.value = before + "\t" + after;
         this.selectionStart = this.selectionEnd = start + 1;
       }
     }
@@ -109,7 +124,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function debounce(func, wait, immediate) {
     var timeout;
     return function () {
-      var context = this, args = arguments;
+      var context = this;
+      var args = arguments;
       var later = function () {
         timeout = null;
         if (!immediate) func.apply(context, args);
@@ -123,11 +139,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function getFormJSON() {
     return {
-      "language": languageSelect.value,
-      "style": styleSelect.value,
-      "text": textArea.value,
-      "classes": htmlCheckbox.checked,
-    }
+      language: languageSelect.value,
+      style: styleSelect.value,
+      text: textArea.value,
+      classes: htmlCheckbox.checked,
+    };
   }
 
   async function update(event) {
@@ -145,12 +161,12 @@ document.addEventListener("DOMContentLoaded", function () {
         output.innerHTML = value.html;
       }
     } catch (error) {
-      console.error('Error highlighting code:', error);
+      console.error("Error highlighting code:", error);
       // Fallback: display plain text
       if (htmlCheckbox.checked) {
         output.innerText = textArea.value;
       } else {
-        output.innerHTML = '<pre>' + textArea.value + '</pre>';
+        output.innerHTML = "<pre>" + textArea.value + "</pre>";
       }
     }
 
@@ -160,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function share(event) {
-    let data = JSON.stringify(getFormJSON())
+    let data = JSON.stringify(getFormJSON());
     data = Base64.encodeURI(data);
     location.hash = "#" + data;
     try {
@@ -172,26 +188,29 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (location.hash) {
-    let json = Base64.decode(location.hash.substring(1))
+    let json = Base64.decode(location.hash.substring(1));
     json = JSON.parse(json);
     textArea.value = json.text;
     languageSelect.value = json.language;
     styleSelect.value = json.style;
     htmlCheckbox.checked = json.classes;
-    update(new Event('change'));
-  } else  if (darkMode) {
-  	styleSelect.value = "monokai";
-   	update(new Event("change"));
+    update(new Event("change"));
+  } else if (darkMode) {
+    styleSelect.value = "monokai";
+    update(new Event("change"));
   }
 
   var eventHandler = (event) => update(event);
-  var debouncedEventHandler = debounce(eventHandler, chroma === null ? 250 : 100);
+  var debouncedEventHandler = debounce(
+    eventHandler,
+    chroma === null ? 250 : 100,
+  );
 
-  languageSelect.addEventListener('change', eventHandler);
-  styleSelect.addEventListener('change', eventHandler);
-  htmlCheckbox.addEventListener('change', eventHandler);
-  copyButton.addEventListener('click', share);
+  languageSelect.addEventListener("change", eventHandler);
+  styleSelect.addEventListener("change", eventHandler);
+  htmlCheckbox.addEventListener("change", eventHandler);
+  copyButton.addEventListener("click", share);
 
-  textArea.addEventListener('keydown', handleTab);
-  textArea.addEventListener('change', debouncedEventHandler);
+  textArea.addEventListener("keydown", handleTab);
+  textArea.addEventListener("change", debouncedEventHandler);
 });
