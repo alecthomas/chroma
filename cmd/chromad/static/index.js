@@ -1,22 +1,21 @@
 import * as Base64 from "./base64.js";
 import { chroma } from "./chroma.js";
 
-document.addEventListener("DOMContentLoaded", function () {
-  var darkMode =
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches;
-  var style = document.createElement("style");
-  var ref = document.querySelector("script");
+document.addEventListener("DOMContentLoaded", () => {
+  const darkMode =
+    window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+  const style = document.createElement("style");
+  const ref = document.querySelector("script");
   ref.parentNode.insertBefore(style, ref);
 
-  var form = document.getElementById("chroma");
-  var textArea = form.elements["text"];
-  var styleSelect = form.elements["style"];
-  var languageSelect = form.elements["language"];
-  var copyButton = form.elements["copy"];
-  var csrfToken = form.elements["gorilla.csrf.Token"].value;
-  var output = document.getElementById("output");
-  var htmlCheckbox = document.getElementById("html");
+  const form = document.getElementById("chroma");
+  const textArea = form.elements.text;
+  const styleSelect = form.elements.style;
+  const languageSelect = form.elements.language;
+  const copyButton = form.elements.copy;
+  const csrfToken = form.elements["gorilla.csrf.Token"].value;
+  const output = document.getElementById("output");
+  const htmlCheckbox = document.getElementById("html");
 
   (document.querySelectorAll(".notification .delete") || []).forEach((el) => {
     const notification = el.parentNode;
@@ -58,16 +57,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // https://stackoverflow.com/a/37697925/7980
   function handleTab(e) {
-    var after,
-      before,
-      end,
-      lastNewLine,
-      changeLength,
-      re,
-      replace,
-      selection,
-      start,
-      val;
+    let after;
+    let before;
+    let end;
+    let lastNewLine;
+    let changeLength;
+    let re;
+    let replace;
+    let selection;
+    let start;
+    let val;
     if (
       (e.charCode === 9 || e.keyCode === 9) &&
       !e.altKey &&
@@ -114,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
       if (replace && !e.shiftKey) {
-        this.value = before + "\t" + after;
+        this.value = `${before}\t${after}`;
         this.selectionStart = this.selectionEnd = start + 1;
       }
     }
@@ -122,18 +121,17 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function debounce(func, wait, immediate) {
-    var timeout;
+    let timeout;
     return function () {
-      var context = this;
-      var args = arguments;
-      var later = function () {
+      const args = arguments;
+      const later = () => {
         timeout = null;
-        if (!immediate) func.apply(context, args);
+        if (!immediate) func.apply(this, args);
       };
-      var callNow = immediate && !timeout;
+      const callNow = immediate && !timeout;
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
+      if (callNow) func.apply(this, args);
     };
   }
 
@@ -154,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (value.language) {
         languageSelect.value = value.language;
       }
-      style.innerHTML = "#output { " + value.background + "}";
+      style.innerHTML = `#output { ${value.background}}`;
       if (htmlCheckbox.checked) {
         output.innerText = value.html;
       } else {
@@ -166,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (htmlCheckbox.checked) {
         output.innerText = textArea.value;
       } else {
-        output.innerHTML = "<pre>" + textArea.value + "</pre>";
+        output.innerHTML = `<pre>${textArea.value}</pre>`;
       }
     }
 
@@ -178,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function share(event) {
     let data = JSON.stringify(getFormJSON());
     data = Base64.encodeURI(data);
-    location.hash = "#" + data;
+    location.hash = `#${data}`;
     try {
       navigator.clipboard.writeText(location.href);
     } catch (e) {
@@ -200,8 +198,8 @@ document.addEventListener("DOMContentLoaded", function () {
     update(new Event("change"));
   }
 
-  var eventHandler = (event) => update(event);
-  var debouncedEventHandler = debounce(
+  const eventHandler = (event) => update(event);
+  const debouncedEventHandler = debounce(
     eventHandler,
     chroma === null ? 250 : 100,
   );
