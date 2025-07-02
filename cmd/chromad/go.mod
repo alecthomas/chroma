@@ -5,8 +5,8 @@ go 1.22
 toolchain go1.24.4
 
 require (
-	github.com/alecthomas/chroma/v2 v2.18.0
-	github.com/alecthomas/kong v1.11.0
+	github.com/alecthomas/chroma/v2 v2.19.0
+	github.com/alecthomas/kong v1.12.0
 	github.com/alecthomas/kong-hcl v1.0.1
 	github.com/gorilla/csrf v1.7.2
 	github.com/gorilla/handlers v1.5.2
