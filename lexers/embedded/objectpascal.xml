@@ -33,7 +33,7 @@
       </rule>
       <!-- Comment -->
       <rule pattern="//.*">
-        <token type="Comment" />
+        <token type="CommentSingle" />
       </rule>
       <!-- Comment Multiline Block -->
       <rule pattern="\([*](.|\n)*?[*]\)">
