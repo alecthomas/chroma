@@ -24,7 +24,7 @@ func gemtextRules() Rules {
 			{`^(>)(.+\r?\n)`, ByGroups(Keyword, GenericEmph), nil},
 			{"^(```\\r?\\n)([\\w\\W]*?)(^```)(.+\\r?\\n)?", ByGroups(String, Text, String, Comment), nil},
 			{
-				"^(```)(\\w+)(\\n)([\\w\\W]*?)(^```)(.+\\r?\\n)?",
+				"^(```)(\\w+)(\\r?\\n)([\\w\\W]*?)(^```)(.+\\r?\\n)?",
 				UsingByGroup(2, 4, String, String, String, Text, String, Comment),
 				nil,
 			},
