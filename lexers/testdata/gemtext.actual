@@ -56,6 +56,10 @@ This isn't to be treated as Gemtext:
 > no one said this
 ```
 
+```
+This is also plaintext
+```This text is ignored
+
 
 ```This is alt text
 This text is also preformatted.
