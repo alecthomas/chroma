@@ -20,7 +20,7 @@ func gemtextRules() Rules {
 		"root": {
 			{`^(#[^#].+\r?\n)`, ByGroups(GenericHeading), nil},
 			{`^(#{2,3}.+\r?\n)`, ByGroups(GenericSubheading), nil},
-			{`^(\*)(\s)(.+\r?\n)`, ByGroups(Keyword, Text, Text), nil},
+			{`^(\* )(.+\r?\n)`, ByGroups(Keyword, Text), nil},
 			{`^(>)(.+\r?\n)`, ByGroups(Keyword, GenericEmph), nil},
 			{"^(```\\r?\\n)([\\w\\W]*?)(^```)(.+\\r?\\n)?", ByGroups(String, Text, String, Comment), nil},
 			{
