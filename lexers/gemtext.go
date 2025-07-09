@@ -30,7 +30,7 @@ func gemtextRules() Rules {
 			},
 			{"^(```)(.+\\r?\\n)([\\w\\W]*?)(^```)(.+\\r?\\n)?", ByGroups(String, String, Text, String, Comment), nil},
 			{`^(=>)(\s*)([^\s]+)(\s*)$`, ByGroups(Keyword, Text, NameAttribute, Text), nil},
-			{`^(=>)(\s*)([^\s]+)(\s*)(.+)$`, ByGroups(Keyword, Text, NameAttribute, Text, NameTag), nil},
+			{`^(=>)(\s*)([^\s]+)(\s+)(.+)$`, ByGroups(Keyword, Text, NameAttribute, Text, NameTag), nil},
 			{`(.|(?:\r?\n))`, ByGroups(Text), nil},
 		},
 	}
