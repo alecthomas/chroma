@@ -88,7 +88,7 @@
   {"type":"Keyword","value":"*"},
   {"type":"Text","value":" Here's another.\n"},
   {"type":"Keyword","value":"*"},
-  {"type":"Text","value":"  Still a list item!\n*This is not.\n** This is also not.\n\n"},
+  {"type":"Text","value":"  Still a list item!\n*This is not.\n** This is also not.\n- Not a list item.\n  - Not a list item.\n\n"},
   {"type":"Keyword","value":"\u003e"},
   {"type":"GenericEmph","value":" Someone said this.\n"},
   {"type":"Text","value":"\n"},

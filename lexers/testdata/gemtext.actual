@@ -40,6 +40,8 @@ Links may also be closer together. Here are some examples from the spec:
 *  Still a list item!
 *This is not.
 ** This is also not.
+- Not a list item.
+  - Not a list item.
 
 > Someone said this.
 
