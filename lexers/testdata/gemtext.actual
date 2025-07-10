@@ -1,0 +1,90 @@
+# This is a heading!
+
+#This is also a heading!
+
+This is some text. It is not special.
+
+## Another heading
+
+##yes, leading spaces are optional
+
+=> gemini://geminiprotocol.net/docs/gemtext-specification.gmi
+
+=> gemini://geminiprotocol.net/docs/gemtext-specification.gmi Here is a friendly link to the Gemtext specification
+
+=> https://geminiprotocol.net/docs/gemtext-specification.gmi gemini protocol isn't special for links
+
+=> gemini://geminiprotocol.net/	multiple kinds of whitespace
+
+=>  gemini://geminiprotocol.net/	 multiple whitespace between parts!
+
+=> /foo/bar/baz.txt leading slash still counts
+
+Links may also be closer together. Here are some examples from the spec:
+=> gemini://example.org/
+=> gemini://example.org/ An example link
+=> gemini://example.org/foo	Another example link at the same host
+=> foo/bar/baz.txt	A relative link
+=> 	gopher://example.org:70/1 A gopher link
+
+=>this shouldn't be a link, but it is. 
+=>gemini://example.org/ the leading space is optional
+
+### Why not try lists?
+
+
+###spaces are still optional
+
+* This is a list item.
+* Here's another.
+*  Still a list item!
+*This is not.
+** This is also not.
+*	Neither is this.
+- Not a list item.
+  - Not a list item.
+
+> Someone said this.
+
+>Someone also said this.
+
+```
+This text is preformatted.
+
+# Hello, world!
+
+This isn't to be treated as Gemtext:
+=> gemini://example.com
+
+> no one said this
+```
+
+```
+This is also plaintext
+```This text is ignored
+
+
+```This is alt text
+This text is also preformatted.
+```this text is ignored.
+
+```Art by Joan Stark of a camp site. A small tent faces a small campfire. There is a log nearby, perfect for sitting on. The initials "jgs" can be seen.
+        ______
+jgs    /     /\
+      /     /  \
+     /_____/----\_    (
+    "     "          ).
+   _ ___          o (:') o
+  (@))_))        o ~/~~\~ o
+                  o  o  o
+```
+
+Syntax highlighting may be applied to preformatted blocks:
+```javascript
+	column.substring(0,num)
+```
+
+The spec says, "Any text following the leading "```" of a preformat toggle line MUST be ignored by clients." So...
+```
+```this is a comment!
+wow, what WAS that??
