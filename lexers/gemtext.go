@@ -7,7 +7,7 @@ import (
 // Gemtext lexer.
 var Gemtext = Register(MustNewLexer(
 	&Config{
-		Name:      "Gemini hypertext format",
+		Name:      "Gemtext",
 		Aliases:   []string{"gemtext", "gmi", "gmni", "gemini"},
 		Filenames: []string{"*.gmi", "*.gmni", "*.gemini"},
 		MimeTypes: []string{"text/gemini"},
