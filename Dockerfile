@@ -32,7 +32,7 @@ RUN make build/chromad
 FROM alpine:3.19 AS runtime
 
 # Install ca-certificates for HTTPS requests
-RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add ca-certificates curl
 
 # Create a non-root user
 RUN addgroup -g 1001 chromad && \
@@ -54,7 +54,7 @@ USER chromad
 EXPOSE 8080
 
 # Set default environment variables
-ENV PORT=0.0.0.0:8080
+ENV PORT=8080
 ENV CHROMA_CSRF_KEY="testtest"
 
 # Health check
@@ -62,4 +62,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 	CMD curl -fsSL http://127.0.0.1:8080/ > /dev/null
 
 # Run the application
-CMD ["sh", "-c", "./chromad --csrf-key=$CHROMA_CSRF_KEY --bind=$PORT"]
+CMD ["sh", "-c", "./chromad --csrf-key=$CHROMA_CSRF_KEY --bind=0.0.0.0:$PORT"]
