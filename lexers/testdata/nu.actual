@@ -1,0 +1,76 @@
+"12" | into int
+
+date now | date to-timezone "Europe/London"
+
+{'name': 'nu', 'stars': 5, 'language': 'Python'} | upsert language 'Rust'
+
+[one two three] | to yaml
+
+[[framework, language]; [Django, Python] [Laravel, PHP]]
+
+[{name: 'Robert' age: 34 position: 'Designer'}
+ {name: 'Margaret' age: 30 position: 'Software Developer'}
+ {name: 'Natalie' age: 50 position: 'Accountant'}
+] | select name position
+
+let name = "Alice"
+$"greetings, ($name)!"
+# => greetings, Alice!
+
+let string_list = "one,two,three" | split row ","
+$string_list
+# => ╭───┬───────╮
+# => │ 0 │ one   │
+# => │ 1 │ two   │
+# => │ 2 │ three │
+# => ╰───┴───────╯
+
+"Hello, world!" | str contains "o, w"
+# => true
+
+let str_list = [zero one two]
+$str_list | str join ','
+# => zero,one,two
+
+'Hello World!' | str substring 4..8
+# => o Wor
+
+'Nushell 0.80' | parse '{shell} {version}'
+
+"acronym,long\nAPL,A Programming Language" | from csv
+
+$'(ansi purple_bold)This text is a bold purple!(ansi reset)'
+# => This text is a bold purple!
+
+[foo bar baz] | insert 1 'beeze'
+
+[1, 2, 3, 4] | update 1 10
+
+let numbers = [1, 2, 3]
+$numbers | prepend 0
+
+let numbers = [1, 2, 3]
+$numbers | append 4
+
+[cammomile marigold rose forget-me-not] | first 2
+
+let planets = [Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune]
+$planets | each { |elt| $"($elt) is a planet of the solar system" }
+
+$planets | enumerate | each { |elt| $"($elt.index + 1) - ($elt.item)" }
+
+let scores = [3 8 4]
+$"total = ($scores | reduce { |elt, acc| $acc + $elt })"
+# => total = 15
+
+def "main run" [] {
+    print "running"
+}
+
+def "main build" [] {
+    print "building"
+}
+
+def main [x: string] {
+  $"Hello ($x | describe) ($x)"
+}
