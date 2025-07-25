@@ -421,38 +421,37 @@ func (f *Formatter) tabWidthStyle() string {
 	return ""
 }
 
+func (f *Formatter) writeCSSRule(w io.Writer, comment string, selector string, styles string) error {
+	if styles == "" {
+		return nil
+	}
+	if f.writeCSSComments && comment != "" {
+		if _, err := fmt.Fprintf(w, "/* %s */ ", comment); err != nil {
+			return err
+		}
+	}
+	if _, err := fmt.Fprintf(w, "%s { %s }\n", selector, styles); err != nil {
+		return err
+	}
+	return nil
+}
+
 // WriteCSS writes CSS style definitions (without any surrounding HTML).
 func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 	css := f.styleCache.get(style, false)
 
-	// Helper to write a CSS rule if styles is non-empty
-	writeRule := func(comment string, selector string, styles string) error {
-		if styles == "" {
-			return nil
-		}
-		if f.writeCSSComments {
-			if _, err := fmt.Fprintf(w, "/* %s */ %s { %s }\n", comment, selector, styles); err != nil {
-				return err
-			}
-		} else {
-			if _, err := fmt.Fprintf(w, "%s { %s }\n", selector, styles); err != nil {
-				return err
-			}
-		}
-		return nil
-	}
-
 	// Special-case background as it is mapped to the outer ".chroma" class.
-	if err := writeRule(chroma.Background.String(), fmt.Sprintf(".%sbg", f.prefix), css[chroma.Background]); err != nil {
+	if err := f.writeCSSRule(w, chroma.Background.String(), fmt.Sprintf(".%sbg", f.prefix), css[chroma.Background]); err != nil {
 		return err
 	}
 	// Special-case PreWrapper as it is the ".chroma" class.
-	if err := writeRule(chroma.PreWrapper.String(), fmt.Sprintf(".%schroma", f.prefix), css[chroma.PreWrapper]); err != nil {
+	if err := f.writeCSSRule(w, chroma.PreWrapper.String(), fmt.Sprintf(".%schroma", f.prefix), css[chroma.PreWrapper]); err != nil {
 		return err
 	}
 	// Special-case code column of table to expand width.
 	if f.lineNumbers && f.lineNumbersInTable {
-		if err := writeRule(chroma.LineTableTD.String(), fmt.Sprintf(".%schroma .%s:last-child", f.prefix, f.class(chroma.LineTableTD)), "width: 100%;"); err != nil {
+		selector := fmt.Sprintf(".%schroma .%s:last-child", f.prefix, f.class(chroma.LineTableTD))
+		if err := f.writeCSSRule(w, chroma.LineTableTD.String(), selector, "width: 100%;"); err != nil {
 			return err
 		}
 	}
@@ -462,7 +461,7 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 		for _, tt := range []chroma.TokenType{chroma.LineNumbers, chroma.LineNumbersTable} {
 			comment := fmt.Sprintf("%s targeted by URL anchor", tt)
 			selector := fmt.Sprintf(".%schroma .%s:target", f.prefix, f.class(tt))
-			if err := writeRule(comment, selector, targetedLineCSS); err != nil {
+			if err := f.writeCSSRule(w, comment, selector, targetedLineCSS); err != nil {
 				return err
 			}
 		}
@@ -482,7 +481,7 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 		if class == "" {
 			continue
 		}
-		if err := writeRule(tt.String(), fmt.Sprintf(".%schroma .%s", f.prefix, class), css[tt]); err != nil {
+		if err := f.writeCSSRule(w, tt.String(), fmt.Sprintf(".%schroma .%s", f.prefix, class), css[tt]); err != nil {
 			return err
 		}
 	}
