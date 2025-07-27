@@ -40,9 +40,16 @@
           <using lexer="Bash" />
         </bygroups>
       </rule>
-      <rule pattern="((?:FROM|MAINTAINER|EXPOSE|WORKDIR|USER|STOPSIGNAL)|VOLUME)\b(.*)">
+      <rule
+        pattern="((?:FROM|MAINTAINER|EXPOSE|WORKDIR|USER|STOPSIGNAL)|VOLUME)\b(\s)([\S]*)\b(?:(\s)(AS)\b(\s)([\S]*))?\b"
+      >
         <bygroups>
           <token type="Keyword" />
+          <token type="TextWhitespace" />
+          <token type="LiteralString" />
+          <token type="TextWhitespace" />
+          <token type="Keyword" />
+          <token type="TextWhitespace" />
           <token type="LiteralString" />
         </bygroups>
       </rule>
