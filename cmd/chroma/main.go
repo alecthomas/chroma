@@ -346,8 +346,8 @@ func listAll() {
 }
 
 func lex(ctx *kong.Context, lexer chroma.Lexer, contents string) chroma.Iterator {
-	if rel, ok := lexer.(*chroma.RegexLexer); ok {
-		rel.Trace(cli.Trace)
+	if rel, ok := lexer.(chroma.TracingLexer); ok {
+		rel.SetTracing(cli.Trace)
 	}
 	lexer = chroma.Coalesce(lexer)
 	it, err := lexer.Tokenise(nil, contents)
