@@ -49,6 +49,48 @@ func TestSplitTokensIntoLines(t *testing.T) {
 	}
 	actual := chroma.SplitTokensIntoLines(in)
 	assert.Equal(t, expected, actual)
+
+	in = []chroma.Token{
+		{Value: "func", Type: chroma.KeywordDeclaration},
+		{Value: " ", Type: chroma.TextWhitespace},
+		{Value: "main", Type: chroma.NameFunction},
+		{Value: "()", Type: chroma.Punctuation},
+		{Value: " ", Type: chroma.TextWhitespace},
+		{Value: "{", Type: chroma.Punctuation},
+		{Value: "\n\t", Type: chroma.TextWhitespace},
+		{Value: "println", Type: chroma.NameBuiltin},
+		{Value: "(", Type: chroma.Punctuation},
+		{Value: `"mark this"`, Type: chroma.LiteralString},
+		{Value: ")", Type: chroma.Punctuation},
+		{Value: "\n", Type: chroma.TextWhitespace},
+		{Value: "}", Type: chroma.Punctuation},
+		{Value: "\n", Type: chroma.TextWhitespace},
+	}
+	expected = [][]chroma.Token{
+		{
+			{Type: chroma.KeywordDeclaration, Value: "func"},
+			{Type: chroma.TextWhitespace, Value: " "},
+			{Type: chroma.NameFunction, Value: "main"},
+			{Type: chroma.Punctuation, Value: "()"},
+			{Type: chroma.TextWhitespace, Value: " "},
+			{Type: chroma.Punctuation, Value: "{"},
+			{Type: chroma.TextWhitespace, Value: "\n"},
+		},
+		{
+			{Type: chroma.TextWhitespace, Value: "\t"},
+			{Type: chroma.NameBuiltin, Value: "println"},
+			{Type: chroma.Punctuation, Value: "("},
+			{Type: chroma.LiteralString, Value: `"mark this"`},
+			{Type: chroma.Punctuation, Value: ")"},
+			{Type: chroma.TextWhitespace, Value: "\n"},
+		},
+		{
+			{Type: chroma.Punctuation, Value: "}"},
+			{Type: chroma.TextWhitespace, Value: "\n"},
+		},
+	}
+	actual = chroma.SplitTokensIntoLines(in)
+	assert.Equal(t, expected, actual)
 }
 
 func TestFormatterStyleToCSS(t *testing.T) {
