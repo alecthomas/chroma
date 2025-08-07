@@ -1,0 +1,155 @@
+;
+; Load instructions.
+;
+LD E, H
+LD E, $42
+LD DE, $8000
+LD [HL], H
+LD [HL], $42
+LD E, [HL]
+LD [DE], A
+LD [$8000], A
+LDH [$8000], A
+LDH [C], A
+LDH [$FF00+C], A
+LD A, [DE]
+LD A, [$8000]
+LDH A, [$8000]
+LDH A, [C]
+LD [HLI], A
+LD [HL+], A
+LD [HLD], A
+LD [HL-], A
+LD A, [HLI]
+LD A, [HL+]
+LD A, [HLD]
+LD A, [HL-]
+
+;
+; 8-bit arithmetic instructions.
+;
+ADC A, H
+ADC A, [HL]
+ADC A, $42
+ADD A, H
+ADD A, [HL]
+ADD A, $42
+CP A, H
+CP A, [HL]
+CP A, $42
+DEC B
+DEC [HL]
+INC B
+INC [HL]
+SBC A, H
+SBC A, [HL]
+SBC A, $42
+SUB A, H
+SUB A, [HL]
+SUB A, $42
+
+;
+; 16-bit arithmetic instructions
+;
+ADD HL, DE
+DEC DE
+INC DE
+
+;
+; Bitwise logic instructions
+;
+AND A, H
+AND A, [HL]
+AND A, $42
+CPL
+OR A, H
+OR A, [HL]
+OR A, $42
+XOR A, H
+XOR A, [HL]
+XOR A, $42
+
+;
+; Bit flag instructions
+;
+BIT 1, H
+BIT 2, [HL]
+RES 3, H
+RES 4, [HL]
+SET 5, H
+SET 6, [HL]
+
+;
+; Bit shift instructions
+;
+RL B
+RL [HL]
+RLA
+RLC B
+RLC [HL]
+RLCA
+RR B
+RR [HL]
+RRA
+RRC B
+RRC [HL]
+RRCA
+SLA B
+SLA [HL]
+SRA B
+SRA [HL]
+SRL B
+SRL [HL]
+SWAP B
+SWAP [HL]
+
+;
+; Jumps and subroutine instructions
+;
+CALL $9fff
+CALL Z, $9fff
+JP HL
+JP $9fff
+JP NZ, $9fff
+JR $9fff
+JR C, $9fff
+RET NC
+RET
+RETI
+RST $38
+
+;
+; Carry flag instructions
+;
+CCF
+SCF
+
+;
+; Stack manipulation instructions
+;
+ADD HL, SP
+ADD SP, -16
+DEC SP
+INC SP
+LD SP, $9fff
+LD [$9fff], SP
+LD HL, SP+16
+LD SP, HL
+POP AF
+POP DE
+PUSH AF
+PUSH DE
+
+;
+; Interrupt-related instructions
+;
+DI
+EI
+HALT
+
+;
+; Miscellaneous instructions
+;
+DAA
+NOP
+STOP

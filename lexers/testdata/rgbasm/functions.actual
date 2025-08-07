@@ -1,0 +1,60 @@
+;
+; Integer functions.
+;
+HIGH(n)
+LOW(n)
+BITWIDTH(n)
+TZCOUNT(n)
+
+;
+; Fixed-point functions.
+;
+DIV(x, y)
+MUL(x, y)
+FMOD(x, y)
+POW(x, y)
+LOG(x, y)
+ROUND(x)
+CEIL(x)
+FLOOR(x)
+SIN(x)
+COS(x)
+TAN(x)
+ASIN(x)
+ACOS(x)
+ATAN(x)
+ATAN2(y, x)
+
+;
+; String functions.
+;
+STRCAT(str1, str2, str3)
+STRUPR(str)
+STRLWR(str)
+STRSLICE(str, start, end)
+STRRPL(str, old, new)
+STRFMT(fmt, arg1, arg2, arg3)
+STRCHAR(str, idx)
+REVCHAR(val1, val2, val3)
+STRLEN(str)
+STRCMP(str1, str2)
+STRFIND(str, substr)
+STRRFIND(str, substr)
+INCHARMAP(str)
+CHARLEN(str)
+CHARCMP(str1, str2)
+CHARSIZE(char)
+STRSUB(str, pos, len)
+STRIN(str, substr)
+STRRIN(str, substr)
+CHARSUB(str, pos)
+
+;
+; Other functions.
+;
+DEF(symbol)
+ISCONST(arg)
+BANK(arg)
+SECTION(symbol)
+SIZEOF(arg)
+STARTOF(arg)

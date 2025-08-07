@@ -1,0 +1,371 @@
+;
+; Quick syntax example (rgbds documentation intro).
+;
+SECTION "My Code", ROM0  ; a directive
+MyFunction:              ; a label
+    push hl              ; an instruction
+    /* ...and multiple instructions,
+       with mixed case */
+    ld a, [hli] :: LD H, [HL] :: Ld l, a
+    pop /*wait for it*/ hl
+    ret
+
+    ; Multiline definitions.
+    DB 1, 2, 3, \
+       4, 5, 6, \ ; Put it before any comments
+       7, 8, 9
+
+;
+; Numeric formats.
+;
+    ld a, 1234
+    ld a, 10_000
+    ld a, 0o777
+    ld a, &777
+    ld a, $cafe
+    ld a, 0xcafe
+    ld a, 89bfh
+    ld a, %000_1111
+    ld a, 0b00001111
+    ld a, 12.34
+    ld a, 10_000.000_345
+    ld a, 12.34q8
+    ld a, `01230123
+
+;
+; Case-insensitivity.
+;
+def MyVar equ 42
+section "case", rom0
+    xor a
+    ld a, MyVar
+    HALT
+
+;
+; Multiline strings and comments.
+;
+PRINT """First line,
+second line, containing a \"{symbol}\",
+third line with "single" quotes and an \{escaped symbol}
+last line."""
+/* First line,
+   second line,
+   third line. */
+
+;
+; Raw strings
+;
+PRINT "String \n {symbol}"
+PRINT #"Raw string \n {rawsymbol}"
+PRINT #"""Raw string (multiline) \n \{test\} \ "
+second line,
+third line"""
+
+;
+; Character maps.
+;
+CHARMAP "A", 42
+CHARMAP ":)", 39
+CHARMAP "<br>", 13, 10
+CHARMAP "&euro;", $20ac
+
+;
+; Section definitions and stack.
+;
+SECTION "Cool Stuff", ROMX
+SECTION "Cool Stuff", ROMX[$4567]
+SECTION "Cool Stuff", ROMX[$4567], BANK[3]
+SECTION "Cool Stuff", ROMX, BANK[7]
+SECTION "OAM Data", WRAM0, ALIGN[8] ; align to 256 bytes
+SECTION "VRAM Data", ROMX, BANK[2], ALIGN[4] ; align to 16 bytes
+    PUSHS "Variables", WRAM0
+        wAnswer: db
+    POPS
+    ld [wAnswer], a
+
+; Bank and Section are also functions. They should appear as such here.
+DEF myBank EQU BANK(wAnswer)
+DEF mySection EQU SECTION(wAnswer)
+
+;
+; Using @, . and .. builtins.
+;
+SECTION "test floating", ROM0
+FloatingStart:
+    ds 6, (@ - FloatingStart) * 2 + zero
+    ds 10, (@ - FloatingStart) + zero, (@ - FloatingStart) * 3 + zero, (@ - FloatingStart) * 4 + zero
+    PUSHS .
+    LOAD ..
+
+;
+; Labels.
+;
+GlobalLabel:
+AnotherGlobal:
+.locallabel ; This defines "AnotherGlobal.locallabel"
+.another_local:
+AnotherGlobal.with_another_local:
+ThisWillBeExported:: ; Note the two colons
+ThisWillBeExported.too::
+    JR Z, .locallabel
+    JR C, AnotherGlobal.with_another_local
+    CALL GlobalLabel
+
+; Anonymous labels.
+    ld hl, :++
+:   ld a, [hli] ; referenced by "jr nz"
+    ldh [c], a
+    dec c
+    jr nz, :-
+    ret
+:   ; referenced by "ld hl"
+    dw $7FFF, $1061, $03E0, $58A5
+
+;
+; Predefined builtins.
+;
+PRINTLN(__UTC_YEAR__)
+PRINTLN(__UTC_MONTH__)
+PRINTLN(__UTC_DAY__)
+PRINTLN(__UTC_HOUR__)
+PRINTLN(__UTC_MINUTE__)
+PRINTLN(__UTC_SECOND__)
+PRINTLN(__DATE__)
+PRINTLN(__TIME__)
+PRINTLN(__RGBDS_MAJOR__)
+PRINTLN(__RGBDS_MINOR__)
+PRINTLN(__RGBDS_PATCH__)
+PRINTLN(__RGBDS_RC__)
+PRINTLN(__RGBDS_VERSION__)
+PRINTLN(__MYVAR__)  ; Not a builtin.
+
+;
+; Variables, constants and operators.
+;
+DEF ARRAY_SIZE EQU 4
+DEF COUNT = 2
+DEF COUNT = 3
+DEF COUNT = ARRAY_SIZE + COUNT
+DEF COUNT *= 2
+; COUNT now has the value 14
+
+DEF x = 10
+DEF x += 1    ; x == 11
+DEF y = x - 1 ; y == 10
+DEF y *= 2    ; y == 20
+DEF y >>= 1   ; y == 10
+DEF x ^= y    ; x == 1
+
+; Purging symbols and using DEF() function alongside DEF keyword.
+DEF Var1 EQUS "Var1 is defined"
+Var2: DB "Var2 is also defined"
+PURGE Var1, Var2
+ASSERT !DEF(Var1) && !DEF(Var2)
+DEF isDefined EQU DEF(Var1)
+
+; Variable substitutions.
+SECTION "Test", ROM0[2]
+X:                 ; This works with labels **whose address is known**
+DEF Y = 3          ; This also works with variables
+DEF SUM EQU X + Y  ; And likewise with numeric constants
+; Prints "%0010 + $3 == 5"
+PRINTLN "{#05b:X} + {#x:Y} == {d:SUM}"
+
+RSSET 32
+DEF PERCENT RB 1   ; Same with offset constants
+DEF VALUE = 20
+DEF RESULT = MUL(20.0, 0.32)
+; Prints "32% of 20 = 6.40"
+PRINTLN "{d:PERCENT}% of {d:VALUE} = {f:RESULT}"
+
+DEF WHO EQUS STRLWR("WORLD")
+; Prints "Hello world!"
+PRINTLN "Hello {s:WHO}!"
+
+; Escaping curly brackets does not cause interpolation.
+PRINTLN "The raw symbol is \{s:WHO}!"
+
+; Offset constants.
+RSRESET
+DEF str_pStuff RW   1
+DEF str_tData  RB   256
+DEF str_bCount RB   1
+DEF str_SIZEOF RL   0
+
+    ; Offsets constants use "RL" which is also contained in two opcodes.
+    ; The instructions below should appear as keywords, not built-in names.
+    RL A
+    RLC A
+
+; String constants.
+DEF COUNTREG EQUS "[hl+]"
+    ld a, COUNTREG
+
+DEF PLAYER_NAME EQUS "\"John\""
+    db PLAYER_NAME
+
+DEF pusha EQUS "push af\npush bc\npush de\npush hl\n"
+
+DEF s EQUS "Hello, "
+REDEF s EQUS "{s}world!"
+; prints "Hello, world!"
+PRINTLN "{s}\n"
+
+DEF topic EQUS "life, the universe, and \"everything\""
+DEF meaning EQUS "answer"
+; Defines answer = 42
+DEF {meaning} = 42
+; Prints "The answer to life, the universe, and "everything" is $2A"
+PRINTLN "The {meaning} to {topic} is {{meaning}}"
+
+;
+; Defining data, reserving memory space.
+;
+
+; Defining data in ROM
+DB 1,2,3,4,"This is a string"
+DW "Hello!"
+DW "H", "e", "l", "l", "o", "!"
+; outputs 3 bytes: $AA, $AA, $AA
+DS 3, $AA
+; outputs 7 bytes: $BB, $CC, $BB, $CC, $BB, $CC, $BB
+DS 7, $BB, $CC
+
+; Defining data in RAM
+DS 42 ; Allocates 42 bytes
+
+; Allocating overlapping space in RAM
+; Let's say PC == $C0DE here
+UNION
+    ; Here, PC == $C0DE
+    wName:: ds 10
+    ; Now, PC == $C0E8
+    wNickname:: ds 10
+    ; PC == $C0F2
+NEXTU
+    ; PC is back to $C0DE
+    wHealth:: dw
+    ; PC == $C0E0
+    wLives:: db
+    ; PC == $C0E1
+    ds 7
+    ; PC == $C0E8
+    wBonus:: db
+    ; PC == $C0E9
+NEXTU
+    ; PC is back to $C0DE again
+    wVideoBuffer: ds 16
+    ; PC == $C0EE
+ENDU
+; Afterward, PC == $C0F2
+
+;
+; Including files.
+;
+INCLUDE "header.inc"
+
+INCBIN "titlepic.bin"
+INCBIN "sprites/hero.bin"
+INCBIN "data.bin", 78, 256
+
+;
+; Repeating code.
+;
+REPT 4
+    ADD A, H
+ENDR
+
+FOR V, 1, 100
+    PRINT "{d:V}"
+    IF V == 5
+        PRINT " stop! "
+        BREAK
+    ENDC
+    PRINT ", "
+ENDR
+
+;
+; Conditionals.
+;
+IF NUM < 0
+  PRINTLN "NUM < 0"
+ELIF NUM == 0
+  PRINTLN "NUM == 0"
+ELSE
+  PRINTLN "NUM > 0"
+ENDC
+
+;
+; Assertions.
+;
+Function:
+    xor a
+ASSERT LOW(MyByte) == 0
+    ld h, HIGH(MyByte)
+    ld l, a
+    ld a, [hli]
+; You can also indent this!
+    ASSERT BANK(OtherFunction) == BANK(Function)
+    call OtherFunction
+; Lowercase also works
+    ld hl, FirstByte
+    ld a, [hli]
+assert FirstByte + 1 == SecondByte
+    ld b, [hl]
+    ret
+.end
+    ; If you specify one, a message will be printed
+    STATIC_ASSERT .end - Function < 256, "Function is too large!"
+
+;
+; Macros.
+;
+MACRO lb
+    ld \1, (\2) << 8 | (\3)
+ENDM
+    lb hl, 20, 18        ; Expands to "ld hl, ((20) << 8) | (18)"
+    lb de, 3 + 1, NUM**2 ; Expands to "ld de, ((3 + 1) << 8) | (NUM**2)"
+
+; Unique symbol name affix.
+MACRO loop_c_times_fixed
+    xor a, a
+.loop\@
+    ld [hl+], a
+    dec c
+    jr nz, .loop\@
+ENDM
+
+; Arguments and more complex symbol expansion.
+def NUM_ITEMS equ 0
+def v10 = 42
+def x = 10
+MACRO add_item
+    redef NUM_ITEMS equ NUM_ITEMS + 1
+    def ITEM_{02x:NUM_ITEMS} equ \1
+
+    ; Special bracketed arguments.
+    def lastArg equ \<_NARG>
+    redef lastArg equ \<-1>
+    def version equ \<v{d:x}>   ; will expand to ‘\<42>’.
+ENDM
+    add_item 1
+    add_item 4
+    add_item 8
+    assert NUM_ITEMS == 3
+    assert ITEM_03 == 8
+
+;
+; Options.
+;
+PUSHO
+    OPT g.oOX, Wdiv       ; acts like command-line -g.oOX -Wdiv
+    DW `..ooOOXX          ; uses the graphics constant characters from OPT g
+    PRINTLN $80000000/-1  ; prints a warning about division
+POPO
+    DW `00112233          ; uses the default graphics constant characters
+    PRINTLN $80000000/-1  ; no warning by default
+
+PUSHO g.oOX, Wdiv         ; Also works directly with PUSHO
+    DW `..ooOOXX
+    PRINTLN $80000000/-1
+POPO
