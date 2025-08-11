@@ -1,4 +1,4 @@
-@pub use collections.{Array, BitSet, BitVec, HashMap, HashSet, List, Queue};
+import collections.{Array, BitSet, BitVec, HashMap, HashSet, List, Queue}
 
 @pub mod annotations;
 
@@ -148,8 +148,8 @@ impl StacktraceElement {
   None,
 }
 
-use Option.Some
-use Option.None
+import Option.Some
+import Option.None
 
 impl[T] Option[T] {
   @pub fun isNone: Bool = if self
@@ -173,8 +173,8 @@ impl[T] Option[Option[T]] {
   Fail(E),
 }
 
-use Result.Pass
-use Result.Fail
+import Result.Pass
+import Result.Fail
 
 impl[T, E] Result[T, E] {
   @pub fun isPass: Bool = if self
