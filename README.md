@@ -272,7 +272,7 @@ for that setup the `chroma` executable can be just symlinked to `~/.lessfilter`.
 
 ## Projects using Chroma
 
-* [`moar`](https://github.com/walles/moar) is a full-blown pager that colorizes
+* [`moor`](https://github.com/walles/moor) is a full-blown pager that colorizes
   its input using Chroma
 * [Hugo](https://gohugo.io/) is a static site generator that [uses Chroma for syntax
   highlighting code examples](https://gohugo.io/content-management/syntax-highlighting/)
