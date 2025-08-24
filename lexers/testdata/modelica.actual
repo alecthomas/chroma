@@ -1,0 +1,248 @@
+
+within TestKeywords;
+
+package TestKeywords
+  // -----------------------------------------
+  // Basic classes and types
+  // -----------------------------------------
+  record MyRecord
+    parameter Real r = 1.0;       // 'parameter', 'Real'
+    Integer i;                   // 'Integer'
+  end MyRecord;                  // 'record', 'end'
+
+  connector MyConnector
+    flow Real f;                 // 'connector', 'flow', 'Real'
+    stream String s;             // 'stream', 'String'
+    input Real inVar;            // 'input'
+    output Real outVar;          // 'output'
+  end MyConnector;
+
+  type MyType = Real;            // 'type', 'Real'
+
+  // -----------------------------------------
+  // Reserved words
+  // -----------------------------------------
+  model FullModel
+    extends TestKeywords;        // 'extends'
+    inner MyConnector mc;        // 'inner'
+    outer MyConnector mcOuter;   // 'outer'
+    constant Real c = 3.14;      // 'constant', 'Real'
+    public Real pubVar;          // 'public'
+    protected Real protVar;      // 'protected'
+    discrete Integer dInt;       // 'discrete', 'Integer'
+    Boolean flag = true;         // 'Boolean', 'true'
+    Boolean off = false;         // 'false'
+    parameter Integer p = 2;     // 'parameter', 'Integer'
+    MyRecord rec;                // 'record'
+    input Real inputVar;         // 'input'
+    output Real outputVar;       // 'output'
+    Real arr[2];                 // arrays (no keyword)
+  equation
+    der(inputVar) = -p * inputVar + c; // 'der'
+    when time > 1.0 then               // 'when', 'then'
+      outputVar = inputVar * 2.0;
+    end when;                         // 'end' (when)
+
+    // Ejemplos de funciones matemáticas comunes
+    Real minVal = Modelica.Math.min(inputVar, outputVar);
+    Real maxVal = Modelica.Math.max(inputVar, outputVar);
+    Real absVal = abs(inputVar);
+    Real sinVal = sin(inputVar);
+    Real cosVal = cos(inputVar);
+    Real tanVal = tan(inputVar);
+    Real expVal = exp(inputVar);
+    Real logVal = log(inputVar);
+    Real sqrtVal = sqrt(inputVar);
+  end FullModel;
+
+  // -----------------------------------------
+  // Functions, operators, and control flow
+  // -----------------------------------------
+  function myFunc
+    input Real x;                   // 'input'
+    output Real y;                  // 'output'
+  algorithm
+    if x > 0 then                  // 'if', 'then'
+      y := x;
+    elseif x < 0 then              // 'elseif', 'then'
+      y := -x;
+    else                          // 'else'
+      y := 0;
+    end if;                       // 'end' (if)
+  end myFunc;                     // 'end', 'function'
+
+  operator function addOp "operator example"
+    input Real a;
+    input Real b;
+    output Real r;
+  algorithm
+    r := a + b;
+    return;                       // 'return'
+  end addOp;                      // 'operator', 'function', 'return'
+
+  impure function impureFunc
+    input Real x;
+    output Real y;
+  algorithm
+    y := x + rand();              // 'impure'
+  end impureFunc;                 // 'impure', 'function'
+
+  // -----------------------------------------
+  // Algorithm with loop / for / while / break
+  // -----------------------------------------
+  model AlgoModel
+    Real sum;
+  algorithm
+    sum := 0;
+    for i in 1:10 loop             // 'for', 'in', 'loop'
+      if i == 5 then
+        break;                   // 'break'
+      end if;                    // 'end' (if)
+      sum := sum + i;
+    end for;                     // 'end' (for)
+    while sum < 10 loop          // 'while', 'loop'
+      sum := sum + 1;
+    end while;                   // 'end' (while)
+  end AlgoModel;
+
+  // -----------------------------------------
+  // Package, encapsulated, import, partial, final
+  // -----------------------------------------
+  package InnerPackage encapsulated
+    import Modelica.Math;         // 'import'
+    partial model AbstractModel   // 'partial'
+    end AbstractModel;
+    model Concrete final          // 'final'
+    end Concrete;
+  end InnerPackage;
+
+  // -----------------------------------------
+  // Use of connect, constrainedby, expandable, protected, public
+  // -----------------------------------------
+  model ConnExample
+    MyConnector c1, c2;
+    MyRecord r1;
+  equation
+    connect(c1, c2);             // 'connect'
+  end ConnExample;
+
+  // -----------------------------------------
+  // Redeclare / replaceable / constrainedby
+  // -----------------------------------------
+  model RedeclareExample
+    replaceable model M = FullModel;   // 'replaceable'
+    redeclare model R = FullModel;     // 'redeclare'
+    constrainedby MyRecord cb;         // 'constrainedby'
+  end RedeclareExample;
+
+  // -----------------------------------------
+  // External, annotation, within usage
+  // -----------------------------------------
+  function externalExample
+    input Real x;
+    output Real y;
+  external "C" y = "c_func"(x);  // 'external'
+  end externalExample;
+
+  // -----------------------------------------
+  // Operator/flow/pure/each/annotation/initial/expandable/type/true/false
+  // -----------------------------------------
+  model Misc
+    pure function pureFunc
+      input Real a;
+      output Real b;
+    algorithm
+      b := a * 2;
+    end pureFunc;               // 'pure'
+    each Integer eachVar[2];    // 'each', 'Integer'
+    expandable model ExpModel   // 'expandable'
+    end ExpModel;
+    initial equation           // 'initial'
+      ;                        // empty initial equation
+  end Misc;
+
+  // -----------------------------------------
+  // When / elsewhen / then / return example
+  // -----------------------------------------
+  model WhenExample
+    Real x;
+  equation
+    when x > 1 then            // 'when', 'then'
+      x = 2;
+    elsewhen x < -1 then       // 'elsewhen'
+      x = -2;
+    end when;
+  end WhenExample;
+
+  // -----------------------------------------
+  // Classes and additional language keywords
+  // -----------------------------------------
+  class MyClass
+  end MyClass;                // 'class'
+
+  encapsulated package MoreKeywords encapsulated
+    final model FinalModel end FinalModel;      // 'final'
+    partial model PartialModel end PartialModel;// 'partial'
+    expandable model ExpandableModel end ExpandableModel; // 'expandable'
+    import Modelica.Constants;                   // 'import'
+  end MoreKeywords;
+
+  model VarTypes
+    constant Real cReal = 3.14;      // 'constant', 'Real'
+    parameter Integer pInt = 10;     // 'parameter', 'Integer'
+    discrete Boolean dBool = true;   // 'discrete', 'Boolean'
+    enumeration Choices = {first, second}; // 'enumeration'
+  end VarTypes;
+
+  // -----------------------------------------
+  // Example of annotation with graphical icons
+  // -----------------------------------------
+  model IconExample
+    Real x;
+  annotation (
+    Icon = 
+      graphics = {
+        // Línea simple
+        line(
+          origin={0,0}, 
+          points={{-100,0},{100,0}}, 
+          color={255,0,0}, 
+          thickness=2
+        ),
+
+        // Polígono cerrado
+        polygon(
+          origin={0,0}, 
+          points={{-50,50},{50,50},{0,-50}}, 
+          fillColor={0,255,0}, 
+          pattern=LinePattern.Solid
+        ),
+
+        // Elipse
+        ellipse(
+          origin={0,0},
+          extent={{-20,-10},{20,10}},
+          fillColor={0,0,255},
+          lineColor={0,0,0}
+        ),
+
+        // Texto
+        text(
+          origin={0,60},
+          string="Ejemplo de icono",
+          fontSize=12,
+          color={0,0,0}
+        ),
+
+        // dynamicSelect con opciones
+        dynamicSelect(
+          origin={0,-60},
+          extent={{-30,-20},{30,20}},
+          choices={"Opción1", "Opción2", "Opción3"},
+          selected=1
+        )
+      }
+  );
+  end IconExample;
+
+end TestKeywords;
