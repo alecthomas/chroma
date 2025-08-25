@@ -3,6 +3,7 @@
     <name>RGBDS Assembly</name>
     <alias>rgbasm</alias>
     <filename>*.asm</filename>
+    <priority>0.5</priority>
     <case_insensitive>true</case_insensitive>
   </config>
   <rules>
