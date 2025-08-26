@@ -1,0 +1,989 @@
+# This is a single comment
+// This is also a single comment
+/*
+    This is a multi-line comment
+*/
+
+"
+    Multi-line strings can also be used as comments.
+"
+
+see "Hello World"
+SEE "Hello World"
+See "Hello World"
+See "
+        Hello
+        Welcome to the Ring programming language
+        How are you?
+
+    "
+See "Hello" + nl + "Welcome to the Ring programming language" +
+    nl + "How are you?" + nl
+See "What is your name? "
+Give cName
+See "Hello " + cName + nl
+See "What is your name? " give cName see "Hello " + cName
+? "Hello, World!"
+for x = 1 to 10
+        ? x
+next
+PUT "Hello World"
+Put "Hello World"
+Put "
+        Hello
+        Welcome to the Ring programming language
+        How are you?
+
+    "
+Put "Hello" + nl + "Welcome to the Ring programming language" +
+    nl + "How are you?" + nl
+Put "What is your name? "
+Get cName
+Put "Hello " + cName + nl
+Put "What is your name? " get cName put "Hello " + cName
+print("Hello, World!\n")
+PRINT("Hello World")
+Print("Hello World")
+Print("
+        Hello
+        Welcome to the Ring programming language
+        How are you?
+
+    ")
+Print( "Hello\nWelcome to the Ring programming language\nHow are you?")
+Print("What is your name? ")
+cName = GetString()
+Print("Hello #{cName}")
+Print("What is your name? ") cName=getstring() print("Hello #{cName}")
+Puts("Hello, World!")
+print("\nHello, World\n\nHow are you? \t\t I'm fine!\n")
+x=10 y=20
+print("\nx value = #{x} , y value = #{y} \n")
+world = "World!"
+mystring = print2str("Hello, #{world} \nIn Year \n#{2000+25} \n")
+
+see mystring + nl
+x = "Hello"             # x is a string
+see x + nl
+x = 5                   # x is a number (int)
+see x + nl
+x = 1.2                 # x is a number (double)
+see x + nl
+x = [1,2,3,4]           # x is a list
+see x                   # print list items
+x = date()              # x is a string contains date
+see x + nl
+x = time()              # x is a string contains time
+see x + nl
+x = true                # x is a number (logical value = 1)
+see x + nl
+x = false               # x is a number (logical value = 0)
+see x + nl
+list = [1,2,3,"four","five"]
+list2 = list
+list = []
+See list        # print the first list - no items to print
+See "********" + nl
+See list2       # print the second list - contains 5 items
+x   = 10                # x is a number
+y   = "20"              # y is a string
+sum = x + y             # sum is a number (y will be converted to a number)
+Msg = "Sum = " + sum    # Msg is a string (sum will be converted to a string)
+? Msg
+? 5 < 7         # 1 (True)
+? "5" < 7       # 1 (True)
+? 5 < "7"       # 1 (True)
+? "5" < "7"     # 1 (True)
+? "5" = 5       # 1 (True)
+? 5 = "5"       # 1 (True)
+? 5 = 5         # 1 (True)
+? "5" = "5"     # 1 (True)
+? 5 = 7         # 0 (False)
+? "5" = 7       # 0 (False)
+? 5 = "7"       # 0 (False)
+? "5" = "7"     # 0 (False)
+? "test" = 5    # 0 (False)
+
+? "5" != 5      # 0 (False)
+? 5 != "5"      # 0 (False)
+? 5 != 5        # 0 (False)
+? "5" != "5"    # 0 (False)
+? 5 != 7        # 1 (True)
+? "5" != 7      # 1 (True)
+? 5 != "7"      # 1 (True)
+? "5" != "7"    # 1 (True)
+? "test" != 5   # 1 (True)
+? 12500 = "0012500"             # 1 (True)
+? 12500 = "0012500-PRY-09"      # 0 (False)
+? 1 =  "1  x"                   # 0 (False)
+? 1 = "1     "                  # 1 (True)
+? 0 = ""                        # 1 (True)
+? 0 = "       0        "        # 1 (True)
+? 1 = "       1       "         # 1 (True)
+? 0 = "000000"                  # 1 (True)
+? 0 = "00000
+"                               # 1 (True)
+? 0xFF = 255
+? 1 = "       1
+"                               # 1 (True)
+
+? 0 = " "                       # 0 (False)
+
+if 0                            # False
+        ? :fail
+else
+        ? :pass
+ok                              # pass
+
+if ""                           # False
+        ? :fail
+else
+        ? :pass
+ok                              # pass
+
+if " "                          # True
+        ? :pass
+else
+        ? :fail
+ok                              # pass
+aList    = [1,2,3]
+aList2   = [1,2,3]
+? aList  = aList        # 1 (True)
+? aList  = aList2       # 0 (False)
+
+aList3   = ref(aList)
+? aList3 = aList        # 1 (True)
+? 1 and 1                       # 1 (True)
+? "test" and "test"             # 1 (True)
+? [1,2,3] and "test"            # 1 (True)
+? 1 and "test" and [1,2,3]      # 1 (True)
+? 1 and new point1               # 1 (True)
+? 1 and 0                       # 0 (False)
+? 1 and ""                      # 0 (False)
+? 1 and []                      # 0 (False)
+? 1 and NULLPointer()           # 0 (False)
+? 1 & 1                 # 1
+? "1" & 1               # 1
+? 1 & "3"               # 1
+? "3" & "3"             # 3
+? "123" & "123"         # 123
+cStr = "one"
+cStr += " two"
+? cStr          # one two
+nNum = 100
+nNum += 200
+? nNum          # 300
+x = +10
+? x             # 10
+? +x            # 10
+y = "10"
+? +y            # 10
+? type(+y)      # STRING
+
+x = 10
+? -x            # -10
+y = "10"
+? -y            # -10
+? type(-y)      # NUMBER
+
+aList = [1,2,3]
+# print numbers from 1 to 10
+for x = 1 to 10  see x + nl  next
+# Dynamic loop
+See "Start : " give nStart  nStart = 0+nStart
+See "End   : " give nEnd    nEnd   = 0+nEnd
+See "Step  : " give nStep   nStep  = 0+nStep
+For x = nStart to nEnd Step nStep
+        see x + nl
+Next
+# print even numbers from 0 to 10
+for x = 0 to 10 step 2
+        see x + nl
+next
+# print even numbers from 10 to 0
+for x = 10 to 0 step -2
+        see x + nl
+next
+aList = 1:10    # create list contains numbers from 1 to 10
+for x in aList  see x + nl  next  # print numbers from 1 to 10
+aList = 1:10    # create list contains numbers from 1 to 10
+# print odd items inside the list
+for x in aList step 2
+        see x + nl
+next
+aList = 1:5     # create list contains numbers from 1 to 5
+# replace list numbers with strings
+for x in aList
+        switch x
+        on 1  x = "one"
+        on 2  x = "two"
+        on 3  x = "three"
+        on 4  x = "four"
+        on 5  x = "five"
+        off
+next
+see aList       # print the list items
+x = 1
+do
+        see x + nl
+        x++
+again x <= 10
+for x = 1 to 10
+        see x + nl
+        if x = 5 exit ok
+next
+for x = 1 to 10
+        for y = 1 to 10
+                see "x=" + x + " y=" + y + nl
+                if x = 3 and y = 5
+                        exit 2     # exit from 2 loops
+                ok
+        next
+next
+for x = 1 to 10
+        if x = 3
+                see "Number Three" + nl
+                loop
+        ok
+        see x + nl
+next
+x = 0 y = 10
+
+if (x = 0 and nice()) and (y = 10 and nice())
+        see "great" + nl
+ok
+
+x = 0 y = 10
+
+if (x = 1 and nice()) and (y = 10 and nice())
+        see "great" + nl
+ok
+
+if 5    # 5 evaluates to true because it's not zero (0).
+        see "message from the if statement" + nl
+ok
+
+i = 2
+while i < i 
+    ? i
+end
+
+while i < i 
+    ? i
+endwhile
+while i < i {
+    ? i
+}
+for x = 0 to 10 step 2
+        Put x + nl
+end
+aList = 1:10    # create list contains numbers from 1 to 10
+for x in aList  put x + nl  end  # print numbers from 1 to 10
+for x = 1 to 10  {
+        print("#{x}\n")
+}
+print("Start : ") nStart = getnumber()
+print("End   : ") nEnd = getnumber()
+print("Step  : ") nStep = getnumber()
+for x = nStart to nEnd step nStep {
+        print("#{x}\n")
+}
+for x = 0 to 10 step 2 {
+        print("#{x}\n")
+}
+for x = 10 to 0 step -2 {
+        print("#{x}\n")
+}
+aList = 1:10    # create list contains numbers from 1 to 10
+for x in aList { print("#{x}\n") }  # print numbers from 1 to 10
+aList = 1:10    # create list contains numbers from 1 to 10
+# print odd items inside the list
+for x in aList step 2 {
+        print("#{x}\n")
+}
+aList = 1:5     # create list contains numbers from 1 to 5
+# replace list numbers with strings
+for x in aList {
+        switch x {
+        case 1  x = "one"
+        case 2  x = "two"
+        case 3  x = "three"
+        case 4  x = "four"
+        case 5  x = "five"
+        }
+}
+print(aList)    # print the list items
+hello()
+first()  second()
+sum(3,5) sum(1000,2000)
+See "Hello World!" + nl
+if novalue() = NULL
+        See "the function doesn't return a value" + nl
+ok
+see fact(5)     # output = 120
+hello2()
+first2()  second2()
+sum2(3,5) sum2(1000,2000)
+if novalue2() = NULL
+        put "the function doesn't return a value" + nl
+end
+put fact2(5)     # output = 120
+hello3()
+first3()  second3()
+sum3(3,5) sum3(1000,2000)
+if novalue3() = NULL {
+        print("the function doesn't return a value\n")
+}
+aList = 1:3
+add(aList,4:6)          # Add the list as one item
+? len(aList)            # 4
+
+aList = 1:3
+add(aList,4:6,True)     # Add each item alone
+? len(aList)            # 6
+? aList
+aList = 1:20  see len(aList)  # print 20
+aList = ["one","two","other","three"]
+Del(aList,3)    # delete item number three
+see aList       # print one two three
+mylist = [["one",1],
+          ["two",2],
+          ["three",3]]
+
+see find(mylist,"two",1) + nl           # print 2
+see find(mylist,2,2) + nl               # print 2
+aList = ["one","two","three","four","five"]
+aList = sort(aList)
+see binarysearch(aList,"three")
+mylist = ["hello","world","in","2025"]
+see mylist                # print list before sorting
+mylist = sort(mylist)     # sort list
+see "list after sort"+nl
+see mylist                # print hello world in 2025
+aList = [ ["hello",15000] ,
+          ["world", 14000 ] ,
+          ["in", 16000 ] ,
+          ["2025", 12000 ] ]
+
+aList2 = sort(aList,1)
+see aList2
+aList = [10,20,30,40,50]
+aList = reverse(aList)
+see aList       # print 50 40 30 20 10
+aList = ["A","B","D","E"]
+insert(aList,2,"C")    # Inserts AFTER Index 2, "C" into Position 3
+see aList              # print A B C D E
+aList = [ 1 , [10,20,30] , 5 , [100,1000,5000] ]
+aList2 = [
+"one","two",
+[3,4],
+[20,30], ["three",
+          "four",
+          "five",[100,200,300]
+         ]
+]
+
+see aList[2]            # print 10 20 30
+see aList[4][3] + nl    # print 5000
+see aList2[5][2] + nl   # print four
+see aList2[5][4][3]     # print 300
+aList = [
+"one","two",
+[3,4],
+[20,30], ["three",
+          "four",
+          "five",[100,200,300]
+         ]
+]
+
+aList2 = aList          # Copy aList to aList2
+aList2[5] = "other"     # modify item number five
+see aList2[5] + nl      # print other
+see aList[5]            # print three four five 100 200 300
+aList = duplicate( [1,2,3,4,5] )
+see aList[10] + nl                # print 5
+
+see mylist()                      # print 10 20 30 40 50
+
+aList = [ [1,2,3,4,5] , aList[1] , aList[1] ]
+see aList       # print 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5
+x = [ 1, 2, x ]
+? x             # print 1 2 1 2
+? len(x)        # print 3
+? x[1]          # print 1
+? x[2]          # print 2
+? x[3]          # print 1 2
+aList = [ ["one",1] , ["two",2] , ["three",3] ]
+see aList["one"] + nl +
+    aList["two"] + nl +
+    aList["three"]      # print 1 2 3
+
+aList = [ :one = 1 , :two = 2 , :three = 3 ]
+see aList["one"] + nl +
+    aList["two"] + nl +
+    aList["three"] + nl # print 1 2 3
+see aList[1]            # print one 1
+
+myList = [5,7,3,9]    ### list with args or parms in  an array
+result = sum4(myList)
+See "Sum result: "+ result +nl
+cStr = "This is a string"
+cStr2 = 'Another string'
+cStr3 = :JustAnotherString
+cStr4 = `Yet "another" 'string' ! `
+cStr = "How are you?"
+see cStr + nl
+see "String size : " + len(cStr) + nl
+cStr = "Welcome To The Ring Programming Language"
+see cStr + nl + upper(cStr) + nl + lower(cStr)
+# print user name letter by letter (each letter in new line)
+
+See "Hello, Enter your name : " give cName
+for x = 1 to len(cName)
+        see nl + cName[x]
+next
+# print user name letter by letter (each letter in new line)
+
+See "Hello, Enter your name : " give cName
+for x in cName
+        see nl + x
+next
+see left("Hello World!",5) # print Hello
+see Right("Hello World!",6) # print World!
+cMsg = "     Welcome      "
+see trim(cMsg)                  # print Welcome
+see copy("***hello***",3) # print ***hello******hello******hello***
+cStr = "Hello
+How are you?
+are you fine?"
+see lines(cStr)         # print 3
+cStr = "Welcome to the Ring programming language"
+see substr(cStr,"Ring")         # print 16
+cStr = "Welcome to the Ring programming language"
+nPos = substr(cStr,"Ring")      # nPos = 16
+see substr(cStr,nPos)           # print Ring programming language
+see strcmp("hello","hello") + nl +
+    strcmp("abc","bcd") + nl +
+    strcmp("bcd","abc") + nl
+cStr = "Welcome to Ring"
+? reverse(cStr)                 # gniR ot emocleW
+mystr = "Hello
+How are you ?
+are you fine ?
+ok"
+
+mylist = str2list(mystr)
+see "Items : " + len(mylist) + nl
+
+for x in mylist
+        see "Item : " + x + nl
+next
+
+newstr = list2str(mylist)
+see "list2Str result = " + newstr
+
+if mystr = newstr
+        see nl + "Done"
+else
+        see nl + "Error!"
+ok
+cStr = "Welcome"
+? cstr[1] + cstr[2] + cStr[5]
+v = cstr[1] + cstr[2] + cStr[5]
+? v
+? len(v)
+c1 = cStr[1]
+? c1
+aList = [1,2,3]
+cStr = ""
+for item in aList
+        cStr += int2bytes(item)
+next
+? "All String"
+? len(cStr)
+? "First Part"
+n1 = cStr[1] + cStr[2] + cStr[3] + cStr[4]
+? len(n1)
+? "Second Part"
+n2 = cStr[5] + cStr[6] + cStr[7] + cStr[8]
+? len(n2)
+? "Third Part"
+n3 = cStr[9] + cStr[10] + cStr[11] + cStr[12]
+? len(n3)
+? "All String"
+cString = cStr[1] + cStr[2] + cStr[3] + cStr[4] +
+          cStr[5] + cStr[6] + cStr[7] + cStr[8] +
+          cStr[9] + cStr[10] + cStr[11] + cStr[12]
+? len(cString)
+? ascii(cStr[1])
+? len(cStr[2])
+See "Mathematical Functions" + nl
+See "Sin(0) = " + sin(0) + nl
+See "Sin(90) radians = " + sin(90) + nl
+See "Sin(90) degree = " + sin(90*3.14/180) + nl
+
+See "Cos(0) = " + cos(0) + nl
+See "Cos(90) radians = " + cos(90) + nl
+See "Cos(90) degree = " + cos(90*3.14/180) + nl
+
+See "Tan(0) = " + tan(0) + nl
+See "Tan(90) radians = " + tan(90) + nl
+See "Tan(90) degree = " + tan(90*3.14/180) + nl
+
+See "asin(0) = " + asin(0) + nl
+See "acos(0) = " + acos(0) + nl
+See "atan(0) = " + atan(0) + nl
+See "atan2(1,1) = " + atan2(1,1) + nl
+
+See "sinh(0) = " + sinh(0) + nl
+See "sinh(1) = " + sinh(1) + nl
+See "cosh(0) = " + cosh(0) + nl
+See "cosh(1) = " + cosh(1) + nl
+See "tanh(0) = " + tanh(0) + nl
+See "tanh(1) = " + tanh(1) + nl
+
+See "exp(0) = " + exp(0) + nl
+See "exp(1) = " + exp(1) + nl
+See "log(1) = " + log(1) + nl
+See "log(2) = " + log(2) + nl
+See "log10(1) = " + log10(1) + nl
+See "log10(2) = " + log10(2) + nl
+See "log10(10) = " + log10(10) + nl
+
+See "Ceil(1.12) = " + Ceil(1.12) + nl
+See "Ceil(1.72) = " + Ceil(1.72) + nl
+
+See "Floor(1.12) = " + floor(1.12) + nl
+See "Floor(1.72) = " + floor(1.72) + nl
+
+See "fabs(1.12) = " + fabs(1.12) + nl
+See "fabs(1.72) = " + fabs(1.72) + nl
+
+See "pow(2,3) = " + pow(2,3) + nl
+
+see "sqrt(16) = " + sqrt(16) + nl
+New point { x=10  y=20  z=30  print() }
+New point2                       # create new object using the point class
+{                               # access the new object attributes and methods
+        x = 10                  # set the x attribute to 10
+        y = 20                  # set the y attribute to 20
+        z = 30                  # set the z attribute to 30
+        print()                 # call the print method
+}                               # end of object access
+
+new point4 { print() }
+new point5(10,20,30)
+new point6( [ :x = 10 , :y = 20 , :z = 30 ] )
+See "Creating the Object" + nl
+o1 = new Point
+See "Using the Object" + nl
+o1 {
+        x=5
+        y=15
+        z=25
+        print()
+}
+o1 = new Point8
+
+print( o1 { x=10 y=20 z=30 } )
+o1 = new person {
+        name = "Test"
+        age = 20
+        print()
+        o1.printsalary()
+}
+
+try
+        see o1.salary
+catch
+        see cCatchError + nl
+done
+
+try
+        o1.increasesalary(1000)
+catch
+        see cCatchError + nl
+done
+new Employee {
+                Name = "test"
+                age = 20
+                job = "programmer"
+                salary = 20000000
+                print()
+        }
+
+o1 = new dynamicClass
+see o1.var5 + nl        # output 5
+o1 = new System.output1.console
+o1.print("Hello World")
+import system.output2
+o1 = new console {
+        print("Hello World")
+}
+see new point9 { x=10 y=20 z=30 }
+new point11
+o1 = new program {
+        test()
+    }
+? o1
+oProgram = new Program
+? oProgram.name
+? oProgram.version
+? isNULL(oProgram.name)
+? isNULL(oProgram.version)
+oProgram { name="My Application" version="1.0" }
+? isNULL(oProgram.name)
+? isNULL(oProgram.version)
+? oProgram
+cClassName = "myclass2"
+myobj = new from cClassName
+
+cClassName = "myclass"
+myobj = new from cClassName
+see "sin(0) = " + sin(0) + nl
+see "cos(0) = " + cos(0) + nl
+see "tan(0) = " + tan(0) + nl
+see "asin(0) = " + asin(0) + nl
+see "acos(1) = " + acos(1) + nl
+see "atan(0) = " + atan(0) + nl
+see "atan2(1,1) = " + atan2(1,1) + nl
+see "sinh(1) = " + sinh(1) + nl
+see "cosh(1) = " + cosh(1) + nl
+see "tanh(1) = " + tanh(1) + nl
+see "exp(1) = " + exp(1) + nl
+see "log(10) = " + log(10) + nl
+see "log10(10) = " + log10(10) + nl
+see "pow(2,3) = " + pow(2,3) + nl
+see "sqrt(16) = " + sqrt(16) + nl
+see "ceil(1.2) = " + ceil(1.2) + nl
+see "floor(1.8) = " + floor(1.8) + nl
+see "fabs(-5.5) = " + fabs(-5.5) + nl
+see "Random number (0-10): " + random(10) + nl
+randomize(123)
+see "Random number with seed: " + random(10) + nl
+see "min(5,10) = " + min(5,10) + nl
+see "max(5,10) = " + max(5,10) + nl
+see nl
+cStr = "Hello World"
+see "Original: " + cStr + nl
+see "Length: " + len(cStr) + nl
+see "Left(5): " + left(cStr,5) + nl
+see "Right(5): " + right(cStr,5) + nl
+see "Upper: " + upper(cStr) + nl
+see "Lower: " + lower(cStr) + nl
+see "Trim: '" + trim("  Hello  ") + "'" + nl
+see "Position of 'World': " + substr(cStr,"World") + nl
+see "Substring from position 7: " + substr(cStr,7) + nl
+see "Substring (5,3): " + substr(cStr,5,3) + nl
+see "strcmp('hello','hello'): " + strcmp("hello","hello") + nl
+see "strcmp('abc','def'): " + strcmp("abc","def") + nl
+see "ASCII of 'A': " + ascii("A") + nl
+see "Char of 65: " + char(65) + nl
+see "String(123): " + string(123) + nl
+see "Number('456'): " + number("456") + nl
+see "Hex(255): " + hex(255) + nl
+see "Dec('FF'): " + dec("FF") + nl
+see "str2hex('Hello'): " + str2hex("Hello") + nl
+see "hex2str('48656C6C6F'): " + hex2str("48656C6C6F") + nl
+see "Copy('Hi',3): " + copy("Hi",3) + nl
+see "Space(5): '" + space(5) + "'" + nl
+see "Lines('Line1\\nLine2'): " + lines("Line1\nLine2") + nl
+see nl
+aList = [1,2,3,4,5]
+see "Original list: " + list2str(aList) + nl
+see "List size: " + len(aList) + nl
+add(aList,6)
+see "After add(6): " + list2str(aList) + nl
+insert(aList,3,3.5)
+see "After insert(3.5 at pos 3): " + list2str(aList) + nl
+del(aList,3)
+see "After delete pos 3: " + list2str(aList) + nl
+see "Find 4: " + find(aList,4) + nl
+see "Binary search for 4: " + binarysearch(aList,4) + nl
+aList = [5,2,8,1,3]
+see "Unsorted: " + list2str(aList) + nl
+aList = sort(aList)
+see "Sorted: " + list2str(aList) + nl
+aList = reverse(aList)
+see "Reversed: " + list2str(aList) + nl
+objList = [[1,"one"],[2,"two"],[3,"three"]]
+see "Find 'two' in column 2: " + find(objList,"two",2) + nl
+see "Binary search for 2 in column 1: " + binarysearch(objList,2,1) + nl
+see "list2str([1,2,3]): " + list2str([1,2,3]) + nl
+see "str2list('abcd'): " + list2str(str2list("abcd")) + nl
+see nl
+cTestFile = "testfile.txt"
+cContent = "This is a test file."
+write(cTestFile, cContent)
+see "File written: " + cTestFile + nl
+see "File exists: " + fexists(cTestFile) + nl
+see "File size: " + getfilesize(cTestFile) + nl
+cReadContent = read(cTestFile)
+see "File content: " + cReadContent + nl
+f = fopen(cTestFile, "r")
+if f != NULL
+    see "File opened successfully" + nl
+    cLine = fgets(f, 100)
+    see "First line: " + cLine + nl
+    fclose(f)
+ok
+remove(cTestFile)
+see "File deleted: " + cTestFile + nl
+see nl
+see "Current date: " + date() + nl
+see "Current time: " + time() + nl
+see "Time list: " + list2str(timelist()) + nl
+see "Add 5 days to today: " + adddays(date(), 5) + nl
+see "Days between 01/01/2023 and 01/01/2024: " + diffdays("01/01/2023", "01/01/2024") + nl
+see "Current directory: " + currentdir() + nl
+see "Executable filename: " + exefilename() + nl
+see "Executable folder: " + exefolder() + nl
+see "Active source file: " + filename() + nl
+see "Is Windows: " + iswindows() + nl
+see "Is Linux: " + islinux() + nl
+see "Is macOS: " + ismacosx() + nl
+see "System PATH: " + sysget("PATH") + nl
+see "Number of processors: " + nofprocessors() + nl
+see "System uptime: " + uptime() + nl
+see nl
+nNum = 123
+cStr = "Hello"
+aList = [1,2,3]
+nNull = NULL
+see "isnumber(123): " + isnumber(nNum) + nl
+see "isstring('Hello'): " + isstring(cStr) + nl
+see "islist([1,2,3]): " + islist(aList) + nl
+see "isnull(NULL): " + isnull(nNull) + nl
+see "isalnum('a'): " + isalnum('a') + nl
+see "isalpha('A'): " + isalpha('A') + nl
+see "isdigit('1'): " + isdigit('1') + nl
+see "islower('a'): " + islower('a') + nl
+see "isupper('A'): " + isupper('A') + nl
+see "isspace(' '): " + isspace(' ') + nl
+see "ispunct(','): " + ispunct(',') + nl
+see "isprint('A'): " + isprint('A') + nl
+see "iscntrl('\\n'): " + iscntrl('\n') + nl
+see "isgraph('A'): " + isgraph('A') + nl
+see "isxdigit('F'): " + isxdigit('F') + nl
+see nl
+obj = new TestClass
+see "Object created" + nl
+see "Class name: " + classname(obj) + nl
+see "Object ID: " + objectid(obj) + nl
+see "Attributes: " + list2str(attributes(obj)) + nl
+see "Methods: " + list2str(methods(obj)) + nl
+see "attr1: " + getattribute(obj, "attr1") + nl
+setattribute(obj, "attr1", "Modified")
+see "Modified attr1: " + getattribute(obj, "attr1") + nl
+see "Has method1: " + ismethod(obj, "method1") + nl
+see "Has method3: " + ismethod(obj, "method3") + nl
+see nl
+see "int2bytes(1234): " + int2bytes(1234) + nl
+see "float2bytes(3.14): " + float2bytes(3.14) + nl
+see "double2bytes(3.14159): " + double2bytes(3.14159) + nl
+bytesInt = int2bytes(1234)
+see "bytes2int: " + bytes2int(bytesInt) + nl
+
+bytesFloat = float2bytes(3.14)
+see "bytes2float: " + bytes2float(bytesFloat) + nl
+
+bytesDouble = double2bytes(3.14159)
+see "bytes2double: " + bytes2double(bytesDouble) + nl
+ptr = nullpointer()
+see "Null pointer created" + nl
+see "Is pointer: " + ispointer(ptr) + nl
+see nl
+see "Ring version: " + version() + nl
+see "Ring version with patch: " + version(1) + nl
+t1 = clock()
+for i = 1 to 100000 next
+t2 = clock()
+see "Loop time: " + (t2 - t1) + " clock ticks" + nl
+see "Clocks per second: " + clockspersecond() + nl
+see "Calling garbage collector..." + nl
+callgarbagecollector()
+callgc()
+see "Functions count: " + len(functions()) + nl
+see "Classes count: " + len(classes()) + nl
+see "Global variables count: " + len(globals()) + nl
+assert(1 = 1)
+see "Assertion passed: 1 == 1" + nl
+see nl
+see "Murmur3 hash of 'hello': " + murmur3hash("hello", 0) + nl
+see "Unsigned addition (255+1): " + unsigned(255, 1, "+") + nl
+aList = [1,2,3]
+see "Original list: " + list2str(aList) + nl
+refList = ref(aList)
+refList[1] = 99
+see "Modified via reference: " + list2str(aList) + nl
+see "Reference count: " + refcount(aList) + nl
+tempName = tempname()
+see "Temporary filename: " + tempName + nl
+tempFile = tempfile()
+see "Temporary file handle created" + nl
+fclose(tempFile)
+see nl
+func sum4(aList)
+  acc = 0
+  sizeList = len(aList)
+
+  for i = 1 to sizeList
+     See aList[i] +nl
+     acc = acc + aList[i]
+  next
+return acc
+
+func duplicate list
+        nMax = len(list)
+        for x = 1 to nMax
+                list + list[x]
+        next
+        return list
+
+func mylist return [10,20,30,40,50]
+func novalue3 { }
+func sum3(x,y) { print(x+y) }
+func first3 {  print("message from the first function \n")  }
+
+func second3 { print("message from the second function \n") }
+func hello3 {
+        print("Hello from function \n")
+}
+def fact2 x if x = 0 return 1 else return x * fact(x-1) end
+def novalue2
+def sum2 x,y put x+y+nl
+def first2   put "message from the first function" + nl
+
+def second2  put "message from the second function" + nl
+def hello2
+        put "Hello from function" + nl
+end
+func fact x if x = 0 return 1 else return x * fact(x-1) ok
+func novalue
+func main
+        see "Message from the main function" + nl
+func sum x,y
+        see x+y+nl
+func first   see "message from the first function" + nl
+
+func second  see "message from the second function" + nl
+func hello
+        see "Hello from function" + nl
+
+func nice  see "nice" + nl   return 1
+
+func print3 object
+        see object.x + nl +
+            object.y + nl +
+            object.z
+class TestClass
+    attr1 = "Default"
+    attr2 = 100
+    
+    func method1
+        return "Method1 called"
+    end
+    
+    function method2 x
+        return x * 2
+    endfunction
+class myclass
+        ? :hello
+
+class myclass2
+        ? :wow
+class program
+
+        this.name = "My Application"
+        this.version = "1.0"
+        ? name ? version
+
+        func test
+                ? "Name    = " + name
+                ? "Version = " + version
+class point11
+        _x=10 _y=20 _z=30
+        print()
+        func print
+                new UI {
+                        display(this._x,this._y,this._z)
+                }
+end
+Class UI
+        func display _x,_y,_z
+                see _x + nl + _y + nl + _z + nl
+Class Point10
+        self.x = 10
+        self.y = 20
+        self.z = 30
+        def print
+                see self.x + nl + self.y + nl + self.z + nl
+        end
+endclass
+class point9 x y z
+Class DynamicClass
+        for x = 1 to 10
+                cStr = "var" + x + " = " + x
+                eval(cStr)
+        next
+Class Human
+        Name Age
+        func print
+                see "Name : " + name + nl + "Age  : " + age + nl
+
+Class Employee from Human
+        Job Salary
+        func print
+                super.print()
+                see "Job  : " + job + nl + "Salary : " + salary + nl
+Class Person
+
+        name age
+
+        func print
+                see "Name   : " + name + nl +
+                    "Age    : " + age + nl
+
+        func printsalary
+               1 see "Salary : " + salary + nl
+
+        private
+
+        salary = 15000
+
+        func increasesalary x
+                salary += x
+Class Point8 x y z
+Class Point7 x y z func print see x + nl + y + nl + z
+Class Point6 x y z
+      func init aPara x = aPara[:x] y = aPara[:y] z = aPara[:z] print()
+      func print see x + nl + y + nl + z + nl
+Class Point5
+        x y z
+        func init p1,p2,p3 x=p1 y=p2 z=p3 print()
+        func print see x + nl + y + nl + z + nl
+Class Point4
+        x = 10  y = 20  z = 30
+        func print see x + nl + y + nl + z + nl
+Class Point2                     # define the Point class
+        x y z                   # the class contains three attributes x, y & z
+        func print              # define the print method
+                see x + nl +    # print the x attribute
+                    y + nl +    # print the y attribute
+                    z + nl      # print the z attribute
+Class Point x y z func print see x + nl + y + nl + z + nl
+class point1
+Package System.Output1
+        Class Console
+                Func Print cText
+                        see cText + nl
+end
+Package System.Output2
+        Class Console
+                Func Print cText
+                        see cText + nl
+Package System.Output3
+        Class Console
+                Func Print cText
+                        see cText + nl
+endpackage
