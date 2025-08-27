@@ -89,5 +89,5 @@ tokenLoop:
 			out = out[:len(out)-1]
 		}
 	}
-	return
+	return out
 }
