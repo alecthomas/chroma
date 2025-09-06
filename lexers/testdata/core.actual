@@ -143,7 +143,7 @@ impl StacktraceElement {
   fun sortsSame(other: Self): Bool
 }
 
-@pub enum Option[T] {
+@pub union Option[T] {
   Some(T),
   None,
 }
@@ -168,7 +168,7 @@ impl[T] Option[Option[T]] {
     ... is None      { None[T] }
 }
 
-@pub enum Result[T, E] {
+@pub union Result[T, E] {
   Pass(T),
   Fail(E),
 }

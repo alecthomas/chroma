@@ -13,7 +13,7 @@
       <rule pattern="//(.*?)\n">
         <token type="CommentSingle"/>
       </rule>
-      <rule pattern="(class|value|union|enum|trait|impl|annotation)\b">
+      <rule pattern="(class|value|union|trait|impl|annotation)\b">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule pattern="(fun|let|var)\b">
