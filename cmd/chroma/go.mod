@@ -2,7 +2,7 @@ module github.com/alecthomas/chroma/v2/cmd/chroma
 
 go 1.22
 
-toolchain go1.25.0
+toolchain go1.25.1
 
 replace github.com/alecthomas/chroma/v2 => ../../
 
