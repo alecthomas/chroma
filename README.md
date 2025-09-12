@@ -209,9 +209,9 @@ using the included Python 3 script `pygments2chroma_xml.py`. I use something lik
 the following:
 
 ```sh
-python3 _tools/pygments2chroma_xml.py \
+uv run --script _tools/pygments2chroma_xml.py \
   pygments.lexers.jvm.KotlinLexer \
-  > lexers/embedded/kotlin.xml
+  > lexers/embedded/kotlin.xml 
 ```
 
 A list of all lexers available in Pygments can be found in [pygments-lexers.txt](https://github.com/alecthomas/chroma/blob/master/pygments-lexers.txt).

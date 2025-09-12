@@ -1,4 +1,12 @@
 #!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "pygments",
+#     "pystache",
+# ]
+# ///
+import argparse
 import functools
 import importlib
 import re
@@ -168,7 +176,11 @@ class TemplateView(object):
 
 
 def main():
-    package_name, symbol_name = sys.argv[1].rsplit(sep=".", maxsplit=1)
+    parser = argparse.ArgumentParser( prog='pygments2chroma_xml.py', description='Converts pygments RegexLexer classes to chroma xml grammar definitions.')
+    parser.add_argument('lexer_class', type=str, help="The class name of the pygments lexer, like: 'pygments.lexers.jvm.KotlinLexer'.")
+    args = parser.parse_args()
+
+    package_name, symbol_name = args.lexer_class.rsplit(sep=".", maxsplit=1)
 
     package = importlib.import_module(package_name)
 
