@@ -46,7 +46,10 @@ func writeToken(w io.Writer, formatting string, text string) {
 
 func trueColourFormatter(w io.Writer, style *chroma.Style, it chroma.Iterator) error {
 	style = clearBackground(style)
-	for token := it(); token != chroma.EOF; token = it() {
+	for token := range it {
+		if token == chroma.EOF {
+			break
+		}
 		entry := style.Get(token.Type)
 		if entry.IsZero() {
 			fmt.Fprint(w, token.Value)

@@ -1,57 +1,53 @@
 package chroma
 
-import "strings"
+import (
+	"iter"
+	"strings"
+)
 
 // An Iterator across tokens.
 //
 // EOF will be returned at the end of the Token stream.
 //
 // If an error occurs within an Iterator, it may propagate this in a panic. Formatters should recover.
-type Iterator func() Token
+type Iterator iter.Seq[Token]
 
 // Tokens consumes all tokens from the iterator and returns them as a slice.
 func (i Iterator) Tokens() []Token {
 	var out []Token
-	for t := i(); t != EOF; t = i() {
+	for t := range i {
+		if t == EOF {
+			break
+		}
 		out = append(out, t)
 	}
 	return out
 }
 
-// Stdlib converts a Chroma iterator to a Go 1.23-compatible iterator.
-func (i Iterator) Stdlib() func(yield func(Token) bool) {
-	return func(yield func(Token) bool) {
-		for t := i(); t != EOF; t = i() {
-			if !yield(t) {
-				return
-			}
-		}
-	}
-}
-
 // Concaterator concatenates tokens from a series of iterators.
 func Concaterator(iterators ...Iterator) Iterator {
-	return func() Token {
-		for len(iterators) > 0 {
-			t := iterators[0]()
-			if t != EOF {
-				return t
+	return func(yield func(Token) bool) {
+		for _, it := range iterators {
+			for t := range it {
+				if t == EOF {
+					break
+				}
+				if !yield(t) {
+					return
+				}
 			}
-			iterators = iterators[1:]
 		}
-		return EOF
 	}
 }
 
 // Literator converts a sequence of literal Tokens into an Iterator.
 func Literator(tokens ...Token) Iterator {
-	return func() Token {
-		if len(tokens) == 0 {
-			return EOF
+	return func(yield func(Token) bool) {
+		for _, token := range tokens {
+			if !yield(token) {
+				return
+			}
 		}
-		token := tokens[0]
-		tokens = tokens[1:]
-		return token
 	}
 }
 

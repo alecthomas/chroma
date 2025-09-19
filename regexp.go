@@ -40,7 +40,10 @@ func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, erro
 	if err != nil {
 		return nil, err
 	}
-	for t := it(); t != EOF; t = it() {
+	for t := range it {
+		if t == EOF {
+			break
+		}
 		out = append(out, t)
 	}
 	return out, nil
@@ -178,7 +181,7 @@ type LexerState struct {
 	NamedGroups map[string]string
 	// Custum context for mutators.
 	MutatorContext map[interface{}]interface{}
-	iteratorStack  []Iterator
+	tokenStack     [][]Token
 	options        *TokeniseOptions
 	newlineAdded   bool
 }
@@ -193,26 +196,37 @@ func (l *LexerState) Get(key interface{}) interface{} {
 	return l.MutatorContext[key]
 }
 
-// Iterator returns the next Token from the lexer.
-func (l *LexerState) Iterator() Token { // nolint: gocognit
+// Iterator returns a Go iterator over tokens from the lexer.
+func (l *LexerState) Iterator(yield func(Token) bool) { // nolint: gocognit
 	trace := json.NewEncoder(os.Stderr)
 	end := len(l.Text)
 	if l.newlineAdded {
 		end--
 	}
+
 	for l.Pos < end && len(l.Stack) > 0 {
-		// Exhaust the iterator stack, if any.
-		for len(l.iteratorStack) > 0 {
-			n := len(l.iteratorStack) - 1
-			t := l.iteratorStack[n]()
+		// Exhaust the token stack, if any.
+		for len(l.tokenStack) > 0 {
+			n := len(l.tokenStack) - 1
+			tokens := l.tokenStack[n]
+			if len(tokens) == 0 {
+				l.tokenStack = l.tokenStack[:n]
+				continue
+			}
+			// Take first token and remove it from the stack
+			t := tokens[0]
+			l.tokenStack[n] = tokens[1:]
 			if t.Type == Ignore {
 				continue
 			}
 			if t == EOF {
-				l.iteratorStack = l.iteratorStack[:n]
+				l.tokenStack = l.tokenStack[:n]
 				continue
 			}
-			return t
+			if !yield(t) {
+				return
+			}
+			continue // Check for more tokens on stack before processing rules
 		}
 
 		l.State = l.Stack[len(l.Stack)-1]
@@ -256,7 +270,10 @@ func (l *LexerState) Iterator() Token { // nolint: gocognit
 				continue
 			}
 			l.Pos++
-			return Token{Error, string(l.Text[l.Pos-1 : l.Pos])}
+			if !yield(Token{Error, string(l.Text[l.Pos-1 : l.Pos])}) {
+				return
+			}
+			continue
 		}
 		l.Rule = ruleIndex
 		l.Groups = groups
@@ -268,31 +285,49 @@ func (l *LexerState) Iterator() Token { // nolint: gocognit
 			}
 		}
 		if rule.Type != nil {
-			l.iteratorStack = append(l.iteratorStack, rule.Type.Emit(l.Groups, l))
+			// Collect all tokens from the emitter and push them onto the stack
+			var tokens []Token
+			rule.Type.Emit(l.Groups, l)(func(t Token) bool {
+				tokens = append(tokens, t)
+				return true
+			})
+			if len(tokens) > 0 {
+				l.tokenStack = append(l.tokenStack, tokens)
+			}
 		}
 	}
-	// Exhaust the IteratorStack, if any.
-	// Duplicate code, but eh.
-	for len(l.iteratorStack) > 0 {
-		n := len(l.iteratorStack) - 1
-		t := l.iteratorStack[n]()
+
+	// Exhaust the token stack, if any.
+	for len(l.tokenStack) > 0 {
+		n := len(l.tokenStack) - 1
+		tokens := l.tokenStack[n]
+		if len(tokens) == 0 {
+			l.tokenStack = l.tokenStack[:n]
+			continue
+		}
+		// Take first token and remove it from the stack
+		t := tokens[0]
+		l.tokenStack[n] = tokens[1:]
 		if t.Type == Ignore {
 			continue
 		}
 		if t == EOF {
-			l.iteratorStack = l.iteratorStack[:n]
+			l.tokenStack = l.tokenStack[:n]
 			continue
 		}
-		return t
+		if !yield(t) {
+			return
+		}
 	}
 
 	// If we get to here and we still have text, return it as an error.
 	if l.Pos != len(l.Text) && len(l.Stack) == 0 {
 		value := string(l.Text[l.Pos:])
 		l.Pos = len(l.Text)
-		return Token{Type: Error, Value: value}
+		if !yield(Token{Type: Error, Value: value}) {
+			return
+		}
 	}
-	return EOF
 }
 
 // RegexLexer is the default lexer implementation used in Chroma.

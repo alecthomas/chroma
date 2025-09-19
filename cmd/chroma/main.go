@@ -393,7 +393,10 @@ func format(ctx *kong.Context, w io.Writer, style *chroma.Style, it chroma.Itera
 
 func check(filename string, it chroma.Iterator) {
 	line, col := 1, 0
-	for token := it(); token != chroma.EOF; token = it() {
+	for token := range it {
+		if token == chroma.EOF {
+			break
+		}
 		if token.Type == chroma.Error {
 			fmt.Printf("%s:%d:%d %q\n", filename, line, col, token.String())
 		}

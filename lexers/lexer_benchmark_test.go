@@ -212,7 +212,10 @@ func Benchmark(b *testing.B) {
 	for range b.N {
 		it, err := lexers.GlobalLexerRegistry.Get("Java").Tokenise(nil, lexerBenchSource)
 		assert.NoError(b, err)
-		for t := it(); t != chroma.EOF; t = it() {
+		for t := range it {
+			if t == chroma.EOF {
+				break
+			}
 		}
 	}
 }
