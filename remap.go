@@ -33,19 +33,17 @@ func (r *remappingLexer) Tokenise(options *TokeniseOptions, text string) (Iterat
 	if err != nil {
 		return nil, err
 	}
-	var buffer []Token
-	return func() Token {
-		for {
-			if len(buffer) > 0 {
-				t := buffer[0]
-				buffer = buffer[1:]
-				return t
-			}
-			t := it()
+	return func(yield func(Token) bool) {
+		for t := range it {
 			if t == EOF {
-				return t
+				break
 			}
-			buffer = r.mapper(t)
+			mapped := r.mapper(t)
+			for _, mt := range mapped {
+				if !yield(mt) {
+					return
+				}
+			}
 		}
 	}, nil
 }

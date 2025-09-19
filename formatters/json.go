@@ -14,7 +14,10 @@ var JSON = Register("json", chroma.FormatterFunc(func(w io.Writer, s *chroma.Sty
 		return err
 	}
 	i := 0
-	for t := it(); t != chroma.EOF; t = it() {
+	for t := range it {
+		if t == chroma.EOF {
+			break
+		}
 		if i > 0 {
 			if _, err := fmt.Fprintln(w, ","); err != nil {
 				return err
