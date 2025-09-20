@@ -240,9 +240,6 @@ type indexedTTYFormatter struct {
 func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma.Iterator) (err error) {
 	theme := styleToEscapeSequence(c.table, style)
 	for token := range it {
-		if token == chroma.EOF {
-			break
-		}
 		clr, ok := theme[token.Type]
 
 		// This search mimics how styles.Get() is used in tty_truecolour.go.

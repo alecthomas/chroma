@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path"
+	"slices"
 	"strings"
 
 	"github.com/alecthomas/chroma/v2"
@@ -62,7 +63,7 @@ type Formatter struct {
 }
 
 func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Iterator) (err error) {
-	f.writeSVG(w, style, iterator.Tokens())
+	f.writeSVG(w, style, iterator)
 	return err
 }
 
@@ -80,9 +81,9 @@ func escapeString(s string) string {
 	return svgEscaper.Replace(s)
 }
 
-func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens []chroma.Token) { // nolint: gocyclo
+func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens chroma.Iterator) { // nolint: gocyclo
 	svgStyles := f.styleToSVG(style)
-	lines := chroma.SplitTokensIntoLines(tokens)
+	lines := slices.Collect(chroma.SplitTokensIntoLines(tokens))
 
 	fmt.Fprint(w, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
 	fmt.Fprint(w, "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n")

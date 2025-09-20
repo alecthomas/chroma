@@ -35,9 +35,6 @@ func (r *remappingLexer) Tokenise(options *TokeniseOptions, text string) (Iterat
 	}
 	return func(yield func(Token) bool) {
 		for t := range it {
-			if t == EOF {
-				break
-			}
 			mapped := r.mapper(t)
 			for _, mt := range mapped {
 				if !yield(mt) {

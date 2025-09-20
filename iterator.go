@@ -2,6 +2,7 @@ package chroma
 
 import (
 	"iter"
+	"slices"
 	"strings"
 )
 
@@ -10,28 +11,13 @@ import (
 // EOF will be returned at the end of the Token stream.
 //
 // If an error occurs within an Iterator, it may propagate this in a panic. Formatters should recover.
-type Iterator iter.Seq[Token]
-
-// Tokens consumes all tokens from the iterator and returns them as a slice.
-func (i Iterator) Tokens() []Token {
-	var out []Token
-	for t := range i {
-		if t == EOF {
-			break
-		}
-		out = append(out, t)
-	}
-	return out
-}
+type Iterator = iter.Seq[Token]
 
 // Concaterator concatenates tokens from a series of iterators.
 func Concaterator(iterators ...Iterator) Iterator {
 	return func(yield func(Token) bool) {
 		for _, it := range iterators {
 			for t := range it {
-				if t == EOF {
-					break
-				}
 				if !yield(t) {
 					return
 				}
@@ -42,48 +28,32 @@ func Concaterator(iterators ...Iterator) Iterator {
 
 // Literator converts a sequence of literal Tokens into an Iterator.
 func Literator(tokens ...Token) Iterator {
-	return func(yield func(Token) bool) {
-		for _, token := range tokens {
-			if !yield(token) {
-				return
-			}
-		}
-	}
+	return slices.Values(tokens)
 }
 
 // SplitTokensIntoLines splits tokens containing newlines in two.
-func SplitTokensIntoLines(tokens []Token) (out [][]Token) {
-	var line []Token // nolint: prealloc
-tokenLoop:
-	for _, token := range tokens {
-		for strings.Contains(token.Value, "\n") {
-			parts := strings.SplitAfterN(token.Value, "\n", 2)
-			// Token becomes the tail.
-			token.Value = parts[1]
-
-			// Append the head to the line and flush the line.
-			clone := token.Clone()
-			clone.Value = parts[0]
-			line = append(line, clone)
-			out = append(out, line)
-			line = nil
-
-			// If the tail token is empty, don't emit it.
-			if len(token.Value) == 0 {
-				continue tokenLoop
+func SplitTokensIntoLines(tokens Iterator) iter.Seq[[]Token] {
+	return func(yield func([]Token) bool) {
+		var line []Token
+		for token := range tokens {
+			line = slices.Grow(line, strings.Count(token.Value, "\n")+1)
+			for part := range strings.SplitAfterSeq(token.Value, "\n") {
+				if part == "" {
+					continue // Empty substring at end of token. Ignore
+				}
+				token := token
+				token.Value = part
+				line = append(line, token)
+				if strings.HasSuffix(part, "\n") {
+					if !yield(line) {
+						return
+					}
+					line = nil
+				}
 			}
 		}
-		line = append(line, token)
-	}
-	if len(line) > 0 {
-		out = append(out, line)
-	}
-	// Strip empty trailing token line.
-	if len(out) > 0 {
-		last := out[len(out)-1]
-		if len(last) == 1 && last[0].Value == "" {
-			out = out[:len(out)-1]
+		if len(line) > 0 {
+			yield(line)
 		}
 	}
-	return out
 }
