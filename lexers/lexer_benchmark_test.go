@@ -5,7 +5,6 @@ import (
 
 	assert "github.com/alecthomas/assert/v2"
 
-	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/lexers"
 )
 
@@ -212,10 +211,7 @@ func Benchmark(b *testing.B) {
 	for range b.N {
 		it, err := lexers.GlobalLexerRegistry.Get("Java").Tokenise(nil, lexerBenchSource)
 		assert.NoError(b, err)
-		for t := range it {
-			if t == chroma.EOF {
-				break
-			}
+		for range it {
 		}
 	}
 }

@@ -80,10 +80,6 @@ func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (
 		var subIterator Iterator
 
 		for token := range it {
-			if token == EOF {
-				break
-			}
-
 			switch {
 			case token.Type == Name && strings.ToLower(token.Value) == "content-type":
 				{
@@ -120,9 +116,6 @@ func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (
 						}
 						// Emit tokens from the sub-iterator
 						for st := range subIterator {
-							if st == EOF {
-								break
-							}
 							if !yield(st) {
 								return
 							}

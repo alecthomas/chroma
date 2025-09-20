@@ -41,9 +41,6 @@ func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, erro
 		return nil, err
 	}
 	for t := range it {
-		if t == EOF {
-			break
-		}
 		out = append(out, t)
 	}
 	return out, nil
@@ -219,7 +216,7 @@ func (l *LexerState) Iterator(yield func(Token) bool) { // nolint: gocognit
 			if t.Type == Ignore {
 				continue
 			}
-			if t == EOF {
+			if t.IsZero() {
 				l.tokenStack = l.tokenStack[:n]
 				continue
 			}
@@ -311,7 +308,7 @@ func (l *LexerState) Iterator(yield func(Token) bool) { // nolint: gocognit
 		if t.Type == Ignore {
 			continue
 		}
-		if t == EOF {
+		if t.IsZero() {
 			l.tokenStack = l.tokenStack[:n]
 			continue
 		}

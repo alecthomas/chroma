@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"html"
 	"io"
+	"iter"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -222,13 +224,13 @@ func (h highlightRanges) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 func (h highlightRanges) Less(i, j int) bool { return h[i][0] < h[j][0] }
 
 func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Iterator) (err error) {
-	return f.writeHTML(w, style, iterator.Tokens())
+	return f.writeHTML(w, style, iterator)
 }
 
 // We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
 //
 // OTOH we need to be super careful about correct escaping...
-func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.Token) (err error) { // nolint: gocyclo
+func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens iter.Seq[chroma.Token]) (err error) { // nolint: gocyclo
 	css := f.styleCache.get(style, true)
 	if f.standalone {
 		fmt.Fprint(w, "<html>\n")
@@ -246,7 +248,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 
 	wrapInTable := f.lineNumbers && f.lineNumbersInTable
 
-	lines := chroma.SplitTokensIntoLines(tokens)
+	lines := slices.Collect(chroma.SplitTokensIntoLines(tokens))
 	lineDigits := len(strconv.Itoa(f.baseLineNumber + len(lines) - 1))
 	highlightIndex := 0
 

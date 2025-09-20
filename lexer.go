@@ -85,16 +85,11 @@ type Token struct {
 	Value string    `json:"value"`
 }
 
-func (t *Token) String() string   { return t.Value }
-func (t *Token) GoString() string { return fmt.Sprintf("&Token{%s, %q}", t.Type, t.Value) }
-
-// Clone returns a clone of the Token.
-func (t *Token) Clone() Token {
-	return *t
+func (t Token) String() string   { return t.Value }
+func (t Token) GoString() string { return fmt.Sprintf("Token{%s, %q}", t.Type, t.Value) }
+func (t Token) IsZero() bool {
+	return t == Token{}
 }
-
-// EOF is returned by lexers at the end of input.
-var EOF Token
 
 // TokeniseOptions contains options for tokenisers.
 type TokeniseOptions struct {

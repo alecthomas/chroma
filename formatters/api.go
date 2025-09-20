@@ -13,9 +13,6 @@ var (
 	// NoOp formatter.
 	NoOp = Register("noop", chroma.FormatterFunc(func(w io.Writer, s *chroma.Style, iterator chroma.Iterator) error {
 		for t := range iterator {
-			if t == chroma.EOF {
-				break
-			}
 			if _, err := io.WriteString(w, t.Value); err != nil {
 				return err
 			}

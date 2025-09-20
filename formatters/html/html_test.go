@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"regexp"
+	"slices"
 	"strings"
 	"testing"
 
@@ -47,7 +48,9 @@ func TestSplitTokensIntoLines(t *testing.T) {
 			{Type: chroma.NameKeyword, Value: "what?\n"},
 		},
 	}
-	actual := chroma.SplitTokensIntoLines(in)
+	actual := slices.Collect(chroma.SplitTokensIntoLines(slices.Values(in)))
+	t.Logf("got[%d]: %q", len(actual), actual)
+	t.Logf("want[%d]: %q", len(expected), expected)
 	assert.Equal(t, expected, actual)
 
 	in = []chroma.Token{
@@ -89,7 +92,7 @@ func TestSplitTokensIntoLines(t *testing.T) {
 			{Type: chroma.TextWhitespace, Value: "\n"},
 		},
 	}
-	actual = chroma.SplitTokensIntoLines(in)
+	actual = slices.Collect(chroma.SplitTokensIntoLines(slices.Values(in)))
 	assert.Equal(t, expected, actual)
 }
 

@@ -13,13 +13,10 @@ func (d *coalescer) Tokenise(options *TokeniseOptions, text string) (Iterator, e
 	return func(yield func(Token) bool) {
 		var prev Token
 		for token := range it {
-			if token == EOF {
-				break
-			}
 			if len(token.Value) == 0 {
 				continue
 			}
-			if prev == EOF {
+			if prev.IsZero() {
 				prev = token
 			} else {
 				if prev.Type == token.Type && len(prev.Value) < 8192 {
@@ -32,7 +29,7 @@ func (d *coalescer) Tokenise(options *TokeniseOptions, text string) (Iterator, e
 				}
 			}
 		}
-		if prev != EOF {
+		if !prev.IsZero() {
 			yield(prev)
 		}
 	}, nil
