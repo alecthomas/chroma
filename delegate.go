@@ -2,6 +2,7 @@ package chroma
 
 import (
 	"bytes"
+	"iter"
 )
 
 type delegatingLexer struct {
@@ -58,7 +59,7 @@ type insertion struct {
 	tokens     []Token
 }
 
-func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint: gocognit
+func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) { // nolint: gocognit
 	tokens, err := Tokenise(Coalesce(d.language), options, text)
 	if err != nil {
 		return nil, err

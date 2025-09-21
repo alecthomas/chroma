@@ -1,6 +1,7 @@
 package lexers
 
 import (
+	"iter"
 	"strings"
 
 	. "github.com/alecthomas/chroma/v2" // nolint
@@ -36,14 +37,14 @@ func httpRules() Rules {
 	}
 }
 
-func httpContentBlock(groups []string, state *LexerState) Iterator {
+func httpContentBlock(groups []string, state *LexerState) iter.Seq[Token] {
 	tokens := []Token{
 		{Generic, groups[0]},
 	}
 	return Literator(tokens...)
 }
 
-func httpHeaderBlock(groups []string, state *LexerState) Iterator {
+func httpHeaderBlock(groups []string, state *LexerState) iter.Seq[Token] {
 	tokens := []Token{
 		{Name, groups[1]},
 		{Text, groups[2]},
@@ -55,7 +56,7 @@ func httpHeaderBlock(groups []string, state *LexerState) Iterator {
 	return Literator(tokens...)
 }
 
-func httpContinuousHeaderBlock(groups []string, state *LexerState) Iterator {
+func httpContinuousHeaderBlock(groups []string, state *LexerState) iter.Seq[Token] {
 	tokens := []Token{
 		{Text, groups[1]},
 		{Literal, groups[2]},
@@ -68,7 +69,7 @@ func httpBodyContentTypeLexer(lexer Lexer) Lexer { return &httpBodyContentTyper{
 
 type httpBodyContentTyper struct{ Lexer }
 
-func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint: gocognit
+func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) { // nolint: gocognit
 	it, err := d.Lexer.Tokenise(options, text)
 	if err != nil {
 		return nil, err
@@ -77,7 +78,7 @@ func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (
 	return func(yield func(Token) bool) {
 		var contentType string
 		var isContentType bool
-		var subIterator Iterator
+		var subIterator iter.Seq[Token]
 
 		for token := range it {
 			if token == EOF {

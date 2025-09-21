@@ -3,6 +3,7 @@ package chroma
 import (
 	"encoding/json"
 	"fmt"
+	"iter"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -491,7 +492,7 @@ func (r *RegexLexer) needRules() error {
 }
 
 // Tokenise text using lexer, returning an iterator.
-func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
+func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) {
 	err := r.needRules()
 	if err != nil {
 		return nil, err

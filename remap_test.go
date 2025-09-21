@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"slices"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -24,6 +25,6 @@ func TestRemappingLexer(t *testing.T) {
 		{TextWhitespace, " "}, {Name, "print"}, {TextWhitespace, " "}, {Keyword, "else"},
 		{TextWhitespace, " "}, {Name, "end"},
 	}
-	actual := it.Tokens()
+	actual := slices.Collect(it)
 	assert.Equal(t, expected, actual)
 }

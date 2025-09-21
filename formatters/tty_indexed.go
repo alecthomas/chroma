@@ -2,6 +2,7 @@ package formatters
 
 import (
 	"io"
+	"iter"
 	"math"
 
 	"github.com/alecthomas/chroma/v2"
@@ -237,7 +238,7 @@ type indexedTTYFormatter struct {
 	table *ttyTable
 }
 
-func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma.Iterator) (err error) {
+func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it iter.Seq[chroma.Token]) (err error) {
 	theme := styleToEscapeSequence(c.table, style)
 	for token := range it {
 		if token == chroma.EOF {

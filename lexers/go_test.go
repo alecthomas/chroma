@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
+
 	"github.com/alecthomas/chroma/v2"
 )
 

@@ -2,12 +2,13 @@ package chroma
 
 import (
 	"fmt"
+	"iter"
 )
 
 // An Emitter takes group matches and returns tokens.
 type Emitter interface {
 	// Emit tokens for the given regex groups.
-	Emit(groups []string, state *LexerState) Iterator
+	Emit(groups []string, state *LexerState) iter.Seq[Token]
 }
 
 // ValidatingEmitter is an Emitter that can validate against a compiled rule.
@@ -23,10 +24,10 @@ type SerialisableEmitter interface {
 }
 
 // EmitterFunc is a function that is an Emitter.
-type EmitterFunc func(groups []string, state *LexerState) Iterator
+type EmitterFunc func(groups []string, state *LexerState) iter.Seq[Token]
 
 // Emit tokens for groups.
-func (e EmitterFunc) Emit(groups []string, state *LexerState) Iterator {
+func (e EmitterFunc) Emit(groups []string, state *LexerState) iter.Seq[Token] {
 	return e(groups, state)
 }
 
@@ -52,8 +53,8 @@ func (b *byGroupsEmitter) ValidateEmitter(rule *CompiledRule) error {
 	return nil
 }
 
-func (b *byGroupsEmitter) Emit(groups []string, state *LexerState) Iterator {
-	iterators := make([]Iterator, 0, len(groups)-1)
+func (b *byGroupsEmitter) Emit(groups []string, state *LexerState) iter.Seq[Token] {
+	iterators := make([]iter.Seq[Token], 0, len(groups)-1)
 	if len(b.Emitters) != len(groups)-1 {
 		iterators = append(iterators, Error.Emit(groups, state))
 		// panic(errors.Errorf("number of groups %q does not match number of emitters %v", groups, emitters))
@@ -69,8 +70,8 @@ func (b *byGroupsEmitter) Emit(groups []string, state *LexerState) Iterator {
 
 // ByGroupNames emits a token for each named matching group in the rule's regex.
 func ByGroupNames(emitters map[string]Emitter) Emitter {
-	return EmitterFunc(func(groups []string, state *LexerState) Iterator {
-		iterators := make([]Iterator, 0, len(state.NamedGroups)-1)
+	return EmitterFunc(func(groups []string, state *LexerState) iter.Seq[Token] {
+		iterators := make([]iter.Seq[Token], 0, len(state.NamedGroups)-1)
 		if len(state.NamedGroups)-1 == 0 {
 			if emitter, ok := emitters[`0`]; ok {
 				iterators = append(iterators, emitter.Emit(groups, state))
@@ -147,7 +148,7 @@ type usingByGroup struct {
 }
 
 func (u *usingByGroup) EmitterKind() string { return "usingbygroup" }
-func (u *usingByGroup) Emit(groups []string, state *LexerState) Iterator {
+func (u *usingByGroup) Emit(groups []string, state *LexerState) iter.Seq[Token] {
 	// bounds check
 	if len(u.Emitters) != len(groups)-1 {
 		panic("UsingByGroup expects number of emitters to be the same as len(groups)-1")
@@ -157,7 +158,7 @@ func (u *usingByGroup) Emit(groups []string, state *LexerState) Iterator {
 	sublexer := state.Registry.Get(groups[u.SublexerNameGroup])
 
 	// build iterators
-	iterators := make([]Iterator, len(groups)-1)
+	iterators := make([]iter.Seq[Token], len(groups)-1)
 	for i, group := range groups[1:] {
 		if i == u.CodeGroup-1 && sublexer != nil {
 			var err error
@@ -176,7 +177,7 @@ func (u *usingByGroup) Emit(groups []string, state *LexerState) Iterator {
 //
 // This Emitter is not serialisable.
 func UsingLexer(lexer Lexer) Emitter {
-	return EmitterFunc(func(groups []string, _ *LexerState) Iterator {
+	return EmitterFunc(func(groups []string, _ *LexerState) iter.Seq[Token] {
 		it, err := lexer.Tokenise(&TokeniseOptions{State: "root", Nested: true}, groups[0])
 		if err != nil {
 			panic(err)
@@ -191,7 +192,7 @@ type usingEmitter struct {
 
 func (u *usingEmitter) EmitterKind() string { return "using" }
 
-func (u *usingEmitter) Emit(groups []string, state *LexerState) Iterator {
+func (u *usingEmitter) Emit(groups []string, state *LexerState) iter.Seq[Token] {
 	if state.Registry == nil {
 		panic(fmt.Sprintf("no LexerRegistry available for Using(%q)", u.Lexer))
 	}
@@ -219,7 +220,7 @@ type usingSelfEmitter struct {
 
 func (u *usingSelfEmitter) EmitterKind() string { return "usingself" }
 
-func (u *usingSelfEmitter) Emit(groups []string, state *LexerState) Iterator {
+func (u *usingSelfEmitter) Emit(groups []string, state *LexerState) iter.Seq[Token] {
 	it, err := state.Lexer.Tokenise(&TokeniseOptions{State: u.State, Nested: true}, groups[0])
 	if err != nil {
 		panic(err)

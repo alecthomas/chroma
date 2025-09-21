@@ -1,6 +1,7 @@
 package lexers
 
 import (
+	"iter"
 	"regexp"
 	"slices"
 	"strings"
@@ -1505,8 +1506,8 @@ func makeRule(config ruleMakingConfig) *CompiledRule {
 
 // Emitter for colon pairs, changes token state based on key and brackets
 func colonPair(tokenClass TokenType) Emitter {
-	return EmitterFunc(func(groups []string, state *LexerState) Iterator {
-		iterators := []Iterator{}
+	return EmitterFunc(func(groups []string, state *LexerState) iter.Seq[Token] {
+		iterators := []iter.Seq[Token]{}
 		tokens := []Token{
 			{Punctuation, state.NamedGroups[`colon`]},
 			{Punctuation, state.NamedGroups[`opening_delimiters`]},
@@ -1581,10 +1582,10 @@ func colonPair(tokenClass TokenType) Emitter {
 }
 
 // Emitter for quoting constructs, changes token state based on quote name and adverbs
-func quote(groups []string, state *LexerState) Iterator {
+func quote(groups []string, state *LexerState) iter.Seq[Token] {
 	keyword := state.NamedGroups[`keyword`]
 	adverbsStr := state.NamedGroups[`adverbs`]
-	iterators := []Iterator{}
+	iterators := []iter.Seq[Token]{}
 	tokens := []Token{
 		{Keyword, keyword},
 		{StringAffix, adverbsStr},
@@ -1649,7 +1650,7 @@ func quote(groups []string, state *LexerState) Iterator {
 }
 
 // Emitter for pod config, tokenises the properties with "colon-pair-attribute" state
-func podConfig(groups []string, state *LexerState) Iterator {
+func podConfig(groups []string, state *LexerState) iter.Seq[Token] {
 	// Tokenise pod config
 	iterator, err := state.Lexer.Tokenise(
 		&TokeniseOptions{
@@ -1665,8 +1666,8 @@ func podConfig(groups []string, state *LexerState) Iterator {
 }
 
 // Emitter for pod code, tokenises the code based on the lang specified
-func podCode(groups []string, state *LexerState) Iterator {
-	iterators := []Iterator{}
+func podCode(groups []string, state *LexerState) iter.Seq[Token] {
+	iterators := []iter.Seq[Token]{}
 	tokens := []Token{
 		{Comment, state.NamedGroups[`ws`]},
 		{Keyword, state.NamedGroups[`keyword`]},

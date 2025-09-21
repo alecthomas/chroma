@@ -1,5 +1,7 @@
 package chroma
 
+import "iter"
+
 //go:generate enumer -text -type TokenType
 
 // TokenType is the type of token to highlight.
@@ -348,7 +350,7 @@ func (t TokenType) InSubCategory(other TokenType) bool {
 	return t/100 == other/100
 }
 
-func (t TokenType) Emit(groups []string, _ *LexerState) Iterator {
+func (t TokenType) Emit(groups []string, _ *LexerState) iter.Seq[Token] {
 	return Literator(Token{Type: t, Value: groups[0]})
 }
 

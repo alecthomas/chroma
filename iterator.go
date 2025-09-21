@@ -5,27 +5,8 @@ import (
 	"strings"
 )
 
-// An Iterator across tokens.
-//
-// EOF will be returned at the end of the Token stream.
-//
-// If an error occurs within an Iterator, it may propagate this in a panic. Formatters should recover.
-type Iterator iter.Seq[Token]
-
-// Tokens consumes all tokens from the iterator and returns them as a slice.
-func (i Iterator) Tokens() []Token {
-	var out []Token
-	for t := range i {
-		if t == EOF {
-			break
-		}
-		out = append(out, t)
-	}
-	return out
-}
-
 // Concaterator concatenates tokens from a series of iterators.
-func Concaterator(iterators ...Iterator) Iterator {
+func Concaterator(iterators ...iter.Seq[Token]) iter.Seq[Token] {
 	return func(yield func(Token) bool) {
 		for _, it := range iterators {
 			for t := range it {
@@ -40,8 +21,8 @@ func Concaterator(iterators ...Iterator) Iterator {
 	}
 }
 
-// Literator converts a sequence of literal Tokens into an Iterator.
-func Literator(tokens ...Token) Iterator {
+// Literator converts a sequence of literal Tokens into an iter.Seq[Token].
+func Literator(tokens ...Token) iter.Seq[Token] {
 	return func(yield func(Token) bool) {
 		for _, token := range tokens {
 			if !yield(token) {
