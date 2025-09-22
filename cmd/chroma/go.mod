@@ -1,6 +1,6 @@
 module github.com/alecthomas/chroma/v2/cmd/chroma
 
-go 1.22
+go 1.23
 
 toolchain go1.25.1
 
