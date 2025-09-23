@@ -1,0 +1,36 @@
+module main;
+import std::io;
+
+enum Weather : (String name)
+{
+	RAINY   = "rainy",
+	COLD    = "cold",
+	HOT     = "hot",
+	SUNNY   = "sunny",
+	THUNDER = "stormy",
+}
+
+<*
+	@require $defined($Enum.values) &&& $defined($Enum.names) &&& $defined($Enum.values[0].name)
+*>
+macro void @im_a_macro ($Enum)
+{
+	$foreach $i, $val : $Enum.values:
+		$switch $i:
+		$case 0:
+			io::print(@sprintf("The %s could be %s, ", $Enum, $val.name));
+		$case $Enum.values.len - 1:
+			io::printn(@sprintf("or %s.", $val.name));
+		$default:
+			io::print(@sprintf("%s, ", $val.name));
+		$endswitch
+	$endforeach
+}
+
+fn int main ()
+{
+	io::printn("Hello, world!");
+	@im_a_macro(Weather);
+
+	return 0;
+}
