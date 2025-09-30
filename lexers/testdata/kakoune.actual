@@ -1,0 +1,15 @@
+define-command -hidden -params 4 doc-render-regex %{
+    evaluate-commands -draft %{ try %{
+        execute-keys <percent> s %arg{1} <ret>
+        execute-keys -draft s %arg{2} <ret> d
+        execute-keys "%arg{3}"
+        evaluate-commands %sh{
+            face="$4"
+            eval "set -- $kak_quoted_selections_desc"
+            ranges=""
+            for desc in "$@"; do ranges="$ranges '$desc|$face'"; done
+            echo "update-option buffer doc_render_ranges"
+            echo "set-option -add buffer doc_render_ranges $ranges"
+        }
+    } }
+}
