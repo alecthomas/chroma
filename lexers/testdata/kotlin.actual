@@ -10,7 +10,9 @@ fun main(args: Array<String>) {
     StringBuilder().apply {
         append(multiline)
     }
-    val unsigned = 0x00UL + 123u + 76.54
+    val ints = 9_000 + 1__2 + 0b0110_10 + 0B011010
+    val floats = 1.0 + .45 + 1_2.3_4E5_6 + 56f + 90F + 1.2f
+    val unsigned = 0x00UL + 123u
 }
 /*
 */
