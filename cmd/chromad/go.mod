@@ -2,7 +2,7 @@ module github.com/alecthomas/chroma/v2/cmd/chromad
 
 go 1.22
 
-toolchain go1.25.1
+toolchain go1.25.3
 
 require (
 	github.com/alecthomas/chroma/v2 v2.20.0
