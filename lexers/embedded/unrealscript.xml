@@ -1,0 +1,135 @@
+<lexer>
+  <config>
+    <name>UnrealScript</name>
+    <alias>unrealscript</alias>
+    <alias>uscript</alias>
+    <alias>unreal</alias>
+    <filename>*.uc</filename>
+    <mime_type>text/x-unrealscript</mime_type>
+    <case_insensitive>true</case_insensitive>
+    <dot_all>true</dot_all>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\n"><token type="TextWhitespace"/></rule>
+      <rule pattern="[^\S\n]+"><token type="TextWhitespace"/></rule>
+
+      <rule pattern="//[^\n]*\n"><token type="CommentSingle"/></rule>
+      <rule pattern="/\*.*?\*/"><token type="CommentMultiline"/></rule>
+
+      <rule pattern="`[A-Za-z_]\w*"><token type="CommentPreproc"/></rule>
+
+      <rule pattern="(new)(\s+)(class)(')([A-Za-z_]\w*)(')">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="TextWhitespace"/>
+          <token type="KeywordType"/>
+          <token type="Punctuation"/>
+          <token type="NameClass"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+
+      <rule pattern="&#39;[A-Za-z_]\w*&#39;">
+        <token type="NameConstant"/>
+      </rule>
+
+      <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;"><token type="LiteralStringDouble"/></rule>
+      <rule pattern="&#39;(\\\\|\\&#39;|[^&#39;])*&#39;"><token type="LiteralStringSingle"/></rule>
+
+      <rule pattern="0[xX][0-9a-fA-F]+"><token type="LiteralNumberHex"/></rule>
+      <rule pattern="\d+\.\d*([eE][+-]?\d+)?|\.\d+([eE][+-]?\d+)?|\d+[eE][+-]?\d+"><token type="LiteralNumberFloat"/></rule>
+      <rule pattern="-?\d+"><token type="LiteralNumberInteger"/></rule>
+
+      <rule pattern="\b(class|interface|struct|enum)\b"><token type="KeywordDeclaration"/></rule>
+      <rule pattern="(defaultproperties)(\s*)(\{)">
+        <bygroups>
+          <token type="KeywordNamespace"/>
+          <token type="TextWhitespace"/>
+          <token type="Punctuation"/>
+        </bygroups>
+        <push state="defaultprops"/>
+      </rule>
+      <rule pattern="(replication|cpptext)(\s*)(\{)">
+        <bygroups>
+          <token type="KeywordNamespace"/>
+          <token type="TextWhitespace"/>
+          <token type="Punctuation"/>
+        </bygroups>
+        <push state="braceblock"/>
+      </rule>
+
+      <rule pattern="\b(function|event|state|operator|delegate|static)\b"><token type="KeywordDeclaration"/></rule>
+      <rule pattern="\b(var|local|const)\b"><token type="KeywordDeclaration"/></rule>
+
+      <rule pattern="\b(abstract|final|native|simulated|iterator|latent|exec|intrinsic|reliable|unreliable|private|protected|public|config|localized|transient|editconst|editinline|placeable|within|extends|implements|out|optional|coerce|singular|server|client)\b">
+        <token type="Keyword"/>
+      </rule>
+
+      <rule pattern="\b(true|false|none|null)\b"><token type="KeywordConstant"/></rule>
+      <rule pattern="\b(self|super|default)\b"><token type="NameBuiltin"/></rule>
+
+      <rule pattern="\b(bool|byte|int|float|string|name|vector|rotator|color|quaternion|array)\b">
+        <token type="KeywordType"/>
+      </rule>
+
+      <rule pattern="[{}()\[\],.;]"><token type="Punctuation"/></rule>
+      <rule pattern="[-+*/%&|^~!=<>?:]=?|&&|\|\|"><token type="Operator"/></rule>
+
+      <rule pattern="[A-Za-z_]\w*"><token type="Name"/></rule>
+    </state>
+
+    <state name="braceblock">
+      <rule pattern="\{"><token type="Punctuation"/><push/></rule>
+      <rule pattern="\}"><token type="Punctuation"/><pop depth="1"/></rule>
+      <rule pattern="//[^\n]*\n"><token type="CommentSingle"/></rule>
+      <rule pattern="/\*.*?\*/"><token type="CommentMultiline"/></rule>
+      <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;"><token type="LiteralStringDouble"/></rule>
+      <rule pattern="[^{}\n]+"><token type="Text"/></rule>
+      <rule pattern="\n"><token type="TextWhitespace"/></rule>
+    </state>
+
+    <state name="defaultprops">
+      <rule pattern="\}"><token type="Punctuation"/><pop depth="1"/></rule>
+
+      <rule pattern="//[^\n]*\n"><token type="CommentSingle"/></rule>
+      <rule pattern="/\*.*?\*/"><token type="CommentMultiline"/></rule>
+      <rule pattern="[^\S\n]+"><token type="TextWhitespace"/></rule>
+      <rule pattern="\n"><token type="TextWhitespace"/></rule>
+
+      <rule pattern="([A-Za-z_]\w*)(\s*)(=)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="TextWhitespace"/>
+          <token type="Operator"/>
+        </bygroups>
+      </rule>
+
+      <rule pattern="\("><token type="Punctuation"/><push state="parens"/></rule>
+
+      <rule pattern="&#39;[A-Za-z_]\w*&#39;"><token type="NameConstant"/></rule>
+      <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;"><token type="LiteralStringDouble"/></rule>
+      <rule pattern="0[xX][0-9a-fA-F]+"><token type="LiteralNumberHex"/></rule>
+      <rule pattern="\d+\.\d*([eE][+-]?\d+)?|\.\d+([eE][+-]?\d+)?|\d+[eE][+-]?\d+"><token type="LiteralNumberFloat"/></rule>
+      <rule pattern="-?\d+"><token type="LiteralNumberInteger"/></rule>
+
+      <rule pattern="[,:.;]"><token type="Punctuation"/></rule>
+      <rule pattern="[A-Za-z_]\w*"><token type="Name"/></rule>
+    </state>
+
+    <state name="parens">
+      <rule pattern="\("><token type="Punctuation"/><push/></rule>
+      <rule pattern="\)"><token type="Punctuation"/><pop depth="1"/></rule>
+
+      <rule pattern="&#39;[A-Za-z_]\w*&#39;"><token type="NameConstant"/></rule>
+      <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;"><token type="LiteralStringDouble"/></rule>
+      <rule pattern="0[xX][0-9a-fA-F]+"><token type="LiteralNumberHex"/></rule>
+      <rule pattern="\d+\.\d*([eE][+-]?\d+)?|\.\d+([eE][+-]?\d+)?|\d+[eE][+-]?\d+"><token type="LiteralNumberFloat"/></rule>
+      <rule pattern="-?\d+"><token type="LiteralNumberInteger"/></rule>
+      <rule pattern="[,:]"><token type="Punctuation"/></rule>
+      <rule pattern="[A-Za-z_]\w*"><token type="Name"/></rule>
+      <rule pattern="[^\S\n]+"><token type="TextWhitespace"/></rule>
+      <rule pattern="\n"><token type="TextWhitespace"/></rule>
+    </state>
+  </rules>
+</lexer>
