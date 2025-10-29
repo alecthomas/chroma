@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"html"
 	"io"
+	"iter"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -221,8 +223,8 @@ func (h highlightRanges) Len() int           { return len(h) }
 func (h highlightRanges) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 func (h highlightRanges) Less(i, j int) bool { return h[i][0] < h[j][0] }
 
-func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Iterator) (err error) {
-	return f.writeHTML(w, style, iterator.Tokens())
+func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) (err error) {
+	return f.writeHTML(w, style, slices.Collect(iterator))
 }
 
 // We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
