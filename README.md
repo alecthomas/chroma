@@ -51,7 +51,7 @@ translators for Pygments lexers and styles.
 |   M    | Makefile, Mako, markdown, Mason, Materialize SQL dialect, Mathematica, Matlab, MCFunction, Meson, Metal, MiniZinc, MLIR, Modula-2, Mojo, MonkeyC, MoonScript, MorrowindScript, Myghty, MySQL
 |   N    | NASM, Natural, NDISASM, Newspeak, Nginx configuration file, Nim, Nix, NSIS, Nu
 |   O    | Objective-C, ObjectPascal, OCaml, Octave, Odin, OnesEnterprise, OpenEdge ABL, OpenSCAD, Org Mode
-|   P    | PacmanConf, Perl, PHP, PHTML, Pig, PkgConfig, PL/pgSQL, plaintext, Plutus Core, Pony, PostgreSQL SQL dialect, PostScript, POVRay, PowerQuery, PowerShell, Prolog, Promela, PromQL, properties, Protocol Buffer, PRQL, PSL, Puppet, Python, Python 2
+|   P    | PacmanConf, Perl, PHP, PHTML, Pig, PkgConfig, PL/pgSQL, plaintext, Plutus Core, Pony, PostgreSQL SQL dialect, PostScript, POVRay, PowerQuery, PowerShell, Prolog, Promela, PromQL, properties, Protocol Buffer, Protocol Buffer Text Format, PRQL, PSL, Puppet, Python, Python 2
 |   Q    | QBasic, QML
 |   R    | R, Racket, Ragel, Raku, react, ReasonML, reg, Rego, reStructuredText, Rexx, RPGLE, RPMSpec, Ruby, Rust
 |   S    | SAS, Sass, Scala, Scheme, Scilab, SCSS, Sed, Sieve, Smali, Smalltalk, Smarty, SNBT, Snobol, Solidity, SourcePawn, SPARQL, SQL, SquidConf, Standard ML, stas, Stylus, Svelte, Swift, SYSTEMD, systemverilog
