@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"slices"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -53,5 +54,5 @@ func TestCombine(t *testing.T) {
 	it, err := l.Tokenise(nil, "hello world")
 	assert.NoError(t, err)
 	expected := []Token{{String, `hello`}, {Whitespace, ` `}, {Name, `world`}}
-	assert.Equal(t, expected, it.Tokens())
+	assert.Equal(t, expected, slices.Collect(it))
 }
