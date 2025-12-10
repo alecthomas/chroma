@@ -1,6 +1,6 @@
 <lexer>
   <config>
-    <name>Bash</name>
+    <name>Shell</name>
     <alias>bash</alias>
     <alias>sh</alias>
     <alias>ksh</alias>
