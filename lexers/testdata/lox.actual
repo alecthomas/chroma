@@ -68,6 +68,7 @@ while (a < 10) {
 
 for (var a = 1; a < 10; a = a + 1) {
   print a;
+  continue;
 }
 
 makeBreakfast(bacon, eggs, toast);
@@ -129,4 +130,16 @@ class Brunch < Breakfast {
   drink() {
     print "How about a Bloody Mary?";
   }
+}
+
+switch (a) {
+  case 1:
+    print("1");
+    break;
+  case 2:
+    print("1");
+    break;
+  default:
+    print("default");
+    break;
 }
