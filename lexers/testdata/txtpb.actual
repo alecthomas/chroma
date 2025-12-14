@@ -1,0 +1,135 @@
+# proto-file: example/test.proto
+# proto-message: TestMessage
+
+# Basic field assignments
+name: "John Smith"
+age: 42
+email: 'user@example.com'
+
+# Numeric literals
+decimal_value: 12345
+octal_value: 0755
+hex_value: 0xDEADBEEF
+zero: 0
+
+# Negative numbers (- is a separate token)
+negative_int: -42
+negative_float: -3.14159
+negative_with_space: - 100
+negative_scientific: -54.32E+1f
+
+# Float literals
+pi: 3.14159
+scientific: 1.23e-10
+with_suffix: 42f
+decimal_suffix: 100F
+exp_notation: 2e5
+leading_dot: .5
+trailing_dot: 10.
+optional_suffix: 1.0f
+
+# Special float values
+positive_inf: inf
+negative_inf: -infinity
+not_a_number: NaN
+case_insensitive: INFINITY
+
+# Boolean values
+is_active: true
+is_deleted: False
+short_true: t
+short_false: f
+# 0, 1, 0x0, 0x1, etc. are also valid but not bools lexically
+
+# String escapes
+escaped_string: "line1\nline2\ttab\r\nwindows\\backslash"
+double_quote_escape: "He said \"hello\", 'single' quote"
+single_quote_escape: 'She said \'good bye\', "double" quote'
+octal_escape: "\0\18\22\3334"
+hex_escape: "\x0\x1Hello\x42"
+unicode_escape: "\u0041\u0042"
+unicode_long: "\U0001f951\U0010FFFD"
+
+# Message values with colon delimiter
+nested_message: {
+  field1: "value1"
+  field2: 123
+}
+
+# Message values with angle brackets
+another_message <
+  inner_field: true
+>
+
+# Repeated fields
+tags: "tag1"
+tags: "tag2"
+tags: "tag3"
+
+# List syntax for repeated fields
+numbers: [1, 2, 3, 4, 5]
+strings: ["first", "second", "third"]
+
+# Map entries
+metadata { key: "version" value: "1.0" }
+metadata { key: "author" value: "test" }
+metadata: [
+  { key: "language" value: "proto" },
+  { key: "year" value: "2024" }
+]
+
+# Extension fields
+[com.example.custom_field]: "extension_value"
+[org.example.number_ext]: 999
+
+# Any expansion
+details {
+  [type.googleapis.com/example.PersonDetails] {
+    phone: "555-1234"
+    address: "123 Main St"
+  }
+}
+
+# Qualified field names
+config.server.host: "localhost"
+config.server.port: 8080
+
+# Group field (capitalized name)
+MyGroup {
+  my_value: 42
+}
+
+# Enum values by name
+status: ACTIVE
+priority: HIGH
+color: RED
+
+# Enum values by number
+fallback_status: 1
+
+# Edge cases
+empty_string: ""
+empty_message: {}
+empty_list: []
+
+# Multiple nested messages
+outer {
+  middle {
+    inner {
+      deep_field: "nested"
+    }
+  }
+}
+
+# Mixed delimiters
+mixed: { field1: "a" } next: < field2: "b" >
+
+# Semicolon separators (optional)
+with_semi: 1; another: 2;
+
+# Concatenated strings
+long_string: "This is a very long string that "
+             "can be split across multiple lines "
+             "for better readability"
+
+field_with_comment: 42  # Inline comment (and no new line, should be handled by ensure_nl=true)
