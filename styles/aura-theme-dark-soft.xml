@@ -1,10 +1,10 @@
 <!--
 # Aura Theme Dark Soft > Color scheme for Chroma syntax highlighter
 # Repository: https://github.com/daltonmenezes/aura-theme
-# Theme version: 1.0.0
+# Theme version: 1.0.1
 -->
 
-<style name="Aura Theme Dark Soft">
+<style name="aura-theme-dark-soft">
   <!-- Base -->
   <entry type="Background" style="bg:#15141b #bdbdbd"/>
   <entry type="CodeLine" style="#bdbdbd"/>
