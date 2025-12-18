@@ -35,7 +35,7 @@
       </rule>
 
       <!-- OPERATORS -->
-      <rule pattern="\+|-|\*|/|%|==|!=|<=|>=|=|<|>|:|\|">
+      <rule pattern="\+|-|\*|/|%|==|!=|&lt;=|&gt;=|=|&lt;|&gt;|:|\\|">
         <token type="Operator"/>
       </rule>
 
