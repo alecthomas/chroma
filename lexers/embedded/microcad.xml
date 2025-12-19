@@ -2,7 +2,7 @@
   <config>
     <name>microcad</name>
     <alias>µcad</alias>
-    <filename>*.µcad</filename>    
+    <filename>*.µcad</filename>
     <filename>*.ucad</filename>
     <filename>*.mcad</filename>
     <mime_type>text/microcad</mime_type>
@@ -10,13 +10,27 @@
   </config>
 
   <rules>
-
     <!-- Root state -->
     <state name="root">
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="\s+">
+        <token type="TextWhitespace"/>
+      </rule>
 
       <!-- COMMENTS -->
+      <rule pattern="///.*">
+        <token type="LiteralStringDoc"/>
+      </rule>
+
       <rule pattern="//.*">
         <token type="CommentSingle"/>
+      </rule>
+
+      <rule pattern="/\*.*">
+        <token type="CommentMultiline"/>
+        <push state="comment"/>
       </rule>
 
       <!-- KEYWORDS -->
@@ -35,7 +49,7 @@
       </rule>
 
       <!-- OPERATORS -->
-      <rule pattern="\+|-|\*|/|%|==|!=|&lt;=|&gt;=|=|&lt;|&gt;|:|\\|">
+      <rule pattern="[+\-*/%&amp;|&lt;&gt;^!@=]">
         <token type="Operator"/>
       </rule>
 
@@ -73,10 +87,10 @@
       </rule>
 
       <!-- PAREN GROUP -->
-      <rule pattern="\(">
+      <rule pattern="[{}()\[\],.;:]">
         <token type="Punctuation"/>
-        <push state="paren"/>
       </rule>
+
 
       <!-- BRACE GROUP -->
       <rule pattern="\{">
@@ -111,6 +125,15 @@
         <include state="root"/>
       </rule>
     </state>
+
+    <state name="comment">
+      <!-- End of comment -->
+      <rule pattern="\*/">
+        <token type="CommentMultiline"/>
+        <pop/>
+      </rule>
+    </state>
+
 
   </rules>
 </lexer>
