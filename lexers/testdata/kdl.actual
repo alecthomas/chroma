@@ -1,0 +1,33 @@
+/- {
+    a
+}
+
+a; b; c;
+
+cool /-a="thing" plus="something else" {
+    stuff
+}
+
+a 12.42e8
+
+// Nodes can be separated into multiple lines
+title \
+  "Some title"
+
+
+// Files must be utf8 encoded!
+smile 😁
+
+// Node names and property keys are just strings, so you can write them like
+// quoted or raw strings, too!
+"illegal(){}[]/\\=#;identifier" #"1.2.3"# "#false"=#true
+
+// Identifiers are very flexible. The following is a legal bare identifier:
+-<123~!$@%^&*,.:'`|?+>
+
+// And you can also use non-ASCII unicode!
+ノード　お名前=ฅ^•ﻌ•^ฅ
+
+// kdl specifically allows properties and values to be
+// interspersed with each other, much like CLI commands.
+foo bar=#true baz quux=#false 1 2 3
