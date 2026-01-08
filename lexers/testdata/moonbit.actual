@@ -1,0 +1,43 @@
+///|
+/// A point on the screen.
+#valtype
+pub(all) struct Point {
+  x : Int
+  y : Int
+} derive(Show, Eq, Compare, Hash, Default)
+
+///|
+/// Shortcut for creating a `Point`.
+pub fn Point::new(x : Int, y : Int) -> Point {
+  Point::{ x, y }
+}
+
+///|
+/// Add together two points.
+pub impl Add for Point with add(self : Point, other : Point) -> Point {
+  { x: self.x + other.x, y: self.y + other.y }
+}
+
+///|
+test "Point.add" {
+  inspect(Point::new(20, 30) + Point::new(25, 80), content="{x: 45, y: 110}")
+}
+
+///|
+pub(all) enum Color {
+  Red
+  Green
+  Blue
+} derive(Show, Eq, Compare, Hash)
+
+///|
+fn main {
+  let name = "World!" // Define a variable
+  println("Hello, \{name}") // and use it directly
+  println("current count:")
+  let buf = @buffer.new()
+  for i in 1..<10 { // Loop over a range from 1 to 10
+    buf.write_string("\{i} ")
+  }
+  println(buf)
+}
