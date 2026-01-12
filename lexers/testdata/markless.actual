@@ -1,0 +1,42 @@
+# Hello there!
+This is a playground for ''Markless''(https://shirakumo.org/docs/markless, color red, large), a //text based// **markup language** intended for __simple__ document and comment publications.
+
+Markless is a relatively new[1] markup standard that focuses on being intuitive first and fast for computers to process second. Being a purely text-based markup, no complicated editor software is required to create documents in it, any simple text editor will do. v(Though of course, having syntax highlighting and previews are nice.)
+
+[1] Development of the standard started in 2015
+
+The Markless standard does not specify its results based on another document format, meaning that an implementation could be written to turn a Markless document into practically any other format[2]. Markless is strict and does not allow for any ambiguities in its markup. This should both make it less confusing for you, and easier to parse for a computer program.
+
+[2] While the output here is HTML, cl-markless for instance can also translate to BBCode, LaTeX, and EPUB, among other formats.
+
+Here's some more useful links:
+- https://shirakumo.org/docs/markless/
+  For a more complete tutorial on Markless' syntax
+- https://shirakumo.org/docs/markless/markless.html
+  The full specification document
+- https://shirakumo.org/project/cl-markless/releases/latest
+  Downloads for cl-markless to convert documents offline
+
+The Markless document standard and ecosystem is brought to you by the ''Shirakumo Collective''(link #logo).
+
+[ image https://shirakumo.org/logo2.png, description Shirakumo Logo, caption The logo for the Shirakumo Team, link https://shirakumo.org, label logo ]
+
+==
+
+:::
+- ::This should //not// be parsed
+:::
+
+:: markless
+- This //should// be parsed
+::
+
+| Quoting for justice
+~ Someone, probably
+
+~ Yukari | And **this** is how you do the
+         | inline quotes.
+~ Haruna | //Woah.//
+
+1. First things first, this <-is great->
+10. Now for something different.
