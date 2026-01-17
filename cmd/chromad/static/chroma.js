@@ -12,10 +12,12 @@ class ChromaWASM {
     try {
       // Create a new Go instance (wasm_exec.js already imported in initChroma)
       const go = new Go();
-      WebAssembly.instantiateStreaming(fetch("./static/chroma.wasm"), go.importObject).then((result) => {
-          go.run(result.instance);
-          this.ready = true;
-      });
+      const result = await WebAssembly.instantiateStreaming(
+        fetch("./static/chroma.wasm"),
+        go.importObject
+      );
+      go.run(result.instance);
+      this.ready = true;
       console.log("Chroma WASM module initialized successfully");
     } catch (error) {
       console.error("Failed to initialize Chroma WASM module:", error);
