@@ -1,7 +1,7 @@
 import * as Base64 from "./base64.js";
 import { chroma } from "./chroma.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+function init() {
   const darkMode =
     window.matchMedia?.("(prefers-color-scheme: dark)").matches;
   const style = document.createElement("style");
@@ -25,8 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   async function renderServer(formData) {
-    return (
-      await fetch("api/render", {
+    const response = await fetch("/api/render", {
         method: "POST",
         mode: "cors",
         cache: "no-cache",
@@ -38,8 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
         redirect: "follow",
         referrer: "no-referrer",
         body: JSON.stringify(formData),
-      })
-    ).json();
+      });
+    return await response.json();
   }
 
   async function renderWasm(formData) {
@@ -196,6 +195,8 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (darkMode) {
     styleSelect.value = "monokai";
     update(new Event("change"));
+  } else {
+    update(new Event("change"));
   }
 
   const eventHandler = (event) => update(event);
@@ -210,5 +211,11 @@ document.addEventListener("DOMContentLoaded", () => {
   copyButton.addEventListener("click", share);
 
   textArea.addEventListener("keydown", handleTab);
-  textArea.addEventListener("change", debouncedEventHandler);
-});
+  textArea.addEventListener("input", debouncedEventHandler);
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}

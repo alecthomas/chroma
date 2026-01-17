@@ -1,8 +1,5 @@
 // chroma.js - TinyGo WASM runtime initialization for Chroma syntax highlighter
 
-// Import wasm_exec.js so that it initialises the Go WASM runtime.
-import "./wasm_exec.js";
-
 class ChromaWASM {
   constructor() {
     this.go = null;
@@ -13,7 +10,7 @@ class ChromaWASM {
 
   async init() {
     try {
-      // Create a new Go instance
+      // Create a new Go instance (wasm_exec.js already imported in initChroma)
       const go = new Go();
       WebAssembly.instantiateStreaming(fetch("./static/chroma.wasm"), go.importObject).then((result) => {
           go.run(result.instance);
@@ -70,5 +67,18 @@ export function isWasmSupported() {
   return false;
 }
 
-// Create global instance, null if WASM is not supported.
-export const chroma = isWasmSupported() ? new ChromaWASM() : null;
+async function initChroma() {
+  if (!isWasmSupported()) {
+    return null;
+  }
+
+  try {
+    await import("./wasm_exec.js");
+    return new ChromaWASM();
+  } catch (error) {
+    return null;
+  }
+}
+
+// Create global instance, null if WASM is not supported or file doesn't exist.
+export const chroma = await initChroma();
