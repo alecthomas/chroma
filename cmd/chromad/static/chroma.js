@@ -12,7 +12,7 @@ class ChromaWASM {
     try {
       // Create a new Go instance (wasm_exec.js already imported in initChroma)
       const go = new Go();
-      WebAssembly.instantiateStreaming(fetch("/static/chroma.wasm"), go.importObject).then((result) => {
+      WebAssembly.instantiateStreaming(fetch("./static/chroma.wasm"), go.importObject).then((result) => {
           go.run(result.instance);
           this.ready = true;
       });
@@ -73,7 +73,7 @@ async function initChroma() {
   }
 
   try {
-    await import("/static/wasm_exec.js");
+    await import("./static/wasm_exec.js");
     return new ChromaWASM();
   } catch (error) {
     return null;

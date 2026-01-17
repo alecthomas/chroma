@@ -2,6 +2,8 @@ set positional-arguments := true
 set shell := ["bash", "-c"]
 
 version := `git describe --tags --dirty --always`
+export GOOS := env("GOOS", "linux")
+export GOARCH := env("GOARCH", "amd64")
 
 _help:
     @just -l
