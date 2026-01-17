@@ -97,7 +97,14 @@ function init() {
 
   (document.querySelectorAll(".notification .delete") || []).forEach((el) => {
     const notification = el.parentNode;
+
+    // Check if notification was previously closed
+    if (localStorage.getItem("notificationClosed") === "true") {
+      notification.parentNode.removeChild(notification);
+    }
+
     el.addEventListener("click", () => {
+      localStorage.setItem("notificationClosed", "true");
       notification.parentNode.removeChild(notification);
     });
   });
