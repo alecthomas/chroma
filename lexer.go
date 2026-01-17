@@ -2,6 +2,7 @@ package chroma
 
 import (
 	"fmt"
+	"iter"
 	"strings"
 )
 
@@ -112,8 +113,8 @@ type TokeniseOptions struct {
 type Lexer interface {
 	// Config describing the features of the Lexer.
 	Config() *Config
-	// Tokenise returns an Iterator over tokens in text.
-	Tokenise(options *TokeniseOptions, text string) (Iterator, error)
+	// Tokenise returns an iter.Seq[Token] over tokens in text.
+	Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error)
 	// SetRegistry sets the registry this Lexer is associated with.
 	//
 	// The registry should be used by the Lexer if it needs to look up other

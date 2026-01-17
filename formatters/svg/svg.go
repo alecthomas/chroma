@@ -6,8 +6,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"iter"
 	"os"
 	"path"
+	"slices"
 	"strings"
 
 	"github.com/alecthomas/chroma/v2"
@@ -61,8 +63,8 @@ type Formatter struct {
 	fontFormat   FontFormat
 }
 
-func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Iterator) (err error) {
-	f.writeSVG(w, style, iterator.Tokens())
+func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) (err error) {
+	f.writeSVG(w, style, slices.Collect(iterator))
 	return err
 }
 
