@@ -22,7 +22,7 @@ format-js:
 # Build chromad binary
 chromad: wasm-exec chroma-wasm
     rm -rf build
-    esbuild --platform=node --bundle cmd/chromad/static/index.js --minify --outfile=cmd/chromad/static/index.min.js
+    esbuild --platform=browser --format=esm --bundle cmd/chromad/static/index.js --minify --external:./wasm_exec.js --outfile=cmd/chromad/static/index.min.js
     esbuild --bundle cmd/chromad/static/index.css --minify --outfile=cmd/chromad/static/index.min.css
     cd cmd/chromad && CGOENABLED=0 go build -ldflags="-X 'main.version={{ version }}'" -o ../../build/chromad .
 
