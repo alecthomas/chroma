@@ -2,8 +2,7 @@ import * as Base64 from "./base64.js";
 import { chroma } from "./chroma.js";
 
 function init() {
-  const darkMode =
-    window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+  const darkMode = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
   const style = document.createElement("style");
   const ref = document.querySelector("script");
   ref.parentNode.insertBefore(style, ref);
@@ -26,18 +25,18 @@ function init() {
 
   async function renderServer(formData) {
     const response = await fetch("/api/render", {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-          "X-CSRF-Token": csrfToken,
-          "Content-Type": "application/json",
-        },
-        redirect: "follow",
-        referrer: "no-referrer",
-        body: JSON.stringify(formData),
-      });
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "X-CSRF-Token": csrfToken,
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: JSON.stringify(formData),
+    });
     return await response.json();
   }
 

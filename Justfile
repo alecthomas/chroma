@@ -10,7 +10,7 @@ _help:
 
 # Generate README.md from lexer definitions
 readme:
-    #!/usr/bin/env sh
+    #!/usr/bin/env bash
     GOOS= GOARCH= ./table.py
 
 # Generate tokentype_string.go
@@ -23,24 +23,30 @@ format-js:
 
 # Build chromad binary
 chromad: wasm-exec chroma-wasm
+    #!/usr/bin/env bash
     rm -rf build
-    esbuild --platform=browser --format=esm --bundle cmd/chromad/static/index.js --minify --external:./wasm_exec.js --outfile=cmd/chromad/static/index.min.js
-    esbuild --bundle cmd/chromad/static/index.css --minify --outfile=cmd/chromad/static/index.min.css
+    mk cmd/chromad/static/index.min.js : cmd/chromad/static/{index,chroma}.js -- \
+    	esbuild --platform=browser --format=esm --bundle cmd/chromad/static/index.js --minify --external:./wasm_exec.js --outfile=cmd/chromad/static/index.min.js
+    mk cmd/chromad/static/index.min.css : cmd/chromad/static/index.css -- \
+    	esbuild --bundle cmd/chromad/static/index.css --minify --outfile=cmd/chromad/static/index.min.css
     cd cmd/chromad && CGOENABLED=0 go build -ldflags="-X 'main.version={{ version }}'" -o ../../build/chromad .
 
 # Copy wasm_exec.js from TinyGo
 wasm-exec:
-    #!/usr/bin/env sh
+    #!/usr/bin/env bash
     tinygoroot=$(tinygo env TINYGOROOT)
-    install -m644 "$tinygoroot/targets/wasm_exec.js" cmd/chromad/static/wasm_exec.js
+    mk cmd/chromad/static/wasm_exec.js : "$tinygoroot/targets/wasm_exec.js" -- \
+    	install -m644 "$tinygoroot/targets/wasm_exec.js" cmd/chromad/static/wasm_exec.js
 
 # Build WASM binary
 chroma-wasm:
-    #!/usr/bin/env sh
+    #!/usr/bin/env bash
     if type tinygo > /dev/null 2>&1; then
-        tinygo build -no-debug -target wasm -o cmd/chromad/static/chroma.wasm cmd/libchromawasm/main.go
+        mk cmd/chromad/static/chroma.wasm : cmd/libchromawasm/main.go -- \
+        	tinygo build -no-debug -target wasm -o cmd/chromad/static/chroma.wasm cmd/libchromawasm/main.go
     else
-        GOOS=js GOARCH=wasm go build -o cmd/chromad/static/chroma.wasm cmd/libchromawasm/main.go
+        mk cmd/chromad/static/chroma.wasm : cmd/libchromawasm/main.go -- \
+        	GOOS=js GOARCH=wasm go build -o cmd/chromad/static/chroma.wasm cmd/libchromawasm/main.go
     fi
 
 # Upload chromad to server

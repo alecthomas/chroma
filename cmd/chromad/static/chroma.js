@@ -14,7 +14,7 @@ class ChromaWASM {
       const go = new Go();
       const result = await WebAssembly.instantiateStreaming(
         fetch("./static/chroma.wasm"),
-        go.importObject
+        go.importObject,
       );
       go.run(result.instance);
       this.ready = true;
