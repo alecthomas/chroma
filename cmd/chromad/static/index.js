@@ -2,7 +2,10 @@ import * as Base64 from "./base64.js";
 import { chroma } from "./chroma.js";
 
 function init() {
-  const darkMode = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+  const systemDarkModeQuery = window.matchMedia?.(
+    "(prefers-color-scheme: dark)",
+  );
+  const systemDarkMode = systemDarkModeQuery?.matches;
   const style = document.createElement("style");
   const ref = document.querySelector("script");
   ref.parentNode.insertBefore(style, ref);
@@ -15,6 +18,82 @@ function init() {
   const csrfToken = form.elements["gorilla.csrf.Token"].value;
   const output = document.getElementById("output");
   const htmlCheckbox = document.getElementById("html");
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+
+  function getThemePreference() {
+    const stored = localStorage.getItem("theme");
+    if (stored) {
+      return stored;
+    }
+    return "auto";
+  }
+
+  function setThemePreference(theme) {
+    if (theme === "auto") {
+      localStorage.removeItem("theme");
+    } else {
+      localStorage.setItem("theme", theme);
+    }
+  }
+
+  function getEffectiveTheme(theme) {
+    if (theme === "auto") {
+      const currentSystemDarkMode = systemDarkModeQuery?.matches ?? false;
+      return currentSystemDarkMode ? "dark" : "light";
+    }
+    return theme;
+  }
+
+  function applyTheme(theme) {
+    const effectiveTheme = getEffectiveTheme(theme);
+    const isDark = effectiveTheme === "dark";
+    document.documentElement.setAttribute("data-theme", effectiveTheme);
+
+    // Set icon based on the effective theme (current mode)
+    if (theme === "auto") {
+      themeIcon.setAttribute("name", "ellipse-outline");
+    } else if (isDark) {
+      themeIcon.setAttribute("name", "moon-outline");
+    } else {
+      themeIcon.setAttribute("name", "sunny-outline");
+    }
+
+    if (isDark && styleSelect.value === "monokailight") {
+      styleSelect.value = "monokai";
+      update(new Event("change"));
+    } else if (!isDark && styleSelect.value === "monokai") {
+      styleSelect.value = "monokailight";
+      update(new Event("change"));
+    }
+  }
+
+  function toggleTheme() {
+    const currentTheme = getThemePreference();
+    let newTheme;
+    if (currentTheme === "light") {
+      newTheme = "dark";
+    } else if (currentTheme === "dark") {
+      newTheme = "auto";
+    } else {
+      newTheme = "light";
+    }
+    setThemePreference(newTheme);
+    applyTheme(newTheme);
+  }
+
+  themeToggle.addEventListener("click", toggleTheme);
+
+  // Listen for system preference changes
+  if (systemDarkModeQuery) {
+    systemDarkModeQuery.addEventListener("change", (e) => {
+      const currentTheme = getThemePreference();
+      if (currentTheme === "auto") {
+        // Re-apply theme to update based on new system preference
+        applyTheme("auto");
+      }
+    });
+  }
 
   (document.querySelectorAll(".notification .delete") || []).forEach((el) => {
     const notification = el.parentNode;
@@ -183,6 +262,9 @@ function init() {
     event.preventDefault();
   }
 
+  const initialTheme = getThemePreference();
+  applyTheme(initialTheme);
+
   if (location.hash) {
     let json = Base64.decode(location.hash.substring(1));
     json = JSON.parse(json);
@@ -191,10 +273,12 @@ function init() {
     styleSelect.value = json.style;
     htmlCheckbox.checked = json.classes;
     update(new Event("change"));
-  } else if (darkMode) {
-    styleSelect.value = "monokai";
-    update(new Event("change"));
   } else {
+    const effectiveTheme = getEffectiveTheme(initialTheme);
+    const isDark = effectiveTheme === "dark";
+    if (isDark && styleSelect.value === "monokailight") {
+      styleSelect.value = "monokai";
+    }
     update(new Event("change"));
   }
 

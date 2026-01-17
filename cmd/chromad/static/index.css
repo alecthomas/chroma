@@ -15,3 +15,12 @@ textarea {
 #output pre {
 	padding: 0;
 }
+
+/* Override system theme preference when data-theme is set */
+:root[data-theme="light"] {
+	color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+	color-scheme: dark;
+}
