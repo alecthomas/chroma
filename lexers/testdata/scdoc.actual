@@ -1,0 +1,53 @@
+; Comment at the top
+MYPROGRAM(1) "User Manual"
+
+# NAME
+
+myprogram - does something useful
+
+## SYNOPSIS
+
+*myprogram* [_options_] _file_
+
+# DESCRIPTION
+
+This has *bold text* and _underlined text_.
+
+Note that in_the_middle_of underscores are ignored.
+
+Line breaks work++
+like this.
+
+## OPTIONS
+
+- *-h*, *--help*
+	Show help
+	- Nested item with tab
+		- Deeply nested
+
+. First item
+. Second item
+	. Nested numbered item with continuation
+	  that spans multiple lines
+
+# EXAMPLES
+
+Literal block:
+
+```
+code example
+```
+
+Tab-indented:
+
+	literal text
+
+# TABLE
+
+| Row 1
+:  Cell 1
+:- Cell 2
+
+# ESCAPES
+
+This is \*not bold\* and \_not underlined\_.
