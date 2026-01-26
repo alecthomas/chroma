@@ -1,0 +1,5 @@
+#. TRANSLATORS: %s contains the user's name as specified in Preferences
+#, c-format
+#: src/name.c:36
+msgid "My name is %s.\n"
+msgstr ""

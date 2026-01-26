@@ -1,0 +1,16 @@
+[
+  {"type":"CommentSingle","value":"#. TRANSLATORS: %s contains the user's name as specified in Preferences"},
+  {"type":"Error","value":"\n"},
+  {"type":"KeywordType","value":"#, c-format"},
+  {"type":"Error","value":"\n"},
+  {"type":"KeywordDeclaration","value":"#: src/name.c:36"},
+  {"type":"Error","value":"\n"},
+  {"type":"NameVariable","value":"msgid"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralString","value":"\"My name is %s.\\n\""},
+  {"type":"Error","value":"\n"},
+  {"type":"NameVariable","value":"msgstr"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralString","value":"\"\""},
+  {"type":"Error","value":"\n"}
+]
