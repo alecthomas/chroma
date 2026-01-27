@@ -233,6 +233,10 @@ function init() {
       const formData = getFormJSON();
       const value = await render(formData);
 
+      if (value.error) {
+        throw new Error(value.error);
+      }
+
       if (value.language) {
         languageSelect.value = value.language;
       }
@@ -243,13 +247,9 @@ function init() {
         output.innerHTML = value.html;
       }
     } catch (error) {
-      console.error("Error highlighting code:", error);
-      // Fallback: display plain text
-      if (htmlCheckbox.checked) {
-        output.innerText = textArea.value;
-      } else {
-        output.innerHTML = `<pre>${textArea.value}</pre>`;
-      }
+      const errorMsg = `Error highlighting code: ${error}`;
+      output.innerText = errorMsg;
+      console.error(errorMsg);
     }
 
     if (event) {
