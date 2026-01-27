@@ -42,7 +42,7 @@ translators for Pygments lexers and styles.
 |   D    | D, Dart, Dax, Desktop file, Diff, Django/Jinja, dns, Docker, DTD, Dylan
 |   E    | EBNF, Elixir, Elm, EmacsLisp, Erlang
 |   F    | Factor, Fennel, Fish, Forth, Fortran, FortranFixed, FSharp
-|   G    | GAS, GDScript, GDScript3, Gemtext, Genshi, Genshi HTML, Genshi Text, Gherkin, Gleam, GLSL, Gnuplot, Go, Go HTML Template, Go Template, Go Text Template, GraphQL, Groff, Groovy
+|   G    | GAS, GDScript, GDScript3, Gemtext, Genshi, Genshi HTML, Genshi Text, Gettext, Gherkin, Gleam, GLSL, Gnuplot, Go, Go HTML Template, Go Template, Go Text Template, GraphQL, Groff, Groovy
 |   H    | Handlebars, Hare, Haskell, Haxe, HCL, Hexdump, HLB, HLSL, HolyC, HTML, HTTP, Hy
 |   I    | Idris, Igor, INI, Io, ISCdhcpd
 |   J    | J, Janet, Java, JavaScript, JSON, JSONata, Jsonnet, Julia, Jungle
