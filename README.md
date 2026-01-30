@@ -47,7 +47,7 @@ translators for Pygments lexers and styles.
 |   I    | Idris, Igor, INI, Io, ISCdhcpd
 |   J    | J, Janet, Java, JavaScript, JSON, JSONata, Jsonnet, Julia, Jungle
 |   K    | Kakoune, Kotlin
-|   L    | Lean4, Lighttpd configuration file, LLVM, lox, Lua
+|   L    | Lean4, Lighttpd configuration file, LLVM, lox, Lua, Luau
 |   M    | Makefile, Mako, markdown, Markless, Mason, Materialize SQL dialect, Mathematica, Matlab, MCFunction, Meson, Metal, MiniZinc, MLIR, Modelica, Modula-2, Mojo, MonkeyC, MoonScript, MorrowindScript, Myghty, MySQL
 |   N    | NASM, Natural, NDISASM, Newspeak, Nginx configuration file, Nim, Nix, NSIS, Nu
 |   O    | Objective-C, ObjectPascal, OCaml, Octave, Odin, OnesEnterprise, OpenEdge ABL, OpenSCAD, Org Mode

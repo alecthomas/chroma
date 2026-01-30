@@ -54,7 +54,10 @@ TEMPLATE = r'''
 '''
 
 
-def xml_regex(s):
+def xml_regex(s: str) -> str:
+    # Convert Python-style capture groups to .NET-style capture groups
+    s = s.replace('(?P', '(?')
+
     return xml_string(s)
 
 def xml_string(s):
