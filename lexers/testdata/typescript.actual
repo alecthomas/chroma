@@ -1,5 +1,7 @@
 const moduleName = modules.map();
 
+using resource = new Resource();
+
 declare module "fs" {}
 declare module "@custom/plugin" {}
 declare module "../../compiler/types" {}
