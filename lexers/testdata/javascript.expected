@@ -59,5 +59,16 @@
   {"type":"Text","value":" "},
   {"type":"LiteralNumberFloat","value":"1e3"},
   {"type":"Punctuation","value":";"},
+  {"type":"Text","value":"\n\n"},
+  {"type":"KeywordReserved","value":"using"},
+  {"type":"Text","value":" "},
+  {"type":"NameOther","value":"resource"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"Keyword","value":"new"},
+  {"type":"Text","value":" "},
+  {"type":"NameOther","value":"Resource"},
+  {"type":"Punctuation","value":"();"},
   {"type":"Text","value":"\n"}
 ]
