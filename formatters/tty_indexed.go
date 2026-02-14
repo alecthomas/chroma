@@ -2,6 +2,7 @@ package formatters
 
 import (
 	"io"
+	"iter"
 	"math"
 
 	"github.com/alecthomas/chroma/v2"
@@ -237,9 +238,12 @@ type indexedTTYFormatter struct {
 	table *ttyTable
 }
 
-func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma.Iterator) (err error) {
+func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it iter.Seq[chroma.Token]) (err error) {
 	theme := styleToEscapeSequence(c.table, style)
-	for token := it(); token != chroma.EOF; token = it() {
+	for token := range it {
+		if token == chroma.EOF {
+			break
+		}
 		clr, ok := theme[token.Type]
 
 		// This search mimics how styles.Get() is used in tty_truecolour.go.

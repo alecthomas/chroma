@@ -1,6 +1,7 @@
 package lexers
 
 import (
+	"iter"
 	"strings"
 
 	. "github.com/alecthomas/chroma/v2" // nolint
@@ -62,8 +63,8 @@ func restructuredtextRules() Rules {
 	}
 }
 
-func rstCodeBlock(groups []string, state *LexerState) Iterator {
-	iterators := []Iterator{}
+func rstCodeBlock(groups []string, state *LexerState) iter.Seq[Token] {
+	iterators := []iter.Seq[Token]{}
 	tokens := []Token{
 		{Punctuation, groups[1]},
 		{Text, groups[2]},

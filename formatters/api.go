@@ -2,6 +2,7 @@ package formatters
 
 import (
 	"io"
+	"iter"
 	"sort"
 
 	"github.com/alecthomas/chroma/v2"
@@ -11,8 +12,11 @@ import (
 
 var (
 	// NoOp formatter.
-	NoOp = Register("noop", chroma.FormatterFunc(func(w io.Writer, s *chroma.Style, iterator chroma.Iterator) error {
-		for t := iterator(); t != chroma.EOF; t = iterator() {
+	NoOp = Register("noop", chroma.FormatterFunc(func(w io.Writer, s *chroma.Style, iterator iter.Seq[chroma.Token]) error {
+		for t := range iterator {
+			if t == chroma.EOF {
+				break
+			}
 			if _, err := io.WriteString(w, t.Value); err != nil {
 				return err
 			}
