@@ -4,7 +4,7 @@
 
 # define sets
 set PRODUCTS;
-set RESOURCES;
+ordered set RESOURCES;
 
 # define parameters
 param demand {PRODUCTS} >= 0;

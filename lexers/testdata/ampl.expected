@@ -10,6 +10,8 @@
   {"type":"Name","value":"PRODUCTS"},
   {"type":"Punctuation","value":";"},
   {"type":"Text","value":"\n"},
+  {"type":"KeywordType","value":"ordered"},
+  {"type":"Text","value":" "},
   {"type":"KeywordDeclaration","value":"set"},
   {"type":"Text","value":" "},
   {"type":"Name","value":"RESOURCES"},

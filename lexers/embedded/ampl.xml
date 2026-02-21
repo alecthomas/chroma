@@ -49,7 +49,7 @@
       </rule>
 
       <!-- Types -->
-      <rule pattern="\b(integer|binary|symbolic|bordered|circular|reversed|INOUT|IN|OUT|LOCAL)\b">
+      <rule pattern="\b(integer|binary|symbolic|ordered|circular|reversed|INOUT|IN|OUT|LOCAL)\b">
         <token type="KeywordType"/>
       </rule>
 
