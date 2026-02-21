@@ -1,0 +1,27 @@
+## Simple AMPL example for tests
+
+# Sourced from: https://ampl.com/mo-book/notebooks/01/production-planning-advanced.html
+
+# define sets
+set PRODUCTS;
+set RESOURCES;
+
+# define parameters
+param demand {PRODUCTS} >= 0;
+param price {PRODUCTS} > 0;
+param available {RESOURCES} >= 0;
+param cost {RESOURCES} > 0;
+param need {RESOURCES,PRODUCTS} >= 0;
+
+# define variables
+var Use {r in RESOURCES} >= 0, <= available[r];
+var Sell {p in PRODUCTS} >= 0, <= demand[p];
+
+# define objective function
+maximize Profit:
+   sum {p in PRODUCTS} price[p] * Sell[p] -
+   sum {r in RESOURCES} cost[r] * Use[r];
+
+# create indexed constraint
+subject to ResourceLimit {r in RESOURCES}:
+   sum {p in PRODUCTS} need[r,p] * Sell[p] <= Use[r];
