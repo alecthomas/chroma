@@ -16,7 +16,7 @@
       </rule>
 
       <!-- Comments: '#' to end-of-line and C-style comments -->
-      <rule pattern="#.*?$">
+      <rule pattern="#[^\n]*">
         <token type="Comment"/>
       </rule>
       <rule pattern="/\*">
@@ -25,10 +25,10 @@
       </rule>
 
       <!-- Strings -->
-      <rule pattern='"(\\.|[^"\\])*"'>
+      <rule pattern="&quot;(\\.|[^\\&quot;])*&quot;">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="'(\\.|[^'\\])*'">
+      <rule pattern="&#39;(\\.|[^\\&#39;])*&#39;">
         <token type="LiteralString"/>
       </rule>
 
@@ -49,7 +49,7 @@
       </rule>
 
       <!-- Types -->
-      <rule pattern="(\binteger|\bbinary|\bsymbolic|\bordered|\bcircular|\breversed|\bINOUT|\bIN|\bOUT|\bLOCAL)">
+      <rule pattern="\b(integer|binary|symbolic|bordered|circular|reversed|INOUT|IN|OUT|LOCAL)\b">
         <token type="KeywordType"/>
       </rule>
 
@@ -86,7 +86,7 @@
       <rule pattern="[^*]+">
         <token type="Comment"/>
       </rule>
-      <rule pattern="\*+/">
+      <rule pattern="\*/">
         <token type="Comment"/>
         <pop depth="1"/>
       </rule>
