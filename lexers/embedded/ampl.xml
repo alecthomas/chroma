@@ -65,7 +65,7 @@
 
       <!-- Operator words (logical/set operators) -->
       <rule pattern="\b(or|exists|forall|and|in|not|within|union|diff|difference|symdiff|inter|intersect|intersection|cross|setof|by|less|sum|prod|product|div|mod)\b">
-        <token type="KeywordReserved"/>
+        <token type="OperatorWord"/>
       </rule>
 
       <!-- Identifiers -->
@@ -74,7 +74,7 @@
       </rule>
 
       <!-- Operators and punctuation -->
-      <rule pattern=":=|&lt;=|&gt;=|&lt;&gt;|!=|==|[-+*/^=&lt;&gt;%]">
+      <rule pattern="\+|\-|\*|/|\*\*|=|&lt;=|&gt;=|==|\||\^|&lt;|&gt;|\!|\.\.|:=|\&amp;|\!=|&lt;&lt;|&gt;&gt;">
         <token type="Operator"/>
       </rule>
       <rule pattern="[(),;:\[\]{}.]">
