@@ -18,6 +18,7 @@ lexers:
     aliases: abnf
     filenames: *.abnf
     mimetypes: text/x-abnf
+...
 
 """
 
@@ -46,20 +47,20 @@ if __name__ == "__main__":
         language_seperator_length = max(language_seperator_length, len(lexers))
         rows.append(f"|   {key}    | {lexers}")
 
-    tbody = "\n".join(rows)
+    tbody: str = "\n".join(rows)
 
     lexer_table: str = (
         separator.format(language_seperator="-" * language_seperator_length) + "\n" + tbody
     )
 
     with open(README_FILE, "r") as f:
-        content = f.read()
+        content: str = f.read()
 
     with open(README_FILE, "w") as f:
-        # Want to replace content between (and including) "| Prefix | Language" and the first two blank lines after it.
-        marker = re.compile(r"(?P<start>" + re.escape(header) + r"\n).*?(?P<end>\n\n)", re.DOTALL)
-        replacement = r"\g<start>%s\g<end>" % lexer_table
-        updated_content = marker.sub(replacement, content)
+        # Want to replace content between "| Prefix | Language" and the first two blank lines after it.
+        marker: re.Pattern = re.compile(r"(?P<start>" + re.escape(header) + r"\n).*?(?P<end>\n\n)", re.DOTALL)
+        replacement: str = r"\g<start>%s\g<end>" % lexer_table
+        updated_content: str = marker.sub(replacement, content)
         f.write(updated_content)
 
     print(tbody)
