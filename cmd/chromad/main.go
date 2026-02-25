@@ -164,8 +164,8 @@ func newContext(r *http.Request) context {
 		ctx.Languages = append(ctx.Languages, lexer.Config().Name)
 	}
 	sort.Strings(ctx.Languages)
-	for _, style := range styles.Registry {
-		ctx.Styles = append(ctx.Styles, style.Name)
+	for name := range styles.Registry {
+		ctx.Styles = append(ctx.Styles, name)
 	}
 	sort.Strings(ctx.Styles)
 	return ctx

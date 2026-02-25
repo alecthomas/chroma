@@ -226,10 +226,10 @@ formatter outputs raw tokens. The latter is useful for debugging lexers.
 ### Styles
 
 Chroma styles are defined in XML. The style entries use the
-[same syntax](http://pygments.org/docs/styles/) as Pygments.
-
-All Pygments styles have been converted to Chroma using the `_tools/style.py`
+[same syntax](http://pygments.org/docs/styles/) as Pygments. All Pygments styles have been converted to Chroma using the `_tools/style.py`
 script.
+
+Style names are case-insensitive. For example, `monokai` and `Monokai` are treated as the same style.
 
 When you work with one of [Chroma's styles](https://github.com/alecthomas/chroma/tree/master/styles),
 know that the `Background` token type provides the default style for tokens. It does so
