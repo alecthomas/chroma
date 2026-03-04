@@ -267,8 +267,7 @@ func main() {
 }
 
 func selectStyle() (*chroma.Style, error) {
-	style, ok := styles.Registry[cli.Style]
-	if ok {
+	if style := styles.Get(cli.Style); style != styles.Fallback {
 		return style, nil
 	}
 	r, err := os.Open(cli.Style)
@@ -434,7 +433,7 @@ func dumpXMLLexerDefinitions(dir string) error {
 				fmt.Fprintf(os.Stderr, "warning: %s already exists\n", filename)
 				continue
 			}
-			err = os.WriteFile(filename, data, 0600)
+			err = os.WriteFile(filename, data, 0o600)
 			if err != nil {
 				return err
 			}
