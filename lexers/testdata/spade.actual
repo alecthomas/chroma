@@ -1,0 +1,186 @@
+// Somewhat exhaustive Spade syntax example
+/* block comment */
+/// doc comment
+//! inside doc comment
+
+fn a() {}
+entity b() {}
+pipeline(5) c() {}
+
+entity calls() {
+	a();
+	inst b();
+	inst(5) c();
+}
+
+pipeline(5) pipeline_constructs() {
+	reg;
+	stage(+1).something;
+	stage(absolute)
+	'absolute
+}
+
+fn literals() {
+	(
+		0,
+		1,
+		0u,
+		0i,
+		0u32,
+		0i32,
+		b'x'
+		b"xy",
+		true,
+		false,
+		HIGHIMP,
+		LOW,
+		HIGH,
+	)
+}
+
+fn conditionals() {
+	if true {a} else {b}
+	match something {
+		_ => {},
+		a => {},
+		a @ b => {},
+		(a, b) => {},
+		[a, b] => {}
+	}
+}
+
+entity registers() {
+	reg(clk) a: type reset(rst: false) = value;
+	reg(clk) b: type initial(false) = value;
+}
+
+entity misc_statements() {
+	decl a;
+	let a = b;
+	let a: int<32> = b;
+	set c = d;
+	assert false;
+}
+
+fn special_identifiers(self) {
+	self;
+	r#abc;
+}
+
+struct NonGeneric {}
+struct Struct<G1, #uint G2> {
+	a: bool,
+	b: G1,
+	c: uint<G2>,
+}
+
+enum Enum<G1, #uint G2> {
+	NoMembers,
+	OneMember{name: G1},
+	TwoMembers{name1: G1, name2: uint<G2>},
+}
+
+trait Trait<G1, G2> {
+	fn function();
+	entity e();
+	pipeline(5) P;
+}
+
+impl Struct {}
+impl<G1, #uint G2> Struct<G1, G2> {}
+
+impl<G1, #uint G2> Trait<G1, G2> for Struct<G1, G2> {
+	fn function() {
+
+	}
+	entity e() {
+
+	}
+
+	pipeline(G1) p(clk: clock) {}
+}
+
+mod module {
+
+}
+mod external;
+
+type<G1, #uint G2> Alias = Type<G1, G2>;
+
+type Types = (bool, Option<uint<32>>, Fn(A) -> B, Entity(A) -> B, inv uint<32>)
+
+
+use a;
+use a::b;
+use a::{b, c};
+use a as b;
+
+pub use a;
+pub(super) use a;
+pub(a::b) use a;
+
+pub fn a() {}
+pub(super) fn a() {}
+pub(a::b) a() {}
+
+fn generic<T: Tr>() {}
+fn generic<T>()
+where T: Tr {}
+
+fn generate() {
+	gen if true {
+
+	} else {
+		false
+	}
+}
+
+extern fn e() {}
+unsafe fn u() {}
+fn test() {
+	unsafe{ call() }
+}
+
+fn operators() {
+    a + b;
+    a - b;
+    a * b;
+    a / b;
+    a % b;
+    a == b;
+    a != b;
+    a < b;
+    a > b;
+    a <= b;
+    a >= b;
+    a >>> b;
+    a >> b;
+    a << b;
+    a +. b;
+    a -. b;
+    a *. b;
+    a >>. b;
+    a <<. b;
+    a || b;
+    a && b;
+    a ^^ b;
+    a & b;
+    a | b;
+    a ! b;
+    a ^ b;
+    a ~ b;
+    a `identifier` b;
+
+	a[0];
+	a[0..N];
+	a[..N];
+	a[0..];
+}
+
+fn return_type() -> bool {}
+fn args(a: bool, b: uint<32>) {}
+
+fn named_args() {
+	call$(a, b: true)
+}
+
