@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+<head>
+  <title><%= content_for?(:title) ? yield(:title) : "Default Title" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+</head>
+<body class="<%= controller_name %> <%= action_name %>">
+
+<%# Navigation partial %>
+<%= render "shared/navbar", user: current_user %>
+
+<%# ERB comment spanning
+    multiple lines %>
+
+<% if current_user.admin? %>
+  <div class="admin-banner">
+    <p>Welcome, <%= current_user.name %>! You have <%= current_user.roles.count %> roles.</p>
+  </div>
+<% end %>
+
+<% @posts.each_with_index do |post, index| %>
+  <article id="post-<%= post.id %>" class="<%= cycle('odd', 'even') %>" data-tags="<%= post.tags.pluck(:name).join(',') %>">
+    <h2><%= link_to post.title, post_path(post), class: "post-link" %></h2>
+
+    <div class="meta">
+      <span><%= l(post.created_at, format: :long) %></span>
+      <span><%= pluralize(post.comments.count, "comment") %></span>
+      <%= "Featured" if post.featured? %>
+    </div>
+
+    <div class="body">
+      <%= sanitize post.body, tags: %w[p br strong em a ul ol li code pre], attributes: %w[href class id] %>
+    </div>
+
+    <% if post.tags.any? %>
+      <ul class="tags">
+        <% post.tags.each do |tag| %>
+          <li><%= link_to tag.name, tag_path(tag) %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <%# Render comments if they exist %>
+    <% unless post.comments.empty? %>
+      <section class="comments">
+        <%= render partial: "comments/comment", collection: post.comments, as: :comment, locals: { editable: current_user&.admin? } %>
+      </section>
+    <% end %>
+  </article>
+<% end %>
+
+<%= form_with(model: @post, local: true, data: { turbo: false, controller: "form" }) do |f| %>
+  <% if @post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+      <ul>
+        <% @post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title, placeholder: "Enter title...", required: true, maxlength: 255 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :body %>
+    <%= f.text_area :body, rows: 10, data: { action: "input->form#validate" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :category_id %>
+    <%= f.collection_select :category_id, Category.order(:name), :id, :name, { prompt: "Select a category" }, { class: "form-control" } %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit @post.persisted? ? "Update Post" : "Create Post", class: "btn btn-primary" %>
+    <%= link_to "Cancel", posts_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>
+
+<%- trimmed = @items.select { |i| i.active? && i.visible_to?(current_user) } -%>
+<%= render partial: "items/grid", locals: { items: trimmed, columns: 3 } %>
+
+<% content_for :sidebar do %>
+  <div class="sidebar">
+    <h3>Recent Posts</h3>
+    <ul>
+      <% Post.published.order(created_at: :desc).limit(5).each do |post| %>
+        <li><%= link_to post.title, post %></li>
+      <% end %>
+    </ul>
+
+    <h3>Archives</h3>
+    <% Post.published.group_by { |p| p.created_at.strftime("%B %Y") }.each do |month, posts| %>
+      <p><%= link_to "#{month} (#{posts.size})", archive_path(month: month) %></p>
+    <% end %>
+  </div>
+<% end %>
+
+<script>
+  var postCount = <%= @posts.count %>;
+  var config = <%= raw({ api_key: ENV["API_KEY"], debug: Rails.env.development? }.to_json) %>;
+</script>
+
+<%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+</body>
+</html>
