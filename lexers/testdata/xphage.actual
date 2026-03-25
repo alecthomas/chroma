@@ -1,0 +1,10 @@
+// Single-line comment
+pulse core {
+    atom shadow = 42
+    beam("Hello World")
+    @UIElement Signal
+    /* multi-line
+       comment */
+    fusion -> vortex
+    matrix value = 0xFF
+}
