@@ -21,6 +21,8 @@ var GlobalLexerRegistry = func() *chroma.LexerRegistry {
 	for _, path := range paths {
 		reg.Register(chroma.MustNewXMLLexer(embedded, path))
 	}
+
+	// Custom lexers are registered via their own init() functions.
 	return reg
 }()
 
