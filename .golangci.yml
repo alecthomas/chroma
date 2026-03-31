@@ -48,6 +48,7 @@ linters:
     - recvcheck
     - tenv
     - err113
+    - prealloc
 
 linters-settings:
   gocyclo:
@@ -62,7 +63,6 @@ linters-settings:
     #  - (Must)?NewLexer$
     exclude_godoc_examples: false
 
-
 issues:
   exclude-dirs:
     - _examples
@@ -71,19 +71,19 @@ issues:
   exclude-use-default: false
   exclude:
     # Captured by errcheck.
-    - '^(G104|G204):'
+    - "^(G104|G204):"
     # Very commonly not checked.
     - 'Error return value of .(.*\.Help|.*\.MarkFlagRequired|(os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked'
     - 'exported method (.*\.MarshalJSON|.*\.UnmarshalJSON|.*\.EntityURN|.*\.GoString|.*\.Pos) should have comment or be unexported'
-    - 'composite literal uses unkeyed fields'
+    - "composite literal uses unkeyed fields"
     - 'declaration of "err" shadows declaration'
-    - 'should not use dot imports'
-    - 'Potential file inclusion via variable'
-    - 'should have comment or be unexported'
-    - 'comment on exported var .* should be of the form'
-    - 'at least one file in a package should have a package comment'
-    - 'string literal contains the Unicode'
-    - 'methods on the same type should have the same receiver name'
-    - '_TokenType_name should be _TokenTypeName'
-    - '`_TokenType_map` should be `_TokenTypeMap`'
-    - 'rewrite if-else to switch statement'
+    - "should not use dot imports"
+    - "Potential file inclusion via variable"
+    - "should have comment or be unexported"
+    - "comment on exported var .* should be of the form"
+    - "at least one file in a package should have a package comment"
+    - "string literal contains the Unicode"
+    - "methods on the same type should have the same receiver name"
+    - "_TokenType_name should be _TokenTypeName"
+    - "`_TokenType_map` should be `_TokenTypeMap`"
+    - "rewrite if-else to switch statement"

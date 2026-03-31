@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"slices"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -22,7 +23,7 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 	}))
 	it, err := l.Tokenise(nil, `hello`)
 	assert.NoError(t, err)
-	assert.Equal(t, []Token{{Keyword, "hello"}, {Whitespace, "\n"}}, it.Tokens())
+	assert.Equal(t, []Token{{Keyword, "hello"}, {Whitespace, "\n"}}, slices.Collect(it))
 
 	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
@@ -31,7 +32,7 @@ func TestNewlineAtEndOfFile(t *testing.T) {
 	}))
 	it, err = l.Tokenise(nil, `hello`)
 	assert.NoError(t, err)
-	assert.Equal(t, []Token{{Error, "hello"}}, it.Tokens())
+	assert.Equal(t, []Token{{Error, "hello"}}, slices.Collect(it))
 }
 
 func TestMatchingAtStart(t *testing.T) {
@@ -49,7 +50,7 @@ func TestMatchingAtStart(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t,
 		[]Token{{Punctuation, "-"}, {NameEntity, "module"}, {Whitespace, " "}, {Operator, "->"}},
-		it.Tokens())
+		slices.Collect(it))
 }
 
 func TestEnsureLFOption(t *testing.T) {
@@ -68,7 +69,7 @@ func TestEnsureLFOption(t *testing.T) {
 		{Whitespace, "\n"},
 		{Keyword, "world"},
 		{Whitespace, "\n"},
-	}, it.Tokens())
+	}, slices.Collect(it))
 
 	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
@@ -85,7 +86,7 @@ func TestEnsureLFOption(t *testing.T) {
 		{Whitespace, "\r\n"},
 		{Keyword, "world"},
 		{Whitespace, "\r"},
-	}, it.Tokens())
+	}, slices.Collect(it))
 }
 
 func TestEnsureLFFunc(t *testing.T) {
@@ -124,7 +125,7 @@ func TestByGroupNames(t *testing.T) {
 	}))
 	it, err := l.Tokenise(nil, `abc=123`)
 	assert.NoError(t, err)
-	assert.Equal(t, []Token{{String, `abc`}, {Operator, `=`}, {String, `123`}}, it.Tokens())
+	assert.Equal(t, []Token{{String, `abc`}, {Operator, `=`}, {String, `123`}}, slices.Collect(it))
 
 	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
@@ -140,7 +141,7 @@ func TestByGroupNames(t *testing.T) {
 	}))
 	it, err = l.Tokenise(nil, `abc=123`)
 	assert.NoError(t, err)
-	assert.Equal(t, []Token{{String, `abc`}, {Error, `=`}, {String, `123`}}, it.Tokens())
+	assert.Equal(t, []Token{{String, `abc`}, {Error, `=`}, {String, `123`}}, slices.Collect(it))
 
 	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
@@ -156,7 +157,7 @@ func TestByGroupNames(t *testing.T) {
 	}))
 	it, err = l.Tokenise(nil, `abc=123`)
 	assert.NoError(t, err)
-	assert.Equal(t, []Token{{String, `abc123`}}, it.Tokens())
+	assert.Equal(t, []Token{{String, `abc123`}}, slices.Collect(it))
 
 	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
@@ -173,7 +174,7 @@ func TestByGroupNames(t *testing.T) {
 	}))
 	it, err = l.Tokenise(nil, `abc=123`)
 	assert.NoError(t, err)
-	assert.Equal(t, []Token{{String, `abc`}, {Error, `=`}, {String, `123`}}, it.Tokens())
+	assert.Equal(t, []Token{{String, `abc`}, {Error, `=`}, {String, `123`}}, slices.Collect(it))
 
 	l = Coalesce(mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 		"root": {
@@ -190,7 +191,7 @@ func TestByGroupNames(t *testing.T) {
 	}))
 	it, err = l.Tokenise(nil, `abc=123`)
 	assert.NoError(t, err)
-	assert.Equal(t, []Token{{Error, `abc=123`}}, it.Tokens())
+	assert.Equal(t, []Token{{Error, `abc=123`}}, slices.Collect(it))
 }
 
 func TestIgnoreToken(t *testing.T) {
@@ -201,5 +202,5 @@ func TestIgnoreToken(t *testing.T) {
 	}))
 	it, err := l.Tokenise(nil, `  hello  `)
 	assert.NoError(t, err)
-	assert.Equal(t, []Token{{Keyword, "hello"}, {TextWhitespace, "\n"}}, it.Tokens())
+	assert.Equal(t, []Token{{Keyword, "hello"}, {TextWhitespace, "\n"}}, slices.Collect(it))
 }
