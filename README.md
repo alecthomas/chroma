@@ -276,6 +276,8 @@ for that setup the `chroma` executable can be just symlinked to `~/.lessfilter`.
   its input using Chroma
 * [Hugo](https://gohugo.io/) is a static site generator that [uses Chroma for syntax
   highlighting code examples](https://gohugo.io/content-management/syntax-highlighting/)
+* [f4](https://github.com/unxed/f4) is asynchronious cross platform Far Manager clone in Go
+  that uses Chroma for syntax highlighting in built-in editor
 
 ## Testing lexers
 
