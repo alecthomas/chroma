@@ -1,3 +1,8 @@
+---
+title: Markdown
+summary: Frontmatter highlighting
+---
+
 # about
 
 <div class="html">HTML</div>
@@ -85,6 +90,20 @@ end loop;
 end
 $$;
 ```
+
+Inline HTML comment: <!-- comment -->.
+
+Text before a fake frontmatter block.
+
+---
+title: not frontmatter
+---
+
+Text before a horizontal rule.
+
+---
+
+Text after a horizontal rule.
 
 ## MarkdownLink Test
 [normal link](https://google.com)  
