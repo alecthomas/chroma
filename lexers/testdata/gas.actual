@@ -1,0 +1,13 @@
+# Returns bit 5 of a number.
+.globl _start
+.section .text
+_start:
+    mov $0, %rdi            # zero rdi
+    mov $0b00100011, %rcx   // input value
+    test $0b00010000, %rcx  /* bit mask, set zero flag */
+    jz final                ! if zero jump out
+    mov $1, %rdi            @ else, the test wasn't zero, set output to 1
+
+final:
+    mov $60, %rax           | set exit syscall
+    syscall                 # make syscall
