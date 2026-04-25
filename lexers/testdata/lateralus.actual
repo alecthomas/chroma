@@ -1,0 +1,22 @@
+// examples/fibonacci.ltl  -  Fibonacci demonstration
+
+module examples.fibonacci
+
+import io
+
+fn fib(n: int) -> int {
+    if n <= 0 { return 0 }
+    if n == 1 { return 1 }
+    return fib(n - 1) + fib(n - 2)
+}
+
+fn main() {
+    io.println("Fibonacci sequence:")
+    let mut i = 0
+    while i <= 15 {
+        io.println("fib(" + i as str + ") = " + fib(i) as str)
+        i += 1
+    }
+}
+
+main()
