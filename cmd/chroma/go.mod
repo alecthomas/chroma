@@ -14,6 +14,6 @@ require (
 )
 
 require (
-	github.com/dlclark/regexp2 v1.11.5 // indirect
+	github.com/dlclark/regexp2 v1.12.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 )
