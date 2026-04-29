@@ -1,0 +1,18 @@
+edition = "2023";
+
+package com.example;
+
+import "google/protobuf/descriptor.proto";
+
+option features.field_presence = EXPLICIT;
+
+message MyMessage {
+  string name = 1;
+  int32 value = 2 [features.field_presence = IMPLICIT];
+}
+
+enum MyEnum {
+  option features.enum_type = CLOSED;
+  MY_ENUM_UNSPECIFIED = 0;
+  MY_ENUM_VALUE = 1;
+}

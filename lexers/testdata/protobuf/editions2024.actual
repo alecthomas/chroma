@@ -1,0 +1,23 @@
+edition = "2024";
+
+package com.example;
+
+import option "custom_options.proto";
+import "google/protobuf/descriptor.proto";
+
+export message PublicMessage {
+  string name = 1;
+}
+
+local message InternalHelper {
+  int32 value = 1;
+}
+
+export enum PublicEnum {
+  PUBLIC_ENUM_UNSPECIFIED = 0;
+  PUBLIC_ENUM_VALUE = 1;
+}
+
+local enum LocalEnum {
+  LOCAL_UNSPECIFIED = 0;
+}
