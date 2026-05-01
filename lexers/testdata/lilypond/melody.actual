@@ -1,0 +1,19 @@
+% From lilypond.org examples
+
+\header {
+  title = "Simple Song"
+  composer = "Composer Name"
+}
+
+\relative c' {
+  \time 3/4
+  \key g \major
+  
+  % Melody with dynamics
+  g8\mf( a b c d4) |
+  e8( d c b a g) |
+  a4 b8( c) d4 |
+  g,2.~ |
+  g4 r r |
+  \bar "|."
+}

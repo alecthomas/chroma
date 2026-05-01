@@ -1,0 +1,25 @@
+% Simple LilyPond example
+\version "2.24.0"
+
+\relative c' {
+  \key c \major
+  \time 4/4
+  
+  % A simple melody
+  c4 d e f |
+  g2 a |
+  b4 c8 d e4 f |
+  g1 |
+  
+  % Dynamics and articulations
+  c4\p d\< e f\! |
+  g2\f a-> |
+  
+  % Chords
+  <c e g>4 <d f a> <e g b> <f a c> |
+}
+
+\addlyrics {
+  Do re mi fa
+  sol la ti do
+}
