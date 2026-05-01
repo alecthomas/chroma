@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package com.example.foo;
+
+extend google.protobuf.FieldOptions {
+  optional string my_field_option = 50000;
+}
+
+message Proto2Message {
+  repeated group Inner = 1 {
+    required int32 ival = 1;
+  }
+}

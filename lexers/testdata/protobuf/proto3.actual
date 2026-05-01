@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package com.example.foo;
+
+import "google/protobuf/timestamp.proto";
+import public "other.proto";
+import weak "legacy.proto";
+
+option java_package = "com.example";
+option java_outer_classname = "ExampleProto";
+option (grpc.gateway.options.openapiv2_swagger) = {
+  info: {
+    title: "Example API";
+    version: "1.0";
+  };
+};
+
+message SearchRequest {
+  string query = 1;
+  int32 page_number = 2;
+  repeated string results = 3;
+  optional bool include_meta = 4;
+  map<string, int32> labels = 5;
+
+  oneof result_type {
+    string url = 6;
+    int32 id = 7;
+  }
+
+  reserved 8, 9, 10 to max;
+  reserved "old_field";
+  reserved bare_ident;
+}
+
+message SearchResponse {
+  repeated Result results = 1;
+}
+
+message Result {
+  string url = 1;
+  string title = 2;
+  repeated string snippets = 3;
+}
+
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  STATUS_ACTIVE = 1;
+  STATUS_INACTIVE = 2 [(custom_option) = "hello"];
+}
+
+service SearchService {
+  rpc Search(SearchRequest) returns (SearchResponse);
+  rpc StreamResults(SearchRequest) returns (stream SearchResponse);
+  rpc BidiStream(stream SearchRequest) returns (stream SearchResponse);
+  rpc WithOption(SearchRequest) returns (SearchResponse) {
+    option (google.api.http) = {post: "/v1/search"};
+  }
+}
