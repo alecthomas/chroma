@@ -7,7 +7,7 @@ toolchain go1.26.2
 replace github.com/alecthomas/chroma/v2 => ../../
 
 require (
-	github.com/alecthomas/chroma/v2 v2.23.1
+	github.com/alecthomas/chroma/v2 v2.24.1
 	github.com/alecthomas/kong v1.15.0
 	github.com/mattn/go-colorable v0.1.14
 	github.com/mattn/go-isatty v0.0.22
