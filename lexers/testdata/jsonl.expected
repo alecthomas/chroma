@@ -1,0 +1,16 @@
+[
+  {"type":"Punctuation","value":"{"},
+  {"type":"NameTag","value":"\"name\""},
+  {"type":"Punctuation","value":":"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralStringDouble","value":"\"Alice\""},
+  {"type":"Punctuation","value":"}"},
+  {"type":"Text","value":"\n"},
+  {"type":"Punctuation","value":"{"},
+  {"type":"NameTag","value":"\"name\""},
+  {"type":"Punctuation","value":":"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralStringDouble","value":"\"Bob\""},
+  {"type":"Punctuation","value":"}"},
+  {"type":"Text","value":"\n"}
+]
