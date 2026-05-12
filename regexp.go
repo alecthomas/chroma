@@ -13,7 +13,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/dlclark/regexp2"
+	"github.com/dlclark/regexp2/v2"
 )
 
 // A Rule is the fundamental matching unit of the Regex lexer state machine.
@@ -368,7 +368,7 @@ func (r *RegexLexer) maybeCompile() (err error) {
 					pattern = "(?" + rule.flags + ")" + pattern
 				}
 				pattern = `\G` + pattern
-				rule.Regexp, err = regexp2.Compile(pattern, 0)
+				rule.Regexp, err = regexp2.Compile(pattern)
 				if err != nil {
 					return fmt.Errorf("failed to compile rule %s.%d: %s", state, i, err)
 				}
@@ -500,7 +500,7 @@ func (r *RegexLexer) MustRules() Rules {
 func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule, []string, map[string]string) {
 	for i, rule := range rules {
 		match, err := rule.Regexp.FindRunesMatchStartingAt(text, pos)
-		if match != nil && err == nil && match.Index == pos {
+		if match != nil && err == nil && match.RuneIndex == pos {
 			groups := []string{}
 			namedGroups := make(map[string]string)
 			for _, g := range match.Groups() {
