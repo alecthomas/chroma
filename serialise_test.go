@@ -23,7 +23,6 @@ func TestEmitterSerialisationRoundTrip(t *testing.T) {
 		{"TokenType", Name},
 	}
 	for _, test := range tests {
-		// nolint: scopelint
 		t.Run(test.name, func(t *testing.T) {
 			data, err := xml.Marshal(test.emitter)
 			assert.NoError(t, err)
@@ -48,7 +47,6 @@ func TestMutatorSerialisationRoundTrip(t *testing.T) {
 		{"Pop", Pop(1)},
 	}
 	for _, test := range tests {
-		// nolint: scopelint
 		t.Run(test.name, func(t *testing.T) {
 			data, err := xml.Marshal(test.mutator)
 			assert.NoError(t, err)
@@ -101,10 +99,10 @@ func TestMarshal(t *testing.T) {
 	assert.Equal(t, mustRules(t, expected), mustRules(t, actual))
 }
 
-func mustRules(t testing.TB, r *RegexLexer) Rules {
-	t.Helper()
+func mustRules(tb testing.TB, r *RegexLexer) Rules {
+	tb.Helper()
 	rules, err := r.Rules()
-	assert.NoError(t, err)
+	assert.NoError(tb, err)
 	return rules
 }
 

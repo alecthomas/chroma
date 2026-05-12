@@ -3,6 +3,7 @@ package chroma
 import (
 	"encoding/json"
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -70,9 +71,7 @@ func (r Rules) Clone() Rules {
 // Merge creates a clone of "r" then merges "rules" into the clone.
 func (r Rules) Merge(rules Rules) Rules {
 	out := r.Clone()
-	for k, v := range rules.Clone() {
-		out[k] = v
-	}
+	maps.Copy(out, rules.Clone())
 	return out
 }
 
@@ -177,19 +176,19 @@ type LexerState struct {
 	// Named Group matches.
 	NamedGroups map[string]string
 	// Custum context for mutators.
-	MutatorContext map[interface{}]interface{}
+	MutatorContext map[any]any
 	iteratorStack  []Iterator
 	options        *TokeniseOptions
 	newlineAdded   bool
 }
 
 // Set mutator context.
-func (l *LexerState) Set(key interface{}, value interface{}) {
+func (l *LexerState) Set(key any, value any) {
 	l.MutatorContext[key] = value
 }
 
 // Get mutator context.
-func (l *LexerState) Get(key interface{}) interface{} {
+func (l *LexerState) Get(key any) any {
 	return l.MutatorContext[key]
 }
 
@@ -484,7 +483,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 		Text:           []rune(text),
 		Stack:          []string{options.State},
 		Rules:          r.rules,
-		MutatorContext: map[interface{}]interface{}{},
+		MutatorContext: map[any]any{},
 	}
 	return state.Iterator, nil
 }

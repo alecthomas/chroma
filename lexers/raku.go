@@ -1599,8 +1599,7 @@ func quote(groups []string, state *LexerState) Iterator {
 	var tokenStates []string
 
 	// Set tokenStates based on adverbs
-	adverbs := strings.Split(adverbsStr, ":")
-	for _, adverb := range adverbs {
+	for adverb := range strings.SplitSeq(adverbsStr, ":") {
 		switch adverb {
 		case "c", "closure":
 			tokenStates = append(tokenStates, "Q-closure")

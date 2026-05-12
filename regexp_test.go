@@ -7,6 +7,7 @@ import (
 )
 
 func mustNewLexer(t *testing.T, config *Config, rules Rules) *RegexLexer { // nolint: forbidigo
+	t.Helper()
 	lexer, err := NewLexer(config, func() Rules {
 		return rules
 	})

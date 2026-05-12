@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html"
 	"io"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -288,7 +289,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 			highlightIndex++
 		}
 
-		if !(f.preventSurroundingPre || f.inlineCode) {
+		if !f.preventSurroundingPre && !f.inlineCode {
 			// Start of Line
 			fmt.Fprint(w, `<span`)
 
@@ -321,7 +322,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 			fmt.Fprint(w, html)
 		}
 
-		if !(f.preventSurroundingPre || f.inlineCode) {
+		if !f.preventSurroundingPre && !f.inlineCode {
 			fmt.Fprint(w, `</span>`) // End of CodeLine
 
 			fmt.Fprint(w, `</span>`) // End of Line
@@ -613,8 +614,7 @@ func (l *styleCache) get(style *chroma.Style, compress bool) map[chroma.TokenTyp
 	defer l.mu.Unlock()
 
 	// Look for an existing entry.
-	for i := len(l.cache) - 1; i >= 0; i-- {
-		entry := l.cache[i]
+	for i, entry := range slices.Backward(l.cache) {
 		if entry.style == style && entry.compressed == compress {
 			// Top of the cache, no need to adjust the order.
 			if i == len(l.cache)-1 {

@@ -122,7 +122,7 @@ func main() {
 	css, err := parser.Parse(string(source))
 	kingpin.FatalIfError(err, "")
 
-	context := map[string]interface{}{
+	context := map[string]any{
 		"Name":  *nameArg,
 		"Rules": css.Rules,
 	}

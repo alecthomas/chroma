@@ -7,6 +7,7 @@ import (
 )
 
 func makeDelegationTestLexers(t *testing.T) (lang Lexer, root Lexer) {
+	t.Helper()
 	return mustNewLexer(t, nil, Rules{ // nolint: forbidigo
 			"root": {
 				{`\<\?`, CommentPreproc, Push("inside")},
@@ -100,7 +101,6 @@ func TestDelegate(t *testing.T) {
 	lang, root := makeDelegationTestLexers(t)
 	delegate := DelegatingLexer(root, lang)
 	for _, test := range testdata {
-		// nolint: scopelint
 		t.Run(test.name, func(t *testing.T) {
 			it, err := delegate.Tokenise(nil, test.source)
 			assert.NoError(t, err)

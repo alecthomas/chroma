@@ -86,6 +86,7 @@ func TestColourClampBrightness(t *testing.T) {
 }
 
 func assertInDelta(t *testing.T, expected, actual float64) {
+	t.Helper()
 	const delta = 0.01 // used for brightness and hue comparisons
 	assert.True(t, actual > (expected-delta) && actual < (expected+delta))
 }

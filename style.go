@@ -4,7 +4,8 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"sort"
+	"maps"
+	"slices"
 	"strings"
 )
 
@@ -31,12 +32,14 @@ func (t Trilean) String() string {
 
 // Prefix returns s with "no" as a prefix if Trilean is no.
 func (t Trilean) Prefix(s string) string {
-	if t == Yes {
+	switch t {
+	case Yes:
 		return s
-	} else if t == No {
+	case No:
 		return "no" + s
+	default:
+		return ""
 	}
-	return ""
 }
 
 // A StyleEntry in the Style map.
@@ -111,11 +114,10 @@ func (s StyleEntry) Sub(e StyleEntry) StyleEntry {
 // Ancestors should be provided from oldest to newest.
 func (s StyleEntry) Inherit(ancestors ...StyleEntry) StyleEntry {
 	out := s
-	for i := len(ancestors) - 1; i >= 0; i-- {
+	for _, ancestor := range slices.Backward(ancestors) {
 		if out.NoInherit {
 			return out
 		}
-		ancestor := ancestors[i]
 		if !out.Colour.IsSet() {
 			out.Colour = ancestor.Colour
 		}
@@ -157,9 +159,7 @@ func NewStyleBuilder(name string) *StyleBuilder {
 }
 
 func (s *StyleBuilder) AddAll(entries StyleEntries) *StyleBuilder {
-	for ttype, entry := range entries {
-		s.entries[ttype] = entry
-	}
+	maps.Copy(s.entries, entries)
 	return s
 }
 
@@ -275,7 +275,7 @@ func (s *Style) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	for ttype := range s.entries {
 		sorted = append(sorted, ttype)
 	}
-	sort.Slice(sorted, func(i, j int) bool { return sorted[i] < sorted[j] })
+	slices.Sort(sorted)
 	for _, ttype := range sorted {
 		entry := s.entries[ttype]
 		el := xml.StartElement{Name: xml.Name{Local: "entry"}}
@@ -437,8 +437,7 @@ func MustParseStyleEntry(entry string) StyleEntry {
 // ParseStyleEntry parses a Pygments style entry.
 func ParseStyleEntry(entry string) (StyleEntry, error) { // nolint: gocyclo
 	out := StyleEntry{}
-	parts := strings.Fields(entry)
-	for _, part := range parts {
+	for part := range strings.FieldsSeq(entry) {
 		switch {
 		case part == "italic":
 			out.Italic = Yes
