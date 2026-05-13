@@ -1,0 +1,4 @@
+var strings = []string{
+	"bar", //
+	"baz", // baz
+}
