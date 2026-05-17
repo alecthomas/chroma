@@ -12,6 +12,7 @@
     <filename>*.rbx</filename>
     <filename>*.duby</filename>
     <filename>Gemfile</filename>
+    <filename>*.gemfile</filename>
     <filename>Vagrantfile</filename>
     <filename>Appraisals</filename>
     <filename>.pryrc</filename>
