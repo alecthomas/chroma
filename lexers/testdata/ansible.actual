@@ -1,0 +1,40 @@
+---
+- name: Install and configure web servers
+  hosts: webservers
+  become: true
+  vars:
+    package_name: nginx
+    listen_port: 8080
+    admin_user: "{{ ansible_user | default('root') }}"
+  tasks:
+    - name: Ensure {{ package_name }} is installed
+      ansible.builtin.package:
+        name: "{{ package_name }}"
+        state: present
+
+    {# render only when SSL is enabled #}
+    {% if enable_ssl %}
+    - name: Deploy TLS certificate
+      ansible.builtin.copy:
+        src: "files/{{ inventory_hostname }}.pem"
+        dest: /etc/ssl/certs/{{ inventory_hostname }}.pem
+        mode: "0644"
+    {% endif %}
+
+    - name: Render configuration
+      ansible.builtin.template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+      notify:
+        - Restart nginx
+
+    - name: Print greeting
+      ansible.builtin.debug:
+        msg: "Hello {{ admin_user }}, listening on port {{ listen_port }}"
+
+  handlers:
+    - name: Restart nginx
+      ansible.builtin.service:
+        name: "{{ package_name }}"
+        state: restarted
+...
