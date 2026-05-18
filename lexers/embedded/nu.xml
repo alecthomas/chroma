@@ -4,6 +4,9 @@
     <alias>nu</alias>
     <filename>*.nu</filename>
     <mime_type>text/plain</mime_type>
+    <analyse first="true" >
+      <regex pattern="(?m)^#!.*/bin/(?:env |)nu(?:shell)?\b" score="1.0" />
+    </analyse>
   </config>
   <rules>
     <state name="root">
