@@ -1,0 +1,23 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    actionpack (7.0.4)
+      rack (~> 2.0, >= 2.2.0)
+
+GIT
+  remote: https://github.com/foo/bar.git
+  revision: abc123def4567890abc123def4567890abc12345
+  ref: main
+
+DEPENDENCIES
+  rails (~> 7.0)
+  some-gem!
+
+CHECKSUMS
+  rack (2.2.0) sha256=deadbeefcafebabe1234567890abcdef1234567890abcdef1234567890abcdef
+
+RUBY VERSION
+   ruby 3.2.0p0
+
+BUNDLED WITH
+   2.4.1
