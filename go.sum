@@ -6,5 +6,7 @@ github.com/dlclark/regexp2/v2 v2.0.2 h1:2wqyuetE2L4JkwDaEBL255hSNFE/MNcss4sn0DRe
 github.com/dlclark/regexp2/v2 v2.0.2/go.mod h1:Bz5TMy5d8fPK0ximH0Yi9KvsRHNnvXqUx9XG6a4wB+I=
 github.com/dlclark/regexp2/v2 v2.0.3 h1:Q/g6akmsBvqlGs/EQo+BvclgjZA3lCYwAayJl/4p3/4=
 github.com/dlclark/regexp2/v2 v2.0.3/go.mod h1:Bz5TMy5d8fPK0ximH0Yi9KvsRHNnvXqUx9XG6a4wB+I=
+github.com/dlclark/regexp2/v2 v2.1.0 h1:jHXRmHRZGbuQzDZjMlCAXOvQb75iv3HyLDzXGj5H1AY=
+github.com/dlclark/regexp2/v2 v2.1.0/go.mod h1:Bz5TMy5d8fPK0ximH0Yi9KvsRHNnvXqUx9XG6a4wB+I=
 github.com/hexops/gotextdiff v1.0.3 h1:gitA9+qJrrTCsiCl7+kh75nPqQt1cx4ZkudSTLoUqJM=
 github.com/hexops/gotextdiff v1.0.3/go.mod h1:pSWU5MAI3yDq+fZBTazCSJysOMbxWL1BSow5/V2vxeg=
