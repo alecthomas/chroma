@@ -516,6 +516,9 @@ func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule
 // replace \r and \r\n with \n
 // same as strings.ReplaceAll but more efficient
 func ensureLF(text string) string {
+	if strings.IndexByte(text, '\r') < 0 {
+		return text
+	}
 	buf := make([]byte, len(text))
 	var j int
 	for i := range len(text) {
