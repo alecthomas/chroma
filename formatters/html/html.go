@@ -461,6 +461,12 @@ func (f *Formatter) writeCSSRule(w io.Writer, comment string, selector string, s
 //
 // Rules are scoped by the style's mode (eg. ".chroma.dark") so that CSS
 // generated from a light and dark style can be combined without conflict.
+// To support dynamic theme switching, call WriteCSS with both styles,
+// concatenate the output, and toggle the wrapper's mode class (added
+// automatically by Format) at runtime. Tokens that one theme leaves
+// unstyled fall back to that theme's ".chroma.<mode>" text/background
+// via the CSS cascade; pass WithAllClasses(true) if you need every
+// token's rule materialised explicitly for both themes.
 func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 	css := f.styleCache.get(style, false)
 	modeCls := f.modeClass(style)
