@@ -127,7 +127,7 @@ func TestClassPrefix(t *testing.T) {
 	var styleBuf bytes.Buffer
 	err := withPrefix.WriteCSS(&styleBuf, styles.Fallback)
 	assert.NoError(t, err)
-	if !strings.Contains(styleBuf.String(), ".some-prefix-chroma ") {
+	if !strings.Contains(styleBuf.String(), ".some-prefix-chroma.some-prefix-") {
 		t.Error("Stylesheets should have a class prefix")
 	}
 }
@@ -235,9 +235,9 @@ func TestPreWrapper(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.True(t, regexp.MustCompile("<body class=\"bg\">\n<pre.*class=\"chroma\"><code><span class=\"line\"><span class=\"cl\"><span class=\"nb\">echo</span> FOO</span></span></code></pre>\n</body>\n</html>").MatchString(buf.String()))
-	assert.True(t, regexp.MustCompile(`\.bg { .+ }`).MatchString(buf.String()))
-	assert.True(t, regexp.MustCompile(`\.chroma { .+ }`).MatchString(buf.String()))
+	assert.True(t, regexp.MustCompile("<body class=\"bg dark\">\n<pre.*class=\"chroma dark\"><code><span class=\"line\"><span class=\"cl\"><span class=\"nb\">echo</span> FOO</span></span></code></pre>\n</body>\n</html>").MatchString(buf.String()))
+	assert.True(t, regexp.MustCompile(`\.bg\.dark { .+ }`).MatchString(buf.String()))
+	assert.True(t, regexp.MustCompile(`\.chroma\.dark { .+ }`).MatchString(buf.String()))
 }
 
 func TestLinkeableLineNumbers(t *testing.T) {
@@ -264,7 +264,7 @@ func TestTableLinkeableLineNumbers(t *testing.T) {
 
 	assert.Contains(t, buf.String(), `id="line1"><a class="lnlinks" href="#line1">1</a>`)
 	assert.Contains(t, buf.String(), `id="line5"><a class="lnlinks" href="#line5">5</a>`)
-	assert.Contains(t, buf.String(), `/* LineLink */ .chroma .lnlinks { outline: none; text-decoration: none; color: inherit }`, buf.String())
+	assert.Contains(t, buf.String(), `/* LineLink */ .chroma.dark .lnlinks { outline: none; text-decoration: none; color: inherit }`, buf.String())
 }
 
 func TestTableLineNumberSpacing(t *testing.T) {
@@ -335,7 +335,7 @@ func TestWithPreWrapper(t *testing.T) {
 
 	t.Run("Regular", func(t *testing.T) {
 		s := format(New(WithClasses(true)))
-		assert.Equal(t, s, `<pre class="chroma"><code><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></code></pre>`)
+		assert.Equal(t, s, `<pre class="chroma dark"><code><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></code></pre>`)
 	})
 
 	t.Run("PreventSurroundingPre", func(t *testing.T) {
@@ -345,7 +345,7 @@ func TestWithPreWrapper(t *testing.T) {
 
 	t.Run("InlineCode", func(t *testing.T) {
 		s := format(New(InlineCode(true), WithClasses(true)))
-		assert.Equal(t, s, `<code class="chroma"><span class="nb">echo</span> FOO</code>`)
+		assert.Equal(t, s, `<code class="chroma dark"><span class="nb">echo</span> FOO</code>`)
 	})
 
 	t.Run("InlineCode, inline styles", func(t *testing.T) {
@@ -355,18 +355,18 @@ func TestWithPreWrapper(t *testing.T) {
 
 	t.Run("Wrapper", func(t *testing.T) {
 		s := format(New(WithPreWrapper(wrapper), WithClasses(true)))
-		assert.Equal(t, s, `<foo class="chroma" id="code-true"><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></foo>`)
+		assert.Equal(t, s, `<foo class="chroma dark" id="code-true"><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></foo>`)
 	})
 
 	t.Run("Wrapper, LineNumbersInTable", func(t *testing.T) {
 		s := format(New(WithPreWrapper(wrapper), WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true)))
 
-		assert.Equal(t, s, `<div class="chroma">
+		assert.Equal(t, s, `<div class="chroma dark">
 <table class="lntable"><tr><td class="lntd">
-<foo class="chroma" id="code-false"><span class="lnt">1
+<foo class="chroma dark" id="code-false"><span class="lnt">1
 </span></foo></td>
 <td class="lntd">
-<foo class="chroma" id="code-true"><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></foo></td></tr></table>
+<foo class="chroma dark" id="code-true"><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></foo></td></tr></table>
 </div>
 `)
 	})
@@ -389,7 +389,7 @@ func TestReconfigureOptions(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 
 	assert.NoError(t, err)
-	assert.Equal(t, `<pre class="chroma"><code><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></code></pre>`, buf.String())
+	assert.Equal(t, `<pre class="chroma dark"><code><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></code></pre>`, buf.String())
 }
 
 func TestWriteCssWithAllClasses(t *testing.T) {
@@ -400,6 +400,71 @@ func TestWriteCssWithAllClasses(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.NotContains(t, buf.String(), ".chroma . {", "Generated css doesn't contain invalid css")
+}
+
+func TestModeClassOnWrapper(t *testing.T) {
+	tests := []struct {
+		name      string
+		styleName string
+		wantClass string
+	}{
+		{"LightStyle", "github", `class="chroma light"`},
+		{"DarkStyle", "github-dark", `class="chroma dark"`},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := New(WithClasses(true))
+			it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+			assert.NoError(t, err)
+			var buf bytes.Buffer
+			err = f.Format(&buf, styles.Get(tt.styleName), it)
+			assert.NoError(t, err)
+			assert.Contains(t, buf.String(), tt.wantClass)
+		})
+	}
+}
+
+func TestModeClassWithPrefix(t *testing.T) {
+	f := New(WithClasses(true), ClassPrefix("c-"))
+	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	assert.NoError(t, err)
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Get("github"), it)
+	assert.NoError(t, err)
+	assert.Contains(t, buf.String(), `class="c-chroma c-light"`)
+}
+
+func TestModeClassAbsentInInlineMode(t *testing.T) {
+	f := New()
+	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	assert.NoError(t, err)
+	var buf bytes.Buffer
+	err = f.Format(&buf, styles.Get("github"), it)
+	assert.NoError(t, err)
+	assert.NotContains(t, buf.String(), `light`)
+	assert.NotContains(t, buf.String(), `dark`)
+}
+
+func TestWriteCSSModeScoping(t *testing.T) {
+	tests := []struct {
+		name      string
+		styleName string
+		selector  string
+	}{
+		{"Light", "github", ".chroma.light"},
+		{"Dark", "github-dark", ".chroma.dark"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := New(WithClasses(true))
+			var buf bytes.Buffer
+			err := f.WriteCSS(&buf, styles.Get(tt.styleName))
+			assert.NoError(t, err)
+			out := buf.String()
+			assert.Contains(t, out, tt.selector)
+			assert.Contains(t, out, tt.selector+" .k ")
+		})
+	}
 }
 
 func TestStyleCache(t *testing.T) {
