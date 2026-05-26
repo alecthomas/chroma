@@ -41,3 +41,39 @@ func TestRegisterCaseInsensitivity(t *testing.T) {
 	assert.Equal(t, custom, Get("CUSTOMSTYLE"))
 	assert.Equal(t, custom, Get("CustomStyle"))
 }
+
+func TestGetForMode(t *testing.T) {
+	tests := []struct {
+		name string
+		req  string
+		mode chroma.Mode
+		want string
+	}{
+		{"AlreadyDark", "github-dark", chroma.Dark, "github-dark"},
+		{"AlreadyLight", "github", chroma.Light, "github"},
+		{"FollowsCounterpartToDark", "github", chroma.Dark, "github-dark"},
+		{"FollowsCounterpartToLight", "github-dark", chroma.Light, "github"},
+		{"NoCounterpartReturnsOriginal", "swapoff", chroma.Light, "swapoff"},
+		{"UnknownReturnsFallback", "no-such-style", chroma.Dark, Fallback.Name},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := GetForMode(tt.req, tt.mode)
+			assert.Equal(t, tt.want, got.Name)
+		})
+	}
+}
+
+func TestRegisterPair(t *testing.T) {
+	light := chroma.MustNewStyle("PairLight", chroma.StyleEntries{
+		chroma.Background: "bg:#ffffff",
+	})
+	dark := chroma.MustNewStyle("PairDark", chroma.StyleEntries{
+		chroma.Background: "bg:#000000",
+	})
+	RegisterPair(light, dark)
+	assert.Equal(t, "pairdark", light.Counterpart)
+	assert.Equal(t, "pairlight", dark.Counterpart)
+	assert.Equal(t, dark, GetForMode("PairLight", chroma.Dark))
+	assert.Equal(t, light, GetForMode("PairDark", chroma.Light))
+}

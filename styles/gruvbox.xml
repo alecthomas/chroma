@@ -1,4 +1,4 @@
-<style name="gruvbox">
+<style name="gruvbox" counterpart="gruvbox-light">
   <entry type="Background" style="noinherit #ebdbb2 bg:#282828"/>
   <entry type="Keyword" style="noinherit #fe8019"/>
   <entry type="KeywordType" style="noinherit #fabd2f"/>

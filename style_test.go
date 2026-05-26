@@ -103,6 +103,56 @@ func TestStyleBuilderTransform(t *testing.T) {
 	assert.Equal(t, "#ff3300", deriv.Get(NameVariableGlobal).Colour.String())
 }
 
+func TestStyleMode(t *testing.T) {
+	tests := []struct {
+		name string
+		bg   string
+		want Mode
+	}{
+		{"DarkBackground", "bg:#000000", Dark},
+		{"LightBackground", "bg:#ffffff", Light},
+		{"UnsetBackgroundDefaultsToLight", "#000000", Light},
+		{"NearMidLight", "bg:#888888", Light},
+		{"NearMidDark", "bg:#777777", Dark},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, err := NewStyle("test", StyleEntries{Background: tt.bg})
+			assert.NoError(t, err)
+			assert.Equal(t, tt.want, s.Mode())
+		})
+	}
+}
+
+func TestStyleCounterpartXMLRoundTrip(t *testing.T) {
+	style, err := NewStyle("test", StyleEntries{Background: "bg:#ffffff"})
+	assert.NoError(t, err)
+	style.Counterpart = "other"
+	data, err := xml.MarshalIndent(style, "", "  ")
+	assert.NoError(t, err)
+	assert.Equal(t, `<style name="test" counterpart="other">
+  <entry type="Background" style="bg:#ffffff"></entry>
+</style>`, string(data))
+	got := &Style{}
+	err = xml.Unmarshal(data, got)
+	assert.NoError(t, err)
+	assert.Equal(t, "other", got.Counterpart)
+}
+
+func TestStyleBuilderCounterpart(t *testing.T) {
+	parent, err := NewStyleBuilder("parent").Counterpart("DarkOne").Build()
+	assert.NoError(t, err)
+	assert.Equal(t, "darkone", parent.Counterpart)
+
+	child, err := parent.Builder().Build()
+	assert.NoError(t, err)
+	assert.Equal(t, "darkone", child.Counterpart, "child should inherit parent's counterpart")
+
+	override, err := parent.Builder().Counterpart("OtherDark").Build()
+	assert.NoError(t, err)
+	assert.Equal(t, "otherdark", override.Counterpart)
+}
+
 func TestStyleMarshaller(t *testing.T) {
 	expected, err := NewStyle("test", StyleEntries{
 		Whitespace: "bg:#ffffff",

@@ -19,6 +19,24 @@ const (
 	No
 )
 
+// Mode indicates whether a style is intended for a light or dark background.
+type Mode uint8
+
+// Mode values.
+const (
+	Light Mode = iota
+	Dark
+)
+
+func (m Mode) String() string {
+	switch m {
+	case Dark:
+		return "dark"
+	default:
+		return "light"
+	}
+}
+
 func (t Trilean) String() string {
 	switch t {
 	case Yes:
@@ -149,13 +167,20 @@ func (s StyleEntry) IsZero() bool {
 //
 // Once built, a Style is immutable.
 type StyleBuilder struct {
-	entries map[TokenType]string
-	name    string
-	parent  *Style
+	entries     map[TokenType]string
+	name        string
+	counterpart string
+	parent      *Style
 }
 
 func NewStyleBuilder(name string) *StyleBuilder {
 	return &StyleBuilder{name: name, entries: map[TokenType]string{}}
+}
+
+// Counterpart sets the lowercase name of the opposite-mode style.
+func (s *StyleBuilder) Counterpart(name string) *StyleBuilder {
+	s.counterpart = strings.ToLower(name)
+	return s
 }
 
 func (s *StyleBuilder) AddAll(entries StyleEntries) *StyleBuilder {
@@ -205,10 +230,15 @@ func (s *StyleBuilder) Transform(transform func(StyleEntry) StyleEntry) *StyleBu
 }
 
 func (s *StyleBuilder) Build() (*Style, error) {
+	counterpart := s.counterpart
+	if counterpart == "" && s.parent != nil {
+		counterpart = s.parent.Counterpart
+	}
 	style := &Style{
-		Name:    s.name,
-		entries: map[TokenType]StyleEntry{},
-		parent:  s.parent,
+		Name:        s.name,
+		Counterpart: counterpart,
+		entries:     map[TokenType]StyleEntry{},
+		parent:      s.parent,
 	}
 	for ttype, descriptor := range s.entries {
 		entry, err := ParseStyleEntry(descriptor)
@@ -257,9 +287,23 @@ func MustNewStyle(name string, entries StyleEntries) *Style {
 //
 // See http://pygments.org/docs/styles/ for details. Semantics are intended to be identical.
 type Style struct {
-	Name    string
-	entries map[TokenType]StyleEntry
-	parent  *Style
+	Name string
+	// Counterpart is the lowercase name of the style intended as this style's
+	// opposite-mode pair (eg. "github-dark" for "github"). Resolved via
+	// styles.GetForMode. May be empty.
+	Counterpart string
+	entries     map[TokenType]StyleEntry
+	parent      *Style
+}
+
+// Mode returns Light or Dark based on the brightness of the Background entry's
+// background colour. Styles with an unset Background default to Light.
+func (s *Style) Mode() Mode {
+	bg := s.get(Background).Background
+	if bg.IsSet() && bg.Brightness() < 0.5 {
+		return Dark
+	}
+	return Light
 }
 
 func (s *Style) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -268,6 +312,9 @@ func (s *Style) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 	start.Name = xml.Name{Local: "style"}
 	start.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: s.Name}}
+	if s.Counterpart != "" {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "counterpart"}, Value: s.Counterpart})
+	}
 	if err := e.EncodeToken(start); err != nil {
 		return err
 	}
@@ -295,9 +342,12 @@ func (s *Style) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 func (s *Style) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for _, attr := range start.Attr {
-		if attr.Name.Local == "name" {
+		switch attr.Name.Local {
+		case "name":
 			s.Name = attr.Value
-		} else {
+		case "counterpart":
+			s.Counterpart = strings.ToLower(attr.Value)
+		default:
 			return fmt.Errorf("unexpected attribute %s", attr.Name.Local)
 		}
 	}
