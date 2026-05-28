@@ -55,12 +55,18 @@ var (
 		}).Parse(indexTemplate))
 )
 
+type styleInfo struct {
+	Name        string `json:"name"`
+	Mode        string `json:"mode"`
+	Counterpart string `json:"counterpart,omitempty"`
+}
+
 type context struct {
 	Background       template.CSS
 	SelectedLanguage string
 	Languages        []string
 	SelectedStyle    string
-	Styles           []string
+	Styles           []styleInfo
 	CSRFField        template.HTML
 	Version          string
 }
@@ -164,10 +170,16 @@ func newContext(r *http.Request) context {
 		ctx.Languages = append(ctx.Languages, lexer.Config().Name)
 	}
 	sort.Strings(ctx.Languages)
-	for name := range styles.Registry {
-		ctx.Styles = append(ctx.Styles, name)
+	for name, s := range styles.Registry {
+		ctx.Styles = append(ctx.Styles, styleInfo{
+			Name:        name,
+			Mode:        s.Mode().String(),
+			Counterpart: s.Counterpart,
+		})
 	}
-	sort.Strings(ctx.Styles)
+	sort.Slice(ctx.Styles, func(i, j int) bool {
+		return ctx.Styles[i].Name < ctx.Styles[j].Name
+	})
 	return ctx
 }
 

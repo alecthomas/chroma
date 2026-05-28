@@ -66,7 +66,7 @@
               <select name="style" id="style">
                 <option value="" disabled{{if eq "" $.SelectedStyle}} selected{{end}}>Style</option>
                 {{- range .Styles}}
-                  <option value="{{.}}"{{if eq . $.SelectedStyle}} selected{{end}}>{{.}}</option>
+                  <option value="{{.Name}}"{{if eq .Name $.SelectedStyle}} selected{{end}}>{{.Name}}</option>
                 {{- end}}
               </select>
             </div>
@@ -105,6 +105,9 @@
     <div class="field box" id="output"></div>
   </form>
 </div>
+<script>
+  window.chromaStyles = {{.Styles}};
+</script>
 <script type="module">
 {{JS "index.js"}}
 </script>

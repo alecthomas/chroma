@@ -21,6 +21,22 @@ function init() {
   const themeToggle = document.getElementById("theme-toggle");
   const themeIcon = document.getElementById("theme-icon");
 
+  const stylesByName = Object.fromEntries(
+    (window.chromaStyles || []).map((s) => [s.name, s]),
+  );
+
+  function styleForMode(name, mode) {
+    const info = stylesByName[name];
+    if (!info || info.mode === mode) {
+      return name;
+    }
+    const counterpart = info.counterpart && stylesByName[info.counterpart];
+    if (counterpart && counterpart.mode === mode) {
+      return counterpart.name;
+    }
+    return name;
+  }
+
   function getThemePreference() {
     const stored = localStorage.getItem("theme");
     if (stored) {
@@ -59,11 +75,9 @@ function init() {
       themeIcon.setAttribute("name", "sunny-outline");
     }
 
-    if (isDark && styleSelect.value === "monokailight") {
-      styleSelect.value = "monokai";
-      update(new Event("change"));
-    } else if (!isDark && styleSelect.value === "monokai") {
-      styleSelect.value = "monokailight";
+    const swapped = styleForMode(styleSelect.value, effectiveTheme);
+    if (swapped !== styleSelect.value) {
+      styleSelect.value = swapped;
       update(new Event("change"));
     }
   }
@@ -282,10 +296,7 @@ function init() {
     update(new Event("change"));
   } else {
     const effectiveTheme = getEffectiveTheme(initialTheme);
-    const isDark = effectiveTheme === "dark";
-    if (isDark && styleSelect.value === "monokailight") {
-      styleSelect.value = "monokai";
-    }
+    styleSelect.value = styleForMode(styleSelect.value, effectiveTheme);
     update(new Event("change"));
   }
 
