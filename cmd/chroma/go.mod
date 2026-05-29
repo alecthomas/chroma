@@ -1,8 +1,6 @@
 module github.com/alecthomas/chroma/v2/cmd/chroma
 
-go 1.26
-
-toolchain go1.26.3
+go 1.25
 
 replace github.com/alecthomas/chroma/v2 => ../../
 
@@ -14,6 +12,6 @@ require (
 )
 
 require (
-	github.com/dlclark/regexp2/v2 v2.1.0 // indirect
+	github.com/dlclark/regexp2/v2 v2.1.1 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 )
