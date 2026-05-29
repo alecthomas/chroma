@@ -72,6 +72,15 @@ chromad = go.exe {
   depends_on = [wasm-exec, chroma-wasm, index-min-js, index-min-css]
 }
 
+pre fmt = go.fmt {
+	package = "./..."
+}
+
+# Run Go tests.
+pre test = go.test {
+	package = "./..."
+}
+
 # Deploy chromad to swapoff.org. Must be explicitly selected.
 explicit upload = exec {
   command = <<-EOF
@@ -81,4 +90,4 @@ explicit upload = exec {
   depends_on = [chromad]
 }
 
-target default = [chromad, readme, tokentype]
+target default = [test, chromad, readme, tokentype]
