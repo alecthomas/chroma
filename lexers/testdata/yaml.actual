@@ -11,6 +11,9 @@ nested_comment: # this is a comment right next to a key
   date_comment: 2010-11-12 # comment after date
   single_quote: 'single # quote string' # comment after single quote string
   double_quote: "double # quote string" # comment after double quote string
+  slash_comment: "slash" // comment after double quote string
+  slash_comment_with_colon: "slash" // comment: after double quote string
+  slash_comment_after_literal: slash // comment: after literal
   key: no comment
 
 ################
