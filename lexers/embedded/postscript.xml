@@ -5,6 +5,7 @@
     <alias>postscr</alias>
     <filename>*.ps</filename>
     <filename>*.eps</filename>
+    <filename>*.epsf</filename>
     <filename>*.epsi</filename>
     <filename>*.pfa</filename>
     <filename>*.t42</filename>
