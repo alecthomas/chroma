@@ -6,7 +6,6 @@
     <filename>*.ps</filename>
     <filename>*.eps</filename>
     <filename>*.pfa</filename>
-    <filename>*.pfb</filename>
     <filename>*.t42</filename>
     <mime_type>application/postscript</mime_type>
   </config>
