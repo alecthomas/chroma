@@ -1,0 +1,18 @@
+package views
+
+import "fmt"
+
+templ UserCard(name string, count int) {
+	<section class="card" data-count={ count }>
+		<h1>{ name }</h1>
+		<p>{ fmt.Sprintf("Count: %d", count) }</p>
+		if count > 0 {
+			<ul>
+				<li>active</li>
+			</ul>
+		} else {
+			<p>inactive</p>
+		}
+		@Button("Save")
+	</section>
+}
