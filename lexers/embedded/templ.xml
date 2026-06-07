@@ -25,7 +25,7 @@
           <using lexer="Go"/>
         </bygroups>
       </rule>
-      <rule pattern="\b(templ)(\s+)([A-Za-z_]\w*)(\s*)(\([^{}]*\))(\s*)({)">
+      <rule pattern="\b(templ|css|script)(\s+)([A-Za-z_]\w*)(\s*)(\([^{}]*\))(\s*)({)">
         <bygroups>
           <token type="KeywordDeclaration"/>
           <token type="TextWhitespace"/>
@@ -36,13 +36,8 @@
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="(@)([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)?)(\s*)(\([^{}]*\))?">
-        <bygroups>
-          <token type="Punctuation"/>
-          <token type="NameFunction"/>
-          <token type="TextWhitespace"/>
-          <using lexer="Go"/>
-        </bygroups>
+      <rule pattern="@[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)?(?:\([^{}]*\))?(?:\s*{)?">
+        <token type="NameFunction"/>
       </rule>
       <rule pattern="\b(if|for|switch|select)(\s+)([^{}\n]*)(\s*)({)">
         <bygroups>
@@ -147,7 +142,7 @@
         </bygroups>
       </rule>
       <rule pattern="[@{}&lt;&amp;]">
-        <token type="Text"/>
+        <token type="Punctuation"/>
       </rule>
     </state>
     <state name="script-content">
@@ -163,7 +158,17 @@
         </bygroups>
         <pop depth="1"/>
       </rule>
-      <rule pattern=".+?(?=&lt;\s*/\s*script\s*&gt;)">
+      <rule pattern="\s*[^\r\n]*\{\{.*?\}\}[^\r\n]*">
+        <token type="Other"/>
+      </rule>
+      <rule pattern="({{)(.*?)(}})">
+        <bygroups>
+          <token type="CommentPreproc"/>
+          <using lexer="Go"/>
+          <token type="CommentPreproc"/>
+        </bygroups>
+      </rule>
+      <rule pattern=".+?(?=({{|&lt;\s*/\s*script\s*&gt;))">
         <using lexer="Javascript"/>
       </rule>
     </state>
@@ -200,6 +205,29 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
+      <rule pattern="\b(if)(\s+)([^{}]*)(\s*)({)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <using lexer="Go"/>
+          <token type="Text"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule pattern="}">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="({)([^{}]*)(})(\s*)(=)(\s*)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <using lexer="Go"/>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+          <token type="Operator"/>
+          <token type="Text"/>
+        </bygroups>
+        <push state="attr"/>
+      </rule>
       <rule pattern="({)([^{}]*)(})">
         <bygroups>
           <token type="Punctuation"/>
@@ -207,7 +235,7 @@
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="([\w:-]+\s*)(=)(\s*)({)([^{}]*)(})">
+      <rule pattern="([\w:?-]+\s*)(=)(\s*)({)([^{}]*)(})">
         <bygroups>
           <token type="NameAttribute"/>
           <token type="Operator"/>
@@ -217,7 +245,7 @@
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="([\w:-]+\s*)(=)(\s*)">
+      <rule pattern="([\w:?-]+\s*)(=)(\s*)">
         <bygroups>
           <token type="NameAttribute"/>
           <token type="Operator"/>
@@ -225,7 +253,7 @@
         </bygroups>
         <push state="attr"/>
       </rule>
-      <rule pattern="[\w:-]+">
+      <rule pattern="[\w:?-]+">
         <token type="NameAttribute"/>
       </rule>
       <rule pattern="(/?)(\s*)(&gt;)">
