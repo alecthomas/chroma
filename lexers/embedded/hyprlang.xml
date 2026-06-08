@@ -36,7 +36,7 @@
         </bygroups>
         <push state="value"/>
       </rule>
-      <rule pattern="([A-Za-z_]\w[\w\d.\-]*)(\s*)(:)(\s*)([\w\d][\w\d/.\-:]*)(\s*)(\{)">
+      <rule pattern="([A-Za-z_][\w\d.\-]*)(\s*)(:)(\s*)([\w\d][\w\d/.\-:]*)(\s*)(\{)">
         <bygroups>
           <token type="NameNamespace"/>
           <token type="TextWhitespace"/>
@@ -47,14 +47,14 @@
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="([A-Za-z_]\w[\w\d.\-]*)(\s*)(\{)">
+      <rule pattern="([A-Za-z_][\w\d.\-]*)(\s*)(\{)">
         <bygroups>
           <token type="NameNamespace"/>
           <token type="TextWhitespace"/>
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="([A-Za-z_]\w[\w\d.\-]*)(\s*)(=)">
+      <rule pattern="([A-Za-z_][\w\d.\-]*)(\s*)(=)">
         <bygroups>
           <token type="NameAttribute"/>
           <token type="TextWhitespace"/>

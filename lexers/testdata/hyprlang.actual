@@ -1,6 +1,7 @@
 # Hyprland configuration sample
 $mainMod = SUPER
 $terminal = kitty
+x = 1
 
 source = ~/.config/hypr/env.conf
 
