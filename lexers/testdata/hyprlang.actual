@@ -1,0 +1,32 @@
+# Hyprland configuration sample
+$mainMod = SUPER
+$terminal = kitty
+
+source = ~/.config/hypr/env.conf
+
+monitor=DP-1,1378x1024@60,0x0,1
+
+exec-once = hyprpaper & waybar
+exec = [monitor 1; float; move 20% 30%] kitty
+execr = notify-send Hyprland ready
+
+input {
+  kb_layout = us
+  follow_mouse = 1
+}
+
+section:device {
+  name = epic-mouse-v1
+  sensitivity = -0.5
+  enabled = true
+}
+
+decoration {
+  rounding = 8
+  col.shadow = rgba(1a1a1aee)
+  col.active_border = rgb(33ccff) rgb(ff00cc) 45deg
+}
+
+bind = $mainMod, Return, exec, $terminal
+bindm = $mainMod, mouse:272, movewindow
+windowrulev2 = float, class:^(pavucontrol)$

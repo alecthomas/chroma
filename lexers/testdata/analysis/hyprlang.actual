@@ -1,0 +1,6 @@
+$mainMod = SUPER
+monitor=DP-1,1378x1024@60,0x0,1
+exec-once = waybar
+input {
+  kb_layout = us
+}
