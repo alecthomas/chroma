@@ -1,0 +1,44 @@
+package views
+
+import "fmt"
+
+var enabled = true
+
+css primaryClassName(color string) {
+	background-color: #ffffff;
+	color: { color };
+}
+
+script withParameters(a string, b string, c int) {
+	console.log(a, b, c);
+}
+
+templ UserCard(name string, count int, attrs templ.Attributes, contents templ.Component) {
+	{{ first := name }}
+	<section class={ "card", primaryClassName("red") } data-count={ count } noshade?={ enabled } @click={ handleClick } .active={ enabled } [data-kind]="card" #ref if enabled { disabled } for _, attr := range extraAttrs { { attr } } { "data-" + first }="paragraph" { attrs... }>
+		if enabled {
+			aria-label="enabled"
+		}
+		for _, label := range labels {
+			data-label={ label }
+		}
+		<h1>{ name }</h1>
+		<p>{ fmt.Sprintf("Count: %d", count) }</p>
+		<script>
+			const message = "Your message: {{ name }}";
+			{{ name }}
+		</script>
+		if count > 0 {
+			<ul>
+				<li>active</li>
+			</ul>
+		} else {
+			<p>inactive</p>
+		}
+		@Button("Save")
+		@contents
+		@wrapChildren() {
+			<div>{ children... }</div>
+		}
+	</section>
+}
