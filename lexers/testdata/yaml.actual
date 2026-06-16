@@ -3,6 +3,7 @@
 # Comments in YAML look like this.
 
 comment_after_string_key: string value # comments can follow on same line
+comment_after_key_with_colon: woof # Note: this should be a comment
 nested_comment: # this is a comment right next to a key
   sub_key: sub string value # sub comment
   inline_not_comment: string#hash #nospacecomment
