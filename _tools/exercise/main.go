@@ -31,7 +31,7 @@ func main() {
 		kingpin.FatalIfError(err, "")
 		it, err := lexer.Tokenise(nil, string(text))
 		kingpin.FatalIfError(err, "%s failed to tokenise %q", lexer.Config().Name, file)
-		err = formatters.NoOp.Format(ioutil.Discard, styles.SwapOff, it)
+		err = formatters.NoOp.Format(ioutil.Discard, styles.Get("swapoff"), it)
 		kingpin.FatalIfError(err, "%s failed to format %q", lexer.Config().Name, file)
 		fmt.Printf("ok\n")
 	}
