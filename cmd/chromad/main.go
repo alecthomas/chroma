@@ -170,7 +170,8 @@ func newContext(r *http.Request) context {
 		ctx.Languages = append(ctx.Languages, lexer.Config().Name)
 	}
 	sort.Strings(ctx.Languages)
-	for name, s := range styles.Registry {
+	for _, name := range styles.Names() {
+		s := styles.Get(name)
 		ctx.Styles = append(ctx.Styles, styleInfo{
 			Name:        name,
 			Mode:        s.Mode().String(),

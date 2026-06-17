@@ -28,13 +28,12 @@ var (
 // Fallback formatter.
 var Fallback = NoOp
 
-// Registry of Formatters.
-var Registry = map[string]chroma.Formatter{}
+var registry = map[string]chroma.Formatter{}
 
 // Names of registered formatters.
 func Names() []string {
 	out := []string{}
-	for name := range Registry {
+	for name := range registry {
 		out = append(out, name)
 	}
 	sort.Strings(out)
@@ -45,7 +44,7 @@ func Names() []string {
 //
 // If the given formatter is not found, the Fallback formatter will be returned.
 func Get(name string) chroma.Formatter {
-	if f, ok := Registry[name]; ok {
+	if f, ok := registry[name]; ok {
 		return f
 	}
 	return Fallback
@@ -53,6 +52,6 @@ func Get(name string) chroma.Formatter {
 
 // Register a named formatter.
 func Register(name string, formatter chroma.Formatter) chroma.Formatter {
-	Registry[name] = formatter
+	registry[name] = formatter
 	return formatter
 }

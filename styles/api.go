@@ -12,10 +12,8 @@ import (
 //go:embed *.xml
 var embedded embed.FS
 
-// Registry of Styles.
-var Registry = func() map[string]*chroma.Style {
-	registry := map[string]*chroma.Style{}
-	// Register all embedded styles.
+var registry = func() map[string]*chroma.Style {
+	r := map[string]*chroma.Style{}
 	files, err := fs.ReadDir(embedded, ".")
 	if err != nil {
 		panic(err)
@@ -24,42 +22,48 @@ var Registry = func() map[string]*chroma.Style {
 		if file.IsDir() {
 			continue
 		}
-		r, err := embedded.Open(file.Name())
+		f, err := embedded.Open(file.Name())
 		if err != nil {
 			panic(err)
 		}
-		style, err := chroma.NewXMLStyle(r)
+		style, err := chroma.NewXMLStyle(f)
 		if err != nil {
 			panic(err)
 		}
-		registry[strings.ToLower(style.Name)] = style
-		_ = r.Close()
+		r[strings.ToLower(style.Name)] = style
+		_ = f.Close()
 	}
-	return registry
+	return r
 }()
 
 // Fallback style. Reassign to change the default fallback style.
-var Fallback = Registry["swapoff"]
+var Fallback = registry["swapoff"]
 
 // Register a chroma.Style.
 func Register(style *chroma.Style) *chroma.Style {
-	Registry[strings.ToLower(style.Name)] = style
+	registry[strings.ToLower(style.Name)] = style
 	return style
 }
 
 // Names of all available styles.
 func Names() []string {
 	out := []string{}
-	for name := range Registry {
+	for name := range registry {
 		out = append(out, name)
 	}
 	sort.Strings(out)
 	return out
 }
 
+// Lookup a named style, returning false if not found.
+func Lookup(name string) (*chroma.Style, bool) {
+	style, ok := registry[strings.ToLower(name)]
+	return style, ok
+}
+
 // Get named style, or Fallback.
 func Get(name string) *chroma.Style {
-	if style, ok := Registry[strings.ToLower(name)]; ok {
+	if style, ok := Lookup(name); ok {
 		return style
 	}
 	return Fallback
@@ -77,7 +81,7 @@ func GetForMode(name string, mode chroma.Mode) *chroma.Style {
 	if style.Counterpart == "" {
 		return style
 	}
-	counterpart, ok := Registry[style.Counterpart]
+	counterpart, ok := registry[style.Counterpart]
 	if !ok || counterpart.Mode() != mode {
 		return style
 	}

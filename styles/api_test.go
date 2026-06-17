@@ -9,8 +9,8 @@ import (
 )
 
 func TestStyleRegistryCaseInsensitivity(t *testing.T) {
-	// Verify that all keys in the Registry are lowercase.
-	for name := range Registry {
+	// Verify that all names are lowercase.
+	for _, name := range Names() {
 		assert.Equal(t, strings.ToLower(name), name)
 	}
 

@@ -470,9 +470,10 @@ func TestWriteCSSModeScoping(t *testing.T) {
 func TestStyleCache(t *testing.T) {
 	f := New()
 
-	assert.True(t, len(styles.Registry) > styleCacheLimit)
+	assert.True(t, len(styles.Names()) > styleCacheLimit)
 
-	for _, style := range styles.Registry {
+	for _, name := range styles.Names() {
+		style := styles.Get(name)
 		var buf bytes.Buffer
 		err := f.WriteCSS(&buf, style)
 		assert.NoError(t, err)

@@ -268,8 +268,7 @@ func main() {
 }
 
 func selectStyle() (*chroma.Style, error) {
-	style, ok := styles.Registry[cli.Style]
-	if ok {
+	if style, ok := styles.Lookup(cli.Style); ok {
 		return style, nil
 	}
 	r, err := os.Open(cli.Style)
