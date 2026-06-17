@@ -69,15 +69,15 @@ chromad = go.exe {
   goos = env("GOOS", "linux")
   goarch = env("GOARCH", "amd64")
   cgo = false
-  depends_on = [wasm-exec, chroma-wasm, index-min-js, index-min-css]
+  depends_on = [wasm-exec, chroma-wasm, index-min-js, index-min-css, test]
 }
 
-pre fmt = go.fmt {
+pre format-go = go.fmt {
 	package = "./..."
 }
 
 # Run Go tests.
-pre test = go.test {
+test = go.test {
 	package = "./..."
 }
 
