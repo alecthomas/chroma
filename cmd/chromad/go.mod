@@ -1,9 +1,9 @@
-module github.com/alecthomas/chroma/v2/cmd/chromad
+module github.com/alecthomas/chroma/v3/cmd/chromad
 
 go 1.25
 
 require (
-	github.com/alecthomas/chroma/v2 v2.26.1
+	github.com/alecthomas/chroma/v3 v2.26.1
 	github.com/alecthomas/kong v1.15.0
 	github.com/alecthomas/kong-hcl v1.0.1
 	github.com/gorilla/csrf v1.7.2
@@ -19,4 +19,4 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 )
 
-replace github.com/alecthomas/chroma/v2 => ../../
+replace github.com/alecthomas/chroma/v3 => ../../

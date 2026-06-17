@@ -3,10 +3,12 @@ package chroma
 import (
 	"encoding/json"
 	"fmt"
+	"iter"
 	"maps"
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -36,15 +38,11 @@ func Words(prefix, suffix string, words ...string) string {
 
 // Tokenise text using lexer, returning tokens as a slice.
 func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, error) {
-	var out []Token
 	it, err := lexer.Tokenise(options, text)
 	if err != nil {
 		return nil, err
 	}
-	for t := it(); t != EOF; t = it() {
-		out = append(out, t)
-	}
-	return out, nil
+	return slices.Collect(it), nil
 }
 
 // Rules maps from state to a sequence of Rules.
@@ -177,9 +175,14 @@ type LexerState struct {
 	NamedGroups map[string]string
 	// Custum context for mutators.
 	MutatorContext map[any]any
-	iteratorStack  []Iterator
+	iteratorStack  []pullIterator
 	options        *TokeniseOptions
 	newlineAdded   bool
+}
+
+type pullIterator struct {
+	next func() (Token, bool)
+	stop func()
 }
 
 // Set mutator context.
@@ -192,106 +195,121 @@ func (l *LexerState) Get(key any) any {
 	return l.MutatorContext[key]
 }
 
-// Iterator returns the next Token from the lexer.
-func (l *LexerState) Iterator() Token { // nolint: gocognit
-	trace := json.NewEncoder(os.Stderr)
-	end := len(l.Text)
-	if l.newlineAdded {
-		end--
-	}
-	for l.Pos < end && len(l.Stack) > 0 {
-		// Exhaust the iterator stack, if any.
-		for len(l.iteratorStack) > 0 {
-			n := len(l.iteratorStack) - 1
-			t := l.iteratorStack[n]()
-			if t.Type == Ignore {
-				continue
-			}
-			if t == EOF {
-				l.iteratorStack = l.iteratorStack[:n]
-				continue
-			}
-			return t
-		}
+func (l *LexerState) pushIterator(seq iter.Seq[Token]) {
+	next, stop := iter.Pull(seq)
+	l.iteratorStack = append(l.iteratorStack, pullIterator{next, stop})
+}
 
-		l.State = l.Stack[len(l.Stack)-1]
-		selectedRule, ok := l.Rules[l.State]
-		if !ok {
-			panic("unknown state " + l.State)
-		}
-		var start time.Time
-		if l.Lexer.trace {
-			start = time.Now()
-		}
-		ruleIndex, rule, groups, namedGroups := matchRules(l.Text, l.Pos, selectedRule)
-		if l.Lexer.trace {
-			var length int
-			if groups != nil {
-				length = len(groups[0])
-			} else {
-				length = -1
-			}
-			_ = trace.Encode(Trace{ //nolint
-				Lexer:   l.Lexer.config.Name,
-				State:   l.State,
-				Rule:    ruleIndex,
-				Pattern: rule.Pattern,
-				Pos:     l.Pos,
-				Length:  length,
-				Elapsed: float64(time.Since(start)) / float64(time.Millisecond),
-			})
-			// fmt.Fprintf(os.Stderr, "%s: pos=%d, text=%q, elapsed=%s\n", l.State, l.Pos, string(l.Text[l.Pos:]), time.Since(start))
-		}
-		// No match.
-		if groups == nil {
-			// From Pygments :\
-			//
-			// If the RegexLexer encounters a newline that is flagged as an error token, the stack is
-			// emptied and the lexer continues scanning in the 'root' state. This can help producing
-			// error-tolerant highlighting for erroneous input, e.g. when a single-line string is not
-			// closed.
-			if l.Text[l.Pos] == '\n' && l.State != l.options.State {
-				l.Stack = []string{l.options.State}
-				continue
-			}
-			l.Pos++
-			return Token{Error, string(l.Text[l.Pos-1 : l.Pos])}
-		}
-		l.Rule = ruleIndex
-		l.Groups = groups
-		l.NamedGroups = namedGroups
-		l.Pos += utf8.RuneCountInString(groups[0])
-		if rule.Mutator != nil {
-			if err := rule.Mutator.Mutate(l); err != nil {
-				panic(err)
-			}
-		}
-		if rule.Type != nil {
-			l.iteratorStack = append(l.iteratorStack, rule.Type.Emit(l.Groups, l))
-		}
+func (l *LexerState) stopIterators() {
+	for _, entry := range l.iteratorStack {
+		entry.stop()
 	}
-	// Exhaust the IteratorStack, if any.
-	// Duplicate code, but eh.
+	l.iteratorStack = nil
+}
+
+// drainIteratorStack yields tokens from the iterator stack, returning false if the consumer stopped.
+func (l *LexerState) drainIteratorStack(yield func(Token) bool) bool {
 	for len(l.iteratorStack) > 0 {
 		n := len(l.iteratorStack) - 1
-		t := l.iteratorStack[n]()
-		if t.Type == Ignore {
-			continue
-		}
-		if t == EOF {
+		t, ok := l.iteratorStack[n].next()
+		if !ok {
+			l.iteratorStack[n].stop()
 			l.iteratorStack = l.iteratorStack[:n]
 			continue
 		}
-		return t
+		if t.Type == Ignore {
+			continue
+		}
+		if !yield(t) {
+			return false
+		}
 	}
+	return true
+}
 
-	// If we get to here and we still have text, return it as an error.
-	if l.Pos != len(l.Text) && len(l.Stack) == 0 {
-		value := string(l.Text[l.Pos:])
-		l.Pos = len(l.Text)
-		return Token{Type: Error, Value: value}
+// Iterator returns an iterator over tokens from the lexer.
+func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
+	return func(yield func(Token) bool) {
+		defer l.stopIterators()
+		trace := json.NewEncoder(os.Stderr)
+		end := len(l.Text)
+		if l.newlineAdded {
+			end--
+		}
+		for l.Pos < end && len(l.Stack) > 0 {
+			if !l.drainIteratorStack(yield) {
+				return
+			}
+
+			l.State = l.Stack[len(l.Stack)-1]
+			selectedRule, ok := l.Rules[l.State]
+			if !ok {
+				panic("unknown state " + l.State)
+			}
+			var start time.Time
+			if l.Lexer.trace {
+				start = time.Now()
+			}
+			ruleIndex, rule, groups, namedGroups := matchRules(l.Text, l.Pos, selectedRule)
+			if l.Lexer.trace {
+				var length int
+				if groups != nil {
+					length = len(groups[0])
+				} else {
+					length = -1
+				}
+				_ = trace.Encode(Trace{ //nolint
+					Lexer:   l.Lexer.config.Name,
+					State:   l.State,
+					Rule:    ruleIndex,
+					Pattern: rule.Pattern,
+					Pos:     l.Pos,
+					Length:  length,
+					Elapsed: float64(time.Since(start)) / float64(time.Millisecond),
+				})
+			}
+			// No match.
+			if groups == nil {
+				// From Pygments :\
+				//
+				// If the RegexLexer encounters a newline that is flagged as an error token, the stack is
+				// emptied and the lexer continues scanning in the 'root' state. This can help producing
+				// error-tolerant highlighting for erroneous input, e.g. when a single-line string is not
+				// closed.
+				if l.Text[l.Pos] == '\n' && l.State != l.options.State {
+					l.Stack = []string{l.options.State}
+					continue
+				}
+				l.Pos++
+				if !yield(Token{Error, string(l.Text[l.Pos-1 : l.Pos])}) {
+					return
+				}
+				continue
+			}
+			l.Rule = ruleIndex
+			l.Groups = groups
+			l.NamedGroups = namedGroups
+			l.Pos += utf8.RuneCountInString(groups[0])
+			if rule.Mutator != nil {
+				if err := rule.Mutator.Mutate(l); err != nil {
+					panic(err)
+				}
+			}
+			if rule.Type != nil {
+				l.pushIterator(rule.Type.Emit(l.Groups, l))
+			}
+		}
+		if !l.drainIteratorStack(yield) {
+			return
+		}
+
+		// If we get to here and we still have text, return it as an error.
+		if l.Pos != len(l.Text) && len(l.Stack) == 0 {
+			value := string(l.Text[l.Pos:])
+			l.Pos = len(l.Text)
+			yield(Token{Type: Error, Value: value})
+		}
 	}
-	return EOF
 }
 
 // RegexLexer is the default lexer implementation used in Chroma.
@@ -459,7 +477,7 @@ func (r *RegexLexer) needRules() error {
 }
 
 // Tokenise text using lexer, returning an iterator.
-func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
+func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) {
 	err := r.needRules()
 	if err != nil {
 		return nil, err
@@ -485,7 +503,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 		Rules:          r.rules,
 		MutatorContext: map[any]any{},
 	}
-	return state.Iterator, nil
+	return state.Iterator(), nil
 }
 
 // MustRules is like Rules() but will panic on error.

@@ -1,7 +1,7 @@
 package lexers
 
 import (
-	. "github.com/alecthomas/chroma/v2" // nolint
+	. "github.com/alecthomas/chroma/v3" // nolint
 )
 
 // YAML+Jinja is YAML with Jinja templating embedded. Used by Ansible playbooks

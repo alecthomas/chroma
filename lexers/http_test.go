@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
-	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma/v3"
 )
 
 // Regression test for https://github.com/alecthomas/chroma/issues/1273:

@@ -13,10 +13,10 @@ import (
 	"github.com/alecthomas/assert/v2"
 	"github.com/alecthomas/repr"
 
-	"github.com/alecthomas/chroma/v2"
-	"github.com/alecthomas/chroma/v2/formatters"
-	"github.com/alecthomas/chroma/v2/lexers"
-	"github.com/alecthomas/chroma/v2/styles"
+	"github.com/alecthomas/chroma/v3"
+	"github.com/alecthomas/chroma/v3/formatters"
+	"github.com/alecthomas/chroma/v3/lexers"
+	"github.com/alecthomas/chroma/v3/styles"
 )
 
 func TestCompileAllRegexes(t *testing.T) {

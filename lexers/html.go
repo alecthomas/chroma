@@ -1,7 +1,7 @@
 package lexers
 
 import (
-	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma/v3"
 )
 
 // HTML lexer.

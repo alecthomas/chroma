@@ -2,6 +2,8 @@ package chroma
 
 import (
 	"bytes"
+	"iter"
+	"slices"
 )
 
 type delegatingLexer struct {
@@ -58,7 +60,7 @@ type insertion struct {
 	tokens     []Token
 }
 
-func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint: gocognit
+func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) { // nolint: gocognit
 	tokens, err := Tokenise(Coalesce(d.language), options, text)
 	if err != nil {
 		return nil, err
@@ -68,21 +70,23 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 	insertions := []*insertion{}
 	var insert *insertion
 	offset := 0
-	var last Token
+	first := true
+	var lastType TokenType
 	for _, t := range tokens {
 		if t.Type == Other {
-			if last != EOF && insert != nil && last.Type != Other {
+			if !first && insert != nil && lastType != Other {
 				insert.end = offset
 			}
 			others.WriteString(t.Value)
 		} else {
-			if last == EOF || last.Type == Other {
+			if first || lastType == Other {
 				insert = &insertion{start: offset}
 				insertions = append(insertions, insert)
 			}
 			insert.tokens = append(insert.tokens, t)
 		}
-		last = t
+		first = false
+		lastType = t.Type
 		offset += len(t.Value)
 	}
 
@@ -98,60 +102,38 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (Itera
 
 	// Interleave the two sets of tokens.
 	var out []Token
-	offset = 0 // Offset into text.
-	tokenIndex := 0
-	nextToken := func() Token {
-		if tokenIndex >= len(rootTokens) {
-			return EOF
-		}
-		t := rootTokens[tokenIndex]
-		tokenIndex++
-		return t
-	}
-	insertionIndex := 0
-	nextInsertion := func() *insertion {
-		if insertionIndex >= len(insertions) {
-			return nil
-		}
-		i := insertions[insertionIndex]
-		insertionIndex++
-		return i
-	}
-	t := nextToken()
-	i := nextInsertion()
-	for t != EOF || i != nil {
-		// fmt.Printf("%d->%d:%q   %d->%d:%q\n", offset, offset+len(t.Value), t.Value, i.start, i.end, Stringify(i.tokens...))
-		if t == EOF || (i != nil && i.start < offset+len(t.Value)) {
-			var l Token
-			l, t = splitToken(t, i.start-offset)
-			if l != EOF {
-				out = append(out, l)
-				offset += len(l.Value)
+	offset = 0
+	ti := 0
+	ii := 0
+	for ti < len(rootTokens) || ii < len(insertions) {
+		if ti >= len(rootTokens) || (ii < len(insertions) && insertions[ii].start < offset+len(rootTokens[ti].Value)) {
+			ins := insertions[ii]
+			ii++
+			if ti < len(rootTokens) {
+				l, r := splitToken(rootTokens[ti], ins.start-offset)
+				if l.Value != "" {
+					out = append(out, l)
+					offset += len(l.Value)
+				}
+				rootTokens[ti] = r
 			}
-			out = append(out, i.tokens...)
-			offset += i.end - i.start
-			if t == EOF {
-				t = nextToken()
-			}
-			i = nextInsertion()
+			out = append(out, ins.tokens...)
+			offset += ins.end - ins.start
 		} else {
-			out = append(out, t)
-			offset += len(t.Value)
-			t = nextToken()
+			out = append(out, rootTokens[ti])
+			offset += len(rootTokens[ti].Value)
+			ti++
 		}
 	}
-	return Literator(out...), nil
+	return slices.Values(out), nil
 }
 
 func splitToken(t Token, offset int) (l Token, r Token) {
-	if t == EOF {
-		return EOF, EOF
+	if offset <= 0 {
+		return Token{}, t
 	}
-	if offset == 0 {
-		return EOF, t
-	}
-	if offset == len(t.Value) {
-		return t, EOF
+	if offset >= len(t.Value) {
+		return t, Token{}
 	}
 	l = t.Clone()
 	r = t.Clone()

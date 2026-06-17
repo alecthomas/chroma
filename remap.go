@@ -1,5 +1,7 @@
 package chroma
 
+import "iter"
+
 type remappingLexer struct {
 	lexer  Lexer
 	mapper func(Token) []Token
@@ -28,24 +30,18 @@ func (r *remappingLexer) Config() *Config {
 	return r.lexer.Config()
 }
 
-func (r *remappingLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
+func (r *remappingLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) {
 	it, err := r.lexer.Tokenise(options, text)
 	if err != nil {
 		return nil, err
 	}
-	var buffer []Token
-	return func() Token {
-		for {
-			if len(buffer) > 0 {
-				t := buffer[0]
-				buffer = buffer[1:]
-				return t
+	return func(yield func(Token) bool) {
+		for t := range it {
+			for _, mapped := range r.mapper(t) {
+				if !yield(mapped) {
+					return
+				}
 			}
-			t := it()
-			if t == EOF {
-				return t
-			}
-			buffer = r.mapper(t)
 		}
 	}, nil
 }

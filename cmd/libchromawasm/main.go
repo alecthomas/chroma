@@ -7,10 +7,10 @@ import (
 	"strings"
 	"syscall/js"
 
-	"github.com/alecthomas/chroma/v2"
-	"github.com/alecthomas/chroma/v2/formatters/html"
-	"github.com/alecthomas/chroma/v2/lexers"
-	"github.com/alecthomas/chroma/v2/styles"
+	"github.com/alecthomas/chroma/v3"
+	"github.com/alecthomas/chroma/v3/formatters/html"
+	"github.com/alecthomas/chroma/v3/lexers"
+	"github.com/alecthomas/chroma/v3/styles"
 )
 
 func main() {

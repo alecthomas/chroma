@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/alecthomas/assert/v2"
-	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma/v3"
 )
 
 func TestStyleRegistryCaseInsensitivity(t *testing.T) {

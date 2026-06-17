@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"slices"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -104,7 +105,7 @@ func TestDelegate(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			it, err := delegate.Tokenise(nil, test.source)
 			assert.NoError(t, err)
-			actual := it.Tokens()
+			actual := slices.Collect(it)
 			assert.Equal(t, test.expected, actual)
 		})
 	}

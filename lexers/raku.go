@@ -1,6 +1,7 @@
 package lexers
 
 import (
+	"iter"
 	"regexp"
 	"slices"
 	"strings"
@@ -8,7 +9,7 @@ import (
 
 	"github.com/dlclark/regexp2/v2"
 
-	. "github.com/alecthomas/chroma/v2" // nolint
+	. "github.com/alecthomas/chroma/v3" // nolint
 )
 
 // Raku lexer.
@@ -1504,8 +1505,8 @@ func makeRule(config ruleMakingConfig) *CompiledRule {
 
 // Emitter for colon pairs, changes token state based on key and brackets
 func colonPair(tokenClass TokenType) Emitter {
-	return EmitterFunc(func(groups []string, state *LexerState) Iterator {
-		iterators := []Iterator{}
+	return EmitterFunc(func(groups []string, state *LexerState) iter.Seq[Token] {
+		iterators := []iter.Seq[Token]{}
 		tokens := []Token{
 			{Punctuation, state.NamedGroups[`colon`]},
 			{Punctuation, state.NamedGroups[`opening_delimiters`]},
@@ -1580,10 +1581,10 @@ func colonPair(tokenClass TokenType) Emitter {
 }
 
 // Emitter for quoting constructs, changes token state based on quote name and adverbs
-func quote(groups []string, state *LexerState) Iterator {
+func quote(groups []string, state *LexerState) iter.Seq[Token] {
 	keyword := state.NamedGroups[`keyword`]
 	adverbsStr := state.NamedGroups[`adverbs`]
-	iterators := []Iterator{}
+	iterators := []iter.Seq[Token]{}
 	tokens := []Token{
 		{Keyword, keyword},
 		{StringAffix, adverbsStr},
@@ -1647,24 +1648,21 @@ func quote(groups []string, state *LexerState) Iterator {
 }
 
 // Emitter for pod config, tokenises the properties with "colon-pair-attribute" state
-func podConfig(groups []string, state *LexerState) Iterator {
-	// Tokenise pod config
+func podConfig(groups []string, state *LexerState) iter.Seq[Token] {
 	iterator, err := state.Lexer.Tokenise(
 		&TokeniseOptions{
 			State:  "colon-pair-attribute",
 			Nested: true,
 		}, groups[0])
-
 	if err != nil {
 		panic(err)
-	} else {
-		return iterator
 	}
+	return iterator
 }
 
 // Emitter for pod code, tokenises the code based on the lang specified
-func podCode(groups []string, state *LexerState) Iterator {
-	iterators := []Iterator{}
+func podCode(groups []string, state *LexerState) iter.Seq[Token] {
+	iterators := []iter.Seq[Token]{}
 	tokens := []Token{
 		{Comment, state.NamedGroups[`ws`]},
 		{Keyword, state.NamedGroups[`keyword`]},

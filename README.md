@@ -1,8 +1,11 @@
 ![Chroma](chroma.jpg)
 
+> [!NOTE]
+> **v3 alpha available.** Chroma v3 replaces the custom `Iterator` type with Go's built-in `iter.Seq[Token]`, removes the `EOF` sentinel, and bumps the module path to `github.com/alecthomas/chroma/v3`. See the [v3.0.0-alpha.1](https://github.com/alecthomas/chroma/releases/tag/v3.0.0-alpha.1) release for migration details.
+
 # A general purpose syntax highlighter in pure Go
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/alecthomas/chroma/v2.svg)](https://pkg.go.dev/github.com/alecthomas/chroma/v2) [![CI](https://github.com/alecthomas/chroma/actions/workflows/ci.yml/badge.svg)](https://github.com/alecthomas/chroma/actions/workflows/ci.yml) [![Slack chat](https://img.shields.io/static/v1?logo=slack&style=flat&label=slack&color=green&message=gophers)](https://invite.slack.golangbridge.org/)
+[![Go Reference](https://pkg.go.dev/badge/github.com/alecthomas/chroma/v3.svg)](https://pkg.go.dev/github.com/alecthomas/chroma/v3) [![CI](https://github.com/alecthomas/chroma/actions/workflows/ci.yml/badge.svg)](https://github.com/alecthomas/chroma/actions/workflows/ci.yml) [![Slack chat](https://img.shields.io/static/v1?logo=slack&style=flat&label=slack&color=green&message=gophers)](https://invite.slack.golangbridge.org/)
 
 
 Chroma takes source code and other structured text and converts it into syntax
@@ -75,7 +78,7 @@ Try out various languages and styles on the [Chroma Playground](https://swapoff.
 This is version 2 of Chroma, use the import path:
 
 ```go
-import "github.com/alecthomas/chroma/v2"
+import "github.com/alecthomas/chroma/v3"
 ```
 
 Chroma, like Pygments, has the concepts of

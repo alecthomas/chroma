@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"iter"
 	"os"
 	"os/signal"
 	"path"
@@ -21,11 +22,11 @@ import (
 	colorable "github.com/mattn/go-colorable"
 	isatty "github.com/mattn/go-isatty"
 
-	"github.com/alecthomas/chroma/v2"
-	"github.com/alecthomas/chroma/v2/formatters"
-	"github.com/alecthomas/chroma/v2/formatters/html"
-	"github.com/alecthomas/chroma/v2/lexers"
-	"github.com/alecthomas/chroma/v2/styles"
+	"github.com/alecthomas/chroma/v3"
+	"github.com/alecthomas/chroma/v3/formatters"
+	"github.com/alecthomas/chroma/v3/formatters/html"
+	"github.com/alecthomas/chroma/v3/lexers"
+	"github.com/alecthomas/chroma/v3/styles"
 )
 
 var (
@@ -345,7 +346,7 @@ func listAll() {
 	fmt.Println()
 }
 
-func lex(ctx *kong.Context, lexer chroma.Lexer, contents string) chroma.Iterator {
+func lex(ctx *kong.Context, lexer chroma.Lexer, contents string) iter.Seq[chroma.Token] {
 	if rel, ok := lexer.(chroma.TracingLexer); ok {
 		rel.SetTracing(cli.Trace)
 	}
@@ -391,15 +392,15 @@ func selexer(path, contents string) (lexer chroma.Lexer, err error) {
 	return chroma.NewXMLLexer(os.DirFS("."), path)
 }
 
-func format(ctx *kong.Context, w io.Writer, style *chroma.Style, it chroma.Iterator) {
+func format(ctx *kong.Context, w io.Writer, style *chroma.Style, it iter.Seq[chroma.Token]) {
 	formatter := formatters.Get(cli.Formatter)
 	err := formatter.Format(w, style, it)
 	ctx.FatalIfErrorf(err)
 }
 
-func check(filename string, it chroma.Iterator) {
+func check(filename string, it iter.Seq[chroma.Token]) {
 	line, col := 1, 0
-	for token := it(); token != chroma.EOF; token = it() {
+	for token := range it {
 		if token.Type == chroma.Error {
 			fmt.Printf("%s:%d:%d %q\n", filename, line, col, token.String())
 		}

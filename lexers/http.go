@@ -1,9 +1,10 @@
 package lexers
 
 import (
+	"iter"
 	"strings"
 
-	. "github.com/alecthomas/chroma/v2" // nolint
+	. "github.com/alecthomas/chroma/v3" // nolint
 )
 
 // HTTP lexer.
@@ -36,78 +37,58 @@ func httpRules() Rules {
 	}
 }
 
-func httpContentBlock(groups []string, state *LexerState) Iterator {
-	tokens := []Token{
-		{Generic, groups[0]},
-	}
-	return Literator(tokens...)
+func httpContentBlock(groups []string, state *LexerState) iter.Seq[Token] {
+	return Literator(Token{Generic, groups[0]})
 }
 
-func httpHeaderBlock(groups []string, state *LexerState) Iterator {
-	tokens := []Token{
-		{Name, groups[1]},
-		{Text, groups[2]},
-		{Operator, groups[3]},
-		{Text, groups[4]},
-		{Literal, groups[5]},
-		{Text, groups[6]},
-	}
-	return Literator(tokens...)
+func httpHeaderBlock(groups []string, state *LexerState) iter.Seq[Token] {
+	return Literator(
+		Token{Name, groups[1]},
+		Token{Text, groups[2]},
+		Token{Operator, groups[3]},
+		Token{Text, groups[4]},
+		Token{Literal, groups[5]},
+		Token{Text, groups[6]},
+	)
 }
 
-func httpContinuousHeaderBlock(groups []string, state *LexerState) Iterator {
-	tokens := []Token{
-		{Text, groups[1]},
-		{Literal, groups[2]},
-		{Text, groups[3]},
-	}
-	return Literator(tokens...)
+func httpContinuousHeaderBlock(groups []string, state *LexerState) iter.Seq[Token] {
+	return Literator(
+		Token{Text, groups[1]},
+		Token{Literal, groups[2]},
+		Token{Text, groups[3]},
+	)
 }
 
 func httpBodyContentTypeLexer(lexer Lexer) Lexer { return &httpBodyContentTyper{lexer} }
 
 type httpBodyContentTyper struct{ Lexer }
 
-func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (Iterator, error) { // nolint: gocognit
-	var contentType string
-	var isContentType bool
-	var subIterator Iterator
-
+func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) { // nolint: gocognit
 	it, err := d.Lexer.Tokenise(options, text)
 	if err != nil {
 		return nil, err
 	}
 
-	return func() Token {
-		token := it()
+	return func(yield func(Token) bool) {
+		var contentType string
+		var isContentType bool
 
-		if token == EOF {
-			if subIterator != nil {
-				return subIterator()
-			}
-			return EOF
-		}
-
-		switch {
-		case token.Type == Name && strings.ToLower(token.Value) == "content-type":
-			{
+		for token := range it {
+			switch {
+			case token.Type == Name && strings.ToLower(token.Value) == "content-type":
 				isContentType = true
-			}
-		case token.Type == Literal && isContentType:
-			{
+
+			case token.Type == Literal && isContentType:
 				isContentType = false
 				contentType = strings.TrimSpace(token.Value)
-				pos := strings.Index(contentType, ";")
-				if pos > 0 {
+				if pos := strings.Index(contentType, ";"); pos > 0 {
 					contentType = strings.TrimSpace(contentType[:pos])
 				}
-			}
-		case token.Type == Generic && contentType != "":
-			{
+
+			case token.Type == Generic && contentType != "":
 				lexer := MatchMimeType(contentType)
 
-				// application/calendar+xml can be treated as application/xml
-				// if there's not a better match.
 				if lexer == nil && strings.Contains(contentType, "+") {
 					slashPos := strings.Index(contentType, "/")
 					plusPos := strings.LastIndex(contentType, "+")
@@ -118,14 +99,21 @@ func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (
 				if lexer == nil {
 					token.Type = Text
 				} else {
-					subIterator, err = lexer.Tokenise(nil, token.Value)
+					subIt, err := lexer.Tokenise(nil, token.Value)
 					if err != nil {
 						panic(err)
 					}
-					return subIterator()
+					for subToken := range subIt {
+						if !yield(subToken) {
+							return
+						}
+					}
+					continue
 				}
 			}
+			if !yield(token) {
+				return
+			}
 		}
-		return token
 	}, nil
 }

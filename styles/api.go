@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma/v3"
 )
 
 //go:embed *.xml

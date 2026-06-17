@@ -1,9 +1,10 @@
 package lexers
 
 import (
+	"iter"
 	"strings"
 
-	. "github.com/alecthomas/chroma/v2" // nolint
+	. "github.com/alecthomas/chroma/v3" // nolint
 )
 
 // Markdown lexer with YAML frontmatter and HTML comment support.
@@ -23,7 +24,7 @@ type markdownLexer struct {
 }
 
 // Lexes Markdown, highlighting a leading YAML frontmatter block before delegating to Markdown rules.
-func (m *markdownLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, error) {
+func (m *markdownLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) {
 	frontmatter, rest, ok := splitFrontmatter(text)
 	if !ok {
 		return m.Lexer.Tokenise(options, text)

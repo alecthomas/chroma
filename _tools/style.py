@@ -18,7 +18,7 @@ TEMPLATE = r'''
 package styles
 
 import (
-    "github.com/alecthomas/chroma/v2"
+    "github.com/alecthomas/chroma/v3"
 )
 
 // {{upper_name}} style.
