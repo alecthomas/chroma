@@ -132,14 +132,6 @@ func NewLexer(config *Config, rulesFunc func() Rules) (*RegexLexer, error) {
 	return r, nil
 }
 
-// Trace enables debug tracing.
-//
-// Deprecated: Use SetTracing instead.
-func (r *RegexLexer) Trace(trace bool) *RegexLexer {
-	r.trace = trace
-	return r
-}
-
 // SetTracing enables debug tracing.
 //
 // This complies with the [TracingLexer] interface.
