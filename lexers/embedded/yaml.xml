@@ -93,10 +93,10 @@
       </rule>
     </state>
     <state name="key">
-      <rule pattern="&#34;[^&#34;\n].*&#34;: ">
+      <rule pattern="&#34;[^&#34;\n#].*&#34;: ">
         <token type="NameTag"/>
       </rule>
-      <rule pattern="(-)( )((?:(?!//)[^&#34;\n{])*?)(:)( )">
+      <rule pattern="(-)( )((?:(?!//)[^&#34;\n{#])*?)(:)( )">
         <bygroups>
           <token type="Punctuation"/>
           <token type="TextWhitespace"/>
@@ -105,14 +105,14 @@
           <token type="TextWhitespace"/>
         </bygroups>
       </rule>
-      <rule pattern="((?:(?!//)[^&#34;\n{])*?)(:)( )">
+      <rule pattern="((?:(?!//)[^&#34;\n{#])*?)(:)( )">
         <bygroups>
           <token type="NameTag"/>
           <token type="Punctuation"/>
           <token type="TextWhitespace"/>
         </bygroups>
       </rule>
-      <rule pattern="((?:(?!//)[^&#34;\n{])*?)(:)(\n)">
+      <rule pattern="((?:(?!//)[^&#34;\n{#])*?)(:)(\n)">
         <bygroups>
           <token type="NameTag"/>
           <token type="Punctuation"/>
