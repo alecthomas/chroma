@@ -1,0 +1,137 @@
+<lexer>
+  <config>
+    <name>Hyprlang</name>
+    <alias>hyprlang</alias>
+    <alias>hypr</alias>
+    <filename>hypr*.conf</filename>
+    <filename>*.hypr</filename>
+    <mime_type>text/x-hyprlang</mime_type>
+    <analyse>
+      <regex pattern="(?m)^\s*(bind|bindm|monitor|workspace|windowrulev2?|exec(?:-once|-shutdown)?|execr(?:-once)?|source)\s*=" score="0.6"/>
+      <regex pattern="(?m)^\s*\$[A-Za-z_]\w*\s*=" score="0.4"/>
+      <regex pattern="(?m)^\s*(general|decoration|animations|input|device|binds|gestures|misc|master|dwindle|xwayland|opengl|render|ecosystem)\s*(?::[^\s{]+)?\s*\{" score="0.4"/>
+    </analyse>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\s+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="#.*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="(\$[A-Za-z_]\w*)(\s*)(=)">
+        <bygroups>
+          <token type="NameVariable"/>
+          <token type="TextWhitespace"/>
+          <token type="Operator"/>
+        </bygroups>
+        <push state="value"/>
+      </rule>
+      <rule pattern="(source|exec-once|execr-once|exec-shutdown|exec|execr)(\s*)(=)">
+        <bygroups>
+          <token type="KeywordReserved"/>
+          <token type="TextWhitespace"/>
+          <token type="Operator"/>
+        </bygroups>
+        <push state="value"/>
+      </rule>
+      <rule pattern="([A-Za-z_][\w\d.\-]*)(\s*)(:)(\s*)([\w\d][\w\d/.\-:]*)(\s*)(\{)">
+        <bygroups>
+          <token type="NameNamespace"/>
+          <token type="TextWhitespace"/>
+          <token type="Punctuation"/>
+          <token type="TextWhitespace"/>
+          <token type="NameClass"/>
+          <token type="TextWhitespace"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule pattern="([A-Za-z_][\w\d.\-]*)(\s*)(\{)">
+        <bygroups>
+          <token type="NameNamespace"/>
+          <token type="TextWhitespace"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule pattern="([A-Za-z_][\w\d.\-]*)(\s*)(=)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="TextWhitespace"/>
+          <token type="Operator"/>
+        </bygroups>
+        <push state="value"/>
+      </rule>
+      <rule pattern="[{}]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule>
+        <include state="value_atoms"/>
+      </rule>
+    </state>
+
+    <state name="value">
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="value_atoms"/>
+      </rule>
+    </state>
+
+    <state name="value_atoms">
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="#.*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="(rgb|rgba)(\()">
+        <bygroups>
+          <token type="NameBuiltin"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\)">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="0x[0-9A-Fa-f]{6,8}\b">
+        <token type="LiteralNumberHex"/>
+      </rule>
+      <rule pattern="\b[0-9A-Fa-f]{6,8}\b">
+        <token type="LiteralNumberHex"/>
+      </rule>
+      <rule pattern="\b[+-]?\d+(?:\.\d+)?x[+-]?\d+(?:\.\d+)?(?:@[+-]?\d+(?:\.\d+)?)?\b">
+        <token type="LiteralNumberFloat"/>
+      </rule>
+      <rule pattern="\b[0-9]{1,3}deg\b">
+        <token type="LiteralNumberFloat"/>
+      </rule>
+      <rule pattern="[+-]?(?:\d+\.\d+|\d+)%?(?:@[+-]?(?:\d+\.\d+|\d+))?">
+        <token type="LiteralNumberFloat"/>
+      </rule>
+      <rule pattern="\$[A-Za-z_]\w*">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="\b(true|false|on|off|yes|no|null)\b">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="\b(SHIFT|CAPS|CTRL|CONTROL|ALT|ALT_L|MOD2|MOD3|SUPER|WIN|LOGO|MOD4|MOD5|TAB)\b">
+        <token type="NameConstant"/>
+      </rule>
+      <rule pattern="\b(floating|fullscreen|pinned|activewindow|activeworkspace|class|title|initialClass|initialTitle|tag|xwayland|workspace|monitor|float|tile|move|size|center|opacity|animation|border|rounding|noanim|noblur|nofocus|stayfocused|suppressevent|plugin)\b">
+        <token type="NameFunction"/>
+      </rule>
+      <rule pattern="[\[\](),;]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[-+*/]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[^\s#\[\](),;]+">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
