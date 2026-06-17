@@ -24,7 +24,7 @@ func Standalone(b bool) Option { return func(f *Formatter) { f.standalone = b } 
 func ClassPrefix(prefix string) Option { return func(f *Formatter) { f.prefix = prefix } }
 
 // WithClasses emits HTML using CSS classes, rather than inline styles.
-func WithClasses(b bool) Option { return func(f *Formatter) { f.Classes = b } }
+func WithClasses(b bool) Option { return func(f *Formatter) { f.classes = b } }
 
 // WithAllClasses disables an optimisation that omits redundant CSS classes.
 func WithAllClasses(b bool) Option { return func(f *Formatter) { f.allClasses = b } }
@@ -205,7 +205,7 @@ type Formatter struct {
 	styleCache            *styleCache
 	standalone            bool
 	prefix                string
-	Classes               bool // Exported field to detect when classes are being used
+	classes               bool
 	allClasses            bool
 	customCSS             map[chroma.TokenType]string
 	writeCSSComments      bool
@@ -240,7 +240,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 	css := f.styleCache.get(style, true)
 	if f.standalone {
 		fmt.Fprint(w, "<html>\n")
-		if f.Classes {
+		if f.classes {
 			fmt.Fprint(w, "<style type=\"text/css\">\n")
 			err = f.WriteCSS(w, style)
 			if err != nil {
@@ -302,7 +302,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 
 			if highlight {
 				// Line + LineHighlight
-				if f.Classes {
+				if f.classes {
 					fmt.Fprintf(w, ` class="%s %s"`, f.class(chroma.Line), f.class(chroma.LineHighlight))
 				} else {
 					fmt.Fprintf(w, ` style="%s %s"`, css[chroma.Line], css[chroma.LineHighlight])
@@ -401,7 +401,7 @@ func (f *Formatter) class(t chroma.TokenType) string {
 }
 
 func (f *Formatter) styleAttr(styles map[chroma.TokenType]string, tt chroma.TokenType, extraCSS ...string) string {
-	if f.Classes {
+	if f.classes {
 		cls := f.class(tt)
 		if cls == "" {
 			return ""
@@ -432,7 +432,7 @@ func (f *Formatter) modeClass(style *chroma.Style) string {
 // style's mode class alongside the existing class. Used for the outer
 // wrapper and standalone <body> so external CSS can target the mode.
 func (f *Formatter) styleAttrWithMode(styles map[chroma.TokenType]string, tt chroma.TokenType, style *chroma.Style) string {
-	if !f.Classes || !f.modeClasses {
+	if !f.classes || !f.modeClasses {
 		return f.styleAttr(styles, tt)
 	}
 	cls := f.class(tt)
@@ -674,7 +674,7 @@ func (l *styleCache) get(style *chroma.Style, compress bool) map[chroma.TokenTyp
 
 	// No entry, create one.
 	cached := l.f.styleToCSS(style)
-	if !l.f.Classes {
+	if !l.f.classes {
 		for t, style := range cached {
 			cached[t] = compressStyle(style)
 		}
