@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"fmt"
 	"io"
 	"iter"
 )
@@ -21,7 +22,11 @@ type FormatterFunc func(w io.Writer, style *Style, iterator iter.Seq[Token]) err
 func (f FormatterFunc) Format(w io.Writer, s *Style, it iter.Seq[Token]) (err error) {
 	defer func() {
 		if perr := recover(); perr != nil {
-			err = perr.(error)
+			if e, ok := perr.(error); ok {
+				err = e
+			} else {
+				err = fmt.Errorf("%v", perr)
+			}
 		}
 	}()
 	return f(w, s, it)
@@ -34,7 +39,11 @@ type recoveringFormatter struct {
 func (r recoveringFormatter) Format(w io.Writer, s *Style, it iter.Seq[Token]) (err error) {
 	defer func() {
 		if perr := recover(); perr != nil {
-			err = perr.(error)
+			if e, ok := perr.(error); ok {
+				err = e
+			} else {
+				err = fmt.Errorf("%v", perr)
+			}
 		}
 	}()
 	return r.Formatter.Format(w, s, it)
