@@ -7,6 +7,7 @@
   <entry type="KeywordConstant" style="#79c0ff"/>
   <entry type="KeywordPseudo" style="#79c0ff"/>
   <entry type="Name" style="#e6edf3"/>
+  <entry type="NameAttribute" style="#f0883e"/>
   <entry type="NameClass" style="bold #f0883e"/>
   <entry type="NameConstant" style="bold #79c0ff"/>
   <entry type="NameDecorator" style="bold #d2a8ff"/>
