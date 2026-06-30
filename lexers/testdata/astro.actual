@@ -1,0 +1,50 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+const items = ["alpha", "beta"];
+---
+<!-- Comments with <script> tags stay HTML comments. -->
+<Layout title={title}>
+	<h1 class:list={["title", { active: title.length > 0 }]}>Hello {title}</h1>
+	<Card {title} client:load data-items={items.join(",")} />
+	<p set:html={title} />
+
+	<ul>
+		{items.map((item) => (
+			<li class={`item-${item}`}>{item.toUpperCase()}</li>
+		))}
+	</ul>
+
+	<script type="application/ld+json">
+		{ "name": "Astro", "isAccessibleForFree": true }
+	</script>
+
+	<script lang="ts">
+		const button = document.querySelector("button");
+		button?.addEventListener("click", () => console.log(title));
+	</script>
+
+	<script>
+		const message: string = title;
+		document.body.dataset.message = message;
+	</script>
+
+	<style>
+		h1 {
+			color: rebeccapurple;
+		}
+	</style>
+
+	<style lang="scss">
+		$title-color: #639;
+		h1 {
+			color: $title-color;
+		}
+	</style>
+</Layout>
