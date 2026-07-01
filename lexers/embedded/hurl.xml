@@ -1,0 +1,133 @@
+<lexer>
+  <config>
+    <name>Hurl</name>
+    <alias>hurl</alias>
+    <filename>*.hurl</filename>
+    <mime_type>text/x-hurl</mime_type>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\s+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="#.*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="(GET|HEAD|POST|PUT|DELETE|CONNECT|OPTIONS|TRACE|PATCH|LINK|UNLINK|PURGE|LOCK|UNLOCK|PROPFIND|PROPPATCH|MKCOL|COPY|MOVE|REPORT|SEARCH|VIEW)([ \t]+)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="TextWhitespace"/>
+        </bygroups>
+        <push state="url"/>
+      </rule>
+      <rule pattern="HTTP(/\d(\.\d)?)?\b">
+        <token type="KeywordReserved"/>
+      </rule>
+      <rule pattern="\[[A-Z][A-Za-z0-9]*\]">
+        <token type="NameDecorator"/>
+      </rule>
+      <rule pattern="\{\{">
+        <token type="NameVariable"/>
+        <push state="template"/>
+      </rule>
+      <rule pattern="```">
+        <token type="LiteralString"/>
+        <push state="multiline"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <push state="string"/>
+      </rule>
+      <rule pattern="\b(true|false|null)\b">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="\b(status|url|header|certificate|cookie|body|bytes|xpath|jsonpath|regex|variable|duration|sha256|md5|ip|redirects|version)\b">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="\b(count|daysAfterNow|daysBeforeNow|decode|format|htmlEscape|htmlUnescape|nth|replace|replaceRegex|split|toDate|toFloat|toInt|toString|urlDecode|urlEncode|urlQueryParam|base64Decode|base64Encode|base64UrlSafeDecode|base64UrlSafeEncode|first|last|location)\b">
+        <token type="NameFunction"/>
+      </rule>
+      <rule pattern="\b(not|contains|exists|includes|matches|startsWith|endsWith|isBoolean|isCollection|isDate|isEmpty|isFloat|isInteger|isIsoDate|isNumber|isString|isIpv4|isIpv6|isUuid)\b">
+        <token type="OperatorWord"/>
+      </rule>
+      <rule pattern="==|!=|&gt;=|&lt;=|&gt;|&lt;">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[+-]?\d+(\.\d+)?\b">
+        <token type="LiteralNumber"/>
+      </rule>
+      <rule pattern="[A-Za-z_][A-Za-z0-9_-]*">
+        <token type="Name"/>
+      </rule>
+      <rule pattern="[:{}\[\],*]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="url">
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\{\{">
+        <token type="NameVariable"/>
+        <push state="template"/>
+      </rule>
+      <rule pattern="[^\s{]+">
+        <token type="NameOther"/>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+      </rule>
+    </state>
+    <state name="template">
+      <rule pattern="\}\}">
+        <token type="NameVariable"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^}]+">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="\}">
+        <token type="NameVariable"/>
+      </rule>
+    </state>
+    <state name="string">
+      <rule pattern="\\.">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="\{\{">
+        <token type="NameVariable"/>
+        <push state="template"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^&#34;\\{]+">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern=".">
+        <token type="LiteralStringDouble"/>
+      </rule>
+    </state>
+    <state name="multiline">
+      <rule pattern="```">
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\{\{">
+        <token type="NameVariable"/>
+        <push state="template"/>
+      </rule>
+      <rule pattern="[^`{]+">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="[`{]">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

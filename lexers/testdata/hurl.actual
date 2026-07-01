@@ -1,0 +1,40 @@
+# Fetch the home page and check the title
+GET https://example.org/api/{{version}}/home
+User-Agent: hurl/6.0
+Accept: application/json
+[QueryStringParams]
+page: 1
+limit: 50
+
+HTTP 200
+[Asserts]
+status == 200
+header "Content-Type" contains "application/json"
+jsonpath "$.items" count == 3
+jsonpath "$.enabled" == true
+jsonpath "$.token" matches /[a-f0-9]{32}/
+duration < 1000
+
+# Create a resource, capture the id
+POST https://example.org/api/tests
+Authorization: Bearer {{token}}
+{
+  "name": "scan",
+  "targets": ["10.0.0.1", "10.0.0.2"],
+  "active": true,
+  "retries": 3
+}
+
+HTTP 201
+[Captures]
+test_id: jsonpath "$.id"
+etag: header "ETag"
+[Asserts]
+jsonpath "$.name" == "scan"
+jsonpath "$.created_at" isIsoDate
+bytes count > 0
+
+DELETE https://example.org/api/tests/{{test_id}}
+HTTP *
+[Options]
+retry: 5
