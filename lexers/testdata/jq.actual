@@ -1,0 +1,259 @@
+# JQ lexer test — covers every builtin, keyword, operator, and literal
+
+# Keywords and control flow
+def greet($name): "Hello, \($name)!";
+if .x then .y elif .z then .w else empty end
+try .foo catch "default"
+reduce .[] as $x (0; . + $x)
+foreach .[] as $x (0; . + $x; . * 2)
+label $out | foreach .[] as $x (0; . + $x; if . > 10 then ., break $out else . end)
+module {}; import "foo" as foo; include "bar";
+
+# Boolean/null literals and word operators
+true, false, null
+.x and .y or not .z
+
+# Format strings
+.name | @html
+.data | @base64
+.bytes | @base64d
+.url | @uri
+.row | @csv
+.row | @tsv
+.code | @sh
+.val | @json
+.val | @text
+.val | @yaml
+
+# String interpolation
+"result: \(.count * 2)"
+
+# Numbers
+42, 3.14, 1e10, -7
+
+# Identity and recurse
+.
+..
+
+# Field access and variables
+.foo.bar
+$ENV.HOME
+$__loc__
+
+# Type and structure builtins
+type
+length
+utf8bytelength
+keys
+keys_unsorted
+values
+has("foo")
+in({"a":1})
+contains({"a":1})
+inside({"a":1})
+arrays, objects, iterables, booleans, numbers, normals, nulls, strings, scalars, finites
+
+# Path builtins
+path(.foo)
+paths
+getpath(["a","b"])
+setpath(["a"]; 1)
+delpaths([["a"]])
+
+# Entry builtins
+to_entries
+from_entries
+with_entries(.value += 1)
+
+# Array builtins
+add
+flatten
+flatten(1)
+reverse
+sort
+sort_by(.x)
+group_by(.x)
+unique
+unique_by(.x)
+max
+max_by(.x)
+min
+min_by(.x)
+indices(1)
+index(1)
+rindex(1)
+combinations
+combinations(2)
+transpose
+first
+last
+nth(2; range(10))
+range(5)
+range(0;10)
+range(0;10;2)
+limit(3; .[] )
+until(. > 10; . * 2)
+while(. < 10; . + 1)
+repeat(. * 2) | first
+skip(2; range(10))
+recurse
+recurse(.children[]?)
+walk(if type == "number" then . + 1 else . end)
+pick(.a, .b)
+del(.foo)
+
+# String builtins
+split(",")
+splits(",")
+join(",")
+startswith("foo")
+endswith("foo")
+ltrimstr("foo")
+rtrimstr("foo")
+ltrim
+rtrim
+trim
+trimstr("x";"y")
+ascii_downcase
+ascii_upcase
+explode
+implode
+tojson
+fromjson
+tostring
+tonumber
+toboolean
+format("html")
+test("foo")
+test("foo"; "g")
+match("foo")
+capture("(?P<a>.*)")
+scan("\\d+")
+sub("foo"; "bar")
+gsub("foo"; "bar")
+
+# Math builtins
+sqrt
+floor
+ceil
+round
+fabs
+pow(.; 2)
+log
+log2
+log10
+log1p
+log2
+logb
+exp
+exp2
+exp10
+expm1
+significand
+sin
+cos
+tan
+asin
+acos
+atan
+atan2(1; 2)
+sinh
+cosh
+tanh
+asinh
+acosh
+atanh
+cbrt
+fma(1;2;3)
+fmax(1;2)
+fmin(1;2)
+fmod(10;3)
+hypot(3;4)
+copysign(1;-1)
+remainder(10;3)
+frexp
+modf
+ldexp(1; 2)
+scalb(1;2)
+scalbln(1;2)
+logb
+nearbyint
+rint
+trunc
+erf
+erfc
+tgamma
+lgamma
+gamma
+j0
+j1
+jn(2;1)
+y0
+y1
+yn(2;1)
+nextafter(1;2)
+nexttoward(1;2)
+fdim(2;1)
+cbrt
+abs
+nan
+infinite
+isinfinite
+isnan
+isnormal
+isfinite
+isempty(empty)
+
+# Date/time builtins
+now
+gmtime
+mktime
+strftime("%Y-%m-%d")
+strptime("%Y-%m-%d")
+todate
+fromdate
+todateiso8601
+fromdateiso8601
+strflocaltime("%Y")
+localtime
+
+# Map/select builtins
+map(. + 1)
+map_values(. + 1)
+select(. > 0)
+any(.[]; . > 0)
+all(.[]; . > 0)
+any(. > 0)
+all(. > 0)
+isempty(.[])
+
+# Index/search builtins
+INDEX(.[]; .id)
+IN(.[]; 1)
+JOIN(.[]; .id; .[]; .id)
+bsearch(3)
+
+# Streaming builtins
+tostream
+fromstream(tostream)
+truncate_stream(tostream; 1)
+
+# I/O and debug builtins
+debug
+debug("msg")
+stderr
+error
+error("msg")
+halt
+halt_error
+halt_error(1)
+input
+inputs
+input_line_number
+input_filename
+
+# Misc builtins
+env
+modulemeta
+not
+empty

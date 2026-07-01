@@ -1,0 +1,91 @@
+<lexer>
+  <config>
+    <name>JQ</name>
+    <alias>jq</alias>
+    <filename>*.jq</filename>
+    <mime_type>application/x-jq</mime_type>
+    <dot_all>true</dot_all>
+    <ensure_nl>true</ensure_nl>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="#[^\n]*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="@(?:base64d|base64|uri|csv|tsv|html|json|text|yaml|sh)\b">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="\b(if|then|elif|else|end|try|catch|reduce|foreach|as|def|label|break|module|import|include)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(and|or|not)\b">
+        <token type="OperatorWord"/>
+      </rule>
+      <rule pattern="\b(true|false|null)\b">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="\b(IN|INDEX|JOIN|abs|acos|acosh|add|all|any|arrays|ascii_downcase|ascii_upcase|asin|asinh|atan|atan2|atanh|booleans|bsearch|capture|cbrt|ceil|combinations|contains|copysign|cos|cosh|debug|del|delpaths|empty|endswith|env|erf|erfc|error|exp|exp10|exp2|explode|expm1|fabs|fdim|finites|first|flatten|floor|fma|fmax|fmin|fmod|format|frexp|from_entries|fromdate|fromdateiso8601|fromjson|fromstream|gamma|getpath|gmtime|group_by|gsub|halt|halt_error|has|hypot|implode|in|index|indices|infinite|input|input_filename|input_line_number|inputs|inside|isempty|isfinite|isinfinite|isnan|isnormal|iterables|j0|j1|jn|join|keys|keys_unsorted|last|ldexp|length|lgamma|limit|localtime|log|log10|log1p|log2|logb|ltrim|ltrimstr|map|map_values|match|max|max_by|min|min_by|mktime|modf|modulemeta|nan|nearbyint|nextafter|nexttoward|normals|now|nth|nulls|numbers|objects|path|paths|pick|pow|range|recurse|remainder|repeat|reverse|rindex|rint|round|rtrim|rtrimstr|scalars|scalb|scalbln|scan|select|setpath|significand|sin|sinh|skip|sort|sort_by|split|splits|sqrt|startswith|stderr|strflocaltime|strftime|strings|strptime|sub|tan|tanh|test|tgamma|to_entries|toboolean|todate|todateiso8601|tojson|tonumber|tostream|tostring|transpose|trim|trimstr|trunc|truncate_stream|type|unique|unique_by|until|utf8bytelength|values|walk|while|with_entries|y0|y1|yn)\b">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="\$[A-Za-z_][A-Za-z0-9_]*|\$ENV\b">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="\.\.">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="\.[A-Za-z_][A-Za-z0-9_]*">
+        <token type="NameAttribute"/>
+      </rule>
+      <rule pattern="\.">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?">
+        <token type="LiteralNumber"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <push state="string"/>
+      </rule>
+      <rule pattern="//=|[|][=]|\+=|-=|\*=|/=|%=|==|!=|&lt;=|&gt;=|&lt;|&gt;|//|\?//|\|">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[-+*/%?]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[{}()\[\],;:]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[A-Za-z_][A-Za-z0-9_]*">
+        <token type="NameOther"/>
+      </rule>
+    </state>
+    <state name="string">
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\\(?:[&#34;\\/bfnrt]|u[0-9a-fA-F]{4})">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="\\[(]">
+        <token type="LiteralStringInterpol"/>
+        <push state="interpolation"/>
+      </rule>
+      <rule pattern="[^&#34;\\]+">
+        <token type="LiteralStringDouble"/>
+      </rule>
+    </state>
+    <state name="interpolation">
+      <rule pattern="[)]">
+        <token type="LiteralStringInterpol"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="root"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

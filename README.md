@@ -48,7 +48,7 @@ translators for Pygments lexers and styles.
 |   G    | GAS, GDScript, GDScript3, Gemtext, Genshi, Genshi HTML, Genshi Text, Gettext, Gherkin, Gleam, GLSL, Gnuplot, Go, Go HTML Template, Go Template, Go Text Template, GraphQL, Groff, Groovy
 |   H    | Handlebars, Hare, Haskell, Haxe, HCL, Hexdump, HLB, HLSL, HolyC, HTML, HTTP, Hy
 |   I    | Idris, Igor, INI, Io, ISCdhcpd
-|   J    | J, Janet, Java, JavaScript, JSON, JSONata, Jsonnet, Julia, Jungle
+|   J    | J, Janet, Java, JavaScript, JSON, JSONata, JQ, Jsonnet, Julia, Jungle
 |   K    | Kakoune, KDL, Kotlin
 |   L    | Lateralus, Lean4, Lighttpd configuration file, LilyPond, LLVM, lox, Lua, Luau
 |   M    | Makefile, Mako, markdown, Markless, Mason, Materialize SQL dialect, Mathematica, Matlab, MCFunction, Meson, Metal, microcad, MiniZinc, MLIR, Modelica, Modula-2, Mojo, MonkeyC, MoonBit, MoonScript, MorrowindScript, Myghty, MySQL
