@@ -214,6 +214,53 @@ func TestHighlightLines(t *testing.T) {
 	assert.Contains(t, buf.String(), `<span class="line hl"><span class="cl">`)
 }
 
+func TestLinePrompts(t *testing.T) {
+	tests := []struct {
+		name          string
+		options       []Option
+		expected      string
+		expectedCount int
+	}{{
+		name: "Classes",
+		options: []Option{
+			WithClasses(true),
+			WithLinePrompts(`user<host>$`, [][2]int{{1, 1}, {3, 3}}),
+		},
+		expected:      `<span class="line"><span class="cl"><span class="gp">user&lt;host&gt;$</span>`,
+		expectedCount: 2,
+	}, {
+		name: "InlineStyles",
+		options: []Option{
+			WithLinePrompts(`user<host>$`, [][2]int{{1, 1}, {3, 3}}),
+		},
+		expected:      `<span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em`,
+		expectedCount: 2,
+	}, {
+		name: "LineNumbers",
+		options: []Option{
+			WithClasses(true),
+			WithLineNumbers(true),
+			WithLinePrompts(`>>>`, [][2]int{{2, 2}}),
+		},
+		expected:      `<span class="line"><span class="ln">2</span><span class="cl"><span class="gp">&gt;&gt;&gt;</span>`,
+		expectedCount: 1,
+	}}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := New(tt.options...)
+			it, err := lexers.Get("bash").Tokenise(nil, "echo FOO\necho BAR\necho BAZ")
+			assert.NoError(t, err)
+
+			var buf bytes.Buffer
+			err = f.Format(&buf, styles.Fallback, it)
+			assert.NoError(t, err)
+
+			assert.Equal(t, tt.expectedCount, strings.Count(buf.String(), tt.expected))
+		})
+	}
+}
+
 func TestLineNumbers(t *testing.T) {
 	f := New(WithClasses(true), WithLineNumbers(true))
 	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")

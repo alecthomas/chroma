@@ -131,6 +131,17 @@ func HighlightLines(ranges [][2]int) Option {
 	}
 }
 
+// WithLinePrompts adds a non-selectable prompt before each line in the given ranges.
+//
+// A range is the beginning and ending of a range as 1-based line numbers, inclusive.
+func WithLinePrompts(prompt string, ranges [][2]int) Option {
+	return func(f *Formatter) {
+		f.linePrompt = prompt
+		f.linePromptRanges = ranges
+		sort.Sort(f.linePromptRanges)
+	}
+}
+
 // BaseLineNumber sets the initial number to start line numbering at. Defaults to 1.
 func BaseLineNumber(n int) Option {
 	return func(f *Formatter) {
@@ -219,15 +230,30 @@ type Formatter struct {
 	lineNumbersInTable    bool
 	linkableLineNumbers   bool
 	lineNumbersIDPrefix   string
-	highlightRanges       highlightRanges
+	highlightRanges       lineRanges
+	linePrompt            string
+	linePromptRanges      lineRanges
 	baseLineNumber        int
 }
 
-type highlightRanges [][2]int
+type lineRanges [][2]int
 
-func (h highlightRanges) Len() int           { return len(h) }
-func (h highlightRanges) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
-func (h highlightRanges) Less(i, j int) bool { return h[i][0] < h[j][0] }
+func (r lineRanges) Len() int           { return len(r) }
+func (r lineRanges) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
+func (r lineRanges) Less(i, j int) bool { return r[i][0] < r[j][0] }
+
+func (r lineRanges) match(rangeIndex, line int) (bool, int) {
+	for rangeIndex < len(r) && line > r[rangeIndex][1] {
+		rangeIndex++
+	}
+	if rangeIndex < len(r) {
+		lineRange := r[rangeIndex]
+		if line >= lineRange[0] && line <= lineRange[1] {
+			return true, rangeIndex
+		}
+	}
+	return false, rangeIndex
+}
 
 func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) (err error) {
 	return f.writeHTML(w, style, slices.Collect(iterator))
@@ -266,10 +292,8 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprintf(w, "%s", f.preWrapper.Start(false, f.styleAttrWithMode(css, chroma.PreWrapper, style)))
 		for index := range lines {
 			line := f.baseLineNumber + index
-			highlight, next := f.shouldHighlight(highlightIndex, line)
-			if next {
-				highlightIndex++
-			}
+			highlight, nextHighlightIndex := f.highlightRanges.match(highlightIndex, line)
+			highlightIndex = nextHighlightIndex
 			if highlight {
 				fmt.Fprintf(w, "<span%s>", f.styleAttr(css, chroma.LineHighlight))
 			}
@@ -288,13 +312,14 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 	fmt.Fprintf(w, "%s", f.preWrapper.Start(true, f.styleAttrWithMode(css, chroma.PreWrapper, style)))
 
 	highlightIndex = 0
+	linePromptIndex := 0
 	for index, tokens := range lines {
 		// 1-based line number.
 		line := f.baseLineNumber + index
-		highlight, next := f.shouldHighlight(highlightIndex, line)
-		if next {
-			highlightIndex++
-		}
+		highlight, nextHighlightIndex := f.highlightRanges.match(highlightIndex, line)
+		highlightIndex = nextHighlightIndex
+		linePrompt, nextLinePromptIndex := f.linePromptRanges.match(linePromptIndex, line)
+		linePromptIndex = nextLinePromptIndex
 
 		if !f.preventSurroundingPre && !f.inlineCode {
 			// Start of Line
@@ -318,6 +343,9 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 			}
 
 			fmt.Fprintf(w, `<span%s>`, f.styleAttr(css, chroma.CodeLine))
+			if linePrompt {
+				fmt.Fprintf(w, `<span%s>%s</span>`, f.styleAttr(css, chroma.GenericPrompt), html.EscapeString(f.linePrompt))
+			}
 		}
 
 		for _, token := range tokens {
@@ -367,21 +395,6 @@ func (f *Formatter) lineTitleWithLinkIfNeeded(css map[chroma.TokenType]string, l
 
 func (f *Formatter) lineID(line int) string {
 	return fmt.Sprintf("%s%d", f.lineNumbersIDPrefix, line)
-}
-
-func (f *Formatter) shouldHighlight(highlightIndex, line int) (bool, bool) {
-	next := false
-	for highlightIndex < len(f.highlightRanges) && line > f.highlightRanges[highlightIndex][1] {
-		highlightIndex++
-		next = true
-	}
-	if highlightIndex < len(f.highlightRanges) {
-		hrange := f.highlightRanges[highlightIndex]
-		if line >= hrange[0] && line <= hrange[1] {
-			return true, next
-		}
-	}
-	return false, next
 }
 
 func (f *Formatter) class(t chroma.TokenType) string {
@@ -584,10 +597,14 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 		classes[chroma.PreWrapper] += `white-space: pre-wrap; word-break: break-word;`
 	}
 	lineNumbersStyle := `white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;`
+	linePromptStyle := `white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em;`
 	// All rules begin with default rules followed by user provided rules
 	classes[chroma.Line] = `display: flex;` + classes[chroma.Line]
 	classes[chroma.LineNumbers] = lineNumbersStyle + classes[chroma.LineNumbers]
 	classes[chroma.LineNumbersTable] = lineNumbersStyle + classes[chroma.LineNumbersTable]
+	if len(f.linePromptRanges) > 0 {
+		classes[chroma.GenericPrompt] = linePromptStyle + classes[chroma.GenericPrompt]
+	}
 	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTable]
 	classes[chroma.LineTableTD] = "vertical-align: top; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTableTD]
 	classes[chroma.LineLink] = "outline: none; text-decoration: none; color: inherit" + classes[chroma.LineLink]

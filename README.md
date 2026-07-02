@@ -190,6 +190,7 @@ following constructor options:
 - `WithLineNumbers()` - Render line numbers (style with `LineNumbers`).
 - `WithLinkableLineNumbers()` - Make the line numbers linkable and be a link to themselves.
 - `HighlightLines(ranges)` - Highlight lines in these ranges (style with `LineHighlight`).
+- `WithLinePrompts(prompt, ranges)` - Render non-selectable prompts before lines in these ranges.
 - `LineNumbersInTable()` - Use a table for formatting line numbers and code, rather than spans.
 
 If `WithClasses()` is used, the corresponding CSS can be obtained from the formatter with:
