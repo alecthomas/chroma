@@ -1,0 +1,122 @@
+<lexer>
+  <config>
+    <name>Astro</name>
+    <alias>astro</alias>
+    <filename>*.astro</filename>
+    <mime_type>text/x-astro</mime_type>
+    <case_insensitive>true</case_insensitive>
+    <dot_all>true</dot_all>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="(\A---[ \t]*\r?\n)(.*?)(^---[ \t]*(?:\r?\n|$))">
+        <bygroups>
+          <token type="CommentPreproc"/>
+          <using lexer="TypeScript"/>
+          <token type="CommentPreproc"/>
+        </bygroups>
+      </rule>
+      <rule pattern="&lt;!--">
+        <token type="Other"/>
+        <push state="comment"/>
+      </rule>
+      <rule pattern="(&lt;\s*script\b(?=[^&gt;]*(?:lang|type)\s*=\s*['&#34;]?(?:json|application/(?:ld\+)?json|importmap|speculationrules)(?:['&#34;]|[\s&gt;]))[^&gt;]*&gt;)(.*?)(&lt;\s*/\s*script\s*&gt;)">
+        <bygroups>
+          <token type="Other"/>
+          <using lexer="JSON"/>
+          <token type="Other"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(&lt;\s*script\b(?=[^&gt;]*(?:lang|type)\s*=\s*['&#34;]?(?:js|javascript|text/javascript|application/(?:x-)?javascript|text/ecmascript|application/ecmascript|module)(?:['&#34;]|[\s&gt;]))[^&gt;]*&gt;)(.*?)(&lt;\s*/\s*script\s*&gt;)">
+        <bygroups>
+          <token type="Other"/>
+          <using lexer="JavaScript"/>
+          <token type="Other"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(&lt;\s*script\b(?=[^&gt;]*(?:lang|type)\s*=\s*['&#34;]?(?:ts|typescript|text/typescript|application/typescript)(?:['&#34;]|[\s&gt;]))[^&gt;]*&gt;)(.*?)(&lt;\s*/\s*script\s*&gt;)">
+        <bygroups>
+          <token type="Other"/>
+          <using lexer="TypeScript"/>
+          <token type="Other"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(&lt;\s*script\b[^&gt;]*&gt;)(.*?)(&lt;\s*/\s*script\s*&gt;)">
+        <bygroups>
+          <token type="Other"/>
+          <using lexer="TypeScript"/>
+          <token type="Other"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(&lt;\s*style\b(?=[^&gt;]*lang\s*=\s*['&#34;]?(?:scss|source\.scss|source\.css\.scss)(?:['&#34;]|[\s&gt;]))[^&gt;]*&gt;)(.*?)(&lt;\s*/\s*style\s*&gt;)">
+        <bygroups>
+          <token type="Other"/>
+          <using lexer="SCSS"/>
+          <token type="Other"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(&lt;\s*style\b(?=[^&gt;]*lang\s*=\s*['&#34;]?(?:sass|source\.sass)(?:['&#34;]|[\s&gt;]))[^&gt;]*&gt;)(.*?)(&lt;\s*/\s*style\s*&gt;)">
+        <bygroups>
+          <token type="Other"/>
+          <using lexer="Sass"/>
+          <token type="Other"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(&lt;\s*style\b(?=[^&gt;]*lang\s*=\s*['&#34;]?(?:stylus|source\.stylus)(?:['&#34;]|[\s&gt;]))[^&gt;]*&gt;)(.*?)(&lt;\s*/\s*style\s*&gt;)">
+        <bygroups>
+          <token type="Other"/>
+          <using lexer="Stylus"/>
+          <token type="Other"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(&lt;\s*style\b[^&gt;]*&gt;)(.*?)(&lt;\s*/\s*style\s*&gt;)">
+        <bygroups>
+          <token type="Other"/>
+          <using lexer="CSS"/>
+          <token type="Other"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(\s*)(=)(\s*)({)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Operator"/>
+          <token type="Text"/>
+          <token type="Punctuation"/>
+        </bygroups>
+        <push state="expression"/>
+      </rule>
+      <rule pattern="{">
+        <token type="Punctuation"/>
+        <push state="expression"/>
+      </rule>
+      <rule pattern=".+?">
+        <token type="Other"/>
+      </rule>
+    </state>
+    <state name="comment">
+      <rule pattern="--&gt;">
+        <token type="Other"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern=".+?">
+        <token type="Other"/>
+      </rule>
+    </state>
+    <state name="expression">
+      <rule pattern="}">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(?&lt;!(?&lt;!\\)\\)(['&#34;`]).*?(?&lt;!(?&lt;!\\)\\)\1">
+        <using lexer="TypeScript"/>
+      </rule>
+      <rule pattern="{">
+        <token type="Punctuation"/>
+        <push state="expression"/>
+      </rule>
+      <rule pattern="[^{}]+">
+        <using lexer="TypeScript"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
