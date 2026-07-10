@@ -1,0 +1,21 @@
+import ("math" "testing")
+
+#! Build a typed user score.
+fn score(name: Str count: Int scale: Double) Option<Record<name: Str age: Int>> {
+    let label = "garden\n" # ordinary comment
+    let user = { name: label age: count }
+    let ages = [count 1 2]
+    let points = count * 2 + 3.14 as Double
+    match {
+        count == 0 { false as Bool }
+        { math.round(scale) + user.age + ages.len() }
+    }
+}
+
+extern "counter" {
+    #! Create a counter.
+    fn new(value: Int) Foreign<Counter>
+    fn get(counter: Foreign<Counter>) Int
+}
+
+let active = true
