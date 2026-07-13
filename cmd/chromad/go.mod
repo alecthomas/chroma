@@ -3,7 +3,7 @@ module github.com/alecthomas/chroma/v3/cmd/chromad
 go 1.25
 
 require (
-	github.com/alecthomas/chroma/v3 v3.0.0-alpha.3
+	github.com/alecthomas/chroma/v3 v3.0.0-alpha.5
 	github.com/alecthomas/kong v1.15.0
 	github.com/alecthomas/kong-hcl v1.0.1
 	github.com/gorilla/csrf v1.7.2
