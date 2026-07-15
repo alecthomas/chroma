@@ -79,7 +79,7 @@
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="^( *)([+-] )(\[[ X]\])( .+)$">
+      <rule pattern="^( *)([+-] )(\[[ X-]\])( .+)$">
         <bygroups>
           <token type="Text"/>
           <token type="Keyword"/>
@@ -87,7 +87,7 @@
           <usingself state="inline"/>
         </bygroups>
       </rule>
-      <rule pattern="^( +)(\* )(\[[ X]\])( .+)$">
+      <rule pattern="^( +)(\* )(\[[ X-]\])( .+)$">
         <bygroups>
           <token type="Text"/>
           <token type="Keyword"/>
