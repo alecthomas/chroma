@@ -256,7 +256,7 @@
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="(\s*)(\+[^+]+?\+)((?=\W|\n|$))">
+      <rule pattern="(\s*)(\+[^+\n]+?\+)((?=\W|\n|$))">
         <bygroups>
           <token type="Text"/>
           <token type="GenericDeleted"/>
