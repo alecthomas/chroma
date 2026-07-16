@@ -235,7 +235,7 @@
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="(\s*)(/[^/]+?/)((?=\W|\n|$))">
+      <rule pattern="(\s*)(/[^/\n]+?/)((?=\W|\n|$))">
         <bygroups>
           <token type="Text"/>
           <token type="GenericEmph"/>
@@ -263,7 +263,7 @@
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="(\s*)(_[^_]+?_)((?=\W|\n|$))">
+      <rule pattern="(\s*)(_[^_\n]+?_)((?=\W|\n|$))">
         <bygroups>
           <token type="Text"/>
           <token type="GenericUnderline"/>
