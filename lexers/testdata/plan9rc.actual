@@ -1,0 +1,71 @@
+#!/bin/rc
+# Plan 9 rc lexer smoke test
+path=(. /bin)
+ifs=' 	
+'
+fn greet {
+	echo 'it''s plan 9' $user $path(2) $#*
+}
+. ./lib/profile
+if(. ./lib/check) echo checked
+if not . ./lib/fallback
+cc -$flags $stem.c
+echo long \
+	line
+echo two\
+three
+x=/tmp echo $x^/*.c
+echo $list(1 2- 3-4) $'quoted name'
+echo pre'$x'
+echo pre`{echo mid}post
+echo 'a'b
+echo 'left'right
+echo 'x'$"missing
+fn 'if' { echo quoted-if:$* }
+fn i^n { echo caret-in:$* }
+fn f'or' { echo quoted-for:$* }
+'if' ok
+i^n ok
+f'or' ok
+for(file in `{ls *.c}) if(~ $file *.c) {
+	cmp <{old $file} >{new $file} >[2=1] >>log
+}
+switch($status) {
+case ''
+	echo ok
+case *
+	! whatis status
+}
+while() @ {
+	rfork ens
+	flag x +
+	wait $apid
+	shift 1
+	eval echo $"path
+	exec echo done
+}
+cat <<'EOF'
+$not_substituted
+EOF
+cat <<EOF
+$substituted^
+EOF
+cat <<A <<'B'
+$first
+A
+$second
+B
+cat <<TAG # comment after heredoc marker
+$after_comment
+TAG
+newconn <>/net/tcp/clone >[1=0]
+cmd >[2=] <[0=1] <>[3=4]
+echo amber > out.txt >[2=1]
+cat <[3]in.txt <[0=3]
+cat <>[3]rw.txt <>[0=3]
+lpd <>[3]/net/tcp/42/data |[2=1] cat >/dev/null
+echo viafd >[1=2] |[3=2] cat <[0=3]
+nested=`{echo `{date}; {echo hi}}
+indirect=$$name
+status=''
+if not exit $status
