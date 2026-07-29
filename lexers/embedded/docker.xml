@@ -19,6 +19,9 @@
       <rule pattern="#.*">
         <token type="Comment" />
       </rule>
+      <rule pattern="\s+">
+        <token type="TextWhitespace" />
+      </rule>
       <rule pattern="(ONBUILD)((?:\s*\\?\s*))">
         <bygroups>
           <token type="Keyword" />
