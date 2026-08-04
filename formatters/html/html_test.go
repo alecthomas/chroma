@@ -449,6 +449,16 @@ func TestWriteCssWithAllClasses(t *testing.T) {
 	assert.NotContains(t, buf.String(), ".chroma . {", "Generated css doesn't contain invalid css")
 }
 
+func TestWriteCssWithAllClassesGithubDark(t *testing.T) {
+	formatter := New(WithAllClasses(true))
+
+	var buf bytes.Buffer
+	err := formatter.WriteCSS(&buf, styles.Get("github-dark"))
+
+	assert.NoError(t, err)
+	assert.Contains(t, buf.String(), ".chroma .nx")
+}
+
 func TestModeClassOnWrapper(t *testing.T) {
 	tests := []struct {
 		name      string

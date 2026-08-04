@@ -548,7 +548,10 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 	// Convert the style.
 	for t := range chroma.StandardTypes {
 		entry := style.Get(t)
-		if t != chroma.Background {
+		// With allClasses, keep the fully resolved entry so every token's
+		// rule is materialised explicitly rather than relying on the CSS
+		// cascade from the wrapper class.
+		if t != chroma.Background && !f.allClasses {
 			entry = entry.Sub(bg)
 		}
 
