@@ -1,4 +1,4 @@
-<style name="tomorrow-night-eighties">
+<style name="tomorrow-night-eighties" counterpart="tomorrow">
   <entry type="Background" style="#CCCCCC bg:#2D2D2D"/>
   <entry type="Error" style="#CDCDCD bg:#F2777A"/>
   <entry type="LineTable" style=""/>

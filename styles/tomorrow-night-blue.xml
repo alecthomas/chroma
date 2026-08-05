@@ -1,4 +1,4 @@
-<style name="tomorrow-night-blue">
+<style name="tomorrow-night-blue" counterpart="tomorrow">
   <entry type="Background" style="#FFFFFF bg:#002451"/>
   <entry type="Error" style="#FFFFFF bg:#F99DA5"/>
   <entry type="LineTable" style=""/>
