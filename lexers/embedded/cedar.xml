@@ -1,0 +1,86 @@
+<lexer>
+  <config>
+    <name>Cedar</name>
+    <alias>cedar</alias>
+    <filename>*.cedar</filename>
+    <mime_type>text/x-cedar</mime_type>
+    <ensure_nl>true</ensure_nl>
+  </config>
+  <rules>
+    <state name="string">
+      <rule pattern="&#34;">
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\\u\{[0-9a-fA-F]+\}">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="\\x[0-9a-fA-F]{2}">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="\\[\\&#34;nrt0]">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="[^\\&#34;\n]+">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="\\">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="root">
+      <rule pattern="\s+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="//.*$">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="@[A-Za-z_][A-Za-z0-9_]*">
+        <token type="NameDecorator"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralString"/>
+        <push state="string"/>
+      </rule>
+      <rule pattern="\b(permit|forbid)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(when|unless)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(if|then|else|in|like|has|is)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(true|false)\b">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="\?(principal|resource)\b">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="\b(principal|action|resource|context)\b">
+        <token type="NameBuiltinPseudo"/>
+      </rule>
+      <rule pattern="[A-Za-z_][A-Za-z0-9_]*(?=\s*\()">
+        <token type="NameFunction"/>
+      </rule>
+      <rule pattern="::">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[A-Z][A-Za-z0-9_]*">
+        <token type="NameClass"/>
+      </rule>
+      <rule pattern="\d+">
+        <token type="LiteralNumberInteger"/>
+      </rule>
+      <rule pattern="==|!=|&lt;=|&gt;=|&amp;&amp;|\|\||[!&lt;&gt;+\-*]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[(){}\[\],;:.]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[A-Za-z_][A-Za-z0-9_]*">
+        <token type="Name"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

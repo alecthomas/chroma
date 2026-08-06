@@ -1,0 +1,64 @@
+// Cedar policy language example
+
+@id("alice-view-photo")
+@advice("Alice may view her own vacation photo")
+permit (
+    principal == User::"alice",
+    action == Action::"view",
+    resource == Photo::"VacationPhoto94.jpg"
+);
+
+@id("engineering-share")
+permit (
+    principal is User in Group::"alice_friends",
+    action in [Action::"listAlbums", Action::"viewPhoto"],
+    resource
+)
+when {
+    principal.department == "HardwareEngineering" && principal.jobLevel >= 5
+};
+
+forbid (
+    principal,
+    action,
+    resource
+)
+when {
+    resource.private
+}
+unless {
+    principal == resource.owner
+};
+
+permit (
+    principal,
+    action == Action::"editPhoto",
+    resource
+)
+when {
+    resource.has("owner") &&
+    resource.owner == principal &&
+    !resource.tags.contains("locked") &&
+    resource.name like "*.jpg" &&
+    principal.age > -1 &&
+    context.ip_addr.isInRange(ip("10.0.0.0/8")) &&
+    context.request_time.value < datetime("2026-01-01T00:00:00Z") &&
+    context.balance == decimal("10.5") &&
+    context.timeout == duration("5m30s")
+};
+
+permit (
+    principal in ?principal,
+    action,
+    resource in ?resource
+);
+
+permit (
+    principal,
+    action,
+    resource
+)
+when {
+    {name: "alice", age: 30}.name == principal.name &&
+    [1, 2, 3].containsAll([1, 2])
+};
