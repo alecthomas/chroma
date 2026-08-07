@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"maps"
 	"slices"
 	"testing"
 
@@ -19,29 +20,22 @@ func TestInclude(t *testing.T) {
 	lexer := &RegexLexer{rules: actual}
 	err := include.Mutator.(LexerMutator).MutateLexer(lexer.rules, "root", 0)
 	assert.NoError(t, err)
-	expected := CompiledRules{
-		"root": {
-			{Rule: Rule{
-				Pattern: "//.+",
-				Type:    Comment,
-			}},
-			{Rule: Rule{
-				Pattern: `"[^"]*"`,
-				Type:    String,
-			}},
-		},
-		"other": {
-			{Rule: Rule{
-				Pattern: "//.+",
-				Type:    Comment,
-			}},
-			{Rule: Rule{
-				Pattern: `"[^"]*"`,
-				Type:    String,
-			}},
-		},
+	expected := []*CompiledRule{
+		{Rule: Rule{
+			Pattern: "//.+",
+			Type:    Comment,
+		}},
+		{Rule: Rule{
+			Pattern: `"[^"]*"`,
+			Type:    String,
+		}},
 	}
-	assert.Equal(t, expected, actual)
+	// Include splices the included state's rule pointers into the target state,
+	// so "root" and "other" alias the same rules. Assert per-state to keep this
+	// independent of how a whole-map comparison renders shared pointers.
+	assert.Equal(t, []string{"other", "root"}, slices.Sorted(maps.Keys(actual)))
+	assert.Equal(t, expected, actual["other"])
+	assert.Equal(t, expected, actual["root"])
 }
 
 func TestCombine(t *testing.T) {
