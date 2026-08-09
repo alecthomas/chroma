@@ -114,6 +114,8 @@
   {"type":"Text","value":" Checkbox lists                                            "},
   {"type":"GenericEmph","value":" :checkbox:list:"},
   {"type":"Text","value":"\n"},
+  {"type":"Keyword","value":"- [-]"},
+  {"type":"Text","value":" intermediate\n"},
   {"type":"Keyword","value":"- [ ]"},
   {"type":"Text","value":" asdf\n"},
   {"type":"Keyword","value":"- [X]"},
@@ -372,5 +374,6 @@
   {"type":"Text","value":"\n\n"},
   {"type":"GenericDeleted","value":"+StrikeTrough+"},
   {"type":"Text","value":"\n\n"},
-  {"type":"GenericUnderline","value":"_Underlined_"}
+  {"type":"GenericUnderline","value":"_Underlined_"},
+  {"type":"Text","value":"\n"}
 ]
