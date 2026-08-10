@@ -26,8 +26,12 @@ CLOSED: [2018-08-01 Wed 16:17]
 
 {{{n}}} abc {{{n(,10)}}} def {{{n(x,5)}}}
 * Second heading in this post
-- unordered list item 1
-- unordered list item 2
+- unordered list item hyphen 1
+- unordered list item hyphen 2
+
++ unordered list item plus 1
++ unordered list item plus 2
+
 - Desc1 :: Description list item 1
 - Desc2 :: Description list item 2
 
