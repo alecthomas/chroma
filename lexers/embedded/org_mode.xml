@@ -133,6 +133,14 @@
           <usingself state="inline"/>
         </bygroups>
       </rule>
+      <rule pattern="^( *)([0-9]+[.)])( \[[ X-]\])( .+)$">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Keyword"/>
+          <token type="Keyword"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
       <rule pattern="^( *)([0-9]+[.)])( .+)$">
         <bygroups>
           <token type="Text"/>
