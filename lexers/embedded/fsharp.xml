@@ -5,6 +5,10 @@
     <filename>*.fs</filename>
     <filename>*.fsi</filename>
     <mime_type>text/x-fsharp</mime_type>
+    <analyse>
+      <regex pattern="(?m)^\s*(let rec|let|module|open)\b" score="0.4"/>
+      <regex pattern="\|&gt;" score="0.1"/>
+    </analyse>
   </config>
   <rules>
     <state name="comment">
