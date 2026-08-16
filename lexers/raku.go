@@ -561,10 +561,15 @@ func rakuRules() Rules {
 					}
 				}
 			default:
-				state.Groups = []string{state.Groups[0] + string(text[state.Pos:endPos+nChars])}
+				// If no closing delimiter was found, endPos is already
+				// len(text); don't also add nChars on top of that, or
+				// we'd read past the end of the input (same guard as
+				// the heredoc-terminator handling above).
+				commentEnd := min(endPos+nChars, len(text))
+				state.Groups = []string{state.Groups[0] + string(text[state.Pos:commentEnd])}
 			}
 
-			state.Pos = endPos + nChars
+			state.Pos = min(endPos+nChars, len(text))
 
 			return nil
 		}
