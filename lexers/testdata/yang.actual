@@ -62,3 +62,5 @@ module server-system {
         }
     }
 }
+
+/* nested /* comment */ still comment */

@@ -20,6 +20,14 @@
         <pop depth="1"/>
       </rule>
     </state>
+    <state name="lifetime">
+      <rule pattern="[a-zA-Z_]+\w*">
+        <token type="NameAttribute"/>
+      </rule>
+      <rule>
+        <pop depth="1"/>
+      </rule>
+    </state>
     <state name="number_lit">
       <rule pattern="[ui]\d*">
         <token type="Keyword"/>

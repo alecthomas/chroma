@@ -85,7 +85,7 @@
       </rule>
       <rule pattern="/\*">
         <token type="CommentMultiline"/>
-        <push state="comment"/>
+        <push/>
       </rule>
       <rule pattern="\*/">
         <token type="CommentMultiline"/>

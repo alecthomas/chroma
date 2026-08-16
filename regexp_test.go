@@ -216,3 +216,30 @@ func TestIgnoreToken(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Keyword, "hello"}, {TextWhitespace, "\n"}}, slices.Collect(it))
 }
+
+func TestPushToUndefinedStateIsAnError(t *testing.T) {
+	lexer, err := NewLexer(&Config{Name: "test"}, func() Rules {
+		return Rules{
+			"root": {
+				{`a`, Text, Push("nonexistent")},
+			},
+		}
+	})
+	assert.NoError(t, err)
+	_, err = lexer.Tokenise(nil, "a")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), `invalid push state "nonexistent"`)
+
+	// #pop is a valid pseudo-state and must not be rejected.
+	lexer = mustNewLexer(t, &Config{Name: "test"}, Rules{ // nolint: forbidigo
+		"root": {
+			{`a`, Text, Push("other")},
+		},
+		"other": {
+			{`b`, Text, Push("#pop")},
+		},
+	})
+	it, err := lexer.Tokenise(nil, "ab")
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{Text, "a"}, {Text, "b"}}, slices.Collect(it))
+}

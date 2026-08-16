@@ -164,6 +164,11 @@
         <token type="CommentSingle"/>
       </rule>
     </state>
+    <state name="warn-directive">
+      <rule pattern=".+$">
+        <token type="CommentSingle"/>
+      </rule>
+    </state>
     <state name="classdef-directive">
       <rule pattern="\s+">
         <token type="Text"/>

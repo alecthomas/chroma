@@ -17,3 +17,5 @@ public Number SumMethod() {
     do finishTask(x, "AAA")
 
     quit
+    #WARN unused variable
+    #INFO informational

@@ -18,6 +18,14 @@ type SerialisableMutator interface {
 	MutatorKind() string
 }
 
+// ValidatingMutator is a Mutator that can validate itself against the compiled rules.
+//
+// Validation occurs once, after all LexerMutators have been applied.
+type ValidatingMutator interface {
+	Mutator
+	ValidateMutator(rules CompiledRules) error
+}
+
 // A LexerMutator is an additional interface that a Mutator can implement
 // to modify the lexer when it is compiled.
 type LexerMutator interface {
@@ -70,6 +78,17 @@ func (m *multiMutator) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 }
 
 func (m *multiMutator) MutatorKind() string { return "mutators" }
+
+func (m *multiMutator) ValidateMutator(rules CompiledRules) error {
+	for _, mutator := range m.Mutators {
+		if validate, ok := mutator.(ValidatingMutator); ok {
+			if err := validate.ValidateMutator(rules); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
 
 func (m *multiMutator) Mutate(state *LexerState) error {
 	for _, modifier := range m.Mutators {
@@ -145,7 +164,24 @@ type pushMutator struct {
 	States []string `xml:"state,attr"`
 }
 
+var (
+	_ ValidatingMutator = (*pushMutator)(nil)
+	_ ValidatingMutator = (*multiMutator)(nil)
+)
+
 func (p *pushMutator) MutatorKind() string { return "push" }
+
+func (p *pushMutator) ValidateMutator(rules CompiledRules) error {
+	for _, state := range p.States {
+		if state == "#pop" {
+			continue
+		}
+		if _, ok := rules[state]; !ok {
+			return fmt.Errorf("invalid push state %q", state)
+		}
+	}
+	return nil
+}
 
 func (p *pushMutator) Mutate(s *LexerState) error {
 	if len(p.States) == 0 {
