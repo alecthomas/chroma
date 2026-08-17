@@ -84,3 +84,7 @@ h1
 
     {@debug user}
 </template>
+
+{#snippet figure(caption)}
+    <figure>{caption}</figure>
+{/snippet}
