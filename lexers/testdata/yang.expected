@@ -216,5 +216,7 @@
   {"type":"Punctuation","value":"}"},
   {"type":"TextWhitespace","value":"\n"},
   {"type":"Punctuation","value":"}"},
+  {"type":"TextWhitespace","value":"\n\n"},
+  {"type":"CommentMultiline","value":"/* nested /* comment */ still comment */"},
   {"type":"TextWhitespace","value":"\n"}
 ]

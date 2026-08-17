@@ -184,3 +184,7 @@ fn named_args() {
 	call$(a, b: true)
 }
 
+
+type T {
+    x: 'a int,
+}

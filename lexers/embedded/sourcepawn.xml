@@ -31,8 +31,6 @@
       <rule pattern="(bool|float|void|int|char)\b"><token type="KeywordType"/></rule>
       <rule pattern="(true|false)\b"><token type="KeywordConstant"/></rule>
       <rule pattern="[a-zA-Z_]\w*"><token type="Name"/></rule>
-      <rule pattern="((?:[\w*\s])+?(?:\s|[*]))([a-zA-Z_]\w*)(\s*\([^;]*?\))([^;{]*)(\{)"><bygroups><usingself state="root"/><token type="NameFunction"/><usingself state="root"/><usingself state="root"/><token type="Punctuation"/></bygroups><push state="function"/></rule>
-      <rule pattern="((?:[\w*\s])+?(?:\s|[*]))([a-zA-Z_]\w*)(\s*\([^;]*?\))([^;]*)(;)"><bygroups><usingself state="root"/><token type="NameFunction"/><usingself state="root"/><usingself state="root"/><token type="Punctuation"/></bygroups></rule>
     </state>
     <state name="string">
       <rule pattern="&quot;"><token type="LiteralString"/><pop depth="1"/></rule>

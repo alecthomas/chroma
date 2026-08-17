@@ -1085,5 +1085,20 @@
   {"type":"Punctuation","value":")"},
   {"type":"TextWhitespace","value":"\n"},
   {"type":"Punctuation","value":"}"},
-  {"type":"TextWhitespace","value":"\n\n"}
+  {"type":"TextWhitespace","value":"\n\n\n"},
+  {"type":"Name","value":"type"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Name","value":"T"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"{"},
+  {"type":"TextWhitespace","value":"\n    "},
+  {"type":"Name","value":"x"},
+  {"type":"Text","value":": "},
+  {"type":"NameAttribute","value":"'a"},
+  {"type":"Text","value":" "},
+  {"type":"KeywordType","value":"int"},
+  {"type":"Punctuation","value":","},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"Punctuation","value":"}"},
+  {"type":"TextWhitespace","value":"\n"}
 ]
