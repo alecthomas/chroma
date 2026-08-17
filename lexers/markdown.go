@@ -98,8 +98,10 @@ func markdownRules() Rules {
 			{`\\.`, Text, nil},
 			{`(\s)(\*|_)((?:(?!\2).)*)(\2)((?=\W|\n))`, ByGroups(Text, GenericEmph, GenericEmph, GenericEmph, Text), nil},
 			{`(\s)((\*\*|__).*?)\3((?=\W|\n))`, ByGroups(Text, GenericStrong, GenericStrong, Text), nil},
-			{`(\s)(~~[^~]+~~)((?=\W|\n))`, ByGroups(Text, GenericDeleted, Text), nil},
-			{"`[^`]+`", LiteralStringBacktick, nil},
+			{`(\s)(~~(?:[^~\n]|\n(?![ \t]*\n))+~~)((?=\W|\n))`, ByGroups(Text, GenericDeleted, Text), nil},
+			// A code span may contain line endings but not a blank line, which
+			// terminates the enclosing paragraph (CommonMark 6.1 "Code spans").
+			{"`(?:[^`\\n]|\\n(?![ \\t]*\\n))+`", LiteralStringBacktick, nil},
 			{`[@#][\w/:]+`, NameEntity, nil},
 			{`(!?\[)([^]]+)(\])(\()([^)]+)(\))`, ByGroups(Text, NameTag, Text, Text, NameAttribute, Text), nil},
 			{`.|\n`, Text, nil},
