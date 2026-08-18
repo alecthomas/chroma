@@ -1,0 +1,6 @@
+pre-commit:
+  commands:
+    lexer-metadata:
+      run: ./bin/just lexer-metadata
+      files: git ls-files -- lexers/lexers_gen.go
+      stage_fixed: true
