@@ -16,7 +16,7 @@ var embedded embed.FS
 var (
 	registryMu sync.Mutex
 	// registry holds user-registered styles plus embedded styles that have
-	// already been parsed. Embedded styles are parsed lazily by lookup so
+	// already been parsed. Embedded styles are parsed lazily by Lookup so
 	// that importing this package does not pay for parsing every style;
 	// see TestEmbeddedStyleNamesMatchFilenames for the invariant that makes
 	// the lazy filename-based lookup possible.
@@ -40,28 +40,9 @@ var embeddedNames = sync.OnceValue(func() []string {
 	return names
 })
 
-// lookup returns the style with the given lowercased name, parsing it from
-// the embedded styles on first use. registryMu must be held.
-func lookup(name string) (*chroma.Style, bool) {
-	if style, ok := registry[name]; ok {
-		return style, true
-	}
-	f, err := embedded.Open(name + ".xml")
-	if err != nil {
-		return nil, false
-	}
-	defer f.Close()
-	style, err := chroma.NewXMLStyle(f)
-	if err != nil {
-		panic(err)
-	}
-	registry[name] = style
-	return style, true
-}
-
 // Fallback style. Reassign to change the default fallback style.
 var Fallback = func() *chroma.Style {
-	fallback, ok := lookup("swapoff")
+	fallback, ok := Lookup("swapoff")
 	if !ok {
 		panic(`chroma/styles: default fallback style "swapoff" is missing`)
 	}
@@ -90,11 +71,26 @@ func Names() []string {
 	return names
 }
 
-// Lookup a named style, returning false if not found.
+// Lookup a named style, returning false if not found. Embedded styles are
+// parsed on first lookup.
 func Lookup(name string) (*chroma.Style, bool) {
+	name = strings.ToLower(name)
 	registryMu.Lock()
 	defer registryMu.Unlock()
-	return lookup(strings.ToLower(name))
+	if style, ok := registry[name]; ok {
+		return style, true
+	}
+	f, err := embedded.Open(name + ".xml")
+	if err != nil {
+		return nil, false
+	}
+	defer f.Close()
+	style, err := chroma.NewXMLStyle(f)
+	if err != nil {
+		panic(err)
+	}
+	registry[name] = style
+	return style, true
 }
 
 // Get named style, or Fallback.
