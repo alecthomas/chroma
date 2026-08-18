@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/dlclark/regexp2/v2"
 )
@@ -130,7 +131,16 @@ func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 	if err != nil {
 		return nil, err
 	}
+	return NewXMLLexerFromConfig(config, from, path)
+}
 
+// NewXMLLexerFromConfig creates a RegexLexer whose Config is already known,
+// loading its rules lazily from the serialised lexer at path in from.
+//
+// The analyser regexes in config are compiled lazily on the first call to
+// AnalyseText; an invalid analyser regex results in a zero score at analyse
+// time rather than an error here.
+func NewXMLLexerFromConfig(config *Config, from fs.FS, path string) (*RegexLexer, error) {
 	if err := config.validateGlobs(); err != nil {
 		return nil, err
 	}
@@ -143,25 +153,28 @@ func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 			score float32
 		}
 
-		regexAnalysers := make([]regexAnalyse, 0, len(config.Analyse.Regexes))
+		compileAnalysers := sync.OnceValue(func() []regexAnalyse {
+			regexAnalysers := make([]regexAnalyse, 0, len(config.Analyse.Regexes))
 
-		regexFlags := regexp2.None
-		if config.CaseInsensitive {
-			regexFlags = regexp2.IgnoreCase
-		}
-		for _, ra := range config.Analyse.Regexes {
-			re, err := regexp2.Compile(ra.Pattern, regexFlags)
-			if err != nil {
-				return nil, fmt.Errorf("%s: %q is not a valid analyser regex: %w", config.Name, ra.Pattern, err)
+			regexFlags := regexp2.None
+			if config.CaseInsensitive {
+				regexFlags = regexp2.IgnoreCase
 			}
+			for _, ra := range config.Analyse.Regexes {
+				re, err := regexp2.Compile(ra.Pattern, regexFlags)
+				if err != nil {
+					return nil
+				}
 
-			regexAnalysers = append(regexAnalysers, regexAnalyse{re, ra.Score})
-		}
+				regexAnalysers = append(regexAnalysers, regexAnalyse{re, ra.Score})
+			}
+			return regexAnalysers
+		})
 
 		analyserFn = func(text string) float32 {
 			var score float32
 
-			for _, ra := range regexAnalysers {
+			for _, ra := range compileAnalysers() {
 				ok, err := ra.re.MatchString(text)
 				if err != nil {
 					return 0
