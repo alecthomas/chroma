@@ -44,6 +44,13 @@ func EmbedFontFile(fontFamily string, fileName string) (option Option, err error
 
 // EmbedFont embeds given base64 encoded font
 func EmbedFont(fontFamily string, font string, format FontFormat) Option {
+	return EmbedFontProvider(fontFamily, func() string { return font }, format)
+}
+
+// EmbedFontProvider embeds the base64 encoded font returned by font, which
+// is not called until the formatter actually writes output. Use this instead
+// of EmbedFont when producing the font data is expensive.
+func EmbedFontProvider(fontFamily string, font func() string, format FontFormat) Option {
 	return func(f *Formatter) { f.fontFamily = fontFamily; f.embeddedFont = font; f.fontFormat = format }
 }
 
@@ -59,7 +66,7 @@ func New(options ...Option) *Formatter {
 // Formatter that generates SVG.
 type Formatter struct {
 	fontFamily   string
-	embeddedFont string
+	embeddedFont func() string
 	fontFormat   FontFormat
 }
 
@@ -93,7 +100,7 @@ func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens []chroma.T
 		return err
 	}
 
-	if f.embeddedFont != "" {
+	if f.embeddedFont != nil {
 		if err := f.writeFontStyle(w); err != nil {
 			return err
 		}
@@ -192,7 +199,7 @@ func (f *Formatter) writeFontStyle(w io.Writer) error {
 	font-weight: normal;
 	font-style: normal;
 }
-</style>`, f.fontFamily, fontFormats[f.fontFormat].mime, f.embeddedFont, fontFormats[f.fontFormat].format)
+</style>`, f.fontFamily, fontFormats[f.fontFormat].mime, f.embeddedFont(), fontFormats[f.fontFormat].format)
 	return err
 }
 
