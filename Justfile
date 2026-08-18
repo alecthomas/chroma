@@ -21,6 +21,18 @@ tokentype-string:
 format-js:
     biome format --write cmd/chromad/static/index.js cmd/chromad/static/chroma.js
 
+# Regenerate lexers/lexers_gen.go from the embedded lexer definitions
+lexer-metadata:
+    GOOS= GOARCH= go generate ./lexers
+
+# Check that generated code is in sync with the embedded lexer definitions
+check-generated: lexer-metadata
+    #!/usr/bin/env bash
+    git diff --exit-code lexers/lexers_gen.go || {
+        echo "lexers/lexers_gen.go is stale; run 'just lexer-metadata' and commit the result." >&2
+        exit 1
+    }
+
 # Tidy Go modules
 tidy:
     find . -name 'go.mod' -execdir go mod tidy \;

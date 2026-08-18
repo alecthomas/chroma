@@ -189,6 +189,25 @@ func (l *LexerRegistry) Register(lexer Lexer) Lexer {
 	lexer.SetRegistry(l)
 	config := lexer.Config()
 
+	// Consult byName before updating it so that registering a fresh lexer,
+	// the common case, does not scan the whole slice. byName is also keyed
+	// on lowercased names, so a hit only means a probable duplicate.
+	if l.byName[config.Name] == nil {
+		l.Lexers = append(l.Lexers, lexer)
+	} else {
+		replaced := false
+		for i, val := range l.Lexers {
+			if val != nil && val.Config().Name == config.Name {
+				l.Lexers[i] = lexer
+				replaced = true
+				break
+			}
+		}
+		if !replaced {
+			l.Lexers = append(l.Lexers, lexer)
+		}
+	}
+
 	l.byName[config.Name] = lexer
 	l.byName[strings.ToLower(config.Name)] = lexer
 
@@ -197,23 +216,5 @@ func (l *LexerRegistry) Register(lexer Lexer) Lexer {
 		l.byAlias[strings.ToLower(alias)] = lexer
 	}
 
-	l.Lexers = add(l.Lexers, lexer)
-
 	return lexer
-}
-
-// add adds a lexer to a slice of lexers if it doesn't already exist, or if found will replace it.
-func add(lexers Lexers, lexer Lexer) Lexers {
-	for i, val := range lexers {
-		if val == nil {
-			continue
-		}
-
-		if val.Config().Name == lexer.Config().Name {
-			lexers[i] = lexer
-			return lexers
-		}
-	}
-
-	return append(lexers, lexer)
 }
