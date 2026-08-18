@@ -314,6 +314,24 @@ func TestTableLinkeableLineNumbers(t *testing.T) {
 	assert.Contains(t, buf.String(), `/* LineLink */ .chroma .lnlinks { outline: none; text-decoration: none; color: inherit }`, buf.String())
 }
 
+func TestTableLineNumbersFlex(t *testing.T) {
+	// With LineNumbersInTable the code column's lines are flex containers, so the
+	// line number column must match to keep highlighted numbers the same height
+	// as the highlighted code when line-height > 1. See #722.
+	f := New(WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true))
+
+	var buf bytes.Buffer
+	err := f.WriteCSS(&buf, styles.Fallback)
+	assert.NoError(t, err)
+	assert.Contains(t, buf.String(), `.chroma .lntable .lnt, .chroma .lntable .hl { display: flex; }`, buf.String())
+
+	// Not emitted unless line numbers are rendered in a table.
+	var plain bytes.Buffer
+	err = New(WithClasses(true), WithLineNumbers(true)).WriteCSS(&plain, styles.Fallback)
+	assert.NoError(t, err)
+	assert.NotContains(t, plain.String(), `.lntable .lnt`)
+}
+
 func TestTableLineNumberSpacing(t *testing.T) {
 	testCases := []struct {
 		baseLineNumber int
