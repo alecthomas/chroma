@@ -3,9 +3,9 @@ package styles
 import (
 	"embed"
 	"io/fs"
-	"maps"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/alecthomas/chroma/v3"
 )
@@ -13,57 +13,84 @@ import (
 //go:embed *.xml
 var embedded embed.FS
 
-var registry = func() map[string]*chroma.Style {
-	r := map[string]*chroma.Style{}
+var (
+	registryMu sync.Mutex
+	// registry holds user-registered styles plus embedded styles that have
+	// already been parsed. Embedded styles are parsed lazily by Lookup so
+	// that importing this package does not pay for parsing every style;
+	// see TestEmbeddedStyleNamesMatchFilenames for the invariant that makes
+	// the lazy filename-based lookup possible.
+	registry = map[string]*chroma.Style{}
+)
+
+// embeddedNames returns the lowercased names of the embedded styles, which
+// by convention are also their file names.
+var embeddedNames = sync.OnceValue(func() []string {
 	files, err := fs.ReadDir(embedded, ".")
 	if err != nil {
 		panic(err)
 	}
+	names := make([]string, 0, len(files))
 	for _, file := range files {
-		if file.IsDir() {
+		if file.IsDir() || !strings.HasSuffix(file.Name(), ".xml") {
 			continue
 		}
-		f, err := embedded.Open(file.Name())
-		if err != nil {
-			panic(err)
-		}
-		style, err := chroma.NewXMLStyle(f)
-		if err != nil {
-			panic(err)
-		}
-		r[strings.ToLower(style.Name)] = style
-		_ = f.Close()
+		names = append(names, strings.TrimSuffix(file.Name(), ".xml"))
 	}
-	return r
-}()
+	return names
+})
 
 // Fallback style. Reassign to change the default fallback style.
 var Fallback = func() *chroma.Style {
-	fallback := registry["swapoff"]
-	if fallback == nil {
+	fallback, ok := Lookup("swapoff")
+	if !ok {
 		panic(`chroma/styles: default fallback style "swapoff" is missing`)
 	}
 	return fallback
 }()
 
 // Register a chroma.Style.
-//
-// Not safe to call concurrently with other functions in this package;
-// register all styles at init time.
 func Register(style *chroma.Style) *chroma.Style {
+	registryMu.Lock()
+	defer registryMu.Unlock()
 	registry[strings.ToLower(style.Name)] = style
 	return style
 }
 
 // Names of all available styles.
 func Names() []string {
-	return slices.Sorted(maps.Keys(registry))
+	registryMu.Lock()
+	defer registryMu.Unlock()
+	names := slices.Clone(embeddedNames())
+	for name := range registry {
+		if !slices.Contains(names, name) {
+			names = append(names, name)
+		}
+	}
+	slices.Sort(names)
+	return names
 }
 
-// Lookup a named style, returning false if not found.
+// Lookup a named style, returning false if not found. Embedded styles are
+// parsed on first lookup.
 func Lookup(name string) (*chroma.Style, bool) {
-	style, ok := registry[strings.ToLower(name)]
-	return style, ok
+	name = strings.ToLower(name)
+	registryMu.Lock()
+	defer registryMu.Unlock()
+	if style, ok := registry[name]; ok {
+		return style, true
+	}
+	f, err := embedded.Open(name + ".xml")
+	if err != nil {
+		return nil, false
+	}
+	defer f.Close()
+	style, err := chroma.NewXMLStyle(f)
+	if err != nil {
+		panic(err)
+	}
+	registry[name] = style
+	return style, true
 }
 
 // Get named style, or Fallback.
