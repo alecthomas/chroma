@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"slices"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -44,5 +45,5 @@ func TestSimpleLexer(t *testing.T) {
 		{LiteralString, "10"},
 		{Whitespace, "\n"},
 	}
-	assert.Equal(t, expected, actual)
+	assert.Equal(t, expected, slices.Collect(actual))
 }

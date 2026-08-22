@@ -36,13 +36,9 @@ func Words(prefix, suffix string, words ...string) string {
 	return prefix + `(` + strings.Join(words, `|`) + `)` + suffix
 }
 
-// Tokenise text using lexer, returning tokens as a slice.
-func Tokenise(lexer Lexer, options *TokeniseOptions, text string) ([]Token, error) {
-	it, err := lexer.Tokenise(options, text)
-	if err != nil {
-		return nil, err
-	}
-	return slices.Collect(it), nil
+// Tokenise text using lexer, returning tokens as an iterator.
+func Tokenise(lexer Lexer, options *TokeniseOptions, text string) (iter.Seq[Token], error) {
+	return lexer.Tokenise(options, text)
 }
 
 // Rules maps from state to a sequence of Rules.

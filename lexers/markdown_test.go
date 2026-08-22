@@ -2,6 +2,7 @@ package lexers
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 	"testing"
 
@@ -81,8 +82,9 @@ func TestMarkdownFrontmatterAndCommentStress(t *testing.T) {
 	}
 
 	input := b.String()
-	tokens, err := chroma.Tokenise(Markdown, nil, input)
+	it, err := chroma.Tokenise(Markdown, nil, input)
 	assert.NoError(t, err)
+	tokens := slices.Collect(it)
 	assert.Equal(t, input, chroma.Stringify(tokens...))
 
 	var commentCount int

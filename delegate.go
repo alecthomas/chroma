@@ -72,7 +72,7 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (iter.
 	offset := 0
 	first := true
 	var lastType TokenType
-	for _, t := range tokens {
+	for t := range tokens {
 		if t.Type == Other {
 			if !first && insert != nil && lastType != Other {
 				insert.end = offset
@@ -95,10 +95,11 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (iter.
 	}
 
 	// Lex the other tokens.
-	rootTokens, err := Tokenise(Coalesce(d.root), options, others.String())
+	rootIt, err := Tokenise(Coalesce(d.root), options, others.String())
 	if err != nil {
 		return nil, err
 	}
+	rootTokens := slices.Collect(rootIt)
 
 	// Interleave the two sets of tokens.
 	var out []Token

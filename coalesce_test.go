@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"slices"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -15,5 +16,5 @@ func TestCoalesce(t *testing.T) {
 	actual, err := Tokenise(lexer, nil, "!@#$")
 	assert.NoError(t, err)
 	expected := []Token{{Punctuation, "!@#$"}}
-	assert.Equal(t, expected, actual)
+	assert.Equal(t, expected, slices.Collect(actual))
 }

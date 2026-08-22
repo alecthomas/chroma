@@ -1,6 +1,7 @@
 package lexers
 
 import (
+	"slices"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -16,8 +17,9 @@ User-Agent: foo
 
 {"hello": "world"}
 `
-	tokens, err := chroma.Tokenise(HTTP, nil, source)
+	it, err := chroma.Tokenise(HTTP, nil, source)
 	assert.NoError(t, err)
+	tokens := slices.Collect(it)
 	assert.Equal(t, source, chroma.Stringify(tokens...))
 
 	found := false

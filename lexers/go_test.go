@@ -1,6 +1,7 @@
 package lexers
 
 import (
+	"slices"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -46,8 +47,9 @@ func TestGoHTMLTemplateIssue126(t *testing.T) {
     <h3>{{ .Title }}</h3>
     {{ .Content }}
 {{ end }}`} {
-		tokens, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		it, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
 		assert.NoError(t, err)
+		tokens := slices.Collect(it)
 		assert.Equal(t, source, chroma.Stringify(tokens...))
 	}
 }
@@ -75,8 +77,9 @@ func TestGoHTMLTemplateMultilineComments(t *testing.T) {
 */ -}}
 `,
 	} {
-		tokens, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		it, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
 		assert.NoError(t, err)
+		tokens := slices.Collect(it)
 		assert.Equal(t, source, chroma.Stringify(tokens...))
 
 		// Make sure that there are no errors
@@ -101,8 +104,9 @@ func TestGoHTMLTemplateNegativeNumber(t *testing.T) {
 {{ fn -3 }}
 `,
 	} {
-		tokens, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		it, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
 		assert.NoError(t, err)
+		tokens := slices.Collect(it)
 		assert.Equal(t, source, chroma.Stringify(tokens...))
 
 		// Make sure that there are no errors
