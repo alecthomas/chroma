@@ -7,15 +7,13 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"reflect"
-	"regexp"
 	"strings"
 	"sync"
 
 	"github.com/dlclark/regexp2/v2"
 )
 
-// Serialisation of Chroma rules to XML. The format is:
+// XML lexer rules use the following format:
 //
 //	<rules>
 //	  <state name="$STATE">
@@ -26,65 +24,63 @@ import (
 //	  </state>
 //	</rules>
 //
-// eg. Include("String") would become:
+// Include("String"):
 //
 //	<rule>
 //	  <include state="String" />
 //	</rule>
 //
-//	[null, null, {"kind": "include", "state": "String"}]
-//
-// eg. Rule{`\d+`, Text, nil} would become:
+// Rule{`\d+`, Text, nil}:
 //
 //	<rule pattern="\\d+">
 //	  <token type="Text"/>
 //	</rule>
 //
-// eg. Rule{`"`, String, Push("String")}
+// Rule{`"`, String, Push("String")}:
 //
 //	<rule pattern="\"">
 //	  <token type="String" />
 //	  <push state="String" />
 //	</rule>
 //
-// eg. Rule{`(\w+)(\n)`, ByGroups(Keyword, Whitespace), nil},
+// Rule{`(\w+)(\n)`, ByGroups(Keyword, Whitespace), nil}:
 //
 //	<rule pattern="(\\w+)(\\n)">
 //	  <bygroups token="Keyword" token="Whitespace" />
 //	  <push state="String" />
 //	</rule>
 var (
-	// ErrNotSerialisable is returned if a lexer contains Rules that cannot be serialised.
-	ErrNotSerialisable = fmt.Errorf("not serialisable")
-	emitterTemplates   = func() map[string]SerialisableEmitter {
-		out := map[string]SerialisableEmitter{}
-		for _, emitter := range []SerialisableEmitter{
-			&byGroupsEmitter{},
-			&usingSelfEmitter{},
-			TokenType(0),
-			&usingEmitter{},
-			&usingByGroup{},
-		} {
-			out[emitter.EmitterKind()] = emitter
-		}
-		return out
-	}()
-	mutatorTemplates = func() map[string]SerialisableMutator {
-		out := map[string]SerialisableMutator{}
-		for _, mutator := range []SerialisableMutator{
-			&includeMutator{},
-			&combinedMutator{},
-			&multiMutator{},
-			&pushMutator{},
-			&popMutator{},
-		} {
-			out[mutator.MutatorKind()] = mutator
-		}
-		return out
-	}()
+	errUnknownXMLRuleElement = errors.New("unknown XML rule element")
+	emitterDecoders          = map[string]xmlDecoder[Emitter]{
+		"bygroups":     decodeXML(func(value *byGroupsEmitter) Emitter { return value }),
+		"usingself":    decodeXML(func(value *usingSelfEmitter) Emitter { return value }),
+		"token":        decodeXML(func(value *TokenType) Emitter { return *value }),
+		"using":        decodeXML(func(value *usingEmitter) Emitter { return value }),
+		"usingbygroup": decodeXML(func(value *usingByGroup) Emitter { return value }),
+	}
+	mutatorDecoders = map[string]xmlDecoder[Mutator]{
+		"include":  decodeXML(func(value *includeMutator) Mutator { return value }),
+		"combined": decodeXML(func(value *combinedMutator) Mutator { return value }),
+		"mutators": decodeXML(func(value *multiMutator) Mutator { return value }),
+		"push":     decodeXML(func(value *pushMutator) Mutator { return value }),
+		"pop":      decodeXML(func(value *popMutator) Mutator { return value }),
+	}
 )
 
-// fastUnmarshalConfig unmarshals only the Config from a serialised lexer.
+type xmlDecoder[T any] func(*xml.Decoder, xml.StartElement) (T, error)
+
+func decodeXML[T, U any](convert func(*T) U) xmlDecoder[U] {
+	return func(d *xml.Decoder, start xml.StartElement) (U, error) {
+		value := new(T)
+		if err := d.DecodeElement(value, &start); err != nil {
+			var zero U
+			return zero, err
+		}
+		return convert(value), nil
+	}
+}
+
+// fastUnmarshalConfig unmarshals only the Config from an XML lexer definition.
 func fastUnmarshalConfig(from fs.FS, path string) (*Config, error) {
 	r, err := from.Open(path)
 	if err != nil {
@@ -125,7 +121,7 @@ func MustNewXMLLexer(from fs.FS, path string) *RegexLexer {
 	return lex
 }
 
-// NewXMLLexer creates a new RegexLexer from a serialised RegexLexer.
+// NewXMLLexer creates a new RegexLexer from an XML lexer definition.
 func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 	config, err := fastUnmarshalConfig(from, path)
 	if err != nil {
@@ -135,7 +131,7 @@ func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 }
 
 // NewXMLLexerFromConfig creates a RegexLexer whose Config is already known,
-// loading its rules lazily from the serialised lexer at path in from.
+// loading its rules lazily from the XML definition at path in from.
 //
 // The analyser regexes in config are compiled lazily on the first call to
 // AnalyseText; an invalid analyser regex results in a zero score at analyse
@@ -231,118 +227,22 @@ func NewXMLLexerFromConfig(config *Config, from fs.FS, path string) (*RegexLexer
 	}, nil
 }
 
-// Marshal a RegexLexer to XML.
-func Marshal(l *RegexLexer) ([]byte, error) {
-	type lexer struct {
-		Config Config `xml:"config"`
-		Rules  Rules  `xml:"rules"`
-	}
-
-	rules, err := l.Rules()
-	if err != nil {
-		return nil, err
-	}
-	root := &lexer{
-		Config: *l.Config(),
-		Rules:  rules,
-	}
-	data, err := xml.MarshalIndent(root, "", "  ")
-	if err != nil {
-		return nil, err
-	}
-	re := regexp.MustCompile(`></[a-zA-Z]+>`)
-	data = re.ReplaceAll(data, []byte(`/>`))
-	return data, nil
-}
-
-// Unmarshal a RegexLexer from XML.
-func Unmarshal(data []byte) (*RegexLexer, error) {
-	type lexer struct {
-		Config Config `xml:"config"`
-		Rules  Rules  `xml:"rules"`
-	}
-	root := &lexer{}
-	err := xml.Unmarshal(data, root)
-	if err != nil {
-		return nil, fmt.Errorf("invalid Lexer XML: %w", err)
-	}
-	lex, err := NewLexer(&root.Config, func() Rules { return root.Rules })
-	if err != nil {
-		return nil, err
-	}
-	return lex, nil
-}
-
-func marshalMutator(e *xml.Encoder, mutator Mutator) error {
-	if mutator == nil {
-		return nil
-	}
-	smutator, ok := mutator.(SerialisableMutator)
-	if !ok {
-		return fmt.Errorf("unsupported mutator: %w", ErrNotSerialisable)
-	}
-	return e.EncodeElement(mutator, xml.StartElement{Name: xml.Name{Local: smutator.MutatorKind()}})
-}
-
 func unmarshalMutator(d *xml.Decoder, start xml.StartElement) (Mutator, error) {
 	kind := start.Name.Local
-	mutator, ok := mutatorTemplates[kind]
+	decode, ok := mutatorDecoders[kind]
 	if !ok {
-		return nil, fmt.Errorf("unknown mutator %q: %w", kind, ErrNotSerialisable)
+		return nil, fmt.Errorf("unknown mutator %q: %w", kind, errUnknownXMLRuleElement)
 	}
-	value, target := newFromTemplate(mutator)
-	if err := d.DecodeElement(target, &start); err != nil {
-		return nil, err
-	}
-	return value().(SerialisableMutator), nil
-}
-
-func marshalEmitter(e *xml.Encoder, emitter Emitter) error {
-	if emitter == nil {
-		return nil
-	}
-	semitter, ok := emitter.(SerialisableEmitter)
-	if !ok {
-		return fmt.Errorf("unsupported emitter %T: %w", emitter, ErrNotSerialisable)
-	}
-	return e.EncodeElement(emitter, xml.StartElement{
-		Name: xml.Name{Local: semitter.EmitterKind()},
-	})
+	return decode(d, start)
 }
 
 func unmarshalEmitter(d *xml.Decoder, start xml.StartElement) (Emitter, error) {
 	kind := start.Name.Local
-	mutator, ok := emitterTemplates[kind]
+	decode, ok := emitterDecoders[kind]
 	if !ok {
-		return nil, fmt.Errorf("unknown emitter %q: %w", kind, ErrNotSerialisable)
+		return nil, fmt.Errorf("unknown emitter %q: %w", kind, errUnknownXMLRuleElement)
 	}
-	value, target := newFromTemplate(mutator)
-	if err := d.DecodeElement(target, &start); err != nil {
-		return nil, err
-	}
-	return value().(SerialisableEmitter), nil
-}
-
-func (r Rule) MarshalXML(e *xml.Encoder, _ xml.StartElement) error {
-	start := xml.StartElement{
-		Name: xml.Name{Local: "rule"},
-	}
-	if r.Pattern != "" {
-		start.Attr = append(start.Attr, xml.Attr{
-			Name:  xml.Name{Local: "pattern"},
-			Value: r.Pattern,
-		})
-	}
-	if err := e.EncodeToken(start); err != nil {
-		return err
-	}
-	if err := marshalEmitter(e, r.Type); err != nil {
-		return err
-	}
-	if err := marshalMutator(e, r.Mutator); err != nil {
-		return err
-	}
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
+	return decode(d, start)
 }
 
 func (r *Rule) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -360,7 +260,7 @@ func (r *Rule) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		switch token := token.(type) {
 		case xml.StartElement:
 			mutator, err := unmarshalMutator(d, token)
-			if err != nil && !errors.Is(err, ErrNotSerialisable) {
+			if err != nil && !errors.Is(err, errUnknownXMLRuleElement) {
 				return err
 			} else if err == nil {
 				if r.Mutator != nil {
@@ -370,7 +270,7 @@ func (r *Rule) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 				continue
 			}
 			emitter, err := unmarshalEmitter(d, token)
-			if err != nil && !errors.Is(err, ErrNotSerialisable) { // nolint: gocritic
+			if err != nil && !errors.Is(err, errUnknownXMLRuleElement) { // nolint: gocritic
 				return err
 			} else if err == nil {
 				if r.Type != nil {
@@ -395,17 +295,6 @@ type xmlRuleState struct {
 
 type xmlRules struct {
 	States []xmlRuleState `xml:"state"`
-}
-
-func (r Rules) MarshalXML(e *xml.Encoder, _ xml.StartElement) error {
-	xr := xmlRules{}
-	for state, rules := range r {
-		xr.States = append(xr.States, xmlRuleState{
-			Name:  state,
-			Rules: rules,
-		})
-	}
-	return e.EncodeElement(xr, xml.StartElement{Name: xml.Name{Local: "rules"}})
 }
 
 func (r *Rules) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -439,25 +328,6 @@ func (t *TokenType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	return nil
 }
 
-func (t TokenType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "type"}, Value: t.String()})
-	if err := e.EncodeToken(start); err != nil {
-		return err
-	}
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-// This hijinks is a bit unfortunate but without it we can't deserialise into TokenType.
-func newFromTemplate(template any) (value func() any, target any) {
-	t := reflect.TypeOf(template)
-	if t.Kind() == reflect.Pointer {
-		v := reflect.New(t.Elem())
-		return v.Interface, v.Interface()
-	}
-	v := reflect.New(t)
-	return func() any { return v.Elem().Interface() }, v.Interface()
-}
-
 func (b *Emitters) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for {
 		token, err := d.Token()
@@ -476,16 +346,4 @@ func (b *Emitters) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 			return nil
 		}
 	}
-}
-
-func (b Emitters) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	if err := e.EncodeToken(start); err != nil {
-		return err
-	}
-	for _, m := range b {
-		if err := marshalEmitter(e, m); err != nil {
-			return err
-		}
-	}
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }

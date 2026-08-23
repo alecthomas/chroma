@@ -12,12 +12,6 @@ type Mutator interface {
 	Mutate(state *LexerState) error
 }
 
-// SerialisableMutator is a Mutator that can be serialised and deserialised.
-type SerialisableMutator interface {
-	Mutator
-	MutatorKind() string
-}
-
 // ValidatingMutator is a Mutator that can validate itself against the compiled rules.
 //
 // Validation occurs once, after all LexerMutators have been applied.
@@ -64,21 +58,6 @@ func (m *multiMutator) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 	}
 }
 
-func (m *multiMutator) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	name := xml.Name{Local: "mutators"}
-	if err := e.EncodeToken(xml.StartElement{Name: name}); err != nil {
-		return err
-	}
-	for _, m := range m.Mutators {
-		if err := marshalMutator(e, m); err != nil {
-			return err
-		}
-	}
-	return e.EncodeToken(xml.EndElement{Name: name})
-}
-
-func (m *multiMutator) MutatorKind() string { return "mutators" }
-
 func (m *multiMutator) ValidateMutator(rules CompiledRules) error {
 	for _, mutator := range m.Mutators {
 		if validate, ok := mutator.(ValidatingMutator); ok {
@@ -113,8 +92,6 @@ func Include(state string) Rule {
 	return Rule{Mutator: &includeMutator{state}}
 }
 
-func (i *includeMutator) MutatorKind() string { return "include" }
-
 func (i *includeMutator) Mutate(s *LexerState) error {
 	return fmt.Errorf("should never reach here Include(%q)", i.State)
 }
@@ -131,8 +108,6 @@ func (i *includeMutator) MutateLexer(rules CompiledRules, state string, rule int
 type combinedMutator struct {
 	States []string `xml:"state,attr"`
 }
-
-func (c *combinedMutator) MutatorKind() string { return "combined" }
 
 // Combined creates a new anonymous state from the given states, and pushes that state.
 func Combined(states ...string) Mutator {
@@ -168,8 +143,6 @@ var (
 	_ ValidatingMutator = (*pushMutator)(nil)
 	_ ValidatingMutator = (*multiMutator)(nil)
 )
-
-func (p *pushMutator) MutatorKind() string { return "push" }
 
 func (p *pushMutator) ValidateMutator(rules CompiledRules) error {
 	for _, state := range p.States {
@@ -208,8 +181,6 @@ func Push(states ...string) Mutator {
 type popMutator struct {
 	Depth int `xml:"depth,attr"`
 }
-
-func (p *popMutator) MutatorKind() string { return "pop" }
 
 func (p *popMutator) Mutate(state *LexerState) error {
 	if len(state.Stack) == 0 {

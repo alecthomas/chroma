@@ -10,7 +10,6 @@ import (
 	"os/signal"
 	"path"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"runtime/pprof"
 	"sort"
@@ -48,7 +47,6 @@ command, for Go.
 		Check      bool             `help:"Do not format, check for tokenisation errors instead."`
 		Filename   string           `help:"Filename to use for selecting a lexer when reading from stdin."`
 		Fail       bool             `help:"Exit silently with status 1 if no specific lexer was found."`
-		XML        string           `hidden:"" help:"Generate XML lexer definitions." type:"existingdir" placeholder:"DIR"`
 
 		Lexer string `group:"select" help:"Lexer to use when formatting or path to an XML file to load." default:"autodetect" short:"l"`
 		Style string `group:"select" help:"Style to use for formatting or path to an XML file to load." default:"swapoff" short:"s"`
@@ -153,11 +151,6 @@ func main() {
 		"select": "Select lexer and style:",
 		"html":   "HTML formatter options:",
 	})
-	if cli.XML != "" {
-		err := dumpXMLLexerDefinitions(cli.XML)
-		ctx.FatalIfErrorf(err)
-		return
-	}
 	if cli.List {
 		listAll()
 		return
@@ -431,35 +424,4 @@ func check(filename string, it iter.Seq[chroma.Token]) bool {
 		}
 	}
 	return failed
-}
-
-var nameCleanRe = regexp.MustCompile(`[^A-Za-z0-9_#+-]`)
-
-func dumpXMLLexerDefinitions(dir string) error {
-	for _, name := range lexers.Names(false) {
-		lex := lexers.Get(name)
-		if rlex, ok := lex.(*chroma.RegexLexer); ok {
-			data, err := chroma.Marshal(rlex)
-			if err != nil {
-				if errors.Is(err, chroma.ErrNotSerialisable) {
-					fmt.Fprintf(os.Stderr, "warning: %q: %s\n", name, err)
-					continue
-				}
-				return err
-			}
-			name := strings.ToLower(nameCleanRe.ReplaceAllString(lex.Config().Name, "_"))
-			filename := filepath.Join(dir, name) + ".xml"
-			// fmt.Println(name)
-			_, err = os.Stat(filename)
-			if err == nil {
-				fmt.Fprintf(os.Stderr, "warning: %s already exists\n", filename)
-				continue
-			}
-			err = os.WriteFile(filename, data, 0600)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	return nil
 }

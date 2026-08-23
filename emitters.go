@@ -17,12 +17,6 @@ type ValidatingEmitter interface {
 	ValidateEmitter(rule *CompiledRule) error
 }
 
-// SerialisableEmitter is an Emitter that can be serialised and deserialised to/from JSON.
-type SerialisableEmitter interface {
-	Emitter
-	EmitterKind() string
-}
-
 // EmitterFunc is a function that is an Emitter.
 type EmitterFunc func(groups []string, state *LexerState) iter.Seq[Token]
 
@@ -43,8 +37,6 @@ var _ ValidatingEmitter = (*byGroupsEmitter)(nil)
 func ByGroups(emitters ...Emitter) Emitter {
 	return &byGroupsEmitter{Emitters: emitters}
 }
-
-func (b *byGroupsEmitter) EmitterKind() string { return "bygroups" }
 
 func (b *byGroupsEmitter) ValidateEmitter(rule *CompiledRule) error {
 	if len(rule.Regexp.GetGroupNumbers())-1 != len(b.Emitters) {
@@ -146,7 +138,6 @@ type usingByGroup struct {
 	Emitters          Emitters `xml:"emitters"`
 }
 
-func (u *usingByGroup) EmitterKind() string { return "usingbygroup" }
 func (u *usingByGroup) Emit(groups []string, state *LexerState) iter.Seq[Token] {
 	// bounds check
 	if len(u.Emitters) != len(groups)-1 {
@@ -173,7 +164,7 @@ func (u *usingByGroup) Emit(groups []string, state *LexerState) iter.Seq[Token] 
 
 // UsingLexer returns an Emitter that uses a given Lexer for parsing and emitting.
 //
-// This Emitter is not serialisable.
+// This Emitter cannot be represented in an XML lexer definition.
 func UsingLexer(lexer Lexer) Emitter {
 	return EmitterFunc(func(groups []string, _ *LexerState) iter.Seq[Token] {
 		it, err := lexer.Tokenise(&TokeniseOptions{State: "root", Nested: true}, groups[0])
@@ -187,8 +178,6 @@ func UsingLexer(lexer Lexer) Emitter {
 type usingEmitter struct {
 	Lexer string `xml:"lexer,attr"`
 }
-
-func (u *usingEmitter) EmitterKind() string { return "using" }
 
 func (u *usingEmitter) Emit(groups []string, state *LexerState) iter.Seq[Token] {
 	if state.Registry == nil {
@@ -215,8 +204,6 @@ func Using(lexer string) Emitter {
 type usingSelfEmitter struct {
 	State string `xml:"state,attr"`
 }
-
-func (u *usingSelfEmitter) EmitterKind() string { return "usingself" }
 
 func (u *usingSelfEmitter) Emit(groups []string, state *LexerState) iter.Seq[Token] {
 	it, err := state.Lexer.Tokenise(&TokeniseOptions{State: u.State, Nested: true}, groups[0])

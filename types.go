@@ -371,5 +371,3 @@ func (t TokenType) InSubCategory(other TokenType) bool {
 func (t TokenType) Emit(groups []string, _ *LexerState) iter.Seq[Token] {
 	return Literator(Token{Type: t, Value: groups[0]})
 }
-
-func (t TokenType) EmitterKind() string { return "token" }
