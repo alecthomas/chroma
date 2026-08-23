@@ -1,9 +1,8 @@
 package chroma
 
 import (
-	"bytes"
 	"iter"
-	"slices"
+	"strings"
 )
 
 type delegatingLexer struct {
@@ -14,7 +13,7 @@ type delegatingLexer struct {
 // DelegatingLexer combines two lexers to handle the common case of a language embedded inside another, such as PHP
 // inside HTML or PHP inside plain text.
 //
-// It takes two lexer as arguments: a root lexer and a language lexer.  First everything is scanned using the language
+// It takes two lexers as arguments: a root lexer and a language lexer. First everything is scanned using the language
 // lexer, which must return "Other" for unrecognised tokens. Then all "Other" tokens are lexed using the root lexer.
 // Finally, these two sets of tokens are merged.
 //
@@ -54,79 +53,86 @@ func (d *delegatingLexer) Config() *Config {
 	return d.language.Config()
 }
 
-// An insertion is the character range where language tokens should be inserted.
-type insertion struct {
-	start, end int
-	tokens     []Token
-}
-
 func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) { // nolint: gocognit
-	tokens, err := Tokenise(Coalesce(d.language), options, text)
+	languageTokens, err := Tokenise(Coalesce(d.language), options, text)
 	if err != nil {
 		return nil, err
 	}
-	// Compute insertions and gather "Other" tokens.
-	others := &bytes.Buffer{}
-	insertions := []*insertion{}
-	var insert *insertion
-	offset := 0
-	first := true
-	var lastType TokenType
-	for t := range tokens {
-		if t.Type == Other {
-			if !first && insert != nil && lastType != Other {
-				insert.end = offset
-			}
-			others.WriteString(t.Value)
+	var rootText strings.Builder
+	hasLanguageTokens := false
+	for token := range languageTokens {
+		if token.Type == Other {
+			rootText.WriteString(token.Value)
 		} else {
-			if first || lastType == Other {
-				insert = &insertion{start: offset}
-				insertions = append(insertions, insert)
-			}
-			insert.tokens = append(insert.tokens, t)
+			hasLanguageTokens = true
 		}
-		first = false
-		lastType = t.Type
-		offset += len(t.Value)
 	}
-
-	if len(insertions) == 0 {
+	if !hasLanguageTokens {
 		return d.root.Tokenise(options, text)
 	}
 
-	// Lex the other tokens.
-	rootIt, err := Tokenise(Coalesce(d.root), options, others.String())
+	rootTokens, err := Tokenise(Coalesce(d.root), options, rootText.String())
 	if err != nil {
 		return nil, err
 	}
-	rootTokens := slices.Collect(rootIt)
-
-	// Interleave the two sets of tokens.
-	var out []Token
-	offset = 0
-	ti := 0
-	ii := 0
-	for ti < len(rootTokens) || ii < len(insertions) {
-		if ti >= len(rootTokens) || (ii < len(insertions) && insertions[ii].start < offset+len(rootTokens[ti].Value)) {
-			ins := insertions[ii]
-			ii++
-			if ti < len(rootTokens) {
-				l, r := splitToken(rootTokens[ti], ins.start-offset)
-				if l.Value != "" {
-					out = append(out, l)
-					offset += len(l.Value)
-				}
-				rootTokens[ti] = r
-			}
-			out = append(out, ins.tokens...)
-			offset += ins.end - ins.start
-		} else {
-			out = append(out, rootTokens[ti])
-			offset += len(rootTokens[ti].Value)
-			ti++
-		}
+	languageTokens, err = Tokenise(Coalesce(d.language), options, text)
+	if err != nil {
+		return nil, err
 	}
-	return slices.Values(out), nil
+	return func(yield func(Token) bool) {
+		nextRoot, stopRoot := iter.Pull(rootTokens)
+		defer stopRoot()
+
+		var root Token
+		var pendingRoot Token
+		for language := range languageTokens {
+			if language.Value == "" {
+				continue
+			}
+			if language.Type != Other {
+				if pendingRoot.Value != "" {
+					if !yield(pendingRoot) {
+						return
+					}
+					pendingRoot = Token{}
+				}
+				if !yield(language) {
+					return
+				}
+				continue
+			}
+
+			// Consume only Other spans because embedded language spans were removed from the root input.
+			remaining := len(language.Value)
+			for remaining > 0 {
+				if root.Value == "" {
+					var ok bool
+					root, ok = nextRoot()
+					if !ok {
+						break
+					}
+					continue
+				}
+				consumed, rest := splitToken(root, min(remaining, len(root.Value)))
+				root = rest
+				remaining -= len(consumed.Value)
+				if pendingRoot.Value == "" {
+					pendingRoot = consumed
+				} else {
+					pendingRoot.Value += consumed.Value
+				}
+				if root.Value == "" {
+					if !yield(pendingRoot) {
+						return
+					}
+					pendingRoot = Token{}
+				}
+			}
+		}
+		if pendingRoot.Value != "" {
+			yield(pendingRoot)
+		}
+	}, nil
 }
 
 func splitToken(t Token, offset int) (l Token, r Token) {
