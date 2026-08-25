@@ -1,0 +1,131 @@
+<!--
+Lexer for InfluxDB line protocol:
+https://docs.influxdata.com/influxdb3/enterprise/reference/line-protocol/
+
+  <measurement>[,<tag_key>=<tag_value>...] <field_key>=<field_value>[,...] [<timestamp>]
+-->
+<lexer>
+  <config>
+    <name>InfluxDB Line Protocol</name>
+    <alias>lp</alias>
+    <alias>line-protocol</alias>
+    <filename>*.lp</filename>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="#[^\n]*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="\r?\n">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="(?:\\.|[^,\s\\])+">
+        <token type="NameClass"/>
+        <push state="tags"/>
+      </rule>
+    </state>
+    <state name="tags">
+      <rule pattern="(,)((?:\\.|[^,=\s\\])+)(=)((?:\\.|[^,=\s\\])+)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="NameTag"/>
+          <token type="Punctuation"/>
+          <token type="NameLabel"/>
+        </bygroups>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+        <mutators>
+          <pop depth="1"/>
+          <push state="fields"/>
+        </mutators>
+      </rule>
+      <rule pattern="\r?\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\S+">
+        <token type="Error"/>
+      </rule>
+    </state>
+    <state name="fields">
+      <rule pattern="((?:\\.|[^,=\s\\])+)(=)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="Punctuation"/>
+        </bygroups>
+        <push state="value"/>
+      </rule>
+      <rule pattern=",">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="([ \t]+)(-?\d+)([ \t]*)(?=\r?$)">
+        <bygroups>
+          <token type="TextWhitespace"/>
+          <token type="LiteralDate"/>
+          <token type="TextWhitespace"/>
+        </bygroups>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="\r?\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\S+">
+        <token type="Error"/>
+      </rule>
+    </state>
+    <state name="value">
+      <rule pattern="&quot;">
+        <token type="LiteralStringDouble"/>
+        <push state="string"/>
+      </rule>
+      <rule pattern="-?\d+i\b">
+        <token type="LiteralNumberInteger"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\d+u\b">
+        <token type="LiteralNumberInteger"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="-?(?:\d+\.\d*|\.\d+|\d+)(?:[eE][-+]?\d+)?(?=[,\s]|$)">
+        <token type="LiteralNumberFloat"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(?:true|True|TRUE|t|T|false|False|FALSE|f|F)(?=[,\s]|$)">
+        <token type="KeywordConstant"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^,\s]+">
+        <token type="Error"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="string">
+      <rule pattern="\\[&quot;\\]">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="[^&quot;\\\n]+">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="\\">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="&quot;">
+        <token type="LiteralStringDouble"/>
+        <pop depth="2"/>
+      </rule>
+      <rule pattern="(?=\r?\n)">
+        <pop depth="3"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

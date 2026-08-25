@@ -1625,6 +1625,16 @@ var embeddedLexers = []struct {
 		},
 		CaseInsensitive: true,
 	}},
+	{"embedded/influxdb_line_protocol.xml", chroma.Config{
+		Name: "InfluxDB Line Protocol",
+		Aliases: []string{
+			"lp",
+			"line-protocol",
+		},
+		Filenames: []string{
+			"*.lp",
+		},
+	}},
 	{"embedded/ini.xml", chroma.Config{
 		Name: "INI",
 		Aliases: []string{
