@@ -1,0 +1,8 @@
+[color "diff"]
+	old = red bold
+	new = green no-ul
+	meta = reset brightred
+	unquoted-hex-is-comment = #00ff00
+	quoted-hex = "#00ff00"
+	color-number = 255
+

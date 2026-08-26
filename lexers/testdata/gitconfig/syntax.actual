@@ -1,0 +1,10 @@
+# Comments and blank lines
+; Semicolon comments are also valid
+
+[core]
+[branch "devel"]
+[section.subsection]
+[section "sub\tsection"]
+[remote "feature/\"quote\""]
+[same-line] key = value
+[same-line "subsection"] bare
