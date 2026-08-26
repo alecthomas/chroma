@@ -1,0 +1,15 @@
+# Comment lines start with a hash
+weather,location=us-midwest temperature=82 1465839830100400200
+weather,location=us-midwest,season=summer temperature=82,humidity=71i,wind=12.5,precip=0u,raining=false,desc="hot" 1465839830100400200
+weather temperature=82
+weather temperature=1.234456e+78,dew=-3.5,count=-12i,neg=-1e-3
+weather,tag=value f1=t,f2=T,f3=true,f4=True,f5=TRUE,f6=f,f7=F,f8=false,f9=False,f10=FALSE
+my\ Measurement,tag\ Key1=tag\ Value1,tag\,Key2=tag\=Value2 field\ Key="string field" 1556813561098000000
+weather note="\"quoted\" string with a \\ backslash",empty=""
+weather,location=us-midwest temperature=82 -1465839830100400200
+   weather temperature=82 1465839830100400200   
+weather temperature=hot
+weather,location temperature=82
+weather note="unterminated
+weather empty=,other=1i
+weather,location=us-midwest temperature=82 1465839830100400200
