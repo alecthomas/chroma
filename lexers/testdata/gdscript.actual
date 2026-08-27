@@ -81,3 +81,117 @@ func _init():
     print("Constructed!")
     var lv = Something.new()
     print(lv.a)
+
+
+## Documentation comments start with two hashes.
+## They may contain BBCode such as [b]bold[/b] and [method some_function].
+## @deprecated: Use [method some_function] instead.
+func documented() -> void:
+    pass
+
+
+class Exports:
+    @export_storage var stored := 0
+    @export_custom(PROPERTY_HINT_NONE, "suffix:m") var custom := 0.0
+    @export_tool_button("Bake") var bake: Callable
+    @export_range(0, 100, 1, "or_greater") var ranged := 50
+    @onready var lazy := Vector2.ZERO
+
+    @warning_ignore_start("unused_variable")
+    func noisy() -> void:
+        var unused := 1
+    @warning_ignore_restore("unused_variable")
+
+
+@abstract
+class Shape:
+    @abstract
+    func area() -> float
+
+
+var health := 100:
+    get:
+        return health
+    set(value):
+        health = clampi(value, 0, 100)
+
+var referenced := 0:
+    get = _get_referenced, set = _set_referenced
+
+
+var doubler := func(x: int) -> int: return x * 2
+var comparer := func(a, b): return a < b
+var greeter := func(): print("hi")
+
+
+var big := 1_000_000
+var hex := 0xDEAD_BEEF
+var upper_hex := 0XFF
+var bits := 0b1010_1010
+var upper_bits := 0B11
+var fractional := 1_000.000_1
+var trailing_point := 10.
+var leading_point := .5
+var exponent := 1_0e-1_0
+
+
+var raw := r"C:\not\escaped\at\all"
+var raw_regex := r'\d+(\.\d+)?'
+var raw_multiline := r"""\w+"""
+var string_name := &"my_signal"
+var node_path := ^"Sprite2D:position"
+var multiline := """
+Spans
+multiple lines
+"""
+
+var masked := 0b1100 & 0b1010
+var xored := 0xF0 ^ 0x0F
+
+
+func _enter_tree() -> void:
+    var plain := $Sprite2D
+    var nested := $Container/Label
+    var quoted := $"Node With Spaces"
+    var unique := %UniqueName
+    var unique_quoted := %"Unique With Spaces"
+    var nested_unique := $Container/%UniqueChild
+    var modulo := 10 % 3
+
+
+func classify(value: Variant) -> String:
+    match value:
+        var v when v is int and v < 0:
+            return "negative"
+        0:
+            return "zero"
+        [var first, ..]:
+            return "array starting with %s" % first
+        {"key": var found}:
+            return "dictionary with %s" % found
+        _:
+            return "something else"
+
+
+var typed_array: Array[int] = [1, 2, 3]
+var typed_dict: Dictionary[String, int] = {"one": 1}
+
+var rect_i := Rect2i(0, 0, 16, 16)
+var projection := Projection()
+var packed_v4 := PackedVector4Array()
+
+var node_types = [
+    AimModifier3D, AnimationMixer, AreaLight3D, BoneConstraint3D, BoneTwistDisperser3D,
+    CCDIK3D, ChainIK3D, ConvertTransformModifier3D, CopyTransformModifier3D,
+    EditorDock, EditorToaster, FABRIK3D, FoldableContainer, GraphElement, GraphFrame,
+    GridMapEditorPlugin, IKModifier3D, IterateIK3D, JacobianIK3D,
+    LimitAngularVelocityModifier3D, LookAtModifier3D, ModifierBoneTarget3D,
+    OpenXRBindingModifierEditor, OpenXRCompositionLayer, OpenXRCompositionLayerCylinder,
+    OpenXRCompositionLayerEquirect, OpenXRCompositionLayerQuad,
+    OpenXRInteractionProfileEditor, OpenXRInteractionProfileEditorBase, OpenXRRenderModel,
+    OpenXRRenderModelManager, OpenXRVisibilityMask, Parallax2D, PhysicalBoneSimulator3D,
+    RetargetModifier3D, SkeletonModifier3D, SplineIK3D, SpringBoneCollision3D,
+    SpringBoneCollisionCapsule3D, SpringBoneCollisionPlane3D, SpringBoneCollisionSphere3D,
+    SpringBoneSimulator3D, StatusIndicator, TileMapLayer, TwoBoneIK3D, VirtualJoystick,
+    XRBodyModifier3D, XRFaceModifier3D, XRHandModifier3D,
+]
