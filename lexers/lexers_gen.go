@@ -1283,6 +1283,7 @@ var embeddedLexers = []struct {
 			"text/x-gdscript",
 			"application/x-gdscript",
 		},
+		Priority: 0.05,
 		Analyse: &chroma.AnalyseConfig{
 			Regexes: []chroma.RegexConfig{
 				{
