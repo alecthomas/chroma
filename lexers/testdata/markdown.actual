@@ -110,3 +110,23 @@ Text after a horizontal rule.
   [whitespace before link](https://google.com)  
 abc[non-whitespace before link](https://google.com)  
 ([first link](https://google.com) and [second link](https://google.com))  
+
+## Code span does not cross a blank line
+
+here is `an open span
+
+## Swallowed Header
+
+and it closes` here.
+
+a `span wrapped
+across one line break` still lexes.
+
+open ~~strikethrough
+
+## Not Struck Header
+
+close~~ here.
+
+a ~~struck across one
+line break~~ still lexes.
