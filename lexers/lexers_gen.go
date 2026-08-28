@@ -1344,6 +1344,22 @@ var embeddedLexers = []struct {
 			"text/x-gherkin",
 		},
 	}},
+	{"embedded/gitconfig.xml", chroma.Config{
+		Name: "Git Config",
+		Aliases: []string{
+			"gitconfig",
+			"git-config",
+		},
+		Filenames: []string{
+			".gitconfig",
+			".gitmodules",
+			"gitconfig",
+			"config.worktree",
+		},
+		MimeTypes: []string{
+			"text/x-git-config",
+		},
+	}},
 	{"embedded/gleam.xml", chroma.Config{
 		Name: "Gleam",
 		Aliases: []string{
@@ -1656,7 +1672,6 @@ var embeddedLexers = []struct {
 			"*.kube",
 			"*.volume",
 			"*.image",
-			".gitconfig",
 			".editorconfig",
 			"pylintrc",
 			".pylintrc",
