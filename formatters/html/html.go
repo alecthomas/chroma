@@ -515,6 +515,21 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 			return err
 		}
 	}
+	// Special-case the line number column of the table so its lines use the
+	// same flex layout as the code column. The code column's Line already sets
+	// "display: flex", so without this an inherited line-height greater than one
+	// makes the highlighted line numbers a different height to the highlighted
+	// code they sit beside.
+	if f.lineNumbers && f.lineNumbersInTable {
+		selector := fmt.Sprintf(
+			"%s .%s .%s, %s .%s .%s",
+			chromaSel, f.class(chroma.LineTable), f.class(chroma.LineNumbersTable),
+			chromaSel, f.class(chroma.LineTable), f.class(chroma.LineHighlight),
+		)
+		if err := f.writeCSSRule(w, chroma.LineTable.String(), selector, "display: flex;"); err != nil {
+			return err
+		}
+	}
 	// Special-case line number highlighting when targeted.
 	if f.lineNumbers || f.lineNumbersInTable {
 		targetedLineCSS := StyleEntryToCSS(style.Get(chroma.LineHighlight))
