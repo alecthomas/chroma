@@ -208,7 +208,7 @@ func main() {
 	style, err := builder.Build()
 	ctx.FatalIfErrorf(err)
 
-	if cli.Formatter == "html" {
+	if usesHTMLFormatter() {
 		configureHTMLFormatter(ctx)
 	}
 
@@ -287,6 +287,13 @@ func selectStyle() (*chroma.Style, error) {
 	}
 	defer r.Close()
 	return chroma.NewXMLStyle(r)
+}
+
+// usesHTMLFormatter reports whether the html formatter will be used.
+// --html-styles dumps its CSS regardless of the selected formatter, so the
+// html options have to be applied for it too.
+func usesHTMLFormatter() bool {
+	return cli.Formatter == "html" || cli.HTMLStyles
 }
 
 func configureHTMLFormatter(ctx *kong.Context) {
