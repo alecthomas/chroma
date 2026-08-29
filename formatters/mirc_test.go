@@ -31,3 +31,18 @@ func TestNoneIRCColour(t *testing.T) {
 
 	assert.Equal(t, "\x0342WORD\x0f", stringBuilder.String())
 }
+
+func TestHexIRCBackgroundColour(t *testing.T) {
+	style, err := chroma.NewStyle("test", chroma.StyleEntries{
+		chroma.Error: "#960050 bg:#1e0010",
+	})
+	assert.NoError(t, err)
+
+	stringBuilder := strings.Builder{}
+	err = MIRC16m.Format(&stringBuilder, style, chroma.Literator(chroma.Token{
+		Type:  chroma.Error,
+		Value: "WORD",
+	}))
+	assert.NoError(t, err)
+	assert.Equal(t, "\x04960050,1E0010WORD\x0f", stringBuilder.String())
+}
