@@ -208,6 +208,9 @@ func mIRCHexColorFormatter(w io.Writer, style *chroma.Style, it iter.Seq[chroma.
 		}
 		if entry.Colour.IsSet() {
 			formatting += fmt.Sprintf("\x04%02X%02X%02X", entry.Colour.Red(), entry.Colour.Green(), entry.Colour.Blue())
+			if entry.Background.IsSet() {
+				formatting += fmt.Sprintf(",%02X%02X%02X", entry.Background.Red(), entry.Background.Green(), entry.Background.Blue())
+			}
 		}
 
 		if err := mIRCwriteToken(w, formatting, token.Value); err != nil {
