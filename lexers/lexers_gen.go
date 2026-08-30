@@ -491,6 +491,22 @@ var embeddedLexers = []struct {
 			"application/x-brainfuck",
 		},
 	}},
+	{"embedded/bsl.xml", chroma.Config{
+		Name: "1C Enterprise",
+		Aliases: []string{
+			"1c",
+			"bsl",
+			"onec",
+		},
+		Filenames: []string{
+			"*.bsl",
+			"*.os",
+		},
+		MimeTypes: []string{
+			"text/x-bsl",
+		},
+		CaseInsensitive: true,
+	}},
 	{"embedded/c#.xml", chroma.Config{
 		Name: "C#",
 		Aliases: []string{
