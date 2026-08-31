@@ -1,0 +1,18 @@
+/ This Slim comment is not rendered
+/! This HTML comment is rendered
+
+- items = [{name: "Alpha", price: 10}, {name: "Beta", price: 20}]
+- if items.any?
+  table
+    - items.each do |item|
+      tr
+        td = item[:name]
+        td = number_to_currency(item[:price])
+- else
+  p No items found.
+
+== raw yield
+
+p
+  | Hello, #{current_user.name}!
+  | Visit #{link_to "home", root_path} to continue.

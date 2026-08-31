@@ -3298,6 +3298,19 @@ var embeddedLexers = []struct {
 			"*.sieve",
 		},
 	}},
+	{"embedded/slim.xml", chroma.Config{
+		Name: "Slim",
+		Aliases: []string{
+			"slim",
+		},
+		Filenames: []string{
+			"*.slim",
+		},
+		MimeTypes: []string{
+			"text/x-slim",
+		},
+		EnsureNL: true,
+	}},
 	{"embedded/smali.xml", chroma.Config{
 		Name: "Smali",
 		Aliases: []string{
