@@ -1,0 +1,240 @@
+<lexer>
+  <config>
+    <name>Slim</name>
+    <alias>slim</alias>
+    <filename>*.slim</filename>
+    <mime_type>text/x-slim</mime_type>
+    <ensure_nl>true</ensure_nl>
+  </config>
+  <rules>
+    <!--
+      Line-oriented Slim highlighting for diffs and editors.
+
+      Pygments SlimLexer cannot be converted by pygments2chroma_xml.py because
+      it relies on pygments.lexers.css._indentation / _starts_block callbacks
+      that track indent between lines. This lexer covers typical single-line
+      Slim (tags, id/class, attributes, /, |, =, -, #{}) and reuses the Ruby
+      lexer for embedded code. Multiline / and | blocks are not indent-tracked.
+    -->
+    <state name="root">
+      <rule pattern="[ \t]+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="(doctype)((?:[ \t]+\S+)?)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="NameConstant"/>
+        </bygroups>
+      </rule>
+      <rule pattern="/![^\n]*">
+        <token type="CommentPreproc"/>
+      </rule>
+      <rule pattern="/[^\n]*">
+        <token type="Comment"/>
+      </rule>
+      <rule pattern="\|[ \t]?">
+        <token type="Punctuation"/>
+        <push state="plain"/>
+      </rule>
+      <rule pattern="&#39;[ \t]?">
+        <token type="Punctuation"/>
+        <push state="plain"/>
+      </rule>
+      <rule pattern="(-)([^\n]*)(\n?)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <using lexer="Ruby"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(==?)([^\n]*)(\n?)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <using lexer="Ruby"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\.[\w:-]+">
+        <token type="NameClass"/>
+        <push state="tag"/>
+      </rule>
+      <rule pattern="\#[\w:-]+">
+        <token type="NameFunction"/>
+        <push state="tag"/>
+      </rule>
+      <rule pattern="[\w:-]+">
+        <token type="NameTag"/>
+        <push state="tag"/>
+      </rule>
+      <rule pattern="[^\n]+">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="tag">
+      <rule pattern="\.[\w:-]+">
+        <token type="NameClass"/>
+      </rule>
+      <rule pattern="\#[\w:-]+">
+        <token type="NameFunction"/>
+      </rule>
+      <rule pattern="[&lt;&gt;]{1,2}">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[\(\[]">
+        <token type="Punctuation"/>
+        <push state="attrs"/>
+      </rule>
+      <rule pattern="\{">
+        <token type="Punctuation"/>
+        <push state="attrs-curly"/>
+      </rule>
+      <rule pattern="([ \t]+)([\w.:-]+)(?==)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="NameAttribute"/>
+        </bygroups>
+        <push state="attr-value"/>
+      </rule>
+      <rule pattern="([ \t]+)(\*)(\{[^}]*\}|[\w.]+)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Punctuation"/>
+          <using lexer="Ruby"/>
+        </bygroups>
+      </rule>
+      <rule pattern="([ \t]*)(==?)([^\n]*)(\n?)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Punctuation"/>
+          <using lexer="Ruby"/>
+          <token type="Text"/>
+        </bygroups>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\|[ \t]?">
+        <token type="Punctuation"/>
+        <push state="tag-plain"/>
+      </rule>
+      <rule pattern="[ \t]*/">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="(:)([\w:-]+)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="NameTag"/>
+        </bygroups>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="Text"/>
+        <push state="tag-plain"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="attrs">
+      <rule pattern="[ \t]+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="[)\]]">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[\w.:-]+(?==)">
+        <token type="NameAttribute"/>
+        <push state="attr-value"/>
+      </rule>
+      <rule pattern="(\*)(\{[^}]*\}|[\w.]+)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <using lexer="Ruby"/>
+        </bygroups>
+      </rule>
+      <rule pattern="[\w.:-]+">
+        <token type="NameAttribute"/>
+      </rule>
+      <rule pattern=",">
+        <token type="Punctuation"/>
+      </rule>
+    </state>
+    <state name="attrs-curly">
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^}]+">
+        <using lexer="Ruby"/>
+      </rule>
+    </state>
+    <state name="attr-value">
+      <rule pattern="=">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="&#34;(?:\\.|[^\\&#34;])*&#34;">
+        <using lexer="Ruby"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="&#39;(?:\\.|[^\\&#39;])*&#39;">
+        <using lexer="Ruby"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[\w.?!@:]+(?:\([^)]*\))?">
+        <using lexer="Ruby"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^\s)\]]+">
+        <using lexer="Ruby"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="plain">
+      <rule>
+        <include state="plain-common"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="tag-plain">
+      <rule>
+        <include state="plain-common"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="2"/>
+      </rule>
+    </state>
+    <state name="plain-common">
+      <rule pattern="(#\{)([^}]+)(\})">
+        <bygroups>
+          <token type="LiteralStringInterpol"/>
+          <using lexer="Ruby"/>
+          <token type="LiteralStringInterpol"/>
+        </bygroups>
+      </rule>
+      <rule pattern="[^#\n]+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="#">
+        <token type="Text"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
