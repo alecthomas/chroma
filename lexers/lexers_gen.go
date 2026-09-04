@@ -3441,6 +3441,21 @@ var embeddedLexers = []struct {
 		CaseInsensitive: true,
 		NotMultiline:    true,
 	}},
+	{"embedded/ssh_config.xml", chroma.Config{
+		Name: "SSH config",
+		Aliases: []string{
+			"sshconfig",
+			"ssh-config",
+			"ssh_config",
+		},
+		Filenames: []string{
+			"ssh_config",
+		},
+		MimeTypes: []string{
+			"text/x-ssh-config",
+		},
+		CaseInsensitive: true,
+	}},
 	{"embedded/standard_ml.xml", chroma.Config{
 		Name: "Standard ML",
 		Aliases: []string{
