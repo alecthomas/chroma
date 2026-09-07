@@ -141,12 +141,45 @@ func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens []chroma.T
 	return err
 }
 
+// East Asian Wide and Fullwidth ranges, which a monospace font renders two columns wide.
+var wideRanges = [...][2]rune{
+	{0x1100, 0x115f}, {0x2e80, 0x303e}, {0x3041, 0x33ff}, {0x3400, 0x4dbf},
+	{0x4e00, 0x9fff}, {0xa000, 0xa4cf}, {0xac00, 0xd7a3}, {0xf900, 0xfaff},
+	{0xfe10, 0xfe19}, {0xfe30, 0xfe6f}, {0xff00, 0xff60}, {0xffe0, 0xffe6},
+	{0x1f300, 0x1f64f}, {0x1f900, 0x1f9ff}, {0x20000, 0x3fffd},
+}
+
+func isWide(r rune) bool {
+	for _, span := range &wideRanges {
+		if r >= span[0] && r <= span[1] {
+			return true
+		}
+	}
+	return false
+}
+
+// columns is the width of text in monospace columns. Tabs expand to four, matching svgEscaper.
+func columns(text string) int {
+	width := 0
+	for _, r := range text {
+		switch {
+		case r == '\t':
+			width += 4
+		case isWide(r):
+			width += 2
+		default:
+			width++
+		}
+	}
+	return width
+}
+
 func maxLineWidth(lines [][]chroma.Token) int {
 	maxWidth := 0
 	for _, tokens := range lines {
 		length := 0
 		for _, token := range tokens {
-			length += len(strings.ReplaceAll(token.String(), `	`, "    "))
+			length += columns(token.String())
 		}
 		if length > maxWidth {
 			maxWidth = length
@@ -162,7 +195,7 @@ func (f *Formatter) writeTokenBackgrounds(w io.Writer, lines [][]chroma.Token, s
 	for index, tokens := range lines {
 		lineLength := 0
 		for _, token := range tokens {
-			length := len(strings.ReplaceAll(token.String(), `	`, "    "))
+			length := columns(token.String())
 			tokenBackground := style.Get(token.Type).Background
 			if tokenBackground.IsSet() && tokenBackground != style.Get(chroma.Background).Background {
 				if _, err := fmt.Fprintf(w, "<rect id=\"%s\" x=\"%dch\" y=\"%fem\" width=\"%dch\" height=\"1.2em\" fill=\"%s\" />\n", escapeString(token.String()), lineLength, 1.2*float64(index)+0.25, length, style.Get(token.Type).Background.String()); err != nil {
