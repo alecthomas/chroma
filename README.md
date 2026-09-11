@@ -55,7 +55,7 @@ translators for Pygments lexers and styles.
 |   Q    | QBasic, QML
 |   R    | R, Racket, Ragel, Raku, react, ReasonML, reg, Rego, reStructuredText, Rexx, RGBDS Assembly, Ring, RPGLE, RPMSpec, Ruby, Rust
 |   S    | SAS, Sass, Scala, scdoc, Scheme, Scilab, SCSS, Sed, Sieve, Smali, Smalltalk, Smarty, SNBT, Snobol, Solidity, SourcePawn, Spade, SPARQL, SQL, SquidConf, Standard ML, stas, Stylus, Svelte, Swift, SYSTEMD, systemverilog
-|   T    | TableGen, Tal, TASM, Tcl, Tcsh, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, Turing, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData, Typst
+|   T    | TableGen, Tal, TASM, Tcl, Tcsh, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, TSRX, Turing, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData, Typst
 |   U    | ucode
 |   V    | V, V shell, Vala, VB.net, verilog, VHDL, VHS, VimL, vue
 |   W    | WDTE, WebAssembly Text Format, WebGPU Shading Language, WebVTT, Whiley
