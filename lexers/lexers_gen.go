@@ -3729,6 +3729,20 @@ var embeddedLexers = []struct {
 		CaseInsensitive: true,
 		NotMultiline:    true,
 	}},
+	{"embedded/tsrx.xml", chroma.Config{
+		Name: "TSRX",
+		Aliases: []string{
+			"tsrx",
+		},
+		Filenames: []string{
+			"*.tsrx",
+		},
+		MimeTypes: []string{
+			"text/x-tsrx",
+		},
+		DotAll:   true,
+		EnsureNL: true,
+	}},
 	{"embedded/turing.xml", chroma.Config{
 		Name: "Turing",
 		Aliases: []string{
