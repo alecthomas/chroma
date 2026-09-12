@@ -1,0 +1,10 @@
+// TSRX is a TypeScript superset: these must lex exactly as .tsx does.
+const a: Array<Todo> = [];
+const m: Map<string, Array<number>> = new Map();
+function id<T>(x: T): T { return x; }
+const t = cond ? { x: 1 } : other;
+const fragment = document.createDocumentFragment();
+for (let i = 0; index < n; i++) { sum += i; }
+const o = { a: 1 }; key = o;
+const s = <style apply={theme} / >;
+const b = 1;

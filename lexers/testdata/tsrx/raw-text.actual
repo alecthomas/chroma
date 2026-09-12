@@ -1,0 +1,30 @@
+// Raw-text elements: a body in another language, and the self-closing form
+// that has no body at all.
+const theme = <style>
+	.card {
+		color: rebeccapurple;
+	}
+</style>;
+
+export const bundle = <style apply={[theme]} />;
+
+export function Panel({ items }: { items: string[] }) @{
+	<>
+		<style apply={theme}>
+			ul {
+				display: grid;
+				gap: 0.5rem;
+			}
+		</style>
+
+		<script>
+			document.title = `panel: ${items.length}`;
+		</script>
+
+		<ul>
+			@for (const item of items) {
+				<li>{item}</li>
+			}
+		</ul>
+	</>
+}
