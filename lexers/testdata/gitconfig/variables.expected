@@ -1,0 +1,20 @@
+[
+  {"type":"Punctuation","value":"["},
+  {"type":"Keyword","value":"core"},
+  {"type":"Punctuation","value":"]"},
+  {"type":"Text","value":"\n\t"},
+  {"type":"NameAttribute","value":"filemode"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralString","value":"false"},
+  {"type":"Text","value":"\n\t"},
+  {"type":"NameAttribute","value":"autocrlf"},
+  {"type":"Text","value":"\n\t"},
+  {"type":"NameAttribute","value":"ignore-case"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralString","value":"true"},
+  {"type":"Text","value":"\n\t1invalid = text\n\tinvalid_name = text\n\n"}
+]
