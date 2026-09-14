@@ -71,7 +71,7 @@
       <rule pattern="\d\d\d\d-\d\d-\d\d([T ]\d\d:\d\d:\d\d(\.\d+)?(Z|\s+[-+]\d+)?)?">
         <token type="LiteralDate"/>
       </rule>
-      <rule pattern="\b[+\-]?(0x[\da-f]+|0o[0-7]+|(\d+\.?\d*|\.?\d+)(e[\+\-]?\d+)?|\.inf|\.nan)\b">
+      <rule pattern="[+\-]?(0x[\da-f]+|0o[0-7]+|(\d+\.?\d*|\.?\d+)(e[\+\-]?\d+)?|\.inf|\.nan)\b">
         <token type="LiteralNumber"/>
       </rule>
       <rule pattern="([^\{\}\[\]\?,\:\!\-\*&amp;\@].*)( )+(#.*)">
