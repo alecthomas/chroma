@@ -1,0 +1,8 @@
+Match all
+    User root
+
+Match canonical host "*.corp" originalhost "*.corp-legacy" user !admin
+    Hostname %h.canon
+
+Match final localuser deploy tagged release localnetwork 10.0.0.0/8 exec "test %n = api"
+    Include ~/.ssh/conf.d/*.conf
