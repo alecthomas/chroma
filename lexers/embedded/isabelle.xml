@@ -1,0 +1,192 @@
+<lexer>
+  <config>
+    <name>Isabelle</name>
+    <alias>isabelle</alias>
+    <filename>*.thy</filename>
+    <mime_type>text/x-isabelle</mime_type>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\s+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="\(\*">
+        <token type="Comment"/>
+        <push state="comment"/>
+      </rule>
+      <rule pattern="\\&lt;open&gt;">
+        <token type="LiteralStringSymbol"/>
+        <push state="cartouche"/>
+      </rule>
+      <rule pattern="\{\*|‹">
+        <token type="LiteralString"/>
+        <push state="cartouche"/>
+      </rule>
+      <rule pattern="\?&#39;?[^\W\d][.\w&#39;]*">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="(::|:|\(|\)|\[|\]|_|=|,|\||\+|\-|!|\?)">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="(\.\.|\{|\}|\.)">
+        <token type="OperatorWord"/>
+      </rule>
+      <rule pattern="\b(type_constructor|class_instance|class_relation|no_discs_sels|code_module|module_name|constrains|identifier|overloaded|parametric|permissive|rep_compat|type_class|datatypes|functions|morphisms|pervasive|structure|unchecked|checking|constant|includes|keywords|assumes|defines|imports|obtains|attach|avoids|binder|infixl|infixr|output|unsafe|congs|fixes|hints|infix|monos|notes|shows|where|file|lazy|open|and|for|if|in|is)\b">
+        <token type="KeywordPseudo"/>
+      </rule>
+      <rule pattern="\b(print_case_translations|print_ML_antiquotations|print_antiquotations|print_term_bindings|print_dependencies|print_induct_rules|find_unused_assms|print_quotientsQ3|print_trans_rules|print_attributes|print_defn_rules|print_inductives|print_quotconsts|print_quotmapsQ3|print_codesetup|print_coercions|print_quot_maps|print_quotients|print_statement|display_drafts|print_codeproc|print_commands|print_theorems|find_theorems|print_abbrevs|print_bundles|print_classes|print_context|print_interps|print_locales|print_methods|print_options|print_simpset|values_prolog|print_claset|print_locale|print_orders|print_syntax|print_theory|sledgehammer|solve_direct|spark_status|find_consts|locale_deps|print_binds|print_cases|print_facts|print_rules|print_state|unused_thms|ML_command|class_deps|print_bnfs|quickcheck|smt_status|code_deps|code_thms|full_prf|thm_deps|thy_deps|nitpick|welcome|ML_val|refute|values|value|help|prop|term|try0|prf|pwd|thm|try|typ|pr)\b">
+        <token type="KeywordType"/>
+      </rule>
+      <rule pattern="\b(theory|begin|end)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(permanent_interpretation|typed_print_translation|parse_ast_translation|print_ast_translation|spark_proof_functions|no_adhoc_overloading|quickcheck_generator|datatype_new_compat|sledgehammer_params|nominal_termination|domain_isomorphism|syntax_declaration|bnf_axiomatization|adhoc_overloading|parse_translation|print_translation|quickcheck_params|free_constructors|import_const_map|no_type_notation|nominal_datatype|partial_function|nominal_function|attribute_setup|code_identifier|code_modulename|coinductive_set|import_type_map|no_translations|install_C_types|datatype_compat|axiomatization|lifting_forget|lifting_update|nitpick_params|spark_open_siv|spark_open_vcg|install_C_file|term_cartouche|text_cartouche|case_of_simps|code_datatype|code_instance|code_printing|code_reserved|inductive_set|instantiation|realizability|refute_params|setup_lifting|simproc_setup|simps_of_case|type_notation|abbreviation|code_include|code_reflect|datatype_new|default_sort|defer_recdef|equivariance|extract_type|method_setup|translations|type_synonym|coinductive|declaration|export_code|import_file|import_tptp|local_setup|no_notation|nonterminal|overloading|primrec_new|spark_types|approximate|smt2_status|boogie_file|codatatype|code_abort|code_class|code_const|code_monad|definition|hide_class|hide_const|spark_open|statespace|hoarestate|SML_export|SML_import|atom_decl|code_type|domaindef|fun_cases|hide_fact|hide_type|inductive|no_syntax|primcorec|realizers|spark_end|wpc_setup|cartouche|classrel|datatype|judgment|notation|text_raw|theorems|typedecl|SML_file|defining|ML_file|arities|classes|context|declare|extract|notepad|primrec|c_types|memsafe|functor|bundle|consts|domain|fixrec|lemmas|locale|oracle|recdef|record|syntax|c_defs|class|setup|binds|defs|text|fun|ML)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(chapter|header)\b">
+        <token type="GenericHeading"/>
+      </rule>
+      <rule pattern="\b(subsubsection|subsection|subsubsect|section|subsect|sect)\b">
+        <token type="GenericSubheading"/>
+      </rule>
+      <rule pattern="\b(wrap_free_constructors|quotient_definition|schematic_corollary|nominal_inductive2|nominal_inductive|schematic_theorem|ax_specification|lift_definition|nominal_primrec|primcorecursive|schematic_lemma|interpretation|crunch_ignore|enriched_type|quotient_type|specification|rep_datatype|termination|code_pred|corollary|recdef_tc|sublocale|function|instance|spark_vc|subclass|pcpodef|theorem|typedef|cpodef|crunch|lemma|bnf)\b">
+        <token type="KeywordNamespace"/>
+      </rule>
+      <rule pattern="\b(inductive_cases|inductive_simps)\b">
+        <token type="KeywordNamespace"/>
+      </rule>
+      <rule pattern="\b(sorry|oops)\b">
+        <token type="GenericError"/>
+      </rule>
+      <rule pattern="\b(done|qed|by)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(interpret|hence|have)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(proof|next)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(including|unfolding|moreover|include|txt_raw|ML_prf|using|write|also|note|let|txt)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(ultimately|finally|from|then|with)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(presume|assume|case|def|fix)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(obtain|guess|show|thus)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(apply_trace|apply_end|prefer|apply|defer|back)\b">
+        <token type="KeywordPseudo"/>
+      </rule>
+      <rule pattern="\\&lt;(\w|\^)*&gt;">
+        <token type="TextSymbol"/>
+      </rule>
+      <rule pattern="'[^\W\d][.\w']*">
+        <token type="NameDecorator"/>
+      </rule>
+      <rule pattern="0[xX][\da-fA-F][\da-fA-F_]*">
+        <token type="LiteralNumberHex"/>
+      </rule>
+      <rule pattern="0[oO][0-7][0-7_]*">
+        <token type="LiteralNumberOct"/>
+      </rule>
+      <rule pattern="0[bB][01][01_]*">
+        <token type="LiteralNumberBin"/>
+      </rule>
+      <rule pattern='\"'>
+        <token type="LiteralString"/>
+        <push state="string"/>
+      </rule>
+      <rule pattern="`">
+        <token type="LiteralStringOther"/>
+        <push state="fact"/>
+      </rule>
+      <rule pattern="[^\s:|\[\]\-()=,+!?{}._][^\s:|\[\]\-()=,+!?{}]*">
+        <token type="Name"/>
+      </rule>
+    </state>
+    <state name="comment">
+      <rule pattern="[^(*)]+">
+        <token type="Comment"/>
+      </rule>
+      <rule pattern="\(\*">
+        <token type="Comment"/>
+        <push/>
+      </rule>
+      <rule pattern="\*\)">
+        <token type="Comment"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[(*)]">
+        <token type="Comment"/>
+      </rule>
+    </state>
+    <state name="cartouche">
+      <rule pattern="[^{*}\\‹›]+">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="\\&lt;open&gt;">
+        <token type="LiteralStringSymbol"/>
+        <push/>
+      </rule>
+      <rule pattern="\{\*|‹">
+        <token type="LiteralString"/>
+        <push/>
+      </rule>
+      <rule pattern="\\&lt;close&gt;">
+        <token type="LiteralStringSymbol"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\*\}|›">
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\\&lt;(\w|\^)*&gt;">
+        <token type="LiteralStringSymbol"/>
+      </rule>
+      <rule pattern="[{*}\\]">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="string">
+      <rule pattern='[^\"\\]+'>
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="\\&lt;(\w|\^)*&gt;">
+        <token type="LiteralStringSymbol"/>
+      </rule>
+      <rule pattern='\\\"'>
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="\\">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern='\"'>
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="fact">
+      <rule pattern="[^`\\]+">
+        <token type="LiteralStringOther"/>
+      </rule>
+      <rule pattern="\\&lt;(\w|\^)*&gt;">
+        <token type="LiteralStringSymbol"/>
+      </rule>
+      <rule pattern="\\`">
+        <token type="LiteralStringOther"/>
+      </rule>
+      <rule pattern="\\">
+        <token type="LiteralStringOther"/>
+      </rule>
+      <rule pattern="`">
+        <token type="LiteralStringOther"/>
+        <pop depth="1"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

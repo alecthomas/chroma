@@ -1679,6 +1679,18 @@ var embeddedLexers = []struct {
 			"text/x-iosrc",
 		},
 	}},
+	{"embedded/isabelle.xml", chroma.Config{
+		Name: "Isabelle",
+		Aliases: []string{
+			"isabelle",
+		},
+		Filenames: []string{
+			"*.thy",
+		},
+		MimeTypes: []string{
+			"text/x-isabelle",
+		},
+	}},
 	{"embedded/iscdhcpd.xml", chroma.Config{
 		Name: "ISCdhcpd",
 		Aliases: []string{
