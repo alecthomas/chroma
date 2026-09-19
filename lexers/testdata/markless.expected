@@ -161,5 +161,15 @@
   {"type":"Keyword","value":"10."},
   {"type":"TextWhitespace","value":" "},
   {"type":"Text","value":"Now for something different."},
+  {"type":"TextWhitespace","value":"\n\n"},
+  {"type":"Text","value":"The formula is H "},
+  {"type":"Keyword","value":"v("},
+  {"type":"Text","value":"2"},
+  {"type":"Keyword","value":")"},
+  {"type":"Text","value":" O, and the area is 4 "},
+  {"type":"Keyword","value":"^("},
+  {"type":"Text","value":"2"},
+  {"type":"Keyword","value":")"},
+  {"type":"Text","value":" cm."},
   {"type":"TextWhitespace","value":"\n"}
 ]
