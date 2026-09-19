@@ -11,6 +11,7 @@ import (
 	"path"
 	"slices"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/alecthomas/chroma/v3"
 )
@@ -141,12 +142,17 @@ func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens []chroma.T
 	return err
 }
 
+// tokenWidth is the token's width in character cells, with tabs expanded.
+func tokenWidth(token chroma.Token) int {
+	return utf8.RuneCountInString(strings.ReplaceAll(token.String(), `	`, "    "))
+}
+
 func maxLineWidth(lines [][]chroma.Token) int {
 	maxWidth := 0
 	for _, tokens := range lines {
 		length := 0
 		for _, token := range tokens {
-			length += len(strings.ReplaceAll(token.String(), `	`, "    "))
+			length += tokenWidth(token)
 		}
 		if length > maxWidth {
 			maxWidth = length
@@ -162,7 +168,7 @@ func (f *Formatter) writeTokenBackgrounds(w io.Writer, lines [][]chroma.Token, s
 	for index, tokens := range lines {
 		lineLength := 0
 		for _, token := range tokens {
-			length := len(strings.ReplaceAll(token.String(), `	`, "    "))
+			length := tokenWidth(token)
 			tokenBackground := style.Get(token.Type).Background
 			if tokenBackground.IsSet() && tokenBackground != style.Get(chroma.Background).Background {
 				if _, err := fmt.Fprintf(w, "<rect id=\"%s\" x=\"%dch\" y=\"%fem\" width=\"%dch\" height=\"1.2em\" fill=\"%s\" />\n", escapeString(token.String()), lineLength, 1.2*float64(index)+0.25, length, style.Get(token.Type).Background.String()); err != nil {
