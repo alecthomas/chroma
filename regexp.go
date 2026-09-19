@@ -195,27 +195,31 @@ func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
 		if l.newlineAdded {
 			end--
 		}
-		seenAtPos := map[string]struct{}{}
-		seenPos := -1
+		// Zero-width push/pop can oscillate forever without advancing Pos.
+		// Count consecutive iterations at the same position instead of hashing
+		// the stack on every match (map + strings.Join).
+		const maxStuckIters = 1000
+		stuck := 0
+		lastPos := -1
 		for l.Pos < end && len(l.Stack) > 0 {
 			if !l.drainIteratorStack(yield) {
 				return
 			}
 
-			if l.Pos != seenPos {
-				seenPos = l.Pos
-				clear(seenAtPos)
-			}
-			stackKey := strings.Join(l.Stack, "\x1e")
-			if _, again := seenAtPos[stackKey]; again {
-				// Zero-width push/pop can oscillate forever without advancing Pos.
-				l.Pos++
-				if !yield(Token{Error, string(l.Text[l.Pos-1 : l.Pos])}) {
-					return
+			if l.Pos != lastPos {
+				lastPos = l.Pos
+				stuck = 0
+			} else {
+				stuck++
+				if stuck >= maxStuckIters {
+					l.Pos++
+					if !yield(Token{Error, string(l.Text[l.Pos-1 : l.Pos])}) {
+						return
+					}
+					stuck = 0
+					continue
 				}
-				continue
 			}
-			seenAtPos[stackKey] = struct{}{}
 
 			l.State = l.Stack[len(l.Stack)-1]
 			selectedRule, ok := l.Rules[l.State]
