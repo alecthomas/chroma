@@ -1,0 +1,15 @@
+a(href=root_path class="btn") Home
+a[href=user_path(@user) title=user.name] Profile
+button{type: "submit", disabled: false} Save
+img src=image_path("logo.png") alt="Logo" /
+input type="text" name="q" placeholder="Search" required=true
+div data-controller="dropdown" data-action="click->dropdown#toggle"
+a(
+  href=url_for(controller: "home", action: "index")
+  class="logo"
+) Home
+div *user_attrs
+span *{id: 1, name: "widget"}
+p#intro.lead Welcome to #{app_name}
+.alert.alert-info
+  ' This line keeps the trailing space
