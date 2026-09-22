@@ -1,0 +1,8 @@
+Host app
+    UserKnownHostsFile %d/.ssh/known_hosts.d/%k
+    StrictHostKeyChecking = ask
+    KexAlgorithms ^sntrup761x25519-sha512,+curve25519-sha256
+    Ciphers -aes128-cbc,aes256-gcm@openssh.com
+    LocalForward 127.0.0.1:8080 localhost:80
+    RemoteForward [::1]:2200 localhost:22
+    SomeFutureOption value # unknown options still render as directives
