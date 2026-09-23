@@ -6,3 +6,10 @@ let n = 0x21 + 1_000;
 let n2 = 1e3;
 
 using resource = new Resource();
+
+class Counter {
+  #count = 0;
+  static #instances = 0;
+  #bump() { this.#count += 1; }
+  has(o) { return #count in o; }
+}
