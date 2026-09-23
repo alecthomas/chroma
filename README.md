@@ -39,11 +39,11 @@ translators for Pygments lexers and styles.
 
 <!-- supported-languages:begin -->
 | Prefix | Language
-| :----: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| :----: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |   A    | ABAP, ABNF, ActionScript, ActionScript 3, Ada, Agda, AL, Alloy, AMPL, Angular2, ANTLR, ApacheConf, APL, AppleScript, ArangoDB AQL, Arduino, ArmAsm, Arturo, Astro, ATL, AutoHotkey, AutoIt, Awk
 |   B    | Ballerina, Bash, Bash Session, Batchfile, Beef, BibTeX, Bicep, BlitzBasic, BNF, BQN, Brainfuck
 |   C    | C, C#, C++, C3, Caddyfile, Caddyfile Directives, Cap'n Proto, Cassandra CQL, Cedar, Ceylon, CFEngine3, cfstatement, ChaiScript, Chapel, Cheetah, Clojure, CMake, COBOL, CoffeeScript, Common Lisp, Coq, Core, Crystal, CSS, CSV, CUE, Cython
-|   D    | D, Dart, Dax, Desktop file, Devicetree, Diff, Django/Jinja, dns, Docker, DTD, Dylan
+|   D    | D, Dart, Dax, Desktop file, Devicetree, Diff, Django/Jinja, dns, Docker, docopt, DTD, Dylan
 |   E    | EBNF, Elixir, Elm, EmacsLisp, ERB, Erlang
 |   F    | Factor, Fennel, Fish, Forth, Fortran, FortranFixed, FSharp
 |   G    | Garden, GAS, GDScript, GDScript3, Gemfile.lock, Gemtext, Genshi, Genshi HTML, Genshi Text, Gettext, Gherkin, Gleam, GLSL, Gnuplot, Go, Go HTML Template, Go Template, Go Text Template, GraphQL, Groff, Groovy
@@ -55,7 +55,7 @@ translators for Pygments lexers and styles.
 |   M    | Makefile, Mako, markdown, Markless, Mason, Materialize SQL dialect, Mathematica, Matlab, MCFunction, Meson, Metal, microcad, MiniZinc, MLIR, Modelica, Modula-2, Mojo, MonkeyC, MoonBit, MoonScript, MorrowindScript, Myghty, MySQL
 |   N    | NASM, Natural, NDISASM, Newspeak, Nginx configuration file, Nim, Nix, NSIS, Nu
 |   O    | Objective-C, ObjectPascal, OCaml, Octave, Odin, OnesEnterprise, OpenEdge ABL, OpenSCAD, Org Mode
-|   P    | PacmanConf, Perl, PHP, PHTML, Pig, PkgConfig, PL/pgSQL, plaintext, Plutus Core, Pony, PostgreSQL SQL dialect, PostScript, POVRay, PowerQuery, PowerShell, Prolog, Promela, PromQL, properties, Protocol Buffer, Protocol Buffer Text Format, PRQL, PSL, Puppet, Python, Python 2
+|   P    | PacmanConf, Perl, PHP, PHTML, Pig, PkgConfig, PL/pgSQL, plaintext, Plan 9 rc, Plutus Core, Pony, PostgreSQL SQL dialect, PostScript, POVRay, PowerQuery, PowerShell, Prolog, Promela, PromQL, properties, Protocol Buffer, Protocol Buffer Text Format, PRQL, PSL, Puppet, Python, Python 2
 |   Q    | QBasic, QML
 |   R    | R, Racket, Ragel, Raku, react, ReasonML, reg, Rego, reStructuredText, Rexx, RGBDS Assembly, Ring, RPGLE, RPMSpec, Ruby, Rust
 |   S    | SAS, Sass, Scala, scdoc, Scheme, Scilab, SCSS, Sed, Sieve, Smali, Smalltalk, Smarty, SNBT, Snobol, Solidity, SourcePawn, Spade, SPARQL, SQL, SquidConf, Standard ML, stas, Stylus, Svelte, Swift, SYSTEMD, systemverilog

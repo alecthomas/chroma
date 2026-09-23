@@ -1,0 +1,190 @@
+<lexer>
+  <config>
+    <name>docopt</name>
+    <alias>docopt</alias>
+    <filename>*.docopt</filename>
+  </config>
+  <rules>
+    <!-- Prose and section headers -->
+    <state name="root">
+      <rule pattern="(?i)^([ \t]*)(usage)(\s*:)([ \t]*)([A-Za-z0-9][\w.+-]*)?">
+        <bygroups>
+          <token type="Text"/>
+          <token type="GenericHeading"/>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+          <token type="NameFunction"/>
+        </bygroups>
+        <push state="usage"/>
+      </rule>
+      <rule pattern="(?i)^([ \t]*)(options|arguments|commands|aliases|parameters)(\s*:)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="GenericHeading"/>
+          <token type="Punctuation"/>
+        </bygroups>
+        <push state="options"/>
+      </rule>
+      <rule pattern="[^\n]+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <!-- Usage patterns -->
+    <state name="usage">
+      <!-- A blank line ends the section -->
+      <rule pattern="^[ \t]*\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <!-- Section headers, even without a blank line in between -->
+      <rule pattern="(?i)^([ \t]*)(usage)(\s*:)([ \t]*)([A-Za-z0-9][\w.+-]*)?">
+        <bygroups>
+          <token type="Text"/>
+          <token type="GenericHeading"/>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+          <token type="NameFunction"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(?i)^([ \t]*)(options|arguments|commands|aliases|parameters)(\s*:)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="GenericHeading"/>
+          <token type="Punctuation"/>
+        </bygroups>
+        <push state="#pop" state="options"/>
+      </rule>
+      <!-- Program name: first word of a usage line -->
+      <rule pattern="^([ \t]*)([A-Za-z0-9][\w.+-]*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="NameFunction"/>
+        </bygroups>
+      </rule>
+      <!-- Positional arguments, &lt;like_this&gt; or UPPERCASE -->
+      <rule pattern="&lt;[^&gt;\n]+&gt;">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="[A-Z](?>[A-Z0-9_]*)(?![a-z/-])">
+        <token type="NameVariable"/>
+      </rule>
+      <!-- Options: short, stacked short and long flags -->
+      <rule pattern="(?&lt;![\w])-[\w-]*">
+        <token type="NameAttribute"/>
+      </rule>
+      <!-- Repetition, alternatives, assignments -->
+      <rule pattern="\.\.\.">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[|]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern=",">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="=">
+        <token type="Operator"/>
+      </rule>
+      <!-- Grouping -->
+      <rule pattern="[\[\]()]">
+        <token type="Punctuation"/>
+      </rule>
+      <!-- Commands -->
+      <rule pattern="[A-Za-z0-9][\w.+-]*">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <!-- Option (and argument, command, alias) definition lists -->
+    <state name="options">
+      <!-- A blank line ends the section -->
+      <rule pattern="^[ \t]*\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <!-- Section headers, even without a blank line in between -->
+      <rule pattern="(?i)^([ \t]*)(options|arguments|commands|aliases|parameters)(\s*:)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="GenericHeading"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(?i)^([ \t]*)(usage)(\s*:)([ \t]*)([A-Za-z0-9][\w.+-]*)?">
+        <bygroups>
+          <token type="Text"/>
+          <token type="GenericHeading"/>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+          <token type="NameFunction"/>
+        </bygroups>
+        <push state="#pop" state="usage"/>
+      </rule>
+      <!-- Option flags: short, stacked short and long flags -->
+      <rule pattern="^([ \t]*)(-[\w-]*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="NameAttribute"/>
+        </bygroups>
+      </rule>
+      <rule pattern=",">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="(?&lt;![\w])-[\w-]*">
+        <token type="NameAttribute"/>
+      </rule>
+      <!-- Option arguments: flag=&lt;arg&gt; or flag ARG -->
+      <rule pattern="=">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="&lt;[^&gt;\n]+&gt;">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="[A-Z](?>[A-Z0-9_]*)(?![a-z/-])">
+        <token type="NameVariable"/>
+      </rule>
+      <!-- [default: ...] and [env: ...] in descriptions -->
+      <rule pattern="(?i)(\[)(default|env)(:[ \t]*)([^\]\n]*)(\])">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="NameBuiltin"/>
+          <token type="Punctuation"/>
+          <token type="LiteralString"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <!-- Other [bracketed] things in descriptions -->
+      <rule pattern="(\[)([^\]\n]*)(\])">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="Comment"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <!-- Description text -->
+      <rule pattern="[^\[\]\n]+">
+        <token type="Comment"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Comment"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
