@@ -39,6 +39,10 @@ func svelteRules() Rules {
 				Punctuation,
 				Push("templates"),
 			},
+			// An attribute whose value is an expression: take the `=` as well, so
+			// the HTML delegate sees a bare attribute instead of one whose value
+			// went missing with the expression, which it reports as an error.
+			{`(?<=[\w:$-])=(?=\{)`, Operator, nil},
 			// on:submit|preventDefault
 			{`(?<=\s+on:\w+(?:\|\w+)*)\|(?=\w+)`, Operator, nil},
 			{`.+?`, Other, nil},
