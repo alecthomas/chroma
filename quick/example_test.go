@@ -25,8 +25,8 @@ func main() { }
 	// /* LineLink */ .chroma .lnlinks { outline: none; text-decoration: none; color: inherit }
 	// /* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
 	// /* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
-	// /* LineHighlight */ .chroma .hl { background-color: #3c3d38 }
-	// /* LineNumbersTable */ .chroma .lnt { white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
+	// /* LineHighlight */ .chroma .hl { display: flex; background-color: #3c3d38 }
+	// /* LineNumbersTable */ .chroma .lnt { display: flex; white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
 	// /* LineNumbers */ .chroma .ln { white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
 	// /* Line */ .chroma .line { display: flex; }
 	// /* Keyword */ .chroma .k { color: #66d9ef }

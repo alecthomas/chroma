@@ -359,6 +359,33 @@ func TestTableLineNumberSpacing(t *testing.T) {
 	}
 }
 
+// https://github.com/alecthomas/chroma/issues/722
+func TestTableLineNumberRowHeight(t *testing.T) {
+	t.Run("Classes", func(t *testing.T) {
+		f := New(WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true), HighlightLines([][2]int{{2, 2}}))
+		var buf bytes.Buffer
+		err := f.WriteCSS(&buf, styles.Fallback)
+		assert.NoError(t, err)
+		// Unhighlighted row: .lnt is the row and needs its own flex box.
+		assert.Contains(t, buf.String(), ".chroma .lnt { display: flex;")
+		// Highlighted row: .hl (not .lnt) is the row.
+		assert.Contains(t, buf.String(), ".chroma .hl { display: flex;")
+	})
+
+	t.Run("InlineStyles", func(t *testing.T) {
+		f := New(WithLineNumbers(true), LineNumbersInTable(true), HighlightLines([][2]int{{2, 2}}))
+		it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
+		assert.NoError(t, err)
+		var buf bytes.Buffer
+		err = f.Format(&buf, styles.Fallback, it)
+		assert.NoError(t, err)
+		// Unhighlighted row.
+		assert.Contains(t, buf.String(), `<span style="display:flex;white-space:pre;`)
+		// Highlighted row: the .hl-equivalent wrapping span gets the flex box.
+		assert.Contains(t, buf.String(), `<span style="display:flex;background-color:`)
+	})
+}
+
 func TestWithPreWrapper(t *testing.T) {
 	wrapper := preWrapper{
 		start: func(code bool, styleAttr string) string {
