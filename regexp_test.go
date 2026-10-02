@@ -65,6 +65,23 @@ func TestZeroWidthMatchTerminates(t *testing.T) {
 	assert.Equal(t, []Token{{Error, "b"}}, slices.Collect(it))
 }
 
+func TestZeroWidthPushPopCycleTerminates(t *testing.T) {
+	l := Coalesce(mustNewLexer(t, &Config{Name: "loopy"}, Rules{ // nolint: forbidigo
+		"root": {
+			{`(?=\S)`, None, Push("a")},
+		},
+		"a": {
+			{`(?=\S)`, None, Push("b")},
+		},
+		"b": {
+			{``, None, Pop(1)},
+		},
+	}))
+	it, err := l.Tokenise(nil, "x")
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{Error, "x"}}, slices.Collect(it))
+}
+
 func TestEnsureLFOption(t *testing.T) {
 	l := Coalesce(mustNewLexer(t, &Config{}, Rules{ // nolint: forbidigo
 		"root": {
