@@ -1003,6 +1003,15 @@ var embeddedLexers = []struct {
 		},
 		CaseInsensitive: true,
 	}},
+	{"embedded/docopt.xml", chroma.Config{
+		Name: "docopt",
+		Aliases: []string{
+			"docopt",
+		},
+		Filenames: []string{
+			"*.docopt",
+		},
+	}},
 	{"embedded/dtd.xml", chroma.Config{
 		Name: "DTD",
 		Aliases: []string{
