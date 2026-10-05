@@ -1,0 +1,61 @@
+<lexer>
+  <config>
+    <name>1C Enterprise</name>
+    <alias>1c</alias>
+    <alias>bsl</alias>
+    <alias>onec</alias>
+    <filename>*.bsl</filename>
+    <filename>*.os</filename>
+    <mime_type>text/x-bsl</mime_type>
+    <case_insensitive>true</case_insensitive>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\s+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="//[^\n]*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="^[ \t]*[&amp;#][^\n]*">
+        <token type="CommentPreproc"/>
+      </rule>
+      <rule pattern="&#34;(?:[^&#34;]|&#34;&#34;)*&#34;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="&#39;[^&#39;\n]*&#39;">
+        <token type="LiteralDate"/>
+      </rule>
+      <rule pattern="\d+\.\d+">
+        <token type="LiteralNumberFloat"/>
+      </rule>
+      <rule pattern="\d+">
+        <token type="LiteralNumberInteger"/>
+      </rule>
+      <rule pattern="\b(Истина|Ложь|Неопределено|True|False|Undefined|NULL)\b">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="\b(Или|Не|И|And|Or|Not)\b">
+        <token type="OperatorWord"/>
+      </rule>
+      <rule pattern="\b(КонецПопытки|ВызватьИсключение|ИначеЕсли|КонецЕсли|КонецЦикла|Продолжить|Исключение|Прервать|Перейти|Возврат|Каждого|Попытка|Тогда|Иначе|Цикл|Если|Пока|Для|По|Из|RaiseException|Continue|EndTry|ElsIf|EndIf|EndDo|Except|Return|Break|While|Then|Else|Each|Goto|Raise|Try|For|Do|To|In|If)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(КонецПроцедуры|КонецФункции|Процедура|Функция|Экспорт|Перем|Знач|Новый|EndProcedure|EndFunction|Procedure|Function|Export|Var|Val|New)\b">
+        <token type="KeywordDeclaration"/>
+      </rule>
+      <rule pattern="~[^\s:]+">
+        <token type="NameLabel"/>
+      </rule>
+      <rule pattern="&lt;=|&gt;=|&lt;&gt;|[-+*/%&lt;&gt;=]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[(){}\[\];,.:]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[^\W\d]\w*">
+        <token type="Name"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
