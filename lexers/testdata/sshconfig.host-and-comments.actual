@@ -1,0 +1,9 @@
+# Global defaults
+Host *
+    User alice
+    Port 22
+
+# Wildcards and negation
+Host *.example.com !bastion.example.com
+    IdentityFile ~/.ssh/id_ed25519
+    ProxyJump jump.example.com
