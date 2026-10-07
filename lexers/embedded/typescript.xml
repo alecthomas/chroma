@@ -275,13 +275,19 @@
       <rule pattern="[$a-zA-Z_]\w*">
         <token type="NameOther" />
       </rule>
-      <rule pattern="[0-9][0-9]*\.[0-9]+([eE][0-9]+)?[fd]?">
+      <rule pattern="\d+(\.\d*([eE][+\-]?\d+)?|[eE][+\-]?\d+)">
         <token type="LiteralNumberFloat" />
       </rule>
-      <rule pattern="0x[0-9a-fA-F]+">
+      <rule pattern="0[bB][01]+">
+        <token type="LiteralNumberBin" />
+      </rule>
+      <rule pattern="0[oO][0-7]+">
+        <token type="LiteralNumberOct" />
+      </rule>
+      <rule pattern="0[xX][0-9a-fA-F]+">
         <token type="LiteralNumberHex" />
       </rule>
-      <rule pattern="[0-9]+">
+      <rule pattern="[0-9][0-9_]*">
         <token type="LiteralNumberInteger" />
       </rule>
       <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;">
