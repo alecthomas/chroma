@@ -1,0 +1,20 @@
+[include]
+	path = /path/to/foo.inc
+	path = foo.inc
+	path = ~/foo.inc
+	path = ~alice/foo.inc
+	path = %(prefix)/etc/gitconfig
+	path = :(optional)relative.inc ; optional include
+
+[includeIf "gitdir:/path/to/foo/.git"]
+	path = /path/to/foo.inc
+
+[includeIf "gitdir/i:~/to/group/"]
+	path = foo.inc
+
+[includeIf "onbranch:release/**"]
+	path = foo.inc
+
+[includeIf "hasconfig:remote.*.url:https://example.com/**"]
+	path = foo.inc
+
