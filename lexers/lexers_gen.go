@@ -526,6 +526,7 @@ var embeddedLexers = []struct {
 			"*.cp",
 			"*.CPP",
 			"*.tpp",
+			"*.cppm",
 		},
 		MimeTypes: []string{
 			"text/x-c++hdr",
