@@ -195,9 +195,29 @@ func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
 		if l.newlineAdded {
 			end--
 		}
+		// Zero-width push/pop cycles can cycle states indefinitely without advancing Pos.
+		// Track consecutive iterations at the same position to break infinite loops.
+		const maxStuckIters = 1000
+		stuck := 0
+		lastPos := -1
 		for l.Pos < end && len(l.Stack) > 0 {
 			if !l.drainIteratorStack(yield) {
 				return
+			}
+
+			if l.Pos != lastPos {
+				lastPos = l.Pos
+				stuck = 0
+			} else {
+				stuck++
+				if stuck >= maxStuckIters {
+					l.Pos++
+					if !yield(Token{Error, string(l.Text[l.Pos-1 : l.Pos])}) {
+						return
+					}
+					stuck = 0
+					continue
+				}
 			}
 
 			l.State = l.Stack[len(l.Stack)-1]
