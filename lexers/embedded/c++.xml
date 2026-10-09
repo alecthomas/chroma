@@ -16,6 +16,9 @@
     <filename>*.cp</filename>
     <filename>*.CPP</filename>
     <filename>*.tpp</filename>
+    <filename>*.cppm</filename>
+    <filename>*.ixx</filename>
+    <filename>*.cxxm</filename>
     <mime_type>text/x-c++hdr</mime_type>
     <mime_type>text/x-c++src</mime_type>
     <ensure_nl>true</ensure_nl>

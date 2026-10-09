@@ -53,6 +53,59 @@ func TestGet(t *testing.T) {
 	})
 }
 
+func TestCppModuleFilenames(t *testing.T) {
+	expected := lexers.Get("C++")
+	assert.NotZero(t, expected)
+
+	testCases := []string{
+		"example.cppm",
+		"example.ixx",
+		"example.cxxm",
+		"src/core/math.cppm",
+		"src/core/math.ixx",
+		"src/core/math.cxxm",
+	}
+
+	for _, filename := range testCases {
+		t.Run("Match/"+filename, func(t *testing.T) {
+			actual := lexers.Match(filename)
+			assert.NotZero(t, actual, "expected match for %s", filename)
+			assert.Equal(t, expected.Config().Name, actual.Config().Name)
+		})
+		t.Run("Get/"+filename, func(t *testing.T) {
+			actual := lexers.Get(filename)
+			assert.NotZero(t, actual, "expected get for %s", filename)
+			assert.Equal(t, expected.Config().Name, actual.Config().Name)
+		})
+	}
+
+	for _, ext := range []string{"cppm", "ixx", "cxxm"} {
+		t.Run("GetExtension/"+ext, func(t *testing.T) {
+			actual := lexers.Get(ext)
+			assert.NotZero(t, actual, "expected get for extension %s", ext)
+			assert.Equal(t, expected.Config().Name, actual.Config().Name)
+		})
+	}
+
+	t.Run("TokeniseModuleCode", func(t *testing.T) {
+		lexer := lexers.Match("module.cppm")
+		assert.NotZero(t, lexer)
+		source := `export module speech;
+import <iostream>;
+export void say_hello() {
+    std::cout << "Hello, World!\n";
+}
+`
+		it, err := lexer.Tokenise(nil, source)
+		assert.NoError(t, err)
+		tokens := slices.Collect(it)
+		assert.True(t, len(tokens) > 0)
+		for _, token := range tokens {
+			assert.False(t, token.Type == chroma.Error, "unexpected error token: %v", token)
+		}
+	})
+}
+
 func TestAliases(t *testing.T) {
 	t.Run("UseNameIfNoAliases", func(t *testing.T) {
 		expected := lexers.GlobalLexerRegistry.Aliases(false)
