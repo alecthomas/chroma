@@ -440,6 +440,10 @@ var embeddedLexers = []struct {
 			"*.bicep",
 		},
 	}},
+	{"embedded/blade.xml", chroma.Config{
+		Name:   "Blade",
+		DotAll: true,
+	}},
 	{"embedded/blitzbasic.xml", chroma.Config{
 		Name: "BlitzBasic",
 		Aliases: []string{
