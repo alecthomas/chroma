@@ -43,7 +43,7 @@ translators for Pygments lexers and styles.
 |   A    | ABAP, ABNF, ActionScript, ActionScript 3, Ada, Agda, AL, Alloy, AMPL, Angular2, ANTLR, ApacheConf, APL, AppleScript, ArangoDB AQL, Arduino, ArmAsm, Arturo, Astro, ATL, AutoHotkey, AutoIt, Awk
 |   B    | Ballerina, Bash, Bash Session, Batchfile, Beef, BibTeX, Bicep, BlitzBasic, BNF, BQN, Brainfuck
 |   C    | C, C#, C++, C3, Caddyfile, Caddyfile Directives, Cap'n Proto, Cassandra CQL, Cedar, Ceylon, CFEngine3, cfstatement, ChaiScript, Chapel, Cheetah, Clojure, CMake, COBOL, CoffeeScript, Common Lisp, Coq, Core, Crystal, CSS, CSV, CUE, Cython
-|   D    | D, Dart, Dax, Desktop file, Devicetree, Diff, Django/Jinja, dns, Docker, DTD, Dylan
+|   D    | D, Dart, Dax, DBML, Desktop file, Devicetree, Diff, Django/Jinja, dns, Docker, DTD, Dylan
 |   E    | EBNF, Elixir, Elm, EmacsLisp, ERB, Erlang
 |   F    | Factor, Fennel, Fish, Forth, Fortran, FortranFixed, FSharp
 |   G    | Garden, GAS, GDScript, GDScript3, Gemfile.lock, Gemtext, Genshi, Genshi HTML, Genshi Text, Gettext, Gherkin, Gleam, GLSL, Gnuplot, Go, Go HTML Template, Go Template, Go Text Template, GraphQL, Groff, Groovy

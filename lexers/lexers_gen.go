@@ -905,6 +905,20 @@ var embeddedLexers = []struct {
 			"*.dax",
 		},
 	}},
+	{"embedded/dbml.xml", chroma.Config{
+		Name: "DBML",
+		Aliases: []string{
+			"dbml",
+		},
+		Filenames: []string{
+			"*.dbml",
+		},
+		MimeTypes: []string{
+			"text/x-dbml",
+		},
+		CaseInsensitive: true,
+		DotAll:          true,
+	}},
 	{"embedded/desktop_entry.xml", chroma.Config{
 		Name: "Desktop file",
 		Aliases: []string{
