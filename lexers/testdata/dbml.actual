@@ -1,0 +1,73 @@
+// Shop schema
+Project shop {
+  database_type: 'PostgreSQL'
+  Note: '''
+    Orders and the people who place them.
+  '''
+}
+
+Table users as U {
+  id integer [pk, increment]
+  email varchar(255) [unique, not null]
+  "full name" varchar
+  created_at timestamp [default: `now()`]
+  tags text[]
+
+  indexes {
+    (email, created_at) [name: 'users_email_created']
+  }
+}
+
+Table orders [headercolor: #3498DB] {
+  id integer [pk, increment]
+  user_id integer [not null, ref: > U.id]
+  status order_status [note: 'pending, paid or shipped']
+  total decimal(10,2) [default: 0]
+}
+
+Enum order_status {
+  pending
+  paid
+  shipped [note: 'on its way']
+}
+
+Ref: orders.user_id > users.id [delete: cascade]
+
+/* Grouping */
+TableGroup commerce {
+  users
+  orders
+}
+
+Table core."user table" {
+  note varchar
+  price "double precision" [not null]
+  st core.status
+  ratio float [default: 1.5e10, check: `ratio > 0`]
+  base_id int [ref: >? base.id]
+  ~base_template
+}
+
+TablePartial base_template [headercolor: #ff0000] {
+  id int [pk, not null]
+  indexes {
+    id [type: hash]
+  }
+}
+
+Ref fk_name: posts.user_id ?<> core.users.id [update: no action, color: #79AD51, inactive]
+
+Note sticky [color: #F4D03F] {
+  '''a \''' still inside'''
+}
+
+records users(id, name, active) [example] {
+  1, 'Alice', true
+  2, 'Bob\'s', null
+}
+
+DiagramView overview {
+  Tables { * }
+}
+
+Dep: raw_orders -> stg_orders
