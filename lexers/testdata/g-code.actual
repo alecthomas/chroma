@@ -1,0 +1,15 @@
+; config.g for a Duet 2 WiFi (RepRapFirmware)
+%
+N10 G21 ; millimetres
+G90
+M83 (relative extrusion)
+M558 P8 C"!^zprobe.in" H5 F120 T6000 ; normally closed probe
+G31 P500 X0 Y0 Z1.25
+M584 X0 Y1 Z2 E3:4
+G1 X10.5 Y-3 F3000
+X20 Y20
+T0
+M291 P"Probe ""now""?" S3
+if move.axes[0].homed
+  echo "X is homed"
+G28 {var.axis}

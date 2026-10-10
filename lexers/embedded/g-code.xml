@@ -1,0 +1,78 @@
+<lexer>
+  <config>
+    <name>G-code</name>
+    <alias>gcode</alias>
+    <alias>g-code</alias>
+    <alias>nc</alias>
+    <filename>*.gcode</filename>
+    <filename>*.gco</filename>
+    <filename>*.ngc</filename>
+    <mime_type>text/x-gcode</mime_type>
+    <case_insensitive>true</case_insensitive>
+  </config>
+  <rules>
+    <state name="common">
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern=";[^\n]*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="\([^)\n]*\)">
+        <token type="Comment"/>
+      </rule>
+      <rule pattern="&quot;(&quot;&quot;|[^&quot;\n])*&quot;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="\{[^}\n]*\}">
+        <token type="LiteralStringOther"/>
+      </rule>
+    </state>
+    <state name="root">
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule>
+        <include state="common"/>
+      </rule>
+      <rule pattern="%">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="N\d+">
+        <token type="NameLabel"/>
+      </rule>
+      <rule pattern="[GMT]\d+(\.\d+)?">
+        <token type="Keyword"/>
+        <push state="parameters"/>
+      </rule>
+      <rule pattern="\b(if|elif|else|while|break|continue|var|global|set|echo|abort|return)\b">
+        <token type="Keyword"/>
+        <push state="parameters"/>
+      </rule>
+      <rule>
+        <push state="parameters"/>
+      </rule>
+    </state>
+    <state name="parameters">
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="common"/>
+      </rule>
+      <rule pattern="([A-Z])([-+]?(?:\d+\.?\d*|\.\d+)(?::[-+]?(?:\d+\.?\d*|\.\d+))*)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="LiteralNumber"/>
+        </bygroups>
+      </rule>
+      <rule pattern="[A-Z](?=&quot;|\{)">
+        <token type="NameAttribute"/>
+      </rule>
+      <rule pattern="[^\n]">
+        <token type="Text"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
