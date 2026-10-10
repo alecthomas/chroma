@@ -1,0 +1,218 @@
+<lexer>
+  <config>
+    <name>Blade</name>
+    <dot_all>true</dot_all>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="(?&lt;!@)(@verbatim)(.*?)(@endverbatim)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Other"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(?&lt;!@)(@php)(.*?)(@endphp)">
+        <bygroups>
+          <token type="Keyword"/>
+          <using lexer="PHP"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+      <rule>
+        <include state="echoes"/>
+      </rule>
+      <rule pattern="@@[a-zA-Z_]\w*">
+        <token type="Other"/>
+      </rule>
+      <rule pattern="(&lt;)(x[-:][\w\-:.]*)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="NameTag"/>
+        </bygroups>
+        <push state="component"/>
+      </rule>
+      <rule pattern="(?&lt;![\w.])(@[a-zA-Z_][\w.:-]*)(\s*)(=)(\s*)(&quot;[^&quot;]*&quot;|&#39;[^&#39;]*&#39;)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="TextWhitespace"/>
+          <token type="Operator"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(?&lt;![\w.])(@(?!(?:charset|container|counter-style|font-face|font-feature-values|import|keyframes|layer|media|namespace|page|property|scope|starting-style|supports|view-transition)\b)[a-zA-Z_]\w*(?:::\w+)?)([ \t]*)(\()">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="TextWhitespace"/>
+          <token type="Punctuation"/>
+        </bygroups>
+        <push state="arguments"/>
+      </rule>
+      <rule pattern="(?&lt;![\w.])@(?!(?:charset|container|counter-style|font-face|font-feature-values|import|keyframes|layer|media|namespace|page|property|scope|starting-style|supports|view-transition)\b)[a-zA-Z_]\w*(?:::\w+)?">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="[^{@&lt;]+">
+        <token type="Other"/>
+      </rule>
+      <rule pattern="[{@&lt;]">
+        <token type="Other"/>
+      </rule>
+    </state>
+    <state name="echoes">
+      <rule pattern="\{\{--.*?--\}\}">
+        <token type="Comment"/>
+      </rule>
+      <rule pattern="(@)(\{\{.*?\}\}|\{!!.*?!!\})">
+        <bygroups>
+          <token type="CommentPreproc"/>
+          <token type="Other"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(\{\{\{)(.*?)(\}\}\})">
+        <bygroups>
+          <token type="CommentPreproc"/>
+          <using lexer="PHP"/>
+          <token type="CommentPreproc"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(\{\{)(.*?)(\}\})">
+        <bygroups>
+          <token type="CommentPreproc"/>
+          <using lexer="PHP"/>
+          <token type="CommentPreproc"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(\{!!)(.*?)(!!\})">
+        <bygroups>
+          <token type="CommentPreproc"/>
+          <using lexer="PHP"/>
+          <token type="CommentPreproc"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="arguments">
+      <rule pattern="&#39;(?:\\.|[^&#39;\\])*&#39;|&quot;(?:\\.|[^&quot;\\])*&quot;">
+        <using lexer="PHP"/>
+      </rule>
+      <rule pattern="\(">
+        <token type="Punctuation"/>
+        <push/>
+      </rule>
+      <rule pattern="\)">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^()&#39;&quot;]+">
+        <using lexer="PHP"/>
+      </rule>
+    </state>
+    <state name="component">
+      <rule pattern="/?&gt;">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\s+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule>
+        <include state="echoes"/>
+      </rule>
+      <rule pattern="(:\$)(\w+)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="NameVariable"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(:(?!:)[\w\-:.@]+)(\s*)(=)(\s*)(&quot;)([^&quot;]*)(&quot;)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="TextWhitespace"/>
+          <token type="Operator"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralString"/>
+          <using lexer="PHP"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(:(?!:)[\w\-:.@]+)(\s*)(=)(\s*)(&#39;)([^&#39;]*)(&#39;)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="TextWhitespace"/>
+          <token type="Operator"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralString"/>
+          <using lexer="PHP"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(@(?:class|style))([ \t]*)(\()">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="TextWhitespace"/>
+          <token type="Punctuation"/>
+        </bygroups>
+        <push state="arguments"/>
+      </rule>
+      <rule pattern="([\w\-:.@%]+)(\s*)(=)(\s*)(&quot;)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="TextWhitespace"/>
+          <token type="Operator"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralString"/>
+        </bygroups>
+        <push state="double-quoted"/>
+      </rule>
+      <rule pattern="([\w\-:.@%]+)(\s*)(=)(\s*)(&#39;)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="TextWhitespace"/>
+          <token type="Operator"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralString"/>
+        </bygroups>
+        <push state="single-quoted"/>
+      </rule>
+      <rule pattern="([\w\-:.@%]+)(\s*)(=)(\s*)([^\s&gt;&quot;&#39;]+)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="TextWhitespace"/>
+          <token type="Operator"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern="[\w\-:.@%]+">
+        <token type="NameAttribute"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="double-quoted">
+      <rule pattern="&quot;">
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="echoes"/>
+      </rule>
+      <rule pattern="[^&quot;{]+|\{">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="single-quoted">
+      <rule pattern="&#39;">
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="echoes"/>
+      </rule>
+      <rule pattern="[^&#39;{]+|\{">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

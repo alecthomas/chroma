@@ -1,0 +1,39 @@
+{{-- Resources: resources/views/posts/index.blade.php --}}
+@extends('layouts.app')
+
+@section('content')
+    <h1>{{ $title }}</h1>
+    @if (count($posts) > 0)
+        <ul>
+            @foreach ($posts as $post)
+                <li><a href="{{ route('posts.show', $post) }}">{{ $post->title }}</a></li>
+            @endforeach
+        </ul>
+    @else
+        <p>No posts yet. Write to hello@example.com.</p>
+    @endif
+    {!! $post->rendered_body !!}
+    <span>@{{ not.blade }}</span>
+    @php
+        $count = count($posts);
+    @endphp
+@endsection
+@verbatim
+    <div>{{ name }} @if(x)</div>
+@endverbatim
+@include('partials.face', ['mood' => ':('])
+@lang('a) b')
+<x-alert type="error" :message="$message" ::class="{ open: isOpen }" :$userId>
+    <x-slot:title class="{{ $titleClass }}">Server Error</x-slot>
+    <x-forms::input.text @class(['p-4', 'font-bold' => $active]) />
+</x-alert>
+<button @click.prevent="open = true">Open</button>
+<style>
+    @media (max-width: 600px) { .a { color: {{ $color }}; } }
+</style>
+<script>
+    var raw = @{{ raw }};
+</script>
+@{!! not.blade !!}
+<p>{{{ $legacy }}}</p>
+@datetime::short($post->published_at)
