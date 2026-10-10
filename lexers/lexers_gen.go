@@ -1219,6 +1219,26 @@ var embeddedLexers = []struct {
 			},
 		},
 	}},
+	{"embedded/g-code.xml", chroma.Config{
+		Name: "G-code",
+		Aliases: []string{
+			"gcode",
+			"g-code",
+			"nc",
+		},
+		Filenames: []string{
+			"*.gcode",
+			"*.gco",
+			"*.ngc",
+			"*.nc",
+			"*.cnc",
+			"*.tap",
+		},
+		MimeTypes: []string{
+			"text/x-gcode",
+		},
+		CaseInsensitive: true,
+	}},
 	{"embedded/garden.xml", chroma.Config{
 		Name: "Garden",
 		Aliases: []string{
