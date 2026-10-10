@@ -7,70 +7,366 @@
     <filename>*.gcode</filename>
     <filename>*.gco</filename>
     <filename>*.ngc</filename>
+    <filename>*.nc</filename>
+    <filename>*.cnc</filename>
+    <filename>*.tap</filename>
     <mime_type>text/x-gcode</mime_type>
     <case_insensitive>true</case_insensitive>
   </config>
   <rules>
-    <state name="common">
+    <state name="root">
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="(?m)^([ \t]*)(if|elif|else|while|break|continue|abort|echo|skip|var|global|set)\b">
+        <bygroups>
+          <token type="TextWhitespace"/>
+          <token type="Keyword"/>
+        </bygroups>
+        <push state="meta"/>
+      </rule>
+      <rule pattern="(?m)^([ \t]*)([A-Z][A-Z_][A-Z0-9_]*)(?=[ \t;]|$)">
+        <bygroups>
+          <token type="TextWhitespace"/>
+          <token type="NameFunction"/>
+        </bygroups>
+        <push state="extended"/>
+      </rule>
       <rule pattern="[ \t]+">
         <token type="TextWhitespace"/>
       </rule>
       <rule pattern=";[^\n]*">
         <token type="CommentSingle"/>
       </rule>
+      <rule pattern="\((?:MSG|DEBUG|PRINT|LOG),[^)\n]*\)">
+        <token type="CommentSpecial"/>
+      </rule>
       <rule pattern="\([^)\n]*\)">
         <token type="Comment"/>
-      </rule>
-      <rule pattern="&quot;(&quot;&quot;|[^&quot;\n])*&quot;">
-        <token type="LiteralStringDouble"/>
-      </rule>
-      <rule pattern="\{[^}\n]*\}">
-        <token type="LiteralStringOther"/>
-      </rule>
-    </state>
-    <state name="root">
-      <rule pattern="\n">
-        <token type="TextWhitespace"/>
-      </rule>
-      <rule>
-        <include state="common"/>
       </rule>
       <rule pattern="%">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="N\d+">
+      <rule pattern="/">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="N\d+(?:\.\d+)?">
         <token type="NameLabel"/>
       </rule>
-      <rule pattern="[GMT]\d+(\.\d+)?">
-        <token type="Keyword"/>
-        <push state="parameters"/>
+      <rule pattern="(\*)(\d+)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="LiteralNumberInteger"/>
+        </bygroups>
       </rule>
-      <rule pattern="\b(if|elif|else|while|break|continue|var|global|set|echo|abort|return)\b">
+      <rule pattern="(O(?:\d+|&lt;[^&gt;\n]*&gt;))([ \t]*)(sub|endsub|call|return|if|elseif|else|endif|while|endwhile|do|repeat|endrepeat|break|continue)\b">
+        <bygroups>
+          <token type="NameFunction"/>
+          <token type="TextWhitespace"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+      <rule pattern="O(?=\[)">
+        <token type="NameFunction"/>
+      </rule>
+      <rule pattern="(?&lt;=\][ \t]*)(sub|endsub|call|return|if|elseif|else|endif|while|endwhile|do|repeat|endrepeat|break|continue)\b">
         <token type="Keyword"/>
-        <push state="parameters"/>
+      </rule>
+      <rule pattern="M118(?![\d.])">
+        <token type="Keyword"/>
+        <push state="m118"/>
+      </rule>
+      <rule pattern="M(?:16|23|28|117|928|81\d)(?![\d.])">
+        <token type="Keyword"/>
+        <push state="message"/>
+      </rule>
+      <rule pattern="([GM])([ \t]*)(\d+(?:\.\d+)?)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="TextWhitespace"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+      <!-- A T word starting the block selects a tool; later ones are parameters. -->
+      <rule pattern="(?m)(?&lt;=^[ \t]*(?:/[ \t]*)?(?:N\d+(?:\.\d+)?[ \t]*)?)T[ \t]*-?\d+">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="([A-Z])([ \t]*)([-+]?(?:\d+\.?\d*|\.\d+)(?::[-+]?(?:\d+\.?\d*|\.\d+))*)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralNumber"/>
+        </bygroups>
+      </rule>
+      <rule pattern="[A-Z](?=[ \t]*[#\[{&quot;])|[A-Z](?=[ \t;(\n]|$)">
+        <token type="NameAttribute"/>
       </rule>
       <rule>
-        <push state="parameters"/>
+        <include state="parameter"/>
+      </rule>
+      <rule pattern="=">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern=":">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="\[">
+        <token type="Punctuation"/>
+        <push state="expression"/>
+      </rule>
+      <rule>
+        <include state="template"/>
+      </rule>
+      <rule pattern="\{">
+        <token type="Punctuation"/>
+        <push state="braces"/>
+      </rule>
+      <rule pattern="&quot;(?:&quot;&quot;|[^&quot;\n])*&quot;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="[-+]?(?:\d+\.?\d*|\.\d+)">
+        <token type="LiteralNumber"/>
+      </rule>
+      <rule pattern="[^\n]">
+        <token type="Text"/>
       </rule>
     </state>
-    <state name="parameters">
+    <state name="parameter">
+      <rule pattern="#&lt;_[^&gt;\n]*&gt;">
+        <token type="NameVariableGlobal"/>
+      </rule>
+      <rule pattern="#&lt;[^&gt;\n]*&gt;|#+\d+|#+(?=\[)">
+        <token type="NameVariable"/>
+      </rule>
+    </state>
+    <state name="expression">
+      <rule pattern="\[">
+        <token type="Punctuation"/>
+        <push/>
+      </rule>
+      <rule pattern="\]">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(?=\n)">
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="\b(abs|acos|asin|atan|cos|exists|exp|fix|fup|ln|round|sin|sqrt|tan)\b">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="\b(mod|and|or|xor|eq|ne|gt|ge|lt|le)\b">
+        <token type="OperatorWord"/>
+      </rule>
+      <rule>
+        <include state="parameter"/>
+      </rule>
+      <rule pattern="\d+\.?\d*|\.\d+">
+        <token type="LiteralNumber"/>
+      </rule>
+      <rule pattern="\*\*|[-+*/]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[^\n]">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="braces">
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(?=\n)">
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="rrf"/>
+      </rule>
+    </state>
+    <state name="meta">
       <rule pattern="\n">
         <token type="TextWhitespace"/>
         <pop depth="1"/>
       </rule>
-      <rule>
-        <include state="common"/>
+      <rule pattern=";[^\n]*">
+        <token type="CommentSingle"/>
       </rule>
-      <rule pattern="([A-Z])([-+]?(?:\d+\.?\d*|\.\d+)(?::[-+]?(?:\d+\.?\d*|\.\d+))*)">
+      <rule>
+        <include state="rrf"/>
+      </rule>
+    </state>
+    <state name="rrf">
+      <rule pattern="\{">
+        <token type="Punctuation"/>
+        <push state="braces"/>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="&quot;(?:&quot;&quot;|[^&quot;\n])*&quot;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="'(?:''|[^'\n])'">
+        <token type="LiteralStringChar"/>
+      </rule>
+      <rule pattern="'[^'\n]*'">
+        <token type="LiteralStringSingle"/>
+      </rule>
+      <rule pattern="0x[0-9a-f]+">
+        <token type="LiteralNumberHex"/>
+      </rule>
+      <rule pattern="0b[01]+">
+        <token type="LiteralNumberBin"/>
+      </rule>
+      <rule pattern="(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?">
+        <token type="LiteralNumber"/>
+      </rule>
+      <rule pattern="\b(true|false|null|pi|iterations|line|result|input)\b">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="\b(abs|acos|asin|atan|atan2|ceil|cos|datetime|degrees|drop|exists|exp|fileexists|fileread|find|floor|isnan|log|max|min|mod|pow|radians|random|round|sin|sqrt|square|take|tan|vector)\b(?=[ \t]*\()">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="(\|)([ \t]*)(abs|attr|batch|capitalize|center|count|default|dictsort|escape|filesizeformat|first|float|forceescape|format|groupby|indent|int|items|join|last|length|list|lower|map|max|min|pprint|random|reject|rejectattr|replace|reverse|round|safe|select|selectattr|slice|sort|string|striptags|sum|title|tojson|trim|truncate|unique|upper|urlencode|urlize|wordcount|wordwrap|xmlattr)\b">
+        <bygroups>
+          <token type="Operator"/>
+          <token type="TextWhitespace"/>
+          <token type="NameFunction"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\baction_(?:respond_info|raise_error|emergency_stop|call_remote_method)\b">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="\b(?:var|global|param)\.\w+">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="[A-Z_]\w*">
+        <token type="Name"/>
+      </rule>
+      <rule pattern="==|!=|&lt;=|&gt;=|&amp;&amp;|\|\||&gt;&gt;&gt;|&gt;&gt;|[-+*/%!&lt;&gt;=&amp;|^?:#~]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[.,()\[\]]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[^\n]">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="extended">
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern=";[^\n]*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="([A-Z_][A-Z0-9_]*)(=)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="Operator"/>
+        </bygroups>
+      </rule>
+      <rule>
+        <include state="template"/>
+      </rule>
+      <rule pattern="\{">
+        <token type="Punctuation"/>
+        <push state="braces"/>
+      </rule>
+      <rule pattern="&quot;[^&quot;\n]*&quot;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="[-+]?(?:\d+\.?\d*|\.\d+)(?=[ \t;\n]|$)">
+        <token type="LiteralNumber"/>
+      </rule>
+      <rule pattern="[^ \t;\n{]+">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="m118">
+      <rule pattern="([AEP])(\d+)">
         <bygroups>
           <token type="NameAttribute"/>
           <token type="LiteralNumber"/>
         </bygroups>
       </rule>
-      <rule pattern="[A-Z](?=&quot;|\{)">
-        <token type="NameAttribute"/>
+      <rule>
+        <include state="message"/>
       </rule>
-      <rule pattern="[^\n]">
+    </state>
+    <state name="message">
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern=";[^\n]*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="[^ \t;\n][^;\n]*">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="template">
+      <rule pattern="\{#.*?#\}">
+        <token type="CommentMultiline"/>
+      </rule>
+      <rule pattern="\{%-?">
+        <token type="CommentPreproc"/>
+        <push state="statement"/>
+      </rule>
+    </state>
+    <state name="statement">
+      <rule pattern="-?%\}">
+        <token type="CommentPreproc"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\s+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="\b(if|elif|else|endif|for|endfor|set|endset|macro|endmacro|call|endcall|filter|endfilter|with|endwith|raw|endraw|break|continue|do)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(and|or|not|in|is)\b">
+        <token type="OperatorWord"/>
+      </rule>
+      <rule pattern="\b(true|false|none)\b">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="(\|)([ \t]*)(abs|attr|batch|capitalize|center|count|default|dictsort|escape|filesizeformat|first|float|forceescape|format|groupby|indent|int|items|join|last|length|list|lower|map|max|min|pprint|random|reject|rejectattr|replace|reverse|round|safe|select|selectattr|slice|sort|string|striptags|sum|title|tojson|trim|truncate|unique|upper|urlencode|urlize|wordcount|wordwrap|xmlattr)\b">
+        <bygroups>
+          <token type="Operator"/>
+          <token type="TextWhitespace"/>
+          <token type="NameFunction"/>
+        </bygroups>
+      </rule>
+      <rule pattern="&quot;(?:\\.|[^&quot;\\\n])*&quot;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="'(?:\\.|[^'\\\n])*'">
+        <token type="LiteralStringSingle"/>
+      </rule>
+      <rule pattern="(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?">
+        <token type="LiteralNumber"/>
+      </rule>
+      <rule pattern="[A-Z_]\w*">
+        <token type="Name"/>
+      </rule>
+      <rule pattern="==|!=|&lt;=|&gt;=|\*\*|//|[-+*/%&lt;&gt;=~]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[.,:()\[\]{}]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern=".">
         <token type="Text"/>
       </rule>
     </state>

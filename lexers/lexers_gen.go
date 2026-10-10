@@ -1230,6 +1230,9 @@ var embeddedLexers = []struct {
 			"*.gcode",
 			"*.gco",
 			"*.ngc",
+			"*.nc",
+			"*.cnc",
+			"*.tap",
 		},
 		MimeTypes: []string{
 			"text/x-gcode",
