@@ -132,6 +132,22 @@ func TestClassPrefix(t *testing.T) {
 	}
 }
 
+func TestTableLineHighlightStretches(t *testing.T) {
+	f := New(WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true))
+	var buf bytes.Buffer
+	err := f.WriteCSS(&buf, styles.Fallback)
+	assert.NoError(t, err)
+	css := buf.String()
+	assert.Contains(t, css, ".chroma .lnt { display: flex;")
+	assert.Contains(t, css, ".chroma .hl { display: flex;")
+
+	plain := New(WithClasses(true), WithLineNumbers(true))
+	buf.Reset()
+	err = plain.WriteCSS(&buf, styles.Fallback)
+	assert.NoError(t, err)
+	assert.NotContains(t, buf.String(), ".chroma .lnt { display: flex;")
+}
+
 func TestTableLineNumberNewlines(t *testing.T) {
 	f := New(WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true))
 	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")

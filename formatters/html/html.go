@@ -600,6 +600,11 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 	classes[chroma.Line] = `display: flex;` + classes[chroma.Line]
 	classes[chroma.LineNumbers] = lineNumbersStyle + classes[chroma.LineNumbers]
 	classes[chroma.LineNumbersTable] = lineNumbersStyle + classes[chroma.LineNumbersTable]
+	if f.lineNumbersInTable {
+		// Flex so a line-height above 1 does not shorten the table highlight.
+		classes[chroma.LineNumbersTable] = `display: flex;` + classes[chroma.LineNumbersTable]
+		classes[chroma.LineHighlight] = `display: flex;` + classes[chroma.LineHighlight]
+	}
 	if len(f.linePromptRanges) > 0 {
 		classes[chroma.GenericPrompt] = linePromptStyle + classes[chroma.GenericPrompt]
 	}
