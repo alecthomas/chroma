@@ -61,20 +61,14 @@ func goRules() Rules {
 	}
 }
 
-var GoHTMLTemplate = Register(DelegatingLexer(HTML, MustNewXMLLexer(
-	embedded,
-	"embedded/go_template.xml",
-).SetConfig(
+var GoHTMLTemplate = Register(DelegatingLexer(HTML, mustEmbeddedXMLLexer("embedded/go_template.xml").SetConfig(
 	&Config{
 		Name:    "Go HTML Template",
 		Aliases: []string{"go-html-template"},
 	},
 )))
 
-var GoTextTemplate = Register(MustNewXMLLexer(
-	embedded,
-	"embedded/go_template.xml",
-).SetConfig(
+var GoTextTemplate = Register(mustEmbeddedXMLLexer("embedded/go_template.xml").SetConfig(
 	&Config{
 		Name:    "Go Text Template",
 		Aliases: []string{"go-text-template"},
