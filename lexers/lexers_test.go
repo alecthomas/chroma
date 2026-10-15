@@ -43,6 +43,13 @@ func TestGet(t *testing.T) {
 			repr.String(expected.Config(), repr.Indent("  ")),
 			repr.String(actual.Config(), repr.Indent("  ")))
 	})
+	t.Run("ViaCPPModuleFilename", func(t *testing.T) {
+		expected := lexers.Get("cpp")
+		actual := lexers.GlobalLexerRegistry.Get("example.cppm")
+		assert.Equal(t,
+			repr.String(expected.Config(), repr.Indent("  ")),
+			repr.String(actual.Config(), repr.Indent("  ")))
+	})
 	// GDScript and GDScript3 both claim *.gd, so the more recent dialect has to win.
 	t.Run("ViaFilenameWithCompetingLexers", func(t *testing.T) {
 		expected := lexers.Get("GDScript")
