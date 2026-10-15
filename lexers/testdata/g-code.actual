@@ -1,0 +1,51 @@
+%
+(program header)
+/N10 G90 G21 G17 M3 S1000 ; spindle on
+N56.78 T1 M6
+G1 X -5 Y.5 Z+1 F300
+g0x1.y2
+G28 X Y
+M104 T0 S200
+T-1
+N3 T0*57
+#1 = 12.5
+#<depth> = [#1 * 2]
+#<_global> = 3
+G1 X#1 Y[SIN[30]*2] Z#<depth>
+#2 = [ATAN[1]/[2] + [#1 MOD 3]]
+o100 sub
+o101 if [#1 EQ 1 AND #2 GT 0]
+  (MSG, deep cut)
+o101 endif
+o100 endsub
+o<probe> call [1] [2]
+o[#101+2] call
+M117 Printing (50%) G1 X10 ; status
+M118 A1 E1 Hello host
+M23 /folder/file.gco
+SET_PIN PIN=fan VALUE=0.5
+BED_MESH_CALIBRATE PROFILE=default
+if (fileexists("/sys/x.g")) && heat.heaters[0].current > 50
+  echo >>"log.txt" "hot", heat.heaters[0].current
+elif iterations < 3
+  var speed = {move.axes[0].max - {1}} * 0x3f
+  set global.n = {1,{2,3,4},5}
+else
+  skip
+G1 X{var.speed * 2} F{global.feed}
+M291 P"Probe ""now""?" S3 R"ok"
+M30
+%
+G1 X##2 Y#[1+2]
+M201 E{var.a}:{var.b}
+{# Klipper macro body #}
+{% set x = params.X|default(0)|float %}
+{% if printer.toolhead.homed_axes != "xyz" %}
+  G28
+{% endif %}
+{% for i in range(3) %}
+G1 X{x + i * 10} F{params.F|default(3000)|int}
+{%- endfor %}
+SET_GCODE_VARIABLE MACRO=park VARIABLE=last VALUE={x}
+{action_respond_info("Parked at %s" % x)}
+M117 Done
