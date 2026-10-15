@@ -2623,6 +2623,19 @@ var embeddedLexers = []struct {
 			"*.pc",
 		},
 	}},
+	{"embedded/pkl.xml", chroma.Config{
+		Name: "Pkl",
+		Aliases: []string{
+			"pkl",
+		},
+		Filenames: []string{
+			"*.pkl",
+		},
+		MimeTypes: []string{
+			"text/x-pkl",
+		},
+		DotAll: true,
+	}},
 	{"embedded/pl_pgsql.xml", chroma.Config{
 		Name: "PL/pgSQL",
 		Aliases: []string{
