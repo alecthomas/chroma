@@ -468,5 +468,15 @@
   {"type":"NameTag","value":"second link"},
   {"type":"Text","value":"]("},
   {"type":"NameAttribute","value":"https://google.com"},
-  {"type":"Text","value":"))  \n"}
+  {"type":"Text","value":"))  \n\n"},
+  {"type":"GenericSubheading","value":"## Code span does not cross a blank line\n"},
+  {"type":"Text","value":"\nhere is `an open span\n\n"},
+  {"type":"GenericSubheading","value":"## Swallowed Header\n"},
+  {"type":"Text","value":"\nand it closes` here.\n\na "},
+  {"type":"LiteralStringBacktick","value":"`span wrapped\nacross one line break`"},
+  {"type":"Text","value":" still lexes.\n\nopen ~~strikethrough\n\n"},
+  {"type":"GenericSubheading","value":"## Not Struck Header\n"},
+  {"type":"Text","value":"\nclose~~ here.\n\na "},
+  {"type":"GenericDeleted","value":"~~struck across one\nline break~~"},
+  {"type":"Text","value":" still lexes.\n"}
 ]
