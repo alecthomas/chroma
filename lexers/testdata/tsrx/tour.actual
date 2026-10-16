@@ -1,0 +1,70 @@
+// Highlighting tour: every construct the tsrx lexer must color.
+import { useState } from 'octane';
+import type { Signal } from 'octane';
+
+/* A block comment
+   that spans lines. */
+
+type Todo = {
+	id: string;
+	title: string;
+	done?: boolean;
+};
+
+export function TodoList({ items, limit = 25 }: { items: Todo[]; limit?: number }) @{
+	const [query, setQuery] = useState('');
+	const &{ id, title } = items[0];
+	const &[first, second] = items;
+	const label = `showing ${items.length} of ${limit}`;
+	const visible = items.filter((item) => !item.done && untrack(() => track(query)));
+
+	<>
+		<ul class="todo-list" data-count={visible.length}>
+			@for (const item of visible; index i; key item.id) {
+				<li onClick={() => setQuery(item.title)}>{i + 1}. {item.title}</li>
+			} @empty {
+				<li class="empty">No todos yet</li>
+			}
+		</ul>
+
+		@if (visible.length > 0) {
+			<p>{label}</p>
+		} @else if (items.length === 0) {
+			<p>Nothing loaded</p>
+		} @else {
+			<p>All done</p>
+		}
+
+		@switch (query) {
+			@case ('') { <Placeholder /> }
+			@default { <Results query={query} /> }
+		}
+
+		@try {
+			<AsyncList items={items} />
+		} @pending {
+			<Spinner size={16} />
+		} @catch (error) {
+			<ErrorBox message={error.message} />
+		}
+
+		<style>
+			ul {
+				display: grid;
+				gap: 0.5rem;
+				color: #f97316;
+			}
+			.empty:hover {
+				opacity: 0.5;
+			}
+		</style>
+	</>
+}
+
+fragment Placeholder() @{
+	<span>type to search</span>
+}
+
+module widgets {
+	export const VERSION = 3;
+}

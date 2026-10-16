@@ -14,7 +14,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="[a-zA-Z_]\w*">
+      <rule pattern="(r#)?[a-zA-Z_]\w*">
         <token type="NameNamespace"/>
         <pop depth="1"/>
       </rule>
@@ -97,7 +97,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="[a-zA-Z_]\w*">
+      <rule pattern="(r#)?[a-zA-Z_]\w*">
         <token type="NameFunction"/>
         <pop depth="1"/>
       </rule>
@@ -363,7 +363,7 @@
       <rule pattern="(isize|usize|bool|char|u128|i128|i64|i32|i16|str|u64|u32|f32|f64|u16|i8|u8)\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="[a-zA-Z_]\w*">
+      <rule pattern="(r#)?[a-zA-Z_]\w*">
         <token type="NameClass"/>
         <pop depth="1"/>
       </rule>

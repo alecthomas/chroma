@@ -1,13 +1,12 @@
-import collections.{Array, BitSet, BitVec, HashMap, HashSet, List, Queue}
+import core.collection.{Array, HashMap, HashSet, List, Queue}
+import core.random.Random
 
-@pub mod annotations;
+@internal
+fun unsafeKillRefs[T](arr: Array[T], idx: Int64): Unit
 
-@pub @internal fun unreachable[T](): T
-
-@pub fun unimplemented(): Unit = fatalError("not yet implemented")
-
+@private
 fun isValidUtf8(data: Array[UInt8]): Bool {
-  var i = 0i64
+  var i = 0
 
   while i < data.size {
     let by = data(i).toInt32
@@ -18,7 +17,7 @@ fun isValidUtf8(data: Array[UInt8]): Bool {
 
     if by & 0x80i32 == 0i32 {
       bytes = 0
-      i = i + 1i64
+      i = i + 1
     } else {
       if by
       ... & 0xC0i32 == 0x80i32 {
@@ -45,7 +44,7 @@ fun isValidUtf8(data: Array[UInt8]): Bool {
 
       while bytes > 0i32 {
         bytes = bytes - 1i32
-        i = i + 1i64
+        i = i + 1
 
         if i >= data.size {
           return false
@@ -57,54 +56,46 @@ fun isValidUtf8(data: Array[UInt8]): Bool {
           return false
         }
 
-        codepoint = codepoint.shiftLeft(6i32) | (by & 0x3Fi32)
+        codepoint = codepoint.shiftUp(6i32) | (by & 0x3Fi32)
       }
 
       if codepoint < min || codepoint > max {
         return false
       }
 
-      i = i + 1i64
+      i = i + 1
     }
   }
 
   return true
 }
 
-@internal fun unsafeKillRefs[T](arr: Array[T], idx: Int64): Unit
+class Stacktrace() {
+  var backtrace: Option[Array[Int32]] = None[Array[Int32]];
+  var elements: Option[Array[StacktraceElement]] = None[Array[StacktraceElement]];
 
-@pub class Stacktrace {
-  backtrace: Option[Array[Int32]],
-  elements: Option[Array[StacktraceElement]],
-}
+  self.retrieveStacktrace();
 
-impl Stacktrace {
-  @pub @static fun new(): Stacktrace {
-    let trace = Stacktrace(None[Array[Int32]], None[Array[StacktraceElement]])
-    trace.retrieveStacktrace()
-    trace
-  }
-
-  @pub fun getStacktrace(): Array[StacktraceElement] {
+  fun getStacktrace(): Array[StacktraceElement] {
     if self.elements.isSome {
       return self.elements.getOrPanic()
     }
 
     if self.backtrace.isNone {
-      let elements = Array[StacktraceElement]::new()
+      let elements = Array[StacktraceElement]()
       self.elements = Some[Array[StacktraceElement]](elements)
       return elements
     }
 
     let backtraceLength = self.backtrace.getOrPanic().size
-    var i = 0i64
-    let len = backtraceLength / 2i64
-    let elements = List[StacktraceElement]::new()
+    var i = 0
+    let len = backtraceLength / 2
+    let elements = List[StacktraceElement]()
     elements.reserve(len)
 
     while i < len {
       elements.push(self.getStacktraceElement(i))
-      i = i + 1i64
+      i = i + 1
     }
 
     let elements = elements.toArray()
@@ -112,9 +103,9 @@ impl Stacktrace {
     return elements
   }
 
-  @pub fun printStacktrace(): Unit {
+  fun printStacktrace(): Unit {
     let x = self.getStacktrace()
-    var i = 0i64
+    var i = 0
 
     for frame in self.getStacktrace() {
       println(frame.toString())
@@ -125,17 +116,16 @@ impl Stacktrace {
   @internal fun getStacktraceElement(idx: Int64): StacktraceElement
 }
 
-class StacktraceElement {
-  name: String,
-  line: Int32,
+@private class StacktraceElement(@private let name: String, @private let line: Int32) {
+  fun toString: String = "${self.name}: ${self.line}"
 }
 
-impl StacktraceElement {
-  fun toString(): String = "${self.name}: ${self.line}"
+trait Default {
+  @static fun default: Self
 }
 
 /* total order */
-@pub trait Sortable {
+trait Sortable {
   fun sortsAs(other: Self): Int32
   // ideally we would be able to provide a default implementation for the next 3 methods based on `sortsAs`
   fun sortsBefore(other: Self): Bool
@@ -143,45 +133,54 @@ impl StacktraceElement {
   fun sortsSame(other: Self): Bool
 }
 
-@pub union Option[T] {
-  Some(T),
-  None,
-}
+union Option[T] with Some(T), None {
 
-import Option.Some
-import Option.None
-
-impl[T] Option[T] {
-  @pub fun isNone: Bool = if self
+  fun isNone: Bool = if self
     ... is Some(_) { false }
     ... is None    { true  }
 
-  @pub fun isSome: Bool = if self
+  fun isSome: Bool = if self
     ... is Some(_) { true  }
     ... is None    { false }
+
 }
 
 impl[T] Option[Option[T]] {
   // WTF -- removing `()` causes memory corruption in main (tests/stdlib/option-flatten.core:6) -- WTF
-  @pub fun flatten(): Option[T] = if self
+  fun flatten(): Option[T] = if self
     ... is Some(val) { val }
     ... is None      { None[T] }
 }
 
-@pub union Result[T, E] {
-  Pass(T),
-  Fail(E),
-}
+union Result[T, E] with Pass(T), Fail(E) {
 
-import Result.Pass
-import Result.Fail
-
-impl[T, E] Result[T, E] {
-  @pub fun isPass: Bool = if self
+  fun isPass: Bool = if self
     ... is Pass(_) { true  }
     ... is Fail(_) { false }
 
-  @pub fun isFail: Bool = if self
+  fun isFail: Bool = if self
     ... is Pass(_) { false }
     ... is Fail(_) { true  }
+
+}
+
+trait [T, E] Identity for Result[T, E] {
+  fun identicalTo(rhs: Result[T, E]): Bool = self === rhs
+}
+
+impl[T: Identity, E] Result[T, E] {
+  fun includes(rhs: T): Bool = if self
+    ... is Pass(val) { val.identicalTo(rhs) }
+    ... is Fail(_)   { false }
+}
+
+class List[T](values: T...) {
+  @private var array: Array[T] = values;
+  @private var len: Int64 = values.size();
+
+  @static fun ofCapacity(capacity: Int64): List[T] = {
+    let list = List[T]()
+    list.reserve(capacity)
+    return list // without "return", it fails with: assertion failed: self.used(src)
+  }
 }
