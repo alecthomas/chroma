@@ -27,6 +27,14 @@ key: value
 another_key: Another value goes here.
 a_number_value: 100
 scientific_notation: 1e+12
+negative_number: -5
+positive_number: +5
+negative_hex: -0x1f
+infinity: .inf
+negative_infinity: -.inf
+not_a_number: .nan
+leading_dot_float: .5
+phone_number: +1-555-0100
 # The number 1 will be interpreted as a number, not a boolean. if you want
 # it to be interpreted as a boolean, use true
 boolean: true
@@ -186,6 +194,7 @@ a_sequence:
 # sequences:
 json_map: {"key": "value"}
 json_seq: [3, 2, 1, "takeoff"]
+signed_json_seq: [3, -4, +5, .inf]
 and quotes are optional: {key: [3, 2, 1, takeoff]}
 
 #######################
