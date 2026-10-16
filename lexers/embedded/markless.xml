@@ -1,0 +1,406 @@
+<lexer>
+  <config>
+    <name>Markless</name>
+    <alias>mess</alias>
+    <filename>*.mess</filename>
+    <filename>*.markless</filename>
+    <mime_type>text/x-markless</mime_type>
+  </config>
+  <rules>
+    <state name="root">
+      <rule>
+        <include state="block"/>
+      </rule>
+    </state>
+    <!-- Block directives -->
+    <state name="block">
+      <rule>
+        <include state="header"/>
+      </rule>
+      <rule>
+        <include state="ordered-list"/>
+      </rule>
+      <rule>
+        <include state="unordered-list"/>
+      </rule>
+      <rule>
+        <include state="code-block"/>
+      </rule>
+      <rule>
+        <include state="blockquote"/>
+      </rule>
+      <rule>
+        <include state="blockquote-header"/>
+      </rule>
+      <rule>
+        <include state="align"/>
+      </rule>
+      <rule>
+        <include state="comment"/>
+      </rule>
+      <rule>
+        <include state="instruction"/>
+      </rule>
+      <rule>
+        <include state="embed"/>
+      </rule>
+      <rule>
+        <include state="footnote"/>
+      </rule>
+      <rule>
+        <include state="horizontal-rule"/>
+      </rule>
+      <rule>
+        <include state="paragraph"/>
+      </rule>
+    </state>
+    <state name="header">
+      <rule pattern="(# )(.*)$">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="GenericHeading"/>
+        </bygroups>
+        <push state="inline"/>
+      </rule>
+      <rule pattern="(##+)(.*)$">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="GenericSubheading"/>
+        </bygroups>
+        <push state="inline"/>
+      </rule>
+    </state>
+    <state name="ordered-list">
+      <rule pattern="([0-9]+\.)">
+        <token type="Keyword"/>
+      </rule>
+    </state>
+    <state name="unordered-list">
+      <rule pattern="(- )">
+        <token type="Keyword"/>
+      </rule>
+    </state>
+    <state name="code-block">
+      <rule pattern="(::+)( *)(\w*)([^\n]*)(\n)([\w\W]*?)(^\1$)">
+        <usingbygroup>
+          <sublexer_name_group>3</sublexer_name_group>
+          <code_group>6</code_group>
+          <emitters>
+            <token type="Keyword"/>
+            <token type="TextWhitespace"/>
+            <token type="NameFunction"/>
+            <token type="LiteralString"/>
+            <token type="TextWhitespace"/>
+            <token type="Text"/>
+            <token type="Keyword"/>
+          </emitters>
+        </usingbygroup>
+      </rule>
+    </state>
+    <state name="blockquote">
+      <rule pattern="(\| )(.*)$">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="GenericInserted"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="blockquote-header">
+      <rule pattern="(~ )([^|\n]+)(\| )(.*?\n)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="NameEntity"/>
+          <token type="Keyword"/>
+          <token type="GenericInserted"/>
+        </bygroups>
+        <push state="inline-blockquote"/>
+      </rule>
+      <rule pattern="(~ )(.*)$">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="NameEntity"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="inline-blockquote">
+      <rule pattern="^(   +)(\| )(.*$)">
+        <bygroups>
+          <token type="TextWhitespace"/>
+          <token type="Keyword"/>
+          <token type="GenericInserted"/>
+        </bygroups>
+      </rule>
+      <rule>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="align">
+      <rule pattern="(\|\|)|(\|&lt;)|(\|&gt;)|(&gt;&lt;)">
+        <token type="Keyword"/>
+      </rule>
+    </state>
+    <state name="comment">
+      <rule pattern="(;[; ]).*?$">
+        <token type="CommentSingle"/>
+      </rule>
+    </state>
+    <state name="instruction">
+      <rule pattern="(! )([^ ]+)(.+?)$">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="NameFunction"/>
+          <token type="NameVariable"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="embed">
+      <rule pattern="(\[ )([^ ]+)( )([^,\]\n]+)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="NameFunction"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralString"/>
+        </bygroups>
+        <push state="embed-options"/>
+      </rule>
+    </state>
+    <state name="embed-options">
+      <rule pattern="\\.">
+        <token type="Text"/>
+      </rule>
+      <rule pattern=",">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="\]?$">
+        <token type="Keyword"/>
+        <pop depth="1"/>
+      </rule>
+      <!-- Generic key or key/value pair -->
+      <rule pattern="( *)([^, \]\n]+)([^,\]\n]+)?">
+        <bygroups>
+          <token type="TextWhitespace"/>
+          <token type="NameFunction"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="footnote">
+      <rule pattern="(\[)([0-9]+)(\])">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="NameVariable"/>
+          <token type="Keyword"/>
+        </bygroups>
+        <push state="inline"/>
+      </rule>
+    </state>
+    <state name="horizontal-rule">
+      <rule pattern="(==+)$">
+        <token type="LiteralOther"/>
+      </rule>
+    </state>
+    <state name="paragraph">
+      <rule pattern=" *">
+        <token type="TextWhitespace"/>
+        <push state="inline"/>
+      </rule>
+    </state>
+    <!-- Inline directives -->
+    <state name="inline">
+      <rule>
+        <include state="escapes"/>
+      </rule>
+      <rule>
+        <include state="dashes"/>
+      </rule>
+      <rule>
+        <include state="newline"/>
+      </rule>
+      <rule>
+        <include state="italic"/>
+      </rule>
+      <rule>
+        <include state="underline"/>
+      </rule>
+      <rule>
+        <include state="bold"/>
+      </rule>
+      <rule>
+        <include state="strikethrough"/>
+      </rule>
+      <rule>
+        <include state="code"/>
+      </rule>
+      <rule>
+        <include state="compound"/>
+      </rule>
+      <rule>
+        <include state="footnote-reference"/>
+      </rule>
+      <rule>
+        <include state="subtext"/>
+      </rule>
+      <rule>
+        <include state="subtext"/>
+      </rule>
+      <rule>
+        <include state="url"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="escapes">
+      <rule pattern="\\.">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="dashes">
+      <rule pattern="-{2,3}">
+        <token type="TextPunctuation"/>
+      </rule>
+    </state>
+    <state name="newline">
+      <rule pattern="-/-">
+        <token type="TextWhitespace"/>
+      </rule>
+    </state>
+    <state name="italic">
+      <rule pattern="(//)(.*?)(\1)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="GenericEmph"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="underline">
+      <rule pattern="(__)(.*?)(\1)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="GenericUnderline"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="bold">
+      <rule pattern="(\*\*)(.*?)(\1)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="GenericStrong"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="strikethrough">
+      <rule pattern="(&lt;-)(.*?)(-&gt;)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="GenericDeleted"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="code">
+      <rule pattern="(``+)(.*?)(\1)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="LiteralStringBacktick"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="compound">
+      <rule pattern="(''+)(.*?)(''\()">
+        <bygroups>
+          <token type="Keyword"/>
+          <usingself state="inline"/>
+          <token type="Keyword"/>
+        </bygroups>
+        <push state="compound-options"/>
+      </rule>
+    </state>
+    <state name="compound-options">
+      <rule pattern="\\.">
+        <token type="Text"/>
+      </rule>
+      <rule pattern=",">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="\)">
+        <token type="Keyword"/>
+        <pop depth="1"/>
+      </rule>
+      <!-- Hex Color -->
+      <rule pattern=" *#[0-9A-Fa-f]{3,6} *">
+        <token type="LiteralNumberHex"/>
+      </rule>
+      <!-- Named Color -->
+      <rule pattern=" *(indian-red|light-coral|salmon|dark-salmon|light-salmon|crimson|red|firebrick|dark-red|pink|light-pink|hot-pink|deep-pink|medium-violet-red|pale-violet-red|coral|tomato|orange-red|dark-orange|orange|gold|yellow|light-yellow|lemon-chiffon|light-goldenrod-yellow|papayawhip|moccasin|peachpuff|pale-goldenrod|khaki|dark-khaki|lavender|thistle|plum|violet|orchid|fuchsia|magenta|medium-orchid|medium-purple|rebecca-purple|blue-violet|dark-violet|dark-orchid|dark-magenta|purple|indigo|slate-blue|dark-slate-blue|medium-slate-blue|green-yellow|chartreuse|lawn-green|lime|lime-green|pale-green|light-green|medium-spring-green|spring-green|medium-sea-green|sea-green|forest-green|green|dark-green|yellow-green|olive-drab|olive|dark-olive-green|medium-aquamarine|dark-sea-green|light-sea-green|dark-cyan|teal|aqua|cyan|light-cyan|pale-turquoise|aquamarine|turquoise|medium-turquoise|dark-turquoise|cadet-blue|steel-blue|light-steel-blue|powder-blue|light-blue|sky-blue|light-sky-blue|deep-sky-blue|dodger-blue|cornflower-blue|royal-blue|blue|medium-blue|dark-blue|navy|midnight-blue|cornsilk|blanched-almond|bisque|navajo-white|wheat|burlywood|tan|rosy-brown|sandy-brown|goldenrod|dark-goldenrod|peru|chocolate|saddle-brown|sienna|brown|maroon|white|snow|honeydew|mintcream|azure|alice-blue|ghost-white|white-smoke|seashell|beige|oldlace|floral-white|ivory|antique-white|linen|lavenderblush|mistyrose|gainsboro|light-gray|silver|dark-gray|gray|dim-gray|light-slate-gray|slate-gray|dark-slate-gray) *">
+        <token type="LiteralOther"/>
+      </rule>
+      <!-- Named size -->
+      <rule pattern=" *(microscopic|tiny|small|normal|big|large|huge|gigantic) *">
+        <token type="NameTag"/>
+      </rule>
+      <!-- Options -->
+      <rule pattern=" *(bold|italic|underline|strikethrough|subtext|supertext|spoiler) *">
+        <token type="NameBuiltin"/>
+      </rule>
+      <!-- URL. Note the missing ) and , in the match. -->
+      <rule pattern=" *\w[-\w+.]*://[\w$\-_.+!*'(&amp;/:;=?@z%#\\]+ *">
+        <token type="LiteralString"/>
+      </rule>
+      <!-- Generic key or key/value pair -->
+      <rule pattern="( *)([^, )]+)( [^,)]+)?">
+        <bygroups>
+          <token type="TextWhitespace"/>
+          <token type="NameFunction"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="footnote-reference">
+      <rule pattern="(\[)([0-9]+)(\])">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="NameVariable"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="subtext">
+      <rule pattern="(v\()(.*?)(\))">
+        <bygroups>
+          <token type="Keyword"/>
+          <usingself state="inline"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="supertext">
+      <rule pattern="(\^\()(.*?)(\))">
+        <bygroups>
+          <token type="Keyword"/>
+          <usingself state="inline"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="url">
+      <rule pattern="\w[-\w+.]*://[\w\$\-_.+!*'()&amp;,/:;=?@z%#\\]+">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

@@ -2076,6 +2076,19 @@ var embeddedLexers = []struct {
 			"application/x-mako",
 		},
 	}},
+	{"embedded/markless.xml", chroma.Config{
+		Name: "Markless",
+		Aliases: []string{
+			"mess",
+		},
+		Filenames: []string{
+			"*.mess",
+			"*.markless",
+		},
+		MimeTypes: []string{
+			"text/x-markless",
+		},
+	}},
 	{"embedded/mason.xml", chroma.Config{
 		Name: "Mason",
 		Aliases: []string{
