@@ -441,8 +441,19 @@ var embeddedLexers = []struct {
 		},
 	}},
 	{"embedded/blade.xml", chroma.Config{
-		Name:   "Blade",
-		DotAll: true,
+		Name: "Blade",
+		Aliases: []string{
+			"blade",
+			"html+blade",
+		},
+		Filenames: []string{
+			"*.blade.php",
+		},
+		MimeTypes: []string{
+			"text/x-blade",
+		},
+		DotAll:   true,
+		Priority: 3,
 	}},
 	{"embedded/blitzbasic.xml", chroma.Config{
 		Name: "BlitzBasic",

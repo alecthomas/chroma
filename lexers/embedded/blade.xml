@@ -1,7 +1,12 @@
 <lexer>
   <config>
     <name>Blade</name>
+    <alias>blade</alias>
+    <alias>html+blade</alias>
+    <filename>*.blade.php</filename>
+    <mime_type>text/x-blade</mime_type>
     <dot_all>true</dot_all>
+    <priority>3</priority>
   </config>
   <rules>
     <state name="root">
