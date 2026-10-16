@@ -84,3 +84,7 @@ h1
 
     {@debug user}
 </template>
+<div class={klass} class:active={isActive}>
+	<button onclick={() => count++} disabled={busy}>{count}</button>
+	<Nested {...props} bind:value={name} />
+</div>
