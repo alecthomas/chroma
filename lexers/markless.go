@@ -102,7 +102,7 @@ func marklessRules() Rules {
 			Include("compound"),
 			Include("footnote-reference"),
 			Include("subtext"),
-			Include("subtext"),
+			Include("supertext"),
 			Include("url"),
 			{`.`, Text, nil},
 			{`\n`, TextWhitespace, Pop(1)},
