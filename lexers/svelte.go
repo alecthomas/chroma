@@ -61,7 +61,7 @@ func svelteRules() Rules {
 				),
 				nil,
 			},
-			{`(#|/)(await|each|if|key)\b`, Keyword, nil},
+			{`(#|/)(await|each|if|key|snippet)\b`, Keyword, nil},
 			{`(:else)(\s+)(if)?\b`, ByGroups(Keyword, Text, Keyword), nil},
 			{`:(catch|then)\b`, Keyword, nil},
 			{`[^{}]+`, Using("TypeScript"), nil},
