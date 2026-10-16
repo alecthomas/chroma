@@ -1,0 +1,33 @@
+doctype html
+html lang="en"
+  head
+    title = content_for?(:title) ? yield(:title) : "Users"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+
+  body.controller-users.action-index
+    / Navigation is rendered by the layout
+    /! Google Tag Manager
+
+    .container#main
+      - if notice.present?
+        .alert.alert-success = notice
+
+      h1#page-title.header
+        | Users (#{@users.size})
+
+      = simple_form_for @user, url: users_path, html: { class: "card" } do |f|
+        = f.input :email, required: true, placeholder: "you@example.com"
+        = f.input :password
+        = f.button :submit, t(".save"), class: "btn btn-primary"
+
+      ul.users
+        - @users.each do |user|
+          li.user id="user_#{user.id}" class=user.role
+            = link_to user.name, user_path(user), class: "name"
+            span.meta
+              | joined #{l(user.created_at, format: :short)}
+            a href=edit_user_path(user) title="Edit #{user.name}" Edit
+
+      footer
+        p
+          | Logged in as #{current_user.email}
