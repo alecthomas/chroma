@@ -7,10 +7,7 @@ import (
 )
 
 // ERB lexer is Ruby embedded in HTML.
-var ERB = Register(DelegatingLexer(HTML, MustNewXMLLexer(
-	embedded,
-	"embedded/erb.xml",
-).SetConfig(
+var ERB = Register(DelegatingLexer(HTML, mustEmbeddedXMLLexer("embedded/erb.xml").SetConfig(
 	&Config{
 		Name:      "ERB",
 		Aliases:   []string{"erb", "html+erb", "html+ruby", "rhtml"},

@@ -29,6 +29,22 @@ var GlobalLexerRegistry = func() *chroma.LexerRegistry {
 	return reg
 }()
 
+// mustEmbeddedXMLLexer uses the generated metadata so that no XML is parsed at init.
+func mustEmbeddedXMLLexer(path string) *chroma.RegexLexer {
+	for i := range embeddedLexers {
+		if embeddedLexers[i].path != path {
+			continue
+		}
+		config := embeddedLexers[i].config
+		lexer, err := chroma.NewXMLLexerFromConfig(&config, embedded, path)
+		if err != nil {
+			panic(err)
+		}
+		return lexer
+	}
+	panic(path + ": no generated lexer metadata")
+}
+
 // Names of all lexers, optionally including aliases.
 func Names(withAliases bool) []string {
 	return GlobalLexerRegistry.Names(withAliases)
