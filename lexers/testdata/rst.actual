@@ -1,0 +1,22 @@
+=====
+Title
+=====
+
+Section
+-------
+
+A paragraph with *emphasis*, **strong** text and ``literal``
+text that wraps onto a second line, plus a `link <https://example.com>`_.
+
+Another paragraph.
+
+- First item
+- Second item
+
+.. note:: Directives take arguments.
+
+.. code-block:: python
+
+   print("hello")
+
+Done.
