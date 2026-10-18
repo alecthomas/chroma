@@ -20,6 +20,9 @@
   </config>
   <rules>
     <state name="root">
+      <rule pattern="^(?: *(?:ifn?eq|ifn?def|else|endif|-?include|sinclude|define|endef|undefine|vpath)|\.\s*(?:include|undef|error|warning|if|else|elif|endif|for|endfor)|if)(?=\s)(?:.*\\\n)*.*\n">
+        <token type="CommentPreproc"/>
+      </rule>
       <rule pattern="^(?:[\t ]+.*\n|\n)+">
         <using lexer="Bash"/>
       </rule>
@@ -32,14 +35,17 @@
       <rule pattern="#.*?\n">
         <token type="Comment"/>
       </rule>
-      <rule pattern="(export)(\s+)(?=[\w${}\t -]+\n)">
+      <rule pattern="((?:un)?export)(\s+)(?=[\w${}\t -]+\n)">
         <bygroups>
           <token type="Keyword"/>
           <token type="Text"/>
         </bygroups>
         <push state="export"/>
       </rule>
-      <rule pattern="export\s+">
+      <rule pattern="(?:un)?export\s+">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="^(?:override|private)\s+(?=[^\s!?:+=])">
         <token type="Keyword"/>
       </rule>
       <rule pattern="([\w${}().-]+)(\s*)([!?:+]?=)([ \t]*)((?:.*\\\n)+|.*\n)">
