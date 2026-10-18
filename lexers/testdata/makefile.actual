@@ -1,0 +1,41 @@
+include config.mk
+-include $(DEPS)
+sinclude local.mk
+
+ifeq ($(OS),Windows_NT)
+  EXE := .exe
+else ifeq ($(shell uname -s),Darwin)
+  EXE :=
+else
+  EXE :=
+endif
+
+ifndef CC
+CC = cc
+endif
+
+ifneq (,$(filter debug,$(MAKECMDGOALS))) # trailing comment
+override CFLAGS += -g -O0
+endif
+
+define HELP_TEXT
+Usage: make [target]
+endef
+
+vpath %.c src
+unexport GREP_OPTIONS
+
+all: main$(EXE)
+	if [ -n "$(VERBOSE)" ]; then \
+		echo building; \
+	fi
+	$(CC) $(CFLAGS) -o $@ $^
+
+.include <bsd.prog.mk>
+.if defined(DEBUG)
+CFLAGS+= -g
+.endif
+
+if ENABLE_DOCS
+SUBDIRS = docs
+endif
