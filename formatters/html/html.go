@@ -336,7 +336,10 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 				if f.classes {
 					fmt.Fprintf(w, ` class="%s %s"`, html.EscapeString(f.class(chroma.Line)), html.EscapeString(f.class(chroma.LineHighlight)))
 				} else {
-					fmt.Fprintf(w, ` style="%s %s"`, css[chroma.Line], css[chroma.LineHighlight])
+					// LineHighlight's own display:flex (needed when it wraps a
+					// line-number-table row on its own, #722) is redundant
+					// here since Line already sets it.
+					fmt.Fprintf(w, ` style="%s %s"`, css[chroma.Line], strings.TrimPrefix(css[chroma.LineHighlight], "display:flex;"))
 				}
 				fmt.Fprint(w, `>`)
 			} else {
@@ -599,10 +602,16 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 	// All rules begin with default rules followed by user provided rules
 	classes[chroma.Line] = `display: flex;` + classes[chroma.Line]
 	classes[chroma.LineNumbers] = lineNumbersStyle + classes[chroma.LineNumbers]
-	classes[chroma.LineNumbersTable] = lineNumbersStyle + classes[chroma.LineNumbersTable]
+	// Each line-number-table row has no .line wrapper of its own, so it needs
+	// its own flex box to match the height of its .line counterpart (#722).
+	classes[chroma.LineNumbersTable] = `display: flex; ` + lineNumbersStyle + classes[chroma.LineNumbersTable]
 	if len(f.linePromptRanges) > 0 {
 		classes[chroma.GenericPrompt] = linePromptStyle + classes[chroma.GenericPrompt]
 	}
+	// In the line-number table, a highlighted row's .hl span (not .line) is
+	// the row being flexed; harmless when .hl is instead combined with an
+	// already-flex .line elsewhere (#722).
+	classes[chroma.LineHighlight] = `display: flex; ` + classes[chroma.LineHighlight]
 	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTable]
 	classes[chroma.LineTableTD] = "vertical-align: top; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTableTD]
 	classes[chroma.LineLink] = "outline: none; text-decoration: none; color: inherit" + classes[chroma.LineLink]

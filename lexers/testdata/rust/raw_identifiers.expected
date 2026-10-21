@@ -1,0 +1,20 @@
+[
+  {"type":"Keyword","value":"fn"},
+  {"type":"Text","value":" "},
+  {"type":"NameFunction","value":"r#match"},
+  {"type":"Punctuation","value":"()"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"{}"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"Keyword","value":"mod"},
+  {"type":"Text","value":" "},
+  {"type":"NameNamespace","value":"r#type"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"{}"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"Keyword","value":"struct"},
+  {"type":"Text","value":" "},
+  {"type":"NameClass","value":"r#struct"},
+  {"type":"Punctuation","value":";"},
+  {"type":"TextWhitespace","value":"\n"}
+]

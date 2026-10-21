@@ -506,6 +506,22 @@ var embeddedLexers = []struct {
 			"application/x-brainfuck",
 		},
 	}},
+	{"embedded/bsl.xml", chroma.Config{
+		Name: "1C Enterprise",
+		Aliases: []string{
+			"1c",
+			"bsl",
+			"onec",
+		},
+		Filenames: []string{
+			"*.bsl",
+			"*.os",
+		},
+		MimeTypes: []string{
+			"text/x-bsl",
+		},
+		CaseInsensitive: true,
+	}},
 	{"embedded/c#.xml", chroma.Config{
 		Name: "C#",
 		Aliases: []string{
@@ -541,6 +557,7 @@ var embeddedLexers = []struct {
 			"*.cp",
 			"*.CPP",
 			"*.tpp",
+			"*.cppm",
 		},
 		MimeTypes: []string{
 			"text/x-c++hdr",
@@ -920,6 +937,20 @@ var embeddedLexers = []struct {
 			"*.dax",
 		},
 	}},
+	{"embedded/dbml.xml", chroma.Config{
+		Name: "DBML",
+		Aliases: []string{
+			"dbml",
+		},
+		Filenames: []string{
+			"*.dbml",
+		},
+		MimeTypes: []string{
+			"text/x-dbml",
+		},
+		CaseInsensitive: true,
+		DotAll:          true,
+	}},
 	{"embedded/desktop_entry.xml", chroma.Config{
 		Name: "Desktop file",
 		Aliases: []string{
@@ -1017,6 +1048,15 @@ var embeddedLexers = []struct {
 			"text/x-dockerfile-config",
 		},
 		CaseInsensitive: true,
+	}},
+	{"embedded/docopt.xml", chroma.Config{
+		Name: "docopt",
+		Aliases: []string{
+			"docopt",
+		},
+		Filenames: []string{
+			"*.docopt",
+		},
 	}},
 	{"embedded/dtd.xml", chroma.Config{
 		Name: "DTD",
@@ -1234,6 +1274,26 @@ var embeddedLexers = []struct {
 			},
 		},
 	}},
+	{"embedded/g-code.xml", chroma.Config{
+		Name: "G-code",
+		Aliases: []string{
+			"gcode",
+			"g-code",
+			"nc",
+		},
+		Filenames: []string{
+			"*.gcode",
+			"*.gco",
+			"*.ngc",
+			"*.nc",
+			"*.cnc",
+			"*.tap",
+		},
+		MimeTypes: []string{
+			"text/x-gcode",
+		},
+		CaseInsensitive: true,
+	}},
 	{"embedded/garden.xml", chroma.Config{
 		Name: "Garden",
 		Aliases: []string{
@@ -1357,6 +1417,22 @@ var embeddedLexers = []struct {
 		},
 		MimeTypes: []string{
 			"text/x-gherkin",
+		},
+	}},
+	{"embedded/gitconfig.xml", chroma.Config{
+		Name: "Git Config",
+		Aliases: []string{
+			"gitconfig",
+			"git-config",
+		},
+		Filenames: []string{
+			".gitconfig",
+			".gitmodules",
+			"gitconfig",
+			"config.worktree",
+		},
+		MimeTypes: []string{
+			"text/x-git-config",
 		},
 	}},
 	{"embedded/gleam.xml", chroma.Config{
@@ -1671,7 +1747,6 @@ var embeddedLexers = []struct {
 			"*.kube",
 			"*.volume",
 			"*.image",
-			".gitconfig",
 			".editorconfig",
 			"pylintrc",
 			".pylintrc",
@@ -2023,6 +2098,19 @@ var embeddedLexers = []struct {
 		},
 		MimeTypes: []string{
 			"application/x-mako",
+		},
+	}},
+	{"embedded/markless.xml", chroma.Config{
+		Name: "Markless",
+		Aliases: []string{
+			"mess",
+		},
+		Filenames: []string{
+			"*.mess",
+			"*.markless",
+		},
+		MimeTypes: []string{
+			"text/x-markless",
 		},
 	}},
 	{"embedded/mason.xml", chroma.Config{
@@ -2637,6 +2725,19 @@ var embeddedLexers = []struct {
 		Filenames: []string{
 			"*.pc",
 		},
+	}},
+	{"embedded/pkl.xml", chroma.Config{
+		Name: "Pkl",
+		Aliases: []string{
+			"pkl",
+		},
+		Filenames: []string{
+			"*.pkl",
+		},
+		MimeTypes: []string{
+			"text/x-pkl",
+		},
+		DotAll: true,
 	}},
 	{"embedded/pl_pgsql.xml", chroma.Config{
 		Name: "PL/pgSQL",
@@ -3325,6 +3426,19 @@ var embeddedLexers = []struct {
 			"*.sieve",
 		},
 	}},
+	{"embedded/slim.xml", chroma.Config{
+		Name: "Slim",
+		Aliases: []string{
+			"slim",
+		},
+		Filenames: []string{
+			"*.slim",
+		},
+		MimeTypes: []string{
+			"text/x-slim",
+		},
+		EnsureNL: true,
+	}},
 	{"embedded/smali.xml", chroma.Config{
 		Name: "Smali",
 		Aliases: []string{
@@ -3468,6 +3582,21 @@ var embeddedLexers = []struct {
 		},
 		CaseInsensitive: true,
 		NotMultiline:    true,
+	}},
+	{"embedded/ssh_config.xml", chroma.Config{
+		Name: "SSH config",
+		Aliases: []string{
+			"sshconfig",
+			"ssh-config",
+			"ssh_config",
+		},
+		Filenames: []string{
+			"ssh_config",
+		},
+		MimeTypes: []string{
+			"text/x-ssh-config",
+		},
+		CaseInsensitive: true,
 	}},
 	{"embedded/standard_ml.xml", chroma.Config{
 		Name: "Standard ML",

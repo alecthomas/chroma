@@ -12,9 +12,21 @@ nested_comment: # this is a comment right next to a key
   date_comment: 2010-11-12 # comment after date
   single_quote: 'single # quote string' # comment after single quote string
   double_quote: "double # quote string" # comment after double quote string
-  slash_comment: "slash" // comment after double quote string
-  slash_comment_with_colon: "slash" // comment: after double quote string
-  slash_comment_after_literal: slash // comment: after literal
+  slash_in_string: "slash // inside double quote string"
+  slash_in_string_with_colon: "slash // comment: inside double quote string"
+  slash_in_single_quote: 'a//b'
+  slash_after_literal: slash // not a comment
+  slash_in_middle: prefix // middle // suffix
+  unc_path: //server/share
+  protocol_relative_url: //cdn.example.com/lib.js
+  slash_before_hash: //server/share # comment: with colon
+  //leading_key: value
+  middle//key: value
+  trailing_key//:
+    - //server/share
+    - prefix // suffix
+    - //key: value
+  url: https://example.com/x
   key: no comment
 
 ################
@@ -27,6 +39,14 @@ key: value
 another_key: Another value goes here.
 a_number_value: 100
 scientific_notation: 1e+12
+negative_number: -5
+positive_number: +5
+negative_hex: -0x1f
+infinity: .inf
+negative_infinity: -.inf
+not_a_number: .nan
+leading_dot_float: .5
+phone_number: +1-555-0100
 # The number 1 will be interpreted as a number, not a boolean. if you want
 # it to be interpreted as a boolean, use true
 boolean: true
@@ -186,6 +206,7 @@ a_sequence:
 # sequences:
 json_map: {"key": "value"}
 json_seq: [3, 2, 1, "takeoff"]
+signed_json_seq: [3, -4, +5, .inf]
 and quotes are optional: {key: [3, 2, 1, takeoff]}
 
 #######################

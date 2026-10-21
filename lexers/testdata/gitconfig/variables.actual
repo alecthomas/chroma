@@ -1,0 +1,7 @@
+[core]
+	filemode = false
+	autocrlf
+	ignore-case = true
+	1invalid = text
+	invalid_name = text
+
