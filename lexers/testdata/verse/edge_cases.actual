@@ -1,0 +1,15 @@
+Main():void =
+    <#> This whole region
+        is a comment
+    Print("after")
+
+Print("Count {N + 1}\n<not a comment> \"quoted\" <# but this is #>")
+Separator : char = '|'
+Tab : char = 0o09
+
+for (I := 0..9):
+    X := 1.5e3 + 0x1F - 2.0
+
+if (IsReady?):
+    (super:)OnBegin()
+    Spend<public>(Amount:int)<transacts><decides>:void = {}
