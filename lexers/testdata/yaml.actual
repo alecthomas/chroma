@@ -278,4 +278,11 @@ set2:
   item2: null
   item3: null
 
+# Plain scalars may start with an indicator character followed by non-space.
+caches:
+  getresource:
+    dir: :cacheDir/:project
+    alt: :resourceDir/_gen # comment
+    dash: -foo
+
 ...  # document end
