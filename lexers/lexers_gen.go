@@ -4084,6 +4084,19 @@ var embeddedLexers = []struct {
 		},
 		EnsureNL: true,
 	}},
+	{"embedded/verse.xml", chroma.Config{
+		Name: "Verse",
+		Aliases: []string{
+			"verse",
+		},
+		Filenames: []string{
+			"*.verse",
+		},
+		MimeTypes: []string{
+			"text/x-verse",
+			"application/x-verse",
+		},
+	}},
 	{"embedded/vhdl.xml", chroma.Config{
 		Name: "VHDL",
 		Aliases: []string{

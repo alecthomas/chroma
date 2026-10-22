@@ -61,7 +61,7 @@ translators for Pygments lexers and styles.
 |   S    | SAS, Sass, Scala, scdoc, Scheme, Scilab, SCSS, Sed, Sieve, Smali, Smalltalk, Smarty, SNBT, Snobol, Solidity, SourcePawn, Spade, SPARQL, SQL, SquidConf, Standard ML, stas, Stylus, Svelte, Swift, SYSTEMD, systemverilog
 |   T    | TableGen, Tal, TASM, Tcl, Tcsh, Templ, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, TSRX, Turing, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData, Typst
 |   U    | ucode
-|   V    | V, V shell, Vala, VB.net, verilog, VHDL, VHS, VimL, vue
+|   V    | V, V shell, Vala, VB.net, verilog, Verse, VHDL, VHS, VimL, vue
 |   W    | WDTE, WebAssembly Text Format, WebGPU Shading Language, WebVTT, Whiley
 |   X    | XML, Xorg
 |   Y    | YAML, YAML+Jinja, YANG
