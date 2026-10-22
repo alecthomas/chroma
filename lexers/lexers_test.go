@@ -43,6 +43,9 @@ func TestGet(t *testing.T) {
 			repr.String(expected.Config(), repr.Indent("  ")),
 			repr.String(actual.Config(), repr.Indent("  ")))
 	})
+	t.Run("ViaGoooFilename", func(t *testing.T) {
+		assert.Equal(t, lexers.Get("gooo"), lexers.Match("example.gooo"))
+	})
 	t.Run("ViaCPPModuleFilename", func(t *testing.T) {
 		expected := lexers.Get("cpp")
 		actual := lexers.GlobalLexerRegistry.Get("example.cppm")

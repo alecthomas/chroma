@@ -1469,6 +1469,15 @@ var embeddedLexers = []struct {
 			"*.go.tmpl",
 		},
 	}},
+	{"embedded/gooo.xml", chroma.Config{
+		Name: "Gooo",
+		Aliases: []string{
+			"gooo",
+		},
+		Filenames: []string{
+			"*.gooo",
+		},
+	}},
 	{"embedded/graphql.xml", chroma.Config{
 		Name: "GraphQL",
 		Aliases: []string{
