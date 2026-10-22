@@ -53,6 +53,7 @@ func restructuredtextRules() Rules {
 			{`\[.*?\]_`, LiteralString, nil},
 			{`<.+?>`, NameTag, nil},
 			{"[^\\\\\\n\\[*`:]+", Text, nil},
+			{`\n`, Text, nil},
 			{`.`, Text, nil},
 		},
 		"literal": {
