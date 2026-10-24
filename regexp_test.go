@@ -1,8 +1,10 @@
 package chroma
 
 import (
+	"iter"
 	"slices"
 	"testing"
+	"time"
 
 	assert "github.com/alecthomas/assert/v2"
 )
@@ -63,6 +65,45 @@ func TestZeroWidthMatchTerminates(t *testing.T) {
 	it, err := l.Tokenise(nil, "b")
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Error, "b"}}, slices.Collect(it))
+}
+
+func TestZeroWidthPushPopCycleTerminates(t *testing.T) {
+	lexer := mustNewLexer(t, &Config{Name: "loopy"}, Rules{ // nolint: forbidigo
+		"root": {
+			{`(?=\S)`, None, Push("a")},
+		},
+		"a": {
+			{`(?=\S)`, None, Push("b")},
+		},
+		"b": {
+			{``, None, Pop(1)},
+		},
+	})
+	it, err := lexer.Tokenise(nil, "x")
+	assert.NoError(t, err)
+	tokens := collectTokensTimeout(t, it, 2*time.Second)
+	var got []Token
+	for _, tok := range tokens {
+		if tok.Value != "" {
+			got = append(got, tok)
+		}
+	}
+	assert.Equal(t, []Token{{Error, "x"}}, got)
+}
+
+func collectTokensTimeout(t *testing.T, seq iter.Seq[Token], timeout time.Duration) []Token {
+	t.Helper()
+	done := make(chan []Token, 1)
+	go func() {
+		done <- slices.Collect(seq)
+	}()
+	select {
+	case tokens := <-done:
+		return tokens
+	case <-time.After(timeout):
+		t.Fatal("Iterator never returned: zero-width push/pop cycle")
+		return nil
+	}
 }
 
 func TestEnsureLFOption(t *testing.T) {
