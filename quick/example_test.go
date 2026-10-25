@@ -1,3 +1,5 @@
+//go:build !chroma_no_lexers
+
 package quick_test
 
 import (

@@ -1,33 +1,14 @@
 package lexers
 
 import (
-	"embed"
-
 	"github.com/alecthomas/chroma/v3"
 )
 
 //go:generate go run github.com/alecthomas/chroma/v3/internal/metadatagen -dir embedded -out lexers_gen.go
 
-//go:embed embedded
-var embedded embed.FS
-
-// GlobalLexerRegistry is the global LexerRegistry of Lexers.
-//
-// It is populated from generated metadata mirroring the embedded XML
-// definitions, so that registering every lexer does not require parsing any
-// XML; each lexer's rules are still loaded from its XML on first use.
-var GlobalLexerRegistry = func() *chroma.LexerRegistry {
-	reg := chroma.NewLexerRegistry()
-	for i := range embeddedLexers {
-		entry := &embeddedLexers[i]
-		lexer, err := chroma.NewXMLLexerFromConfig(&entry.config, embedded, entry.path)
-		if err != nil {
-			panic(err)
-		}
-		reg.Register(lexer)
-	}
-	return reg
-}()
+// GlobalLexerRegistry contains the bundled lexers unless built with
+// chroma_no_lexers, in which case it starts empty.
+var GlobalLexerRegistry = newLexerRegistry()
 
 // Names of all lexers, optionally including aliases.
 func Names(withAliases bool) []string {
