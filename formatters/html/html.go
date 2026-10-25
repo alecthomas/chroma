@@ -262,7 +262,25 @@ func (r lineRanges) match(rangeIndex, line int) (bool, int) {
 }
 
 func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) (err error) {
-	return f.writeHTML(w, style, slices.Collect(iterator))
+	output := &errorWriter{w: w}
+	if err := f.writeHTML(output, style, slices.Collect(iterator)); err != nil {
+		return err
+	}
+	return output.err
+}
+
+type errorWriter struct {
+	w   io.Writer
+	err error
+}
+
+func (w *errorWriter) Write(p []byte) (int, error) {
+	if w.err != nil {
+		return 0, w.err
+	}
+	var n int
+	n, w.err = w.w.Write(p)
+	return n, w.err
 }
 
 // We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
