@@ -155,7 +155,7 @@
       <rule>
         <include state="commentsandwhitespace"/>
       </rule>
-      <rule pattern="/(\\.|[^[/\\\n]|\[(\\.|[^\]\\\n])*])+/([gimuy]+\b|\B)">
+      <rule pattern="/(\\.|[^[/\\\n]|\[(\\.|[^\]\\\n])*])+/([dgimsuvy]+\b|\B)">
         <token type="LiteralStringRegex"/>
         <pop depth="1"/>
       </rule>

@@ -181,7 +181,7 @@
       <rule>
         <include state="commentsandwhitespace" />
       </rule>
-      <rule pattern="/(\\.|[^[/\\\n]|\[(\\.|[^\]\\\n])*])+/([gim]+\b|\B)">
+      <rule pattern="/(\\.|[^[/\\\n]|\[(\\.|[^\]\\\n])*])+/([dgimsuvy]+\b|\B)">
         <token type="LiteralStringRegex" />
         <pop depth="1" />
       </rule>
