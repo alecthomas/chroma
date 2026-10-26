@@ -19,7 +19,10 @@
       <rule pattern="(false|true)\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="\d\d\d\d-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d\+)?(Z|[+-]\d{2}:\d{2})">
+      <rule pattern="\d{4}-\d{2}-\d{2}([Tt ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?([Zz]|[+-]\d{2}:\d{2})?)?">
+        <token type="LiteralDate"/>
+      </rule>
+      <rule pattern="\d{2}:\d{2}(:\d{2}(\.\d+)?)?">
         <token type="LiteralDate"/>
       </rule>
       <rule pattern="[+-]?[0-9](_?\d)*\.\d+">
