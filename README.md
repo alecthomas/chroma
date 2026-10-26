@@ -110,6 +110,32 @@ text, without any effort:
 err := quick.Highlight(os.Stdout, someSourceCode, "go", "html", "monokai")
 ```
 
+### Building without bundled lexers
+
+Programs that supply their own lexers can omit the bundled lexer definitions:
+
+```sh
+go build -tags chroma_no_lexers ./...
+```
+
+With this tag, `lexers.GlobalLexerRegistry` starts empty. The registry helpers
+and `lexers.Fallback` remain available, so packages such as `quick` can still be
+used. The bundled Go lexer variables, such as `lexers.Go`, are also excluded.
+
+Construct lexers with `chroma.NewLexer` or load your own XML definitions and
+register them before highlighting:
+
+```go
+lexer, err := chroma.NewXMLLexer(os.DirFS("."), "my-lexer.xml")
+if err != nil {
+  return err
+}
+lexers.Register(lexer)
+```
+
+Include and register any other lexers referenced by those definitions. Without
+the tag, all bundled lexers are registered as usual.
+
 ### Identifying the language
 
 To highlight code, you'll first have to identify what language the code is
