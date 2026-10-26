@@ -175,7 +175,7 @@ func TestLexers(t *testing.T) {
 				continue
 			}
 
-			base := strings.Split(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), ".")[0]
+			base, _, _ := strings.Cut(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), ".")
 			lexer := lexers.Get(base)
 			assert.NotZero(t, lexer, base)
 
@@ -222,7 +222,7 @@ func TestLexersTextAnalyser(t *testing.T) {
 	for _, actualFilepath := range files {
 		filename := filepath.Base(actualFilepath)
 		baseFilename := strings.TrimSuffix(filename, filepath.Ext(filename))
-		lexerName := strings.Split(baseFilename, ".")[0]
+		lexerName, _, _ := strings.Cut(baseFilename, ".")
 
 		lexer := lexers.Get(lexerName)
 		assert.NotZero(t, lexer, "no lexer found for name %q", lexerName)
