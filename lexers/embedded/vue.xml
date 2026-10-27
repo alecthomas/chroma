@@ -98,14 +98,14 @@
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="(v-[\w-]+)(=&#34;.+&#34;)(\/?&gt;|\s)">
+      <rule pattern="(v-[\w-]+)(=&#34;[^&#34;]*&#34;)(\/?&gt;|\s)">
         <bygroups>
           <token type="NameTag"/>
           <token type="LiteralString"/>
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="(v-[\w-]+)(=&#34;.+)([:][\w]+)(=&#34;[\w]+&#34;)(\/?&gt;|\s)">
+      <rule pattern="(v-[\w-]+)(=&#34;[^&#34;]*)([:][\w]+)(=&#34;[\w]+&#34;)(\/?&gt;|\s)">
         <bygroups>
           <token type="NameTag"/>
           <token type="LiteralString"/>
