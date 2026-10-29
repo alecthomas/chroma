@@ -41,7 +41,7 @@
       </rule>
 
       <!-- Literals -->
-		<rule pattern="\\&quot;[^&quot;\n]*\\&quot;">
+		<rule pattern="&quot;(\\.|[^&quot;\\])*&quot;">
 		  <token type="LiteralString"/>
 		</rule>
       <rule pattern="'[^'\n]'">
@@ -60,7 +60,7 @@
       </rule>
 
       <!-- Punctuation -->
-      <rule pattern="[{}(),;=.+\-*/&amp;|!&lt;&gt;^%]">
+      <rule pattern="[{}()\[\],;:=.+\-*/&amp;|!&lt;&gt;^%]">
         <token type="Punctuation"/>
       </rule>
       

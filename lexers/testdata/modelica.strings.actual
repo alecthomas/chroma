@@ -1,0 +1,12 @@
+model Strings
+  parameter String quoted = "say \"hi\" to C:\\temp";
+  parameter String lines = "first line
+second line";
+  Real v[2, 3] = {{1, 2, 3}, {4, 5, 6}};
+  Real w[:] = v[1, 2:3];
+algorithm
+  for i in 1:2 loop
+    w[i] := i;
+  end for;
+  annotation(Documentation(info = "<html>a \"b\"</html>"));
+end Strings;
