@@ -46,7 +46,7 @@
     <state name="interpolation">
       <rule pattern="\}"><token type="LiteralStringInterpol"/><pop depth="1"/></rule>
       <rule pattern="\{"><token type="Punctuation"/><push/></rule>
-      <include state="root"/>
+      <rule><include state="root"/></rule>
     </state>
   </rules>
 </lexer>
