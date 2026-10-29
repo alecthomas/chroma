@@ -1,0 +1,38 @@
+<lexer>
+  <config>
+    <name>Lispex</name>
+    <alias>lispex</alias>
+    <alias>lspx</alias>
+    <filename>*.lspx</filename>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\s+"><token type="TextWhitespace"/></rule>
+      <rule pattern=";[^\n]*"><token type="CommentSingle"/></rule>
+      <rule pattern="#\|"><token type="CommentMultiline"/><push state="comment"/></rule>
+      <rule pattern="#\\(?:x[\da-fA-F]+|[A-Za-z]+|[^\s])"><token type="LiteralStringChar"/></rule>
+      <rule pattern="&quot;"><token type="LiteralStringDouble"/><push state="string"/></rule>
+      <rule pattern="#(?:true|false|t|f)(?=$|[\s()'`,;&quot;])"><token type="NameConstant"/></rule>
+      <rule pattern="-?(?:0|[1-9]\d*)/[1-9]\d*(?=$|[\s()'`,;&quot;])"><token type="LiteralNumber"/></rule>
+      <rule pattern="-?(?:0|[1-9]\d*)(?:\.\d+(?:[eE][-+]?\d+)?|[eE][-+]?\d+)(?=$|[\s()'`,;&quot;])"><token type="LiteralNumberFloat"/></rule>
+      <rule pattern="-?(?:0|[1-9]\d*)(?=$|[\s()'`,;&quot;])"><token type="LiteralNumberInteger"/></rule>
+      <rule pattern="(quote|quasiquote|unquote|unquote-splicing|lambda|if|begin|set!|define|let|let\*|letrec|cond|case|guard|and|or|when|unless|do|module|export|import)(?=$|[\s()'`,;&quot;])"><token type="Keyword"/></rule>
+      <rule pattern="(values|call-with-values|call/cc|dynamic-wind|cons|car|cdr|list|map|apply|error|error-object\?|error-object-message|number\?|string\?|boolean\?|pair\?|null\?|vector|vector-ref|bytevector-u8-ref|display|newline|\+|-|\*|/|=|&lt;|&gt;|&lt;=|&gt;=)(?=$|[\s()'`,;&quot;])"><token type="NameBuiltin"/></rule>
+      <rule pattern="'[\p{L}_][^\s()'`,;&quot;#]*"><token type="LiteralStringSymbol"/></rule>
+      <rule pattern="#(?:u8)?\("><token type="Punctuation"/></rule>
+      <rule pattern=",@|['`,]"><token type="Operator"/></rule>
+      <rule pattern="[^\s()'`,;&quot;#]+"><token type="NameVariable"/></rule>
+      <rule pattern="[()]"><token type="Punctuation"/></rule>
+    </state>
+    <state name="comment">
+      <rule pattern="#\|"><token type="CommentMultiline"/><push/></rule>
+      <rule pattern="\|#"><token type="CommentMultiline"/><pop depth="1"/></rule>
+      <rule pattern="[^#|]+|[#|]"><token type="CommentMultiline"/></rule>
+    </state>
+    <state name="string">
+      <rule pattern="&quot;"><token type="LiteralStringDouble"/><pop depth="1"/></rule>
+      <rule pattern="\\(?:[&quot;\\ntr]|x[\da-fA-F]+;)"><token type="LiteralStringEscape"/></rule>
+      <rule pattern="[^&quot;\\]+"><token type="LiteralStringDouble"/></rule>
+    </state>
+  </rules>
+</lexer>
