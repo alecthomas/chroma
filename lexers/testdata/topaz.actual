@@ -89,3 +89,12 @@ for value in [3, 0] {
 // Runtime faults, such as indexing outside an array, are distinct from
 // explicit Err values. Prefer checked operations such as get when absence
 // is part of normal program logic.
+
+let let💎 = 42
+let if한글 = 0x2A
+let true_name = 0b10_10
+let ordinary = "text // /* {let💎} \"quoted\""
+let multiline = """
+// string body
+/* still string */ {if한글}
+"""
