@@ -1,0 +1,14 @@
+import type { Foo } from "./foo";
+
+const action = {
+  abcde: 'ok',
+  type: 'add',
+};
+
+type Shape = { type: 'circle'; radius: number } | { type?: 'square' };
+type Alias = string;
+export type { Shape, Alias };
+
+function handle(type: string) {}
+
+const t = typeof action;
