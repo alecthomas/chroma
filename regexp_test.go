@@ -1,8 +1,10 @@
 package chroma
 
 import (
+	"iter"
 	"slices"
 	"testing"
+	"time"
 
 	assert "github.com/alecthomas/assert/v2"
 )
@@ -63,6 +65,108 @@ func TestZeroWidthMatchTerminates(t *testing.T) {
 	it, err := l.Tokenise(nil, "b")
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Error, "b"}}, slices.Collect(it))
+}
+
+func TestZeroWidthPushPopCycleTerminates(t *testing.T) {
+	lexer, err := NewLexer(&Config{Name: "loopy"}, func() Rules {
+		return Rules{
+			"root": {
+				{`(?=\S)`, None, Push("a")},
+			},
+			"a": {
+				{`(?=\S)`, None, Push("b")},
+			},
+			"b": {
+				{``, None, Pop(1)},
+			},
+		}
+	})
+	assert.NoError(t, err)
+
+	it, err := lexer.Tokenise(nil, "x")
+	assert.NoError(t, err)
+
+	tokens := collectTokensTimeout(t, it, 2*time.Second)
+	var got []Token
+	for _, tok := range tokens {
+		if tok.Value != "" {
+			got = append(got, tok)
+		}
+	}
+	assert.Equal(t, []Token{{Error, "x"}}, got)
+}
+
+func TestZeroWidthPushPopCycleMultipleCharacters(t *testing.T) {
+	lexer, err := NewLexer(&Config{Name: "loopy"}, func() Rules {
+		return Rules{
+			"root": {
+				{`(?=\S)`, None, Push("a")},
+			},
+			"a": {
+				{`(?=\S)`, None, Push("b")},
+			},
+			"b": {
+				{``, None, Pop(1)},
+			},
+		}
+	})
+	assert.NoError(t, err)
+
+	it, err := lexer.Tokenise(nil, "xy")
+	assert.NoError(t, err)
+
+	tokens := collectTokensTimeout(t, it, 2*time.Second)
+	var got []Token
+	for _, tok := range tokens {
+		if tok.Value != "" {
+			got = append(got, tok)
+		}
+	}
+	assert.Equal(t, []Token{{Error, "x"}, {Error, "y"}}, got)
+}
+
+func TestLegitimateZeroWidthTransitionsDoNotTriggerError(t *testing.T) {
+	lexer, err := NewLexer(&Config{Name: "hops"}, func() Rules {
+		return Rules{
+			"root": {
+				{`(?=abc)`, None, Push("s1")},
+			},
+			"s1": {
+				{`(?=abc)`, None, Push("s2")},
+			},
+			"s2": {
+				{`abc`, Keyword, nil},
+			},
+		}
+	})
+	assert.NoError(t, err)
+
+	it, err := lexer.Tokenise(nil, "abc")
+	assert.NoError(t, err)
+
+	tokens := collectTokensTimeout(t, it, 2*time.Second)
+	var got []Token
+	for _, tok := range tokens {
+		if tok.Value != "" {
+			got = append(got, tok)
+		}
+	}
+	assert.Equal(t, []Token{{Keyword, "abc"}}, got)
+}
+
+func collectTokensTimeout(t *testing.T, seq iter.Seq[Token], timeout time.Duration) []Token {
+	t.Helper()
+	done := make(chan []Token, 1)
+	go func() {
+		done <- slices.Collect(seq)
+	}()
+	select {
+	case tokens := <-done:
+		return tokens
+	case <-time.After(timeout):
+		t.Fatal("Iterator never returned: zero-width push/pop cycle")
+		return nil
+	}
 }
 
 func TestEnsureLFOption(t *testing.T) {
