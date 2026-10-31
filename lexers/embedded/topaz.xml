@@ -1,0 +1,52 @@
+<lexer>
+  <config>
+    <name>Topaz</name>
+    <alias>topaz</alias>
+    <alias>tpz</alias>
+    <filename>*.tpz</filename>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\s+"><token type="TextWhitespace"/></rule>
+      <rule pattern="//[^\n]*"><token type="CommentSingle"/></rule>
+      <rule pattern="/\*"><token type="CommentMultiline"/><push state="comment"/></rule>
+      <rule pattern="(?:\b(?:p|r|sh|sql))?&quot;&quot;&quot;"><token type="LiteralStringDouble"/><push state="triple-string"/></rule>
+      <rule pattern="(?:\b(?:p|r|sh|sql))?&quot;"><token type="LiteralStringDouble"/><push state="string"/></rule>
+      <rule pattern="0[xX][\da-fA-F](?:_?[\da-fA-F])*"><token type="LiteralNumberHex"/></rule>
+      <rule pattern="0[bB][01](?:_?[01])*"><token type="LiteralNumberBin"/></rule>
+      <rule pattern="\d(?:_?\d)*\.\d(?:_?\d)*"><token type="LiteralNumberFloat"/></rule>
+      <rule pattern="\d(?:_?\d)*"><token type="LiteralNumberInteger"/></rule>
+      <rule pattern="(import|export|as)(?![\p{L}\p{N}_\p{So}])"><token type="KeywordNamespace"/></rule>
+      <rule pattern="(let|mut|const|type|function|record|enum|newtype|protocol|impl|derives)(?![\p{L}\p{N}_\p{So}])"><token type="KeywordDeclaration"/></rule>
+      <rule pattern="(return|if|else|match|case|for|in|by|while|loop|break|continue|defer|using|concurrent)(?![\p{L}\p{N}_\p{So}])"><token type="Keyword"/></rule>
+      <rule pattern="(true|false|null|None)(?![\p{L}\p{N}_\p{So}])"><token type="KeywordConstant"/></rule>
+      <rule pattern="(int|float|bool|string|template|Array|Map|Set|Option|Result|Eq|Order|Show|JSON)(?![\p{L}\p{N}_\p{So}])"><token type="KeywordType"/></rule>
+      <rule pattern="(Some|Ok|Err)(?![\p{L}\p{N}_\p{So}])"><token type="NameBuiltin"/></rule>
+      <rule pattern="[\p{L}_\p{So}][\p{L}\p{N}_\p{So}]*"><token type="Name"/></rule>
+      <rule pattern="-&gt;|=&gt;|\.\.&lt;|\.\.\.|\.\.|[+*/%=!&lt;&gt;|&amp;?^-]+"><token type="Operator"/></rule>
+      <rule pattern="[{}()\[\],.:]"><token type="Punctuation"/></rule>
+    </state>
+    <state name="comment">
+      <rule pattern="\*/"><token type="CommentMultiline"/><pop depth="1"/></rule>
+      <rule pattern="[^*]+"><token type="CommentMultiline"/></rule>
+      <rule pattern="\*"><token type="CommentMultiline"/></rule>
+    </state>
+    <state name="string">
+      <rule pattern="&quot;"><token type="LiteralStringDouble"/><pop depth="1"/></rule>
+      <rule pattern="\\[\s\S]"><token type="LiteralStringEscape"/></rule>
+      <rule pattern="\{"><token type="LiteralStringInterpol"/><push state="interpolation"/></rule>
+      <rule pattern="[^&quot;\\{]+"><token type="LiteralStringDouble"/></rule>
+    </state>
+    <state name="triple-string">
+      <rule pattern="&quot;&quot;&quot;"><token type="LiteralStringDouble"/><pop depth="1"/></rule>
+      <rule pattern="\\[\s\S]"><token type="LiteralStringEscape"/></rule>
+      <rule pattern="\{"><token type="LiteralStringInterpol"/><push state="interpolation"/></rule>
+      <rule pattern="[^&quot;\\{]+|&quot;"><token type="LiteralStringDouble"/></rule>
+    </state>
+    <state name="interpolation">
+      <rule pattern="\}"><token type="LiteralStringInterpol"/><pop depth="1"/></rule>
+      <rule pattern="\{"><token type="Punctuation"/><push/></rule>
+      <rule><include state="root"/></rule>
+    </state>
+  </rules>
+</lexer>

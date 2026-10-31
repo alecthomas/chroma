@@ -2029,6 +2029,16 @@ var embeddedLexers = []struct {
 		},
 		DotAll: true,
 	}},
+	{"embedded/lispex.xml", chroma.Config{
+		Name: "Lispex",
+		Aliases: []string{
+			"lispex",
+			"lspx",
+		},
+		Filenames: []string{
+			"*.lspx",
+		},
+	}},
 	{"embedded/llvm.xml", chroma.Config{
 		Name: "LLVM",
 		Aliases: []string{
@@ -3865,6 +3875,16 @@ var embeddedLexers = []struct {
 		},
 		MimeTypes: []string{
 			"text/x-toml",
+		},
+	}},
+	{"embedded/topaz.xml", chroma.Config{
+		Name: "Topaz",
+		Aliases: []string{
+			"topaz",
+			"tpz",
+		},
+		Filenames: []string{
+			"*.tpz",
 		},
 	}},
 	{"embedded/tradingview.xml", chroma.Config{
