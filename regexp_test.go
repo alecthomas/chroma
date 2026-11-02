@@ -2,6 +2,7 @@ package chroma
 
 import (
 	"slices"
+	"strings"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
@@ -242,4 +243,21 @@ func TestPushToUndefinedStateIsAnError(t *testing.T) {
 	it, err := lexer.Tokenise(nil, "ab")
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Text, "a"}, {Text, "b"}}, slices.Collect(it))
+}
+
+func TestLongTokensMatch(t *testing.T) {
+	l := Coalesce(mustNewLexer(t, &Config{}, Rules{ // nolint: forbidigo
+		"root": {
+			{`"(\\\\|\\"|[^"])*"`, LiteralStringDouble, nil},
+			{`/\*(.|\n)*?\*/`, CommentMultiline, nil},
+		},
+	}))
+	for _, token := range []Token{
+		{LiteralStringDouble, `"` + strings.Repeat("a", 100_000) + `"`},
+		{CommentMultiline, "/*" + strings.Repeat("a\n", 50_000) + "*/"},
+	} {
+		it, err := l.Tokenise(nil, token.Value)
+		assert.NoError(t, err)
+		assert.Equal(t, []Token{token}, slices.Collect(it))
+	}
 }
