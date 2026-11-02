@@ -359,7 +359,8 @@ func (r *RegexLexer) maybeCompile() (err error) {
 					pattern = "(?" + rule.flags + ")" + pattern
 				}
 				pattern = `\G` + pattern
-				rule.Regexp, err = regexp2.Compile(pattern)
+				// Long tokens such as big comments exceed regexp2's default stack limit; MatchTimeout bounds runaway matches.
+				rule.Regexp, err = regexp2.Compile(pattern, regexp2.OptionMaxBacktrackingStackSize(-1))
 				if err != nil {
 					return fmt.Errorf("failed to compile rule %s.%d: %s", state, i, err)
 				}
