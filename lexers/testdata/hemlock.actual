@@ -1,0 +1,94 @@
+#!/usr/bin/env hemlock
+// Line comment
+/* Block
+   comment */
+import { sin, PI } from "@stdlib/math";
+import { open } from "@stdlib/fs";
+import "libc.so.6";
+
+extern fn strlen(s: string): i32;
+
+enum Color { RED, GREEN, BLUE }
+
+define Person { name: string, age: i32, active?: true }
+
+type Callback = fn(i32): void;
+
+let x = 42;
+let big = 5000000000;
+let hex = 0xDEADBEEF;
+let bin = 0b1010;
+let oct = 0o777;
+let sep = 1_000_000;
+let pi = 3.14;
+let half = .5;
+let sci = 1.5e-10;
+let s = "hello\n\t\x41\u{1F600}";
+let ch = 'A';
+let esc = '\n';
+let arr: array<i32> = [1, 2, 3];
+let obj = { x: 10, ...defaults };
+
+@hot
+@section("fast")
+async fn compute(n: i32): i32 {
+    let msg = `n=${n} sin=${sin(PI / 2)} literal \${not} $plain`;
+    print(msg);
+    return n * n;
+}
+
+fn swap(ref a: i32, ref b: i32) { let t = a; a = b; b = t; }
+fn double(x: i32): i32 => x * 2;
+
+fn main() {
+    let p: Person = { name: "Alice", age: 30 };
+    let city = p?.address?.city ?? "Unknown";
+    config ??= { timeout: 30 };
+
+    let result = match (x) {
+        0 => "zero",
+        1 | 2 | 3 => "small",
+        n if n < 10 => "medium",
+        n => "large: " + n
+    };
+
+    outer: while (true) {
+        for (let i = 0; i < 10; i++) {
+            if (i == 5) { break outer; }
+        }
+    }
+
+    for (item in arr) { write(item); }
+    loop { if (TYPEID_I32 == typeid(x)) { break; } }
+    switch (x) { case 1: break; default: break; }
+
+    let buf = buffer(64);
+    let raw = alloc(64);
+    memset(raw, 0, 64);
+    ptr_write_f32(buf, 3.14);
+    let v = ptr_read_i32(raw);
+    atomic_add_i32(raw, 1);
+    free(raw);
+
+    let t = spawn(compute, 42);
+    let r = await t;
+    detach(spawn(compute, 7));
+
+    let c = channel(10);
+    c.send(r); c.recv(); c.close();
+
+    try { throw "error"; } catch (e) { eprint(e); } finally { print("done"); }
+    defer print("cleanup");
+
+    let mask = (x << 2) | (x >> 1) & ~0xFF ^ 1;
+    let ok = !(x >= 1 && x <= 9) || false;
+    x += 1; x -= 1; x *= 2; x /= 2; x %= 3; x <<= 1; x >>= 1;
+
+    create_user(name: "Bob", age: 30);
+    print(typeof(x), sizeof(i32), i32("42"), f64(3.99));
+}
+
+gpu fn scale(n: u32, a: f32, data: gpu_buffer<f32>) {
+    let i: u32 = global_id(0);
+    if (i < n) { data[i] = a * data[i]; }
+}
