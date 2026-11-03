@@ -279,3 +279,16 @@ set2:
   item3: null
 
 ...  # document end
+---
+kind: Pod
+image: nginx:1.27
+quoted: "nginx"
+args:
+  - serve
+  - --port=8080
+labels: {app: nginx, "tier": web, n: 3}
+command: [/bin/app, -v]
+nested: {a: [1, two], b: {c: d}}
+empty: []
+signed: -3
+dot: .5

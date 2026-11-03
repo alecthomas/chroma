@@ -41,6 +41,10 @@
       <rule>
         <include state="value"/>
       </rule>
+      <rule pattern="[\[{]">
+        <token type="Punctuation"/>
+        <push state="flow"/>
+      </rule>
       <rule pattern="[?:,\[\]]">
         <token type="Punctuation"/>
       </rule>
@@ -71,15 +75,65 @@
       <rule pattern="[+\-]?(0x[\da-f]+|0o[0-7]+|(\d+\.?\d*|\.?\d+)(e[\+\-]?\d+)?|\.inf|\.nan)\b">
         <token type="LiteralNumber"/>
       </rule>
-      <rule pattern="([^\{\}\[\]\?,\:\!\-\*&amp;\@].*)( )+(#.*)">
+      <rule pattern="((?:[^\{\}\[\]\?,\:\!\-\*&amp;\@]|-(?=\S)).*)( )+(#.*)">
         <bygroups>
-          <token type="Literal"/>
+          <token type="LiteralString"/>
           <token type="TextWhitespace"/>
           <token type="Comment"/>
         </bygroups>
       </rule>
-      <rule pattern="[^\{\}\[\]\?,\:\!\-\*&amp;\@].*">
-        <token type="Literal"/>
+      <rule pattern="(?:[^\{\}\[\]\?,\:\!\-\*&amp;\@]|-(?=\S)).*">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="flow">
+      <rule pattern="\s+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="#.*$">
+        <token type="Comment"/>
+      </rule>
+      <rule pattern="[\[{]">
+        <token type="Punctuation"/>
+        <push/>
+      </rule>
+      <rule pattern="[\]}]">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern=",">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="(&#34;(?:\\.|[^&#34;\\])*&#34;|&#39;(?:&#39;&#39;|[^&#39;])*&#39;|[^\s{}\[\],:#&#34;&#39;][^{}\[\],:\n]*?)([ \t]*)(:)(?=[\s,\]}])">
+        <bygroups>
+          <token type="NameTag"/>
+          <token type="TextWhitespace"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule pattern="!![^\s,\]}]+|[&amp;*][^\s,\]}]+">
+        <token type="CommentPreproc"/>
+      </rule>
+      <rule pattern="(false|False|FALSE|true|True|TRUE|null|Off|off|yes|Yes|YES|OFF|On|ON|no|No|on|NO|n|N|Y|y)(?=[\s,\]}]|$)">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="&#34;(?:\\.|[^&#34;\\])*&#34;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="&#39;(?:&#39;&#39;|[^&#39;])*&#39;">
+        <token type="LiteralStringSingle"/>
+      </rule>
+      <rule pattern="\d\d\d\d-\d\d-\d\d([T ]\d\d:\d\d:\d\d(\.\d+)?(Z|\s+[-+]\d+)?)?(?=[\s,\]}]|$)">
+        <token type="LiteralDate"/>
+      </rule>
+      <rule pattern="[+\-]?(0x[\da-f]+|0o[0-7]+|(\d+\.?\d*|\.?\d+)(e[\+\-]?\d+)?|\.inf|\.nan)(?=[\s,\]}]|$)">
+        <token type="LiteralNumber"/>
+      </rule>
+      <rule pattern="[^\s{}\[\],#&#34;&#39;][^{}\[\],\n]*?(?=[ \t]*(?:[,\]}]|$)|[ \t]+#)">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
       </rule>
     </state>
     <state name="key">
