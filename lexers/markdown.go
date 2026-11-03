@@ -96,6 +96,8 @@ func markdownRules() Rules {
 		"inline": {
 			{`<!--[\w\W]*?-->`, CommentMultiline, nil},
 			{`\\.`, Text, nil},
+			{`^(?:\*\*\S(?:.*?\S)?\*\*|__\S(?:.*?\S)?__)(?=\W|$)`, GenericStrong, nil},
+			{`^(?:\*[^\s*](?:[^*\n]*?[^\s*])?\*|_[^\s_](?:[^_\n]*?[^\s_])?_)(?=\W|$)`, GenericEmph, nil},
 			{`(\s)(\*|_)((?:(?!\2).)*)(\2)((?=\W|\n))`, ByGroups(Text, GenericEmph, GenericEmph, GenericEmph, Text), nil},
 			{`(\s)((\*\*|__).*?)\3((?=\W|\n))`, ByGroups(Text, GenericStrong, GenericStrong, Text), nil},
 			{`(\s)(~~[^~]+~~)((?=\W|\n))`, ByGroups(Text, GenericDeleted, Text), nil},

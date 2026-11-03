@@ -1,0 +1,17 @@
+**Why**: emphasis at the very top of a file.
+
+# Heading
+*Note* right after a heading.
+
+- item
+__Bold__ right after a list item.
+
+> quote
+_It_ right after a quote.
+
+- **Lead** at the start of a list item's text
+* a star list item stays a list item
+***
+
+A paragraph line
+**after** a plain line already worked, and *in the middle* too.
