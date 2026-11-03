@@ -521,10 +521,7 @@ var (
 )
 
 // EmacsLisp lexer.
-var EmacsLisp = Register(TypeRemappingLexer(MustNewXMLLexer(
-	embedded,
-	"embedded/emacslisp.xml",
-), TypeMapping{
+var EmacsLisp = Register(TypeRemappingLexer(mustEmbeddedXMLLexer("embedded/emacslisp.xml"), TypeMapping{
 	{NameVariable, NameFunction, emacsBuiltinFunction},
 	{NameVariable, NameBuiltin, emacsSpecialForms},
 	{NameVariable, NameException, emacsErrorKeywords},

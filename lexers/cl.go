@@ -229,10 +229,7 @@ var (
 )
 
 // Common Lisp lexer.
-var CommonLisp = Register(TypeRemappingLexer(MustNewXMLLexer(
-	embedded,
-	"embedded/common_lisp.xml",
-), TypeMapping{
+var CommonLisp = Register(TypeRemappingLexer(mustEmbeddedXMLLexer("embedded/common_lisp.xml"), TypeMapping{
 	{NameVariable, NameFunction, clBuiltinFunctions},
 	{NameVariable, Keyword, clSpecialForms},
 	{NameVariable, NameBuiltin, clMacros},

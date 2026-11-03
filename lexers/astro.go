@@ -7,5 +7,5 @@ import (
 // Astro lexer.
 var Astro = Register(DelegatingLexer(
 	HTML,
-	MustNewXMLLexer(embedded, "embedded/astro.xml"),
+	mustEmbeddedXMLLexer("embedded/astro.xml"),
 ))
