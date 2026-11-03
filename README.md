@@ -329,3 +329,14 @@ When updating or adding a lexer, please add tests. See [lexers/README.md](lexers
 - Some more esoteric features of Pygments are omitted for simplicity.
 - Though the Chroma API supports content detection, very few languages support them.
   I have plans to implement a statistical analyser at some point, but not enough time.
+
+## Coming from Oh-My-Zsh Or Want to Build From Source?
+Certain zsh plugins like "colorize" can make use of Chroma for syntax highlighting. This can be configured to enhance output from the linux `cat` utility. Here is how to build and install from source:
+
+1. Download a tarball from the releases or clone the repo
+2. `cd`` into `chroma/cmd/chroma`
+3. `go build .`
+4. `cp chroma /usr/local/bin`
+5. restart terminal
+
+Your Oh-My-Zsh plugins should now work. Happy coding.
