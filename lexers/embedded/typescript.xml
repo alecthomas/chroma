@@ -225,6 +225,9 @@
         <token type="KeywordDeclaration" />
         <push state="slashstartsregex" />
       </rule>
+      <rule pattern="type(?=\s*\??\s*:)">
+        <token type="NameOther" />
+      </rule>
       <rule
         pattern="(abstract|async|boolean|class|const|debugger|enum|export|extends|from|get|global|goto|implements|import|interface|namespace|package|private|protected|public|readonly|require|set|static|super|type|using)\b"
       >
