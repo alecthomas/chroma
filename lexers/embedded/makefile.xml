@@ -20,6 +20,10 @@
   </config>
   <rules>
     <state name="root">
+      <rule pattern="^ *define(?=\s).*\n">
+        <token type="CommentPreproc"/>
+        <push state="define"/>
+      </rule>
       <rule pattern="^(?: *(?:ifn?eq|ifn?def|else|endif|-?include|sinclude|define|endef|undefine|vpath)|\.\s*(?:include|undef|error|warning|if|else|elif|endif|for|endfor)|if)(?=\s)(?:.*\\\n)*.*\n">
         <token type="CommentPreproc"/>
       </rule>
@@ -93,6 +97,15 @@
       <rule pattern="\)">
         <token type="Keyword"/>
         <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="define">
+      <rule pattern="^ *endef(?=\s).*\n">
+        <token type="CommentPreproc"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(?:(?! *endef(?=\s)).*\n)+">
+        <using lexer="Bash"/>
       </rule>
     </state>
     <state name="export">

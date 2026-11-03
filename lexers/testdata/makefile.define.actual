@@ -1,0 +1,15 @@
+BIN := app
+X = echo "hi" $(BIN)
+
+define HELP
+Usage: make build
+builds the app
+echo "hi" $(BIN)
+endef
+
+define RUN_TESTS =
+	go test ./... | tee out.txt
+endef
+
+all: help
+	@echo "$$HELP"
