@@ -10,31 +10,31 @@
   <entry type="LineNumbers" style="#8087a2"/>
   <entry type="Keyword" style="#c6a0f6"/>
   <entry type="KeywordReserved" style="#c6a0f6"/>
-  <entry type="KeywordPseudo" style="#c6a0f6"/>
-  <entry type="KeywordConstant" style="#f5a97f"/>
-  <entry type="KeywordDeclaration" style="#ed8796"/>
-  <entry type="KeywordNamespace" style="#8bd5ca"/>
-  <entry type="KeywordType" style="#ed8796"/>
+  <entry type="KeywordPseudo" style="#f5bde6"/>
+  <entry type="KeywordConstant" style="#c6a0f6"/>
+  <entry type="KeywordDeclaration" style="italic #ed8796"/>
+  <entry type="KeywordNamespace" style="#c6a0f6"/>
+  <entry type="KeywordType" style="#eed49f"/>
   <entry type="Name" style="#cad3f5"/>
   <entry type="NameClass" style="#eed49f"/>
-  <entry type="NameConstant" style="#eed49f"/>
-  <entry type="NameDecorator" style="bold #8aadf4"/>
-  <entry type="NameEntity" style="#8bd5ca"/>
-  <entry type="NameException" style="#f5a97f"/>
+  <entry type="NameConstant" style="#cad3f5"/>
+  <entry type="NameDecorator" style="bold #cad3f5"/>
+  <entry type="NameEntity" style="#cad3f5"/>
+  <entry type="NameException" style="#eed49f"/>
   <entry type="NameFunction" style="#8aadf4"/>
   <entry type="NameFunctionMagic" style="#8aadf4"/>
-  <entry type="NameLabel" style="#91d7e3"/>
-  <entry type="NameNamespace" style="#f5a97f"/>
+  <entry type="NameLabel" style="italic #8bd5ca"/>
+  <entry type="NameNamespace" style="#cad3f5"/>
   <entry type="NameProperty" style="#f5a97f"/>
-  <entry type="NameTag" style="#c6a0f6"/>
-  <entry type="NameVariable" style="#f4dbd6"/>
-  <entry type="NameVariableClass" style="#f4dbd6"/>
-  <entry type="NameVariableGlobal" style="#f4dbd6"/>
-  <entry type="NameVariableInstance" style="#f4dbd6"/>
+  <entry type="NameTag" style="#8aadf4"/>
+  <entry type="NameVariable" style="italic #cad3f5"/>
+  <entry type="NameVariableClass" style="italic #eed49f"/>
+  <entry type="NameVariableGlobal" style="italic #cad3f5"/>
+  <entry type="NameVariableInstance" style="italic #cad3f5"/>
   <entry type="NameVariableMagic" style="#f4dbd6"/>
-  <entry type="NameAttribute" style="#8aadf4"/>
-  <entry type="NameBuiltin" style="#91d7e3"/>
-  <entry type="NameBuiltinPseudo" style="#91d7e3"/>
+  <entry type="NameAttribute" style="#a6da95"/>
+  <entry type="NameBuiltin" style="italic #ed8796"/>
+  <entry type="NameBuiltinPseudo" style="#ed8796"/>
   <entry type="NameOther" style="#cad3f5"/>
   <entry type="Literal" style="#cad3f5"/>
   <entry type="LiteralDate" style="#cad3f5"/>
@@ -48,10 +48,10 @@
   <entry type="LiteralStringInterpol" style="#a6da95"/>
   <entry type="LiteralStringAffix" style="#ed8796"/>
   <entry type="LiteralStringDelimiter" style="#8aadf4"/>
-  <entry type="LiteralStringEscape" style="#8aadf4"/>
-  <entry type="LiteralStringRegex" style="#8bd5ca"/>
-  <entry type="LiteralStringDoc" style="#6e738d"/>
-  <entry type="LiteralStringHeredoc" style="#6e738d"/>
+  <entry type="LiteralStringEscape" style="#f5bde6"/>
+  <entry type="LiteralStringRegex" style="#f5bde6"/>
+  <entry type="LiteralStringDoc" style="#a6da95"/>
+  <entry type="LiteralStringHeredoc" style="#a6da95"/>
   <entry type="LiteralNumber" style="#f5a97f"/>
   <entry type="LiteralNumberBin" style="#f5a97f"/>
   <entry type="LiteralNumberHex" style="#f5a97f"/>
@@ -60,14 +60,14 @@
   <entry type="LiteralNumberIntegerLong" style="#f5a97f"/>
   <entry type="LiteralNumberOct" style="#f5a97f"/>
   <entry type="Operator" style="bold #91d7e3"/>
-  <entry type="OperatorWord" style="bold #91d7e3"/>
-  <entry type="Comment" style="italic #6e738d"/>
-  <entry type="CommentSingle" style="italic #6e738d"/>
-  <entry type="CommentMultiline" style="italic #6e738d"/>
-  <entry type="CommentSpecial" style="italic #6e738d"/>
-  <entry type="CommentHashbang" style="italic #5b6078"/>
-  <entry type="CommentPreproc" style="italic #6e738d"/>
-  <entry type="CommentPreprocFile" style="bold #6e738d"/>
+  <entry type="OperatorWord" style="bold #c6a0f6"/>
+  <entry type="Comment" style="italic #939ab7"/>
+  <entry type="CommentSingle" style="italic #939ab7"/>
+  <entry type="CommentMultiline" style="italic #939ab7"/>
+  <entry type="CommentSpecial" style="italic #939ab7"/>
+  <entry type="CommentHashbang" style="italic #939ab7"/>
+  <entry type="CommentPreproc" style="italic #f5bde6"/>
+  <entry type="CommentPreprocFile" style="bold #f5bde6"/>
   <entry type="Generic" style="#cad3f5"/>
   <entry type="GenericInserted" style="bg:#363a4f #a6da95"/>
   <entry type="GenericDeleted" style="bg:#363a4f #ed8796"/>
