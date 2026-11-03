@@ -9,3 +9,9 @@ RUN echo hi && \
 EXPOSE 8080
 HEALTHCHECK --interval=5m CMD curl -f http://localhost/ || exit 1
 CMD ["/app/run"]
+ARG GO=1.24
+FROM golang:${GO} AS builder
+LABEL org.opencontainers.image.title="app" version=2 \
+      maintainer='someone'
+ENV PATH="/app/bin:$PATH" MODE=prod
+ENV A=1 B=2.0.1

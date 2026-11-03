@@ -41,10 +41,23 @@
           <using lexer="JSON" />
         </bygroups>
       </rule>
-      <rule pattern="(LABEL|ENV|ARG)((?:(?:\s*\\?\s*)\w+=\w+(?:\s*\\?\s*))*)">
+      <rule pattern="(LABEL)(?=\s)">
+        <token type="Keyword"/>
+        <push state="label"/>
+      </rule>
+      <rule pattern="(ARG|ENV)(?=\s)">
+        <token type="Keyword"/>
+        <push state="assign"/>
+      </rule>
+      <rule pattern="(FROM)(\s+)(\S*\$\{[^}\s]*\}\S*)(?:(\s+)(AS)\b(\s+)(\S+))?">
         <bygroups>
-          <token type="Keyword" />
-          <using lexer="Bash" />
+          <token type="Keyword"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralString"/>
+          <token type="TextWhitespace"/>
+          <token type="Keyword"/>
+          <token type="TextWhitespace"/>
+          <token type="LiteralString"/>
         </bygroups>
       </rule>
       <rule
@@ -65,6 +78,58 @@
       </rule>
       <rule pattern="(.*\\\n)*.+">
         <using lexer="Bash" />
+      </rule>
+    </state>
+    <state name="label">
+      <rule pattern="\\\n">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[ \t]+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="([\w.-]+)(=)">
+        <bygroups>
+          <token type="NameVariable"/>
+          <token type="Operator"/>
+        </bygroups>
+      </rule>
+      <rule pattern="&#34;(?:\\.|[^&#34;\\])*&#34;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="&#39;[^&#39;]*&#39;">
+        <token type="LiteralStringSingle"/>
+      </rule>
+      <rule pattern="(?:[^\s=&#34;&#39;\\]|\\.)+">
+        <using lexer="Bash"/>
+      </rule>
+      <rule pattern="[=&#34;&#39;\\]">
+        <using lexer="Bash"/>
+      </rule>
+    </state>
+    <state name="assign">
+      <rule pattern="\\\n">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="TextWhitespace"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(\w+)(=)(\d+(?:\.\d+)+)(?=[\s\\]|$)">
+        <bygroups>
+          <token type="NameVariable"/>
+          <token type="Operator"/>
+          <token type="LiteralNumber"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(?:[^\n\\]|\\.)+?(?=\w+=\d+(?:\.\d+)+(?:[\s\\]|$)|\\\n|\n|$)">
+        <using lexer="Bash"/>
+      </rule>
+      <rule pattern="\\">
+        <using lexer="Bash"/>
       </rule>
     </state>
   </rules>
