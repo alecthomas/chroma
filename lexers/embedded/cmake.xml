@@ -16,6 +16,9 @@
         </bygroups>
         <push state="args"/>
       </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+      </rule>
       <rule>
         <include state="keywords"/>
       </rule>
