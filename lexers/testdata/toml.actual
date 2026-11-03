@@ -6,3 +6,35 @@ ld1 = 1979-05-27
 lt2 = 00:32:00.999999
 lt3 = 07:32
 count = 42
+# tables and keys
+title = "TOML"
+"quoted key" = 1
+site."google.com" = true
+a.b.c = 1
+1234 = "digits"
+owner = { name = "Tom", dob = 1979-05-27 }
+points = [1, 2, { x = 3 }]
+hex = 0xDEAD_BEEF
+oct = 0o755
+bin = 0b1101
+exp = 5e+22
+flt = -6.626e-34
+inf = +inf
+nan = -nan
+str = """
+two
+lines"""
+lit = '''
+raw'''
+
+[project]
+name = 'x'
+
+[a.b]
+c = 1
+
+[dog."tater.man"]
+type.name = "pug"
+
+[[bin]]
+path = "src/main.rs"
