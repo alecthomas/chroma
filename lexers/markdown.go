@@ -81,10 +81,13 @@ func markdownRules() Rules {
 			{`<!--[\w\W]*?-->`, CommentMultiline, nil},
 			{`^(#[^#].+\n)`, ByGroups(GenericHeading), nil},
 			{`^(#{2,6}.+\n)`, ByGroups(GenericSubheading), nil},
-			{`^(\s*)([*-] )(\[[ xX]\])( .+\n)`, ByGroups(Text, Keyword, Keyword, UsingSelf("inline")), nil},
-			{`^(\s*)([*-])(\s)(.+\n)`, ByGroups(Text, Keyword, Text, UsingSelf("inline")), nil},
+			{"^(?!\\d+\\.\\s)([^\\s#>*+`|-][^\\n]*\\n)(=+[ \\t]*(?:\\n|\\z))", ByGroups(UsingSelf("setext-heading"), GenericHeading), nil},
+			{"^(?!\\d+\\.\\s)([^\\s#>*+`|-][^\\n]*\\n)(-+[ \\t]*(?:\\n|\\z))", ByGroups(UsingSelf("setext-subheading"), GenericSubheading), nil},
+			{`^(\s*)([*+-] )(\[[ xX]\])( .+\n)`, ByGroups(Text, Keyword, Keyword, UsingSelf("inline")), nil},
+			{`^(\s*)([*+-])(\s)(.+\n)`, ByGroups(Text, Keyword, Text, UsingSelf("inline")), nil},
 			{`^(\s*)([0-9]+\.)( .+\n)`, ByGroups(Text, Keyword, UsingSelf("inline")), nil},
 			{`^(\s*>\s)(.+\n)`, ByGroups(Keyword, GenericEmph), nil},
+			{`^( {0,3})(\[)([^\]\n]+)(\]:)([ \t]+)(\S+)`, ByGroups(Text, Text, NameTag, Text, Text, NameAttribute), nil},
 			{"^(```\\n)([\\w\\W]*?)(^```$)", ByGroups(String, Text, String), nil},
 			{
 				"^(```)(\\w+)(\\n)([\\w\\W]*?)(^```$)",
@@ -92,6 +95,14 @@ func markdownRules() Rules {
 				nil,
 			},
 			Include("inline"),
+		},
+		"setext-heading": {
+			{`<!--[\w\W]*?-->`, CommentMultiline, nil},
+			{`[^<]+|<`, GenericHeading, nil},
+		},
+		"setext-subheading": {
+			{`<!--[\w\W]*?-->`, CommentMultiline, nil},
+			{`[^<]+|<`, GenericSubheading, nil},
 		},
 		"inline": {
 			{`<!--[\w\W]*?-->`, CommentMultiline, nil},
@@ -102,6 +113,7 @@ func markdownRules() Rules {
 			{"`[^`]+`", LiteralStringBacktick, nil},
 			{`[@#][\w/:]+`, NameEntity, nil},
 			{`(!?\[)([^]]+)(\])(\()([^)]+)(\))`, ByGroups(Text, NameTag, Text, Text, NameAttribute, Text), nil},
+			{`(!?\[)([^]]+)(\]\[)([^]]*)(\])`, ByGroups(Text, NameTag, Text, NameAttribute, Text), nil},
 			{`.|\n`, Text, nil},
 		},
 	}

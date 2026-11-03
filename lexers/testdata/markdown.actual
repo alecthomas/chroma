@@ -110,3 +110,17 @@ Text after a horizontal rule.
   [whitespace before link](https://google.com)  
 abc[non-whitespace before link](https://google.com)  
 ([first link](https://google.com) and [second link](https://google.com))  
+
+Setext Heading
+==============
+
+Second Level
+------------
+
++ plus item
+- minus item
++ [ ] plus task
+
+See [the docs][docs] and [collapsed][].
+
+[docs]: https://example.com/docs "Docs"
