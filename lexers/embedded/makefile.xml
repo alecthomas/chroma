@@ -23,8 +23,12 @@
       <rule pattern="^(?: *(?:ifn?eq|ifn?def|else|endif|-?include|sinclude|define|endef|undefine|vpath)|\.\s*(?:include|undef|error|warning|if|else|elif|endif|for|endfor)|if)(?=\s)(?:.*\\\n)*.*\n">
         <token type="CommentPreproc"/>
       </rule>
-      <rule pattern="^(?:[\t ]+.*\n|\n)+">
-        <using lexer="Bash"/>
+      <rule pattern="^(?:[\t ]*\n)+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="^[\t ]+">
+        <token type="Text"/>
+        <push state="recipe"/>
       </rule>
       <rule pattern="\$[&lt;@$+%?|*]">
         <token type="Keyword"/>
@@ -130,6 +134,81 @@
         <pop depth="1"/>
       </rule>
       <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="recipe">
+      <rule pattern="\\\n">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(\$\()([A-Za-z_][\w.-]*)(\))">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="NameVariable"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <push state="recipe-string"/>
+      </rule>
+      <rule pattern="&#39;[^&#39;\n]*&#39;">
+        <token type="LiteralStringSingle"/>
+      </rule>
+      <rule pattern="(?:[^$&#34;&#39;\\\n]|\$(?!\([A-Za-z_][\w.-]*\))|\\.)+">
+        <using lexer="Bash"/>
+      </rule>
+      <rule pattern="[&#39;\\]">
+        <using lexer="Bash"/>
+      </rule>
+    </state>
+    <state name="recipe-string">
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="2"/>
+      </rule>
+      <rule pattern="(\$\()([A-Za-z_][\w.-]*)(\))">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="NameVariable"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(\$\()([^)\n]*)(\))">
+        <bygroups>
+          <token type="Keyword"/>
+          <using lexer="Bash"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(\$\{#?)([^}\n]*)(\})">
+        <bygroups>
+          <token type="LiteralStringInterpol"/>
+          <token type="NameVariable"/>
+          <token type="LiteralStringInterpol"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\$[a-zA-Z_]\w*">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="\$(?:\d+|[#$?!_*@-])">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="(?:\\\\|\\[0-7]+|\\.|[^&#34;\\$\n])+">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="\\\n">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="\$">
         <token type="Text"/>
       </rule>
     </state>

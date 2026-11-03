@@ -39,3 +39,11 @@ CFLAGS+= -g
 if ENABLE_DOCS
 SUBDIRS = docs
 endif
+
+GO ?= go
+BIN := bin/app
+
+build: $(BIN)
+	$(GO) build -o $(BIN) ./cmd/app
+	@echo "built $(BIN) for ${GOOS} in $$PWD"
+	echo 'single $(BIN)' $(shell date)
