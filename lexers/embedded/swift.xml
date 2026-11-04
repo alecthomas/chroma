@@ -113,6 +113,9 @@
         <token type="CommentMultiline"/>
         <push state="comment-multi"/>
       </rule>
+      <rule pattern="#(warning|error)\b">
+        <token type="CommentPreproc"/>
+      </rule>
       <rule pattern="#(if|elseif|else|endif|available)\b">
         <token type="CommentPreproc"/>
         <push state="preproc"/>
