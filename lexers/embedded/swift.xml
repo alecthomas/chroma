@@ -304,7 +304,7 @@
           <token type="NameVariable"/>
         </bygroups>
       </rule>
-      <rule pattern="(?&lt;!\.)open(?=\s+[a-zA-Z_@])">
+      <rule pattern="(?&lt;!\.)(?:open|package)(?=\s+[a-zA-Z_@])">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule pattern="(fileprivate|typealias|extension|subscript|internal|protocol|operator|private|public|struct|deinit|static|import|class|init|func|enum|let|var)\b">
