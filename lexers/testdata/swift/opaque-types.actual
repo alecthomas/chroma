@@ -1,0 +1,3 @@
+var body: some View { Text("Hi") }
+func shapes() -> some Collection<Shape> { [] }
+if case .some(let value) = optional {}
