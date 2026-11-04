@@ -258,6 +258,12 @@
       <rule pattern="(?&lt;!\.)isolated(?=\s+[a-zA-Z_(])">
         <token type="KeywordReserved"/>
       </rule>
+      <rule pattern="(?&lt;!\.)(?:consume|copy|discard)(?=\s+[a-zA-Z_(])">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="(?&lt;!\.)(?:borrowing|consuming)(?=\s+[a-zA-Z_(\[@])">
+        <token type="KeywordReserved"/>
+      </rule>
       <rule pattern="(?&lt;!\.)(?:any|some)(?=\s+[a-zA-Z_(\[])">
         <token type="Keyword"/>
       </rule>
