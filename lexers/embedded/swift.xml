@@ -202,7 +202,10 @@
           <token type="NameVariable"/>
         </bygroups>
       </rule>
-      <rule pattern="(typealias|extension|subscript|internal|protocol|operator|private|public|struct|deinit|static|import|class|init|func|enum|let|var)\b">
+      <rule pattern="(?&lt;!\.)open(?=\s+[a-zA-Z_@])">
+        <token type="KeywordDeclaration"/>
+      </rule>
+      <rule pattern="(fileprivate|typealias|extension|subscript|internal|protocol|operator|private|public|struct|deinit|static|import|class|init|func|enum|let|var)\b">
         <token type="KeywordDeclaration"/>
       </rule>
     </state>
