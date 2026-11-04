@@ -171,7 +171,10 @@
       <rule pattern="@availability\([^)]+\)">
         <token type="KeywordReserved"/>
       </rule>
-      <rule pattern="(@UIApplicationMain|@NSApplicationMain|@IBInspectable|@availability|@IBDesignable|associativity|@autoclosure|convenience|nonmutating|@NSManaged|@NSCopying|precedence|@IBAction|@noreturn|@IBOutlet|override|optional|mutating|indirect|Protocol|rethrows|required|willSet|dynamic|postfix|unowned|throws|prefix|didSet|final|inout|@objc|infix|right|lazy|none|weak|Type|left|get|set)\b">
+      <rule pattern="(@UIApplicationMain|@NSApplicationMain|@IBInspectable|@availability|@IBDesignable|associativity|higherThan|lowerThan|@autoclosure|convenience|nonmutating|@NSManaged|@NSCopying|precedence|@IBAction|@noreturn|@IBOutlet|override|optional|mutating|indirect|Protocol|rethrows|required|willSet|dynamic|postfix|unowned|throws|prefix|didSet|final|inout|@objc|infix|right|lazy|none|weak|Type|left|get|set)\b">
+        <token type="KeywordReserved"/>
+      </rule>
+      <rule pattern="assignment(?=\s*:\s*(?:true|false)\b)">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="(as|dynamicType|false|is|nil|self|Self|super|true|__COLUMN__|__FILE__|__FUNCTION__|__LINE__|_|#(?:file|line|column|function))\b">
@@ -181,7 +184,7 @@
         <token type="KeywordDeclaration"/>
         <push state="module"/>
       </rule>
-      <rule pattern="(associatedtype|class|enum|extension|struct|protocol)(\s+)(?!(?:func|var|let|subscript|override|final|required|convenience|dynamic)\b)([a-zA-Z_]\w*)">
+      <rule pattern="(associatedtype|precedencegroup|class|enum|extension|struct|protocol)(\s+)(?!(?:func|var|let|subscript|override|final|required|convenience|dynamic)\b)([a-zA-Z_]\w*)">
         <bygroups>
           <token type="KeywordDeclaration"/>
           <token type="Text"/>

@@ -1,0 +1,8 @@
+precedencegroup PowerPrecedence {
+    higherThan: MultiplicationPrecedence
+    lowerThan: BitwiseShiftPrecedence
+    associativity: right
+    assignment: false
+}
+infix operator ** : PowerPrecedence
+let assignment = Assignment(assignment: 1)
