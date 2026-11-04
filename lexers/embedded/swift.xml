@@ -135,6 +135,9 @@
         <token type="LiteralString"/>
         <push state="string"/>
       </rule>
+      <rule pattern="\\(?=[.\[a-zA-Z_])">
+        <token type="Operator"/>
+      </rule>
       <rule pattern="[(){}\[\].,:;=@#`?]|-&gt;|[&lt;&amp;?](?=\w)|(?&lt;=\w)[&gt;!?]">
         <token type="Punctuation"/>
       </rule>
