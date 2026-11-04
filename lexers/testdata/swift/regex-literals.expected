@@ -46,7 +46,7 @@
   {"type":"Text","value":" "},
   {"type":"Punctuation","value":"-\u003e"},
   {"type":"Text","value":" "},
-  {"type":"Name","value":"Regex"},
+  {"type":"NameBuiltin","value":"Regex"},
   {"type":"Punctuation","value":"\u003c"},
   {"type":"NameBuiltin","value":"Substring"},
   {"type":"Punctuation","value":"\u003e"},
