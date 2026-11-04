@@ -1,0 +1,6 @@
+func transfer(_ value: sending NonSendable) async -> sending Result {
+    await process(value, isolation: #isolation)
+}
+func load() throws(LoadError) -> Data { try read() }
+extension Date: @retroactive Identifiable {}
+let sending = Message()

@@ -261,7 +261,7 @@
       <rule pattern="(?&lt;!\.)(?:consume|copy|discard|each)(?=\s+[a-zA-Z_(])">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(?&lt;!\.)(?:borrowing|consuming)(?=\s+[a-zA-Z_(\[@])">
+      <rule pattern="(?&lt;!\.)(?:borrowing|consuming|sending)(?=\s+[a-zA-Z_(\[@])">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="(?&lt;!\.)(?:any|some)(?=\s+[a-zA-Z_(\[])">
