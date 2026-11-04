@@ -210,6 +210,9 @@
       <rule pattern="\\(?=[.\[a-zA-Z_])">
         <token type="Operator"/>
       </rule>
+      <rule pattern="#[a-zA-Z_]\w*">
+        <token type="NameFunctionMagic"/>
+      </rule>
       <rule pattern="[(){}\[\].,:;=@#`?]|-&gt;|[&lt;&amp;?](?=\w)|(?&lt;=\w)[&gt;!?]">
         <token type="Punctuation"/>
       </rule>
@@ -281,7 +284,7 @@
           <token type="NameClass"/>
         </bygroups>
       </rule>
-      <rule pattern="(func)(\s+)([a-zA-Z_]\w*)">
+      <rule pattern="(func|macro)(\s+)([a-zA-Z_]\w*)">
         <bygroups>
           <token type="KeywordDeclaration"/>
           <token type="Text"/>
