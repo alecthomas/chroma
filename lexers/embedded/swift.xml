@@ -181,7 +181,7 @@
         <token type="KeywordDeclaration"/>
         <push state="module"/>
       </rule>
-      <rule pattern="(class|enum|extension|struct|protocol)(\s+)(?!(?:func|var|let|subscript|override|final|required|convenience|dynamic)\b)([a-zA-Z_]\w*)">
+      <rule pattern="(associatedtype|class|enum|extension|struct|protocol)(\s+)(?!(?:func|var|let|subscript|override|final|required|convenience|dynamic)\b)([a-zA-Z_]\w*)">
         <bygroups>
           <token type="KeywordDeclaration"/>
           <token type="Text"/>
