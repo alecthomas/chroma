@@ -7,8 +7,9 @@
   <entry type="NameBuiltin" style="#a90d91"/>
   <entry type="NameBuiltinPseudo" style="#5b269a"/>
   <entry type="NameClass" style="#3f6e75"/>
-  <entry type="NameDecorator" style="#000000"/>
+  <entry type="NameDecorator" style="#815f03"/>
   <entry type="NameFunction" style="#000000"/>
+  <entry type="NameFunctionMagic" style="#643820"/>
   <entry type="NameLabel" style="#000000"/>
   <entry type="NameTag" style="#000000"/>
   <entry type="NameVariable" style="#000000"/>
