@@ -201,6 +201,12 @@
         <token type="LiteralString"/>
         <push state="string"/>
       </rule>
+      <rule pattern="(#+)/[\s\S]*?/\1">
+        <token type="LiteralStringRegex"/>
+      </rule>
+      <rule pattern="(?&lt;=(?:^|[=(\[,:{;!&amp;|?]|\b(?:return|case|in|throw|try|await))\s*)/(?![\s/*])(?:\\.|[^/\\\n])*?(?&lt;!\s)/">
+        <token type="LiteralStringRegex"/>
+      </rule>
       <rule pattern="\\(?=[.\[a-zA-Z_])">
         <token type="Operator"/>
       </rule>
