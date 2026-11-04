@@ -9,7 +9,9 @@
   <entry type="NameBuiltin" style="#d0a8ff"/>
   <entry type="NameBuiltinPseudo" style="#a167e6"/>
   <entry type="NameClass" style="#5dd8ff"/>
+  <entry type="NameDecorator" style="#bf8555"/>
   <entry type="NameFunction" style="#41a1c0"/>
+  <entry type="NameFunctionMagic" style="#fd8f3f"/>
   <entry type="NameVariable" style="#41a1c0"/>
   <entry type="LiteralString" style="#fc6a5d"/>
   <entry type="LiteralStringEscape" style="#fc6a5d"/>

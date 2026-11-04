@@ -1,0 +1,2 @@
+struct Todo: Identifiable { let id: UUID }
+let changes: CollectionDifference<Int> = new.difference(from: old)

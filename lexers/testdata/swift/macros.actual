@@ -1,0 +1,18 @@
+@freestanding(expression)
+public macro stringify<T>(_ value: T) -> (T, String) = #externalMacro(module: "Macros", type: "StringifyMacro")
+
+@attached(member, names: named(init))
+macro AutoInit() = #externalMacro(module: "Macros", type: "AutoInitMacro")
+
+#Preview("Light") {
+    ContentView()
+}
+
+@Test func addition() throws {
+    #expect(1 + 1 == 2)
+    let value = try #require(Int("42"))
+    let (result, code) = #stringify(value * 2)
+}
+
+let selector = #selector(tap)
+let line = #line

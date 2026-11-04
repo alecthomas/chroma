@@ -1,0 +1,3 @@
+let nameKey = \Person.name
+let names = people.map(\.name)
+let first = \[String].first?.count

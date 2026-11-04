@@ -1,0 +1,4 @@
+protocol Container {
+    associatedtype Item: Equatable
+    func append(_ item: Item)
+}

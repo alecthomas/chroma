@@ -1,0 +1,6 @@
+let pattern = #"\d+ "quoted" \(literal)"#
+let interpolated = #"Hello \#(name)\#n"#
+let doubled = ##"contains "# inside"##
+let block = #"""
+    Raw "block" with \#(value) and \n kept
+    """#

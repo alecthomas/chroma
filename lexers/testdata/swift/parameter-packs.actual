@@ -1,0 +1,4 @@
+func zip<each T, each U>(_ t: repeat each T, _ u: repeat each U) -> (repeat (each T, each U)) {
+    return (repeat (each t, each u))
+}
+list.each { print($0) }
