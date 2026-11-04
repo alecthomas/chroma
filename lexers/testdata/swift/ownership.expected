@@ -5,7 +5,7 @@
   {"type":"Punctuation","value":":"},
   {"type":"Text","value":" "},
   {"type":"Operator","value":"~"},
-  {"type":"Name","value":"Copyable"},
+  {"type":"NameBuiltin","value":"Copyable"},
   {"type":"Text","value":" "},
   {"type":"Punctuation","value":"{"},
   {"type":"Text","value":"\n    "},
