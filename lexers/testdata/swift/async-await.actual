@@ -1,0 +1,8 @@
+func show(req: Request, id: UUID) async throws -> Todo {
+    async let user = fetchUser()
+    guard let todo = try await Todo.find(id, on: req.db) else {
+        throw Abort(.notFound)
+    }
+    return await todo.with(user)
+}
+DispatchQueue.main.async { refresh() }

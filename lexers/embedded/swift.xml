@@ -237,6 +237,12 @@
       <rule pattern="(fallthrough|#selector|continue|default|repeat|switch|return|throw|catch|where|break|guard|defer|while|case|else|try|for|if|do|is|in|as)\b">
         <token type="Keyword"/>
       </rule>
+      <rule pattern="(?&lt;!\.)await\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="(?&lt;!\.)async\b">
+        <token type="KeywordReserved"/>
+      </rule>
       <rule pattern="(?&lt;!\.)some(?=\s+[a-zA-Z_(\[])">
         <token type="Keyword"/>
       </rule>
