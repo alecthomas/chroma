@@ -1,0 +1,5 @@
+class Shape {
+    class func make() -> Shape { Shape() }
+    class var sides: Int { 0 }
+    override class func describe() {}
+}
