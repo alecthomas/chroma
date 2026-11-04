@@ -246,7 +246,7 @@
       <rule pattern="(?&lt;!\.)isolated(?=\s+[a-zA-Z_(])">
         <token type="KeywordReserved"/>
       </rule>
-      <rule pattern="(?&lt;!\.)some(?=\s+[a-zA-Z_(\[])">
+      <rule pattern="(?&lt;!\.)(?:any|some)(?=\s+[a-zA-Z_(\[])">
         <token type="Keyword"/>
       </rule>
       <rule pattern="@[a-zA-Z_]\w*">
