@@ -249,6 +249,9 @@
       <rule pattern="(?&lt;!\.)async\b">
         <token type="KeywordReserved"/>
       </rule>
+      <rule pattern="(?&lt;!\.)distributed(?=\s+(?:actor|func|var)\b)">
+        <token type="KeywordReserved"/>
+      </rule>
       <rule pattern="(?&lt;!\.)isolated(?=\s+[a-zA-Z_(])">
         <token type="KeywordReserved"/>
       </rule>

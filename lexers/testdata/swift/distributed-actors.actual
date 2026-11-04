@@ -1,0 +1,7 @@
+import Distributed
+
+distributed actor Player {
+    typealias ActorSystem = LocalTestingDistributedActorSystem
+    distributed func move(to position: Position) {}
+}
+let distributed = true
