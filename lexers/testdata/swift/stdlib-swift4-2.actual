@@ -1,0 +1,3 @@
+enum Suit: CaseIterable { case hearts, spades }
+var hasher = Hasher()
+var generator = SystemRandomNumberGenerator()
