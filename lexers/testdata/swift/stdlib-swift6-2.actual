@@ -1,0 +1,3 @@
+struct View: ~Escapable {}
+let grid: InlineArray<4, Int> = [1, 2, 3, 4]
+func sum(_ values: Span<Int>) -> Int { 0 }
