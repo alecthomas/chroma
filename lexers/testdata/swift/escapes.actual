@@ -1,0 +1,3 @@
+let nul = "\0"
+let heart = "\u{2665} \u{1F600}"
+let quoted = "say \"hi\"\n\t\\"
