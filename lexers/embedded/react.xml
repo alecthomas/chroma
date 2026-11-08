@@ -44,7 +44,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="([\w]+\s*)(=)(\s*)">
+      <rule pattern="([\w-]+\s*)(=)(\s*)">
         <bygroups>
           <token type="NameAttribute"/>
           <token type="Operator"/>
@@ -55,7 +55,7 @@
       <rule pattern="[{}]+">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="[\w\.]+">
+      <rule pattern="[\w\.-]+">
         <token type="NameAttribute"/>
       </rule>
       <rule pattern="(/?)(\s*)(&gt;)">
