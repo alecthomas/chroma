@@ -275,7 +275,7 @@
           <token type="KeywordType" />
         </bygroups>
       </rule>
-      <rule pattern="[$a-zA-Z_]\w*">
+      <rule pattern="[$_\p{L}]\w*">
         <token type="NameOther" />
       </rule>
       <rule pattern="\d+(\.\d*([eE][+\-]?\d+)?|[eE][+\-]?\d+)">
