@@ -1,0 +1,14 @@
+@api path /api/*
+reverse_proxy @api localhost:8080 {
+	header_up Host {upstream_hostport}
+}
+
+handle_path /static/* {
+	root * /srv/static
+	file_server
+}
+
+# A comment
+encode gzip zstd
+try_files {path} /index.html
+respond "Not found" 404
