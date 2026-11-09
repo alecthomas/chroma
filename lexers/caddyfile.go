@@ -193,67 +193,6 @@ func caddyfileCommonRules() Rules {
 	}
 }
 
-// Caddyfile lexer.
-var Caddyfile = Register(MustNewLexer(
-	&Config{
-		Name:      "Caddyfile",
-		Aliases:   []string{"caddyfile", "caddy"},
-		Filenames: []string{"Caddyfile*"},
-		MimeTypes: []string{},
-	},
-	caddyfileRules,
-))
-
-func caddyfileRules() Rules {
-	return Rules{
-		"root": {
-			{caddyfileCommentRegexp, CommentSingle, nil},
-			// Global options block
-			{`^\s*(\{)\s*$`, ByGroups(Punctuation), Push("globals")},
-			// Top level import
-			{`(import)(\s+)([^\s]+)`, ByGroups(Keyword, Text, NameVariableMagic), nil},
-			// Snippets
-			{`(&?\([^\s#]+\))(\s*)(\{)`, ByGroups(NameVariableAnonymous, Text, Punctuation), Push("snippet")},
-			// Site label
-			{`[^#{(\s,]+`, GenericHeading, Push("label")},
-			// Site label with placeholder
-			{`\{[\w+.\[\]\:\$-]+\}`, StringEscape, Push("label")},
-			{`\s+`, Text, nil},
-		},
-		"globals": {
-			{`\}`, Punctuation, Pop(1)},
-			// Global options are parsed as subdirectives (no matcher)
-			{`[^\s#]+`, Keyword, Push("subdirective")},
-			Include("base"),
-		},
-		"snippet": {
-			{`\}`, Punctuation, Pop(1)},
-			Include("site_body"),
-			// Any other directive
-			{`[^\s#]+`, Keyword, Push("directive")},
-			Include("base"),
-		},
-		"label": {
-			// Allow multiple labels, comma separated, newlines after
-			// a comma means another label is coming
-			{`,\s*\n?`, Text, nil},
-			{` `, Text, nil},
-			// Site label with placeholder
-			Include("placeholder"),
-			// Site label
-			{`[^#{(\s,]+`, GenericHeading, nil},
-			// Comment after non-block label (hack because comments end in \n)
-			{`#.*\n`, CommentSingle, Push("site_block")},
-			// Note: if \n, we'll never pop out of the site_block, it's valid
-			{`\{(?=\s)|\n`, Punctuation, Push("site_block")},
-		},
-		"site_block": {
-			{`\}`, Punctuation, Pop(2)},
-			Include("site_block_common"),
-		},
-	}.Merge(caddyfileCommonRules())
-}
-
 // Caddyfile directive-only lexer.
 var CaddyfileDirectives = Register(MustNewLexer(
 	&Config{

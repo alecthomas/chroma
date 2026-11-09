@@ -1,0 +1,540 @@
+<lexer>
+  <config>
+    <name>Caddyfile</name>
+    <alias>caddyfile</alias>
+    <alias>caddy</alias>
+    <filename>Caddyfile*</filename>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="(^|\s+)#.*\n">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="^\s*(\{)\s*$">
+        <bygroups>
+          <token type="Punctuation"/>
+        </bygroups>
+        <push state="globals"/>
+      </rule>
+      <rule pattern="(import)(\s+)([^\s]+)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <token type="NameVariableMagic"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(&amp;?\([^\s#]+\))(\s*)(\{)">
+        <bygroups>
+          <token type="NameVariableAnonymous"/>
+          <token type="Text"/>
+          <token type="Punctuation"/>
+        </bygroups>
+        <push state="snippet"/>
+      </rule>
+      <rule pattern="[^#{(\s,]+">
+        <token type="GenericHeading"/>
+        <push state="label"/>
+      </rule>
+      <rule pattern="\{[\w+.\[\]\:\$-]+\}">
+        <token type="LiteralStringEscape"/>
+        <push state="label"/>
+      </rule>
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="globals">
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^\s#]+">
+        <token type="Keyword"/>
+        <push state="subdirective"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="snippet">
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="site_body"/>
+      </rule>
+      <rule pattern="[^\s#]+">
+        <token type="Keyword"/>
+        <push state="directive"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="label">
+      <rule pattern=",\s*\n?">
+        <token type="Text"/>
+      </rule>
+      <rule pattern=" ">
+        <token type="Text"/>
+      </rule>
+      <rule>
+        <include state="placeholder"/>
+      </rule>
+      <rule pattern="[^#{(\s,]+">
+        <token type="GenericHeading"/>
+      </rule>
+      <rule pattern="#.*\n">
+        <token type="CommentSingle"/>
+        <push state="site_block"/>
+      </rule>
+      <rule pattern="\{(?=\s)|\n">
+        <token type="Punctuation"/>
+        <push state="site_block"/>
+      </rule>
+    </state>
+    <state name="site_block">
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="2"/>
+      </rule>
+      <rule>
+        <include state="site_block_common"/>
+      </rule>
+    </state>
+    <state name="site_block_common">
+      <rule>
+        <include state="site_body"/>
+      </rule>
+      <rule pattern="[^\s#]+">
+        <token type="Keyword"/>
+        <push state="directive"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="site_body">
+      <rule pattern="\b(import|invoke)\b( [^\s#]+)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Text"/>
+        </bygroups>
+        <push state="subdirective"/>
+      </rule>
+      <rule pattern="@[^\s]+(?=\s)">
+        <token type="NameDecorator"/>
+        <push state="matcher"/>
+      </rule>
+      <rule pattern="\[\&lt;matcher\&gt;\]">
+        <token type="NameDecorator"/>
+        <push state="matcher"/>
+      </rule>
+      <rule pattern="\b(try_files|tls|log|bind)\b">
+        <token type="Keyword"/>
+        <push state="subdirective"/>
+      </rule>
+      <rule pattern="\b(handle_errors|handle_path|handle_response|replace_status|handle|route)\b">
+        <token type="Keyword"/>
+        <push state="nested_directive"/>
+      </rule>
+      <rule pattern="\b(uri)\b">
+        <token type="Keyword"/>
+        <push state="uri_directive"/>
+      </rule>
+    </state>
+    <state name="matcher">
+      <rule pattern="\{">
+        <token type="Punctuation"/>
+        <push state="block"/>
+      </rule>
+      <rule pattern="not">
+        <token type="Keyword"/>
+        <push state="deep_not_matcher"/>
+      </rule>
+      <rule>
+        <include state="heredoc"/>
+      </rule>
+      <rule pattern="`">
+        <token type="LiteralStringBacktick"/>
+        <push state="backticks"/>
+      </rule>
+      <rule pattern="[^\s#]+">
+        <token type="Keyword"/>
+        <push state="arguments"/>
+      </rule>
+      <rule pattern="\s*\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="block">
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="2"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <push state="double_quotes"/>
+      </rule>
+      <rule pattern="`">
+        <token type="LiteralStringBacktick"/>
+        <push state="backticks"/>
+      </rule>
+      <rule pattern="not">
+        <token type="Keyword"/>
+        <push state="not_matcher"/>
+      </rule>
+      <rule>
+        <include state="site_body"/>
+      </rule>
+      <rule pattern="[^\s#]+">
+        <token type="Keyword"/>
+        <push state="subdirective"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="nested_block">
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="2"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <push state="double_quotes"/>
+      </rule>
+      <rule pattern="`">
+        <token type="LiteralStringBacktick"/>
+        <push state="backticks"/>
+      </rule>
+      <rule pattern="not">
+        <token type="Keyword"/>
+        <push state="not_matcher"/>
+      </rule>
+      <rule>
+        <include state="site_body"/>
+      </rule>
+      <rule pattern="[^\s#]+">
+        <token type="Keyword"/>
+        <push state="directive"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="not_matcher">
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="2"/>
+      </rule>
+      <rule pattern="\{(?=\s)">
+        <token type="Punctuation"/>
+        <push state="block"/>
+      </rule>
+      <rule pattern="[^\s#]+">
+        <token type="Keyword"/>
+        <push state="arguments"/>
+      </rule>
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="deep_not_matcher">
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="2"/>
+      </rule>
+      <rule pattern="\{(?=\s)">
+        <token type="Punctuation"/>
+        <push state="block"/>
+      </rule>
+      <rule pattern="[^\s#]+">
+        <token type="Keyword"/>
+        <push state="deep_subdirective"/>
+      </rule>
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="directive">
+      <rule pattern="\{(?=\s)">
+        <token type="Punctuation"/>
+        <push state="block"/>
+      </rule>
+      <rule pattern="(\[\&lt;matcher\&gt;\]|@[^\s]+|/[^\s]+|\*)">
+        <token type="NameDecorator"/>
+        <push state="arguments"/>
+      </rule>
+      <rule pattern="(^|\s+)#.*\n">
+        <token type="CommentSingle"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\s*\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="nested_directive">
+      <rule pattern="\{(?=\s)">
+        <token type="Punctuation"/>
+        <push state="nested_block"/>
+      </rule>
+      <rule pattern="(\[\&lt;matcher\&gt;\]|@[^\s]+|/[^\s]+|\*)">
+        <token type="NameDecorator"/>
+        <push state="nested_arguments"/>
+      </rule>
+      <rule pattern="(^|\s+)#.*\n">
+        <token type="CommentSingle"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\s*\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="subdirective">
+      <rule pattern="\{(?=\s)">
+        <token type="Punctuation"/>
+        <push state="block"/>
+      </rule>
+      <rule pattern="(^|\s+)#.*\n">
+        <token type="CommentSingle"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\s*\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="arguments">
+      <rule pattern="\{(?=\s)">
+        <token type="Punctuation"/>
+        <push state="block"/>
+      </rule>
+      <rule pattern="(^|\s+)#.*\n">
+        <token type="CommentSingle"/>
+        <pop depth="2"/>
+      </rule>
+      <rule pattern="\\\n">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\s*\n">
+        <token type="Text"/>
+        <pop depth="2"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="nested_arguments">
+      <rule pattern="\{(?=\s)">
+        <token type="Punctuation"/>
+        <push state="nested_block"/>
+      </rule>
+      <rule pattern="(^|\s+)#.*\n">
+        <token type="CommentSingle"/>
+        <pop depth="2"/>
+      </rule>
+      <rule pattern="\\\n">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\s*\n">
+        <token type="Text"/>
+        <pop depth="2"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="deep_subdirective">
+      <rule pattern="\{(?=\s)">
+        <token type="Punctuation"/>
+        <push state="block"/>
+      </rule>
+      <rule pattern="(^|\s+)#.*\n">
+        <token type="CommentSingle"/>
+        <pop depth="3"/>
+      </rule>
+      <rule pattern="\s*\n">
+        <token type="Text"/>
+        <pop depth="3"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="uri_directive">
+      <rule pattern="\{(?=\s)">
+        <token type="Punctuation"/>
+        <push state="block"/>
+      </rule>
+      <rule pattern="(\[\&lt;matcher\&gt;\]|@[^\s]+|/[^\s]+|\*)">
+        <token type="NameDecorator"/>
+      </rule>
+      <rule pattern="(strip_prefix|strip_suffix|replace|path_regexp)">
+        <token type="NameConstant"/>
+        <push state="arguments"/>
+      </rule>
+      <rule pattern="(^|\s+)#.*\n">
+        <token type="CommentSingle"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\s*\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <include state="base"/>
+      </rule>
+    </state>
+    <state name="double_quotes">
+      <rule>
+        <include state="placeholder"/>
+      </rule>
+      <rule pattern="\\&#34;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="[^&#34;]">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="backticks">
+      <rule>
+        <include state="placeholder"/>
+      </rule>
+      <rule pattern="\\`">
+        <token type="LiteralStringBacktick"/>
+      </rule>
+      <rule pattern="[^`]">
+        <token type="LiteralStringBacktick"/>
+      </rule>
+      <rule pattern="`">
+        <token type="LiteralStringBacktick"/>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="optional">
+      <rule pattern="\[">
+        <token type="Punctuation"/>
+        <push state="optional"/>
+      </rule>
+      <rule>
+        <include state="name_constants"/>
+      </rule>
+      <rule pattern="\|">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[^\[\]\|]+">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="\]">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="heredoc">
+      <rule pattern="(&lt;&lt;([a-zA-Z0-9_-]+))(\n(.*|\n)*)(\s*)(\2)">
+        <bygroups>
+          <token type="LiteralStringHeredoc"/>
+          <token type="Ignore"/>
+          <token type="LiteralString"/>
+          <token type="LiteralString"/>
+          <token type="LiteralString"/>
+          <token type="LiteralStringHeredoc"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="name_constants">
+      <rule pattern="\b(most_recently_modified|largest_size|smallest_size|first_exist|internal|disable_redirects|ignore_loaded_certs|disable_certs|private_ranges|first|last|before|after|on|off)\b(\||(?=\]|\s|$))">
+        <bygroups>
+          <token type="NameConstant"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+    </state>
+    <state name="placeholder">
+      <rule pattern="\{[\w+.\[\]\:\$-]+\}">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="\{[^\}\s]*\b">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+    <state name="base">
+      <rule pattern="(^|\s+)#.*\n">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="\[\&lt;matcher\&gt;\]">
+        <token type="NameDecorator"/>
+      </rule>
+      <rule>
+        <include state="name_constants"/>
+      </rule>
+      <rule>
+        <include state="heredoc"/>
+      </rule>
+      <rule pattern="(https?://)?([a-z0-9.-]+)(:)([0-9]+)([^\s]*)">
+        <bygroups>
+          <token type="Name"/>
+          <token type="Name"/>
+          <token type="Punctuation"/>
+          <token type="LiteralNumberInteger"/>
+          <token type="Name"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\[">
+        <token type="Punctuation"/>
+        <push state="optional"/>
+      </rule>
+      <rule pattern="`">
+        <token type="LiteralStringBacktick"/>
+        <push state="backticks"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <push state="double_quotes"/>
+      </rule>
+      <rule>
+        <include state="placeholder"/>
+      </rule>
+      <rule pattern="[a-z-]+/[a-z-+]+">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="[0-9]+([smhdk]|ns|us|µs|ms)?\b">
+        <token type="LiteralNumberInteger"/>
+      </rule>
+      <rule pattern="[^\s\n#\{]+">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="/[^\s#]*">
+        <token type="Name"/>
+      </rule>
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

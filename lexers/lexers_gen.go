@@ -622,6 +622,16 @@ var embeddedLexers = []struct {
 		},
 		DotAll: true,
 	}},
+	{"embedded/caddyfile.xml", chroma.Config{
+		Name: "Caddyfile",
+		Aliases: []string{
+			"caddyfile",
+			"caddy",
+		},
+		Filenames: []string{
+			"Caddyfile*",
+		},
+	}},
 	{"embedded/cap_n_proto.xml", chroma.Config{
 		Name: "Cap'n Proto",
 		Aliases: []string{
