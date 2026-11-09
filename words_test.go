@@ -1,7 +1,9 @@
 package chroma
 
 import (
+	"fmt"
 	"slices"
+	"strings"
 	"testing"
 	"testing/fstest"
 
@@ -48,6 +50,35 @@ func TestWordsMatchLikeRegex(t *testing.T) {
 			assert.Equal(t, slices.Collect(regexTokens), slices.Collect(nativeTokens))
 		})
 	}
+}
+
+func TestWordTrieLargeList(t *testing.T) {
+	var words []string
+	for i := range 3000 {
+		words = append(words, fmt.Sprintf("w%dö%x", i%97, i))
+	}
+	runes := make([][]rune, len(words))
+	for i, word := range words {
+		runes[i] = []rune(word)
+	}
+	trie := newWordTrie(runes)
+	lookup := func(s string) bool {
+		state := int32(0)
+		for _, b := range []byte(s) {
+			var ok bool
+			if state, ok = trie.step(state, b); !ok {
+				return false
+			}
+		}
+		return trie.isTerminal(state)
+	}
+	for _, word := range words {
+		assert.True(t, lookup(word), word)
+		assert.False(t, lookup(word+"z"), word+"z")
+		assert.False(t, lookup(strings.TrimSuffix(word, word[len(word)-1:])+"q"), word)
+	}
+	assert.False(t, lookup("w"))
+	assert.False(t, lookup("w1ö"))
 }
 
 func TestWordsFollowCaseInsensitiveConfig(t *testing.T) {
