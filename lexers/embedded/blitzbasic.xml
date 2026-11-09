@@ -48,7 +48,7 @@
       <rule pattern="\%[10]+">
         <token type="LiteralNumberBin"/>
       </rule>
-      <rule pattern="\b(Before|Handle|After|First|Float|Last|Sgn|Abs|Not|And|Int|Mod|Str|Sar|Shr|Shl|Or)\b">
+      <rule words="Before Handle After First Float Last Sgn Abs Not And Int Mod Str Sar Shr Shl Or" prefix="\b" suffix="\b">
         <token type="Operator"/>
       </rule>
       <rule pattern="([+\-*/~=&lt;&gt;^])">
@@ -116,13 +116,13 @@
           <token type="NameClass"/>
         </bygroups>
       </rule>
-      <rule pattern="\b(Pi|True|False|Null)\b">
+      <rule words="Pi True False Null" prefix="\b" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="\b(Local|Global|Const|Field|Dim)\b">
+      <rule words="Local Global Const Field Dim" prefix="\b" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="\b(Function|Restore|Default|Forever|Include|Return|Repeat|ElseIf|Delete|Insert|Select|EndIf|Until|While|Gosub|Type|Goto|Else|Data|Next|Step|Each|Case|Wend|Exit|Read|Then|For|New|Asc|Len|Chr|End|To|If)\b">
+      <rule words="Function Restore Default Forever Include Return Repeat ElseIf Delete Insert Select EndIf Until While Gosub Type Goto Else Data Next Step Each Case Wend Exit Read Then For New Asc Len Chr End To If" prefix="\b" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="([a-z]\w*)(?:([ \t]*)(@{1,2}|[#$%])|([ \t]*)([.])([ \t]*)(?:([a-z]\w*)))?">

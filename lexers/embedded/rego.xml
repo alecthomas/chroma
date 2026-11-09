@@ -6,7 +6,7 @@
   </config>
   <rules>
     <state name="root">
-      <rule pattern="(package|import|as|not|with|default|else|some|in|if|contains)\b">
+      <rule words="package import as not with default else some in if contains" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
       <!-- importing keywords should then show up as keywords -->
@@ -26,7 +26,7 @@
           <token type="CommentSpecial"/>
         </bygroups>
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="\d+i">

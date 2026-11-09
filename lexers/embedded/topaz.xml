@@ -16,12 +16,12 @@
       <rule pattern="0[bB][01](?:_?[01])*"><token type="LiteralNumberBin"/></rule>
       <rule pattern="\d(?:_?\d)*\.\d(?:_?\d)*"><token type="LiteralNumberFloat"/></rule>
       <rule pattern="\d(?:_?\d)*"><token type="LiteralNumberInteger"/></rule>
-      <rule pattern="(import|export|as)(?![\p{L}\p{N}_\p{So}])"><token type="KeywordNamespace"/></rule>
-      <rule pattern="(let|mut|const|type|function|record|enum|newtype|protocol|impl|derives)(?![\p{L}\p{N}_\p{So}])"><token type="KeywordDeclaration"/></rule>
-      <rule pattern="(return|if|else|match|case|for|in|by|while|loop|break|continue|defer|using|concurrent)(?![\p{L}\p{N}_\p{So}])"><token type="Keyword"/></rule>
-      <rule pattern="(true|false|null|None)(?![\p{L}\p{N}_\p{So}])"><token type="KeywordConstant"/></rule>
-      <rule pattern="(int|float|bool|string|template|Array|Map|Set|Option|Result|Eq|Order|Show|JSON)(?![\p{L}\p{N}_\p{So}])"><token type="KeywordType"/></rule>
-      <rule pattern="(Some|Ok|Err)(?![\p{L}\p{N}_\p{So}])"><token type="NameBuiltin"/></rule>
+      <rule words="import export as" suffix="(?![\p{L}\p{N}_\p{So}])"><token type="KeywordNamespace"/></rule>
+      <rule words="let mut const type function record enum newtype protocol impl derives" suffix="(?![\p{L}\p{N}_\p{So}])"><token type="KeywordDeclaration"/></rule>
+      <rule words="return if else match case for in by while loop break continue defer using concurrent" suffix="(?![\p{L}\p{N}_\p{So}])"><token type="Keyword"/></rule>
+      <rule words="true false null None" suffix="(?![\p{L}\p{N}_\p{So}])"><token type="KeywordConstant"/></rule>
+      <rule words="int float bool string template Array Map Set Option Result Eq Order Show JSON" suffix="(?![\p{L}\p{N}_\p{So}])"><token type="KeywordType"/></rule>
+      <rule words="Some Ok Err" suffix="(?![\p{L}\p{N}_\p{So}])"><token type="NameBuiltin"/></rule>
       <rule pattern="[\p{L}_\p{So}][\p{L}\p{N}_\p{So}]*"><token type="Name"/></rule>
       <rule pattern="-&gt;|=&gt;|\.\.&lt;|\.\.\.|\.\.|[+*/%=!&lt;&gt;|&amp;?^-]+"><token type="Operator"/></rule>
       <rule pattern="[{}()\[\],.:]"><token type="Punctuation"/></rule>

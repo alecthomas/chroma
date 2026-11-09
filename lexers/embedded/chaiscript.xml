@@ -90,7 +90,7 @@
       <rule pattern="[=+\-*/]">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(for|in|while|do|break|return|continue|if|else|throw|try|catch)\b">
+      <rule words="for in while do break return continue if else throw try catch" suffix="\b">
         <token type="Keyword"/>
         <push state="slashstartsregex"/>
       </rule>
@@ -98,13 +98,13 @@
         <token type="KeywordDeclaration"/>
         <push state="slashstartsregex"/>
       </rule>
-      <rule pattern="(attr|def|fun)\b">
+      <rule words="attr def fun" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
-      <rule pattern="(true|false)\b">
+      <rule words="true false" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(eval|throw)\b">
+      <rule words="eval throw" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="`\S+`">

@@ -48,7 +48,7 @@
       <rule pattern="\\">
         <token type="Text"/>
       </rule>
-      <rule pattern="(in|is|and|or|not)\b">
+      <rule words="in is and or not" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="(&lt;)([a-zA-Z0-9.?]+)(&gt;)">
@@ -203,10 +203,10 @@
       </rule>
     </state>
     <state name="keywords">
-      <rule pattern="(continue|ctypedef|except\?|include|finally|global|return|lambda|assert|except|print|nogil|while|fused|yield|break|raise|exec|else|elif|pass|with|gil|for|try|del|by|as|if)\b">
+      <rule words="continue ctypedef except? include finally global return lambda assert except print nogil while fused yield break raise exec else elif pass with gil for try del by as if" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(DEF|IF|ELIF|ELSE)\b">
+      <rule words="DEF IF ELIF ELSE" suffix="\b">
         <token type="CommentPreproc"/>
       </rule>
     </state>
@@ -285,10 +285,10 @@
       </rule>
     </state>
     <state name="cdef">
-      <rule pattern="(public|readonly|extern|api|inline)\b">
+      <rule words="public readonly extern api inline" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
-      <rule pattern="(struct|enum|union|class)\b">
+      <rule words="struct enum union class" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="([a-zA-Z_]\w*)(\s*)(?=[(:#=]|$)">
@@ -358,13 +358,13 @@
       </rule>
     </state>
     <state name="builtins">
-      <rule pattern="(?&lt;!\.)(staticmethod|classmethod|__import__|issubclass|isinstance|basestring|bytearray|raw_input|frozenset|enumerate|property|unsigned|reversed|callable|execfile|hasattr|compile|complex|delattr|setattr|unicode|globals|getattr|reload|divmod|xrange|unichr|filter|reduce|buffer|intern|coerce|sorted|locals|object|round|input|range|super|tuple|bytes|float|slice|apply|bool|long|exit|vars|file|next|type|iter|open|dict|repr|hash|list|eval|oct|map|zip|int|hex|set|sum|chr|cmp|any|str|pow|ord|dir|len|min|all|abs|max|bin|id)\b">
+      <rule words="staticmethod classmethod __import__ issubclass isinstance basestring bytearray raw_input frozenset enumerate property unsigned reversed callable execfile hasattr compile complex delattr setattr unicode globals getattr reload divmod xrange unichr filter reduce buffer intern coerce sorted locals object round input range super tuple bytes float slice apply bool long exit vars file next type iter open dict repr hash list eval oct map zip int hex set sum chr cmp any str pow ord dir len min all abs max bin id" prefix="(?&lt;!\.)" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(?&lt;!\.)(self|None|Ellipsis|NotImplemented|False|True|NULL)\b">
+      <rule words="self None Ellipsis NotImplemented False True NULL" prefix="(?&lt;!\.)" suffix="\b">
         <token type="NameBuiltinPseudo"/>
       </rule>
-      <rule pattern="(?&lt;!\.)(PendingDeprecationWarning|UnicodeTranslateError|NotImplementedError|FloatingPointError|DeprecationWarning|UnicodeDecodeError|UnicodeEncodeError|UnboundLocalError|KeyboardInterrupt|ZeroDivisionError|IndentationError|EnvironmentError|OverflowWarning|ArithmeticError|RuntimeWarning|UnicodeWarning|AttributeError|AssertionError|NotImplemented|ReferenceError|StopIteration|SyntaxWarning|OverflowError|GeneratorExit|FutureWarning|BaseException|ImportWarning|StandardError|RuntimeError|UnicodeError|LookupError|ImportError|SyntaxError|MemoryError|SystemError|UserWarning|SystemExit|ValueError|IndexError|NameError|TypeError|Exception|KeyError|EOFError|TabError|OSError|Warning|IOError)\b">
+      <rule words="PendingDeprecationWarning UnicodeTranslateError NotImplementedError FloatingPointError DeprecationWarning UnicodeDecodeError UnicodeEncodeError UnboundLocalError KeyboardInterrupt ZeroDivisionError IndentationError EnvironmentError OverflowWarning ArithmeticError RuntimeWarning UnicodeWarning AttributeError AssertionError NotImplemented ReferenceError StopIteration SyntaxWarning OverflowError GeneratorExit FutureWarning BaseException ImportWarning StandardError RuntimeError UnicodeError LookupError ImportError SyntaxError MemoryError SystemError UserWarning SystemExit ValueError IndexError NameError TypeError Exception KeyError EOFError TabError OSError Warning IOError" prefix="(?&lt;!\.)" suffix="\b">
         <token type="NameException"/>
       </rule>
     </state>

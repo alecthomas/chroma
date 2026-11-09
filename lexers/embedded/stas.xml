@@ -44,16 +44,16 @@
       <rule pattern="(\n|\s)+">
         <token type="Text"/>
       </rule>
-      <rule pattern="(?&lt;!\S)(fn|argc|argv|swap|dup|over|over2|rot|rot4|drop|w8|w16|w32|w64|r8|r16|r32|r64|syscall0|syscall1|syscall2|syscall3|syscall4|syscall5|syscall6|_breakpoint|assert|const|auto|reserve|pop|include|addr|if|else|elif|while|break|continue|ret)(?!\S)">
+      <rule words="fn argc argv swap dup over over2 rot rot4 drop w8 w16 w32 w64 r8 r16 r32 r64 syscall0 syscall1 syscall2 syscall3 syscall4 syscall5 syscall6 _breakpoint assert const auto reserve pop include addr if else elif while break continue ret" prefix="(?&lt;!\S)" suffix="(?!\S)">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(?&lt;!\S)(\+|\-|\*|\/|\%|\%\%|\+\+|\-\-|&gt;&gt;|&lt;&lt;)(?!\S)">
+      <rule words="+ - * / % %% ++ -- &gt;&gt; &lt;&lt;" prefix="(?&lt;!\S)" suffix="(?!\S)">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(?&lt;!\S)(\=|\!\=|&gt;|&lt;|&gt;\=|&lt;\=|&gt;s|&lt;s|&gt;\=s|&lt;\=s)(?!\S)">
+      <rule words="= != &gt; &lt; &gt;= &lt;= &gt;s &lt;s &gt;=s &lt;=s" prefix="(?&lt;!\S)" suffix="(?!\S)">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(?&lt;!\S)(\&amp;|\||\^|\~|\!|-\>)(?!\S)">
+      <rule words="&amp; | ^ ~ ! -&gt;" prefix="(?&lt;!\S)" suffix="(?!\S)">
         <token type="Operator"/>
       </rule>
       <rule pattern="(?&lt;!\S)\-?(\d+)(?!\S)">

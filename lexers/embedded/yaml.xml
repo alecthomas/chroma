@@ -56,7 +56,7 @@
           <token type="Ignore"/>
         </bygroups>
       </rule>
-      <rule pattern="(false|False|FALSE|true|True|TRUE|null|Off|off|yes|Yes|YES|OFF|On|ON|no|No|on|NO|n|N|Y|y)\b">
+      <rule words="false False FALSE true True TRUE null Off off yes Yes YES OFF On ON no No on NO n N Y y" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="&#34;(?:\\.|[^&#34;])*&#34;">

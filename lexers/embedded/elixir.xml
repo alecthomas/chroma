@@ -257,25 +257,25 @@
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="(fn|do|end|after|else|rescue|catch)\b">
+      <rule words="fn do end after else rescue catch" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(not|and|or|when|in)\b">
+      <rule words="not and or when in" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="(case|cond|for|if|unless|try|receive|raise|quote|unquote|unquote_splicing|throw|super|while)\b">
+      <rule words="case cond for if unless try receive raise quote unquote unquote_splicing throw super while" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(def|defp|defmodule|defprotocol|defmacro|defmacrop|defdelegate|defexception|defstruct|defimpl|defcallback)\b">
+      <rule words="def defp defmodule defprotocol defmacro defmacrop defdelegate defexception defstruct defimpl defcallback" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(import|require|use|alias)\b">
+      <rule words="import require use alias" suffix="\b">
         <token type="KeywordNamespace"/>
       </rule>
-      <rule pattern="(nil|true|false)\b">
+      <rule words="nil true false" suffix="\b">
         <token type="NameConstant"/>
       </rule>
-      <rule pattern="(_|__MODULE__|__DIR__|__ENV__|__CALLER__)\b">
+      <rule words="_ __MODULE__ __DIR__ __ENV__ __CALLER__" suffix="\b">
         <token type="NamePseudo"/>
       </rule>
       <rule pattern="@(?:\.\.\.|[a-z_]\w*[!?]?)">
@@ -290,19 +290,19 @@
           <token type="NameClass"/>
         </bygroups>
       </rule>
-      <rule pattern="\&lt;\&lt;\&lt;|\&gt;\&gt;\&gt;|\|\|\||\&amp;\&amp;\&amp;|\^\^\^|\~\~\~|\=\=\=|\!\=\=|\~\&gt;\&gt;|\&lt;\~\&gt;|\|\~\&gt;|\&lt;\|\&gt;">
+      <rule words="&lt;&lt;&lt; &gt;&gt;&gt; ||| &amp;&amp;&amp; ^^^ ~~~ === !== ~&gt;&gt; &lt;~&gt; |~&gt; &lt;|&gt;">
         <token type="Operator"/>
       </rule>
-      <rule pattern="\=\=|\!\=|\&lt;\=|\&gt;\=|\&amp;\&amp;|\|\||\&lt;\&gt;|\+\+|\-\-|\|\&gt;|\=\~|\-\&gt;|\&lt;\-|\||\.|\=|\~\&gt;|\&lt;\~">
+      <rule words="== != &lt;= &gt;= &amp;&amp; || &lt;&gt; ++ -- |&gt; =~ -&gt; &lt;- | . = ~&gt; &lt;~">
         <token type="Operator"/>
       </rule>
-      <rule pattern="\\\\|\&lt;\&lt;|\&gt;\&gt;|\=\&gt;|\(|\)|\:|\;|\,|\[|\]">
+      <rule words="\\ &lt;&lt; &gt;&gt; =&gt; ( ) : ; , [ ]">
         <token type="Punctuation"/>
       </rule>
       <rule pattern="&amp;\d">
         <token type="NameEntity"/>
       </rule>
-      <rule pattern="\&lt;|\&gt;|\+|\-|\*|\/|\!|\^|\&amp;">
+      <rule words="&lt; &gt; + - * / ! ^ &amp;">
         <token type="Operator"/>
       </rule>
       <rule pattern="0b[01](_?[01])*">

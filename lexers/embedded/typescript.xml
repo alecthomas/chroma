@@ -221,7 +221,7 @@
         <token type="Keyword" />
         <push state="slashstartsregex" />
       </rule>
-      <rule pattern="(var|let|with|function)\b">
+      <rule words="var let with function" suffix="\b">
         <token type="KeywordDeclaration" />
         <push state="slashstartsregex" />
       </rule>
@@ -233,7 +233,7 @@
       >
         <token type="KeywordReserved" />
       </rule>
-      <rule pattern="(true|false|null|NaN|Infinity|undefined)\b">
+      <rule words="true false null NaN Infinity undefined" suffix="\b">
         <token type="KeywordConstant" />
       </rule>
       <rule
@@ -250,10 +250,10 @@
         </bygroups>
         <push state="slashstartsregex" />
       </rule>
-      <rule pattern="\b(string|bool|number|any|never|object|symbol|unique|unknown|bigint)\b">
+      <rule words="string bool number any never object symbol unique unknown bigint" prefix="\b" suffix="\b">
         <token type="KeywordType" />
       </rule>
-      <rule pattern="\b(constructor|declare|interface|as)\b">
+      <rule words="constructor declare interface as" prefix="\b" suffix="\b">
         <token type="KeywordReserved" />
       </rule>
       <rule pattern="(super)(\s*)(\([\w,?.$\s]+\s*\))">

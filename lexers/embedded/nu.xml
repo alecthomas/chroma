@@ -34,7 +34,7 @@
       <rule pattern="&lt;&lt;-?\s*(\&#x27;?)\\?(\w+)[\w\W]+?\2"><token
           type="LiteralString"
         /></rule>
-      <rule pattern="&amp;&amp;|\|\|"><token type="Operator" /></rule>
+      <rule words="&amp;&amp; ||"><token type="Operator" /></rule>
       <rule pattern="\$[a-zA-Z_]\w*"><token type="NameVariable" /></rule>
     </state>
     <state name="data">

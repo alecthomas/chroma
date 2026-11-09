@@ -18,7 +18,7 @@
       <rule pattern="[,:;]"><token type="Punctuation"/></rule>
     </state>
     <state name="literals">
-      <rule pattern="(true|false)"><token type="KeywordConstant"/></rule>
+      <rule words="true false"><token type="KeywordConstant"/></rule>
       <rule pattern="-?\d+[eE]-?\d+"><token type="LiteralNumberFloat"/></rule>
       <rule pattern="-?\d*\.\d+[fFdD]?"><token type="LiteralNumberFloat"/></rule>
       <rule pattern="-?\d+[bBsSlLfFdD]?"><token type="LiteralNumberInteger"/></rule>

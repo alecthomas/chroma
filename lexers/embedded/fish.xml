@@ -127,7 +127,7 @@
       <rule pattern=";">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="&amp;&amp;|\|\||&amp;|\||\^|&lt;|&gt;">
+      <rule words="&amp;&amp; || &amp; | ^ &lt; &gt;">
         <token type="Operator"/>
       </rule>
       <rule pattern="\s+">

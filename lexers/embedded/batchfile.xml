@@ -96,7 +96,7 @@
         </bygroups>
         <push state="follow"/>
       </rule>
-      <rule pattern="(setlocal|endlocal|prompt|verify|rename|mklink|rmdir|shift|start|color|dpath|title|chdir|erase|pushd|ftype|break|pause|mkdir|assoc|date|path|time|popd|keys|exit|type|copy|echo|move|dir|del|ren|ver|cls|vol|rd|md|cd)(?=(?:\^[\n\x1a]?)?[\t\v\f\r ,;=\xa0+./:[\\\]]|[\n\x1a&amp;&lt;&gt;|(])">
+      <rule words="setlocal endlocal prompt verify rename mklink rmdir shift start color dpath title chdir erase pushd ftype break pause mkdir assoc date path time popd keys exit type copy echo move dir del ren ver cls vol rd md cd" suffix="(?=(?:\^[\n\x1a]?)?[\t\v\f\r ,;=\xa0+./:[\\\]]|[\n\x1a&amp;&lt;&gt;|(])">
         <token type="Keyword"/>
         <push state="follow"/>
       </rule>
@@ -348,7 +348,7 @@
         </bygroups>
         <push state="follow/compound"/>
       </rule>
-      <rule pattern="(setlocal|endlocal|prompt|verify|rename|mklink|rmdir|shift|start|color|dpath|title|chdir|erase|pushd|ftype|break|pause|mkdir|assoc|date|path|time|popd|keys|exit|type|copy|echo|move|dir|del|ren|ver|cls|vol|rd|md|cd)(?:(?=\))|(?=(?:\^[\n\x1a]?)?[\t\v\f\r ,;=\xa0+./:[\\\]]|[\n\x1a&amp;&lt;&gt;|(]))">
+      <rule words="setlocal endlocal prompt verify rename mklink rmdir shift start color dpath title chdir erase pushd ftype break pause mkdir assoc date path time popd keys exit type copy echo move dir del ren ver cls vol rd md cd" suffix="(?:(?=\))|(?=(?:\^[\n\x1a]?)?[\t\v\f\r ,;=\xa0+./:[\\\]]|[\n\x1a&amp;&lt;&gt;|(]))">
         <token type="Keyword"/>
         <push state="follow/compound"/>
       </rule>
@@ -535,7 +535,7 @@
       <rule pattern="(?:(?:%(?:\*|(?:~[a-z]*(?:\$[^:]+:)?)?\d|[^%:\n\x1a]+(?::(?:~(?:-?\d+)?(?:,(?:-?\d+)?)?|(?:[^%\n\x1a^]|\^[^%\n\x1a])[^=\n\x1a]*=(?:[^%\n\x1a^]|\^[^%\n\x1a])*)?)?%))|(?:\^?![^!:\n\x1a]+(?::(?:~(?:-?\d+)?(?:,(?:-?\d+)?)?|(?:[^!\n\x1a^]|\^[^!\n\x1a])[^=\n\x1a]*=(?:[^!\n\x1a^]|\^[^!\n\x1a])*)?)?\^?!))">
         <token type="NameVariable"/>
       </rule>
-      <rule pattern="\^!|%%">
+      <rule words="^! %%">
         <token type="LiteralStringEscape"/>
       </rule>
       <rule pattern="[^&#34;%^\n\x1a]+|[%^]">

@@ -74,7 +74,7 @@
       <rule pattern="use\b">
         <token type="KeywordNamespace"/>
       </rule>
-      <rule pattern="(_|align|break|const|continue|else|enum|export|for|if|return|static|struct|offset|union|fn|free|assert|abort|alloc|let|len|def|type|match|switch|case|append|delete|insert|defer|yield|vastart|vaarg|vaend)\b">
+      <rule words="_ align break const continue else enum export for if return static struct offset union fn free assert abort alloc let len def type match switch case append delete insert defer yield vastart vaarg vaend" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(size)([\s\n]*)(\()">
@@ -84,10 +84,10 @@
           <token type="Punctuation" />
         </bygroups>
       </rule>
-      <rule pattern="(str|size|rune|bool|int|uint|uintptr|u8|u16|u32|u64|i8|i16|i32|i64|f32|f64|null|void|done|nullable|valist|opaque|never)\b">
+      <rule words="str size rune bool int uint uintptr u8 u16 u32 u64 i8 i16 i32 i64 f32 f64 null void done nullable valist opaque never" suffix="\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(true|false)\b">
+      <rule words="true false" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="[a-zA-Z_]\w*">

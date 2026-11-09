@@ -28,7 +28,7 @@
       <rule pattern="[})\].]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(break|continue|do|while|exit|for|if|else|return|switch|case|default)\b">
+      <rule words="break continue do while exit for if else return switch case default" suffix="\b">
         <token type="Keyword"/>
         <push state="slashstartsregex"/>
       </rule>

@@ -125,16 +125,16 @@
           <token type="NameAttribute"/>
         </bygroups>
       </rule>
-      <rule pattern="(case|default|for|each|in|while|do|break|return|continue|if|else|throw|try|catch|with|new|typeof|arguments|instanceof|this|switch|import|include|as|is)\b">
+      <rule words="case default for each in while do break return continue if else throw try catch with new typeof arguments instanceof this switch import include as is" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(class|public|final|internal|native|override|private|protected|static|import|extends|implements|interface|intrinsic|return|super|dynamic|function|const|get|namespace|package|set)\b">
+      <rule words="class public final internal native override private protected static import extends implements interface intrinsic return super dynamic function const get namespace package set" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(true|false|null|NaN|Infinity|-Infinity|undefined|void)\b">
+      <rule words="true false null NaN Infinity -Infinity undefined void" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(decodeURI|decodeURIComponent|encodeURI|escape|eval|isFinite|isNaN|isXMLName|clearInterval|fscommand|getTimer|getURL|getVersion|isFinite|parseFloat|parseInt|setInterval|trace|updateAfterEvent|unescape)\b">
+      <rule words="decodeURI decodeURIComponent encodeURI escape eval isFinite isNaN isXMLName clearInterval fscommand getTimer getURL getVersion isFinite parseFloat parseInt setInterval trace updateAfterEvent unescape" suffix="\b">
         <token type="NameFunction"/>
       </rule>
       <rule pattern="[$a-zA-Z_]\w*">

@@ -114,7 +114,7 @@
       </rule>
     </state>
     <state name="statements">
-      <rule pattern="(reinterpret_cast|static_assert|thread_local|dynamic_cast|static_cast|const_cast|co_return|protected|namespace|consteval|constexpr|typename|co_await|co_yield|operator|restrict|explicit|template|override|noexcept|requires|decltype|alignof|private|alignas|virtual|mutable|nullptr|concept|export|friend|typeid|throws|public|delete|final|throw|catch|using|this|new|try)\b">
+      <rule words="reinterpret_cast static_assert thread_local dynamic_cast static_cast const_cast co_return protected namespace consteval constexpr typename co_await co_yield operator restrict explicit template override noexcept requires decltype alignof private alignas virtual mutable nullptr concept export friend typeid throws public delete final throw catch using this new try" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(enum)\b(\s+)(class)\b(\s*)">
@@ -196,13 +196,13 @@
       <rule pattern="[()\[\],.]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(restricted|volatile|continue|register|default|typedef|struct|extern|switch|sizeof|static|return|union|while|const|break|goto|enum|else|case|auto|for|asm|if|do)\b">
+      <rule words="restricted volatile continue register default typedef struct extern switch sizeof static return union while const break goto enum else case auto for asm if do" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(bool|int|long|float|short|double|char((8|16|32)_t)?|wchar_t|unsigned|signed|void|u?int(_fast|_least|)(8|16|32|64)_t)\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(typename|__inline|restrict|_inline|thread|inline|naked)\b">
+      <rule words="typename __inline restrict _inline thread inline naked" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="(__m(128i|128d|128|64))\b">
@@ -211,7 +211,7 @@
       <rule pattern="__(forceinline|identifier|unaligned|declspec|fastcall|stdcall|finally|except|assume|int32|cdecl|int64|based|leave|int16|raise|noop|int8|w64|try|asm)\b">
         <token type="KeywordReserved"/>
       </rule>
-      <rule pattern="(true|false|NULL)\b">
+      <rule words="true false NULL" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="([a-zA-Z_]\w*)(\s*)(:)(?!:)">

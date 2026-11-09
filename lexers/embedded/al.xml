@@ -43,7 +43,7 @@
       <rule pattern="\b([&lt;&gt;]=|&lt;&gt;|&lt;|&gt;)\b?">
         <token type="Operator"/>
       </rule>
-      <rule pattern="\b(\-|\+|\/|\*)\b">
+      <rule words="- + / *" prefix="\b" suffix="\b">
         <token type="Operator"/>
       </rule>
       <rule pattern="\s*(\:=|\+=|-=|\/=|\*=)\s*?">

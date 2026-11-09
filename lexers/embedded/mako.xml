@@ -79,7 +79,7 @@
       <rule pattern="&lt;%">
         <token type="CommentPreproc"/>
       </rule>
-      <rule pattern="(?&lt;=&lt;%)(include|inherit|namespace|page)">
+      <rule words="include inherit namespace page" prefix="(?&lt;=&lt;%)">
         <token type="NameBuiltin"/>
       </rule>
       <rule>

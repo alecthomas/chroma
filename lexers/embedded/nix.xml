@@ -41,7 +41,7 @@
       <rule>
         <include state="root"/>
       </rule>
-      <rule pattern="(=|\?|,)">
+      <rule words="= ? ,">
         <token type="Operator"/>
       </rule>
     </state>
@@ -49,12 +49,12 @@
       <rule pattern="throw(?![a-zA-Z0-9_&#39;-])">
         <token type="NameException"/>
       </rule>
-      <rule pattern="(dependencyClosure|fetchTarball|filterSource|currentTime|removeAttrs|baseNameOf|derivation|toString|builtins|getAttr|hasAttr|getEnv|isNull|abort|dirOf|toXML|map)(?![a-zA-Z0-9_&#39;-])">
+      <rule words="dependencyClosure fetchTarball filterSource currentTime removeAttrs baseNameOf derivation toString builtins getAttr hasAttr getEnv isNull abort dirOf toXML map" suffix="(?![a-zA-Z0-9_&#39;-])">
         <token type="NameBuiltin"/>
       </rule>
     </state>
     <state name="literals">
-      <rule pattern="(false|true|null)(?![a-zA-Z0-9_&#39;-])">
+      <rule words="false true null" suffix="(?![a-zA-Z0-9_&#39;-])">
         <token type="NameConstant"/>
       </rule>
       <rule>
@@ -74,7 +74,7 @@
       <rule pattern="import(?![a-zA-Z0-9_&#39;-])">
         <token type="KeywordNamespace"/>
       </rule>
-      <rule pattern="(inherit|assert|with|then|else|rec|if)(?![a-zA-Z0-9_&#39;-])">
+      <rule words="inherit assert with then else rec if" suffix="(?![a-zA-Z0-9_&#39;-])">
         <token type="Keyword"/>
       </rule>
     </state>

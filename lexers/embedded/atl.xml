@@ -14,13 +14,13 @@
           <token type="TextWhitespace" />
         </bygroups>
       </rule>
-      <rule pattern="(and|distinct|endif|else|for|foreach|if|implies|in|let|not|or|self|super|then|thisModule|xor)\b">
+      <rule words="and distinct endif else for foreach if implies in let not or self super then thisModule xor" suffix="\b">
         <token type="Keyword" />
       </rule>
       <rule pattern="(OclUndefined|true|false|#\w+)\b">
         <token type="KeywordConstant" />
       </rule>
-      <rule pattern="(module|query|library|create|from|to|uses)\b">
+      <rule words="module query library create from to uses" suffix="\b">
          <token type="KeywordNamespace" />
       </rule>
       <rule pattern="(do)(\s*)({)">
@@ -62,7 +62,7 @@
           <token type="TextWhitespace" />
         </bygroups>
       </rule>
-      <rule pattern="(Bag|Boolean|Integer|OrderedSet|Real|Sequence|Set|String|Tuple)">
+      <rule words="Bag Boolean Integer OrderedSet Real Sequence Set String Tuple">
         <token type="KeywordType" />
       </rule>
       <rule pattern="(\w+)(\s*)(&lt;-|&lt;:=)">

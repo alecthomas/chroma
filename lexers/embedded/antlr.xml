@@ -87,7 +87,7 @@
         </bygroups>
         <push state="action"/>
       </rule>
-      <rule pattern="(catch|finally)\b">
+      <rule words="catch finally" suffix="\b">
         <token type="Keyword"/>
         <push state="exception"/>
       </rule>
@@ -194,7 +194,7 @@
       <rule pattern="\$?[a-z_]\w*">
         <token type="NameVariable"/>
       </rule>
-      <rule pattern="(\+|\||-&gt;|=&gt;|=|\(|\)|\.\.|\.|\?|\*|\^|!|\#|~)">
+      <rule words="+ | -&gt; =&gt; = ( ) .. . ? * ^ ! # ~">
         <token type="Operator"/>
       </rule>
       <rule pattern=",">

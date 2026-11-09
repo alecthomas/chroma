@@ -45,7 +45,7 @@
         <token type="NameEntity"/>
         <push state="shader"/>
       </rule>
-      <rule pattern="(import|module|alias|where|port|else|type|case|then|let|as|of|if|in)\b">
+      <rule words="import module alias where port else type case then let as of if in" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="[A-Z]\w*">
@@ -57,7 +57,7 @@
       <rule pattern="\((&lt;-|\|\||\|&gt;|&amp;&amp;|\+\+|-&gt;|\.\.|//|&gt;&gt;|&gt;=|/=|==|::|&lt;~|&lt;\||&lt;=|&lt;&lt;|~|&lt;|=|:|&gt;|&#39;|/|\\|\.|\^|-|`|\+|\*|\||%)\)">
         <token type="NameFunction"/>
       </rule>
-      <rule pattern="(&lt;-|\|\||\|&gt;|&amp;&amp;|\+\+|-&gt;|\.\.|//|&gt;&gt;|&gt;=|/=|==|::|&lt;~|&lt;\||&lt;=|&lt;&lt;|~|&lt;|=|:|&gt;|&#39;|/|\\|\.|\^|-|`|\+|\*|\||%)">
+      <rule words="&lt;- || |&gt; &amp;&amp; ++ -&gt; .. // &gt;&gt; &gt;= /= == :: &lt;~ &lt;| &lt;= &lt;&lt; ~ &lt; = : &gt; &#39; / \ . ^ - ` + * | %">
         <token type="NameFunction"/>
       </rule>
       <rule>

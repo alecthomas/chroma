@@ -37,13 +37,13 @@
       <rule pattern=",">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(group_right|group_left|ignoring|without|offset|bool|on|by)\b">
+      <rule words="group_right group_left ignoring without offset bool on by" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(count_values|quantile|bottomk|stdvar|stddev|count|group|topk|sum|min|max|avg)\b">
+      <rule words="count_values quantile bottomk stdvar stddev count group topk sum min max avg" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(histogram_quantile|quantile_over_time|absent_over_time|stdvar_over_time|stddev_over_time|count_over_time|predict_linear|label_replace|max_over_time|avg_over_time|sum_over_time|days_in_month|min_over_time|day_of_month|holt_winters|day_of_week|label_join|sort_desc|clamp_max|timestamp|clamp_min|increase|changes|resets|vector|absent|idelta|minute|scalar|log10|delta|month|floor|deriv|round|irate|rate|year|sort|log2|sqrt|ceil|time|hour|abs|exp|ln)\b">
+      <rule words="histogram_quantile quantile_over_time absent_over_time stdvar_over_time stddev_over_time count_over_time predict_linear label_replace max_over_time avg_over_time sum_over_time days_in_month min_over_time day_of_month holt_winters day_of_week label_join sort_desc clamp_max timestamp clamp_min increase changes resets vector absent idelta minute scalar log10 delta month floor deriv round irate rate year sort log2 sqrt ceil time hour abs exp ln" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="[1-9][0-9]*[smhdwy]">
@@ -58,13 +58,13 @@
       <rule pattern="#.*?$">
         <token type="CommentSingle"/>
       </rule>
-      <rule pattern="(\+|\-|\*|\/|\%|\^)">
+      <rule words="+ - * / % ^">
         <token type="Operator"/>
       </rule>
-      <rule pattern="==|!=|&gt;=|&lt;=|&lt;|&gt;">
+      <rule words="== != &gt;= &lt;= &lt; &gt;">
         <token type="Operator"/>
       </rule>
-      <rule pattern="and|or|unless">
+      <rule words="and or unless">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="[_a-zA-Z][a-zA-Z0-9_]+">

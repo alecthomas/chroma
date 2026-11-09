@@ -19,7 +19,7 @@
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="&gt;=|&lt;=|==|!=|&gt;|&lt;|\?|-|\+|\*|\/|%|\[|\]">
+      <rule words="&gt;= &lt;= == != &gt; &lt; ? - + * / % [ ]">
         <token type="Operator"/>
       </rule>
       <rule pattern="[:,.]">
@@ -67,10 +67,10 @@
       <rule pattern="(var)\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(true|false)\b">
+      <rule words="true false" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(and|or|not|if|else|for|to)\b">
+      <rule words="and or not if else for to" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="@?[_a-zA-Z]\w*">

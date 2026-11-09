@@ -22,7 +22,7 @@
       <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="(and|as|each|else|error|false|if|in|is|let|meta|not|null|or|otherwise|section|shared|then|true|try|type)\b">
+      <rule words="and as each else error false if in is let meta not null or otherwise section shared then true try type" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(#binary|#date|#datetime|#datetimezone|#duration|#infinity|#nan|#sections|#shared|#table|#time)\b">

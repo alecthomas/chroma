@@ -24,7 +24,7 @@
         <token type="NameAttribute"/>
         <push state="annotation"/>
       </rule>
-      <rule pattern="(struct|enum|interface|union|import|using|const|annotation|extends|in|of|on|as|with|from|fixed)\b">
+      <rule words="struct enum interface union import using const annotation extends in of on as with from fixed" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="[\w.]+">

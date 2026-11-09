@@ -31,7 +31,7 @@
       <rule pattern="~>">
         <token type="Operator"/>
       </rule>
-      <rule pattern="\b(and|or|in)\b">
+      <rule words="and or in" prefix="\b" suffix="\b">
         <token type="Operator"/>
       </rule>
       <rule pattern="[%@#&amp;?]|\+(?!\d)|\-(?!\d)">
@@ -46,7 +46,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="(true|false)\b">
+      <rule words="true false" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="\b(function)\b">

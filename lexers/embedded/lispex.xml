@@ -16,8 +16,8 @@
       <rule pattern="-?(?:0|[1-9]\d*)/[1-9]\d*(?=$|[\s()'`,;&quot;])"><token type="LiteralNumber"/></rule>
       <rule pattern="-?(?:0|[1-9]\d*)(?:\.\d+(?:[eE][-+]?\d+)?|[eE][-+]?\d+)(?=$|[\s()'`,;&quot;])"><token type="LiteralNumberFloat"/></rule>
       <rule pattern="-?(?:0|[1-9]\d*)(?=$|[\s()'`,;&quot;])"><token type="LiteralNumberInteger"/></rule>
-      <rule pattern="(quote|quasiquote|unquote|unquote-splicing|lambda|if|begin|set!|define|let|let\*|letrec|cond|case|guard|and|or|when|unless|do|module|export|import)(?=$|[\s()'`,;&quot;])"><token type="Keyword"/></rule>
-      <rule pattern="(values|call-with-values|call/cc|dynamic-wind|cons|car|cdr|list|map|apply|error|error-object\?|error-object-message|number\?|string\?|boolean\?|pair\?|null\?|vector|vector-ref|bytevector-u8-ref|display|newline|\+|-|\*|/|=|&lt;|&gt;|&lt;=|&gt;=)(?=$|[\s()'`,;&quot;])"><token type="NameBuiltin"/></rule>
+      <rule words="quote quasiquote unquote unquote-splicing lambda if begin set! define let let* letrec cond case guard and or when unless do module export import" suffix="(?=$|[\s()&#39;`,;&#34;])"><token type="Keyword"/></rule>
+      <rule words="values call-with-values call/cc dynamic-wind cons car cdr list map apply error error-object? error-object-message number? string? boolean? pair? null? vector vector-ref bytevector-u8-ref display newline + - * / = &lt; &gt; &lt;= &gt;=" suffix="(?=$|[\s()&#39;`,;&#34;])"><token type="NameBuiltin"/></rule>
       <rule pattern="'[\p{L}_][^\s()'`,;&quot;#]*"><token type="LiteralStringSymbol"/></rule>
       <rule pattern="#(?:u8)?\("><token type="Punctuation"/></rule>
       <rule pattern=",@|['`,]"><token type="Operator"/></rule>

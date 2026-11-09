@@ -39,7 +39,7 @@
       <rule>
         <include state="common"/>
       </rule>
-      <rule pattern="(?:END-DEFINE|END-IF|END-FOR|END-SUBROUTINE|END-ERROR|END|IGNORE)\b">
+      <rule words="END-DEFINE END-IF END-FOR END-SUBROUTINE END-ERROR END IGNORE" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(?:INIT|CONST)\s*&lt;\b">

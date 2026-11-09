@@ -43,13 +43,13 @@
       <rule pattern="\*">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(HEXDIG|DQUOTE|DIGIT|VCHAR|OCTET|ALPHA|CHAR|CRLF|HTAB|LWSP|BIT|CTL|WSP|LF|SP|CR)\b">
+      <rule words="HEXDIG DQUOTE DIGIT VCHAR OCTET ALPHA CHAR CRLF HTAB LWSP BIT CTL WSP LF SP CR" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="[a-zA-Z][a-zA-Z0-9-]+\b">
         <token type="NameClass"/>
       </rule>
-      <rule pattern="(=/|=|/)">
+      <rule words="=/ = /">
         <token type="Operator"/>
       </rule>
       <rule pattern="[\[\]()]">

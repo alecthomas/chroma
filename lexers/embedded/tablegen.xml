@@ -15,7 +15,7 @@
       </rule>
     </state>
     <state name="keyword">
-      <rule pattern="(multiclass|foreach|string|class|field|defm|bits|code|list|def|int|let|dag|bit|in)\b">
+      <rule words="multiclass foreach string class field defm bits code list def int let dag bit in" suffix="\b">
         <token type="Keyword"/>
       </rule>
     </state>

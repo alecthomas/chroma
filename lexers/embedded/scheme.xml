@@ -66,10 +66,10 @@
       <rule pattern="[\w!$%&amp;*+,/:&lt;=&gt;?@^~|-]+">
         <token type="NameVariable"/>
       </rule>
-      <rule pattern="(\(|\))">
+      <rule words="( )">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(\[|\])">
+      <rule words="[ ]">
         <token type="Punctuation"/>
       </rule>
     </state>

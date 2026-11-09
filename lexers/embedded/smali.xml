@@ -29,7 +29,7 @@
       <rule pattern="^([ \t]*)(\.restart)( )(local)"><bygroups><token type="TextWhitespace"/><token type="Keyword"/><token type="TextWhitespace"/><token type="Keyword"/></bygroups></rule>
     </state>
     <state name="access-modifier">
-      <rule pattern="(public|private|protected|static|final|synchronized|bridge|varargs|native|abstract|strictfp|synthetic|constructor|declared-synchronized|interface|enum|annotation|volatile|transient)"><token type="Keyword"/></rule>
+      <rule words="public private protected static final synchronized bridge varargs native abstract strictfp synthetic constructor declared-synchronized interface enum annotation volatile transient"><token type="Keyword"/></rule>
     </state>
     <state name="whitespace">
       <rule pattern="\n"><token type="TextWhitespace"/></rule>

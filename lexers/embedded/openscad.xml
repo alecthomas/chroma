@@ -34,7 +34,7 @@
       <rule pattern="\$(f[asn]|t|vp[rtd]|children)">
         <token type="NameVariableMagic"/>
       </rule>
-      <rule pattern="(undef|PI)\b">
+      <rule words="undef PI" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(use|include)((?:\s|\\\\s)+)">
@@ -58,13 +58,13 @@
           <token type="NameFunction"/>
         </bygroups>
       </rule>
-      <rule pattern="\b(true|false)\b">
+      <rule words="true false" prefix="\b" suffix="\b">
         <token type="Literal"/>
       </rule>
-      <rule pattern="\b(function|module|include|use|for|intersection_for|if|else|return)\b">
+      <rule words="function module include use for intersection_for if else return" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(circle|square|polygon|text|sphere|cube|cylinder|polyhedron|translate|rotate|scale|resize|mirror|multmatrix|color|offset|hull|minkowski|union|difference|intersection|abs|sign|sin|cos|tan|acos|asin|atan|atan2|floor|round|ceil|ln|log|pow|sqrt|exp|rands|min|max|concat|lookup|str|chr|search|version|version_num|norm|cross|parent_module|echo|import|import_dxf|dxf_linear_extrude|linear_extrude|rotate_extrude|surface|projection|render|dxf_cross|dxf_dim|let|assign|len)\b">
+      <rule words="circle square polygon text sphere cube cylinder polyhedron translate rotate scale resize mirror multmatrix color offset hull minkowski union difference intersection abs sign sin cos tan acos asin atan atan2 floor round ceil ln log pow sqrt exp rands min max concat lookup str chr search version version_num norm cross parent_module echo import import_dxf dxf_linear_extrude linear_extrude rotate_extrude surface projection render dxf_cross dxf_dim let assign len" prefix="\b" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="\bchildren\b">

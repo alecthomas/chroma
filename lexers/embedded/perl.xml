@@ -21,7 +21,7 @@
       <rule pattern="^=[a-zA-Z0-9]+\s+.*?\n=cut">
         <token type="CommentMultiline"/>
       </rule>
-      <rule pattern="(continue|foreach|unless|return|elsif|CHECK|while|BEGIN|reset|print|until|next|else|INIT|then|last|redo|case|our|new|for|END|if|do|my)\b">
+      <rule words="continue foreach unless return elsif CHECK while BEGIN reset print until next else INIT then last redo case our new for END if do my" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(format)(\s+)(\w+)(\s*)(=)(\s*\n)">
@@ -35,7 +35,7 @@
         </bygroups>
         <push state="format"/>
       </rule>
-      <rule pattern="(eq|lt|gt|le|ge|ne|not|and|or|cmp)\b">
+      <rule words="eq lt gt le ge ne not and or cmp" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="s/(\\\\|\\[^\\]|[^\\/])*/(\\\\|\\[^\\]|[^\\/])*/[egimosx]*">
@@ -82,7 +82,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="(getprotobynumber|getprotobyname|getservbyport|getservbyname|gethostbyname|gethostbyaddr|getnetbyaddr|getnetbyname|setprotoent|setpriority|getsockname|getprotoent|getpriority|getpeername|endprotoent|setsockopt|endhostent|setservent|socketpair|getsockopt|endservent|sethostent|getservent|gethostent|getnetent|wantarray|localtime|quotemeta|setnetent|prototype|endnetent|rewinddir|endpwent|endgrent|getpwent|getpwnam|getgrgid|dbmclose|continue|closedir|shutdown|setpwent|shmwrite|syswrite|truncate|formline|setgrent|getgrent|readpipe|getgrnam|readlink|readline|getpwuid|getlogin|telldir|opendir|shmread|readdir|getpgrp|getppid|waitpid|binmode|reverse|sprintf|unshift|symlink|seekdir|sysopen|defined|dbmopen|sysread|sysseek|connect|lcfirst|ucfirst|setpgrp|syscall|import|chroot|system|gmtime|unlink|unpack|semget|semctl|select|msgrcv|length|printf|listen|scalar|caller|rindex|substr|splice|rename|msgctl|msgget|delete|msgsnd|exists|values|socket|fileno|format|accept|shmget|shmctl|ioctl|alarm|atan2|utime|untie|bless|chdir|chmod|undef|umask|chomp|times|close|crypt|srand|split|mkdir|sleep|lstat|study|rmdir|local|fcntl|flock|write|shift|index|semop|chown|tell|join|send|warn|kill|wait|grep|glob|bind|last|pack|getc|fork|link|seek|push|rand|read|exit|sort|exec|open|eval|sqrt|redo|stat|chop|next|each|dump|time|recv|tied|goto|keys|pipe|map|tie|cos|die|eof|pop|sin|pos|oct|ref|exp|int|ord|log|our|hex|abs|vec|chr|uc|tr|my|lc)\b">
+      <rule words="getprotobynumber getprotobyname getservbyport getservbyname gethostbyname gethostbyaddr getnetbyaddr getnetbyname setprotoent setpriority getsockname getprotoent getpriority getpeername endprotoent setsockopt endhostent setservent socketpair getsockopt endservent sethostent getservent gethostent getnetent wantarray localtime quotemeta setnetent prototype endnetent rewinddir endpwent endgrent getpwent getpwnam getgrgid dbmclose continue closedir shutdown setpwent shmwrite syswrite truncate formline setgrent getgrent readpipe getgrnam readlink readline getpwuid getlogin telldir opendir shmread readdir getpgrp getppid waitpid binmode reverse sprintf unshift symlink seekdir sysopen defined dbmopen sysread sysseek connect lcfirst ucfirst setpgrp syscall import chroot system gmtime unlink unpack semget semctl select msgrcv length printf listen scalar caller rindex substr splice rename msgctl msgget delete msgsnd exists values socket fileno format accept shmget shmctl ioctl alarm atan2 utime untie bless chdir chmod undef umask chomp times close crypt srand split mkdir sleep lstat study rmdir local fcntl flock write shift index semop chown tell join send warn kill wait grep glob bind last pack getc fork link seek push rand read exit sort exec open eval sqrt redo stat chop next each dump time recv tied goto keys pipe map tie cos die eof pop sin pos oct ref exp int ord log our hex abs vec chr uc tr my lc" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="((__(DATA|DIE|WARN)__)|(STD(IN|OUT|ERR)))\b">
@@ -182,7 +182,7 @@
         </bygroups>
         <push state="funcname"/>
       </rule>
-      <rule pattern="(package|require|use|no)\b">
+      <rule words="package require use no" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(\[\]|\*\*|::|&lt;&lt;|&gt;&gt;|&gt;=|&lt;=&gt;|&lt;=|={3}|!=|=~|!~|&amp;&amp;?|\|\||\.{1,3})">
@@ -324,7 +324,7 @@
         <token type="Punctuation"/>
         <pop depth="1"/>
       </rule>
-      <rule pattern="\)|,">
+      <rule words=") ,">
         <token type="Punctuation"/>
         <pop depth="1"/>
       </rule>

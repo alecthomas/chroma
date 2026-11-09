@@ -45,16 +45,16 @@
       </rule>
     </state>
     <state name="keywords">
-      <rule pattern="(access|action|alphtype)\b">
+      <rule words="access action alphtype" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(getkey|write|machine|include)\b">
+      <rule words="getkey write machine include" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(any|ascii|extend|alpha|digit|alnum|lower|upper)\b">
+      <rule words="any ascii extend alpha digit alnum lower upper" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(xdigit|cntrl|graph|print|punct|space|zlen|empty)\b">
+      <rule words="xdigit cntrl graph print punct space zlen empty" suffix="\b">
         <token type="Keyword"/>
       </rule>
     </state>
@@ -132,16 +132,16 @@
       <rule pattern="(&gt;|\$|%|&lt;|@|&lt;&gt;)(\*|from\b)">
         <token type="Operator"/>
       </rule>
-      <rule pattern="&gt;|@|\$|%">
+      <rule words="&gt; @ $ %">
         <token type="Operator"/>
       </rule>
       <rule pattern="\*|\?|\+|\{[0-9]*,[0-9]*\}">
         <token type="Operator"/>
       </rule>
-      <rule pattern="!|\^">
+      <rule words="! ^">
         <token type="Operator"/>
       </rule>
-      <rule pattern="\(|\)">
+      <rule words="( )">
         <token type="Operator"/>
       </rule>
     </state>

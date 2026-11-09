@@ -52,7 +52,7 @@
       <rule pattern="=&gt;">
         <token type="Punctuation" />
       </rule>
-      <rule pattern="(false|true)\b">
+      <rule words="false true" suffix="\b">
         <token type="KeywordConstant" />
       </rule>
       <rule pattern="/(?s)\*(((?!\*/).)*)\*/">
@@ -67,16 +67,16 @@
           <token type="Text" />
         </bygroups>
       </rule>
-      <rule pattern="^(provisioner|variable|resource|provider|module|output|data)(?!\.)\b">
+      <rule words="provisioner variable resource provider module output data" prefix="^" suffix="(?!\.)\b">
         <token type="KeywordReserved" />
       </rule>
-      <rule pattern="(for|in)\b">
+      <rule words="for in" suffix="\b">
         <token type="Keyword" />
       </rule>
-      <rule pattern="(module|count|data|each|var)\b">
+      <rule words="module count data each var" suffix="\b">
         <token type="NameBuiltin" />
       </rule>
-      <rule pattern="(parseint|signum|floor|ceil|log|max|min|abs|pow)\b">
+      <rule words="parseint signum floor ceil log max min abs pow" suffix="\b">
         <token type="NameBuiltin" />
       </rule>
       <rule
@@ -94,10 +94,10 @@
       >
         <token type="NameBuiltin" />
       </rule>
-      <rule pattern="(templatefile|filebase64|fileexists|pathexpand|basename|abspath|fileset|dirname|file)\b">
+      <rule words="templatefile filebase64 fileexists pathexpand basename abspath fileset dirname file" suffix="\b">
         <token type="NameBuiltin" />
       </rule>
-      <rule pattern="(formatdate|timestamp|timeadd)\b">
+      <rule words="formatdate timestamp timeadd" suffix="\b">
         <token type="NameBuiltin" />
       </rule>
       <rule
@@ -105,10 +105,10 @@
       >
         <token type="NameBuiltin" />
       </rule>
-      <rule pattern="(cidrnetmask|cidrsubnet|cidrhost)\b">
+      <rule words="cidrnetmask cidrsubnet cidrhost" suffix="\b">
         <token type="NameBuiltin" />
       </rule>
-      <rule pattern="(tostring|tonumber|tobool|tolist|tomap|toset|can|try)\b">
+      <rule words="tostring tonumber tobool tolist tomap toset can try" suffix="\b">
         <token type="NameBuiltin" />
       </rule>
       <rule pattern="(^|[^.\w])(name|x|default|type|description|value)(_[a-zA-Z]\w*)*">

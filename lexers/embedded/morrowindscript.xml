@@ -82,7 +82,7 @@
       <rule pattern="[#=,./%+\-?]">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(==|&lt;=|&lt;|&gt;=|&gt;|!=)">
+      <rule words="== &lt;= &lt; &gt;= &gt; !=">
         <token type="Operator"/>
       </rule>
     </state>

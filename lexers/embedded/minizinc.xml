@@ -29,37 +29,37 @@
       <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="\b(annotation|constraint|predicate|minimize|function|maximize|satisfy|include|record|output|solve|test|list|type|ann|par|any|var|op|of)\b">
+      <rule words="annotation constraint predicate minimize function maximize satisfy include record output solve test list type ann par any var op of" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(string|tuple|float|array|bool|enum|int|set)\b">
+      <rule words="string tuple float array bool enum int set" prefix="\b" suffix="\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="\b(forall|where|endif|then|else|for|if)\b">
+      <rule words="forall where endif then else for if" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(array_intersect|index_set_2of3|index_set_1of3|index_set_3of3|index_set_1of2|index_set_2of2|array_union|show_float|dom_array|int2float|set2array|index_set|dom_size|lb_array|is_fixed|ub_array|bool2int|show_int|array4d|array2d|array1d|array5d|array6d|array3d|product|length|assert|concat|trace|acosh|round|abort|log10|floor|sinh|tanh|atan|sqrt|asin|show|log2|card|ceil|cosh|join|pow|cos|max|log|exp|dom|sin|abs|fix|sum|tan|min|lb|ln|ub)\b">
+      <rule words="array_intersect index_set_2of3 index_set_1of3 index_set_3of3 index_set_1of2 index_set_2of2 array_union show_float dom_array int2float set2array index_set dom_size lb_array is_fixed ub_array bool2int show_int array4d array2d array1d array5d array6d array3d product length assert concat trace acosh round abort log10 floor sinh tanh atan sqrt asin show log2 card ceil cosh join pow cos max log exp dom sin abs fix sum tan min lb ln ub" prefix="\b" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(not|&lt;-&gt;|-&gt;|&lt;-|\\/|xor|/\\)">
+      <rule words="not &lt;-&gt; -&gt; &lt;- \/ xor /\">
         <token type="Operator"/>
       </rule>
       <rule pattern="(&lt;|&gt;|&lt;=|&gt;=|==|=|!=)">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(\+|-|\*|/|div|mod)">
+      <rule words="+ - * / div mod">
         <token type="Operator"/>
       </rule>
-      <rule pattern="\b(intersect|superset|symdiff|subset|union|diff|in)\b">
+      <rule words="intersect superset symdiff subset union diff in" prefix="\b" suffix="\b">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(\\|\.\.|\+\+)">
+      <rule words="\ .. ++">
         <token type="Operator"/>
       </rule>
       <rule pattern="[|()\[\]{},:;]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(true|false)\b">
+      <rule words="true false" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="([+-]?)\d+(\.(?!\.)\d*)?([eE][-+]?\d+)?">

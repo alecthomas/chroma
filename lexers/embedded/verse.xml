@@ -16,13 +16,13 @@
       <rule pattern="(using)(\s*)(\{)"><bygroups><token type="KeywordNamespace"/><token type="TextWhitespace"/><token type="Punctuation"/></bygroups><push state="using-block"/></rule>
       <rule pattern="&lt;(abstract|allocates|castable|closed|computes|concrete|constructor|converges|decides|epic_internal|final|final_super|inline|internal|localizes|module_scoped_var_weak_map_key|native|native_callable|no_rollback|open|override|persistable|predicts|private|protected|public|reads|scoped|suspends|transacts|unique|writes)(\{[^}]*\})?&gt;"><token type="NameDecorator"/></rule>
       <rule pattern="\b(class|enum|interface|module|struct)(\s+)([a-zA-Z_]\w*)"><bygroups><token type="Keyword"/><token type="TextWhitespace"/><token type="NameClass"/></bygroups></rule>
-      <rule pattern="\b(array|block|case|defer|else|first|for|if|loop|map|then)\b"><token type="Keyword"/></rule>
-      <rule pattern="\b(class|enum|interface|module|struct)\b"><token type="Keyword"/></rule>
-      <rule pattern="\b(alias|live|ref|set|using|var)\b"><token type="KeywordDeclaration"/></rule>
-      <rule pattern="\b(any|char|char32|comparable|float|int|logic|option|rational|string|tuple|type|void)\b"><token type="KeywordType"/></rule>
-      <rule pattern="\b(branch|break|catch|const|continue|do|in|is|mutable|of|profile|race|return|rush|Self|spawn|sync|until|upon|when|where|while|with|yield)\b"><token type="KeywordReserved"/></rule>
-      <rule pattern="\b(and|or|not)\b"><token type="OperatorWord"/></rule>
-      <rule pattern="\b(true|false)\b"><token type="KeywordConstant"/></rule>
+      <rule words="array block case defer else first for if loop map then" prefix="\b" suffix="\b"><token type="Keyword"/></rule>
+      <rule words="class enum interface module struct" prefix="\b" suffix="\b"><token type="Keyword"/></rule>
+      <rule words="alias live ref set using var" prefix="\b" suffix="\b"><token type="KeywordDeclaration"/></rule>
+      <rule words="any char char32 comparable float int logic option rational string tuple type void" prefix="\b" suffix="\b"><token type="KeywordType"/></rule>
+      <rule words="branch break catch const continue do in is mutable of profile race return rush Self spawn sync until upon when where while with yield" prefix="\b" suffix="\b"><token type="KeywordReserved"/></rule>
+      <rule words="and or not" prefix="\b" suffix="\b"><token type="OperatorWord"/></rule>
+      <rule words="true false" prefix="\b" suffix="\b"><token type="KeywordConstant"/></rule>
       <rule pattern="\b([a-zA-Z_]\w*)(\s*)(&lt;\w+(?:\{[^}]*\})?&gt;)?(\s*)(\()"><bygroups><token type="NameFunction"/><token type="TextWhitespace"/><token type="NameDecorator"/><token type="TextWhitespace"/><token type="Punctuation"/></bygroups></rule>
       <rule pattern="0x[0-9a-fA-F]+"><token type="LiteralNumberHex"/></rule>
       <rule pattern="0o[0-9a-fA-F]+"><token type="LiteralStringChar"/></rule>

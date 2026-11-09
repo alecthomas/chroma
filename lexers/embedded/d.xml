@@ -21,7 +21,7 @@
       <rule pattern="/\+[\s\S]*?\+/">
         <token type="CommentMultiline"/>
       </rule>
-      <rule pattern="(asm|assert|body|break|case|cast|catch|continue|default|debug|delete|do|else|finally|for|foreach|foreach_reverse|goto|if|in|invariant|is|macro|mixin|new|out|pragma|return|super|switch|this|throw|try|typeid|typeof|version|while|with)\b">
+      <rule words="asm assert body break case cast catch continue default debug delete do else finally for foreach foreach_reverse goto if in invariant is macro mixin new out pragma return super switch this throw try typeid typeof version while with" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="__(FILE|FILE_FULL_PATH|MODULE|LINE|FUNCTION|PRETTY_FUNCTION|DATE|EOF|TIME|TIMESTAMP|VENDOR|VERSION)__\b">
@@ -41,13 +41,13 @@
       <rule pattern="@[\w.]*">
         <token type="NameDecorator"/>
       </rule>
-      <rule pattern="(abstract|auto|alias|align|const|delegate|deprecated|enum|export|extern|final|function|immutable|inout|lazy|nothrow|override|package|private|protected|public|pure|ref|scope|shared|static|synchronized|template|unittest|__gshared)\b">
+      <rule words="abstract auto alias align const delegate deprecated enum export extern final function immutable inout lazy nothrow override package private protected public pure ref scope shared static synchronized template unittest __gshared" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(void|bool|byte|ubyte|short|ushort|int|uint|long|ulong|cent|ucent|float|double|real|ifloat|idouble|ireal|cfloat|cdouble|creal|char|wchar|dchar)\b">
+      <rule words="void bool byte ubyte short ushort int uint long ulong cent ucent float double real ifloat idouble ireal cfloat cdouble creal char wchar dchar" suffix="\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(size_t|ptrdiff_t|noreturn|string|wstring|dstring|Object|Throwable|Exception|Error|imported)\b">
+      <rule words="size_t ptrdiff_t noreturn string wstring dstring Object Throwable Exception Error imported" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="(module)(\s+)">
@@ -57,7 +57,7 @@
         </bygroups>
         <push state="import"/>
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(class|interface|struct|template|union)(\s+)">

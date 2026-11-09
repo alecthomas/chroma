@@ -11,14 +11,14 @@
       <rule><include state="markup"/></rule>
     </state>
     <state name="into_code">
-      <rule pattern="(\#let|\#set|\#show)\b"><token type="KeywordDeclaration"/><push state="inline_code"/></rule>
-      <rule pattern="(\#import|\#include)\b"><token type="KeywordNamespace"/><push state="inline_code"/></rule>
-      <rule pattern="(\#if|\#for|\#while|\#export)\b"><token type="KeywordReserved"/><push state="inline_code"/></rule>
+      <rule words="#let #set #show" suffix="\b"><token type="KeywordDeclaration"/><push state="inline_code"/></rule>
+      <rule words="#import #include" suffix="\b"><token type="KeywordNamespace"/><push state="inline_code"/></rule>
+      <rule words="#if #for #while #export" suffix="\b"><token type="KeywordReserved"/><push state="inline_code"/></rule>
       <rule pattern="#\{"><token type="Punctuation"/><push state="code"/></rule>
       <rule pattern="#\("><token type="Punctuation"/><push state="code"/></rule>
       <rule pattern="(#[a-zA-Z_][a-zA-Z0-9_-]*)(\[)"><bygroups><token type="NameFunction"/><token type="Punctuation"/></bygroups><push state="markup"/></rule>
       <rule pattern="(#[a-zA-Z_][a-zA-Z0-9_-]*)(\()"><bygroups><token type="NameFunction"/><token type="Punctuation"/></bygroups><push state="code"/></rule>
-      <rule pattern="(\#true|\#false|\#none|\#auto)\b"><token type="KeywordConstant"/></rule>
+      <rule words="#true #false #none #auto" suffix="\b"><token type="KeywordConstant"/></rule>
       <rule pattern="#[a-zA-Z_][a-zA-Z0-9_]*"><token type="NameVariable"/></rule>
       <rule pattern="#0x[0-9a-fA-F]+"><token type="LiteralNumberHex"/></rule>
       <rule pattern="#0b[01]+"><token type="LiteralNumberBin"/></rule>
@@ -43,7 +43,7 @@
       <rule><include state="into_code"/></rule>
       <rule pattern="```(?:.|\n)*?```"><token type="LiteralStringBacktick"/></rule>
       <rule pattern="https?://[0-9a-zA-Z~/%#&amp;=\&#x27;,;.+?]*"><token type="GenericEmph"/></rule>
-      <rule pattern="(\-\-\-|\\|\~|\-\-|\.\.\.)\B"><token type="Punctuation"/></rule>
+      <rule words="--- \ ~ -- ..." suffix="\B"><token type="Punctuation"/></rule>
       <rule pattern="\\\["><token type="Punctuation"/></rule>
       <rule pattern="\\\]"><token type="Punctuation"/></rule>
       <rule pattern="\["><token type="Punctuation"/><push/></rule>
@@ -53,8 +53,8 @@
     </state>
     <state name="math">
       <rule><include state="comment"/></rule>
-      <rule pattern="(\\_|\\\^|\\\&amp;)"><token type="Text"/></rule>
-      <rule pattern="(_|\^|\&amp;|;)"><token type="Punctuation"/></rule>
+      <rule words="\_ \^ \&amp;"><token type="Text"/></rule>
+      <rule words="_ ^ &amp; ;"><token type="Punctuation"/></rule>
       <rule pattern="(\+|/|=|\[\||\|\]|\|\||\*|:=|::=|\.\.\.|&#x27;|\-|=:|!=|&gt;&gt;|&gt;=|&gt;&gt;&gt;|&lt;&lt;|&lt;=|&lt;&lt;&lt;|\-&gt;|\|\-&gt;|=&gt;|\|=&gt;|==&gt;|\-\-&gt;|\~\~&gt;|\~&gt;|&gt;\-&gt;|\-&gt;&gt;|&lt;\-|&lt;==|&lt;\-\-|&lt;\~\~|&lt;\~|&lt;\-&lt;|&lt;&lt;\-|&lt;\-&gt;|&lt;=&gt;|&lt;==&gt;|&lt;\-\-&gt;|&gt;|&lt;|\~|:|\|)"><token type="Operator"/></rule>
       <rule pattern="\\"><token type="Punctuation"/></rule>
       <rule pattern="\\\$"><token type="Punctuation"/></rule>
@@ -75,25 +75,25 @@
     <state name="code">
       <rule><include state="comment"/></rule>
       <rule pattern="\["><token type="Punctuation"/><push state="markup"/></rule>
-      <rule pattern="\(|\{"><token type="Punctuation"/><push state="code"/></rule>
-      <rule pattern="\)|\}"><token type="Punctuation"/><pop depth="1"/></rule>
+      <rule words="( {"><token type="Punctuation"/><push state="code"/></rule>
+      <rule words=") }"><token type="Punctuation"/><pop depth="1"/></rule>
       <rule pattern="&quot;[^&quot;]*&quot;"><token type="LiteralStringDouble"/></rule>
       <rule pattern=",|\.{1,2}"><token type="Punctuation"/></rule>
       <rule pattern="="><token type="Operator"/></rule>
-      <rule pattern="(and|or|not)\b"><token type="OperatorWord"/></rule>
-      <rule pattern="=&gt;|&lt;=|==|!=|&gt;|&lt;|-=|\+=|\*=|/=|\+|-|\\|\*"><token type="Operator"/></rule>
+      <rule words="and or not" suffix="\b"><token type="OperatorWord"/></rule>
+      <rule words="=&gt; &lt;= == != &gt; &lt; -= += *= /= + - \ *"><token type="Operator"/></rule>
       <rule pattern="([a-zA-Z_][a-zA-Z0-9_-]*)(:)"><bygroups><token type="NameVariable"/><token type="Punctuation"/></bygroups></rule>
       <rule pattern="([a-zA-Z_][a-zA-Z0-9_-]*)(\()"><bygroups><token type="NameFunction"/><token type="Punctuation"/></bygroups><push state="code"/></rule>
-      <rule pattern="(as|break|export|continue|else|for|if|in|return|while)\b"><token type="KeywordReserved"/></rule>
-      <rule pattern="(import|include)\b"><token type="KeywordNamespace"/></rule>
-      <rule pattern="(auto|none|true|false)\b"><token type="KeywordConstant"/></rule>
+      <rule words="as break export continue else for if in return while" suffix="\b"><token type="KeywordReserved"/></rule>
+      <rule words="import include" suffix="\b"><token type="KeywordNamespace"/></rule>
+      <rule words="auto none true false" suffix="\b"><token type="KeywordConstant"/></rule>
       <rule pattern="([0-9.]+)(mm|pt|cm|in|em|fr|%)"><bygroups><token type="LiteralNumber"/><token type="KeywordReserved"/></bygroups></rule>
       <rule pattern="0x[0-9a-fA-F]+"><token type="LiteralNumberHex"/></rule>
       <rule pattern="0b[01]+"><token type="LiteralNumberBin"/></rule>
       <rule pattern="0o[0-7]+"><token type="LiteralNumberOct"/></rule>
       <rule pattern="[0-9]+[\.e][0-9]+"><token type="LiteralNumberFloat"/></rule>
       <rule pattern="[0-9]+"><token type="LiteralNumberInteger"/></rule>
-      <rule pattern="(let|set|show)\b"><token type="KeywordDeclaration"/></rule>
+      <rule words="let set show" suffix="\b"><token type="KeywordDeclaration"/></rule>
       <rule pattern="([a-zA-Z_][a-zA-Z0-9_-]*)"><token type="NameVariable"/></rule>
       <rule pattern="[ \t\n]+"><token type="TextWhitespace"/></rule>
       <rule pattern=":"><token type="Punctuation"/></rule>

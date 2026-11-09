@@ -58,7 +58,7 @@
         <token type="Punctuation"/>
         <pop depth="1"/>
       </rule>
-      <rule pattern="(~&gt;|&gt;=|&lt;=|!=|=|&lt;|&gt;)">
+      <rule words="~&gt; &gt;= &lt;= != = &lt; &gt;">
         <token type="Operator"/>
       </rule>
       <rule pattern="[0-9][\w.]*">

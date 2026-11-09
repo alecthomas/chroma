@@ -15,9 +15,9 @@
   <rules>
     <state name="root">
       <rule pattern="\b(add\-highlighter|alias|arrange\-buffers|buffer|buffer\-next|buffer\-previous|catch|change\-directory|colorscheme|debug|declare\-option|declare\-user\-mode|define\-command|complete\-command|delete\-buffer|delete\-buffer!|echo|edit|edit!|enter\-user\-mode|evaluate\-commands|execute\-keys|fail|hook|info|kill|kill!|map|nop|on\-key|prompt|provide\-module|quit|quit!|remove\-highlighter|remove\-hooks|rename\-buffer|rename\-client|rename\-session|require\-module|select|set\-face|set\-option|set\-register|source|trigger\-user\-hook|try|unalias|unmap|unset\-face|unset\-option|update\-option|write|write!|write\-all|write\-all\-quit|write\-quit|write\-quit!)\b"><token type="Keyword"/></rule>
-      <rule pattern="\b(global|buffer|window|current|normal|insert|prompt|goto|view|user|object|number\-lines|show\-matching|show\-whitespaces|fill|regex|dynregex|group|flag\-lines|ranges|line|column|wrap|ref|regions|region|default\-region|replace\-ranges)\b"><token type="NameAttribute"/></rule>
+      <rule words="global buffer window current normal insert prompt goto view user object number-lines show-matching show-whitespaces fill regex dynregex group flag-lines ranges line column wrap ref regions region default-region replace-ranges" prefix="\b" suffix="\b"><token type="NameAttribute"/></rule>
       <rule pattern="\b(int|bool|str|regex|int\-list|str\-list|completions|line\-specs|range\-specs|str\-to\-str\-map)\b"><token type="NameClass"/></rule>
-      <rule pattern="\b(default|black|red|green|yellow|blue|magenta|cyan|white|yes|no|false|true)\b"><token type="Literal"/></rule>
+      <rule words="default black red green yellow blue magenta cyan white yes no false true" prefix="\b" suffix="\b"><token type="Literal"/></rule>
       <rule pattern="\brgba?:[0-9a-fA-F]{6,8}\b"><token type="LiteralNumberHex"/></rule>
       <rule pattern="(-params )(\b\d+)(\.\.)(\d+\b)"><bygroups><token type="Text"/><token type="LiteralNumber"/><token type="Text"/><token type="LiteralNumber"/></bygroups></rule>
       <rule pattern="&quot;(&quot;&quot;|[^&quot;])*&quot;"><token type="LiteralString"/></rule>
@@ -37,7 +37,7 @@
     </state>
     <state name="basic">
       <rule pattern="\b(if|fi|else|while|in|do|done|for|then|return|function|case|select|break|continue|until|esac|elif)(\s*)\b"><bygroups><token type="Keyword"/><token type="TextWhitespace"/></bygroups></rule>
-      <rule pattern="\b(alias|bg|bind|builtin|caller|cd|command|compgen|complete|declare|dirs|disown|echo|enable|eval|exec|exit|export|false|fc|fg|getopts|hash|help|history|jobs|kill|let|local|logout|popd|printf|pushd|pwd|read|readonly|set|shift|shopt|source|suspend|test|time|times|trap|true|type|typeset|ulimit|umask|unalias|unset|wait)(?=[\s)`])"><token type="NameBuiltin"/></rule>
+      <rule words="alias bg bind builtin caller cd command compgen complete declare dirs disown echo enable eval exec exit export false fc fg getopts hash help history jobs kill let local logout popd printf pushd pwd read readonly set shift shopt source suspend test time times trap true type typeset ulimit umask unalias unset wait" prefix="\b" suffix="(?=[\s)`])"><token type="NameBuiltin"/></rule>
       <rule pattern="\A#!.+\n"><token type="CommentHashbang"/></rule>
       <rule pattern="#.*\n"><token type="CommentSingle"/></rule>
       <rule pattern="\\[\w\W]"><token type="LiteralStringEscape"/></rule>
@@ -45,7 +45,7 @@
       <rule pattern="[\[\]{}()=]"><token type="Operator"/></rule>
       <rule pattern="&lt;&lt;&lt;"><token type="Operator"/></rule>
       <rule pattern="&lt;&lt;-?\s*(\&#x27;?)\\?(\w+)[\w\W]+?\2"><token type="LiteralString"/></rule>
-      <rule pattern="&amp;&amp;|\|\|"><token type="Operator"/></rule>
+      <rule words="&amp;&amp; ||"><token type="Operator"/></rule>
     </state>
     <state name="data">
       <rule pattern="(?s)\$?&quot;(\\.|[^&quot;\\$])*&quot;"><token type="LiteralStringDouble"/></rule>

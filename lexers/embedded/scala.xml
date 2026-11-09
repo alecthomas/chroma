@@ -74,7 +74,7 @@
       <rule pattern="[\\$_\p{Lu}][\\$_\p{L}](?:[\\$_\p{L}]|[0-9])*(?:(?&lt;=_)[-~\^\*!%&amp;\\&lt;&gt;\|+=:/?@�-�����-����϶҂؆-؈؎-؏۩۽-۾߶৺୰௳-௸௺౿ೱ-ೲ൹༁-༃༓-༗༚-༟༴༶༸྾-࿅࿇-࿏႞-႟፠᎐-᎙᥀᧠-᧿᭡-᭪᭴-᭼⁄⁒⁺-⁼₊-₌℀-℁℃-℆℈-℉℔№-℘℞-℣℥℧℩℮℺-℻⅀-⅄⅊-⅍⅏←-⌨⌫-⑊⒜-ⓩ─-❧➔-⟄⟇-⟥⟰-⦂⦙-⧗⧜-⧻⧾-⭔⳥-⳪⺀-⿻〄〒-〓〠〶-〷〾-〿㆐-㆑㆖-㆟㇀-㇣㈀-㈞㈪-㉐㉠-㉿㊊-㊰㋀-㏿䷀-䷿꒐-꓆꠨-꠫﬩﷽﹢﹤-﹦＋＜-＞｜～￢￤￨-￮￼-�]+)?\b">
         <token type="NameClass"/>
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(import|package)(\s+)">

@@ -15,13 +15,13 @@
       </rule>
     </state>
     <state name="keyword">
-      <rule pattern="(constant|return)">
+      <rule words="constant return">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(memref|tensor|vector|func|loc)">
+      <rule words="memref tensor vector func loc">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="bf16|f16|f32|f64|index">
+      <rule words="bf16 f16 f32 f64 index">
         <token type="Keyword"/>
       </rule>
       <rule pattern="i[1-9]\d*">

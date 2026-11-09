@@ -75,7 +75,7 @@
       <rule pattern="[,:*?]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(in|out|reified)">
+      <rule words="in out reified">
         <token type="Keyword"/>
       </rule>
       <rule pattern="\x60[^\x60]+?\x60">
@@ -107,7 +107,7 @@
       <rule pattern="\n">
         <token type="Text"/>
       </rule>
-      <rule pattern="!==|!in|!is|===">
+      <rule words="!== !in !is ===">
         <token type="Operator"/>
       </rule>
       <rule pattern="%=|&amp;&amp;|\*=|\+\+|\+=|--|-=|-&gt;|\.\.|\/=|::|&lt;=|==|&gt;=|!!|!=|\|\||\?[:.]">

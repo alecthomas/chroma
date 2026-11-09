@@ -35,7 +35,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="\b(as|show|hide)\b">
+      <rule words="as show hide" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="[a-zA-Z_$]\w*">
@@ -71,7 +71,7 @@
       <rule pattern="#!(.*?)$">
         <token type="CommentPreproc"/>
       </rule>
-      <rule pattern="\b(import|export)\b">
+      <rule words="import export" prefix="\b" suffix="\b">
         <token type="Keyword"/>
         <push state="import_decl"/>
       </rule>
@@ -94,16 +94,16 @@
         </bygroups>
         <push state="class"/>
       </rule>
-      <rule pattern="\b(assert|break|case|catch|continue|default|do|else|finally|for|if|in|is|new|return|super|switch|this|throw|try|while)\b">
+      <rule words="assert break case catch continue default do else finally for if in is new return super switch this throw try while" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(abstract|async|await|const|extends|factory|final|get|implements|native|operator|required|set|static|sync|typedef|var|with|yield)\b">
+      <rule words="abstract async await const extends factory final get implements native operator required set static sync typedef var with yield" prefix="\b" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="\b(bool|double|dynamic|int|num|Object|String|void)\b">
+      <rule words="bool double dynamic int num Object String void" prefix="\b" suffix="\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="\b(false|null|true)\b">
+      <rule words="false null true" prefix="\b" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="[~!%^&amp;*+=|?:&lt;&gt;/-]|as\b">

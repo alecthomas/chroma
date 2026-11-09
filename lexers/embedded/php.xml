@@ -16,12 +16,12 @@
   </config>
   <rules>
     <state name="magicfuncs">
-      <rule pattern="(__callStatic|__set_state|__construct|__debugInfo|__toString|__destruct|__invoke|__wakeup|__clone|__sleep|__isset|__unset|__call|__get|__set)\b">
+      <rule words="__callStatic __set_state __construct __debugInfo __toString __destruct __invoke __wakeup __clone __sleep __isset __unset __call __get __set" suffix="\b">
         <token type="NameFunctionMagic"/>
       </rule>
     </state>
     <state name="magicconstants">
-      <rule pattern="(__NAMESPACE__|__FUNCTION__|__METHOD__|__CLASS__|__TRAIT__|__LINE__|__FILE__|__DIR__)\b">
+      <rule words="__NAMESPACE__ __FUNCTION__ __METHOD__ __CLASS__ __TRAIT__ __LINE__ __FILE__ __DIR__" suffix="\b">
         <token type="NameConstant"/>
       </rule>
     </state>
@@ -206,10 +206,10 @@
           <token type="NameConstant"/>
         </bygroups>
       </rule>
-      <rule pattern="(and|E_PARSE|old_function|E_ERROR|or|as|E_WARNING|parent|eval|PHP_OS|break|exit|case|extends|PHP_VERSION|cfunction|FALSE|print|for|require|continue|foreach|require_once|declare|return|default|static|do|switch|die|stdClass|echo|else|TRUE|elseif|var|empty|if|xor|enddeclare|include|virtual|endfor|include_once|while|endforeach|global|endif|list|endswitch|new|endwhile|not|array|E_ALL|NULL|final|php_user_filter|interface|implements|public|private|protected|abstract|clone|try|catch|throw|this|use|namespace|trait|yield|finally|match)\b">
+      <rule words="and E_PARSE old_function E_ERROR or as E_WARNING parent eval PHP_OS break exit case extends PHP_VERSION cfunction FALSE print for require continue foreach require_once declare return default static do switch die stdClass echo else TRUE elseif var empty if xor enddeclare include virtual endfor include_once while endforeach global endif list endswitch new endwhile not array E_ALL NULL final php_user_filter interface implements public private protected abstract clone try catch throw this use namespace trait yield finally match" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule>

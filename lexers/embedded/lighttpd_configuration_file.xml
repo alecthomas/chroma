@@ -22,7 +22,7 @@
       <rule pattern="[0-9]+">
         <token type="LiteralNumber"/>
       </rule>
-      <rule pattern="=&gt;|=~|\+=|==|=|\+">
+      <rule words="=&gt; =~ += == = +">
         <token type="Operator"/>
       </rule>
       <rule pattern="\$[A-Z]+">

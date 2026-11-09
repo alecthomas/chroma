@@ -13,7 +13,7 @@
       <rule pattern="[\{\}\;]+">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(?&lt;![\-\w])(and|or|not|\+|\.)(?![\-\w])">
+      <rule words="and or not + ." prefix="(?&lt;![\-\w])" suffix="(?![\-\w])">
         <token type="Operator"/>
       </rule>
       <rule pattern="&#34;(?:\\&#34;|[^&#34;])*?&#34;">
@@ -45,34 +45,34 @@
       <rule pattern="([0-9]+)(?=[\s\{\}\;])">
         <token type="LiteralNumberInteger"/>
       </rule>
-      <rule pattern="(submodule|module)(?=[^\w\-\:])">
+      <rule words="submodule module" suffix="(?=[^\w\-\:])">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(yang-version|belongs-to|namespace|prefix)(?=[^\w\-\:])">
+      <rule words="yang-version belongs-to namespace prefix" suffix="(?=[^\w\-\:])">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(organization|description|reference|revision|contact)(?=[^\w\-\:])">
+      <rule words="organization description reference revision contact" suffix="(?=[^\w\-\:])">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(revision-date|include|import)(?=[^\w\-\:])">
+      <rule words="revision-date include import" suffix="(?=[^\w\-\:])">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(notification|if-feature|deviation|extension|identity|argument|grouping|typedef|feature|augment|output|action|input|rpc)(?=[^\w\-\:])">
+      <rule words="notification if-feature deviation extension identity argument grouping typedef feature augment output action input rpc" suffix="(?=[^\w\-\:])">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(leaf-list|container|presence|anydata|deviate|choice|config|anyxml|refine|leaf|must|list|case|uses|when)(?=[^\w\-\:])">
+      <rule words="leaf-list container presence anydata deviate choice config anyxml refine leaf must list case uses when" suffix="(?=[^\w\-\:])">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(require-instance|fraction-digits|error-app-tag|error-message|min-elements|max-elements|yin-element|ordered-by|position|modifier|default|pattern|length|status|units|value|range|type|path|enum|base|bit)(?=[^\w\-\:])">
+      <rule words="require-instance fraction-digits error-app-tag error-message min-elements max-elements yin-element ordered-by position modifier default pattern length status units value range type path enum base bit" suffix="(?=[^\w\-\:])">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(mandatory|unique|key)(?=[^\w\-\:])">
+      <rule words="mandatory unique key" suffix="(?=[^\w\-\:])">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(not-supported|invert-match|deprecated|unbounded|obsolete|current|replace|delete|false|true|user|min|max|add)(?=[^\w\-\:])">
+      <rule words="not-supported invert-match deprecated unbounded obsolete current replace delete false true user min max add" suffix="(?=[^\w\-\:])">
         <token type="NameClass"/>
       </rule>
-      <rule pattern="(instance-identifier|identityref|enumeration|decimal64|boolean|leafref|uint64|uint32|string|binary|uint16|int32|int64|int16|empty|uint8|union|int8|bits)(?=[^\w\-\:])">
+      <rule words="instance-identifier identityref enumeration decimal64 boolean leafref uint64 uint32 string binary uint16 int32 int64 int16 empty uint8 union int8 bits" suffix="(?=[^\w\-\:])">
         <token type="NameClass"/>
       </rule>
       <rule pattern="[^;{}\s\&#39;\&#34;]+">

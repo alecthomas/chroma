@@ -25,7 +25,7 @@
       </rule>
     </state>
     <state name="pause">
-      <rule pattern="(mouse|any|button1|button2|button3)\b">
+      <rule words="mouse any button1 button2 button3" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="keypress\b|keypres\b|keypre\b|keypr\b|keyp\b|key\b">
@@ -79,7 +79,7 @@
       <rule pattern="[{}()\[\]]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(eq|ne)\b">
+      <rule words="eq ne" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="([a-zA-Z_]\w*)(\s*)(\()">

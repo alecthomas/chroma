@@ -22,25 +22,25 @@
       <rule pattern="#.*?\n">
         <token type="Comment"/>
       </rule>
-      <rule pattern="(hardware|packet|leased-address|host-decl-name|lease-time|max-lease-time|client-state|config-option|option|filename|next-server|allow|deny|match|ignore)\b">
+      <rule words="hardware packet leased-address host-decl-name lease-time max-lease-time client-state config-option option filename next-server allow deny match ignore" suffix="\b">
          <token type="Keyword"/>
       </rule>
-      <rule pattern="(include|group|host|subnet|subnet6|netmask|class|subclass|pool|failover|include|shared-network|range|range6|prefix6)\b">
+      <rule words="include group host subnet subnet6 netmask class subclass pool failover include shared-network range range6 prefix6" suffix="\b">
          <token type="KeywordType"/>
       </rule>
-      <rule pattern="(on|off|true|false|none)\b">
+      <rule words="on off true false none" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(if|elsif|else)\b">
+      <rule words="if elsif else" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(exists|known|static)\b">
+      <rule words="exists known static" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(and|or|not)\b">
+      <rule words="and or not" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="(==|!=|~=|~~|=)">
+      <rule words="== != ~= ~~ =">
         <token type="Operator"/>
       </rule>
       <rule pattern="[{},;\)]">

@@ -178,7 +178,7 @@
       >
         <token type="KeywordType" />
       </rule>
-      <rule pattern="(and|final|If|Loop|loop|not|or|override|setup|Setup|throw|try|xor)\b">
+      <rule words="and final If Loop loop not or override setup Setup throw try xor" suffix="\b">
         <token type="Keyword" />
       </rule>
       <rule
@@ -186,7 +186,7 @@
       >
         <token type="KeywordConstant" />
       </rule>
-      <rule pattern="(boolean|const|byte|word|string|String|array)\b">
+      <rule words="boolean const byte word string String array" suffix="\b">
         <token type="NameVariable" />
       </rule>
       <rule
@@ -199,7 +199,7 @@
       >
         <token type="NameFunction" />
       </rule>
-      <rule pattern="(typename|__inline|restrict|_inline|thread|inline|naked)\b">
+      <rule words="typename __inline restrict _inline thread inline naked" suffix="\b">
         <token type="KeywordReserved" />
       </rule>
       <rule pattern="(__m(128i|128d|128|64))\b">
@@ -210,7 +210,7 @@
       >
         <token type="KeywordReserved" />
       </rule>
-      <rule pattern="(true|false|NULL)\b">
+      <rule words="true false NULL" suffix="\b">
         <token type="NameBuiltin" />
       </rule>
       <rule pattern="([a-zA-Z_]\w*)(\s*)(:)(?!:)">

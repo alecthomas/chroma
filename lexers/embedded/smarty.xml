@@ -59,7 +59,7 @@
       <rule pattern="[~!%^&amp;*()+=|\[\]:;,.&lt;&gt;/?@-]">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="[0-9](\.[0-9]*)?(eE[+-][0-9])?[flFLdD]?|0[xX][0-9a-fA-F]+[Ll]?">

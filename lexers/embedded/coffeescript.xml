@@ -141,14 +141,14 @@
       <rule pattern="[})\].]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(?&lt;![.$])(for|own|in|of|while|until|loop|break|return|continue|switch|when|then|if|unless|else|throw|try|catch|finally|new|delete|typeof|instanceof|super|extends|this|class|by)\b">
+      <rule words="for own in of while until loop break return continue switch when then if unless else throw try catch finally new delete typeof instanceof super extends this class by" prefix="(?&lt;![.$])" suffix="\b">
         <token type="Keyword"/>
         <push state="slashstartsregex"/>
       </rule>
-      <rule pattern="(?&lt;![.$])(true|false|yes|no|on|off|null|NaN|Infinity|undefined)\b">
+      <rule words="true false yes no on off null NaN Infinity undefined" prefix="(?&lt;![.$])" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(Array|Boolean|Date|Error|Function|Math|netscape|Number|Object|Packages|RegExp|String|sun|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|eval|isFinite|isNaN|parseFloat|parseInt|document|window)\b">
+      <rule words="Array Boolean Date Error Function Math netscape Number Object Packages RegExp String sun decodeURI decodeURIComponent encodeURI encodeURIComponent eval isFinite isNaN parseFloat parseInt document window" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="[$a-zA-Z_][\w.:$]*\s*[:=]\s">

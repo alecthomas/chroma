@@ -16,13 +16,13 @@
       <rule pattern="//(.*?)\n">
         <token type="CommentSingle"/>
       </rule>
-      <rule pattern="(as|assert|case|opaque|panic|pub|todo)\b">
+      <rule words="as assert case opaque panic pub todo" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(import|use)\b">
+      <rule words="import use" suffix="\b">
         <token type="KeywordNamespace"/>
       </rule>
-      <rule pattern="(auto|const|delegate|derive|echo|else|if|implement|macro|test)\b">
+      <rule words="auto const delegate derive echo else if implement macro test" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="(let)\b">
@@ -34,7 +34,7 @@
       <rule pattern="(type)\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(True|False)\b">
+      <rule words="True False" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="0[bB][01](_?[01])*">
@@ -62,7 +62,7 @@
       <rule pattern="[{}()\[\],]|[#(]|\.\.|&lt;&gt;|&lt;&lt;|&gt;&gt;">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern=":|-&gt;">
+      <rule words=": -&gt;">
         <token type="Operator"/>
       </rule>
       <rule pattern="[+\-*/%!=&lt;&gt;&amp;|.]|&lt;-">

@@ -87,7 +87,7 @@
       <rule pattern="\b(global|local|prop(erty)?|set|get)\b">
         <token type="Keyword" />
       </rule>
-      <rule pattern="\b(but|put|returning|the)\b">
+      <rule words="but put returning the" prefix="\b" suffix="\b">
         <token type="NameBuiltin" />
       </rule>
       <rule pattern="\b(attachment|attribute run|character|day|month|paragraph|word|year)s?\b">

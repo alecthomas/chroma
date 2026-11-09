@@ -149,7 +149,7 @@
           <token type="LiteralStringSymbol"/>
         </bygroups>
       </rule>
-      <rule pattern="(?=[\w\-])(HTMLparser|HTMLparser_tags|addParams|cache|encapsLines|filelink|if|imageLinkWrap|imgResource|makelinks|numRows|numberFormat|parseFunc|replacement|round|select|split|stdWrap|strPad|tableStyle|tags|textStyle|typolink)(?![\w\-])">
+      <rule words="HTMLparser HTMLparser_tags addParams cache encapsLines filelink if imageLinkWrap imgResource makelinks numRows numberFormat parseFunc replacement round select split stdWrap strPad tableStyle tags textStyle typolink" prefix="(?=[\w\-])" suffix="(?![\w\-])">
         <token type="NameFunction"/>
       </rule>
       <rule pattern="(?:(=?\s*&lt;?\s+|^\s*))(cObj|field|config|content|constants|FEData|file|frameset|includeLibs|lib|page|plugin|register|resources|sitemap|sitetitle|styles|temp|tt_[^:.\s]*|types|xmlnews|INCLUDE_TYPOSCRIPT|_CSS_DEFAULT_STYLE|_DEFAULT_PI_VARS|_LOCAL_LANG)(?![\w\-])">
@@ -158,13 +158,13 @@
           <token type="NameBuiltin"/>
         </bygroups>
       </rule>
-      <rule pattern="(?=[\w\-])(CASE|CLEARGIF|COA|COA_INT|COBJ_ARRAY|COLUMNS|CONTENT|CTABLE|EDITPANEL|FILE|FILES|FLUIDTEMPLATE|FORM|HMENU|HRULER|HTML|IMAGE|IMGTEXT|IMG_RESOURCE|LOAD_REGISTER|MEDIA|MULTIMEDIA|OTABLE|PAGE|QTOBJECT|RECORDS|RESTORE_REGISTER|SEARCHRESULT|SVG|SWFOBJECT|TEMPLATE|TEXT|USER|USER_INT)(?![\w\-])">
+      <rule words="CASE CLEARGIF COA COA_INT COBJ_ARRAY COLUMNS CONTENT CTABLE EDITPANEL FILE FILES FLUIDTEMPLATE FORM HMENU HRULER HTML IMAGE IMGTEXT IMG_RESOURCE LOAD_REGISTER MEDIA MULTIMEDIA OTABLE PAGE QTOBJECT RECORDS RESTORE_REGISTER SEARCHRESULT SVG SWFOBJECT TEMPLATE TEXT USER USER_INT" prefix="(?=[\w\-])" suffix="(?![\w\-])">
         <token type="NameClass"/>
       </rule>
-      <rule pattern="(?=[\w\-])(ACTIFSUBRO|ACTIFSUB|ACTRO|ACT|CURIFSUBRO|CURIFSUB|CURRO|CUR|IFSUBRO|IFSUB|NO|SPC|USERDEF1RO|USERDEF1|USERDEF2RO|USERDEF2|USRRO|USR)">
+      <rule words="ACTIFSUBRO ACTIFSUB ACTRO ACT CURIFSUBRO CURIFSUB CURRO CUR IFSUBRO IFSUB NO SPC USERDEF1RO USERDEF1 USERDEF2RO USERDEF2 USRRO USR" prefix="(?=[\w\-])">
         <token type="NameClass"/>
       </rule>
-      <rule pattern="(?=[\w\-])(GMENU_FOLDOUT|GMENU_LAYERS|GMENU|IMGMENUITEM|IMGMENU|JSMENUITEM|JSMENU|TMENUITEM|TMENU_LAYERS|TMENU)">
+      <rule words="GMENU_FOLDOUT GMENU_LAYERS GMENU IMGMENUITEM IMGMENU JSMENUITEM JSMENU TMENUITEM TMENU_LAYERS TMENU" prefix="(?=[\w\-])">
         <token type="NameClass"/>
       </rule>
       <rule pattern="(?=[\w\-])(PHP_SCRIPT(_EXT|_INT)?)">

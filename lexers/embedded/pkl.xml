@@ -49,28 +49,28 @@
       <rule pattern="import\*">
         <token type="KeywordNamespace"/>
       </rule>
-      <rule pattern="read\*|read\?">
+      <rule words="read* read?">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(module|amends|extends|import)\b">
+      <rule words="module amends extends import" suffix="\b">
         <token type="KeywordNamespace"/>
       </rule>
-      <rule pattern="(abstract|class|const|external|fixed|function|hidden|local|open|typealias)\b">
+      <rule words="abstract class const external fixed function hidden local open typealias" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(true|false|null|nothing)\b">
+      <rule words="true false null nothing" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="unknown\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(read|throw|trace)\b">
+      <rule words="read throw trace" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(this|super|outer)\b">
+      <rule words="this super outer" suffix="\b">
         <token type="NameBuiltinPseudo"/>
       </rule>
-      <rule pattern="(as|else|for|if|in|is|let|new|out|when)\b">
+      <rule words="as else for if in is let new out when" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="@[A-Za-z_][\w.]*">

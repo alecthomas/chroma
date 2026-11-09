@@ -193,13 +193,13 @@
       <rule pattern="\$([a-zA-Z_]\w*|\(,?|\),?|,?)">
         <token type="CommentPreproc"/>
       </rule>
-      <rule pattern="(unsafe|static|extern|return|const|crate|where|while|await|trait|super|async|match|impl|else|move|loop|pub|ref|mut|for|dyn|use|box|in|if|as)\b">
+      <rule words="unsafe static extern return const crate where while await trait super async match impl else move loop pub ref mut for dyn use box in if as" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(abstract|override|unsized|virtual|become|typeof|final|macro|yield|priv|try|do)\b">
+      <rule words="abstract override unsized virtual become typeof final macro yield priv try do" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
-      <rule pattern="(true|false)\b">
+      <rule words="true false" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="self\b">
@@ -216,7 +216,7 @@
         <token type="Keyword"/>
         <push state="funcname"/>
       </rule>
-      <rule pattern="(struct|enum|type|union)\b">
+      <rule words="struct enum type union" suffix="\b">
         <token type="Keyword"/>
         <push state="typename"/>
       </rule>
@@ -227,19 +227,19 @@
           <token type="Keyword"/>
         </bygroups>
       </rule>
-      <rule pattern="(isize|usize|bool|char|u128|i128|i64|i32|i16|str|u64|u32|f32|f64|u16|i8|u8)\b">
+      <rule words="isize usize bool char u128 i128 i64 i32 i16 str u64 u32 f32 f64 u16 i8 u8" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="[sS]elf\b">
         <token type="NameBuiltinPseudo"/>
       </rule>
-      <rule pattern="(DoubleEndedIterator|ExactSizeIterator|IntoIterator|PartialOrd|PartialEq|ToString|Iterator|ToOwned|Default|Result|String|FnOnce|Extend|Option|FnMut|Unpin|Sized|AsRef|AsMut|Clone|None|From|Into|Sync|drop|Send|Drop|Copy|Some|Ord|Err|Box|Vec|Eq|Ok|Fn)\b">
+      <rule words="DoubleEndedIterator ExactSizeIterator IntoIterator PartialOrd PartialEq ToString Iterator ToOwned Default Result String FnOnce Extend Option FnMut Unpin Sized AsRef AsMut Clone None From Into Sync drop Send Drop Copy Some Ord Err Box Vec Eq Ok Fn" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="::\b">
         <token type="Text"/>
       </rule>
-      <rule pattern="(?::|-&gt;)">
+      <rule words=": -&gt;">
         <token type="Text"/>
         <push state="typename"/>
       </rule>
@@ -357,10 +357,10 @@
         <token type="NameAttribute"/>
         <push state="lifetime"/>
       </rule>
-      <rule pattern="(DoubleEndedIterator|ExactSizeIterator|IntoIterator|PartialOrd|PartialEq|ToString|Iterator|ToOwned|Default|Result|String|FnOnce|Extend|Option|FnMut|Unpin|Sized|AsRef|AsMut|Clone|None|From|Into|Sync|drop|Send|Drop|Copy|Some|Ord|Err|Box|Vec|Eq|Ok|Fn)\b">
+      <rule words="DoubleEndedIterator ExactSizeIterator IntoIterator PartialOrd PartialEq ToString Iterator ToOwned Default Result String FnOnce Extend Option FnMut Unpin Sized AsRef AsMut Clone None From Into Sync drop Send Drop Copy Some Ord Err Box Vec Eq Ok Fn" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(isize|usize|bool|char|u128|i128|i64|i32|i16|str|u64|u32|f32|f64|u16|i8|u8)\b">
+      <rule words="isize usize bool char u128 i128 i64 i32 i16 str u64 u32 f32 f64 u16 i8 u8" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="(r#)?[a-zA-Z_]\w*">

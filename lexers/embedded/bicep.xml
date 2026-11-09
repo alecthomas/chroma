@@ -61,13 +61,13 @@
       <rule pattern="[\w_]+(?=\()">
         <token type="NameFunction"/>
       </rule>
-      <rule pattern="\b(metadata|targetScope|resource|module|param|var|output|for|in|if|existing|import|as|type|with|using|func|assert)\b">
+      <rule words="metadata targetScope resource module param var output for in if existing import as type with using func assert" prefix="\b" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="\b(true|false|null)\b">
+      <rule words="true false null" prefix="\b" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(&gt;=|&gt;|&lt;=|&lt;|==|!=|=~|!~|::|&amp;&amp;|\?\?|!|-|%|\*|\/|\+)">
+      <rule words="&gt;= &gt; &lt;= &lt; == != =~ !~ :: &amp;&amp; ?? ! - % * / +">
         <token type="Operator"/>
       </rule>
       <rule pattern="(\(|\)|\[|\]|\.|:|\?|{|}|@|,|\||=&gt;|=)">

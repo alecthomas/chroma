@@ -140,7 +140,7 @@
       </rule>
     </state>
     <state name="declarations">
-      <rule pattern="\b(DATA|LET)(?=\(|\b)">
+      <rule words="DATA LET" prefix="\b" suffix="(?=\(|\b)">
         <token type="KeywordDeclaration"/>
       </rule>
     </state>
@@ -150,12 +150,12 @@
       </rule>
     </state>
     <state name="metacommands">
-      <rule pattern="\b(\$DYNAMIC|\$INCLUDE|\$STATIC)(?=\(|\b)">
+      <rule words="$DYNAMIC $INCLUDE $STATIC" prefix="\b" suffix="(?=\(|\b)">
         <token type="KeywordConstant"/>
       </rule>
     </state>
     <state name="operators">
-      <rule pattern="\b(AND|EQV|IMP|NOT|OR|XOR)(?=\(|\b)">
+      <rule words="AND EQV IMP NOT OR XOR" prefix="\b" suffix="(?=\(|\b)">
         <token type="OperatorWord"/>
       </rule>
     </state>
@@ -165,7 +165,7 @@
       </rule>
     </state>
     <state name="keywords">
-      <rule pattern="\b(ACCESS|ALIAS|ANY|APPEND|AS|BASE|BINARY|BYVAL|CASE|CDECL|DOUBLE|ELSE|ELSEIF|ENDIF|INTEGER|IS|LIST|LOCAL|LONG|LOOP|MOD|NEXT|OFF|ON|OUTPUT|RANDOM|SIGNAL|SINGLE|STEP|STRING|THEN|TO|UNTIL|USING|WEND)\b">
+      <rule words="ACCESS ALIAS ANY APPEND AS BASE BINARY BYVAL CASE CDECL DOUBLE ELSE ELSEIF ENDIF INTEGER IS LIST LOCAL LONG LOOP MOD NEXT OFF ON OUTPUT RANDOM SIGNAL SINGLE STEP STRING THEN TO UNTIL USING WEND" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
     </state>

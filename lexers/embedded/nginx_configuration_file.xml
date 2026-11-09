@@ -52,7 +52,7 @@
       <rule pattern="#.*\n">
         <token type="CommentSingle"/>
       </rule>
-      <rule pattern="on|off">
+      <rule words="on off">
         <token type="NameConstant"/>
       </rule>
       <rule pattern="\$[^\s;#()]+">

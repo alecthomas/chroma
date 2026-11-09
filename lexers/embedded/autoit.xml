@@ -11,7 +11,7 @@
       <rule pattern=";.*\n"><token type="CommentSingle"/></rule>
       <rule pattern="(#comments-start|#cs)(.|\n)*?(#comments-end|#ce)"><token type="CommentMultiline"/></rule>
       <rule pattern="[\[\]{}(),;]"><token type="Punctuation"/></rule>
-      <rule pattern="(and|or|not)\b"><token type="OperatorWord"/></rule>
+      <rule words="and or not" suffix="\b"><token type="OperatorWord"/></rule>
       <rule pattern="[$|@][a-zA-Z_]\w*"><token type="NameVariable"/></rule>
       <rule pattern="!=|==|:=|\.=|&lt;&lt;|&gt;&gt;|[-~+/*%=&lt;&gt;&amp;^|?:!.]"><token type="Operator"/></rule>
       <rule><include state="commands"/></rule>
@@ -22,7 +22,7 @@
       <rule pattern="&#x27;"><token type="LiteralString"/><push state="sqs"/></rule>
       <rule><include state="numbers"/></rule>
       <rule pattern="[a-zA-Z_#@$][\w#@$]*"><token type="Name"/></rule>
-      <rule pattern="\\|\&#x27;"><token type="Text"/></rule>
+      <rule words="\ &#39;"><token type="Text"/></rule>
       <rule pattern="\`([,%`abfnrtv\-+;])"><token type="LiteralStringEscape"/></rule>
       <rule pattern="_\n"><token type="Text"/></rule>
       <rule><include state="garbage"/></rule>

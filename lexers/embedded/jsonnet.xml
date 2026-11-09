@@ -25,7 +25,7 @@
       <rule pattern="\["><token type="Punctuation"/><push state="array"/></rule>
       <rule pattern="local\b"><token type="Keyword"/><push state="local_name"/></rule>
       <rule pattern="assert\b"><token type="Keyword"/><push state="assert"/></rule>
-      <rule pattern="(assert|else|error|false|for|if|import|importstr|in|null|tailstrict|then|self|super|true)\b"><token type="Keyword"/></rule>
+      <rule words="assert else error false for if import importstr in null tailstrict then self super true" suffix="\b"><token type="Keyword"/></rule>
       <rule pattern="\s+"><token type="TextWhitespace"/></rule>
       <rule pattern="function(?=\()"><token type="Keyword"/><push state="function_params"/></rule>
       <rule pattern="std\.[^\W\d]\w*(?=\()"><token type="NameBuiltin"/><push state="function_args"/></rule>

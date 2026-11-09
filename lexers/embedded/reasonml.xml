@@ -23,7 +23,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="false|true|\(\)|\[\]">
+      <rule words="false true () []">
         <token type="NameBuiltinPseudo"/>
       </rule>
       <rule pattern="\b([A-Z][\w\&#39;]*)(?=\s*\.)">
@@ -40,7 +40,7 @@
         <token type="CommentMultiline"/>
         <push state="comment"/>
       </rule>
-      <rule pattern="\b(as|assert|begin|class|constraint|do|done|downto|else|end|exception|external|false|for|fun|esfun|function|functor|if|in|include|inherit|initializer|lazy|let|switch|module|pub|mutable|new|nonrec|object|of|open|pri|rec|sig|struct|then|to|true|try|type|val|virtual|when|while|with)\b">
+      <rule words="as assert begin class constraint do done downto else end exception external false for fun esfun function functor if in include inherit initializer lazy let switch module pub mutable new nonrec object of open pri rec sig struct then to true try type val virtual when while with" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(~|\}|\|]|\||\|\||\{&lt;|\{|`|_|]|\[\||\[&gt;|\[&lt;|\[|\?\?|\?|&gt;\}|&gt;]|&gt;|=|&lt;-|&lt;|;;|;|:&gt;|:=|::|:|\.\.\.|\.\.|\.|=&gt;|-\.|-|,|\+|\*|\)|\(|&amp;&amp;|&amp;|#|!=)">
@@ -49,10 +49,10 @@
       <rule pattern="([=&lt;&gt;@^|&amp;+\*/$%-]|[!?~])?[!$%&amp;*+\./:&lt;=&gt;?@^|~-]">
         <token type="Operator"/>
       </rule>
-      <rule pattern="\b(and|asr|land|lor|lsl|lsr|lxor|mod|or)\b">
+      <rule words="and asr land lor lsl lsr lxor mod or" prefix="\b" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="\b(unit|int|float|bool|string|char|list|array)\b">
+      <rule words="unit int float bool string char list array" prefix="\b" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="[^\W\d][\w&#39;]*">

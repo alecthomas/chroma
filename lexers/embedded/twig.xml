@@ -126,7 +126,7 @@
       <rule pattern="(in|not|and|b-and|or|b-or|b-xor|isif|elseif|else|importconstant|defined|divisibleby|empty|even|iterable|odd|sameasmatches|starts\s+with|ends\s+with)\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(loop|block|parent)\b">
+      <rule words="loop block parent" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="(?:[\\_a-z]|[^\x00-\x7f])(?:[\\\w-]|[^\x00-\x7f])*">

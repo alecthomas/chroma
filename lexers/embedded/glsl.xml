@@ -45,10 +45,10 @@
       <rule pattern="[1-9][0-9]*">
         <token type="LiteralNumberInteger"/>
       </rule>
-      <rule pattern="\b(sampler3DsamplerCube|sampler2DShadow|sampler1DShadow|invariant|sampler1D|sampler2D|attribute|mat3mat4|centroid|continue|varying|uniform|discard|mat4x4|mat3x3|mat2x3|mat4x2|mat3x2|mat2x2|mat2x4|mat3x4|struct|return|mat4x3|bvec4|false|ivec4|ivec3|const|float|inout|ivec2|break|while|bvec3|bvec2|vec3|else|true|void|bool|vec2|vec4|mat2|for|out|int|in|do|if)\b">
+      <rule words="sampler3DsamplerCube sampler2DShadow sampler1DShadow invariant sampler1D sampler2D attribute mat3mat4 centroid continue varying uniform discard mat4x4 mat3x3 mat2x3 mat4x2 mat3x2 mat2x2 mat2x4 mat3x4 struct return mat4x3 bvec4 false ivec4 ivec3 const float inout ivec2 break while bvec3 bvec2 vec3 else true void bool vec2 vec4 mat2 for out int in do if" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(sampler2DRectShadow|sampler2DRect|sampler3DRect|namespace|precision|interface|volatile|template|unsigned|external|noinline|mediump|typedef|default|switch|static|extern|inline|sizeof|output|packed|double|public|fvec3|class|union|short|highp|fixed|input|fvec4|hvec2|hvec3|hvec4|dvec2|dvec3|dvec4|fvec2|using|long|this|enum|lowp|cast|goto|half|asm)\b">
+      <rule words="sampler2DRectShadow sampler2DRect sampler3DRect namespace precision interface volatile template unsigned external noinline mediump typedef default switch static extern inline sizeof output packed double public fvec3 class union short highp fixed input fvec4 hvec2 hvec3 hvec4 dvec2 dvec3 dvec4 fvec2 using long this enum lowp cast goto half asm" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="[a-zA-Z_]\w*">

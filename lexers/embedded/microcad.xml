@@ -34,7 +34,7 @@
       </rule>
 
       <!-- KEYWORDS -->
-      <rule pattern="\b(pub|sketch|part|op|mod|use|fn|const|prop|init|return|if|else|mat|__builtin|or|and|not|as)\b">
+      <rule words="pub sketch part op mod use fn const prop init return if else mat __builtin or and not as" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
 

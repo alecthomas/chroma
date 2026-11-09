@@ -26,7 +26,7 @@
         <token type="Text"/>
         <push state="afterobject"/>
       </rule>
-      <rule pattern="\b(self|super|true|false|nil|thisContext)\b">
+      <rule words="self super true false nil thisContext" prefix="\b" suffix="\b">
         <token type="NameBuiltinPseudo"/>
         <push state="afterobject"/>
       </rule>
@@ -54,14 +54,14 @@
       <rule>
         <include state="whitespaces"/>
       </rule>
-      <rule pattern="\b(ifTrue:|ifFalse:|whileTrue:|whileFalse:|timesRepeat:)">
+      <rule words="ifTrue: ifFalse: whileTrue: whileFalse: timesRepeat:" prefix="\b">
         <token type="NameBuiltin"/>
         <pop depth="1"/>
       </rule>
       <rule pattern="\b(new\b(?!:))">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern=":=|_">
+      <rule words=":= _">
         <token type="Operator"/>
         <pop depth="1"/>
       </rule>
@@ -141,7 +141,7 @@
       <rule>
         <include state="objects"/>
       </rule>
-      <rule pattern="\^|:=|_">
+      <rule words="^ := _">
         <token type="Operator"/>
       </rule>
       <rule pattern="[\]({}.;!]">

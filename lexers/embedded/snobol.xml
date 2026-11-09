@@ -43,7 +43,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="(?&lt;=[^\w.])(LT|LE|EQ|NE|GE|GT|INTEGER|IDENT|DIFFER|LGT|SIZE|REPLACE|TRIM|DUPL|REMDR|DATE|TIME|EVAL|APPLY|OPSYN|LOAD|UNLOAD|LEN|SPAN|BREAK|ANY|NOTANY|TAB|RTAB|REM|POS|RPOS|FAIL|FENCE|ABORT|ARB|ARBNO|BAL|SUCCEED|INPUT|OUTPUT|TERMINAL)(?=[^\w.])">
+      <rule words="LT LE EQ NE GE GT INTEGER IDENT DIFFER LGT SIZE REPLACE TRIM DUPL REMDR DATE TIME EVAL APPLY OPSYN LOAD UNLOAD LEN SPAN BREAK ANY NOTANY TAB RTAB REM POS RPOS FAIL FENCE ABORT ARB ARBNO BAL SUCCEED INPUT OUTPUT TERMINAL" prefix="(?&lt;=[^\w.])" suffix="(?=[^\w.])">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="[A-Za-z][\w.]*">
@@ -80,7 +80,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="F|S">
+      <rule words="F S">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(\()([A-Za-z][\w.]*)(\))">

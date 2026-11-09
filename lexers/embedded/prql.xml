@@ -11,7 +11,7 @@
       <rule pattern="#.*"><token type="CommentSingle"/></rule>
       <rule pattern="\s+"><token type="TextWhitespace"/></rule>
       <rule pattern="^(\s*)(module)(\s*)"><bygroups><token type="TextWhitespace"/><token type="KeywordNamespace"/><token type="TextWhitespace"/></bygroups><push state="imports"/></rule>
-      <rule pattern="(bool|int|int8|int16|int32|int64|int128|float|text|set)\b"><token type="KeywordType"/></rule>
+      <rule words="bool int int8 int16 int32 int64 int128 float text set" suffix="\b"><token type="KeywordType"/></rule>
       <rule pattern="^prql "><token type="KeywordReserved"/></rule>
       <rule pattern="let"><token type="KeywordDeclaration"/></rule>
       <rule><include state="keywords"/></rule>
@@ -40,7 +40,7 @@
       <rule pattern="@\d{2}(:\d{2})?(:\d{2})?(\.\d{1,6})?(Z|[+-]\d{1,2}(:\d{1,2})?)?"><token type="LiteralDate"/></rule>
       <rule pattern="[^\S\n]+"><token type="Text"/></rule>
       <rule><include state="numbers"/></rule>
-      <rule pattern="-&gt;|=&gt;|==|!=|&gt;=|&lt;=|~=|&amp;&amp;|\|\||\?\?|\/\/"><token type="Operator"/></rule>
+      <rule words="-&gt; =&gt; == != &gt;= &lt;= ~= &amp;&amp; || ?? //"><token type="Operator"/></rule>
       <rule pattern="[-~+/*%=&lt;&gt;&amp;^|.@]"><token type="Operator"/></rule>
       <rule pattern="[]{}:(),;[]"><token type="Punctuation"/></rule>
       <rule><include state="functions"/></rule>
@@ -142,11 +142,11 @@
       <rule><include state="expr"/></rule>
     </state>
     <state name="keywords">
-      <rule pattern="(into|case|type|module|internal)\b"><token type="Keyword"/></rule>
-      <rule pattern="(true|false|null)\b"><token type="KeywordConstant"/></rule>
+      <rule words="into case type module internal" suffix="\b"><token type="Keyword"/></rule>
+      <rule words="true false null" suffix="\b"><token type="KeywordConstant"/></rule>
     </state>
     <state name="functions">
-      <rule pattern="(min|max|sum|average|stddev|every|any|concat_array|count|lag|lead|first|last|rank|rank_dense|row_number|round|as|in|tuple_every|tuple_map|tuple_zip|_eq|_is_null|from_text|lower|upper|read_parquet|read_csv)\b"><token type="NameFunction"/></rule>
+      <rule words="min max sum average stddev every any concat_array count lag lead first last rank rank_dense row_number round as in tuple_every tuple_map tuple_zip _eq _is_null from_text lower upper read_parquet read_csv" suffix="\b"><token type="NameFunction"/></rule>
     </state>
     <state name="comment">
       <rule pattern="-(?!\})"><token type="CommentMultiline"/></rule>

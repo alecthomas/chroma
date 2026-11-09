@@ -26,7 +26,7 @@
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="(\$repo|\$arch|%o|%u)\b">
+      <rule words="$repo $arch %o %u" suffix="\b">
         <token type="NameVariable"/>
       </rule>
       <rule pattern=".">

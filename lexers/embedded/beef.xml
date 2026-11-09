@@ -61,7 +61,7 @@
           <token type="Keyword"/>
         </bygroups>
       </rule>
-      <rule pattern="(as|await|base|break|by|case|catch|checked|continue|default|delegate|else|event|finally|fixed|for|repeat|goto|if|in|init|is|let|lock|new|scope|on|out|params|readonly|ref|return|sizeof|stackalloc|switch|this|throw|try|typeof|unchecked|virtual|void|while|get|set|new|yield|add|remove|value|alias|ascending|descending|from|group|into|orderby|select|thenby|where|join|equals)\b">
+      <rule words="as await base break by case catch checked continue default delegate else event finally fixed for repeat goto if in init is let lock new scope on out params readonly ref return sizeof stackalloc switch this throw try typeof unchecked virtual void while get set new yield add remove value alias ascending descending from group into orderby select thenby where join equals" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(global)(::)">
@@ -70,13 +70,13 @@
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="(abstract|async|const|enum|explicit|extern|implicit|internal|operator|override|partial|extension|private|protected|public|static|sealed|unsafe|volatile)\b">
+      <rule words="abstract async const enum explicit extern implicit internal operator override partial extension private protected public static sealed unsafe volatile" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule pattern="(bool|byte|char8|char16|char32|decimal|double|float|int|int8|int16|int32|int64|long|object|sbyte|short|string|uint|uint8|uint16|uint32|uint64|uint|let|var)\b\??">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(class|struct|record|interface)(\s+)">

@@ -29,7 +29,7 @@
       <rule pattern="&#39;[^&#39;]*&#39;">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="(default|switch|memo)\b">
+      <rule words="default switch memo" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="{|}|;|-&gt;|=&gt;|\(|\)|\[|\]|\.">

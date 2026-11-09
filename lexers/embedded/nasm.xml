@@ -20,7 +20,7 @@
       <rule pattern="[$]+">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="seg|wrt|strict">
+      <rule words="seg wrt strict">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="byte|[dq]?word">
@@ -46,7 +46,7 @@
         </bygroups>
         <push state="instruction-args"/>
       </rule>
-      <rule pattern="BITS|USE16|USE32|SECTION|SEGMENT|ABSOLUTE|EXTERN|GLOBAL|ORG|ALIGN|STRUC|ENDSTRUC|COMMON|CPU|GROUP|UPPERCASE|IMPORT|EXPORT|LIBRARY|MODULE">
+      <rule words="BITS USE16 USE32 SECTION SEGMENT ABSOLUTE EXTERN GLOBAL ORG ALIGN STRUC ENDSTRUC COMMON CPU GROUP UPPERCASE IMPORT EXPORT LIBRARY MODULE">
         <token type="Keyword"/>
         <push state="instruction-args"/>
       </rule>

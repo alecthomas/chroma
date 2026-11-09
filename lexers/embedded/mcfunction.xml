@@ -63,7 +63,7 @@
     </state>
     <state name="literals">
       <rule pattern="\.\."><token type="Literal"/></rule>
-      <rule pattern="(true|false)"><token type="KeywordPseudo"/></rule>
+      <rule words="true false"><token type="KeywordPseudo"/></rule>
       <rule pattern="[A-Za-z_]+"><token type="NameVariableClass"/></rule>
       <rule pattern="[0-7]b"><token type="LiteralNumberByte"/></rule>
       <rule pattern="[+-]?\d*\.?\d+([eE]?[+-]?\d+)?[df]?\b"><token type="LiteralNumberFloat"/></rule>

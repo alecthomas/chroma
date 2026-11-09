@@ -60,25 +60,25 @@
       <rule pattern="[0-9][0-9_]*">
         <token type="LiteralNumberInteger"/>
       </rule>
-      <rule pattern="\b(import|export|from|as)\b">
+      <rule words="import export from as" prefix="\b" suffix="\b">
         <token type="KeywordNamespace"/>
       </rule>
-      <rule pattern="\b(let|const|define|fn|enum|type|extern|ref|gpu)\b">
+      <rule words="let const define fn enum type extern ref gpu" prefix="\b" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="\b(if|else|while|for|in|loop|match|switch|case|default|break|continue|return|defer|try|catch|finally|throw|async|await)\b">
+      <rule words="if else while for in loop match switch case default break continue return defer try catch finally throw async await" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(true|false|null)\b">
+      <rule words="true false null" prefix="\b" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="\b(self)\b">
         <token type="NameBuiltinPseudo"/>
       </rule>
-      <rule pattern="\b(i8|i16|i32|i64|u8|u16|u32|u64|f32|f64|bool|string|rune|array|object|ptr|buffer|void|integer|number|byte|file|task|channel|gpu_buffer|gpu_local|Self)\b">
+      <rule words="i8 i16 i32 i64 u8 u16 u32 u64 f32 f64 bool string rune array object ptr buffer void integer number byte file task channel gpu_buffer gpu_local Self" prefix="\b" suffix="\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="\b(print|write|eprint|read_line|typeof|typeid|alloc|free|realloc|talloc|memset|memcpy|sizeof|panic|assert|apply|exec|exec_argv|spawn|spawn_with|join|detach|select|global_id|local_array|barrier|ffi_sizeof|buffer_ptr|ptr_null|ptr_offset|ptr_to_buffer)\b">
+      <rule words="print write eprint read_line typeof typeid alloc free realloc talloc memset memcpy sizeof panic assert apply exec exec_argv spawn spawn_with join detach select global_id local_array barrier ffi_sizeof buffer_ptr ptr_null ptr_offset ptr_to_buffer" prefix="\b" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="\b(ptr_(read|write|deref)_(i8|i16|i32|i64|u8|u16|u32|u64|f32|f64|ptr))\b">

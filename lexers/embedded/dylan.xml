@@ -137,7 +137,7 @@
           <token type="NameVariable"/>
         </bygroups>
       </rule>
-      <rule pattern="(error|signal|return|break)">
+      <rule words="error signal return break">
         <token type="NameException"/>
       </rule>
       <rule pattern="(\\?)([\w!&amp;*&lt;&gt;|^$%@+~?/=-]+)">

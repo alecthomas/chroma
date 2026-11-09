@@ -13,22 +13,22 @@
       <rule pattern="/\*(?:.|\n)*?\*/">
         <token type="CommentMultiline"/>
       </rule>
-      <rule pattern="\+\+|--">
+      <rule words="++ --">
         <token type="Operator"/>
       </rule>
       <rule pattern="[-+*/^&amp;=!]">
         <token type="Operator"/>
       </rule>
-      <rule pattern="&lt;=|&gt;=|&lt;|&gt;|==">
+      <rule words="&lt;= &gt;= &lt; &gt; ==">
         <token type="Operator"/>
       </rule>
       <rule pattern="mod\b">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(eq|lt|gt|lte|gte|not|is|and|or)\b">
+      <rule words="eq lt gt lte gte not is and or" suffix="\b">
         <token type="Operator"/>
       </rule>
-      <rule pattern="\|\||&amp;&amp;">
+      <rule words="|| &amp;&amp;">
         <token type="Operator"/>
       </rule>
       <rule pattern="\?">
@@ -44,13 +44,13 @@
       <rule pattern="\d+">
         <token type="LiteralNumber"/>
       </rule>
-      <rule pattern="(if|else|len|var|xml|default|break|switch|component|property|function|do|try|catch|in|continue|for|return|while|required|any|array|binary|boolean|component|date|guid|numeric|query|string|struct|uuid|case)\b">
+      <rule words="if else len var xml default break switch component property function do try catch in continue for return while required any array binary boolean component date guid numeric query string struct uuid case" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(application|session|client|cookie|super|this|variables|arguments)\b">
+      <rule words="application session client cookie super this variables arguments" suffix="\b">
         <token type="NameConstant"/>
       </rule>
       <rule pattern="([a-z_$][\w.]*)(\s*)(\()">

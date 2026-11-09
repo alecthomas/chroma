@@ -44,7 +44,7 @@
       <rule pattern="=&gt;|[]{}:().~;,|&amp;!^?[]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(addressof|digestof|consume|isnt|and|not|as|is|or)\b">
+      <rule words="addressof digestof consume isnt and not as is or" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="!=|==|&lt;&lt;|&gt;&gt;|[-+/*%=&lt;&gt;]">
@@ -67,7 +67,7 @@
         </bygroups>
         <push state="methodname"/>
       </rule>
-      <rule pattern="(DisposableActor|NullablePointer|AsioEventNotify|UnsignedInteger|RuntimeOptions|DoNotOptimise|FloatingPoint|SignedInteger|ReadElement|ArrayValues|StringBytes|StringRunes|InputNotify|InputStream|AsioEventID|ByteSeqIter|AmbientAuth|Comparable|ArrayPairs|Stringable|OutStream|SourceLoc|ArrayKeys|StdStream|Equatable|AsioEvent|Iterator|Platform|Unsigned|Greater|Compare|Integer|Pointer|ReadSeq|ByteSeq|String|Number|Signed|Float|USize|Stdin|ILong|ISize|HasEq|Array|ULong|Equal|I128|U128|Bool|Less|Real|None|Seq|I64|Any|F32|F64|U64|U32|I32|Int|I16|U16|Env|I8|U8)\b">
+      <rule words="DisposableActor NullablePointer AsioEventNotify UnsignedInteger RuntimeOptions DoNotOptimise FloatingPoint SignedInteger ReadElement ArrayValues StringBytes StringRunes InputNotify InputStream AsioEventID ByteSeqIter AmbientAuth Comparable ArrayPairs Stringable OutStream SourceLoc ArrayKeys StdStream Equatable AsioEvent Iterator Platform Unsigned Greater Compare Integer Pointer ReadSeq ByteSeq String Number Signed Float USize Stdin ILong ISize HasEq Array ULong Equal I128 U128 Bool Less Real None Seq I64 Any F32 F64 U64 U32 I32 Int I16 U16 Env I8 U8" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="_?[A-Z]\w*">
@@ -85,7 +85,7 @@
       <rule pattern="\d+">
         <token type="LiteralNumberInteger"/>
       </rule>
-      <rule pattern="(true|false)\b">
+      <rule words="true false" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="_\d*">

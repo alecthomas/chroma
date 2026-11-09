@@ -68,35 +68,35 @@
         <token type="CommentSingle"/>
       </rule>
       <!-- Statement keywords -->
-      <rule pattern="(break|return|continue|asm|defer|errdefer|unreachable|try|catch|suspend|resume|nosuspend)\b">
+      <rule words="break return continue asm defer errdefer unreachable try catch suspend resume nosuspend" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <!-- Storage/reserved keywords -->
-      <rule pattern="(const|var|extern|packed|export|pub|noalias|inline|noinline|comptime|volatile|allowzero|align|addrspace|linksection|threadlocal|callconv)\b">
+      <rule words="const var extern packed export pub noalias inline noinline comptime volatile allowzero align addrspace linksection threadlocal callconv" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <!-- Structure keywords -->
-      <rule pattern="(struct|enum|union|error|opaque)\b">
+      <rule words="struct enum union error opaque" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <!-- Repeat keywords -->
-      <rule pattern="(while|for)\b">
+      <rule words="while for" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <!-- Type keywords -->
-      <rule pattern="(bool|void|noreturn|type|anyerror|anyopaque|f16|f32|f64|f80|f128|i8|u8|i16|u16|i32|u32|i64|u64|i128|u128|isize|usize|comptime_int|comptime_float|c_char|c_short|c_ushort|c_int|c_uint|c_long|c_ulong|c_longlong|c_ulonglong|c_longdouble)\b">
+      <rule words="bool void noreturn type anyerror anyopaque f16 f32 f64 f80 f128 i8 u8 i16 u16 i32 u32 i64 u64 i128 u128 isize usize comptime_int comptime_float c_char c_short c_ushort c_int c_uint c_long c_ulong c_longlong c_ulonglong c_longdouble" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <!-- Constant keywords -->
-      <rule pattern="(true|false|null|undefined)\b">
+      <rule words="true false null undefined" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <!-- Conditional keywords -->
-      <rule pattern="(if|else|switch|and|or|orelse)\b">
+      <rule words="if else switch and or orelse" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <!-- Other keywords -->
-      <rule pattern="(fn|test|anyframe|anytype)\b">
+      <rule words="fn test anyframe anytype" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <!-- Hex float -->
@@ -158,11 +158,11 @@
         <token type="Operator"/>
       </rule>
       <!-- 3-char operators -->
-      <rule pattern="(?:\+%=|-%=|\*%=|\+\|=|-\|=|\*\|=|&lt;&lt;=|&gt;&gt;=|&lt;&lt;\|)">
+      <rule words="+%= -%= *%= +|= -|= *|= &lt;&lt;= &gt;&gt;= &lt;&lt;|">
         <token type="Operator"/>
       </rule>
       <!-- 2-char operators -->
-      <rule pattern="(?:\+\+|\*\*|\|\||&lt;&lt;|&gt;&gt;|\+%|-%|\*%|\+\||-\||\*\||==|!=|&lt;=|&gt;=|\+=|-=|\*=|/=|%=|&amp;=|\|=|\^=|\.\*|\.\?|\.\.)">
+      <rule words="++ ** || &lt;&lt; &gt;&gt; +% -% *% +| -| *| == != &lt;= &gt;= += -= *= /= %= &amp;= |= ^= .* .? ..">
         <token type="Operator"/>
       </rule>
       <!-- 1-char operators -->

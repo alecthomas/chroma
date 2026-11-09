@@ -89,7 +89,7 @@
         </bygroups>
         <push state="import"/>
       </rule>
-      <rule pattern="(endprimitive|always_latch|macromodule|always_comb|endgenerate|endfunction|endpackage|endspecify|localparam|parameter|primitive|always_ff|automatic|specparam|endmodule|rtranif1|scalared|continue|deassign|endtable|defparam|function|strength|generate|pulldown|vectored|rtranif0|unsigned|specify|endcase|negedge|strong0|disable|default|endtask|posedge|strong1|typedef|tranif1|integer|forever|release|initial|tranif0|highz0|genvar|highz1|pullup|notif0|bufif1|bufif0|repeat|medium|return|struct|assign|signed|module|packed|string|output|notif1|always|final|casex|while|table|const|large|break|begin|input|pull0|pull1|inout|weak1|rcmos|weak0|casez|force|small|rnmos|rpmos|rtran|event|type|void|enum|wait|fork|join|else|edge|pmos|nand|cmos|nmos|task|xnor|case|tran|buf|ref|end|var|and|xor|for|nor|not|do|if|or)\b">
+      <rule words="endprimitive always_latch macromodule always_comb endgenerate endfunction endpackage endspecify localparam parameter primitive always_ff automatic specparam endmodule rtranif1 scalared continue deassign endtable defparam function strength generate pulldown vectored rtranif0 unsigned specify endcase negedge strong0 disable default endtask posedge strong1 typedef tranif1 integer forever release initial tranif0 highz0 genvar highz1 pullup notif0 bufif1 bufif0 repeat medium return struct assign signed module packed string output notif1 always final casex while table const large break begin input pull0 pull1 inout weak1 rcmos weak0 casez force small rnmos rpmos rtran event type void enum wait fork join else edge pmos nand cmos nmos task xnor case tran buf ref end var and xor for nor not do if or" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="`(autoexpand_vectornets|nounconnected_drive|noexpand_vectornets|noremove_gatenames|unconnected_drive|noremove_netnames|expand_vectornets|remove_gatenames|default_nettype|remove_netnames|endcelldefine|noaccelerate|endprotected|accelerate|celldefine|endprotect|protected|timescale|resetall|protect|include|ifndef|ifdef|endif|elsif|undef|else)\b">
@@ -98,7 +98,7 @@
       <rule pattern="\$(shortrealtobits|bitstoshortreal|printtimescale|showvariables|countdrivers|reset_value|reset_count|getpattern|showscopes|realtobits|bitstoreal|monitoroff|timeformat|sreadmemh|monitoron|sreadmemb|fmonitor|showvars|fdisplay|realtime|readmemb|readmemh|monitor|history|fstrobe|display|restart|incsave|strobe|fwrite|finish|random|fclose|stime|nokey|fopen|floor|nolog|scale|scope|input|reset|write|rtoi|bits|list|stop|itor|time|save|key|log)\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(woshortreal|shortint|realtime|longint|integer|supply0|supply1|triand|trireg|uwire|logic|trior|byte|wand|tri0|tri1|time|real|wire|reg|bit|int|tri)\b">
+      <rule words="woshortreal shortint realtime longint integer supply0 supply1 triand trireg uwire logic trior byte wand tri0 tri1 time real wire reg bit int tri" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="[a-zA-Z_]\w*:(?!:)">

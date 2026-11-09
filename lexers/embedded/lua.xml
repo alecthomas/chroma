@@ -117,10 +117,10 @@
       <rule pattern="[\[\]{}().,:;]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(and|or|not)\b">
+      <rule words="and or not" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="(break|do|else|elseif|end|for|if|in|repeat|return|then|until|while)\b">
+      <rule words="break do else elseif end for if in repeat return then until while" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="goto\b">
@@ -130,7 +130,7 @@
       <rule pattern="(local)\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(true|false|nil)\b">
+      <rule words="true false nil" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(function)\b">

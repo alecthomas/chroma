@@ -21,10 +21,10 @@
       <rule pattern="//.*?\n">
         <token type="CommentSingle"/>
       </rule>
-      <rule pattern="(and|break|case|continue|default|else|for|if|or|print|return|super|switch|this|while)\b">
+      <rule words="and break case continue default else for if or print return super switch this while" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(false|nil|true)\b">
+      <rule words="false nil true" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(class)(\s+)([a-zA-Z_]\w*)">
@@ -64,7 +64,7 @@
       <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;">
         <token type="LiteralStringDouble"/>
       </rule>
-      <rule pattern="!|\+|-|\*|/|&lt;|&gt;|=">
+      <rule words="! + - * / &lt; &gt; =">
         <token type="Operator"/>
       </rule>
       <rule pattern="[{}():;.,]">

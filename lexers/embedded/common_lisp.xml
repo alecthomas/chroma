@@ -125,10 +125,10 @@
       <rule pattern="#[+-]">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(,@|,|\.)">
+      <rule words=",@ , .">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(t|nil)(?=[ &#34;()\&#39;\n,;`])">
+      <rule words="t nil" suffix="(?=[ &#34;()\&#39;\n,;`])">
         <token type="NameConstant"/>
       </rule>
       <rule pattern="\*(\|[^|]+\||(?:\\.|[\w!$%&amp;*+-/&lt;=&gt;?@\[\]^{}~])(?:\\.|[\w!$%&amp;*+-/&lt;=&gt;?@\[\]^{}~]|[#.:])*)\*">

@@ -35,34 +35,34 @@
       <rule pattern="(&amp;наклиенте|&amp;atclient|&amp;насервере|&amp;atserver|&amp;насерверебезконтекста|&amp;atservernocontext|&amp;наклиентенасерверебезконтекста|&amp;atclientatservernocontext).*">
         <token type="CommentPreproc"/>
       </rule>
-      <rule pattern="(&gt;=|&lt;=|&lt;&gt;|\+|-|=|&gt;|&lt;|\*|/|%)">
+      <rule words="&gt;= &lt;= &lt;&gt; + - = &gt; &lt; * / %">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(;|,|\)|\(|\.)">
+      <rule words="; , ) ( .">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(истина|ложь|или|false|true|не|and|not|и|or)\b">
+      <rule words="истина ложь или false true не and not и or" suffix="\b">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(иначеесли|конецесли|иначе|тогда|если|elsif|endif|else|then|if)\b">
+      <rule words="иначеесли конецесли иначе тогда если elsif endif else then if" suffix="\b">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(конеццикла|каждого|цикл|пока|для|while|enddo|по|each|из|for|do|in|to)\b">
+      <rule words="конеццикла каждого цикл пока для while enddo по each из for do in to" suffix="\b">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(продолжить|прервать|возврат|перейти|continue|return|break|goto)\b">
+      <rule words="продолжить прервать возврат перейти continue return break goto" suffix="\b">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(конецпроцедуры|конецфункции|процедура|функция|endprocedure|endfunction|procedure|function)\b">
+      <rule words="конецпроцедуры конецфункции процедура функция endprocedure endfunction procedure function" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(экспорт|новый|перем|знач|export|new|val|var)\b">
+      <rule words="экспорт новый перем знач export new val var" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(вызватьисключение|конецпопытки|исключение|попытка|endtry|except|raise|try)\b">
+      <rule words="вызватьисключение конецпопытки исключение попытка endtry except raise try" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(выполнить|вычислить|execute|eval)\b">
+      <rule words="выполнить вычислить execute eval" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="&#34;">

@@ -27,8 +27,8 @@
       <rule pattern="export\b(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](?=level)\])|(?:--.*$)|\s+)+[a-zA-Z_])"><token type="KeywordReserved"/></rule>
       <rule pattern="(?:\.\.|//|[+\-*\/%^&lt;&gt;=])=?"><token type="Operator"/><push state="expression"/></rule>
       <rule pattern="~="><token type="Operator"/><push state="expression"/></rule>
-      <rule pattern="(and|or|not)\b"><token type="OperatorWord"/><push state="expression"/></rule>
-      <rule pattern="(elseif|for|if|in|repeat|return|until|while)\b"><token type="KeywordReserved"/><push state="expression"/></rule>
+      <rule words="and or not" suffix="\b"><token type="OperatorWord"/><push state="expression"/></rule>
+      <rule words="elseif for if in repeat return until while" suffix="\b"><token type="KeywordReserved"/><push state="expression"/></rule>
       <rule pattern="local\b"><token type="KeywordDeclaration"/><push state="expression"/></rule>
       <rule pattern="function\b"><token type="KeywordReserved"/><push state="expression" state="func_name"/></rule>
       <rule pattern="[\])};]+"><token type="Punctuation"/></rule>
@@ -36,7 +36,7 @@
       <rule pattern="0[xX][\da-fA-F_]*"><token type="LiteralNumberHex"/></rule>
       <rule pattern="0[bB][\d_]*"><token type="LiteralNumberBin"/></rule>
       <rule pattern="\.?\d[\d_]*(?:\.[\d_]*)?(?:[eE][+-]?[\d_]+)?"><token type="LiteralNumberFloat"/></rule>
-      <rule pattern="(true|false|nil)\b"><token type="KeywordConstant"/></rule>
+      <rule words="true false nil" suffix="\b"><token type="KeywordConstant"/></rule>
       <rule pattern="\[(=*)\[[.\n]*?\]\1\]"><token type="LiteralString"/></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)(?=%s*[({&quot;\&#x27;])"><bygroups><token type="Punctuation"/><token type="NameFunction"/></bygroups></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)"><bygroups><token type="Punctuation"/><token type="NameVariable"/></bygroups></rule>
@@ -45,7 +45,7 @@
       <rule pattern="[\[.,]"><token type="Punctuation"/><push state="expression"/></rule>
     </state>
     <state name="expression_static">
-      <rule pattern="(break|continue|do|else|elseif|end|for|if|in|repeat|return|then|until|while)\b"><token type="KeywordReserved"/></rule>
+      <rule words="break continue do else elseif end for if in repeat return then until while" suffix="\b"><token type="KeywordReserved"/></rule>
     </state>
     <state name="expression">
       <rule><include state="ws"/></rule>
@@ -63,7 +63,7 @@
       <rule pattern="0[xX][\da-fA-F_]*"><token type="LiteralNumberHex"/><pop depth="1"/></rule>
       <rule pattern="0[bB][\d_]*"><token type="LiteralNumberBin"/><pop depth="1"/></rule>
       <rule pattern="\.?\d[\d_]*(?:\.[\d_]*)?(?:[eE][+-]?[\d_]+)?"><token type="LiteralNumberFloat"/><pop depth="1"/></rule>
-      <rule pattern="(true|false|nil)\b"><token type="KeywordConstant"/><pop depth="1"/></rule>
+      <rule words="true false nil" suffix="\b"><token type="KeywordConstant"/><pop depth="1"/></rule>
       <rule pattern="\[(=*)\[[.\n]*?\]\1\]"><token type="LiteralString"/><pop depth="1"/></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)(?=%s*[({&quot;\&#x27;])"><bygroups><token type="Punctuation"/><token type="NameFunction"/></bygroups><pop depth="1"/></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)"><bygroups><token type="Punctuation"/><token type="NameVariable"/></bygroups><pop depth="1"/></rule>
@@ -74,7 +74,7 @@
     <state name="ternary">
       <rule><include state="ws"/></rule>
       <rule pattern="else\b"><token type="KeywordReserved"/><pop depth="1"/></rule>
-      <rule pattern="(then|elseif)\b"><token type="OperatorReserved"/><push state="expression"/></rule>
+      <rule words="then elseif" suffix="\b"><token type="OperatorReserved"/><push state="expression"/></rule>
       <rule><pop depth="1"/></rule>
     </state>
     <state name="closing_brace_pop">

@@ -29,16 +29,16 @@
       <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="::=|:=|=|\(|\)|;|,|\*|-|\+|&gt;|&lt;|@|!|/|\||\^|\.|%|&amp;|\[|\]|\{|\}">
+      <rule words="::= := = ( ) ; , * - + &gt; &lt; @ ! / | ^ . % &amp; [ ] { }">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(clone|do|doFile|doString|method|for|if|else|elseif|then)\b">
+      <rule words="clone do doFile doString method for if else elseif then" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(nil|false|true)\b">
+      <rule words="nil false true" suffix="\b">
         <token type="NameConstant"/>
       </rule>
-      <rule pattern="(Object|list|List|Map|args|Sequence|Coroutine|File)\b">
+      <rule words="Object list List Map args Sequence Coroutine File" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="[a-zA-Z_]\w*">

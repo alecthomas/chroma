@@ -47,7 +47,7 @@
         </bygroups>
         <pop depth="1"/>
       </rule>
-      <rule pattern="(choose|otherwise)\b">
+      <rule words="choose otherwise" suffix="\b">
         <token type="Keyword"/>
         <pop depth="1"/>
       </rule>

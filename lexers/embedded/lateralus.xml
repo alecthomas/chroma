@@ -34,19 +34,19 @@
         <push state="attribute"/>
       </rule>
       <!-- Control flow / declaration keywords -->
-      <rule pattern="(fn|let|mut|match|if|else|elif|while|for|in|return|break|continue|import|export|module|pub|priv|struct|enum|impl|trait|where|type|const|static|async|await|spawn|guard|defer|use|as|self|Self|super|yield|do)\b">
+      <rule words="fn let mut match if else elif while for in return break continue import export module pub priv struct enum impl trait where type const static async await spawn guard defer use as self Self super yield do" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <!-- Builtin types -->
-      <rule pattern="(int|i8|i16|i32|i64|i128|uint|u8|u16|u32|u64|u128|float|f32|f64|bool|str|char|bytes|any|never|list|map|set|tuple|Option|Result|Some|None|Ok|Err)\b">
+      <rule words="int i8 i16 i32 i64 i128 uint u8 u16 u32 u64 u128 float f32 f64 bool str char bytes any never list map set tuple Option Result Some None Ok Err" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <!-- Boolean / null literals -->
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <!-- Builtin functions -->
-      <rule pattern="(print|println|eprint|eprintln|format|panic|assert|assert_eq|todo|unimplemented|unreachable|len|range|map|filter|reduce|fold|zip|enumerate|sort|sorted|reverse|sum|min|max)\b">
+      <rule words="print println eprint eprintln format panic assert assert_eq todo unimplemented unreachable len range map filter reduce fold zip enumerate sort sorted reverse sum min max" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <!-- Function definition -->

@@ -240,7 +240,7 @@
         </bygroups>
         <push state="cue-span-classes-without-annotations" />
       </rule>
-      <rule pattern="v|lang">
+      <rule words="v lang">
         <token type="NameTag" />
         <push state="cue-span-classes-with-annotations" />
       </rule>

@@ -37,21 +37,21 @@
         <token type="Keyword"/>
         <push state="slashstartsregex"/>
       </rule>
-      <rule pattern="(for|in|while|do|break|return|continue|switch|case|default|if|else|throw|try|catch|finally|new|delete|typeof|instanceof|void|this)\b">
+      <rule words="for in while do break return continue switch case default if else throw try catch finally new delete typeof instanceof void this" suffix="\b">
         <token type="Keyword"/>
         <push state="slashstartsregex"/>
       </rule>
-      <rule pattern="(var|let|with|function)\b">
+      <rule words="var let with function" suffix="\b">
         <token type="KeywordDeclaration"/>
         <push state="slashstartsregex"/>
       </rule>
-      <rule pattern="(abstract|boolean|byte|char|class|const|debugger|double|enum|export|extends|final|float|goto|implements|import|int|interface|long|native|package|private|protected|public|short|static|super|synchronized|throws|transient|volatile)\b">
+      <rule words="abstract boolean byte char class const debugger double enum export extends final float goto implements import int interface long native package private protected public short static super synchronized throws transient volatile" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
-      <rule pattern="(true|false|null|NaN|Infinity|undefined)\b">
+      <rule words="true false null NaN Infinity undefined" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(Array|Boolean|Date|Error|Function|Math|netscape|Number|Object|Packages|RegExp|String|sun|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|Error|eval|isFinite|isNaN|parseFloat|parseInt|document|this|window)\b">
+      <rule words="Array Boolean Date Error Function Math netscape Number Object Packages RegExp String sun decodeURI decodeURIComponent encodeURI encodeURIComponent Error eval isFinite isNaN parseFloat parseInt document this window" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="[$a-zA-Z_]\w*">

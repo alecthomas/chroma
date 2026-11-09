@@ -41,7 +41,7 @@
       <rule pattern="[\[\](){}|.,;!]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern=":-|--&gt;">
+      <rule words=":- --&gt;">
         <token type="Punctuation"/>
       </rule>
       <rule pattern="&#34;(?:\\x[0-9a-fA-F]+\\|\\u[0-9a-fA-F]{4}|\\U[0-9a-fA-F]{8}|\\[0-7]+\\|\\[&#34;\nabcefnrstv]|[^\\&#34;])*&#34;">
@@ -53,10 +53,10 @@
       <rule pattern="is\b">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(&lt;|&gt;|=&lt;|&gt;=|==|=:=|=|/|//|\*|\+|-)(?=\s|[a-zA-Z0-9\[])">
+      <rule words="&lt; &gt; =&lt; &gt;= == =:= = / // * + -" suffix="(?=\s|[a-zA-Z0-9\[])">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(mod|div|not)\b">
+      <rule words="mod div not" suffix="\b">
         <token type="Operator"/>
       </rule>
       <rule pattern="_">

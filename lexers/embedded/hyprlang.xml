@@ -114,13 +114,13 @@
       <rule pattern="\$[A-Za-z_]\w*">
         <token type="NameVariable"/>
       </rule>
-      <rule pattern="\b(true|false|on|off|yes|no|null)\b">
+      <rule words="true false on off yes no null" prefix="\b" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="\b(SHIFT|CAPS|CTRL|CONTROL|ALT|ALT_L|MOD2|MOD3|SUPER|WIN|LOGO|MOD4|MOD5|TAB)\b">
+      <rule words="SHIFT CAPS CTRL CONTROL ALT ALT_L MOD2 MOD3 SUPER WIN LOGO MOD4 MOD5 TAB" prefix="\b" suffix="\b">
         <token type="NameConstant"/>
       </rule>
-      <rule pattern="\b(floating|fullscreen|pinned|activewindow|activeworkspace|class|title|initialClass|initialTitle|tag|xwayland|workspace|monitor|float|tile|move|size|center|opacity|animation|border|rounding|noanim|noblur|nofocus|stayfocused|suppressevent|plugin)\b">
+      <rule words="floating fullscreen pinned activewindow activeworkspace class title initialClass initialTitle tag xwayland workspace monitor float tile move size center opacity animation border rounding noanim noblur nofocus stayfocused suppressevent plugin" prefix="\b" suffix="\b">
         <token type="NameFunction"/>
       </rule>
       <rule pattern="[\[\](),;]">

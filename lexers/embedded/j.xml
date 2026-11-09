@@ -56,7 +56,7 @@
       <rule pattern="\b[a-zA-Z]\w*">
         <token type="NameVariable"/>
       </rule>
-      <rule pattern="(timespacex|fixdotdot|nameclass|namelist|file2url|tmoutput|ucpcount|boxxopen|smoutput|JVERSION|datatype|toupper|tolower|alpha17|alpha27|getargs|evtloop|boxopen|fliprgb|inverse|scriptd|iospath|cutopen|isatty|toCRLF|toHOST|isutf8|getenv|stdout|script|usleep|sminfo|expand|stderr|clear|fetch|every|erase|empty|Debug|EMPTY|split|names|timex|cutLF|stdin|apply|items|table|exit|Note|list|take|leaf|type|bind|drop|rows|each|echo|sign|CRLF|utf8|sort|pick|ARGV|uucp|ucp|DEL|inv|hfd|dfh|def|LF2|EAV|toJ|TAB|nl|FF|LF|bx|nc|CR|on)">
+      <rule words="timespacex fixdotdot nameclass namelist file2url tmoutput ucpcount boxxopen smoutput JVERSION datatype toupper tolower alpha17 alpha27 getargs evtloop boxopen fliprgb inverse scriptd iospath cutopen isatty toCRLF toHOST isutf8 getenv stdout script usleep sminfo expand stderr clear fetch every erase empty Debug EMPTY split names timex cutLF stdin apply items table exit Note list take leaf type bind drop rows each echo sign CRLF utf8 sort pick ARGV uucp ucp DEL inv hfd dfh def LF2 EAV toJ TAB nl FF LF bx nc CR on">
         <token type="NameFunction"/>
       </rule>
       <rule pattern="=[.:]">

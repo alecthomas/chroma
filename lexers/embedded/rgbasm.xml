@@ -184,35 +184,35 @@
         </bygroups>
       </rule>
       <!-- Predeclared symbols -->
-      <rule pattern="\b(_rs|_narg|__date__|__time__|__iso_8601_local__|__iso_8601_utc__|__utc_year__|__utc_month__|__utc_day__|__utc_hour__|__utc_minute__|__utc_second__|__rgbds_major__|__rgbds_minor__|__rgbds_patch__|__rgbds_rc__|__rgbds_version__)\b">
+      <rule words="_rs _narg __date__ __time__ __iso_8601_local__ __iso_8601_utc__ __utc_year__ __utc_month__ __utc_day__ __utc_hour__ __utc_minute__ __utc_second__ __rgbds_major__ __rgbds_minor__ __rgbds_patch__ __rgbds_rc__ __rgbds_version__" prefix="\b" suffix="\b">
         <token type="NameVariableMagic"/>
       </rule>
       <!-- Built-in statements -->
-      <rule pattern="\b(align|assert|bank|break|charmap|db|dl|ds|dw|elif|else|endc|endl|endm|endr|endsection|endu|export|fail|fatal|for|fragment|hram|if|incbin|include|load|macro|newcharmap|nextu|oam|popc|popo|pops|println|print|purge|pushc|pusho|pushs|redef|rept|rom0|romx|rsreset|rsset|section|setcharmap|shift|sram|static_assert|union|vram|warn|wram0|wramx)">
+      <rule words="align assert bank break charmap db dl ds dw elif else endc endl endm endr endsection endu export fail fatal for fragment hram if incbin include load macro newcharmap nextu oam popc popo pops println print purge pushc pusho pushs redef rept rom0 romx rsreset rsset section setcharmap shift sram static_assert union vram warn wram0 wramx" prefix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <!-- Integer functions -->
-      <rule pattern="\b(high|low|bitwidth|tzcount)\b">
+      <rule words="high low bitwidth tzcount" prefix="\b" suffix="\b">
         <token type="NameFunction"/>
       </rule>
       <!-- Fixed-point functions -->
-      <rule pattern="\b(div|mul|fmod|pow|log|round|ceil|floor|sin|cos|tan|asin|acos|atan|atan2)\b">
+      <rule words="div mul fmod pow log round ceil floor sin cos tan asin acos atan atan2" prefix="\b" suffix="\b">
         <token type="NameFunction"/>
       </rule>
       <!-- String functions -->
-      <rule pattern="\b(strcat|strupr|strlwr|strslice|strrpl|strfmt|strchar|revchar|strlen|strcmp|strfind|strrfind|incharmap|charlen|charcmp|charsize|strsub|strin|strrin|charsub)\b">
+      <rule words="strcat strupr strlwr strslice strrpl strfmt strchar revchar strlen strcmp strfind strrfind incharmap charlen charcmp charsize strsub strin strrin charsub" prefix="\b" suffix="\b">
         <token type="NameFunction"/>
       </rule>
       <!-- Other functions, excluding some that are the same as built-ins (BANK and SECTION) -->
-      <rule pattern="\b(def|isconst|sizeof|startof)">
+      <rule words="def isconst sizeof startof" prefix="\b">
         <token type="NameFunction"/>
       </rule>
       <!-- Opcodes -->
-      <rule pattern="\b(adc|add|and|bit|call|ccf|cp|cpl|daa|dec|di|ei|halt|inc|jp|jr|ld|ldd|ldh|ldi|nop|or|pop|push|res|ret|reti|rlca|rla|rlc|rl|rr|rra|rrc|rrca|rst|sbc|scf|set|sla|sra|srl|stop|sub|swap|xor)\b">
+      <rule words="adc add and bit call ccf cp cpl daa dec di ei halt inc jp jr ld ldd ldh ldi nop or pop push res ret reti rlca rla rlc rl rr rra rrc rrca rst sbc scf set sla sra srl stop sub swap xor" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <!-- Registers and flags -->
-      <rule pattern="\b(a|f|b|c|d|e|h|l|af|bc|de|hl|sp|pc|z|nz|nc)\b">
+      <rule words="a f b c d e h l af bc de hl sp pc z nz nc" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <!-- Operators -->

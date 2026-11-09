@@ -54,16 +54,16 @@
         <token type="CommentMultiline"/>
         <push state="comment"/>
       </rule>
-      <rule pattern="(shared|abstract|formal|default|actual|variable|deprecated|small|late|literal|doc|by|see|throws|optional|license|tagged|final|native|annotation|sealed)\b">
+      <rule words="shared abstract formal default actual variable deprecated small late literal doc by see throws optional license tagged final native annotation sealed" suffix="\b">
         <token type="NameDecorator"/>
       </rule>
-      <rule pattern="(break|case|catch|continue|else|finally|for|in|if|return|switch|this|throw|try|while|is|exists|dynamic|nonempty|then|outer|assert|let)\b">
+      <rule words="break case catch continue else finally for in if return switch this throw try while is exists dynamic nonempty then outer assert let" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(abstracts|extends|satisfies|super|given|of|out|assign)\b">
+      <rule words="abstracts extends satisfies super given of out assign" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(function|value|void|new)\b">
+      <rule words="function value void new" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="(assembly|module|package)(\s+)">
@@ -72,7 +72,7 @@
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(class|interface|object|alias)(\s+)">

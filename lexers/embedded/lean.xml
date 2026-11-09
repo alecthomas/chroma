@@ -13,8 +13,8 @@
       <rule pattern="/--"><token type="LiteralStringDoc"/><push state="docstring"/></rule>
       <rule pattern="/-"><token type="Comment"/><push state="comment"/></rule>
       <rule pattern="--.*$"><token type="CommentSingle"/></rule>
-      <rule pattern="\b(Type|Prop|Sort)\b"><token type="KeywordType"/></rule>
-      <rule pattern="\b(sorry|admit)\b"><token type="GenericError"/></rule>
+      <rule words="Type Prop Sort" prefix="\b" suffix="\b"><token type="KeywordType"/></rule>
+      <rule words="sorry admit" prefix="\b" suffix="\b"><token type="GenericError"/></rule>
       <rule pattern="(!=|\#|\&amp;|\&amp;\&amp;|\*|\+|\-|/|@|!|\-\.|\-&gt;|\.|\.\.|\.\.\.|::|:&gt;|;|;;|&lt;|&lt;\-|=|==|&gt;|_|\||\|\||\~|=&gt;|&lt;=|&gt;=|/\\|\\/|∀|Π|λ|↔|∧|∨|≠|≤|≥|¬|⁻¹|⬝|▸|→|∃|≈|×|⌞|⌟|≡|⟨|⟩|↦)"><token type="NameBuiltinPseudo"/></rule>
       <rule pattern="(\(|\)|:|\{|\}|\[|\]|⦃|⦄|:=|,)"><token type="Operator"/></rule>
       <rule pattern="(?![λΠΣ])[_a-zA-Zα-ωΑ-Ωϊ-ϻἀ-῾℀-⅏𝒜-𝖟](?:(?![λΠΣ])[_a-zA-Zα-ωΑ-Ωϊ-ϻἀ-῾℀-⅏𝒜-𝖟0-9&#x27;ⁿ-₉ₐ-ₜᵢ-ᵪ!?])*"><token type="Name"/></rule>
@@ -27,8 +27,8 @@
       <rule pattern="\S"><token type="NameBuiltinPseudo"/></rule>
     </state>
     <state name="root">
-      <rule pattern="\b(import|unif_hint|renaming|inline|hiding|lemma|variable|theorem|axiom|inductive|structure|universe|alias|\#help|precedence|postfix|prefix|infix|infixl|infixr|notation|\#eval|\#check|\#reduce|\#exit|end|private|using|namespace|instance|section|protected|export|set_option|extends|open|example|\#print|opaque|def|macro|elab|syntax|macro_rules|\#reduce|where|abbrev|noncomputable|class|attribute|\#synth|mutual|scoped|local)\b"><token type="KeywordNamespace"/></rule>
-      <rule pattern="\b(forall|fun|obtain|from|have|show|assume|let|if|else|then|by|in|with|calc|match|nomatch|do|at)\b"><token type="Keyword"/></rule>
+      <rule words="import unif_hint renaming inline hiding lemma variable theorem axiom inductive structure universe alias #help precedence postfix prefix infix infixl infixr notation #eval #check #reduce #exit end private using namespace instance section protected export set_option extends open example #print opaque def macro elab syntax macro_rules #reduce where abbrev noncomputable class attribute #synth mutual scoped local" prefix="\b" suffix="\b"><token type="KeywordNamespace"/></rule>
+      <rule words="forall fun obtain from have show assume let if else then by in with calc match nomatch do at" prefix="\b" suffix="\b"><token type="Keyword"/></rule>
       <rule pattern="@\["><token type="KeywordDeclaration"/><push state="attribute"/></rule>
       <rule><include state="expression"/></rule>
     </state>

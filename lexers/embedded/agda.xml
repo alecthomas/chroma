@@ -11,10 +11,10 @@
       <rule pattern="--(?![!#$%&amp;*+./&lt;=&gt;?@^|_~:\\]).*?$"><token type="CommentSingle"/></rule>
       <rule pattern="\{-"><token type="CommentMultiline"/><push state="comment"/></rule>
       <rule pattern="\{!"><token type="CommentMultiline"/><push state="hole"/></rule>
-      <rule pattern="\b(abstract|codata|coinductive|constructor|data|do|eta-equality|field|forall|hiding|in|inductive|infix|infixl|infixr|instance|interleaved|let|macro|mutual|no-eta-equality|open|overlap|pattern|postulate|primitive|private|quote|quoteTerm|record|renaming|rewrite|syntax|tactic|unquote|unquoteDecl|unquoteDef|using|variable|where|with)(?!\&#x27;)\b"><token type="KeywordReserved"/></rule>
+      <rule words="abstract codata coinductive constructor data do eta-equality field forall hiding in inductive infix infixl infixr instance interleaved let macro mutual no-eta-equality open overlap pattern postulate primitive private quote quoteTerm record renaming rewrite syntax tactic unquote unquoteDecl unquoteDef using variable where with" prefix="\b" suffix="(?!\&#39;)\b"><token type="KeywordReserved"/></rule>
       <rule pattern="(import|module)(\s+)"><bygroups><token type="KeywordReserved"/><token type="TextWhitespace"/></bygroups><push state="module"/></rule>
       <rule pattern="\b(Set|Prop)[\u2080-\u2089]*\b"><token type="KeywordType"/></rule>
-      <rule pattern="(\(|\)|\{|\})"><token type="Operator"/></rule>
+      <rule words="( ) { }"><token type="Operator"/></rule>
       <rule pattern="(\.{1,3}|\||\u03BB|\u2200|\u2192|:|=|-&gt;)"><token type="OperatorWord"/></rule>
       <rule pattern="\d+[eE][+-]?\d+"><token type="LiteralNumberFloat"/></rule>
       <rule pattern="\d+\.\d+([eE][+-]?\d+)?"><token type="LiteralNumberFloat"/></rule>

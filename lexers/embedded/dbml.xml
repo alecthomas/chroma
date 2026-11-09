@@ -30,7 +30,7 @@
       <rule pattern="&quot;(\\\\|\\&quot;|[^&quot;])*&quot;">
         <token type="NameVariable"/>
       </rule>
-      <rule pattern="\b(true|false|null)\b">
+      <rule words="true false null" prefix="\b" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="#(?:[0-9a-f]{6}|[0-9a-f]{3})\b">
@@ -54,7 +54,7 @@
           <token type="NameClass"/>
         </bygroups>
       </rule>
-      <rule pattern="\b(table|tablegroup|tablepartial|enum|project|ref|dep|note|indexes|checks|records|diagramview|metadata|tables|notes|tablegroups|schemas|column|schema|use|reuse|from|as)\b">
+      <rule words="table tablegroup tablepartial enum project ref dep note indexes checks records diagramview metadata tables notes tablegroups schemas column schema use reuse from as" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="\{">

@@ -131,11 +131,11 @@
         <token type="NameDecorator"/>
         <push state="matcher"/>
       </rule>
-      <rule pattern="\b(try_files|tls|log|bind)\b">
+      <rule words="try_files tls log bind" prefix="\b" suffix="\b">
         <token type="Keyword"/>
         <push state="subdirective"/>
       </rule>
-      <rule pattern="\b(handle_errors|handle_path|handle_response|replace_status|handle|route)\b">
+      <rule words="handle_errors handle_path handle_response replace_status handle route" prefix="\b" suffix="\b">
         <token type="Keyword"/>
         <push state="nested_directive"/>
       </rule>
@@ -390,7 +390,7 @@
       <rule pattern="(\[\&lt;matcher\&gt;\]|@[^\s]+|/[^\s]+|\*)">
         <token type="NameDecorator"/>
       </rule>
-      <rule pattern="(strip_prefix|strip_suffix|replace|path_regexp)">
+      <rule words="strip_prefix strip_suffix replace path_regexp">
         <token type="NameConstant"/>
         <push state="arguments"/>
       </rule>

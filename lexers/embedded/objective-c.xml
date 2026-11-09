@@ -144,22 +144,22 @@
         <token type="Literal"/>
         <push state="literal_dictionary"/>
       </rule>
-      <rule pattern="(unsafe_unretained|__bridge_transfer|@autoreleasepool|__autoreleasing|@synchronized|@synthesize|@protected|@selector|@required|@optional|readwrite|@property|nonatomic|@finally|__bridge|@dynamic|__strong|readonly|@private|__block|@public|@encode|release|assign|retain|atomic|@throw|@catch|__weak|setter|getter|typeof|strong|inout|class|@try|@end|weak|copy|out|in)\b">
+      <rule words="unsafe_unretained __bridge_transfer @autoreleasepool __autoreleasing @synchronized @synthesize @protected @selector @required @optional readwrite @property nonatomic @finally __bridge @dynamic __strong readonly @private __block @public @encode release assign retain atomic @throw @catch __weak setter getter typeof strong inout class @try @end weak copy out in" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(instancetype|IBOutlet|IBAction|unichar|Class|BOOL|IMP|SEL|id)\b">
+      <rule words="instancetype IBOutlet IBAction unichar Class BOOL IMP SEL id" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="@(true|false|YES|NO)\n">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(YES|NO|nil|self|super)\b">
+      <rule words="YES NO nil self super" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(Boolean|UInt8|SInt8|UInt16|SInt16|UInt32|SInt32)\b">
+      <rule words="Boolean UInt8 SInt8 UInt16 SInt16 UInt32 SInt32" suffix="\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(TRUE|FALSE)\b">
+      <rule words="TRUE FALSE" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="(@interface|@implementation)(\s+)">
@@ -218,13 +218,13 @@
       <rule pattern="[()\[\],.]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(restricted|volatile|continue|register|default|typedef|struct|extern|switch|sizeof|static|return|union|while|const|break|goto|enum|else|case|auto|for|asm|if|do)\b">
+      <rule words="restricted volatile continue register default typedef struct extern switch sizeof static return union while const break goto enum else case auto for asm if do" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(bool|int|long|float|short|double|char|unsigned|signed|void)\b">
+      <rule words="bool int long float short double char unsigned signed void" suffix="\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(typename|__inline|restrict|_inline|thread|inline|naked)\b">
+      <rule words="typename __inline restrict _inline thread inline naked" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="(__m(128i|128d|128|64))\b">
@@ -233,7 +233,7 @@
       <rule pattern="__(forceinline|identifier|unaligned|declspec|fastcall|finally|stdcall|wchar_t|assume|except|int32|cdecl|int16|leave|based|raise|int64|noop|int8|w64|try|asm)\b">
         <token type="KeywordReserved"/>
       </rule>
-      <rule pattern="(true|false|NULL)\b">
+      <rule words="true false NULL" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="([a-zA-Z_]\w*)(\s*)(:)(?!:)">

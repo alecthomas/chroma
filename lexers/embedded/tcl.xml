@@ -10,11 +10,11 @@
   </config>
   <rules>
     <state name="command-in-bracket">
-      <rule pattern="\b(namespace|continue|variable|uplevel|foreach|return|update|elseif|global|rename|switch|upvar|error|vwait|catch|break|unset|array|apply|trace|after|while|then|else|expr|eval|proc|for|set|if)\b">
+      <rule words="namespace continue variable uplevel foreach return update elseif global rename switch upvar error vwait catch break unset array apply trace after while then else expr eval proc for set if" prefix="\b" suffix="\b">
         <token type="Keyword"/>
         <push state="params-in-bracket"/>
       </rule>
-      <rule pattern="\b(platform::shell|pkg::create|pkg_mkIndex|fconfigure|re_syntax|fileevent|platform|fblocked|lreverse|mathfunc|encoding|registry|lreplace|history|bgerror|llength|lsearch|linsert|lassign|lappend|refchan|unknown|package|lrepeat|msgcat|mathop|format|interp|lrange|string|source|lindex|socket|concat|regsub|regexp|loadTk|memory|binary|append|unload|subst|split|lsort|clock|close|flush|fcopy|chan|glob|time|gets|http|dict|file|puts|tell|join|read|exit|exec|open|list|scan|seek|incr|info|lset|load|dde|pwd|pid|eof|tm|cd)\b">
+      <rule words="platform::shell pkg::create pkg_mkIndex fconfigure re_syntax fileevent platform fblocked lreverse mathfunc encoding registry lreplace history bgerror llength lsearch linsert lassign lappend refchan unknown package lrepeat msgcat mathop format interp lrange string source lindex socket concat regsub regexp loadTk memory binary append unload subst split lsort clock close flush fcopy chan glob time gets http dict file puts tell join read exit exec open list scan seek incr info lset load dde pwd pid eof tm cd" prefix="\b" suffix="\b">
         <token type="NameBuiltin"/>
         <push state="params-in-bracket"/>
       </rule>
@@ -28,11 +28,11 @@
       </rule>
     </state>
     <state name="command-in-paren">
-      <rule pattern="\b(namespace|continue|variable|uplevel|foreach|return|update|elseif|global|rename|switch|upvar|error|vwait|catch|break|unset|array|apply|trace|after|while|then|else|expr|eval|proc|for|set|if)\b">
+      <rule words="namespace continue variable uplevel foreach return update elseif global rename switch upvar error vwait catch break unset array apply trace after while then else expr eval proc for set if" prefix="\b" suffix="\b">
         <token type="Keyword"/>
         <push state="params-in-paren"/>
       </rule>
-      <rule pattern="\b(platform::shell|pkg::create|pkg_mkIndex|fconfigure|re_syntax|fileevent|platform|fblocked|lreverse|mathfunc|encoding|registry|lreplace|history|bgerror|llength|lsearch|linsert|lassign|lappend|refchan|unknown|package|lrepeat|msgcat|mathop|format|interp|lrange|string|source|lindex|socket|concat|regsub|regexp|loadTk|memory|binary|append|unload|subst|split|lsort|clock|close|flush|fcopy|chan|glob|time|gets|http|dict|file|puts|tell|join|read|exit|exec|open|list|scan|seek|incr|info|lset|load|dde|pwd|pid|eof|tm|cd)\b">
+      <rule words="platform::shell pkg::create pkg_mkIndex fconfigure re_syntax fileevent platform fblocked lreverse mathfunc encoding registry lreplace history bgerror llength lsearch linsert lassign lappend refchan unknown package lrepeat msgcat mathop format interp lrange string source lindex socket concat regsub regexp loadTk memory binary append unload subst split lsort clock close flush fcopy chan glob time gets http dict file puts tell join read exit exec open list scan seek incr info lset load dde pwd pid eof tm cd" prefix="\b" suffix="\b">
         <token type="NameBuiltin"/>
         <push state="params-in-paren"/>
       </rule>
@@ -46,11 +46,11 @@
       </rule>
     </state>
     <state name="command-in-brace">
-      <rule pattern="\b(namespace|continue|variable|uplevel|foreach|return|update|elseif|global|rename|switch|upvar|error|vwait|catch|break|unset|array|apply|trace|after|while|then|else|expr|eval|proc|for|set|if)\b">
+      <rule words="namespace continue variable uplevel foreach return update elseif global rename switch upvar error vwait catch break unset array apply trace after while then else expr eval proc for set if" prefix="\b" suffix="\b">
         <token type="Keyword"/>
         <push state="params-in-brace"/>
       </rule>
-      <rule pattern="\b(platform::shell|pkg::create|pkg_mkIndex|fconfigure|re_syntax|fileevent|platform|fblocked|lreverse|mathfunc|encoding|registry|lreplace|history|bgerror|llength|lsearch|linsert|lassign|lappend|refchan|unknown|package|lrepeat|msgcat|mathop|format|interp|lrange|string|source|lindex|socket|concat|regsub|regexp|loadTk|memory|binary|append|unload|subst|split|lsort|clock|close|flush|fcopy|chan|glob|time|gets|http|dict|file|puts|tell|join|read|exit|exec|open|list|scan|seek|incr|info|lset|load|dde|pwd|pid|eof|tm|cd)\b">
+      <rule words="platform::shell pkg::create pkg_mkIndex fconfigure re_syntax fileevent platform fblocked lreverse mathfunc encoding registry lreplace history bgerror llength lsearch linsert lassign lappend refchan unknown package lrepeat msgcat mathop format interp lrange string source lindex socket concat regsub regexp loadTk memory binary append unload subst split lsort clock close flush fcopy chan glob time gets http dict file puts tell join read exit exec open list scan seek incr info lset load dde pwd pid eof tm cd" prefix="\b" suffix="\b">
         <token type="NameBuiltin"/>
         <push state="params-in-brace"/>
       </rule>
@@ -80,7 +80,7 @@
         <token type="LiteralStringDouble"/>
         <push state="string"/>
       </rule>
-      <rule pattern="(eq|ne|in|ni)\b">
+      <rule words="eq ne in ni" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="!=|==|&lt;&lt;|&gt;&gt;|&lt;=|&gt;=|&amp;&amp;|\|\||\*\*|[-+~!*/%&lt;&gt;&amp;^|?:]">
@@ -120,11 +120,11 @@
       </rule>
     </state>
     <state name="command">
-      <rule pattern="\b(namespace|continue|variable|uplevel|foreach|return|update|elseif|global|rename|switch|upvar|error|vwait|catch|break|unset|array|apply|trace|after|while|then|else|expr|eval|proc|for|set|if)\b">
+      <rule words="namespace continue variable uplevel foreach return update elseif global rename switch upvar error vwait catch break unset array apply trace after while then else expr eval proc for set if" prefix="\b" suffix="\b">
         <token type="Keyword"/>
         <push state="params"/>
       </rule>
-      <rule pattern="\b(platform::shell|pkg::create|pkg_mkIndex|fconfigure|re_syntax|fileevent|platform|fblocked|lreverse|mathfunc|encoding|registry|lreplace|history|bgerror|llength|lsearch|linsert|lassign|lappend|refchan|unknown|package|lrepeat|msgcat|mathop|format|interp|lrange|string|source|lindex|socket|concat|regsub|regexp|loadTk|memory|binary|append|unload|subst|split|lsort|clock|close|flush|fcopy|chan|glob|time|gets|http|dict|file|puts|tell|join|read|exit|exec|open|list|scan|seek|incr|info|lset|load|dde|pwd|pid|eof|tm|cd)\b">
+      <rule words="platform::shell pkg::create pkg_mkIndex fconfigure re_syntax fileevent platform fblocked lreverse mathfunc encoding registry lreplace history bgerror llength lsearch linsert lassign lappend refchan unknown package lrepeat msgcat mathop format interp lrange string source lindex socket concat regsub regexp loadTk memory binary append unload subst split lsort clock close flush fcopy chan glob time gets http dict file puts tell join read exit exec open list scan seek incr info lset load dde pwd pid eof tm cd" prefix="\b" suffix="\b">
         <token type="NameBuiltin"/>
         <push state="params"/>
       </rule>
@@ -245,7 +245,7 @@
         <token type="Text"/>
         <pop depth="1"/>
       </rule>
-      <rule pattern="(else|elseif|then)\b">
+      <rule words="else elseif then" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule>

@@ -121,13 +121,13 @@
           <token type="NameFunction"/>
         </bygroups>
       </rule>
-      <rule pattern="(_|true|false|none|True|False|None)\b">
+      <rule words="_ true false none True False None" suffix="\b">
         <token type="KeywordPseudo"/>
       </rule>
       <rule pattern="(in|as|reversed|recursive|not|and|or|is|if|else|import|with(?:(?:out)?\s*context)?|scoped|ignore\s+missing)\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(loop|block|super|forloop)\b">
+      <rule words="loop block super forloop" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="[a-zA-Z_][\w-]*">

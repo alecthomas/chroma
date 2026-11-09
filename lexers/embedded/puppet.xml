@@ -48,10 +48,10 @@
       </rule>
     </state>
     <state name="operators">
-      <rule pattern="(=&gt;|\?|&lt;|&gt;|=|\+|-|/|\*|~|!|\|)">
+      <rule words="=&gt; ? &lt; &gt; = + - / * ~ ! |">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(in|and|or|not)\b">
+      <rule words="in and or not" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
     </state>

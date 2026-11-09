@@ -104,7 +104,7 @@
       <rule pattern="[0-9][0-9_]*">
         <token type="LiteralNumberInteger"/>
       </rule>
-      <rule pattern="\.\.\.|=&gt;">
+      <rule words="... =&gt;">
         <token type="Punctuation"/>
       </rule>
       <rule pattern="\+\+|--|~|&amp;&amp;|\?|:|\|\||\\(?=\n)|(&lt;&lt;|&gt;&gt;&gt;?|==?|!=?|[-&lt;&gt;+*%&amp;|^/])=?">
@@ -118,15 +118,15 @@
       <rule pattern="[})\].]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(import|export|from|as|for|in|while|break|return|continue|switch|case|default|if|else|try|catch|delete|this)\b">
+      <rule words="import export from as for in while break return continue switch case default if else try catch delete this" suffix="\b">
         <token type="Keyword"/>
         <push state="slashstartsregex"/>
       </rule>
-      <rule pattern="(const|let|function)\b">
+      <rule words="const let function" suffix="\b">
         <token type="KeywordDeclaration"/>
         <push state="slashstartsregex"/>
       </rule>
-      <rule pattern="(true|false|null|NaN|Infinity)\b">
+      <rule words="true false null NaN Infinity" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(?:[$_\p{L}\p{N}]|\\u[a-fA-F0-9]{4})(?:(?:[$\p{L}\p{N}]|\\u[a-fA-F0-9]{4}))*">

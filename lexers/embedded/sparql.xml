@@ -66,7 +66,7 @@
       <rule pattern="((?i)str|lang|langmatches|datatype|bound|iri|uri|bnode|rand|abs|ceil|floor|round|concat|strlen|ucase|lcase|encode_for_uri|contains|strstarts|strends|strbefore|strafter|year|month|day|hours|minutes|seconds|timezone|tz|now|md5|sha1|sha256|sha384|sha512|coalesce|if|strlang|strdt|sameterm|isiri|isuri|isblank|isliteral|isnumeric|regex|substr|replace|exists|not\s+exists|count|sum|min|max|avg|sample|group_concat|separator)\b">
         <token type="NameFunction"/>
       </rule>
-      <rule pattern="(true|false)">
+      <rule words="true false">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="[+\-]?(\d+\.\d*[eE][+-]?\d+|\.?\d+[eE][+-]?\d+)">
@@ -78,7 +78,7 @@
       <rule pattern="[+\-]?\d+">
         <token type="LiteralNumberInteger"/>
       </rule>
-      <rule pattern="(\|\||&amp;&amp;|=|\*|\-|\+|/|!=|&lt;=|&gt;=|!|&lt;|&gt;)">
+      <rule words="|| &amp;&amp; = * - + / != &lt;= &gt;= ! &lt; &gt;">
         <token type="Operator"/>
       </rule>
       <rule pattern="[(){}.;,:^\[\]]">

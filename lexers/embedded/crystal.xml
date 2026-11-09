@@ -356,10 +356,10 @@
       <rule pattern="#.*?$">
         <token type="CommentSingle"/>
       </rule>
-      <rule pattern="(instance_sizeof|pointerof|protected|abstract|require|private|include|unless|typeof|sizeof|return|extend|ensure|rescue|ifdef|super|break|begin|until|while|elsif|yield|next|when|else|then|case|with|end|asm|if|do|as|of)\b">
+      <rule words="instance_sizeof pointerof protected abstract require private include unless typeof sizeof return extend ensure rescue ifdef super break begin until while elsif yield next when else then case with end asm if do as of" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(false|true|nil)\b">
+      <rule words="false true nil" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(module|lib)(\s+)([a-zA-Z_]\w*(?:::[a-zA-Z_]\w*)*)">
@@ -392,13 +392,13 @@
       <rule pattern="(self|out|uninitialized)\b|(is_a|responds_to)\?">
         <token type="KeywordPseudo"/>
       </rule>
-      <rule pattern="(def_equals_and_hash|assert_responds_to|forward_missing_to|def_equals|property|def_hash|parallel|delegate|debugger|getter|record|setter|spawn|pp)\b">
+      <rule words="def_equals_and_hash assert_responds_to forward_missing_to def_equals property def_hash parallel delegate debugger getter record setter spawn pp" suffix="\b">
         <token type="NameBuiltinPseudo"/>
       </rule>
       <rule pattern="getter[!?]|property[!?]|__(DIR|FILE|LINE)__\b">
         <token type="NameBuiltinPseudo"/>
       </rule>
-      <rule pattern="(?&lt;!\.)(get_stack_top|StaticArray|Concurrent|with_color|Reference|Scheduler|read_line|Exception|at_exit|Pointer|Channel|Float64|sprintf|Float32|Process|Object|Struct|caller|UInt16|UInt32|UInt64|system|future|Number|printf|String|Symbol|Int32|Range|Slice|Regex|Mutex|sleep|Array|Class|raise|Tuple|Deque|delay|Float|Int16|print|abort|Value|UInt8|Int64|puts|Proc|File|Void|exit|fork|Bool|Char|gets|lazy|loop|main|rand|Enum|Int8|Time|Hash|Set|Box|Nil|Dir|Int|p)\b">
+      <rule words="get_stack_top StaticArray Concurrent with_color Reference Scheduler read_line Exception at_exit Pointer Channel Float64 sprintf Float32 Process Object Struct caller UInt16 UInt32 UInt64 system future Number printf String Symbol Int32 Range Slice Regex Mutex sleep Array Class raise Tuple Deque delay Float Int16 print abort Value UInt8 Int64 puts Proc File Void exit fork Bool Char gets lazy loop main rand Enum Int8 Time Hash Set Box Nil Dir Int p" prefix="(?&lt;!\.)" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="(?&lt;!\w)(&lt;&lt;-?)([&#34;`\&#39;]?)([a-zA-Z_]\w*)(\2)(.*?\n)">

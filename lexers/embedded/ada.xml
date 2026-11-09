@@ -12,7 +12,7 @@
   </config>
   <rules>
     <state name="end">
-      <rule pattern="(if|case|record|loop|select)">
+      <rule words="if case record loop select">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="&#34;[^&#34;]+&#34;|[\w.]+">
@@ -90,7 +90,7 @@
         <token type="Punctuation"/>
         <push state="formal_part"/>
       </rule>
-      <rule pattern="with|and|use">
+      <rule words="with and use">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="array\b">
@@ -132,7 +132,7 @@
       <rule pattern=",|:[^=]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(in|not|null|out|access)\b">
+      <rule words="in not null out access" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule>
@@ -192,7 +192,7 @@
       <rule pattern="[^\S\n]+">
         <token type="Text"/>
       </rule>
-      <rule pattern="function|procedure|entry">
+      <rule words="function procedure entry">
         <token type="KeywordDeclaration"/>
         <push state="subprogram"/>
       </rule>
@@ -204,7 +204,7 @@
         </bygroups>
         <push state="type_def"/>
       </rule>
-      <rule pattern="task|protected">
+      <rule words="task protected">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule pattern="(subtype)(\s+)">
@@ -227,16 +227,16 @@
           <token type="CommentPreproc"/>
         </bygroups>
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(Short_Short_Integer|Short_Short_Float|Long_Long_Integer|Long_Long_Float|Wide_Character|Reference_Type|Short_Integer|Long_Integer|Wide_String|Short_Float|Controlled|Long_Float|Character|Generator|File_Type|File_Mode|Positive|Duration|Boolean|Natural|Integer|Address|Cursor|String|Count|Float|Byte)\b">
+      <rule words="Short_Short_Integer Short_Short_Float Long_Long_Integer Long_Long_Float Wide_Character Reference_Type Short_Integer Long_Integer Wide_String Short_Float Controlled Long_Float Character Generator File_Type File_Mode Positive Duration Boolean Natural Integer Address Cursor String Count Float Byte" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="(and(\s+then)?|in|mod|not|or(\s+else)|rem)\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="generic|private">
+      <rule words="generic private">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule pattern="package">
@@ -275,7 +275,7 @@
           <token type="KeywordReserved"/>
         </bygroups>
       </rule>
-      <rule pattern="\b(synchronized|overriding|terminate|interface|exception|protected|separate|constant|abstract|renames|reverse|subtype|aliased|declare|requeue|limited|return|tagged|access|record|select|accept|digits|others|pragma|entry|elsif|delta|delay|array|until|range|raise|while|begin|abort|else|loop|when|type|null|then|body|task|goto|case|exit|end|for|abs|xor|all|new|out|is|of|if|or|do|at)\b">
+      <rule words="synchronized overriding terminate interface exception protected separate constant abstract renames reverse subtype aliased declare requeue limited return tagged access record select accept digits others pragma entry elsif delta delay array until range raise while begin abort else loop when type null then body task goto case exit end for abs xor all new out is of if or do at" prefix="\b" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="&#34;[^&#34;]*&#34;">

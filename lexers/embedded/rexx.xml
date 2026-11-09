@@ -13,12 +13,12 @@
   </config>
   <rules>
     <state name="keyword">
-      <rule pattern="(address|arg|by|call|do|drop|else|end|exit|for|forever|if|interpret|iterate|leave|nop|numeric|off|on|options|parse|pull|push|queue|return|say|select|signal|to|then|trace|until|while)\b">
+      <rule words="address arg by call do drop else end exit for forever if interpret iterate leave nop numeric off on options parse pull push queue return say select signal to then trace until while" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
     </state>
     <state name="operator">
-      <rule pattern="(-|//|/|\(|\)|\*\*|\*|\\&lt;&lt;|\\&lt;|\\==|\\=|\\&gt;&gt;|\\&gt;|\\|\|\||\||&amp;&amp;|&amp;|%|\+|&lt;&lt;=|&lt;&lt;|&lt;=|&lt;&gt;|&lt;|==|=|&gt;&lt;|&gt;=|&gt;&gt;=|&gt;&gt;|&gt;|¬&lt;&lt;|¬&lt;|¬==|¬=|¬&gt;&gt;|¬&gt;|¬|\.|,)">
+      <rule words="- // / ( ) ** * \&lt;&lt; \&lt; \== \= \&gt;&gt; \&gt; \ || | &amp;&amp; &amp; % + &lt;&lt;= &lt;&lt; &lt;= &lt;&gt; &lt; == = &gt;&lt; &gt;= &gt;&gt;= &gt;&gt; &gt; ¬&lt;&lt; ¬&lt; ¬== ¬= ¬&gt;&gt; ¬&gt; ¬ . ,">
         <token type="Operator"/>
       </rule>
     </state>

@@ -16,10 +16,10 @@
 	      <token type="TextWhitespace"/>
 		</bygroups>
       </rule>
-      <rule pattern="\b(Set|Type|Left|Right|Up|Down|Backspace|Enter|Tab|Space|Ctrl|Sleep|Hide|Show|Escape)\b">
+      <rule words="Set Type Left Right Up Down Backspace Enter Tab Space Ctrl Sleep Hide Show Escape" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(FontFamily|FontSize|Framerate|Height|Width|Theme|Padding|TypingSpeed|PlaybackSpeed|LineHeight|Framerate|LetterSpacing)\b">
+      <rule words="FontFamily FontSize Framerate Height Width Theme Padding TypingSpeed PlaybackSpeed LineHeight Framerate LetterSpacing" prefix="\b" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="#.*(\S|$)">
@@ -31,7 +31,7 @@
       <rule pattern="(?s)&#39;.*&#39;">
         <token type="LiteralStringSingle"/>
       </rule>
-      <rule pattern="(@|\+)">
+      <rule words="@ +">
         <token type="Punctuation"/>
       </rule>
       <rule pattern="\d+">
@@ -40,7 +40,7 @@
       <rule pattern="\s+">
         <token type="TextWhitespace"/>
       </rule>
-      <rule pattern="(ms|s)">
+      <rule words="ms s">
         <token type="Text"/>
       </rule>
 	</state>

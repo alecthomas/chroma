@@ -88,7 +88,7 @@
       <rule pattern="[a-z][\w\&#39;]*">
         <token type="Text"/>
       </rule>
-      <rule pattern="(&lt;-|::|-&gt;|=&gt;|=)">
+      <rule words="&lt;- :: -&gt; =&gt; =">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="([(){}\[\]:!#$%&amp;*+.\\/&lt;=&gt;?@^|~-]+)">

@@ -32,16 +32,16 @@
       <rule pattern="\d+">
         <token type="LiteralNumberInteger"/>
       </rule>
-      <rule pattern="\b(Истина|Ложь|Неопределено|True|False|Undefined|NULL)\b">
+      <rule words="Истина Ложь Неопределено True False Undefined NULL" prefix="\b" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="\b(Или|Не|И|And|Or|Not)\b">
+      <rule words="Или Не И And Or Not" prefix="\b" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="\b(КонецПопытки|ВызватьИсключение|ИначеЕсли|КонецЕсли|КонецЦикла|Продолжить|Исключение|Прервать|Перейти|Возврат|Каждого|Попытка|Тогда|Иначе|Цикл|Если|Пока|Для|По|Из|RaiseException|Continue|EndTry|ElsIf|EndIf|EndDo|Except|Return|Break|While|Then|Else|Each|Goto|Raise|Try|For|Do|To|In|If)\b">
+      <rule words="КонецПопытки ВызватьИсключение ИначеЕсли КонецЕсли КонецЦикла Продолжить Исключение Прервать Перейти Возврат Каждого Попытка Тогда Иначе Цикл Если Пока Для По Из RaiseException Continue EndTry ElsIf EndIf EndDo Except Return Break While Then Else Each Goto Raise Try For Do To In If" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(КонецПроцедуры|КонецФункции|Процедура|Функция|Экспорт|Перем|Знач|Новый|EndProcedure|EndFunction|Procedure|Function|Export|Var|Val|New)\b">
+      <rule words="КонецПроцедуры КонецФункции Процедура Функция Экспорт Перем Знач Новый EndProcedure EndFunction Procedure Function Export Var Val New" prefix="\b" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule pattern="~[^\s:]+">

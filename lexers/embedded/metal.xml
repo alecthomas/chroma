@@ -73,7 +73,7 @@
       </rule>
     </state>
     <state name="statements">
-      <rule pattern="(namespace|constexpr|operator|template|using|this)\b">
+      <rule words="namespace constexpr operator template using this" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(enum)\b(\s+)(class)\b(\s*)">
@@ -122,7 +122,7 @@
       <rule pattern="[()\[\],.]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(continue|typedef|sizeof|extern|static|switch|struct|return|union|const|break|while|enum|else|case|for|do|if)\b">
+      <rule words="continue typedef sizeof extern static switch struct return union const break while enum else case for do if" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(bool|float|half|long|ptrdiff_t|size_t|unsigned|u?char|u?int((8|16|32|64)_t)?|u?short)\b">
@@ -146,10 +146,10 @@
       <rule pattern="(array|depth(2d|cube)(_array)?|depth2d_ms(_array)?|sampler|texture_buffer|texture(1|2)d(_array)?|texture2d_ms(_array)?|texture3d|texturecube(_array)?|uniform|visible_function_table)\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(true|false|NULL)\b">
+      <rule words="true false NULL" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(threadgroup_imageblock|threadgroup|constant|ray_data|device|thread)\b">
+      <rule words="threadgroup_imageblock threadgroup constant ray_data device thread" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="([a-zA-Z_]\w*)(\s*)(:)(?!:)">

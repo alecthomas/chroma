@@ -31,19 +31,19 @@
       </rule>
     </state>
     <state name="keywords">
-      <rule pattern="(?&lt;!\w)(PI|TAU|NAN|INF|true|false)\b">
+      <rule words="PI TAU NAN INF true false" prefix="(?&lt;!\w)" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(?&lt;!\w)(is|in|as|not|or|and)\b">
+      <rule words="is in as not or and" prefix="(?&lt;!\w)" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="(?&lt;!\w)(var|const|enum|signal|static)\b">
+      <rule words="var const enum signal static" prefix="(?&lt;!\w)" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(?&lt;![\w.])(get|set)(?=\s*[:=(])">
+      <rule words="get set" prefix="(?&lt;![\w.])" suffix="(?=\s*[:=(])">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(?&lt;!\w)(if|elif|else|for|while|match|when|break|continue|pass|return|breakpoint|await|yield|super)\b">
+      <rule words="if elif else for while match when break continue pass return breakpoint await yield super" prefix="(?&lt;!\w)" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(?&lt;!\w)(self)\b">
@@ -51,7 +51,7 @@
       </rule>
     </state>
     <state name="builtin_funcs">
-      <rule pattern="(?&lt;!\w)(assert|char|convert|dict_to_inst|get_stack|inst_to_dict|is_instance_of|len|load|preload|print_debug|print_stack|range|type_exists)\b">
+      <rule words="assert char convert dict_to_inst get_stack inst_to_dict is_instance_of len load preload print_debug print_stack range type_exists" prefix="(?&lt;!\w)" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="(?&lt;!\w)(abs[fi]?|acos|asin|atan2?|bezier_(derivative|interpolate)|bytes_to_var(_with_objects)?|ceil[fi]?|clamp[fi]?|cosh?|cubic_interpolate(_angle)?(_in_time)?|db_to_linear|deg_to_rad|ease|error_string|exp|floor[fi]?|fmod|fposmod|hash|instance_from_id|inverse_lerp|is_equal_approx|is_finite|is_instance(_id)?_valid|is_nan|is_same|is_zero_approx|lerp|lerp_angle|lerpf|linear_to_db|log|max[fi]?|min[fi]?|move_toward|nearest_po2|pingpong|posmod|pow|print|print_rich|print_verbose|printerr|printraw|prints|printt|push_error|push_warning|rad_to_deg|rand_from_seed|randf|randf_range|randfn|randi|randi_range|randomize|remap|rid_allocate_id|rid_from_int64|round[fi]?|seed|sign[fi]?|sinh?|smoothstep|snapped[fi]?|sqrt|step_decimals|str|str_to_var|tanh?|typeof|var_to_bytes(_with_objects)?|var_to_str|weakref|wrap[fi]?)\b">
@@ -128,7 +128,7 @@
       </rule>
     </state>
     <state name="types">
-      <rule pattern="(?&lt;!\w)(null|void|bool|int|float)\b">
+      <rule words="null void bool int float" prefix="(?&lt;!\w)" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="(?&lt;!\w)(String(Name)?|NodePath|Vector[234]i?|Rect2i?|Transform[23]D|Plane|Quaternion|AABB|Basis|Projection|Color8?|RID|Object|(Packed(Byte|Int(32|64)|Float(32|64)|String|Vector(2|3|4)|Color))?Array|Dictionary|Signal|Callable)\b">

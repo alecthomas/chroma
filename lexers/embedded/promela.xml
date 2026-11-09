@@ -29,22 +29,22 @@
       <rule pattern="(-)?\d(\&#x27;?\d)*(([uU][lL]{0,2})|[lL]{1,2}[uU]?)?"><token type="LiteralNumberInteger"/></rule>
       <rule pattern="[~!%^&amp;*+=|?:&lt;&gt;/-]"><token type="Operator"/></rule>
       <rule pattern="[()\[\],.]"><token type="Punctuation"/></rule>
-      <rule pattern="(true|false|NULL)\b"><token type="NameBuiltin"/></rule>
+      <rule words="true false NULL" suffix="\b"><token type="NameBuiltin"/></rule>
       <rule pattern="(?!\d)(?:[\w$]|\\u[0-9a-fA-F]{4}|\\U[0-9a-fA-F]{8})+"><token type="Name"/></rule>
     </state>
     <state name="types">
-      <rule pattern="(bit|bool|byte|pid|short|int|unsigned)\b"><token type="KeywordType"/></rule>
+      <rule words="bit bool byte pid short int unsigned" suffix="\b"><token type="KeywordType"/></rule>
     </state>
     <state name="keywords">
-      <rule pattern="(atomic|break|d_step|do|od|for|in|goto|if|fi|unless)\b"><token type="Keyword"/></rule>
-      <rule pattern="(assert|get_priority|printf|printm|set_priority)\b"><token type="NameFunction"/></rule>
-      <rule pattern="(c_code|c_decl|c_expr|c_state|c_track)\b"><token type="Keyword"/></rule>
-      <rule pattern="(_|_last|_nr_pr|_pid|_priority|else|np_|STDIN)\b"><token type="NameBuiltin"/></rule>
-      <rule pattern="(empty|enabled|eval|full|len|nempty|nfull|pc_value)\b"><token type="NameFunction"/></rule>
+      <rule words="atomic break d_step do od for in goto if fi unless" suffix="\b"><token type="Keyword"/></rule>
+      <rule words="assert get_priority printf printm set_priority" suffix="\b"><token type="NameFunction"/></rule>
+      <rule words="c_code c_decl c_expr c_state c_track" suffix="\b"><token type="Keyword"/></rule>
+      <rule words="_ _last _nr_pr _pid _priority else np_ STDIN" suffix="\b"><token type="NameBuiltin"/></rule>
+      <rule words="empty enabled eval full len nempty nfull pc_value" suffix="\b"><token type="NameFunction"/></rule>
       <rule pattern="run\b"><token type="OperatorWord"/></rule>
-      <rule pattern="(active|chan|D_proctype|hidden|init|local|mtype|never|notrace|proctype|show|trace|typedef|xr|xs)\b"><token type="KeywordDeclaration"/></rule>
-      <rule pattern="(priority|provided)\b"><token type="Keyword"/></rule>
-      <rule pattern="(inline|ltl|select)\b"><token type="KeywordDeclaration"/></rule>
+      <rule words="active chan D_proctype hidden init local mtype never notrace proctype show trace typedef xr xs" suffix="\b"><token type="KeywordDeclaration"/></rule>
+      <rule words="priority provided" suffix="\b"><token type="Keyword"/></rule>
+      <rule words="inline ltl select" suffix="\b"><token type="KeywordDeclaration"/></rule>
       <rule pattern="skip\b"><token type="Keyword"/></rule>
     </state>
     <state name="whitespace">

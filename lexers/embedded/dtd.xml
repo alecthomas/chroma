@@ -59,13 +59,13 @@
       <rule>
         <include state="common"/>
       </rule>
-      <rule pattern="CDATA|IDREFS|IDREF|ID|NMTOKENS|NMTOKEN|ENTITIES|ENTITY|NOTATION">
+      <rule words="CDATA IDREFS IDREF ID NMTOKENS NMTOKEN ENTITIES ENTITY NOTATION">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="#REQUIRED|#IMPLIED|#FIXED">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="xml:space|xml:lang">
+      <rule words="xml:space xml:lang">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="[^&gt;\s|()?+*,]+">
@@ -80,7 +80,7 @@
       <rule>
         <include state="common"/>
       </rule>
-      <rule pattern="SYSTEM|PUBLIC|NDATA">
+      <rule words="SYSTEM PUBLIC NDATA">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="[^&gt;\s|()?+*,]+">
@@ -95,7 +95,7 @@
       <rule>
         <include state="common"/>
       </rule>
-      <rule pattern="SYSTEM|PUBLIC">
+      <rule words="SYSTEM PUBLIC">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="[^&gt;\s|()?+*,]+">
@@ -157,7 +157,7 @@
           <token type="NameTag"/>
         </bygroups>
       </rule>
-      <rule pattern="PUBLIC|SYSTEM">
+      <rule words="PUBLIC SYSTEM">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="[\[\]&gt;]">

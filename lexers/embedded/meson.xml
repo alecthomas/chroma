@@ -50,12 +50,12 @@
       </rule>
     </state>
     <state name="keywords">
-      <rule pattern="(endforeach|continue|foreach|break|endif|else|elif|if)\b">
+      <rule words="endforeach continue foreach break endif else elif if" suffix="\b">
         <token type="Keyword"/>
       </rule>
     </state>
     <state name="expr">
-      <rule pattern="(in|and|or|not)\b">
+      <rule words="in and or not" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="(\*=|/=|%=|\+]=|-=|==|!=|\+|-|=)">
@@ -64,18 +64,18 @@
       <rule pattern="[\[\]{}:().,?]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(false|true)\b">
+      <rule words="false true" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule>
         <include state="builtins"/>
       </rule>
-      <rule pattern="(target_machine|build_machine|host_machine|meson)\b">
+      <rule words="target_machine build_machine host_machine meson" suffix="\b">
         <token type="NameVariableMagic"/>
       </rule>
     </state>
     <state name="builtins">
-      <rule pattern="(?&lt;!\.)(add_project_link_arguments|add_global_link_arguments|add_project_arguments|add_global_arguments|include_directories|configuration_data|declare_dependency|install_headers|both_libraries|install_subdir|add_test_setup|configure_file|static_library|shared_library|custom_target|add_languages|shared_module|set_variable|get_variable|find_library|find_program|build_target|install_data|environment|is_disabler|run_command|subdir_done|install_man|is_variable|subproject|dependency|join_paths|get_option|executable|generator|benchmark|disabler|project|message|library|summary|vcs_tag|warning|assert|subdir|range|files|error|test|jar)\b">
+      <rule words="add_project_link_arguments add_global_link_arguments add_project_arguments add_global_arguments include_directories configuration_data declare_dependency install_headers both_libraries install_subdir add_test_setup configure_file static_library shared_library custom_target add_languages shared_module set_variable get_variable find_library find_program build_target install_data environment is_disabler run_command subdir_done install_man is_variable subproject dependency join_paths get_option executable generator benchmark disabler project message library summary vcs_tag warning assert subdir range files error test jar" prefix="(?&lt;!\.)" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="(?&lt;!\.)import\b">

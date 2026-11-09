@@ -105,7 +105,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="\(\)|\[\]">
+      <rule words="() []">
         <token type="NameBuiltinPseudo"/>
       </rule>
       <rule pattern="\b(?&lt;!\.)([A-Z][\w\&#39;]*)(?=\s*\.)">
@@ -167,7 +167,7 @@
           <token type="NameFunction"/>
         </bygroups>
       </rule>
-      <rule pattern="\b(abstract|as|assert|base|begin|class|default|delegate|do!|do|done|downcast|downto|elif|else|end|exception|extern|false|finally|for|function|fun|global|if|inherit|inline|interface|internal|in|lazy|let!|let|match|member|module|mutable|namespace|new|null|of|open|override|private|public|rec|return!|return|select|static|struct|then|to|true|try|type|upcast|use!|use|val|void|when|while|with|yield!|yield|atomic|break|checked|component|const|constraint|constructor|continue|eager|event|external|fixed|functor|include|method|mixin|object|parallel|process|protected|pure|sealed|tailcall|trait|virtual|volatile)\b">
+      <rule words="abstract as assert base begin class default delegate do! do done downcast downto elif else end exception extern false finally for function fun global if inherit inline interface internal in lazy let! let match member module mutable namespace new null of open override private public rec return! return select static struct then to true try type upcast use! use val void when while with yield! yield atomic break checked component const constraint constructor continue eager event external fixed functor include method mixin object parallel process protected pure sealed tailcall trait virtual volatile" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="``([^`\n\r\t]|`[^`\n\r\t])+``">
@@ -182,10 +182,10 @@
       <rule pattern="([=&lt;&gt;@^|&amp;+\*/$%-]|[!?~])?[!$%&amp;*+\./:&lt;=&gt;?@^|~-]">
         <token type="Operator"/>
       </rule>
-      <rule pattern="\b(and|or|not)\b">
+      <rule words="and or not" prefix="\b" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="\b(sbyte|byte|char|nativeint|unativeint|float32|single|float|double|int8|uint8|int16|uint16|int32|uint32|int64|uint64|decimal|unit|bool|string|list|exn|obj|enum)\b">
+      <rule words="sbyte byte char nativeint unativeint float32 single float double int8 uint8 int16 uint16 int32 uint32 int64 uint64 decimal unit bool string list exn obj enum" prefix="\b" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="[^\W\d][\w&#39;]*">

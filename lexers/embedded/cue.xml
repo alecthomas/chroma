@@ -40,13 +40,13 @@
       <rule pattern="[{}]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(import|for|if|in|let|package)\b">
+      <rule words="import for if in let package" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(bool|float|int|string|uint|ulong|ushort)\b\??">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(true|false|null|_)\b">
+      <rule words="true false null _" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="[@#]?[_a-zA-Z$]\w*">

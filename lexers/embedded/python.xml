@@ -180,7 +180,7 @@
       <rule pattern="[]{}:(),;[]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(in|is|and|or|not)\b">
+      <rule words="in is and or not" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
       <rule>
@@ -218,7 +218,7 @@
       <rule pattern="(yield from|nonlocal|continue|finally|except|lambda|assert|global|return|raise|yield|while|break|await|async|pass|else|elif|with|try|for|del|as|if|match|case)\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(False|True|None)\b">
+      <rule words="False True None" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
     </state>
@@ -257,13 +257,13 @@
       </rule>
     </state>
     <state name="builtins">
-      <rule pattern="(?&lt;!\.)(staticmethod|classmethod|memoryview|__import__|issubclass|isinstance|frozenset|bytearray|enumerate|reversed|property|compile|complex|delattr|hasattr|setattr|globals|getattr|divmod|filter|locals|format|object|sorted|slice|print|bytes|range|input|tuple|round|super|float|eval|list|dict|repr|type|vars|hash|next|bool|open|iter|oct|pow|min|zip|max|map|bin|len|set|any|dir|all|abs|str|sum|chr|int|hex|ord|id)\b">
+      <rule words="staticmethod classmethod memoryview __import__ issubclass isinstance frozenset bytearray enumerate reversed property compile complex delattr hasattr setattr globals getattr divmod filter locals format object sorted slice print bytes range input tuple round super float eval list dict repr type vars hash next bool open iter oct pow min zip max map bin len set any dir all abs str sum chr int hex ord id" prefix="(?&lt;!\.)" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(?&lt;!\.)(self|Ellipsis|NotImplemented|cls)\b">
+      <rule words="self Ellipsis NotImplemented cls" prefix="(?&lt;!\.)" suffix="\b">
         <token type="NameBuiltinPseudo"/>
       </rule>
-      <rule pattern="(?&lt;!\.)(PendingDeprecationWarning|ConnectionAbortedError|ConnectionRefusedError|UnicodeTranslateError|ConnectionResetError|ModuleNotFoundError|NotImplementedError|FloatingPointError|StopAsyncIteration|UnicodeDecodeError|DeprecationWarning|UnicodeEncodeError|NotADirectoryError|ProcessLookupError|ZeroDivisionError|IsADirectoryError|FileNotFoundError|UnboundLocalError|KeyboardInterrupt|ChildProcessError|EnvironmentError|IndentationError|InterruptedError|BlockingIOError|ArithmeticError|ConnectionError|BrokenPipeError|FileExistsError|ResourceWarning|PermissionError|RuntimeWarning|ReferenceError|AttributeError|AssertionError|UnicodeWarning|RecursionError|StopIteration|BaseException|OverflowError|SyntaxWarning|FutureWarning|GeneratorExit|ImportWarning|UnicodeError|TimeoutError|WindowsError|RuntimeError|BytesWarning|SystemError|UserWarning|MemoryError|ImportError|LookupError|BufferError|SyntaxError|SystemExit|ValueError|IndexError|NameError|Exception|TypeError|TabError|EOFError|KeyError|VMSError|Warning|OSError|IOError)\b">
+      <rule words="PendingDeprecationWarning ConnectionAbortedError ConnectionRefusedError UnicodeTranslateError ConnectionResetError ModuleNotFoundError NotImplementedError FloatingPointError StopAsyncIteration UnicodeDecodeError DeprecationWarning UnicodeEncodeError NotADirectoryError ProcessLookupError ZeroDivisionError IsADirectoryError FileNotFoundError UnboundLocalError KeyboardInterrupt ChildProcessError EnvironmentError IndentationError InterruptedError BlockingIOError ArithmeticError ConnectionError BrokenPipeError FileExistsError ResourceWarning PermissionError RuntimeWarning ReferenceError AttributeError AssertionError UnicodeWarning RecursionError StopIteration BaseException OverflowError SyntaxWarning FutureWarning GeneratorExit ImportWarning UnicodeError TimeoutError WindowsError RuntimeError BytesWarning SystemError UserWarning MemoryError ImportError LookupError BufferError SyntaxError SystemExit ValueError IndexError NameError Exception TypeError TabError EOFError KeyError VMSError Warning OSError IOError" prefix="(?&lt;!\.)" suffix="\b">
         <token type="NameException"/>
       </rule>
     </state>
@@ -383,7 +383,7 @@
       <rule pattern="(yield from|async for|lambda|yield|await|else|for|if)\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(False|True|None)\b">
+      <rule words="False True None" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
     </state>
@@ -399,7 +399,7 @@
       </rule>
     </state>
     <state name="magicfuncs">
-      <rule pattern="(__instancecheck__|__subclasscheck__|__getattribute__|__length_hint__|__rfloordiv__|__ifloordiv__|__itruediv__|__contains__|__floordiv__|__rtruediv__|__reversed__|__setitem__|__complex__|__rdivmod__|__delattr__|__rmatmul__|__ilshift__|__prepare__|__delitem__|__rrshift__|__imatmul__|__rlshift__|__setattr__|__truediv__|__getitem__|__missing__|__getattr__|__irshift__|__rshift__|__format__|__invert__|__matmul__|__divmod__|__delete__|__aenter__|__lshift__|__await__|__bytes__|__anext__|__aiter__|__aexit__|__round__|__float__|__enter__|__index__|__iadd__|__ipow__|__rpow__|__iter__|__init__|__ixor__|__rmul__|__rmod__|__imul__|__imod__|__iand__|__hash__|__rsub__|__exit__|__rxor__|__bool__|__call__|__rand__|__next__|__radd__|__isub__|__repr__|__set__|__add__|__new__|__neg__|__xor__|__and__|__mul__|__mod__|__sub__|__len__|__str__|__ror__|__ior__|__pos__|__del__|__get__|__dir__|__abs__|__int__|__pow__|__eq__|__gt__|__le__|__lt__|__ne__|__or__|__ge__)\b">
+      <rule words="__instancecheck__ __subclasscheck__ __getattribute__ __length_hint__ __rfloordiv__ __ifloordiv__ __itruediv__ __contains__ __floordiv__ __rtruediv__ __reversed__ __setitem__ __complex__ __rdivmod__ __delattr__ __rmatmul__ __ilshift__ __prepare__ __delitem__ __rrshift__ __imatmul__ __rlshift__ __setattr__ __truediv__ __getitem__ __missing__ __getattr__ __irshift__ __rshift__ __format__ __invert__ __matmul__ __divmod__ __delete__ __aenter__ __lshift__ __await__ __bytes__ __anext__ __aiter__ __aexit__ __round__ __float__ __enter__ __index__ __iadd__ __ipow__ __rpow__ __iter__ __init__ __ixor__ __rmul__ __rmod__ __imul__ __imod__ __iand__ __hash__ __rsub__ __exit__ __rxor__ __bool__ __call__ __rand__ __next__ __radd__ __isub__ __repr__ __set__ __add__ __new__ __neg__ __xor__ __and__ __mul__ __mod__ __sub__ __len__ __str__ __ror__ __ior__ __pos__ __del__ __get__ __dir__ __abs__ __int__ __pow__ __eq__ __gt__ __le__ __lt__ __ne__ __or__ __ge__" suffix="\b">
         <token type="NameFunctionMagic"/>
       </rule>
     </state>
@@ -484,7 +484,7 @@
       </rule>
     </state>
     <state name="magicvars">
-      <rule pattern="(__annotations__|__kwdefaults__|__qualname__|__objclass__|__defaults__|__closure__|__globals__|__weakref__|__module__|__class__|__bases__|__slots__|__file__|__code__|__name__|__func__|__dict__|__self__|__mro__|__doc__)\b">
+      <rule words="__annotations__ __kwdefaults__ __qualname__ __objclass__ __defaults__ __closure__ __globals__ __weakref__ __module__ __class__ __bases__ __slots__ __file__ __code__ __name__ __func__ __dict__ __self__ __mro__ __doc__" suffix="\b">
         <token type="NameVariableMagic"/>
       </rule>
     </state>

@@ -38,19 +38,19 @@
         <token type="LiteralStringDouble"/>
         <push state="string"/>
       </rule>
-      <rule pattern="\b(true|false|null)\b">
+      <rule words="true false null" prefix="\b" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="\b(status|url|header|certificate|cookie|body|bytes|xpath|jsonpath|regex|variable|duration|sha256|md5|ip|redirects|version)\b">
+      <rule words="status url header certificate cookie body bytes xpath jsonpath regex variable duration sha256 md5 ip redirects version" prefix="\b" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="\b(count|daysAfterNow|daysBeforeNow|decode|format|htmlEscape|htmlUnescape|nth|replace|replaceRegex|split|toDate|toFloat|toInt|toString|urlDecode|urlEncode|urlQueryParam|base64Decode|base64Encode|base64UrlSafeDecode|base64UrlSafeEncode|first|last|location)\b">
+      <rule words="count daysAfterNow daysBeforeNow decode format htmlEscape htmlUnescape nth replace replaceRegex split toDate toFloat toInt toString urlDecode urlEncode urlQueryParam base64Decode base64Encode base64UrlSafeDecode base64UrlSafeEncode first last location" prefix="\b" suffix="\b">
         <token type="NameFunction"/>
       </rule>
-      <rule pattern="\b(not|contains|exists|includes|matches|startsWith|endsWith|isBoolean|isCollection|isDate|isEmpty|isFloat|isInteger|isIsoDate|isNumber|isString|isIpv4|isIpv6|isUuid)\b">
+      <rule words="not contains exists includes matches startsWith endsWith isBoolean isCollection isDate isEmpty isFloat isInteger isIsoDate isNumber isString isIpv4 isIpv6 isUuid" prefix="\b" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="==|!=|&gt;=|&lt;=|&gt;|&lt;">
+      <rule words="== != &gt;= &lt;= &gt; &lt;">
         <token type="Operator"/>
       </rule>
       <rule pattern="[+-]?\d+(\.\d+)?\b">

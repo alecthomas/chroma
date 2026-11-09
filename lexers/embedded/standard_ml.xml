@@ -10,23 +10,23 @@
   </config>
   <rules>
     <state name="delimiters">
-      <rule pattern="\(|\[|\{">
+      <rule words="( [ {">
         <token type="Punctuation"/>
         <push state="main"/>
       </rule>
-      <rule pattern="\)|\]|\}">
+      <rule words=") ] }">
         <token type="Punctuation"/>
         <pop depth="1"/>
       </rule>
-      <rule pattern="\b(let|if|local)\b(?!\&#39;)">
+      <rule words="let if local" prefix="\b" suffix="\b(?!\&#39;)">
         <token type="KeywordReserved"/>
         <push state="main" state="main"/>
       </rule>
-      <rule pattern="\b(struct|sig|while)\b(?!\&#39;)">
+      <rule words="struct sig while" prefix="\b" suffix="\b(?!\&#39;)">
         <token type="KeywordReserved"/>
         <push state="main"/>
       </rule>
-      <rule pattern="\b(do|else|end|in|then)\b(?!\&#39;)">
+      <rule words="do else end in then" prefix="\b" suffix="\b(?!\&#39;)">
         <token type="KeywordReserved"/>
         <pop depth="1"/>
       </rule>
@@ -334,7 +334,7 @@
         <token type="CommentMultiline"/>
         <push state="comment"/>
       </rule>
-      <rule pattern="\b(fun|and)\b(?!\&#39;)">
+      <rule words="fun and" prefix="\b" suffix="\b(?!\&#39;)">
         <token type="KeywordReserved"/>
         <push state="fname"/>
       </rule>
@@ -346,7 +346,7 @@
         <token type="Punctuation"/>
         <push state="fname"/>
       </rule>
-      <rule pattern="\b(case|handle)\b(?!\&#39;)">
+      <rule words="case handle" prefix="\b" suffix="\b(?!\&#39;)">
         <token type="KeywordReserved"/>
         <push state="#pop" state="main"/>
       </rule>
@@ -400,7 +400,7 @@
       <rule>
         <include state="whitespace"/>
       </rule>
-      <rule pattern="\b(val|and)\b(?!\&#39;)">
+      <rule words="val and" prefix="\b" suffix="\b(?!\&#39;)">
         <token type="KeywordReserved"/>
         <push state="vname"/>
       </rule>
@@ -444,7 +444,7 @@
       </rule>
     </state>
     <state name="core">
-      <rule pattern="(_|\}|\{|\)|;|,|\[|\(|\]|\.\.\.)">
+      <rule words="_ } { ) ; , [ ( ] ...">
         <token type="Punctuation"/>
       </rule>
       <rule pattern="#&#34;">
@@ -485,7 +485,7 @@
       <rule pattern="#\s+([!%&amp;$#+\-/:&lt;=&gt;?@\\~`^|*]+)">
         <token type="NameLabel"/>
       </rule>
-      <rule pattern="\b(datatype|abstype)\b(?!\&#39;)">
+      <rule words="datatype abstype" prefix="\b" suffix="\b(?!\&#39;)">
         <token type="KeywordReserved"/>
         <push state="dname"/>
       </rule>
@@ -493,11 +493,11 @@
         <token type="Text"/>
         <push state="ename"/>
       </rule>
-      <rule pattern="\b(functor|include|open|signature|structure)\b(?!\&#39;)">
+      <rule words="functor include open signature structure" prefix="\b" suffix="\b(?!\&#39;)">
         <token type="KeywordReserved"/>
         <push state="sname"/>
       </rule>
-      <rule pattern="\b(type|eqtype)\b(?!\&#39;)">
+      <rule words="type eqtype" prefix="\b" suffix="\b(?!\&#39;)">
         <token type="KeywordReserved"/>
         <push state="tname"/>
       </rule>
@@ -508,7 +508,7 @@
         <token type="NameNamespace"/>
         <push state="dotted"/>
       </rule>
-      <rule pattern="\b(abstype|and|andalso|as|case|datatype|do|else|end|exception|fn|fun|handle|if|in|infix|infixr|let|local|nonfix|of|op|open|orelse|raise|rec|then|type|val|with|withtype|while|eqtype|functor|include|sharing|sig|signature|struct|structure|where)\b">
+      <rule words="abstype and andalso as case datatype do else end exception fn fun handle if in infix infixr let local nonfix of op open orelse raise rec then type val with withtype while eqtype functor include sharing sig signature struct structure where" prefix="\b" suffix="\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="([a-zA-Z][\w&#39;]*)">

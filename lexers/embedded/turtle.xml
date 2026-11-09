@@ -134,7 +134,7 @@
       <rule pattern="#[^\n]+">
         <token type="Comment"/>
       </rule>
-      <rule pattern="\b(true|false)\b">
+      <rule words="true false" prefix="\b" suffix="\b">
         <token type="Literal"/>
       </rule>
       <rule pattern="[+\-]?\d*\.\d+">

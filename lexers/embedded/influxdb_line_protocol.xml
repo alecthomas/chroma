@@ -97,7 +97,7 @@ https://docs.influxdata.com/influxdb3/enterprise/reference/line-protocol/
         <token type="LiteralNumberFloat"/>
         <pop depth="1"/>
       </rule>
-      <rule pattern="(?:true|True|TRUE|t|T|false|False|FALSE|f|F)(?=[,\s]|$)">
+      <rule words="true True TRUE t T false False FALSE f F" suffix="(?=[,\s]|$)">
         <token type="KeywordConstant"/>
         <pop depth="1"/>
       </rule>

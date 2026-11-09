@@ -47,7 +47,7 @@
         pattern="(abstract|const|enum|exports|extends|final|implements|native|non-sealed|open|opens|permits|private|protected|provides|public|requires|sealed|static|strictfp|super|synchronized|throws|to|transient|transitive|uses|volatile|with|yield)\b">
         <token type="KeywordDeclaration" />
       </rule>
-      <rule pattern="(boolean|byte|char|double|float|int|long|short|void)\b">
+      <rule words="boolean byte char double float int long short void" suffix="\b">
         <token type="KeywordType" />
       </rule>
       <rule pattern="(package)(\s+)">
@@ -57,10 +57,10 @@
         </bygroups>
         <push state="import" />
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant" />
       </rule>
-      <rule pattern="(class|interface)\b">
+      <rule words="class interface" suffix="\b">
         <token type="KeywordDeclaration" />
         <push state="class" />
       </rule>

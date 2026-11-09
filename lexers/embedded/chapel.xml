@@ -20,10 +20,10 @@
       </rule>
     </state>
     <state name="receivertype">
-      <rule pattern="(unmanaged|borrowed|atomic|single|shared|owned|sync)\b">
+      <rule words="unmanaged borrowed atomic single shared owned sync" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(complex|nothing|opaque|string|locale|bytes|range|imag|real|bool|uint|void|int)\b">
+      <rule words="complex nothing opaque string locale bytes range imag real bool uint void int" suffix="\b">
         <token type="KeywordType"/>
       </rule>
       <rule pattern="[^()]*">
@@ -47,16 +47,16 @@
       <rule pattern="/(\\\n)?[*](.|\n)*?[*](\\\n)?/">
         <token type="CommentMultiline"/>
       </rule>
-      <rule pattern="(config|const|inout|param|type|out|ref|var|in)\b">
+      <rule words="config const inout param type out ref var in" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(false|none|true|nil)\b">
+      <rule words="false none true nil" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(complex|nothing|opaque|string|locale|bytes|range|imag|real|bool|uint|void|int)\b">
+      <rule words="complex nothing opaque string locale bytes range imag real bool uint void int" suffix="\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(implements|forwarding|prototype|otherwise|subdomain|primitive|unmanaged|override|borrowed|lifetime|coforall|continue|private|require|dmapped|cobegin|foreach|lambda|sparse|shared|domain|pragma|reduce|except|export|extern|throws|forall|delete|return|noinit|single|import|select|public|inline|serial|atomic|defer|break|local|index|throw|catch|label|begin|where|while|align|yield|owned|only|this|sync|with|scan|else|enum|init|when|then|let|for|try|use|new|zip|if|by|as|on|do)\b">
+      <rule words="implements forwarding prototype otherwise subdomain primitive unmanaged override borrowed lifetime coforall continue private require dmapped cobegin foreach lambda sparse shared domain pragma reduce except export extern throws forall delete return noinit single import select public inline serial atomic defer break local index throw catch label begin where while align yield owned only this sync with scan else enum init when then let for try use new zip if by as on do" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="(iter)(\s+)">

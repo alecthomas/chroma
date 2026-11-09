@@ -69,7 +69,7 @@
       <rule pattern="O(?=\[)">
         <token type="NameFunction"/>
       </rule>
-      <rule pattern="(?&lt;=\][ \t]*)(sub|endsub|call|return|if|elseif|else|endif|while|endwhile|do|repeat|endrepeat|break|continue)\b">
+      <rule words="sub endsub call return if elseif else endif while endwhile do repeat endrepeat break continue" prefix="(?&lt;=\][ \t]*)" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="M118(?![\d.])">
@@ -154,10 +154,10 @@
       <rule pattern="[ \t]+">
         <token type="TextWhitespace"/>
       </rule>
-      <rule pattern="\b(abs|acos|asin|atan|cos|exists|exp|fix|fup|ln|round|sin|sqrt|tan)\b">
+      <rule words="abs acos asin atan cos exists exp fix fup ln round sin sqrt tan" prefix="\b" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="\b(mod|and|or|xor|eq|ne|gt|ge|lt|le)\b">
+      <rule words="mod and or xor eq ne gt ge lt le" prefix="\b" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
       <rule>
@@ -223,10 +223,10 @@
       <rule pattern="(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?">
         <token type="LiteralNumber"/>
       </rule>
-      <rule pattern="\b(true|false|null|pi|iterations|line|result|input)\b">
+      <rule words="true false null pi iterations line result input" prefix="\b" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="\b(abs|acos|asin|atan|atan2|ceil|cos|datetime|degrees|drop|exists|exp|fileexists|fileread|find|floor|isnan|log|max|min|mod|pow|radians|random|round|sin|sqrt|square|take|tan|vector)\b(?=[ \t]*\()">
+      <rule words="abs acos asin atan atan2 ceil cos datetime degrees drop exists exp fileexists fileread find floor isnan log max min mod pow radians random round sin sqrt square take tan vector" prefix="\b" suffix="\b(?=[ \t]*\()">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="(\|)([ \t]*)(abs|attr|batch|capitalize|center|count|default|dictsort|escape|filesizeformat|first|float|forceescape|format|groupby|indent|int|items|join|last|length|list|lower|map|max|min|pprint|random|reject|rejectattr|replace|reverse|round|safe|select|selectattr|slice|sort|string|striptags|sum|title|tojson|trim|truncate|unique|upper|urlencode|urlize|wordcount|wordwrap|xmlattr)\b">
@@ -332,13 +332,13 @@
       <rule pattern="\s+">
         <token type="TextWhitespace"/>
       </rule>
-      <rule pattern="\b(if|elif|else|endif|for|endfor|set|endset|macro|endmacro|call|endcall|filter|endfilter|with|endwith|raw|endraw|break|continue|do)\b">
+      <rule words="if elif else endif for endfor set endset macro endmacro call endcall filter endfilter with endwith raw endraw break continue do" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(and|or|not|in|is)\b">
+      <rule words="and or not in is" prefix="\b" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="\b(true|false|none)\b">
+      <rule words="true false none" prefix="\b" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(\|)([ \t]*)(abs|attr|batch|capitalize|center|count|default|dictsort|escape|filesizeformat|first|float|forceescape|format|groupby|indent|int|items|join|last|length|list|lower|map|max|min|pprint|random|reject|rejectattr|replace|reverse|round|safe|select|selectattr|slice|sort|string|striptags|sum|title|tojson|trim|truncate|unique|upper|urlencode|urlize|wordcount|wordwrap|xmlattr)\b">

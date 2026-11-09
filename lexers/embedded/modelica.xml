@@ -26,12 +26,12 @@
       </rule>
 
       <!-- Keywords (Modelica specific) -->
-      <rule pattern="\b(model|equation|end|extends|function|type|record|connector|parameter|constant|if|then|else|for|in|when|assert|outer|algorithm|flow|discrete|input|output|loop|elseif|return|public|protected|external|real|integer|boolean|string|array|complex|union|tuple|class|der|time|tstart|tstop)\b">
+      <rule words="model equation end extends function type record connector parameter constant if then else for in when assert outer algorithm flow discrete input output loop elseif return public protected external real integer boolean string array complex union tuple class der time tstart tstop" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
       
       <!-- Type definitions -->
-      <rule pattern="\b(boolean|integer|real|string|array|record|complex|union|tuple)\b">
+      <rule words="boolean integer real string array record complex union tuple" prefix="\b" suffix="\b">
         <token type="KeywordType"/>
       </rule>
 

@@ -115,13 +115,13 @@
       </rule>
     </state>
     <state name="keywords">
-      <rule pattern="\b(datalines4|datalines|delimiter|startsas|redirect|lostcard|continue|informat|filename|footnote|catname|options|libname|systask|display|waitsas|missing|replace|delete|window|endsas|update|format|attrib|length|infile|select|return|retain|rename|remove|output|cards4|modify|leave|title|merge|delim|input|cards|abort|where|label|array|error|call|page|stop|keep|file|drop|link|skip|list|goto|put|out|set|by|dm|in|x)\b">
+      <rule words="datalines4 datalines delimiter startsas redirect lostcard continue informat filename footnote catname options libname systask display waitsas missing replace delete window endsas update format attrib length infile select return retain rename remove output cards4 modify leave title merge delim input cards abort where label array error call page stop keep file drop link skip list goto put out set by dm in x" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(references|distinct|describe|validate|restrict|cascade|msgtype|message|primary|foreign|delete|update|create|unique|having|modify|insert|select|group|check|table|alter|order|reset|index|where|into|from|view|null|like|drop|add|not|key|and|set|on|in|or|as)\b">
+      <rule words="references distinct describe validate restrict cascade msgtype message primary foreign delete update create unique having modify insert select group check table alter order reset index where into from view null like drop add not key and set on in or as" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(while|until|then|else|end|if|do)\b">
+      <rule words="while until then else end if do" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="%(sysevalf|nrbquote|qsysfunc|qlowcase|compstor|nrquote|display|qupcase|datatyp|qcmpres|unquote|syscall|sysfunc|sysrput|sysprod|syslput|sysexec|lowcase|qsubstr|sysget|length|keydef|global|superq|substr|verify|bquote|cmpres|upcase|window|label|qleft|while|qtrim|quote|nrstr|until|sysrc|input|macro|local|qscan|index|else|scan|mend|eval|trim|then|goto|left|put|let|end|str|do|to|if)\b">
@@ -137,7 +137,7 @@
       </rule>
     </state>
     <state name="special">
-      <rule pattern="(null|missing|_all_|_automatic_|_character_|_n_|_infile_|_name_|_null_|_numeric_|_user_|_webout_)">
+      <rule words="null missing _all_ _automatic_ _character_ _n_ _infile_ _name_ _null_ _numeric_ _user_ _webout_">
         <token type="KeywordConstant"/>
       </rule>
     </state>

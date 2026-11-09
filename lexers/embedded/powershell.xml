@@ -92,16 +92,16 @@
       <rule pattern="(\$|@@|@)((global|script|private|env):)?\w+">
         <token type="NameVariable"/>
       </rule>
-      <rule pattern="(parameter|validatenotnullorempty|validatescript|validaterange|validateset|validaterange|validatepattern|validatelength|validatecount|validatenotnullorempty|validatescript|cmdletbinding|alias)\b">
+      <rule words="parameter validatenotnullorempty validatescript validaterange validateset validaterange validatepattern validatelength validatecount validatenotnullorempty validatescript cmdletbinding alias" suffix="\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="[a-z]\w*-[a-z]\w*\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(mandatory|parametersetname|position|helpmessage|valuefrompipeline|valuefrompipelinebypropertyname|valuefromremainingarguments|dontshow)\b">
+      <rule words="mandatory parametersetname position helpmessage valuefrompipeline valuefrompipelinebypropertyname valuefromremainingarguments dontshow" suffix="\b">
         <token type="NameAttribute"/>
       </rule>
-      <rule pattern="(confirmimpact|defaultparametersetname|helpuri|supportspaging|supportsshouldprocess|positionalbinding)\b">
+      <rule words="confirmimpact defaultparametersetname helpuri supportspaging supportsshouldprocess positionalbinding" suffix="\b">
         <token type="NameAttribute"/>
       </rule>
       <rule pattern="(while|until|trap|switch|return|ref|process|param|parameter|in|if|global:|foreach|for|finally|filter|end|elseif|else|dynamicparam|do|default|continue|break|begin|\?|%|#script|#private|#local|#global|try|catch|throw)\b">

@@ -17,7 +17,7 @@
       <rule pattern="/\*.*?\*/">
         <token type="CommentMultiline"/>
       </rule>
-      <rule pattern="(break|catch|continue|done|else|finally|foreach|forever|fork|if|lock|match|return|throw|transaction|try|while)\b">
+      <rule words="break catch continue done else finally foreach forever fork if lock match return throw transaction try while" suffix="\b">
         <token type="Keyword"/>
       </rule>
       <rule pattern="((?:(?:[^\W\d]|\$)[\w.\[\]$&lt;&gt;]*\s+)+?)((?:[^\W\d]|\$)[\w$]*)(\s*)(\()">
@@ -31,13 +31,13 @@
       <rule pattern="@[^\W\d][\w.]*">
         <token type="NameDecorator"/>
       </rule>
-      <rule pattern="(annotation|bind|but|endpoint|error|function|object|private|public|returns|service|type|var|with|worker)\b">
+      <rule words="annotation bind but endpoint error function object private public returns service type var with worker" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(boolean|byte|decimal|float|int|json|map|nil|record|string|table|xml)\b">
+      <rule words="boolean byte decimal float int json map nil record string table xml" suffix="\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(true|false|null)\b">
+      <rule words="true false null" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="(import)(\s+)">

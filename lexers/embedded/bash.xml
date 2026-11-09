@@ -165,7 +165,7 @@
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="\b(alias|bg|bind|break|builtin|caller|cd|command|compgen|complete|declare|dirs|disown|echo|enable|eval|exec|exit|export|false|fc|fg|getopts|hash|help|history|jobs|kill|let|local|logout|popd|printf|pushd|pwd|read|readonly|set|shift|shopt|source|suspend|test|time|times|trap|true|type|typeset|ulimit|umask|unalias|unset|wait)(?=[\s)`])">
+      <rule words="alias bg bind break builtin caller cd command compgen complete declare dirs disown echo enable eval exec exit export false fc fg getopts hash help history jobs kill let local logout popd printf pushd pwd read readonly set shift shopt source suspend test time times trap true type typeset ulimit umask unalias unset wait" prefix="\b" suffix="(?=[\s)`])">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="\A#!.+\n">
@@ -193,7 +193,7 @@
       <rule pattern="&lt;&lt;-?\s*(\&#39;?)\\?(\w+)[\w\W]+?\2">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="&amp;&amp;|\|\|">
+      <rule words="&amp;&amp; ||">
         <token type="Operator"/>
       </rule>
     </state>

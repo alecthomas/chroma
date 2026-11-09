@@ -46,7 +46,7 @@
       <rule pattern="[$]+">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="seg|wrt|strict">
+      <rule words="seg wrt strict">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern="byte|[dq]?word">
@@ -64,7 +64,7 @@
       <rule pattern="[@a-z$._?][\w$.?#@~]*:">
         <token type="NameLabel"/>
       </rule>
-      <rule pattern="BITS|USE16|USE32|SECTION|SEGMENT|ABSOLUTE|EXTERN|GLOBAL|ORG|ALIGN|STRUC|ENDSTRUC|ENDS|COMMON|CPU|GROUP|UPPERCASE|INCLUDE|EXPORT|LIBRARY|MODULE|PROC|ENDP|USES|ARG|DATASEG|UDATASEG|END|IDEAL|P386|MODEL|ASSUME|CODESEG|SIZE">
+      <rule words="BITS USE16 USE32 SECTION SEGMENT ABSOLUTE EXTERN GLOBAL ORG ALIGN STRUC ENDSTRUC ENDS COMMON CPU GROUP UPPERCASE INCLUDE EXPORT LIBRARY MODULE PROC ENDP USES ARG DATASEG UDATASEG END IDEAL P386 MODEL ASSUME CODESEG SIZE">
         <token type="Keyword"/>
         <push state="instruction-args"/>
       </rule>
