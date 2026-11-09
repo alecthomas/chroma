@@ -65,7 +65,7 @@
       </rule>
       
       <!-- Operators -->
-      <rule pattern="(\+|\-|\*|\/|\^|\&amp;|\||\&lt;|\&gt;|\%|\=|\!=|\&lt;\=|\&gt;\=)">
+      <rule words="+ - * / ^ &amp; | &lt; &gt; % = != &lt;= &gt;=">
         <token type="Operator"/>
       </rule>
     </state>

@@ -78,7 +78,7 @@
       <rule words="{ } ( ) [ ] , : ;">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="(\.|\!|\-|\+|\~|\*\*|\*|\/|\%|\.\.\.|\.\.|\&lt;\=|\&gt;\=|\&lt;|\&gt;|\=\=|\!\=|\&amp;\&amp;|\|\||\=|\:\=|\?\=|\+\=|\-\=|\*\=|\/\=|\%\=|\?|\:)">
+      <rule words=". ! - + ~ ** * / % ... .. &lt;= &gt;= &lt; &gt; == != &amp;&amp; || = := ?= += -= *= /= %= ? :">
         <token type="Operator"/>
       </rule>
       <rule pattern="\b(and|if unless|in|is|is a|is defined|is not|isnt|or|not)\b">

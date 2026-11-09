@@ -70,7 +70,7 @@
       <rule pattern="(^|(?&lt;=[^\w\-]))(PIC\s+.+?(?=(\s|\.\s))|PICTURE\s+.+?(?=(\s|\.\s))|(COMPUTATIONAL)(-[1-5X])?|(COMP)(-[1-5X])?|BINARY-C-LONG|BINARY-CHAR|BINARY-DOUBLE|BINARY-LONG|BINARY-SHORT|BINARY)\s*($|(?=[^\w\-]))">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(\*\*|\*|\+|-|/|&lt;=|&gt;=|&lt;|&gt;|==|/=|=)">
+      <rule words="** * + - / &lt;= &gt;= &lt; &gt; == /= =">
         <token type="Operator"/>
       </rule>
       <rule pattern="([(),;:&amp;%.])">

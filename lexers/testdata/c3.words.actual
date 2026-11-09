@@ -1,0 +1,5 @@
+fn Foo Foo.add(Foo a, Foo b) @operator_r(+)
+{
+	float16 f = $$exp2(a.x);
+	return a;
+}

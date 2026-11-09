@@ -15,8 +15,8 @@
       <rule pattern="--.*$"><token type="CommentSingle"/></rule>
       <rule words="Type Prop Sort" prefix="\b" suffix="\b"><token type="KeywordType"/></rule>
       <rule words="sorry admit" prefix="\b" suffix="\b"><token type="GenericError"/></rule>
-      <rule pattern="(!=|\#|\&amp;|\&amp;\&amp;|\*|\+|\-|/|@|!|\-\.|\-&gt;|\.|\.\.|\.\.\.|::|:&gt;|;|;;|&lt;|&lt;\-|=|==|&gt;|_|\||\|\||\~|=&gt;|&lt;=|&gt;=|/\\|\\/|∀|Π|λ|↔|∧|∨|≠|≤|≥|¬|⁻¹|⬝|▸|→|∃|≈|×|⌞|⌟|≡|⟨|⟩|↦)"><token type="NameBuiltinPseudo"/></rule>
-      <rule pattern="(\(|\)|:|\{|\}|\[|\]|⦃|⦄|:=|,)"><token type="Operator"/></rule>
+      <rule words="!= # &amp; &amp;&amp; * + - / @ ! -. -&gt; . .. ... :: :&gt; ; ;; &lt; &lt;- = == &gt; _ | || ~ =&gt; &lt;= &gt;= /\ \/ ∀ Π λ ↔ ∧ ∨ ≠ ≤ ≥ ¬ ⁻¹ ⬝ ▸ → ∃ ≈ × ⌞ ⌟ ≡ ⟨ ⟩ ↦"><token type="NameBuiltinPseudo"/></rule>
+      <rule words="( ) : { } [ ] ⦃ ⦄ := ,"><token type="Operator"/></rule>
       <rule pattern="(?![λΠΣ])[_a-zA-Zα-ωΑ-Ωϊ-ϻἀ-῾℀-⅏𝒜-𝖟](?:(?![λΠΣ])[_a-zA-Zα-ωΑ-Ωϊ-ϻἀ-῾℀-⅏𝒜-𝖟0-9&#x27;ⁿ-₉ₐ-ₜᵢ-ᵪ!?])*"><token type="Name"/></rule>
       <rule pattern="``?(?![λΠΣ])[_a-zA-Zα-ωΑ-Ωϊ-ϻἀ-῾℀-⅏𝒜-𝖟](?:(?![λΠΣ])[_a-zA-Zα-ωΑ-Ωϊ-ϻἀ-῾℀-⅏𝒜-𝖟0-9&#x27;ⁿ-₉ₐ-ₜᵢ-ᵪ!?])*(\.(?![λΠΣ])[_a-zA-Zα-ωΑ-Ωϊ-ϻἀ-῾℀-⅏𝒜-𝖟](?:(?![λΠΣ])[_a-zA-Zα-ωΑ-Ωϊ-ϻἀ-῾℀-⅏𝒜-𝖟0-9&#x27;ⁿ-₉ₐ-ₜᵢ-ᵪ!?])*)*"><token type="LiteralStringSymbol"/></rule>
       <rule pattern="(?&lt;=\.)\d+"><token type="LiteralNumber"/></rule>

@@ -1,0 +1,3 @@
+declare-option int-list my_lines
+map global user n ':buffer-next<ret>'
+buffer-next

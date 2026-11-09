@@ -1,0 +1,15 @@
+[
+  {"type":"Text","value":"\t"},
+  {"type":"Keyword","value":"exx"},
+  {"type":"Text","value":"\n\t"},
+  {"type":"Keyword","value":"ld"},
+  {"type":"Text","value":" a"},
+  {"type":"Punctuation","value":","},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"("},
+  {"type":"Text","value":"hl"},
+  {"type":"Punctuation","value":")"},
+  {"type":"Text","value":"\n\t"},
+  {"type":"Keyword","value":"ret"},
+  {"type":"Text","value":"\n"}
+]

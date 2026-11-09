@@ -44,7 +44,7 @@
       <rule words="not &lt;-&gt; -&gt; &lt;- \/ xor /\">
         <token type="Operator"/>
       </rule>
-      <rule pattern="(&lt;|&gt;|&lt;=|&gt;=|==|=|!=)">
+      <rule words="&lt; &gt; &lt;= &gt;= == = !=">
         <token type="Operator"/>
       </rule>
       <rule words="+ - * / div mod">

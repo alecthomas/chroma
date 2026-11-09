@@ -149,7 +149,7 @@
         <token type="KeywordPseudo"/>
         <push state="option-directive"/>
       </rule>
-      <rule pattern="BYPASS|ELSE|END|ENDBYPASS|ENDIF|OPTIMIZE">
+      <rule words="BYPASS ELSE END ENDBYPASS ENDIF OPTIMIZE">
         <token type="KeywordPseudo"/>
         <push state="other-directive"/>
       </rule>

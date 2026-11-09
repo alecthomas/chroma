@@ -1,0 +1,20 @@
+[
+  {"type":"Keyword","value":"declare-option"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameClass","value":"int-list"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Text","value":"my_lines"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"Keyword","value":"map"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameAttribute","value":"global"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameAttribute","value":"user"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Text","value":"n"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"LiteralString","value":"':buffer-next\u003cret\u003e'"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"Keyword","value":"buffer-next"},
+  {"type":"TextWhitespace","value":"\n"}
+]

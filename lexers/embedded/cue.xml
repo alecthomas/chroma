@@ -21,7 +21,7 @@
       <rule pattern="\n">
         <token type="Text"/>
       </rule>
-      <rule pattern="(\+|&amp;&amp;|==|&lt;|=|-|\|\||!=|&gt;|:|\*|&amp;|=~|&lt;=|\?|\[|\]|,|/|\||!~|&gt;=|!|_\|_|\.\.\.)">
+      <rule words="+ &amp;&amp; == &lt; = - || != &gt; : * &amp; =~ &lt;= ? [ ] , / | !~ &gt;= ! _|_ ...">
         <token type="Operator"/>
       </rule>
       <rule pattern="#*&#34;+">

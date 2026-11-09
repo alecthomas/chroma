@@ -54,7 +54,7 @@
       <rule pattern="\.(db|dw|end|org|byte|word|fill|block|addinstr|echo|error|list|nolist|equ|show|option|seek)">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="(ex|exx|ld|ldd|lddr|ldi|ldir|pop|push|adc|add|cp|cpd|cpdr|cpi|cpir|cpl|daa|dec|inc|neg|sbc|sub|and|bit|ccf|or|res|scf|set|xor|rl|rla|rlc|rlca|rld|rr|rra|rrc|rrca|rrd|sla|sra|srl|call|djnz|jp|jr|ret|rst|nop|reti|retn|di|ei|halt|im|in|ind|indr|ini|inir|out|outd|otdr|outi|otir)">
+      <rule words="ex exx ld ldd lddr ldi ldir pop push adc add cp cpd cpdr cpi cpir cpl daa dec inc neg sbc sub and bit ccf or res scf set xor rl rla rlc rlca rld rr rra rrc rrca rrd sla sra srl call djnz jp jr ret rst nop reti retn di ei halt im in ind indr ini inir out outd otdr outi otir">
         <token type="Keyword"/>
       </rule>
       <rule words="z nz c nc po pe p m">

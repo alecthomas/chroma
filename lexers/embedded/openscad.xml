@@ -28,7 +28,7 @@
       <rule pattern="[*!#%\-+=?/]">
         <token type="Operator"/>
       </rule>
-      <rule pattern="&lt;|&lt;=|==|!=|&gt;=|&gt;|&amp;&amp;|\|\|">
+      <rule words="&lt; &lt;= == != &gt;= &gt; &amp;&amp; ||">
         <token type="Operator"/>
       </rule>
       <rule pattern="\$(f[asn]|t|vp[rtd]|children)">

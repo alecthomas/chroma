@@ -55,7 +55,7 @@
       <rule><include state="comment"/></rule>
       <rule words="\_ \^ \&amp;"><token type="Text"/></rule>
       <rule words="_ ^ &amp; ;"><token type="Punctuation"/></rule>
-      <rule pattern="(\+|/|=|\[\||\|\]|\|\||\*|:=|::=|\.\.\.|&#x27;|\-|=:|!=|&gt;&gt;|&gt;=|&gt;&gt;&gt;|&lt;&lt;|&lt;=|&lt;&lt;&lt;|\-&gt;|\|\-&gt;|=&gt;|\|=&gt;|==&gt;|\-\-&gt;|\~\~&gt;|\~&gt;|&gt;\-&gt;|\-&gt;&gt;|&lt;\-|&lt;==|&lt;\-\-|&lt;\~\~|&lt;\~|&lt;\-&lt;|&lt;&lt;\-|&lt;\-&gt;|&lt;=&gt;|&lt;==&gt;|&lt;\-\-&gt;|&gt;|&lt;|\~|:|\|)"><token type="Operator"/></rule>
+      <rule words="+ / = [| |] || * := ::= ... &#39; - =: != &gt;&gt; &gt;= &gt;&gt;&gt; &lt;&lt; &lt;= &lt;&lt;&lt; -&gt; |-&gt; =&gt; |=&gt; ==&gt; --&gt; ~~&gt; ~&gt; &gt;-&gt; -&gt;&gt; &lt;- &lt;== &lt;-- &lt;~~ &lt;~ &lt;-&lt; &lt;&lt;- &lt;-&gt; &lt;=&gt; &lt;==&gt; &lt;--&gt; &gt; &lt; ~ : |"><token type="Operator"/></rule>
       <rule pattern="\\"><token type="Punctuation"/></rule>
       <rule pattern="\\\$"><token type="Punctuation"/></rule>
       <rule pattern="\$"><token type="Punctuation"/><pop depth="1"/></rule>

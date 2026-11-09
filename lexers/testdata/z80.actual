@@ -1,0 +1,3 @@
+	exx
+	ld a, (hl)
+	ret

@@ -1,0 +1,12 @@
+[
+  {"type":"KeywordPseudo","value":"#BYPASS"},
+  {"type":"Text","value":"\n"},
+  {"type":"Name","value":"SET"},
+  {"type":"Text","value":" "},
+  {"type":"Name","value":"X"},
+  {"type":"Operator","value":"="},
+  {"type":"LiteralNumber","value":"1"},
+  {"type":"Text","value":"\n"},
+  {"type":"KeywordPseudo","value":"#ENDBYPASS"},
+  {"type":"Text","value":"\n"}
+]

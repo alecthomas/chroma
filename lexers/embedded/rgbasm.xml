@@ -227,7 +227,7 @@
         </bygroups>
       </rule>
       <!-- Predeclared symbols (non-words) -->
-      <rule pattern="(@|\.|\.\.)">
+      <rule words="@ . ..">
         <token type="NameVariableMagic"/>
       </rule>
       <!-- Default text -->

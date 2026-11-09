@@ -45,8 +45,8 @@
       <rule pattern="\-{3,}"><token type="LiteralStringSingle"/><push state="inside-eof-string"/></rule>
       <rule><include state="builtin-functions"/></rule>
       <rule pattern="[()[\],]"><token type="Punctuation"/></rule>
-      <rule pattern="(\-&gt;|==&gt;|\||::|@|\#|\$|\&amp;|!|!!|\./)"><token type="NameDecorator"/></rule>
-      <rule pattern="(&lt;:|:&gt;|:&lt;|&gt;:|&lt;\\|&lt;&gt;|&lt;|&gt;|ø|∞|\+|\-|\*|\~|=|\^|%|/|//|==&gt;|&lt;=&gt;|&lt;==&gt;|=&gt;&gt;|&lt;&lt;=&gt;&gt;|&lt;&lt;==&gt;&gt;|\-\-&gt;|&lt;\-&gt;|&lt;\-\-&gt;|=\||\|=|\-:|:\-|_|\.|\.\.|\\)"><token type="Operator"/></rule>
+      <rule words="-&gt; ==&gt; | :: @ # $ &amp; ! !! ./"><token type="NameDecorator"/></rule>
+      <rule words="&lt;: :&gt; :&lt; &gt;: &lt;\ &lt;&gt; &lt; &gt; ø ∞ + - * ~ = ^ % / // ==&gt; &lt;=&gt; &lt;==&gt; =&gt;&gt; &lt;&lt;=&gt;&gt; &lt;&lt;==&gt;&gt; --&gt; &lt;-&gt; &lt;--&gt; =| |= -: :- _ . .. \"><token type="Operator"/></rule>
       <rule pattern="\b\w+"><token type="Name"/></rule>
       <rule pattern="\s+"><token type="TextWhitespace"/></rule>
       <rule pattern=".+$"><token type="Error"/></rule>

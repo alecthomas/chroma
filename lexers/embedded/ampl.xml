@@ -74,7 +74,7 @@
       </rule>
 
       <!-- Operators and punctuation -->
-      <rule pattern="\+|\-|\*|/|\*\*|=|&lt;=|&gt;=|==|\||\^|&lt;|&gt;|\!|\.\.|:=|\&amp;|\!=|&lt;&lt;|&gt;&gt;">
+      <rule words="+ - * / ** = &lt;= &gt;= == | ^ &lt; &gt; ! .. := &amp; != &lt;&lt; &gt;&gt;">
         <token type="Operator"/>
       </rule>
       <rule pattern="[(),;:\[\]{}.]">

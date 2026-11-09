@@ -25,14 +25,14 @@
       <rule pattern="\d(_|\d)*U?L"><token type="LiteralNumberIntegerLong"/></rule>
       <rule pattern="\d(_|\d)*U?"><token type="LiteralNumberInteger"/></rule>
       <rule pattern="\d+(.\d+)?"><token type="LiteralNumber"/></rule>
-      <rule pattern="(type|type!|enum|struct|trait|typealias|traitalias)\b"><token type="KeywordDeclaration"/></rule>
+      <rule words="type type! enum struct trait typealias traitalias" suffix="\b"><token type="KeywordDeclaration"/></rule>
       <rule words="async fn const let mut impl with derive fnalias" suffix="\b"><token type="KeywordDeclaration"/></rule>
       <rule words="self Self" suffix="\b"><token type="Keyword"/></rule>
       <rule words="guard if while match else loop for in is" suffix="\b"><token type="Keyword"/></rule>
       <rule words="return break continue" suffix="\b"><token type="Keyword"/></rule>
       <rule words="try catch raise noraise" suffix="\b"><token type="Keyword"/></rule>
       <rule pattern="\bas\b"><token type="Keyword"/></rule>
-      <rule pattern="(extern|pub|priv|pub\(all\)|pub\(readonly\)|pub\(open\)|test)\b"><token type="Keyword"/></rule>
+      <rule words="extern pub priv pub(all) pub(readonly) pub(open) test" suffix="\b"><token type="Keyword"/></rule>
       <rule words="true false" suffix="\b"><token type="KeywordConstant"/></rule>
       <rule words="Eq Compare Hash Show Default ToJson FromJson" suffix="\b"><token type="NameBuiltin"/></rule>
       <rule words="Array FixedArray Int Int64 UInt UInt64 Option Result Byte Bool Unit String Float Double" suffix="\b"><token type="NameBuiltin"/></rule>
