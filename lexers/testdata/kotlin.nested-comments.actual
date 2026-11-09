@@ -1,0 +1,9 @@
+/* outer /* nested */ # still a comment */
+/** outer
+ * /* nested /* deeper */ still nested */
+ * # still a doc comment
+ */
+fun main() {
+    val result = 1 /* outer /* nested */ # comment */ + 1
+    println(result)
+}
