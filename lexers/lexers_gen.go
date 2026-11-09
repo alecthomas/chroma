@@ -1387,6 +1387,23 @@ var embeddedLexers = []struct {
 			"*.gemfile.lock",
 		},
 	}},
+	{"embedded/gemtext.xml", chroma.Config{
+		Name: "Gemtext",
+		Aliases: []string{
+			"gemtext",
+			"gmi",
+			"gmni",
+			"gemini",
+		},
+		Filenames: []string{
+			"*.gmi",
+			"*.gmni",
+			"*.gemini",
+		},
+		MimeTypes: []string{
+			"text/gemini",
+		},
+	}},
 	{"embedded/gettext.xml", chroma.Config{
 		Name: "Gettext",
 		Aliases: []string{

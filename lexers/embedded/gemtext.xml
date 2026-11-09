@@ -1,0 +1,92 @@
+<lexer>
+  <config>
+    <name>Gemtext</name>
+    <alias>gemtext</alias>
+    <alias>gmi</alias>
+    <alias>gmni</alias>
+    <alias>gemini</alias>
+    <filename>*.gmi</filename>
+    <filename>*.gmni</filename>
+    <filename>*.gemini</filename>
+    <mime_type>text/gemini</mime_type>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="^(#[^#].+\r?\n)">
+        <bygroups>
+          <token type="GenericHeading"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(#{2,3}.+\r?\n)">
+        <bygroups>
+          <token type="GenericSubheading"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\* )(.+\r?\n)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(&gt;)(.+\r?\n)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="GenericEmph"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(```\r?\n)([\w\W]*?)(^```)(.+\r?\n)?">
+        <bygroups>
+          <token type="LiteralString"/>
+          <token type="Text"/>
+          <token type="LiteralString"/>
+          <token type="Comment"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(```)(\w+)(\r?\n)([\w\W]*?)(^```)(.+\r?\n)?">
+        <usingbygroup>
+          <sublexer_name_group>2</sublexer_name_group>
+          <code_group>4</code_group>
+          <emitters>
+            <token type="LiteralString"/>
+            <token type="LiteralString"/>
+            <token type="LiteralString"/>
+            <token type="Text"/>
+            <token type="LiteralString"/>
+            <token type="Comment"/>
+          </emitters>
+        </usingbygroup>
+      </rule>
+      <rule pattern="^(```)(.+\r?\n)([\w\W]*?)(^```)(.+\r?\n)?">
+        <bygroups>
+          <token type="LiteralString"/>
+          <token type="LiteralString"/>
+          <token type="Text"/>
+          <token type="LiteralString"/>
+          <token type="Comment"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(=&gt;)(\s*)([^\s]+)(\s*)$">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <token type="NameAttribute"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(=&gt;)(\s*)([^\s]+)(\s+)(.+)$">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <token type="NameAttribute"/>
+          <token type="Text"/>
+          <token type="NameTag"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(.|(?:\r?\n))">
+        <bygroups>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+    </state>
+  </rules>
+</lexer>
