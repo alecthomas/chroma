@@ -1,0 +1,18 @@
+café = 1
+भाषा = 2
+
+def decó(fn):
+    return fn
+
+@decó
+def funć(arǵ):
+    return arǵ + café + भाषा
+
+class शहर:
+    pass
+
+if False:
+    import मोड्यूल as aliaś
+    from मोड्यूल.sub́ import valué
+
+assert funć(3) == 6
