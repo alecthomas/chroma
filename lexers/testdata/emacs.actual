@@ -1,0 +1,31 @@
+;;; demo.el --- Builtins, special forms, macros and keywords -*- lexical-binding: t -*-
+
+(require 'cl-lib)
+
+(defun demo-sum (list &optional acc &rest more)
+  "Sum LIST into ACC."
+  (let ((acc (or acc 0)))
+    (dolist (x list acc)
+      (setq acc (+ acc x)))))
+
+(defmacro demo-with (var &rest body)
+  `(let ((,var (make-hash-table)))
+     ,@body))
+
+(cl-defun demo-key (&key verbose)
+  (when verbose
+    (message "%s" (buffer-name (current-buffer)))))
+
+(condition-case err
+    (progn
+      (cl-assert (numberp 1))
+      (user-error "Nope"))
+  (error (signal (car err) (cdr err))))
+
+(save-excursion
+  (goto-char (point-min))
+  (insert "hi"))
+
+(setq-local car-like 'car-ish)
+(funcall #'mapcar #'1+ '(1 2 3))
+car|x car: error-ish warn
