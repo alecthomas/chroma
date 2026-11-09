@@ -56,6 +56,9 @@
       </rule>
     </state>
     <state name="expr">
+      <rule pattern="#.*$">
+        <token type="CommentSingle"/>
+      </rule>
       <rule pattern="(?i)(rf|fr)(&#34;&#34;&#34;)">
         <bygroups>
           <token type="LiteralStringAffix"/>

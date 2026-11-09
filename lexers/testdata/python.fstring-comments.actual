@@ -1,0 +1,5 @@
+value = f"{1 # } ignored comment
+}"
+nested = f"{(2 # ) ignored comment
+)}"
+print(value, nested)
