@@ -1,0 +1,3 @@
+const เมือง = "Bangkok";
+const भाषा = "hi";
+console.log(เมือง, भाषा);
