@@ -46,6 +46,12 @@
       </rule>
     </state>
     <state name="property">
+      <rule pattern="(\()(\s*)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
       <rule pattern="\x60[^\x60]+?\x60">
         <token type="NameProperty"/>
         <pop depth="1"/>
