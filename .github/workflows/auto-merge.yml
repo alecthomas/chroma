@@ -45,6 +45,7 @@ jobs:
           LEXER = re.compile(r"^lexers/embedded/[^/]+\.xml$")
           STYLE = re.compile(r"^styles/[^/]+\.xml$")
           TESTDATA = re.compile(r"^lexers/testdata/.+\.(actual|expected)$")
+          CONFIG = re.compile(r"<config[\s>].*?</config>", re.S)
           GO_TESTS_MARKER = "<!-- auto-merge:go-tests -->"
 
 
@@ -58,11 +59,11 @@ jobs:
 
 
           def lexer_config(xml):
-              # Mirrors chroma's fastUnmarshalConfig: first "config" at any depth, matched by local name.
-              config = next((e for e in ET.fromstring(xml).iter() if e.tag.rpartition("}")[2] == "config"), None)
+              # Lexer rules repeat attributes, which Go accepts but ElementTree rejects, so parse only <config>.
+              config = CONFIG.search(xml)
               if config is None:
                   return None
-              return ET.canonicalize(ET.tostring(config, encoding="unicode"))
+              return ET.canonicalize(config.group())
 
 
           def file_reason(status, path, merge_base):
