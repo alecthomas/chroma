@@ -1,0 +1,20 @@
+Known language
+==============
+
+.. code-block:: go
+
+   func main() {
+       fmt.Println("hi")
+   }
+
+   // still code
+
+Unknown language
+================
+
+.. sourcecode:: not-a-real-language
+
+    some *text* that is
+    not highlighted
+
+After the block.

@@ -3366,6 +3366,22 @@ var embeddedLexers = []struct {
 			"text/x-rpm-spec",
 		},
 	}},
+	{"embedded/rst.xml", chroma.Config{
+		Name: "reStructuredText",
+		Aliases: []string{
+			"rst",
+			"rest",
+			"restructuredtext",
+		},
+		Filenames: []string{
+			"*.rst",
+			"*.rest",
+		},
+		MimeTypes: []string{
+			"text/x-rst",
+			"text/prs.fallenstein.rst",
+		},
+	}},
 	{"embedded/ruby.xml", chroma.Config{
 		Name: "Ruby",
 		Aliases: []string{

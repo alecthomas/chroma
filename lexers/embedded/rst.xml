@@ -1,0 +1,232 @@
+<lexer>
+  <config>
+    <name>reStructuredText</name>
+    <alias>rst</alias>
+    <alias>rest</alias>
+    <alias>restructuredtext</alias>
+    <filename>*.rst</filename>
+    <filename>*.rest</filename>
+    <mime_type>text/x-rst</mime_type>
+    <mime_type>text/prs.fallenstein.rst</mime_type>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="^(=+|-+|`+|:+|\.+|\&#39;+|&#34;+|~+|\^+|_+|\*+|\++|#+)([ \t]*\n)(.+)(\n)(\1)(\n)">
+        <bygroups>
+          <token type="GenericHeading"/>
+          <token type="Text"/>
+          <token type="GenericHeading"/>
+          <token type="Text"/>
+          <token type="GenericHeading"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\S.*)(\n)(={3,}|-{3,}|`{3,}|:{3,}|\.{3,}|\&#39;{3,}|&#34;{3,}|~{3,}|\^{3,}|_{3,}|\*{3,}|\+{3,}|#{3,})(\n)">
+        <bygroups>
+          <token type="GenericHeading"/>
+          <token type="Text"/>
+          <token type="GenericHeading"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*)([-*+])( .+\n(?:\1  .+\n)*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="LiteralNumber"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*)([0-9#ivxlcmIVXLCM]+\.)( .+\n(?:\1  .+\n)*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="LiteralNumber"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*)(\(?[0-9#ivxlcmIVXLCM]+\))( .+\n(?:\1  .+\n)*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="LiteralNumber"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*)([A-Z]+\.)( .+\n(?:\1  .+\n)+)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="LiteralNumber"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*)(\(?[A-Za-z]+\))( .+\n(?:\1  .+\n)+)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="LiteralNumber"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*)(\|)( .+\n(?:\|  .+\n)*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Operator"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^( *\.\.)(\s*)((?:source)?code(?:-block)?)(::)([ \t]*)([^\n]+)(\n[ \t]*\n)(([ \t]+).*\n(?:(?:\9.*|)\n)+)">
+        <usingbygroup>
+          <sublexer_name_group>6</sublexer_name_group>
+          <code_group>8</code_group>
+          <emitters>
+            <token type="Punctuation"/>
+            <token type="Text"/>
+            <token type="OperatorWord"/>
+            <token type="Punctuation"/>
+            <token type="Text"/>
+            <token type="Keyword"/>
+            <token type="Text"/>
+            <token type="LiteralString"/>
+            <token type="Ignore"/>
+          </emitters>
+        </usingbygroup>
+      </rule>
+      <rule pattern="^( *\.\.)(\s*)([\w:-]+?)(::)(?:([ \t]*)(.*))">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+          <token type="OperatorWord"/>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^( *\.\.)(\s*)(_(?:[^:\\]|\\.)+:)(.*?)$">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+          <token type="NameTag"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^( *\.\.)(\s*)(\[.+\])(.*?)$">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+          <token type="NameTag"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^( *\.\.)(\s*)(\|.+\|)(\s*)([\w:-]+?)(::)(?:([ \t]*)(.*))">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+          <token type="NameTag"/>
+          <token type="Text"/>
+          <token type="OperatorWord"/>
+          <token type="Punctuation"/>
+          <token type="Text"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^ *\.\..*(\n( +.*\n|\n)+)?">
+        <token type="CommentPreproc"/>
+      </rule>
+      <rule pattern="^( *)(:[a-zA-Z-]+:)(\s*)$">
+        <bygroups>
+          <token type="Text"/>
+          <token type="NameClass"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^( *)(:.*?:)([ \t]+)(.*?)$">
+        <bygroups>
+          <token type="Text"/>
+          <token type="NameClass"/>
+          <token type="Text"/>
+          <token type="NameFunction"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\S.*(?&lt;!::)\n)((?:(?: +.*)\n)+)">
+        <bygroups>
+          <usingself state="inline"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(::)(\n[ \t]*\n)([ \t]+)(.*)(\n)((?:(?:\3.*|)\n)+)">
+        <bygroups>
+          <token type="LiteralStringEscape"/>
+          <token type="Text"/>
+          <token type="LiteralString"/>
+          <token type="LiteralString"/>
+          <token type="Text"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule>
+        <include state="inline"/>
+      </rule>
+    </state>
+    <state name="inline">
+      <rule pattern="\\.">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="``">
+        <token type="LiteralString"/>
+        <push state="literal"/>
+      </rule>
+      <rule pattern="(`.+?)(&lt;.+?&gt;)(`__?)">
+        <bygroups>
+          <token type="LiteralString"/>
+          <token type="LiteralStringInterpol"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern="`.+?`__?">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="(`.+?`)(:[a-zA-Z0-9:-]+?:)?">
+        <bygroups>
+          <token type="NameVariable"/>
+          <token type="NameAttribute"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(:[a-zA-Z0-9:-]+?:)(`.+?`)">
+        <bygroups>
+          <token type="NameAttribute"/>
+          <token type="NameVariable"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\*\*.+?\*\*">
+        <token type="GenericStrong"/>
+      </rule>
+      <rule pattern="\*.+?\*">
+        <token type="GenericEmph"/>
+      </rule>
+      <rule pattern="\[.*?\]_">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="&lt;.+?&gt;">
+        <token type="NameTag"/>
+      </rule>
+      <rule pattern="[^\\\n\[*`:]+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="literal">
+      <rule pattern="[^`]+">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="``((?=$)|(?=[-/:.,; \n\x00\‐\‑\‒\–\—\ \&#39;\&#34;\)\]\}\&gt;\’\”\»\!\?]))">
+        <token type="LiteralString"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="`">
+        <token type="LiteralString"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
