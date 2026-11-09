@@ -187,9 +187,6 @@
       <rule pattern="[0-9](&#39;?[0-9]+)*[LlUu]*">
         <token type="LiteralNumberInteger"/>
       </rule>
-      <rule pattern="\*/">
-        <token type="Error"/>
-      </rule>
       <rule pattern="[~!%^&amp;*+=|?:&lt;&gt;/-]">
         <token type="Operator"/>
       </rule>
