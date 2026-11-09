@@ -1573,6 +1573,20 @@ var embeddedLexers = []struct {
 			"text/x-haskell",
 		},
 	}},
+	{"embedded/hemlock.xml", chroma.Config{
+		Name: "Hemlock",
+		Aliases: []string{
+			"hemlock",
+			"hml",
+		},
+		Filenames: []string{
+			"*.hml",
+		},
+		MimeTypes: []string{
+			"text/x-hemlock",
+		},
+		EnsureNL: true,
+	}},
 	{"embedded/hexdump.xml", chroma.Config{
 		Name: "Hexdump",
 		Aliases: []string{
