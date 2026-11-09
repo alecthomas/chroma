@@ -1,9 +1,11 @@
 package chroma
 
 import (
+	"bytes"
 	"errors"
 	"slices"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/dlclark/regexp2/v2"
 	"github.com/dlclark/regexp2/v2/syntax"
@@ -15,71 +17,131 @@ type wordList struct {
 	words          []string
 }
 
-// trieNode's edges are labels[first:first+count] and targets[first:first+count], sorted by label.
-type trieNode struct {
-	first, count uint32
-	terminal     bool
-}
-
+// wordTrie is a double-array trie over the UTF-8 bytes of its words.
+//
+// State 0 is the root. A transition from state s on byte b goes to
+// t = base[s] + codes[b], valid only if check[t] == s+1; a code of 0 means b
+// occurs in no word.
 type wordTrie struct {
-	nodes   []trieNode
-	labels  []rune
-	targets []uint32
+	codes    [256]uint8
+	base     []int32
+	check    []int32
+	terminal []uint64
 }
 
 func newWordTrie(words [][]rune) wordTrie {
-	words = slices.Clone(words)
-	slices.SortFunc(words, slices.Compare)
-	words = slices.CompactFunc(words, slices.Equal)
-	t := wordTrie{}
-	t.build(words, 0)
-	return t
+	encoded := make([][]byte, len(words))
+	for i, word := range words {
+		encoded[i] = []byte(string(word))
+	}
+	slices.SortFunc(encoded, bytes.Compare)
+	encoded = slices.CompactFunc(encoded, bytes.Equal)
+	b := trieBuilder{free: 1}
+	t := &b.trie
+	var seen [256]bool
+	for _, word := range encoded {
+		for _, c := range word {
+			seen[c] = true
+		}
+	}
+	var code uint8
+	for c, ok := range seen {
+		if ok {
+			code++
+			t.codes[c] = code
+		}
+	}
+	t.grow(1)
+	t.check[0] = -1
+	b.place(0, encoded, 0)
+	t.base = slices.Clip(t.base)
+	t.check = slices.Clip(t.check)
+	t.terminal = slices.Clip(t.terminal)
+	return *t
 }
 
-// build adds the node for words, which share their first depth runes, and returns its index.
-func (t *wordTrie) build(words [][]rune, depth int) uint32 {
-	index := uint32(len(t.nodes))
-	t.nodes = append(t.nodes, trieNode{})
+type trieBuilder struct {
+	trie wordTrie
+	// free is a lower bound on the lowest unused slot, so base searches skip the packed prefix.
+	free int32
+}
+
+func (t *wordTrie) grow(size int) {
+	if extra := size - len(t.check); extra > 0 {
+		t.base = append(t.base, make([]int32, extra)...)
+		t.check = append(t.check, make([]int32, extra)...)
+	}
+	if words := (size + 63) / 64; len(t.terminal) < words {
+		t.terminal = append(t.terminal, make([]uint64, words-len(t.terminal))...)
+	}
+}
+
+// place lays out the children of state, whose words share their first depth bytes.
+func (b *trieBuilder) place(state int32, words [][]byte, depth int) {
+	t := &b.trie
 	if len(words[0]) == depth {
-		t.nodes[index].terminal = true
+		t.terminal[state/64] |= 1 << (state % 64)
 		words = words[1:]
 	}
-	first := uint32(len(t.labels))
-	var groups [][][]rune
+	if len(words) == 0 {
+		return
+	}
+	var groups [][][]byte
+	var codes []int32
 	for i := 0; i < len(words); {
 		j := i + 1
 		for j < len(words) && words[j][depth] == words[i][depth] {
 			j++
 		}
-		t.labels = append(t.labels, words[i][depth])
-		t.targets = append(t.targets, 0)
 		groups = append(groups, words[i:j])
+		codes = append(codes, int32(t.codes[words[i][depth]]))
 		i = j
 	}
-	t.nodes[index].first = first
-	t.nodes[index].count = uint32(len(groups))
-	for i, group := range groups {
-		t.targets[first+uint32(i)] = t.build(group, depth+1)
+	base := b.freeBase(codes)
+	t.base[state] = base
+	for _, code := range codes {
+		t.check[base+code] = state + 1
 	}
-	return index
+	for int(b.free) < len(t.check) && t.check[b.free] != 0 {
+		b.free++
+	}
+	for i, group := range groups {
+		b.place(base+codes[i], group, depth+1)
+	}
 }
 
-func (t *wordTrie) child(node uint32, r rune) (uint32, bool) {
-	n := t.nodes[node]
-	labels := t.labels[n.first : n.first+n.count]
-	if len(labels) <= 8 {
-		for i, label := range labels {
-			if label == r {
-				return t.targets[n.first+uint32(i)], true
+// freeBase returns the lowest base at which every child slot is unused.
+func (b *trieBuilder) freeBase(codes []int32) int32 {
+	t := &b.trie
+	for base := max(0, b.free-codes[0]); ; base++ {
+		t.grow(int(base + codes[len(codes)-1] + 1))
+		free := true
+		for _, code := range codes {
+			if t.check[base+code] != 0 {
+				free = false
+				break
 			}
 		}
+		if free {
+			return base
+		}
+	}
+}
+
+func (t *wordTrie) step(state int32, b byte) (int32, bool) {
+	code := t.codes[b]
+	if code == 0 {
 		return 0, false
 	}
-	i, found := slices.BinarySearch(labels, r)
-	if !found {
+	next := t.base[state] + int32(code)
+	if int(next) >= len(t.check) || t.check[next] != state+1 {
 		return 0, false
 	}
-	return t.targets[n.first+uint32(i)], true
+	return next, true
+}
+
+func (t *wordTrie) isTerminal(state int32) bool {
+	return t.terminal[state/64]&(1<<(state%64)) != 0
 }
 
 type wordMatcher struct {
@@ -154,18 +216,27 @@ func zeroWidth(node *syntax.RegexNode) bool {
 func (m *wordMatcher) match(text []rune, pos int) (int, error) {
 	var buf [16]int
 	ends := buf[:0]
-	node := uint32(0)
+	state := int32(0)
+walk:
 	for i := pos; i < len(text); i++ {
 		r := text[i]
 		if m.foldCase {
 			r = unicode.ToLower(r)
 		}
-		next, ok := m.trie.child(node, r)
-		if !ok {
-			break
+		var ok bool
+		if r < utf8.RuneSelf {
+			if state, ok = m.trie.step(state, byte(r)); !ok {
+				break
+			}
+		} else {
+			var encoded [utf8.UTFMax]byte
+			for _, b := range encoded[:utf8.EncodeRune(encoded[:], r)] {
+				if state, ok = m.trie.step(state, b); !ok {
+					break walk
+				}
+			}
 		}
-		node = next
-		if m.trie.nodes[node].terminal {
+		if m.trie.isTerminal(state) {
 			ends = append(ends, i+1)
 		}
 	}
