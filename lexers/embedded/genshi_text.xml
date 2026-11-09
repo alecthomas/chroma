@@ -1,0 +1,76 @@
+<lexer>
+  <config>
+    <name>Genshi Text</name>
+    <alias>genshitext</alias>
+    <mime_type>application/x-genshi-text</mime_type>
+    <mime_type>text/x-genshi</mime_type>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="[^#$\s]+">
+        <token type="Other"/>
+      </rule>
+      <rule pattern="^(\s*)(##.*)$">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Comment"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*)(#)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="CommentPreproc"/>
+        </bygroups>
+        <push state="directive"/>
+      </rule>
+      <rule>
+        <include state="variable"/>
+      </rule>
+      <rule pattern="[#$\s]">
+        <token type="Other"/>
+      </rule>
+    </state>
+    <state name="directive">
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(?:def|for|if)\s+.*">
+        <using lexer="Python"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(choose|when|with)([^\S\n]+)(.*)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <using lexer="Python"/>
+        </bygroups>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(choose|otherwise)\b">
+        <token type="Keyword"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(end\w*)([^\S\n]*)(.*)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <token type="Comment"/>
+        </bygroups>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="variable">
+      <rule pattern="(?&lt;!\$)(\$\{)(.+?)(\})">
+        <bygroups>
+          <token type="CommentPreproc"/>
+          <using lexer="Python"/>
+          <token type="CommentPreproc"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(?&lt;!\$)(\$)([a-zA-Z_][\w.]*)">
+        <token type="NameVariable"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

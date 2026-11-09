@@ -1404,6 +1404,16 @@ var embeddedLexers = []struct {
 			"text/gemini",
 		},
 	}},
+	{"embedded/genshi_text.xml", chroma.Config{
+		Name: "Genshi Text",
+		Aliases: []string{
+			"genshitext",
+		},
+		MimeTypes: []string{
+			"application/x-genshi-text",
+			"text/x-genshi",
+		},
+	}},
 	{"embedded/gettext.xml", chroma.Config{
 		Name: "Gettext",
 		Aliases: []string{

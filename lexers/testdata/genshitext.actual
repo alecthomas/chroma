@@ -1,0 +1,20 @@
+## A comment
+Dear $name,
+
+#if items
+We have ${len(items)} items for you:
+#for item in items
+  * ${item.title} costs $$5
+#end for
+#end
+#choose
+#when x == 1
+one
+#end
+#otherwise
+other
+#end
+#end
+#with y = 7
+${y}
+#end with
