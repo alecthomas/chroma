@@ -1,0 +1,3 @@
+var name = "world";
+var path = @$"C:\Users\{name}\Desktop";
+var same = $@"C:\Users\{name}\Desktop";

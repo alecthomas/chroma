@@ -40,7 +40,7 @@
       <rule pattern="@&#34;(&#34;&#34;|[^&#34;])*&#34;">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="\$@?&#34;(&#34;&#34;|[^&#34;])*&#34;">
+      <rule pattern="(\$@?|@\$)&#34;(&#34;&#34;|[^&#34;])*&#34;">
         <token type="LiteralString"/>
       </rule>
       <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;\n])*[&#34;\n]">
