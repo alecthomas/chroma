@@ -1,0 +1,5 @@
+const button = (
+  <button aria-label="Close" data-testid={id} aria-hidden>
+    <svg stroke-width="2" />
+  </button>
+);
