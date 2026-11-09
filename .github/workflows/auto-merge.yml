@@ -1,0 +1,127 @@
+name: Auto-merge
+on:
+  # pull_request_target is required for a write token on fork PRs. PR code must
+  # never be checked out or executed here; files are only read via the API.
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [master]
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: auto-merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  auto-merge:
+    name: Auto-merge lexer and style changes
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Approve and enable auto-merge for eligible changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: python3 -I {0}
+        run: |
+          import json
+          import os
+          import re
+          import subprocess
+          import sys
+          import urllib.parse
+          import xml.etree.ElementTree as ET
+
+          REPO = os.environ["REPO"]
+          PR = os.environ["PR"]
+          HEAD_SHA = os.environ["HEAD_SHA"]
+          BOT = "github-actions[bot]"
+          LEXER = re.compile(r"^lexers/embedded/[^/]+\.xml$")
+          STYLE = re.compile(r"^styles/[^/]+\.xml$")
+          TESTDATA = re.compile(r"^lexers/testdata/.+\.(actual|expected)$")
+          DETECTION = {"name", "alias", "filename", "mime_type", "priority", "analyse"}
+          GO_TESTS_MARKER = "<!-- auto-merge:go-tests -->"
+
+
+          def gh(*args, check=True):
+              return subprocess.run(["gh", *args], check=check, capture_output=True, text=True).stdout
+
+
+          def content(path, ref):
+              quoted = urllib.parse.quote(path)
+              return gh("api", "-H", "Accept: application/vnd.github.raw", f"repos/{REPO}/contents/{quoted}?ref={ref}")
+
+
+          def canonical(element):
+              return ET.canonicalize(ET.tostring(element, encoding="unicode"), strip_text=True)
+
+
+          def detection(xml):
+              config = ET.fromstring(xml).find("config")
+              return [canonical(child) for child in config if child.tag in DETECTION]
+
+
+          def file_reason(status, path, merge_base):
+              if TESTDATA.match(path):
+                  if status not in ("added", "modified"):
+                      return f"{path} is {status}"
+              elif LEXER.match(path) or STYLE.match(path):
+                  if status != "modified":
+                      return f"{path} is {status}"
+                  before, after = content(path, merge_base), content(path, HEAD_SHA)
+                  if LEXER.match(path) and detection(before) != detection(after):
+                      return f"{path} changes lexer detection config"
+                  if STYLE.match(path) and ET.fromstring(before).attrib != ET.fromstring(after).attrib:
+                      return f"{path} changes style attributes"
+              else:
+                  return f"{path} is not a lexer, style or testdata file"
+              return None
+
+
+          def comment_on_go_tests(paths):
+              comments = gh("api", "--paginate", f"repos/{REPO}/issues/{PR}/comments", "--jq", f'.[] | select(.user.login == "{BOT}") | .body')
+              if GO_TESTS_MARKER in comments:
+                  return
+              listed = "\n".join(f"- `{path}`" for path in paths)
+              body = (
+                  f"{GO_TESTS_MARKER}\n"
+                  "Lexer and style changes should be tested with `lexers/testdata` files, not Go tests. "
+                  "Add a `.actual` input, generate its `.expected` output with "
+                  "`RECORD=true go test ./lexers`, and remove:\n\n"
+                  f"{listed}"
+              )
+              gh("pr", "comment", PR, "--repo", REPO, "--body", body)
+
+
+          compare = json.loads(gh("api", f"repos/{REPO}/compare/{os.environ['BASE_SHA']}...{HEAD_SHA}"))
+          merge_base = compare["merge_base_commit"]["sha"]
+          files = gh("api", "--paginate", f"repos/{REPO}/pulls/{PR}/files", "--jq", ".[] | [.status, .filename] | @tsv")
+          go_tests, reasons = [], []
+          for line in files.splitlines():
+              status, path = line.split("\t")
+              if status == "added" and path.endswith("_test.go"):
+                  go_tests.append(path)
+              elif reason := file_reason(status, path, merge_base):
+                  reasons.append(reason)
+
+          if go_tests and not reasons:
+              comment_on_go_tests(go_tests)
+              reasons = [f"{path} adds a Go test" for path in go_tests]
+
+          if reasons:
+              reason = "; ".join(reasons)
+              print(f"Not eligible: {reason}")
+              gh("pr", "merge", PR, "--repo", REPO, "--disable-auto", check=False)
+              reviews = gh("api", "--paginate", f"repos/{REPO}/pulls/{PR}/reviews", "--jq", f'.[] | select(.user.login == "{BOT}" and .state == "APPROVED") | .id')
+              for review in reviews.split():
+                  gh("api", "-X", "PUT", f"repos/{REPO}/pulls/{PR}/reviews/{review}/dismissals",
+                     "-f", f"message=No longer eligible for auto-merge: {reason}", "-f", "event=DISMISS")
+              sys.exit(0)
+
+          print("Eligible: approving and enabling auto-merge")
+          gh("api", "-X", "POST", f"repos/{REPO}/pulls/{PR}/reviews",
+             "-f", f"commit_id={HEAD_SHA}", "-f", "event=APPROVE",
+             "-f", "body=Auto-approved: only modifies lexer rules, styles and testdata.")
+          gh("pr", "merge", PR, "--repo", REPO, "--auto", "--squash", "--match-head-commit", HEAD_SHA)
