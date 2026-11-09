@@ -1,0 +1,33 @@
+;;; Builtins, special forms, macros, lambda-list keywords, declarations,
+;;; types and classes, plus symbols that only look like them.
+(defpackage :demo (:use :cl))
+(in-package :demo)
+
+(defun sum-list (list &optional (acc 0) &rest more &key verbose)
+  (declare (ignore more verbose) (type integer acc))
+  (if (null list)
+      acc
+      (sum-list (cdr list) (+ acc (car list)))))
+
+(defmacro with-thing ((var) &body body)
+  `(let ((,var (make-hash-table)))
+     ,@body))
+
+(let* ((x (1+ 2))
+       (y (/= x 3))
+       (car-like 'car-ish)
+       (Car 'upper))
+  (flet ((helper (n) (* n 2)))
+    (loop for i from 0 below 3
+          collect (helper i))))
+
+(defclass point (standard-object)
+  ((x :initarg :x :type fixnum)))
+
+(check-type *print-base* (integer 2 36))
+(format t "~a~%" (string-upcase "hi"))
+(setf (gethash 'k table) 'v)
+(handler-case (error "boom") (condition () nil))
+(typep 1 'vector)
+(quote foo)
+cons\ cell car. car: list* string
