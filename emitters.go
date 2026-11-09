@@ -120,7 +120,7 @@ func ByGroupNames(emitters map[string]Emitter) Emitter {
 //		},
 //	))
 //
-// See the lexers/markdown.go for the complete example.
+// See lexers/embedded/markdown.xml for the complete example.
 //
 // Note: panic's if the number of emitters does not equal the number of matched
 // groups in the regex.

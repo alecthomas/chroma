@@ -2133,6 +2133,21 @@ var embeddedLexers = []struct {
 			"application/x-mako",
 		},
 	}},
+	{"embedded/markdown.xml", chroma.Config{
+		Name: "markdown",
+		Aliases: []string{
+			"md",
+			"mkd",
+		},
+		Filenames: []string{
+			"*.md",
+			"*.mkd",
+			"*.markdown",
+		},
+		MimeTypes: []string{
+			"text/x-markdown",
+		},
+	}},
 	{"embedded/markless.xml", chroma.Config{
 		Name: "Markless",
 		Aliases: []string{

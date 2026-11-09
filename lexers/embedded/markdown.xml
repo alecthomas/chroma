@@ -1,0 +1,134 @@
+<lexer>
+  <config>
+    <name>markdown</name>
+    <alias>md</alias>
+    <alias>mkd</alias>
+    <filename>*.md</filename>
+    <filename>*.mkd</filename>
+    <filename>*.markdown</filename>
+    <mime_type>text/x-markdown</mime_type>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\A---\r?\n[\w\W]*?^---\r?\n">
+        <using lexer="YAML"/>
+      </rule>
+      <rule pattern="&lt;!--[\w\W]*?--&gt;">
+        <token type="CommentMultiline"/>
+      </rule>
+      <rule pattern="^(#[^#].+\n)">
+        <bygroups>
+          <token type="GenericHeading"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(#{2,6}.+\n)">
+        <bygroups>
+          <token type="GenericSubheading"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*)([*-] )(\[[ xX]\])( .+\n)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Keyword"/>
+          <token type="Keyword"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*)([*-])(\s)(.+\n)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*)([0-9]+\.)( .+\n)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Keyword"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(\s*&gt;\s)(.+\n)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="GenericEmph"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(```\n)([\w\W]*?)(^```$)">
+        <bygroups>
+          <token type="LiteralString"/>
+          <token type="Text"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^(```)(\w+)(\n)([\w\W]*?)(^```$)">
+        <usingbygroup>
+          <sublexer_name_group>2</sublexer_name_group>
+          <code_group>4</code_group>
+          <emitters>
+            <token type="LiteralString"/>
+            <token type="LiteralString"/>
+            <token type="LiteralString"/>
+            <token type="Text"/>
+            <token type="LiteralString"/>
+          </emitters>
+        </usingbygroup>
+      </rule>
+      <rule>
+        <include state="inline"/>
+      </rule>
+    </state>
+    <state name="inline">
+      <rule pattern="&lt;!--[\w\W]*?--&gt;">
+        <token type="CommentMultiline"/>
+      </rule>
+      <rule pattern="\\.">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="(\s)(\*|_)((?:(?!\2).)*)(\2)((?=\W|\n))">
+        <bygroups>
+          <token type="Text"/>
+          <token type="GenericEmph"/>
+          <token type="GenericEmph"/>
+          <token type="GenericEmph"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(\s)((\*\*|__).*?)\3((?=\W|\n))">
+        <bygroups>
+          <token type="Text"/>
+          <token type="GenericStrong"/>
+          <token type="GenericStrong"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(\s)(~~[^~]+~~)((?=\W|\n))">
+        <bygroups>
+          <token type="Text"/>
+          <token type="GenericDeleted"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern="`[^`]+`">
+        <token type="LiteralStringBacktick"/>
+      </rule>
+      <rule pattern="[@#][\w/:]+">
+        <token type="NameEntity"/>
+      </rule>
+      <rule pattern="(!?\[)([^]]+)(\])(\()([^)]+)(\))">
+        <bygroups>
+          <token type="Text"/>
+          <token type="NameTag"/>
+          <token type="Text"/>
+          <token type="Text"/>
+          <token type="NameAttribute"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern=".|\n">
+        <token type="Text"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
