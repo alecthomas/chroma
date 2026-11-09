@@ -32,15 +32,20 @@ func TestWriteFontStyle(t *testing.T) {
 }
 
 func TestFontFamilyIsEscaped(t *testing.T) {
-	for _, fontFamily := range []string{`"Fira Code", monospace`, `Foo & Bar Mono`} {
-		t.Run(fontFamily, func(t *testing.T) {
+	for _, test := range []struct{ fontFamily, css string }{
+		{`"Fira Code", monospace`, `"Fira Code", monospace`},
+		{`Foo & Bar Mono`, `Foo & Bar Mono`},
+		{`Foo's Mono`, `Foo\'s Mono`},
+		{`Foo\Bar Mono`, `Foo\\Bar Mono`},
+	} {
+		t.Run(test.fontFamily, func(t *testing.T) {
 			w := &strings.Builder{}
-			f := New(EmbedFont(fontFamily, "AAAA", WOFF))
+			f := New(EmbedFont(test.fontFamily, "AAAA", WOFF))
 			assert.NoError(t, f.Format(w, styles.Get("monokai"),
 				chroma.Literator(chroma.Token{Type: chroma.Text, Value: "hi\n"})))
 			attr, style := decodeSVG(t, w.String())
-			assert.Equal(t, fontFamily, attr)
-			assert.Contains(t, style, "font-family: '"+fontFamily+"';")
+			assert.Equal(t, test.fontFamily, attr)
+			assert.Contains(t, style, "font-family: '"+test.css+"';")
 		})
 	}
 }

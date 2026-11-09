@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"html"
 	"io"
 	"iter"
 	"os"
@@ -88,16 +89,8 @@ func escapeString(s string) string {
 	return svgEscaper.Replace(s)
 }
 
-var xmlEscaper = strings.NewReplacer(
-	`&`, "&amp;",
-	`<`, "&lt;",
-	`>`, "&gt;",
-	`"`, "&quot;",
-)
-
-func escapeXML(s string) string {
-	return xmlEscaper.Replace(s)
-}
+// cssStringEscaper escapes a value for a single-quoted CSS string.
+var cssStringEscaper = strings.NewReplacer(`\`, `\\`, `'`, `\'`)
 
 func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens []chroma.Token) error { // nolint: gocyclo
 	svgStyles := f.styleToSVG(style)
@@ -120,7 +113,7 @@ func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens []chroma.T
 	if _, err := fmt.Fprintf(w, "<rect width=\"100%%\" height=\"100%%\" fill=\"%s\"/>\n", style.Get(chroma.Background).Background.String()); err != nil {
 		return err
 	}
-	if _, err := fmt.Fprintf(w, "<g font-family=\"%s\" font-size=\"14px\" fill=\"%s\">\n", escapeXML(f.fontFamily), style.Get(chroma.Text).Colour.String()); err != nil {
+	if _, err := fmt.Fprintf(w, "<g font-family=\"%s\" font-size=\"14px\" fill=\"%s\">\n", html.EscapeString(f.fontFamily), style.Get(chroma.Text).Colour.String()); err != nil {
 		return err
 	}
 
@@ -210,7 +203,7 @@ func (f *Formatter) writeFontStyle(w io.Writer) error {
 	font-weight: normal;
 	font-style: normal;
 }
-</style>`, escapeXML(f.fontFamily), fontFormats[f.fontFormat].mime, f.embeddedFont(), fontFormats[f.fontFormat].format)
+</style>`, html.EscapeString(cssStringEscaper.Replace(f.fontFamily)), fontFormats[f.fontFormat].mime, f.embeddedFont(), fontFormats[f.fontFormat].format)
 	return err
 }
 
