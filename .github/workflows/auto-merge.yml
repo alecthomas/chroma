@@ -6,6 +6,7 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [master]
 permissions:
+  actions: write
   contents: write
   pull-requests: write
 concurrency:
@@ -16,14 +17,16 @@ jobs:
     name: Auto-merge lexer and style changes
     if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Approve and enable auto-merge for eligible changes
+      - name: Approve CI and enable auto-merge for eligible changes
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          CHANGED_FILES: ${{ github.event.pull_request.changed_files }}
         shell: python3 -I {0}
         run: |
           import json
@@ -31,6 +34,7 @@ jobs:
           import re
           import subprocess
           import sys
+          import time
           import urllib.parse
           import xml.etree.ElementTree as ET
 
@@ -41,7 +45,6 @@ jobs:
           LEXER = re.compile(r"^lexers/embedded/[^/]+\.xml$")
           STYLE = re.compile(r"^styles/[^/]+\.xml$")
           TESTDATA = re.compile(r"^lexers/testdata/.+\.(actual|expected)$")
-          DETECTION = {"name", "alias", "filename", "mime_type", "priority", "analyse"}
           GO_TESTS_MARKER = "<!-- auto-merge:go-tests -->"
 
 
@@ -54,13 +57,12 @@ jobs:
               return gh("api", "-H", "Accept: application/vnd.github.raw", f"repos/{REPO}/contents/{quoted}?ref={ref}")
 
 
-          def canonical(element):
-              return ET.canonicalize(ET.tostring(element, encoding="unicode"), strip_text=True)
-
-
-          def detection(xml):
-              config = ET.fromstring(xml).find("config")
-              return [canonical(child) for child in config if child.tag in DETECTION]
+          def lexer_config(xml):
+              # Mirrors chroma's fastUnmarshalConfig: first "config" at any depth, matched by local name.
+              config = next((e for e in ET.fromstring(xml).iter() if e.tag.rpartition("}")[2] == "config"), None)
+              if config is None:
+                  return None
+              return ET.canonicalize(ET.tostring(config, encoding="unicode"))
 
 
           def file_reason(status, path, merge_base):
@@ -71,8 +73,8 @@ jobs:
                   if status != "modified":
                       return f"{path} is {status}"
                   before, after = content(path, merge_base), content(path, HEAD_SHA)
-                  if LEXER.match(path) and detection(before) != detection(after):
-                      return f"{path} changes lexer detection config"
+                  if LEXER.match(path) and lexer_config(before) != lexer_config(after):
+                      return f"{path} changes lexer config"
                   if STYLE.match(path) and ET.fromstring(before).attrib != ET.fromstring(after).attrib:
                       return f"{path} changes style attributes"
               else:
@@ -95,33 +97,57 @@ jobs:
               gh("pr", "comment", PR, "--repo", REPO, "--body", body)
 
 
-          compare = json.loads(gh("api", f"repos/{REPO}/compare/{os.environ['BASE_SHA']}...{HEAD_SHA}"))
-          merge_base = compare["merge_base_commit"]["sha"]
-          files = gh("api", "--paginate", f"repos/{REPO}/pulls/{PR}/files", "--jq", ".[] | [.status, .filename] | @tsv")
-          go_tests, reasons = [], []
-          for line in files.splitlines():
-              status, path = line.split("\t")
-              if status == "added" and path.endswith("_test.go"):
-                  go_tests.append(path)
-              elif reason := file_reason(status, path, merge_base):
-                  reasons.append(reason)
+          def ineligible_reasons():
+              compare = json.loads(gh("api", f"repos/{REPO}/compare/{os.environ['BASE_SHA']}...{HEAD_SHA}"))
+              merge_base = compare["merge_base_commit"]["sha"]
+              files = [json.loads(line) for line in gh("api", "--paginate", f"repos/{REPO}/pulls/{PR}/files", "--jq", ".[] | {status, filename}").splitlines()]
+              # The files API silently truncates at 3000 entries.
+              if len(files) != int(os.environ["CHANGED_FILES"]):
+                  return [f"only {len(files)} of {os.environ['CHANGED_FILES']} changed files could be listed"]
+              go_tests, reasons = [], []
+              for file in files:
+                  status, path = file["status"], file["filename"]
+                  if status == "added" and path.endswith("_test.go"):
+                      go_tests.append(path)
+                  elif reason := file_reason(status, path, merge_base):
+                      reasons.append(reason)
+              if go_tests and not reasons:
+                  comment_on_go_tests(go_tests)
+                  reasons = [f"{path} adds a Go test" for path in go_tests]
+              return reasons
 
-          if go_tests and not reasons:
-              comment_on_go_tests(go_tests)
-              reasons = [f"{path} adds a Go test" for path in go_tests]
+
+          def disable_auto_merge():
+              enabled_by = gh("api", f"repos/{REPO}/pulls/{PR}", "--jq", ".auto_merge.enabled_by.login // empty", check=False).strip()
+              if enabled_by == BOT:
+                  gh("pr", "merge", PR, "--repo", REPO, "--disable-auto", check=False)
+
+
+          def approve_ci_runs():
+              # CI runs for this push are created alongside this one, so may not be listed yet.
+              for _ in range(12):
+                  runs = gh("api", f"repos/{REPO}/actions/runs?event=pull_request&head_sha={HEAD_SHA}", "--jq", ".workflow_runs[] | [.id, .status] | @tsv")
+                  if runs:
+                      break
+                  time.sleep(5)
+              for line in runs.splitlines():
+                  run_id, status = line.split("\t")
+                  if status == "action_required":
+                      print(f"Approving CI run {run_id}")
+                      gh("api", "-X", "POST", f"repos/{REPO}/actions/runs/{run_id}/approve")
+
+
+          try:
+              reasons = ineligible_reasons()
+          except Exception:
+              disable_auto_merge()
+              raise
 
           if reasons:
-              reason = "; ".join(reasons)
-              print(f"Not eligible: {reason}")
-              gh("pr", "merge", PR, "--repo", REPO, "--disable-auto", check=False)
-              reviews = gh("api", "--paginate", f"repos/{REPO}/pulls/{PR}/reviews", "--jq", f'.[] | select(.user.login == "{BOT}" and .state == "APPROVED") | .id')
-              for review in reviews.split():
-                  gh("api", "-X", "PUT", f"repos/{REPO}/pulls/{PR}/reviews/{review}/dismissals",
-                     "-f", f"message=No longer eligible for auto-merge: {reason}", "-f", "event=DISMISS")
+              print(f"Not eligible: {'; '.join(reasons)}")
+              disable_auto_merge()
               sys.exit(0)
 
-          print("Eligible: approving and enabling auto-merge")
-          gh("api", "-X", "POST", f"repos/{REPO}/pulls/{PR}/reviews",
-             "-f", f"commit_id={HEAD_SHA}", "-f", "event=APPROVE",
-             "-f", "body=Auto-approved: only modifies lexer rules, styles and testdata.")
+          print("Eligible: approving CI and enabling auto-merge")
+          approve_ci_runs()
           gh("pr", "merge", PR, "--repo", REPO, "--auto", "--squash", "--match-head-commit", HEAD_SHA)
