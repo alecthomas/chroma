@@ -34,7 +34,7 @@
       <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;">
         <token type="LiteralStringDouble"/>
       </rule>
-      <rule pattern="&#39;(\\\\|\\&#39;|[^&#39;])*&#39;">
+      <rule pattern="&#39;[^&#39;]*&#39;">
         <token type="LiteralStringSingle"/>
       </rule>
       <rule pattern="[.,=\[\]{}]">
