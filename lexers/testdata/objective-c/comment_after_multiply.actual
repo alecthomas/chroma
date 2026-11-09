@@ -1,0 +1,7 @@
+int cells(int rows, int cols) {
+  return rows*/* cells per row */cols;
+}
+int twice(int value) {
+  return value*// doubled
+    2;
+}

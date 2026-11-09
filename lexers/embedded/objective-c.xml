@@ -209,9 +209,6 @@
       <rule pattern="\d+[LlUu]*">
         <token type="LiteralNumberInteger"/>
       </rule>
-      <rule pattern="\*/">
-        <token type="Error"/>
-      </rule>
       <rule pattern="[~!%^&amp;*+=|?:&lt;&gt;/-]">
         <token type="Operator"/>
       </rule>
