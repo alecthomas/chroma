@@ -1,0 +1,13 @@
+#![allow(non_snake_case, non_camel_case_types, uncommon_codepoints, mixed_script_confusables)]
+mod 模块 { pub fn 函数() -> u32 { 7 } }
+struct Δομή;
+macro_rules! 计算 { ($数:expr) => { $数 + 1 }; }
+fn 借用<'生>(值: &'生 str) -> &'生 str { 值 }
+fn main() {
+    let 变量 = 计算!(模块::函数());
+    let r#名称 = Δομή;
+    let _ = r#名称;
+    '循环: loop { break '循环; }
+    assert_eq!(变量, 8);
+    assert_eq!(借用("text"), "text");
+}

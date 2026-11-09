@@ -14,7 +14,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="(r#)?[a-zA-Z_]\w*">
+      <rule pattern="(r#)?[_\p{L}]\w*">
         <token type="NameNamespace"/>
         <pop depth="1"/>
       </rule>
@@ -23,7 +23,7 @@
       </rule>
     </state>
     <state name="lifetime">
-      <rule pattern="[a-zA-Z_]+\w*">
+      <rule pattern="[_\p{L}]+\w*">
         <token type="NameAttribute"/>
       </rule>
       <rule>
@@ -97,7 +97,7 @@
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="(r#)?[a-zA-Z_]\w*">
+      <rule pattern="(r#)?[_\p{L}]\w*">
         <token type="NameFunction"/>
         <pop depth="1"/>
       </rule>
@@ -190,7 +190,7 @@
         <token type="LiteralString"/>
         <push state="string"/>
       </rule>
-      <rule pattern="\$([a-zA-Z_]\w*|\(,?|\),?|,?)">
+      <rule pattern="\$([_\p{L}]\w*|\(,?|\),?|,?)">
         <token type="CommentPreproc"/>
       </rule>
       <rule words="unsafe static extern return const crate where while await trait super async match impl else move loop pub ref mut for dyn use box in if as" suffix="\b">
@@ -243,7 +243,7 @@
         <token type="Text"/>
         <push state="typename"/>
       </rule>
-      <rule pattern="(break|continue)(\b\s*)(\&#39;[A-Za-z_]\w*)?">
+      <rule pattern="(break|continue)(\b\s*)(\&#39;[_\p{L}]\w*)?">
         <bygroups>
           <token type="Keyword"/>
           <token type="TextWhitespace"/>
@@ -322,17 +322,17 @@
         </bygroups>
         <push state="formatted_string"/>
       </rule>
-      <rule pattern="([a-zA-Z_]\w*!)(\s*)(\(|\[|\{)">
+      <rule pattern="([_\p{L}]\w*!)(\s*)(\(|\[|\{)">
         <bygroups>
           <token type="NameFunctionMagic"/>
           <token type="TextWhitespace"/>
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="(r#)?[a-zA-Z_]\w*">
+      <rule pattern="(r#)?[_\p{L}]\w*">
         <token type="Name"/>
       </rule>
-      <rule pattern="r#[a-zA-Z_]\w*">
+      <rule pattern="r#[_\p{L}]\w*">
         <token type="Name"/>
       </rule>
       <rule pattern="#!?\[">
@@ -363,7 +363,7 @@
       <rule words="isize usize bool char u128 i128 i64 i32 i16 str u64 u32 f32 f64 u16 i8 u8" suffix="\b">
         <token type="KeywordType"/>
       </rule>
-      <rule pattern="(r#)?[a-zA-Z_]\w*">
+      <rule pattern="(r#)?[_\p{L}]\w*">
         <token type="NameClass"/>
         <pop depth="1"/>
       </rule>
