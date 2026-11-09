@@ -1,0 +1,4 @@
+const dotAll = /a.b/s;
+const unicode = /\p{L}+/u;
+const sets = /[\p{L}&&\p{ASCII}]/v;
+const flags = /x/dgimsuy;

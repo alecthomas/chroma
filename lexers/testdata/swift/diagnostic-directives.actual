@@ -1,0 +1,4 @@
+#warning("Remove before release")
+#if DEBUG
+#error("Unsupported configuration")
+#endif

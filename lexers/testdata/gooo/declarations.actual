@@ -1,0 +1,9 @@
+package greeting
+namespace greeting
+
+# Stable semantic identities stay beside declarations.
+entity Text id "urn:gooo:type:text"
+entity Integer id "urn:gooo:type:integer"
+// A source-owned activity body is a raw string.
+activity Greet(Text) -> Text id "urn:gooo:greeting:greet" computes `return "Hello, " + input`
+activity Length(Text) -> Integer computes `return len(input)`

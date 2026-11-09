@@ -26,8 +26,11 @@
       </rule>
     </state>
     <state name="comment">
-      <rule pattern="//.*?\n">
+      <rule pattern="//[^\r\n]*(?:\r\n?|\n|$)">
         <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="/\*.*?\*/">
+        <token type="CommentMultiline"/>
       </rule>
     </state>
     <state name="simplevalue">

@@ -1,0 +1,41 @@
+(* Example theory, exercising common Isar syntax. (* nested comment *) *)
+theory Example
+  imports Main
+begin
+
+section ‹Trees›
+
+datatype 'a tree = Leaf | Node "'a tree" 'a "'a tree"
+
+fun mirror :: "'a tree \<Rightarrow> 'a tree" where
+  "mirror Leaf = Leaf"
+| "mirror (Node l x r) = Node (mirror r) x (mirror l)"
+
+lemma mirror_mirror: "mirror (mirror t) = t"
+  by (induction t) auto
+
+definition magic :: nat where "magic = 0x2A"
+
+theorem obvious:
+  fixes x :: 'a
+  shows "x = x"
+proof -
+  show ?thesis by simp
+qed
+
+lemma unfinished: "magic = 42"
+  apply (simp add: magic_def)
+  oops
+
+value "mirror (Node Leaf (1::nat) Leaf)"
+thm mirror_mirror
+
+text ‹A cartouche with \<open>nested text\<close> and symbols \<alpha> \<Longrightarrow> ‹inner›.›
+
+notepad
+begin
+  have "True" ..
+  then obtain b where "b = True" by blast
+end
+
+end

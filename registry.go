@@ -198,6 +198,11 @@ func (l *LexerRegistry) Register(lexer Lexer) Lexer {
 		replaced := false
 		for i, val := range l.Lexers {
 			if val != nil && val.Config().Name == config.Name {
+				for alias, registered := range l.byAlias {
+					if registered.Config().Name == config.Name {
+						delete(l.byAlias, alias)
+					}
+				}
 				l.Lexers[i] = lexer
 				replaced = true
 				break

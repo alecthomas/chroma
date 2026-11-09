@@ -440,6 +440,21 @@ var embeddedLexers = []struct {
 			"*.bicep",
 		},
 	}},
+	{"embedded/blade.xml", chroma.Config{
+		Name: "Blade",
+		Aliases: []string{
+			"blade",
+			"html+blade",
+		},
+		Filenames: []string{
+			"*.blade.php",
+		},
+		MimeTypes: []string{
+			"text/x-blade",
+		},
+		DotAll:   true,
+		Priority: 3,
+	}},
 	{"embedded/blitzbasic.xml", chroma.Config{
 		Name: "BlitzBasic",
 		Aliases: []string{
@@ -491,6 +506,22 @@ var embeddedLexers = []struct {
 			"application/x-brainfuck",
 		},
 	}},
+	{"embedded/bsl.xml", chroma.Config{
+		Name: "1C Enterprise",
+		Aliases: []string{
+			"1c",
+			"bsl",
+			"onec",
+		},
+		Filenames: []string{
+			"*.bsl",
+			"*.os",
+		},
+		MimeTypes: []string{
+			"text/x-bsl",
+		},
+		CaseInsensitive: true,
+	}},
 	{"embedded/c#.xml", chroma.Config{
 		Name: "C#",
 		Aliases: []string{
@@ -526,6 +557,7 @@ var embeddedLexers = []struct {
 			"*.cp",
 			"*.CPP",
 			"*.tpp",
+			"*.cppm",
 		},
 		MimeTypes: []string{
 			"text/x-c++hdr",
@@ -905,6 +937,20 @@ var embeddedLexers = []struct {
 			"*.dax",
 		},
 	}},
+	{"embedded/dbml.xml", chroma.Config{
+		Name: "DBML",
+		Aliases: []string{
+			"dbml",
+		},
+		Filenames: []string{
+			"*.dbml",
+		},
+		MimeTypes: []string{
+			"text/x-dbml",
+		},
+		CaseInsensitive: true,
+		DotAll:          true,
+	}},
 	{"embedded/desktop_entry.xml", chroma.Config{
 		Name: "Desktop file",
 		Aliases: []string{
@@ -1002,6 +1048,15 @@ var embeddedLexers = []struct {
 			"text/x-dockerfile-config",
 		},
 		CaseInsensitive: true,
+	}},
+	{"embedded/docopt.xml", chroma.Config{
+		Name: "docopt",
+		Aliases: []string{
+			"docopt",
+		},
+		Filenames: []string{
+			"*.docopt",
+		},
 	}},
 	{"embedded/dtd.xml", chroma.Config{
 		Name: "DTD",
@@ -1219,6 +1274,26 @@ var embeddedLexers = []struct {
 			},
 		},
 	}},
+	{"embedded/g-code.xml", chroma.Config{
+		Name: "G-code",
+		Aliases: []string{
+			"gcode",
+			"g-code",
+			"nc",
+		},
+		Filenames: []string{
+			"*.gcode",
+			"*.gco",
+			"*.ngc",
+			"*.nc",
+			"*.cnc",
+			"*.tap",
+		},
+		MimeTypes: []string{
+			"text/x-gcode",
+		},
+		CaseInsensitive: true,
+	}},
 	{"embedded/garden.xml", chroma.Config{
 		Name: "Garden",
 		Aliases: []string{
@@ -1344,6 +1419,22 @@ var embeddedLexers = []struct {
 			"text/x-gherkin",
 		},
 	}},
+	{"embedded/gitconfig.xml", chroma.Config{
+		Name: "Git Config",
+		Aliases: []string{
+			"gitconfig",
+			"git-config",
+		},
+		Filenames: []string{
+			".gitconfig",
+			".gitmodules",
+			"gitconfig",
+			"config.worktree",
+		},
+		MimeTypes: []string{
+			"text/x-git-config",
+		},
+	}},
 	{"embedded/gleam.xml", chroma.Config{
 		Name: "Gleam",
 		Aliases: []string{
@@ -1391,6 +1482,15 @@ var embeddedLexers = []struct {
 		Filenames: []string{
 			"*.gotmpl",
 			"*.go.tmpl",
+		},
+	}},
+	{"embedded/gooo.xml", chroma.Config{
+		Name: "Gooo",
+		Aliases: []string{
+			"gooo",
+		},
+		Filenames: []string{
+			"*.gooo",
 		},
 	}},
 	{"embedded/graphql.xml", chroma.Config{
@@ -1656,7 +1756,6 @@ var embeddedLexers = []struct {
 			"*.kube",
 			"*.volume",
 			"*.image",
-			".gitconfig",
 			".editorconfig",
 			"pylintrc",
 			".pylintrc",
@@ -1677,6 +1776,18 @@ var embeddedLexers = []struct {
 		},
 		MimeTypes: []string{
 			"text/x-iosrc",
+		},
+	}},
+	{"embedded/isabelle.xml", chroma.Config{
+		Name: "Isabelle",
+		Aliases: []string{
+			"isabelle",
+		},
+		Filenames: []string{
+			"*.thy",
+		},
+		MimeTypes: []string{
+			"text/x-isabelle",
 		},
 	}},
 	{"embedded/iscdhcpd.xml", chroma.Config{
@@ -1918,6 +2029,16 @@ var embeddedLexers = []struct {
 		},
 		DotAll: true,
 	}},
+	{"embedded/lispex.xml", chroma.Config{
+		Name: "Lispex",
+		Aliases: []string{
+			"lispex",
+			"lspx",
+		},
+		Filenames: []string{
+			"*.lspx",
+		},
+	}},
 	{"embedded/llvm.xml", chroma.Config{
 		Name: "LLVM",
 		Aliases: []string{
@@ -1996,6 +2117,19 @@ var embeddedLexers = []struct {
 		},
 		MimeTypes: []string{
 			"application/x-mako",
+		},
+	}},
+	{"embedded/markless.xml", chroma.Config{
+		Name: "Markless",
+		Aliases: []string{
+			"mess",
+		},
+		Filenames: []string{
+			"*.mess",
+			"*.markless",
+		},
+		MimeTypes: []string{
+			"text/x-markless",
 		},
 	}},
 	{"embedded/mason.xml", chroma.Config{
@@ -2610,6 +2744,19 @@ var embeddedLexers = []struct {
 		Filenames: []string{
 			"*.pc",
 		},
+	}},
+	{"embedded/pkl.xml", chroma.Config{
+		Name: "Pkl",
+		Aliases: []string{
+			"pkl",
+		},
+		Filenames: []string{
+			"*.pkl",
+		},
+		MimeTypes: []string{
+			"text/x-pkl",
+		},
+		DotAll: true,
 	}},
 	{"embedded/pl_pgsql.xml", chroma.Config{
 		Name: "PL/pgSQL",
@@ -3298,6 +3445,19 @@ var embeddedLexers = []struct {
 			"*.sieve",
 		},
 	}},
+	{"embedded/slim.xml", chroma.Config{
+		Name: "Slim",
+		Aliases: []string{
+			"slim",
+		},
+		Filenames: []string{
+			"*.slim",
+		},
+		MimeTypes: []string{
+			"text/x-slim",
+		},
+		EnsureNL: true,
+	}},
 	{"embedded/smali.xml", chroma.Config{
 		Name: "Smali",
 		Aliases: []string{
@@ -3441,6 +3601,21 @@ var embeddedLexers = []struct {
 		},
 		CaseInsensitive: true,
 		NotMultiline:    true,
+	}},
+	{"embedded/ssh_config.xml", chroma.Config{
+		Name: "SSH config",
+		Aliases: []string{
+			"sshconfig",
+			"ssh-config",
+			"ssh_config",
+		},
+		Filenames: []string{
+			"ssh_config",
+		},
+		MimeTypes: []string{
+			"text/x-ssh-config",
+		},
+		CaseInsensitive: true,
 	}},
 	{"embedded/standard_ml.xml", chroma.Config{
 		Name: "Standard ML",
@@ -3702,6 +3877,16 @@ var embeddedLexers = []struct {
 			"text/x-toml",
 		},
 	}},
+	{"embedded/topaz.xml", chroma.Config{
+		Name: "Topaz",
+		Aliases: []string{
+			"topaz",
+			"tpz",
+		},
+		Filenames: []string{
+			"*.tpz",
+		},
+	}},
 	{"embedded/tradingview.xml", chroma.Config{
 		Name: "TradingView",
 		Aliases: []string{
@@ -3942,6 +4127,19 @@ var embeddedLexers = []struct {
 			"text/x-verilog",
 		},
 		EnsureNL: true,
+	}},
+	{"embedded/verse.xml", chroma.Config{
+		Name: "Verse",
+		Aliases: []string{
+			"verse",
+		},
+		Filenames: []string{
+			"*.verse",
+		},
+		MimeTypes: []string{
+			"text/x-verse",
+			"application/x-verse",
+		},
 	}},
 	{"embedded/vhdl.xml", chroma.Config{
 		Name: "VHDL",

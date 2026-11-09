@@ -67,7 +67,7 @@
       <rule>
         <include state="commentsandwhitespace"/>
       </rule>
-      <rule pattern="/(\\.|[^[/\\\n]|\[(\\.|[^\]\\\n])*])+/([gimuy]+\b|\B)">
+      <rule pattern="/(\\.|[^[/\\\n]|\[(\\.|[^\]\\\n])*])+/([dgimsuvy]+\b|\B)">
         <token type="LiteralStringRegex"/>
         <pop depth="1"/>
       </rule>
@@ -154,6 +154,9 @@
       <rule pattern="`">
         <token type="LiteralStringBacktick"/>
         <push state="interp"/>
+      </rule>
+      <rule pattern="#[a-zA-Z_]\w*">
+        <token type="Name"/>
       </rule>
     </state>
   </rules>

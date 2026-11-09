@@ -1,0 +1,7 @@
+[
+  {"type":"NameBuiltin","value":"project"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralString","value":"example"},
+  {"type":"Punctuation","value":")"},
+  {"type":"Text","value":"\n"}
+]

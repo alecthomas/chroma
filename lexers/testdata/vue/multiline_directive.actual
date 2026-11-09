@@ -1,0 +1,8 @@
+<template>
+  <p
+    v-if="
+      a > 0
+    "
+    class="b">c</p>
+  <i :d="e"></i>
+</template>

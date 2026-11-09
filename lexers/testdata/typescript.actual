@@ -23,3 +23,9 @@ type FirstChar<K extends string> = K extends `${infer X}${infer _}`
 type SChar = FirstChar<"stuff">
 
 export { TestComponent }
+
+class Counter {
+  #count: number = 0;
+  static #instances = 0;
+  #bump(): void { this.#count += 1; }
+}

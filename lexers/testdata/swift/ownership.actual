@@ -1,0 +1,13 @@
+struct FileDescriptor: ~Copyable {
+    let raw: Int32
+    consuming func close() {
+        discard self
+    }
+    borrowing func peek() {}
+}
+
+func process(_ name: borrowing String, _ data: consuming [UInt8]) {
+    let owned = copy name
+    let moved = consume data
+}
+let copy = original.copy()

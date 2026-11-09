@@ -1,0 +1,156 @@
+<lexer>
+  <config>
+    <name>SSH config</name>
+    <alias>sshconfig</alias>
+    <alias>ssh-config</alias>
+    <alias>ssh_config</alias>
+    <filename>ssh_config</filename>
+    <mime_type>text/x-ssh-config</mime_type>
+    <case_insensitive>true</case_insensitive>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="(^|\n)(\s*)(#.*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Text"/>
+          <token type="CommentSingle"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(^|\n)(\s*)(Host)(\s+)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Text"/>
+          <token type="Keyword"/>
+          <token type="Text"/>
+        </bygroups>
+        <push state="host_patterns"/>
+      </rule>
+      <rule pattern="(^|\n)(\s*)(Match)(\s+)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Text"/>
+          <token type="Keyword"/>
+          <token type="Text"/>
+        </bygroups>
+        <push state="match_criteria"/>
+      </rule>
+      <rule pattern="(^|\n)(\s*)([A-Za-z][A-Za-z0-9-]*)(\s*)(=)?([^\S\n]*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Text"/>
+          <token type="NameBuiltin"/>
+          <token type="Text"/>
+          <token type="Operator"/>
+          <token type="Text"/>
+        </bygroups>
+        <push state="value"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="host_patterns">
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="([^\S\n]+)(#.*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="CommentSingle"/>
+        </bygroups>
+      </rule>
+      <rule pattern="#.*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="&#34;([^&#34;\\]|\\.)*&#34;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="%%|%[A-Za-z]|\$\{[A-Za-z_][A-Za-z0-9_]*\}">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="!">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[*?]+">
+        <token type="LiteralStringRegex"/>
+      </rule>
+      <rule pattern="[^#\s]+">
+        <token type="LiteralStringRegex"/>
+      </rule>
+      <rule pattern="[^\S\n]+">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="match_criteria">
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="([^\S\n]+)(#.*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="CommentSingle"/>
+        </bygroups>
+      </rule>
+      <rule pattern="#.*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="&#34;([^&#34;\\]|\\.)*&#34;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="!?(all|canonical|final|exec|localnetwork|host|originalhost|tagged|user|localuser)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="%%|%[A-Za-z]|\$\{[A-Za-z_][A-Za-z0-9_]*\}">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern=",">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="!">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[=*?:\[\]()/]+">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[^\s#,]+">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="[^\S\n]+">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="value">
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="([^\S\n]+)(#.*)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="CommentSingle"/>
+        </bygroups>
+      </rule>
+      <rule pattern="#.*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="&#34;([^&#34;\\]|\\.)*&#34;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="%%|%[A-Za-z]|\$\{[A-Za-z_][A-Za-z0-9_]*\}">
+        <token type="NameVariable"/>
+      </rule>
+      <rule pattern="[=,]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[^\s#&#34;,=]+">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="[^\S\n]+">
+        <token type="Text"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

@@ -1,0 +1,103 @@
+#!/usr/bin/env pkl
+
+/// A module showing off Pkl syntax.
+module pkl.example.server
+
+import "lib/network.pkl"
+import* "all/defaults.pkl"
+
+amends "base.pkl"
+
+@Deprecated { since = "0.26.0" }
+deprecatedProp: String = "old"
+
+hidden secret: String = read("env:SECRET")
+local cache = List(1, 2, 3)
+fixed version: Int = 3
+const MAX: Int = 42
+
+open class Server extends Base<Server> {
+  name: String
+  port: Int = 9000
+  tags: Set<String> = Set("a", "b")
+
+  function url(host: String): String = "https://\(host):\(port)"
+
+  function scale(n: Int): Int = if (n > 10) n * 2 else n ~/ 2
+}
+
+typealias Port = Int(this >= 0 && this <= 65535)
+
+server {
+  host = "localhost"
+  port = 9_000
+  timeout = 30.min
+  disk = 5.gib
+  ratio = 0.5
+  hex = 0x1F
+  bin = 0b1010
+  oct = 0o17
+  sci = 1.5e-3
+  message = """
+    Hello \(name)!
+    Escaped \t\u{1F600} and "quotes".
+    """
+  pattern = #"raw \n string \#(1+2)"#
+  big = #"###"#
+  nested = "inter\( "inner\(1)" )"
+
+  ["dynamic-key"] {
+    enabled = true
+    missing = null
+  }
+
+  [[key.startsWith("test")]] {
+    debug = true
+  }
+
+  for (k, v in props) {
+    ["\(k)"] = v
+  }
+
+  when (enabled) {
+    trace("enabled")
+  } else {
+    trace("disabled")
+  }
+
+  local double = (x) -> x * 2
+  spread = ...base
+  maybe = value?.nested?.prop ?? "default"
+  check = port is Int && port as Int != null
+  notThis = !enabled && secret!!
+  fnType: (String) -> Int
+  union: Int|"String"|"Boolean"
+  defaultUnion: *Int
+  nullable: String?
+}
+
+class `weird name` {}
+
+// Block comments nest in Pkl, so the inner terminator must not close the outer one.
+/* outer /* inner */ still outer */
+
+import "lib/util.pkl" as util
+
+special {
+  missing = nothing
+  undef = unknown
+  notANumber = NaN
+  infinity = Infinity
+  tiny = .23
+  hexFloat = 0x1.8p3
+  power = 2 ** 8
+  opt = read?("env:PORT")
+  all = read*("env:**")
+  fail = throw("boom")
+  log = trace("x")
+  copy = super.port
+  up = outer.port
+  raw = #"""
+    raw "quotes" and \#(1 + 2)
+    """#
+}

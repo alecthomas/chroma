@@ -33,10 +33,13 @@
   </config>
   <rules>
     <state name="numbers">
-      <rule pattern="(\d(?:_?\d)*\.(?:\d(?:_?\d)*)?|(?:\d(?:_?\d)*)?\.\d(?:_?\d)*)([eE][+-]?\d(?:_?\d)*)?">
+      <rule pattern="(\d(?:_?\d)*\.(?:\d(?:_?\d)*)?|(?:\d(?:_?\d)*)?\.\d(?:_?\d)*)([eE][+-]?\d(?:_?\d)*)?[jJ]?">
         <token type="LiteralNumberFloat"/>
       </rule>
-      <rule pattern="\d(?:_?\d)*[eE][+-]?\d(?:_?\d)*j?">
+      <rule pattern="\d(?:_?\d)*[eE][+-]?\d(?:_?\d)*[jJ]?">
+        <token type="LiteralNumberFloat"/>
+      </rule>
+      <rule pattern="\d(?:_?\d)*[jJ]">
         <token type="LiteralNumberFloat"/>
       </rule>
       <rule pattern="0[oO](?:_?[0-7])+">

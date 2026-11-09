@@ -16,7 +16,6 @@
     <filename>*.kube</filename>
     <filename>*.volume</filename>
     <filename>*.image</filename>
-    <filename>.gitconfig</filename>
     <filename>.editorconfig</filename>
     <filename>pylintrc</filename>
     <filename>.pylintrc</filename>

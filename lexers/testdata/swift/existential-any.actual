@@ -1,0 +1,4 @@
+let shapes: [any Shape] = []
+func handle(_ error: any Error) {}
+func run(on actor: isolated (any Actor)?) {}
+let match = values.contains(where: \.any)
