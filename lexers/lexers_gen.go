@@ -4367,6 +4367,27 @@ var embeddedLexers = []struct {
 		MimeTypes: []string{
 			"text/zed",
 		},
+		Analyse: &chroma.AnalyseConfig{
+			Regexes: []chroma.RegexConfig{
+				{
+					Pattern: "\\A(?=[\\s\\S]*definition )(?=[\\s\\S]*relation )(?=[\\s\\S]*permission )",
+					Score:   0.9,
+				},
+				{
+					Pattern: "definition ",
+					Score:   0.5,
+				},
+				{
+					Pattern: "relation ",
+					Score:   0.5,
+				},
+				{
+					Pattern: "permission ",
+					Score:   0.25,
+				},
+			},
+			First: true,
+		},
 	}},
 	{"embedded/zig.xml", chroma.Config{
 		Name: "Zig",

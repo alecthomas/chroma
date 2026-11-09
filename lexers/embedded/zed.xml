@@ -4,6 +4,12 @@
     <alias>zed</alias>
     <filename>*.zed</filename>
     <mime_type>text/zed</mime_type>
+    <analyse first="true">
+      <regex pattern="\A(?=[\s\S]*definition )(?=[\s\S]*relation )(?=[\s\S]*permission )" score="0.9" />
+      <regex pattern="definition " score="0.5" />
+      <regex pattern="relation " score="0.5" />
+      <regex pattern="permission " score="0.25" />
+    </analyse>
   </config>
   <rules>
     <state name="root">
