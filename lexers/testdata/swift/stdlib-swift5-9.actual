@@ -1,0 +1,2 @@
+struct Token: ~Copyable {}
+await withDiscardingTaskGroup { (group: inout DiscardingTaskGroup) in }

@@ -19,13 +19,13 @@
       <rule pattern="(fun|let|var)\b">
         <token type="KeywordDeclaration"/>
       </rule>
-      <rule pattern="(mod|import)\b">
+      <rule pattern="(import)\b">
         <token type="KeywordNamespace"/>
       </rule>
-      <rule pattern="(if|else|is|for|in|while|return)\b">
+      <rule pattern="(if|else|is|for|in|while|return|of|with)\b">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="(true|false|self)\b">
+      <rule pattern="(true|false|self|Self)\b">
         <token type="KeywordConstant"/>
       </rule>
       <rule pattern="0[b][01](_?[01])*(i32|i64|u8|f32|f64)?">

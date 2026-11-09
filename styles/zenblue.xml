@@ -1,0 +1,119 @@
+<!-- ZenBlue - Chroma Style
+     Deep-space dark theme: midnight-navy backgrounds, electric cyan/blue accents, warm cream highlights.
+     Ported from the ZenBlue VS Code theme and ZenBlue_styleguide.md.
+     Compatible with: github.com/alecthomas/chroma/v2
+
+     Palette:
+       bg0 #000520  editor canvas      fg0 #ffffff  primary text
+       bg1 #00031a  sidebar/linenums   fg2 #6289bd  comments/muted
+       bg4 #0e3672  selection/hilight  fg3 #3a6090  very muted
+       accent #007ce2   cyan #00eeff   blue  #2ec0ff
+       blueKw #006eff   blueDp #438eff azure #229bff
+       str  #c8d4ff  warn #ffcb6b  error #ff6b6b  ok #4ec994
+       var/module #edf9b1
+-->
+<style name="zenblue">
+  <!-- Core -->
+  <entry type="Background"        style="#ffffff bg:#000520"/>
+  <entry type="Other"             style="#ffffff"/>
+  <entry type="Error"             style="#ff6b6b"/>
+
+  <!-- Comments -->
+  <entry type="Comment"                style="italic #6289bd"/>
+  <entry type="CommentHashbang"        style="italic #6289bd"/>
+  <entry type="CommentMultiline"       style="italic #6289bd"/>
+  <entry type="CommentSingle"          style="italic #6289bd"/>
+  <entry type="CommentSpecial"         style="italic bold #6289bd"/>
+  <entry type="CommentPreproc"         style="#006eff"/>
+
+  <!-- Keywords -->
+  <entry type="Keyword"                style="#006eff"/>
+  <entry type="KeywordConstant"        style="#00eeff"/>
+  <entry type="KeywordDeclaration"     style="#006eff"/>
+  <entry type="KeywordNamespace"       style="#006eff"/>
+  <entry type="KeywordPseudo"          style="italic #438eff"/>
+  <entry type="KeywordReserved"        style="#006eff"/>
+  <entry type="KeywordType"            style="#2ec0ff"/>
+
+  <!-- Names -->
+  <entry type="Name"                   style="#ffffff"/>
+  <entry type="NameAttribute"          style="#00eeff"/>
+  <entry type="NameBuiltin"            style="italic #438eff"/>
+  <entry type="NameBuiltinPseudo"      style="italic #438eff"/>
+  <entry type="NameClass"              style="#2ec0ff"/>
+  <entry type="NameConstant"           style="#00eeff"/>
+  <entry type="NameDecorator"          style="italic #00eeff"/>
+  <entry type="NameEntity"             style="#ffcb6b"/>
+  <entry type="NameException"          style="#438eff"/>
+  <entry type="NameFunction"           style="#00eeff"/>
+  <entry type="NameFunctionMagic"      style="italic #00eeff"/>
+  <entry type="NameLabel"              style="#2ec0ff"/>
+  <entry type="NameNamespace"          style="#edf9b1"/>
+  <entry type="NameOther"              style="#ffffff"/>
+  <entry type="NameProperty"           style="#edf9b1"/>
+  <entry type="NameTag"                style="#2ec0ff"/>
+  <entry type="NameVariable"           style="#edf9b1"/>
+  <entry type="NameVariableClass"      style="#2ec0ff"/>
+  <entry type="NameVariableGlobal"     style="#edf9b1"/>
+  <entry type="NameVariableInstance"   style="#edf9b1"/>
+  <entry type="NameVariableMagic"      style="italic #438eff"/>
+
+  <!-- Literals -->
+  <entry type="Literal"                style="#edf9b1"/>
+  <entry type="LiteralDate"            style="#ffcb6b"/>
+
+  <!-- Strings -->
+  <entry type="LiteralString"              style="#c8d4ff"/>
+  <entry type="LiteralStringAffix"         style="#2ec0ff"/>
+  <entry type="LiteralStringBacktick"      style="#c8d4ff"/>
+  <entry type="LiteralStringChar"          style="#c8d4ff"/>
+  <entry type="LiteralStringDelimiter"     style="#6289bd"/>
+  <entry type="LiteralStringDoc"           style="italic #6289bd"/>
+  <entry type="LiteralStringDouble"        style="#c8d4ff"/>
+  <entry type="LiteralStringEscape"        style="#2ec0ff"/>
+  <entry type="LiteralStringHeredoc"       style="#c8d4ff"/>
+  <entry type="LiteralStringInterpol"      style="#2ec0ff"/>
+  <entry type="LiteralStringOther"         style="#c8d4ff"/>
+  <entry type="LiteralStringRegex"         style="#2ec0ff"/>
+  <entry type="LiteralStringSingle"        style="#c8d4ff"/>
+  <entry type="LiteralStringSymbol"        style="#c8d4ff"/>
+
+  <!-- Numbers -->
+  <entry type="LiteralNumber"              style="#00eeff"/>
+  <entry type="LiteralNumberBin"           style="#00eeff"/>
+  <entry type="LiteralNumberFloat"         style="#00eeff"/>
+  <entry type="LiteralNumberHex"           style="#00eeff"/>
+  <entry type="LiteralNumberInteger"       style="#00eeff"/>
+  <entry type="LiteralNumberIntegerLong"   style="#00eeff"/>
+  <entry type="LiteralNumberOct"           style="#00eeff"/>
+
+  <!-- Operators -->
+  <entry type="Operator"               style="#2ec0ff"/>
+  <entry type="OperatorWord"           style="#006eff"/>
+
+  <!-- Punctuation -->
+  <entry type="Punctuation"            style="#6289bd"/>
+
+  <!-- Generic / Diffs -->
+  <entry type="Generic"                style="#ffffff"/>
+  <entry type="GenericDeleted"         style="#438eff"/>
+  <entry type="GenericEmph"            style="italic #ffffff"/>
+  <entry type="GenericError"           style="#ff6b6b"/>
+  <entry type="GenericHeading"         style="bold #ffffff"/>
+  <entry type="GenericInserted"        style="#4ec994"/>
+  <entry type="GenericOutput"          style="#6289bd"/>
+  <entry type="GenericPrompt"          style="bold #007ce2"/>
+  <entry type="GenericStrong"          style="bold #ffffff"/>
+  <entry type="GenericSubheading"      style="#2ec0ff"/>
+  <entry type="GenericTraceback"       style="#438eff"/>
+  <entry type="GenericUnderline"       style="underline"/>
+
+  <!-- Text -->
+  <entry type="Text"                   style="#ffffff"/>
+  <entry type="TextWhitespace"         style="#3a6090"/>
+
+  <!-- Line-level decorations -->
+  <entry type="LineHighlight"          style="bg:#0e3672"/>
+  <entry type="LineNumbers"            style="#1e4872 bg:#00031a"/>
+  <entry type="LineNumbersTable"       style="#229bff bg:#00031a"/>
+</style>

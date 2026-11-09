@@ -1,0 +1,5 @@
+actor Counter {
+    nonisolated let id: UUID
+    func merge(with other: isolated Counter) {}
+}
+let actor = Counter()

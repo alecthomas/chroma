@@ -43,6 +43,16 @@ func TestGet(t *testing.T) {
 			repr.String(expected.Config(), repr.Indent("  ")),
 			repr.String(actual.Config(), repr.Indent("  ")))
 	})
+	t.Run("ViaGoooFilename", func(t *testing.T) {
+		assert.Equal(t, lexers.Get("gooo"), lexers.Match("example.gooo"))
+	})
+	t.Run("ViaCPPModuleFilename", func(t *testing.T) {
+		expected := lexers.Get("cpp")
+		actual := lexers.GlobalLexerRegistry.Get("example.cppm")
+		assert.Equal(t,
+			repr.String(expected.Config(), repr.Indent("  ")),
+			repr.String(actual.Config(), repr.Indent("  ")))
+	})
 	// GDScript and GDScript3 both claim *.gd, so the more recent dialect has to win.
 	t.Run("ViaFilenameWithCompetingLexers", func(t *testing.T) {
 		expected := lexers.Get("GDScript")
@@ -165,7 +175,7 @@ func TestLexers(t *testing.T) {
 				continue
 			}
 
-			base := strings.Split(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), ".")[0]
+			base, _, _ := strings.Cut(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), ".")
 			lexer := lexers.Get(base)
 			assert.NotZero(t, lexer, base)
 
@@ -212,7 +222,7 @@ func TestLexersTextAnalyser(t *testing.T) {
 	for _, actualFilepath := range files {
 		filename := filepath.Base(actualFilepath)
 		baseFilename := strings.TrimSuffix(filename, filepath.Ext(filename))
-		lexerName := strings.Split(baseFilename, ".")[0]
+		lexerName, _, _ := strings.Cut(baseFilename, ".")
 
 		lexer := lexers.Get(lexerName)
 		assert.NotZero(t, lexer, "no lexer found for name %q", lexerName)

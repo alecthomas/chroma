@@ -1,0 +1,7 @@
+struct Todo: Codable {
+    enum CodingKeys: String, CodingKey { case id }
+    init(from decoder: Decoder) throws {}
+}
+let word: Substring = "hello world".prefix(5)
+let path: WritableKeyPath<Todo, UUID> = \.id
+func clamp<T: FixedWidthInteger>(_ value: T) -> T { value }

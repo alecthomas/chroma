@@ -1,0 +1,8 @@
+enum ParseError: Error { case invalid }
+struct Bag: Collection, ExpressibleByArrayLiteral {}
+struct Flags: OptionSet { let rawValue: Int }
+func fail() -> Never { fatalError() }
+let range: ClosedRange<Int> = 1...10
+let size = MemoryLayout<Int>.size
+let key: AnyHashable = "id"
+func read(_ buffer: UnsafeRawBufferPointer) {}

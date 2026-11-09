@@ -1,0 +1,18 @@
+[
+  {"type":"KeywordDeclaration","value":"let"},
+  {"type":"Text","value":" "},
+  {"type":"NameVariable","value":"greeting"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralString","value":"\"\"\"\n    Hello, "},
+  {"type":"LiteralStringInterpol","value":"\\("},
+  {"type":"Name","value":"name"},
+  {"type":"LiteralStringInterpol","value":")"},
+  {"type":"LiteralString","value":"!\n    She said \"hi\" and left."},
+  {"type":"LiteralStringEscape","value":"\\t\\u{1F44B}"},
+  {"type":"LiteralString","value":"\n    This line continues "},
+  {"type":"LiteralStringEscape","value":"\\\n"},
+  {"type":"LiteralString","value":"    here.\n    \"\"\""},
+  {"type":"Text","value":"\n"}
+]

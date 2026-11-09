@@ -1,0 +1,18 @@
+[
+  {"type":"CommentPreproc","value":"#warning"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralString","value":"\"Remove before release\""},
+  {"type":"Punctuation","value":")"},
+  {"type":"Text","value":"\n"},
+  {"type":"CommentPreproc","value":"#if"},
+  {"type":"Text","value":" "},
+  {"type":"CommentPreproc","value":"DEBUG"},
+  {"type":"Text","value":"\n"},
+  {"type":"CommentPreproc","value":"#error"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralString","value":"\"Unsupported configuration\""},
+  {"type":"Punctuation","value":")"},
+  {"type":"Text","value":"\n"},
+  {"type":"CommentPreproc","value":"#endif"},
+  {"type":"Text","value":"\n"}
+]

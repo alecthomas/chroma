@@ -1,0 +1,10 @@
+package unicode
+namespace 예제
+/* A block comment can span
+   more than one line. */
+entity 문자 id "urn:example:\uBB38\uC790"
+activity 인사(문자) -> 문자 computes `let value="// not a comment # or /* a block */"
+return value + "\n"`
+entity Escaped id "quote\"backslash\\tab\tline\nreturn\r"
+activity // A comment can separate the keyword and identifier.
+이름(문자) -> 문자

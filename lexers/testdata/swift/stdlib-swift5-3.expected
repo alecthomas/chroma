@@ -1,0 +1,13 @@
+[
+  {"type":"KeywordDeclaration","value":"let"},
+  {"type":"Text","value":" "},
+  {"type":"NameVariable","value":"half"},
+  {"type":"Punctuation","value":":"},
+  {"type":"Text","value":" "},
+  {"type":"NameBuiltin","value":"Float16"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralNumberFloat","value":"0.5"},
+  {"type":"Text","value":"\n"}
+]

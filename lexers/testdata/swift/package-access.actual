@@ -1,0 +1,6 @@
+package struct Engine {
+    package func start() {}
+}
+let package = Package(name: "Engine")
+package.targets.append(target)
+.product(name: "Engine", package: "engine")

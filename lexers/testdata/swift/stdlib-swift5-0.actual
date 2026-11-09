@@ -1,0 +1,3 @@
+func fetch() -> Result<Data, URLError> { .failure(URLError(.badURL)) }
+let position = SIMD3<Float>(0, 1, 0)
+let ordered: KeyValuePairs = ["a": 1, "b": 2]

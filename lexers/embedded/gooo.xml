@@ -1,0 +1,96 @@
+<lexer>
+  <config>
+    <name>Gooo</name>
+    <alias>gooo</alias>
+    <filename>*.gooo</filename>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\s+">
+        <token type="TextWhitespace"/>
+      </rule>
+      <rule pattern="(//|#)[^\r\n]*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="/\*">
+        <token type="CommentMultiline"/>
+        <push state="comment"/>
+      </rule>
+      <rule pattern="(package|namespace)(\s+)([_\p{L}][_\p{L}\p{Nd}]*)">
+        <bygroups>
+          <token type="KeywordNamespace"/>
+          <token type="TextWhitespace"/>
+          <token type="NameNamespace"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(entity)(\s+)([_\p{L}][_\p{L}\p{Nd}]*)">
+        <bygroups>
+          <token type="KeywordDeclaration"/>
+          <token type="TextWhitespace"/>
+          <token type="NameClass"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(activity)(\s+)([_\p{L}][_\p{L}\p{Nd}]*)">
+        <bygroups>
+          <token type="KeywordDeclaration"/>
+          <token type="TextWhitespace"/>
+          <token type="NameFunction"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(package|namespace|entity|activity|id)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <push state="string"/>
+      </rule>
+      <rule pattern="`">
+        <token type="LiteralStringBacktick"/>
+        <push state="raw-string"/>
+      </rule>
+      <rule pattern="-&gt;">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[(){}.,]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[_\p{L}][_\p{L}\p{Nd}]*">
+        <token type="Name"/>
+      </rule>
+    </state>
+    <state name="comment">
+      <rule pattern="\*/">
+        <token type="CommentMultiline"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^*]+|\*">
+        <token type="CommentMultiline"/>
+      </rule>
+    </state>
+    <state name="string">
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\\(?:[&#34;\\nrt]|u[0-9a-fA-F]{4})">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="[^&#34;\\\r\n]+">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="\r\n|[\r\n]">
+        <token type="Error"/>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="raw-string">
+      <rule pattern="`">
+        <token type="LiteralStringBacktick"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^`]+">
+        <token type="LiteralStringBacktick"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

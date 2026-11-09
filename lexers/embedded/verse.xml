@@ -1,0 +1,67 @@
+<lexer>
+  <config>
+    <name>Verse</name>
+    <alias>verse</alias>
+    <filename>*.verse</filename>
+    <mime_type>text/x-verse</mime_type>
+    <mime_type>application/x-verse</mime_type>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="^([ \t]*)(&lt;#&gt;[^\n]*\n(?:\1[ \t]+[^\n]*\n|[ \t]*\n)*)"><bygroups><token type="TextWhitespace"/><token type="CommentMultiline"/></bygroups></rule>
+      <rule pattern="\n"><token type="TextWhitespace"/></rule>
+      <rule pattern="[^\S\n]+"><token type="TextWhitespace"/></rule>
+      <rule pattern="#[^\n]*"><token type="CommentSingle"/></rule>
+      <rule pattern="&lt;#"><token type="CommentMultiline"/><push state="multiline-comment"/></rule>
+      <rule pattern="(using)(\s*)(\{)"><bygroups><token type="KeywordNamespace"/><token type="TextWhitespace"/><token type="Punctuation"/></bygroups><push state="using-block"/></rule>
+      <rule pattern="&lt;(abstract|allocates|castable|closed|computes|concrete|constructor|converges|decides|epic_internal|final|final_super|inline|internal|localizes|module_scoped_var_weak_map_key|native|native_callable|no_rollback|open|override|persistable|predicts|private|protected|public|reads|scoped|suspends|transacts|unique|writes)(\{[^}]*\})?&gt;"><token type="NameDecorator"/></rule>
+      <rule pattern="\b(class|enum|interface|module|struct)(\s+)([a-zA-Z_]\w*)"><bygroups><token type="Keyword"/><token type="TextWhitespace"/><token type="NameClass"/></bygroups></rule>
+      <rule pattern="\b(array|block|case|defer|else|first|for|if|loop|map|then)\b"><token type="Keyword"/></rule>
+      <rule pattern="\b(class|enum|interface|module|struct)\b"><token type="Keyword"/></rule>
+      <rule pattern="\b(alias|live|ref|set|using|var)\b"><token type="KeywordDeclaration"/></rule>
+      <rule pattern="\b(any|char|char32|comparable|float|int|logic|option|rational|string|tuple|type|void)\b"><token type="KeywordType"/></rule>
+      <rule pattern="\b(branch|break|catch|const|continue|do|in|is|mutable|of|profile|race|return|rush|Self|spawn|sync|until|upon|when|where|while|with|yield)\b"><token type="KeywordReserved"/></rule>
+      <rule pattern="\b(and|or|not)\b"><token type="OperatorWord"/></rule>
+      <rule pattern="\b(true|false)\b"><token type="KeywordConstant"/></rule>
+      <rule pattern="\b([a-zA-Z_]\w*)(\s*)(&lt;\w+(?:\{[^}]*\})?&gt;)?(\s*)(\()"><bygroups><token type="NameFunction"/><token type="TextWhitespace"/><token type="NameDecorator"/><token type="TextWhitespace"/><token type="Punctuation"/></bygroups></rule>
+      <rule pattern="0x[0-9a-fA-F]+"><token type="LiteralNumberHex"/></rule>
+      <rule pattern="0o[0-9a-fA-F]+"><token type="LiteralStringChar"/></rule>
+      <rule pattern="0u[0-9a-fA-F]+"><token type="LiteralStringChar"/></rule>
+      <rule pattern="[0-9]+\.[0-9]+([eE][+-]?[0-9]+)?"><token type="LiteralNumberFloat"/></rule>
+      <rule pattern="[0-9]+[eE][+-]?[0-9]+"><token type="LiteralNumberFloat"/></rule>
+      <rule pattern="[0-9]+"><token type="LiteralNumberInteger"/></rule>
+      <rule pattern="&quot;"><token type="LiteralStringDouble"/><push state="string-double"/></rule>
+      <rule pattern="&#x27;(\\.|[^&#x27;\\\n])*&#x27;"><token type="LiteralStringChar"/></rule>
+      <rule pattern=":=|=&gt;|-&gt;|\.\.|[+\-*/]?=|&lt;&gt;|&lt;=|&gt;=|[&lt;&gt;+\-*/?:]"><token type="Operator"/></rule>
+      <rule pattern="\(([a-zA-Z_]\w*):\)"><token type="NameBuiltinPseudo"/></rule>
+      <rule pattern="[{}\[\](),;.]"><token type="Punctuation"/></rule>
+      <rule pattern="@[a-zA-Z_]\w*"><token type="NameDecorator"/></rule>
+      <rule pattern="[a-zA-Z_]\w*"><token type="Name"/></rule>
+    </state>
+    <state name="multiline-comment">
+      <rule pattern="&lt;#"><token type="CommentMultiline"/><push/></rule>
+      <rule pattern="#&gt;"><token type="CommentMultiline"/><pop depth="1"/></rule>
+      <rule pattern="[^&lt;#]+"><token type="CommentMultiline"/></rule>
+      <rule pattern="[&lt;#]"><token type="CommentMultiline"/></rule>
+    </state>
+    <state name="using-block">
+      <rule pattern="\s+"><token type="TextWhitespace"/></rule>
+      <rule pattern="[/.,]"><token type="Punctuation"/></rule>
+      <rule pattern="[a-zA-Z_]\w*"><token type="NameNamespace"/></rule>
+      <rule pattern="\}"><token type="Punctuation"/><pop depth="1"/></rule>
+    </state>
+    <state name="string-double">
+      <rule pattern="\\."><token type="LiteralStringEscape"/></rule>
+      <rule pattern="&lt;#"><token type="CommentMultiline"/><push state="multiline-comment"/></rule>
+      <rule pattern="\{"><token type="LiteralStringInterpol"/><push state="interpolation"/></rule>
+      <rule pattern="[^&quot;\\{&lt;]+"><token type="LiteralStringDouble"/></rule>
+      <rule pattern="&lt;"><token type="LiteralStringDouble"/></rule>
+      <rule pattern="&quot;"><token type="LiteralStringDouble"/><pop depth="1"/></rule>
+    </state>
+    <state name="interpolation">
+      <rule pattern="\}"><token type="LiteralStringInterpol"/><pop depth="1"/></rule>
+      <rule><include state="root"/></rule>
+    </state>
+  </rules>
+</lexer>
+

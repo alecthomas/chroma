@@ -1,0 +1,12 @@
+@propertyWrapper
+struct Clamped<Value: Comparable> {
+    var wrappedValue: Value
+}
+
+struct ContentView: View {
+    @State private var count = 0
+    @Environment(\.dismiss) var dismiss
+    @Clamped(0...10) var level = 5
+    @available(iOS 15, macOS 12, *)
+    @objc dynamic func tap(_ handler: @escaping () -> Void) {}
+}

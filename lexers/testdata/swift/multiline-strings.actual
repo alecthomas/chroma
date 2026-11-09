@@ -1,0 +1,6 @@
+let greeting = """
+    Hello, \(name)!
+    She said "hi" and left.\t\u{1F44B}
+    This line continues \
+    here.
+    """

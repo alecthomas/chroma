@@ -131,14 +131,8 @@ type LexerState struct {
 	NamedGroups map[string]string
 	// Custum context for mutators.
 	MutatorContext map[any]any
-	iteratorStack  []pullIterator
 	options        *TokeniseOptions
 	newlineAdded   bool
-}
-
-type pullIterator struct {
-	next func() (Token, bool)
-	stop func()
 }
 
 // Set mutator context.
@@ -151,28 +145,8 @@ func (l *LexerState) Get(key any) any {
 	return l.MutatorContext[key]
 }
 
-func (l *LexerState) pushIterator(seq iter.Seq[Token]) {
-	next, stop := iter.Pull(seq)
-	l.iteratorStack = append(l.iteratorStack, pullIterator{next, stop})
-}
-
-func (l *LexerState) stopIterators() {
-	for _, entry := range l.iteratorStack {
-		entry.stop()
-	}
-	l.iteratorStack = nil
-}
-
-// drainIteratorStack yields tokens from the iterator stack, returning false if the consumer stopped.
-func (l *LexerState) drainIteratorStack(yield func(Token) bool) bool {
-	for len(l.iteratorStack) > 0 {
-		n := len(l.iteratorStack) - 1
-		t, ok := l.iteratorStack[n].next()
-		if !ok {
-			l.iteratorStack[n].stop()
-			l.iteratorStack = l.iteratorStack[:n]
-			continue
-		}
+func yieldTokens(seq iter.Seq[Token], yield func(Token) bool) bool {
+	for t := range seq {
 		if t.Type == Ignore {
 			continue
 		}
@@ -186,7 +160,6 @@ func (l *LexerState) drainIteratorStack(yield func(Token) bool) bool {
 // Iterator returns an iterator over tokens from the lexer.
 func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
 	return func(yield func(Token) bool) {
-		defer l.stopIterators()
 		var trace *json.Encoder
 		if l.Lexer.trace {
 			trace = json.NewEncoder(os.Stderr)
@@ -201,10 +174,6 @@ func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
 		stuck := 0
 		lastPos := -1
 		for l.Pos < end && len(l.Stack) > 0 {
-			if !l.drainIteratorStack(yield) {
-				return
-			}
-
 			if l.Pos != lastPos {
 				lastPos = l.Pos
 				stuck = 0
@@ -281,8 +250,9 @@ func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
 				}
 				progressed = progressed || len(l.Stack) != depth || len(l.Stack) == 0 || l.Stack[len(l.Stack)-1] != top
 			}
+			var seq iter.Seq[Token]
 			if rule.Type != nil {
-				l.pushIterator(rule.Type.Emit(l.Groups, l))
+				seq = rule.Type.Emit(l.Groups, l)
 			}
 			if !progressed {
 				// A zero-width match that did not change state will never advance.
@@ -291,9 +261,9 @@ func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
 					return
 				}
 			}
-		}
-		if !l.drainIteratorStack(yield) {
-			return
+			if seq != nil && !yieldTokens(seq, yield) {
+				return
+			}
 		}
 
 		// If we get to here and we still have text, return it as an error.
@@ -379,7 +349,8 @@ func (r *RegexLexer) maybeCompile() (err error) {
 					pattern = "(?" + rule.flags + ")" + pattern
 				}
 				pattern = `\G` + pattern
-				rule.Regexp, err = regexp2.Compile(pattern)
+				// Long tokens such as big comments exceed regexp2's default stack limit; MatchTimeout bounds runaway matches.
+				rule.Regexp, err = regexp2.Compile(pattern, regexp2.OptionMaxBacktrackingStackSize(-1))
 				if err != nil {
 					return fmt.Errorf("failed to compile rule %s.%d: %s", state, i, err)
 				}

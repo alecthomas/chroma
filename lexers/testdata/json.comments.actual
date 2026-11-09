@@ -1,0 +1,8 @@
+/* configuration
+   with comments */
+{
+  /* before key */ "enabled" /* before colon */ : /* before value */ true,
+  "items": [1, /* between items */ 2],
+  "text": "/* literal */ // literal"
+}
+// trailing comment
