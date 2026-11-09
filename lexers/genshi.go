@@ -4,19 +4,6 @@ import (
 	. "github.com/alecthomas/chroma/v3" // nolint
 )
 
-// Html+Genshi lexer.
-var GenshiHTMLTemplate = Register(MustNewLexer(
-	&Config{
-		Name:         "Genshi HTML",
-		Aliases:      []string{"html+genshi", "html+kid"},
-		Filenames:    []string{},
-		MimeTypes:    []string{"text/html+genshi"},
-		NotMultiline: true,
-		DotAll:       true,
-	},
-	genshiMarkupRules,
-))
-
 // Genshi lexer.
 var Genshi = Register(MustNewLexer(
 	&Config{

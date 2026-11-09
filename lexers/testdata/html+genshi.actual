@@ -1,0 +1,4 @@
+<div py:with="total = sum(prices)">
+  <p class="total">Total: ${total}</p>
+  <span py:replace='"x" if flag else "y"'/>
+</div>
