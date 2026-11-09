@@ -1404,6 +1404,24 @@ var embeddedLexers = []struct {
 			"text/gemini",
 		},
 	}},
+	{"embedded/genshi.xml", chroma.Config{
+		Name: "Genshi",
+		Aliases: []string{
+			"genshi",
+			"kid",
+			"xml+genshi",
+			"xml+kid",
+		},
+		Filenames: []string{
+			"*.kid",
+		},
+		MimeTypes: []string{
+			"application/x-genshi",
+			"application/x-kid",
+		},
+		DotAll:       true,
+		NotMultiline: true,
+	}},
 	{"embedded/genshi_html.xml", chroma.Config{
 		Name: "Genshi HTML",
 		Aliases: []string{

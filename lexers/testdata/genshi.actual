@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<html xmlns:py="http://genshi.edgewall.org/">
+  <?python
+    title = "Hello"
+  ?>
+  <body class="$cls" id='main-${id}'>
+    <h1 py:content="title">Title</h1>
+    <ul py:if="items">
+      <li py:for="item in items" class=plain>${item.name} and $item.price</li>
+    </ul>
+    <script>var x = "$notavar";</script>
+  </body>
+</html>
