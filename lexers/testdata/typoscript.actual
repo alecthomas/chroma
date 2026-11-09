@@ -1,0 +1,16 @@
+# Site setup
+page = PAGE
+page {
+  typeNum = 0
+  10 = TEXT
+  10.value = <h1>Hello</h1>
+  10.wrap = <div class="x">|</div>
+  20 = FLUIDTEMPLATE
+  20.file = EXT:site/Resources/Private/Templates/Page.html
+}
+
+/* block comment */
+lib.color = #ff0000
+[globalVar = TSFE:id = 1]
+  page.10.value = {$plugin.title}
+[END]
