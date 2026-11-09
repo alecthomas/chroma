@@ -67,12 +67,35 @@ func TestXMLRuleUnmarshal(t *testing.T) {
 		{`<rule><include state="String"/></rule>`, Include("String")},
 		{`<rule pattern="\d+"><token type="Text"/></rule>`, Rule{`\d+`, Text, nil}},
 		{`<rule pattern="&#34;"><token type="LiteralString"/><push state="String"/></rule>`, Rule{`"`, String, Push("String")}},
+		{`<rule words=" if  else&#10;for "><token type="Keyword"/></rule>`, Rule{Words(``, ``, "if", "else", "for"), Keyword, nil}},
+		{
+			`<rule words="int &lt;=" prefix="\(" suffix="\b"><bygroups><token type="KeywordType"/></bygroups></rule>`,
+			Rule{Words(`\(`, `\b`, "int", "<="), ByGroups(KeywordType), nil},
+		},
 	}
 	for _, test := range tests {
 		actual := Rule{}
 		err := xml.Unmarshal([]byte(test.xml), &actual)
 		assert.NoError(t, err)
 		assert.Equal(t, test.expected, actual)
+	}
+}
+
+func TestXMLRuleUnmarshalErrors(t *testing.T) {
+	tests := []struct {
+		name string
+		xml  string
+	}{
+		{"PatternAndWords", `<rule pattern="x" words="a b"><token type="Text"/></rule>`},
+		{"PrefixWithoutWords", `<rule pattern="x" prefix="\b"><token type="Text"/></rule>`},
+		{"SuffixWithoutWords", `<rule suffix="\b"><include state="root"/></rule>`},
+		{"EmptyWords", `<rule words="  "><token type="Text"/></rule>`},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			err := xml.Unmarshal([]byte(test.xml), &Rule{})
+			assert.Error(t, err)
+		})
 	}
 }
 

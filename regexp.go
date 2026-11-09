@@ -1,7 +1,6 @@
 package chroma
 
 import (
-	"cmp"
 	"encoding/json"
 	"fmt"
 	"iter"
@@ -25,15 +24,41 @@ type Rule struct {
 }
 
 // Words creates a regex that matches any of the given literal words.
+//
+// The words are captured as a group between prefix and suffix. Where several
+// words match, the longest is preferred.
 func Words(prefix, suffix string, words ...string) string {
-	words = slices.Clone(words)
-	slices.SortFunc(words, func(a, b string) int {
-		return cmp.Compare(len(b), len(a))
-	})
-	for i, word := range words {
-		words[i] = regexp.QuoteMeta(word)
+	return prefix + `(` + wordAlternation(words) + `)` + suffix
+}
+
+// wordAlternation factors words by common prefix so a non-matching input fails
+// after its first few characters instead of being compared against every word.
+func wordAlternation(words []string) string {
+	terminal := false
+	children := map[rune][]string{}
+	for _, word := range words {
+		if word == "" {
+			terminal = true
+			continue
+		}
+		r, size := utf8.DecodeRuneInString(word)
+		children[r] = append(children[r], word[size:])
 	}
-	return prefix + `(` + strings.Join(words, `|`) + `)` + suffix
+	alternatives := make([]string, 0, len(children))
+	for _, r := range slices.Sorted(maps.Keys(children)) {
+		alternatives = append(alternatives, regexp.QuoteMeta(string(r))+wordAlternation(children[r]))
+	}
+	switch {
+	case len(alternatives) == 0:
+		return ""
+	case len(alternatives) == 1 && !terminal:
+		return alternatives[0]
+	}
+	group := "(?:" + strings.Join(alternatives, "|") + ")"
+	if terminal {
+		group += "?"
+	}
+	return group
 }
 
 // Tokenise text using lexer, returning tokens as an iterator.
@@ -91,7 +116,7 @@ func NewLexer(config *Config, rulesFunc func() Rules) (*RegexLexer, error) {
 	}
 	r := &RegexLexer{
 		config:         config,
-		fetchRulesFunc: func() (Rules, error) { return rulesFunc(), nil },
+		fetchRulesFunc: func() (Rules, ruleWords, error) { return rulesFunc(), nil, nil },
 	}
 	return r, nil
 }
@@ -110,10 +135,15 @@ type CompiledRule struct {
 	Rule
 	Regexp *regexp2.Regexp
 	flags  string
+	// words, if set, matches this rule instead of Regexp.
+	words *wordMatcher
 }
 
 // CompiledRules is a map of rule name to sequence of compiled rules in that rule.
 type CompiledRules map[string][]*CompiledRule
+
+// ruleWords holds each XML rule's word list, aligned by index with its state's rules.
+type ruleWords map[string][]*wordList
 
 // LexerState contains the state for a single lex.
 type LexerState struct {
@@ -287,7 +317,7 @@ type RegexLexer struct {
 	compiled       bool
 	rawRules       Rules
 	rules          map[string][]*CompiledRule
-	fetchRulesFunc func() (Rules, error)
+	fetchRulesFunc func() (Rules, ruleWords, error)
 	compileOnce    sync.Once
 	compileError   error
 }
@@ -401,28 +431,35 @@ restart:
 }
 
 func (r *RegexLexer) fetchRules() error {
-	rules, err := r.fetchRulesFunc()
+	rules, words, err := r.fetchRulesFunc()
 	if err != nil {
 		return fmt.Errorf("%s: failed to compile rules: %w", r.config.Name, err)
 	}
 	if _, ok := rules["root"]; !ok {
 		return fmt.Errorf("no \"root\" state")
 	}
+	flags := ""
+	if !r.config.NotMultiline {
+		flags += "m"
+	}
+	if r.config.CaseInsensitive {
+		flags += "i"
+	}
+	if r.config.DotAll {
+		flags += "s"
+	}
 	compiledRules := map[string][]*CompiledRule{}
 	for state, rules := range rules {
 		compiledRules[state] = nil
-		for _, rule := range rules {
-			flags := ""
-			if !r.config.NotMultiline {
-				flags += "m"
+		for i, rule := range rules {
+			compiled := &CompiledRule{Rule: rule, flags: flags}
+			if i < len(words[state]) && words[state][i] != nil {
+				compiled.words, err = newWordMatcher(words[state][i], flags, r.config.CaseInsensitive)
+				if err != nil {
+					return fmt.Errorf("%s: %s: %w", r.config.Name, state, err)
+				}
 			}
-			if r.config.CaseInsensitive {
-				flags += "i"
-			}
-			if r.config.DotAll {
-				flags += "s"
-			}
-			compiledRules[state] = append(compiledRules[state], &CompiledRule{Rule: rule, flags: flags})
+			compiledRules[state] = append(compiledRules[state], compiled)
 		}
 	}
 
@@ -484,6 +521,17 @@ func (r *RegexLexer) MustRules() Rules {
 
 func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule, []string, map[string]string, error) {
 	for i, rule := range rules {
+		if rule.words != nil {
+			end, err := rule.words.match(text, pos)
+			if err != nil {
+				return 0, nil, nil, nil, fmt.Errorf("matching %q: %w", rule.Pattern, err)
+			}
+			if end < 0 {
+				continue
+			}
+			word := string(text[pos:end])
+			return i, rule, []string{word, word}, map[string]string{"0": word, "1": word}, nil
+		}
 		match, err := rule.Regexp.FindRunesMatchStartingAt(text, pos)
 		if err != nil {
 			return 0, nil, nil, nil, fmt.Errorf("matching %q: %w", rule.Pattern, err)

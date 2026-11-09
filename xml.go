@@ -192,10 +192,10 @@ func NewXMLLexerFromConfig(config *Config, from fs.FS, path string) (*RegexLexer
 	return &RegexLexer{
 		config:   config,
 		analyser: analyserFn,
-		fetchRulesFunc: func() (Rules, error) {
+		fetchRulesFunc: func() (Rules, ruleWords, error) {
 			var lexer struct {
 				Config
-				Rules Rules `xml:"rules"`
+				Rules xmlRules `xml:"rules"`
 			}
 			// Try to open .xml fallback to .xml.gz
 			fr, err := from.Open(path)
@@ -204,10 +204,10 @@ func NewXMLLexerFromConfig(config *Config, from fs.FS, path string) (*RegexLexer
 					path += ".gz"
 					fr, err = from.Open(path)
 					if err != nil {
-						return nil, err
+						return nil, nil, err
 					}
 				} else {
-					return nil, err
+					return nil, nil, err
 				}
 			}
 			defer fr.Close()
@@ -215,14 +215,15 @@ func NewXMLLexerFromConfig(config *Config, from fs.FS, path string) (*RegexLexer
 			if strings.HasSuffix(path, ".gz") {
 				r, err = gzip.NewReader(r)
 				if err != nil {
-					return nil, fmt.Errorf("%s: %w", path, err)
+					return nil, nil, fmt.Errorf("%s: %w", path, err)
 				}
 			}
 			err = xml.NewDecoder(r).Decode(&lexer)
 			if err != nil {
-				return nil, fmt.Errorf("%s: %w", path, err)
+				return nil, nil, fmt.Errorf("%s: %w", path, err)
 			}
-			return lexer.Rules, nil
+			rules, words := lexer.Rules.split()
+			return rules, words, nil
 		},
 	}, nil
 }
@@ -245,13 +246,50 @@ func unmarshalEmitter(d *xml.Decoder, start xml.StartElement) (Emitter, error) {
 	return decode(d, start)
 }
 
-func (r *Rule) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+// rulePattern returns the regex for a <rule>, given either as a pattern
+// attribute or as whitespace-separated words with an optional prefix and suffix.
+//
+// For words it also returns the list, which lexers match with a trie; the
+// equivalent regex remains the rule's Pattern.
+func rulePattern(start xml.StartElement) (string, *wordList, error) {
+	attrs := map[string]string{}
 	for _, attr := range start.Attr {
-		if attr.Name.Local == "pattern" {
-			r.Pattern = attr.Value
-			break
-		}
+		attrs[attr.Name.Local] = attr.Value
 	}
+	pattern, hasPattern := attrs["pattern"]
+	words, hasWords := attrs["words"]
+	prefix, hasPrefix := attrs["prefix"]
+	suffix, hasSuffix := attrs["suffix"]
+	switch {
+	case hasPattern && hasWords:
+		return "", nil, errors.New("rule cannot have both pattern and words")
+	case !hasWords && (hasPrefix || hasSuffix):
+		return "", nil, errors.New("rule prefix and suffix require words")
+	case !hasWords:
+		return pattern, nil, nil
+	}
+	fields := strings.Fields(words)
+	if len(fields) == 0 {
+		return "", nil, errors.New("rule words must not be empty")
+	}
+	return Words(prefix, suffix, fields...), &wordList{prefix: prefix, suffix: suffix, words: fields}, nil
+}
+
+func (r *Rule) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	_, err := r.unmarshalXML(d, start)
+	return err
+}
+
+func (r *Rule) unmarshalXML(d *xml.Decoder, start xml.StartElement) (*wordList, error) {
+	pattern, words, err := rulePattern(start)
+	if err != nil {
+		return nil, err
+	}
+	r.Pattern = pattern
+	return words, r.unmarshalXMLActions(d)
+}
+
+func (r *Rule) unmarshalXMLActions(d *xml.Decoder) error {
 	for {
 		token, err := d.Token()
 		if err != nil {
@@ -288,13 +326,41 @@ func (r *Rule) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	}
 }
 
+type xmlRule struct {
+	Rule
+	words *wordList
+}
+
+func (r *xmlRule) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	words, err := r.Rule.unmarshalXML(d, start)
+	r.words = words
+	return err
+}
+
 type xmlRuleState struct {
-	Name  string `xml:"name,attr"`
-	Rules []Rule `xml:"rule"`
+	Name  string    `xml:"name,attr"`
+	Rules []xmlRule `xml:"rule"`
 }
 
 type xmlRules struct {
 	States []xmlRuleState `xml:"state"`
+}
+
+// split returns the rules and, aligned by index, each rule's word list or nil.
+func (x xmlRules) split() (Rules, ruleWords) {
+	rules := Rules{}
+	words := ruleWords{}
+	for _, state := range x.States {
+		stateRules := make([]Rule, len(state.Rules))
+		stateWords := make([]*wordList, len(state.Rules))
+		for i, rule := range state.Rules {
+			stateRules[i] = rule.Rule
+			stateWords[i] = rule.words
+		}
+		rules[state.Name] = stateRules
+		words[state.Name] = stateWords
+	}
+	return rules, words
 }
 
 func (r *Rules) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -305,8 +371,9 @@ func (r *Rules) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	if *r == nil {
 		*r = Rules{}
 	}
-	for _, state := range xr.States {
-		(*r)[state.Name] = state.Rules
+	rules, _ := xr.split()
+	for name, stateRules := range rules {
+		(*r)[name] = stateRules
 	}
 	return nil
 }

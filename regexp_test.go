@@ -8,6 +8,7 @@ import (
 	"time"
 
 	assert "github.com/alecthomas/assert/v2"
+	"github.com/dlclark/regexp2/v2"
 )
 
 func mustNewLexer(t *testing.T, config *Config, rules Rules) *RegexLexer { // nolint: forbidigo
@@ -17,6 +18,37 @@ func mustNewLexer(t *testing.T, config *Config, rules Rules) *RegexLexer { // no
 	})
 	assert.NoError(t, err)
 	return lexer
+}
+
+func TestWords(t *testing.T) {
+	tests := []struct {
+		name           string
+		prefix, suffix string
+		words          []string
+		input          string
+		match, word    string
+	}{
+		{"PrefersLongest", ``, ``, []string{"fo", "foobar", "foo"}, "foobarx", "foobar", "foobar"},
+		{"BacktracksToShorterWord", ``, `b`, []string{"a", "ab"}, "ab", "ab", "a"},
+		{"EscapesMetacharacters", ``, ``, []string{"1+", "*", "<="}, "1+2", "1+", "1+"},
+		{"Multibyte", ``, ``, []string{"über", "übel"}, "übel", "übel", "übel"},
+		{"PrefixAndSuffix", `\(`, `\b`, []string{"if", "iff"}, "(iff)", "(iff", "iff"},
+		{"NoMatch", ``, `\b`, []string{"car", "cdr"}, "cart", "", ""},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			re := regexp2.MustCompile(`\G`+Words(test.prefix, test.suffix, test.words...), regexp2.None)
+			match, err := re.FindStringMatch(test.input)
+			assert.NoError(t, err)
+			if test.match == "" {
+				assert.Zero(t, match)
+				return
+			}
+			assert.NotZero(t, match)
+			assert.Equal(t, test.match, match.String())
+			assert.Equal(t, test.word, match.GroupByNumber(1).String())
+		})
+	}
 }
 
 func TestNewlineAtEndOfFile(t *testing.T) {
