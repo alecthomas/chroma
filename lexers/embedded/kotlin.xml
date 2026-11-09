@@ -200,7 +200,7 @@
       <rule pattern="(?:\p{Lu}[_\p{L}]*)(?=\.)">
         <token type="NameClass"/>
       </rule>
-      <rule pattern="(?:[_\p{L}][\p{L}\p{N}]*|`@?[_\p{L}][\p{L}\p{N}]+`)">
+      <rule pattern="(?:[_\p{L}][\p{L}\p{N}]*|\x60[^\x60\r\n]+\x60)">
         <token type="Name"/>
       </rule>
     </state>

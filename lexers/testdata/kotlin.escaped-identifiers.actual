@@ -1,0 +1,8 @@
+fun `call me`(`a b`: Int): Int = `a b`
+
+fun main() {
+    val `a b` = 3
+    val `x` = `call me`(`a b`)
+    val (_, `second value`) = 1 to 2
+    println(`x` + `second value`)
+}
