@@ -8,6 +8,19 @@
     <dot_all>true</dot_all>
   </config>
   <rules>
+    <state name="comment">
+      <rule pattern="/[*]">
+        <token type="CommentMultiline"/>
+        <push/>
+      </rule>
+      <rule pattern="[*]/">
+        <token type="CommentMultiline"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^*/]+|[*/]">
+        <token type="CommentMultiline"/>
+      </rule>
+    </state>
     <state name="string">
       <rule pattern="\\[tbnr&#39;&#34;\\\$]">
         <token type="LiteralStringEscape"/>
@@ -107,8 +120,9 @@
       <rule pattern="//[^\n]*\n?">
         <token type="CommentSingle"/>
       </rule>
-      <rule pattern="/[*].*?[*]/">
+      <rule pattern="/[*]">
         <token type="CommentMultiline"/>
+        <push state="comment"/>
       </rule>
       <rule pattern="\n">
         <token type="Text"/>
