@@ -1,0 +1,6 @@
+const 变量 = 2;
+let Δx: number = 变量 * 2;
+function scale(ñ: number): number {
+  return ñ * Δx;
+}
+console.log(scale(变量));
