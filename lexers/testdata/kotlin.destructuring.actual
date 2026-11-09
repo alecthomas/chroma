@@ -1,0 +1,10 @@
+fun main() {
+    val (key, value) = "name:value".split(":")
+    var (_, count: Int) = "items" to 2
+    val (
+        `first name`,
+        second,
+    ) = 1 to 2
+    val single = key
+    println("$single $value $count ${`first name`} $second")
+}
