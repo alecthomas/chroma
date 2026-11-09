@@ -1,6 +1,17 @@
 pre-commit:
   commands:
+    format-go:
+      run: bit format-go
+      glob: "*.go"
+      stage_fixed: true
     lexer-metadata:
-      run: ./bin/just lexer-metadata
+      run: bit lexer-metadata
       files: git ls-files -- lexers/lexers_gen.go
       stage_fixed: true
+
+pre-push:
+  commands:
+    lint:
+      run: bit lint
+    test:
+      run: bit test

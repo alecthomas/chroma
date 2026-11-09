@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"maps"
 	"strings"
 	"sync"
 
@@ -372,9 +373,7 @@ func (r *Rules) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		*r = Rules{}
 	}
 	rules, _ := xr.split()
-	for name, stateRules := range rules {
-		(*r)[name] = stateRules
-	}
+	maps.Copy(*r, rules)
 	return nil
 }
 

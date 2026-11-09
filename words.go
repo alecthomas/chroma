@@ -119,10 +119,10 @@ func (b *trieBuilder) nextFree(from int32) int32 {
 			unused &^= 1<<(from%64) - 1
 		}
 		if unused != 0 {
-			return int32(w*64 + bits.TrailingZeros64(unused))
+			return int32(w*64 + bits.TrailingZeros64(unused)) //nolint:gosec
 		}
 	}
-	return max(from, int32(len(b.used)*64))
+	return max(from, int32(len(b.used)*64)) //nolint:gosec
 }
 
 // place lays out the children of state, whose words share their first depth bytes.
@@ -282,7 +282,7 @@ walk:
 		}
 		var ok bool
 		if r < utf8.RuneSelf {
-			if state, ok = m.trie.step(state, byte(r)); !ok {
+			if state, ok = m.trie.step(state, byte(r)); !ok { //nolint:gosec
 				break
 			}
 		} else {
@@ -303,13 +303,13 @@ walk:
 	if ok, err := assertAt(m.prefix, text, pos); !ok || err != nil {
 		return -1, err
 	}
-	for i := len(ends) - 1; i >= 0; i-- {
-		ok, err := assertAt(m.suffix, text, ends[i])
+	for _, end := range slices.Backward(ends) {
+		ok, err := assertAt(m.suffix, text, end)
 		if err != nil {
 			return -1, err
 		}
 		if ok {
-			return ends[i], nil
+			return end, nil
 		}
 	}
 	return -1, nil

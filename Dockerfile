@@ -24,8 +24,8 @@ ENV CGO_ENABLED=0
 ENV GOOS=linux
 ENV GOARCH=amd64
 
-# Build the application using just
-RUN just chromad
+# Build the application using bit
+RUN bit chromad
 
 # Runtime stage
 FROM alpine:3.24 AS runtime
