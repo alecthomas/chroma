@@ -1,0 +1,11 @@
+let digits = /\d+(?:\.\d+)?/
+let match = input.firstMatch(of: /(?<year>\d{4})-(?<month>\d{2})/)
+let extended = #/
+    (?<key> \w+ ) \s* = \s* (?<value> .* )
+    /#
+let slash = #/a/b/#
+func pattern() -> Regex<Substring> {
+    return /[a-z]+/
+}
+let ratio = total / count / 2
+let half = (width / 2) // halve it

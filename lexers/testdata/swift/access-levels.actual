@@ -1,0 +1,6 @@
+open class Base {
+    open func run() {}
+    fileprivate var secret = 0
+}
+let file = open(path)
+handle.open()

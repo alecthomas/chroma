@@ -1,0 +1,5 @@
+struct Message: Sendable {}
+let task = Task(priority: .background) { try await load() }
+let stream = AsyncStream<Int> { continuation in continuation.finish() }
+await withTaskGroup(of: Void.self) { (group: inout TaskGroup<Void>) in }
+await MainActor.run { refresh() }

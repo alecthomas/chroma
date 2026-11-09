@@ -1,0 +1,5 @@
+struct Point: CustomStringConvertible, CustomDebugStringConvertible {
+    var description: String { "(\(x), \(y))" }
+}
+enum ParseError: ErrorType { case invalid }
+struct Flags: OptionSetType { let rawValue: Int }

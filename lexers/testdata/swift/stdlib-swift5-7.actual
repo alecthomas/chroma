@@ -1,0 +1,3 @@
+let clock = ContinuousClock()
+let timeout: Duration = .seconds(5)
+let pattern: Regex<Substring> = /\w+/
