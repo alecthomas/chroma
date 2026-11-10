@@ -1,0 +1,6 @@
+let values = [0x1p0, 0x1.fp3, 0xFp-2, 0xA.BP+2, 0x1_0.8p0_1]
+precondition(values == [1, 15.5, 3.75, 42.75, 33])
+let description = 0x1.fp3.description
+let range = 0x1p0...0x2p0
+let text = "value: \(0x1.fp3)"
+print(values)
