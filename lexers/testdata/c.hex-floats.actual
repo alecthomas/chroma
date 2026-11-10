@@ -1,0 +1,7 @@
+int main(void) {
+  double a = 0x1.8p+1;
+  double b = 0X.8P0;
+  float c = 0x1p-2F;
+  long double d = 0x1.p+0L;
+  return a == 3.0 && b == 0.5 && c == 0.25f && d == 1.0L ? 0 : 1;
+}
