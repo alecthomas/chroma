@@ -1,0 +1,10 @@
+struct Item;
+fn first<'static_value>(value: &'static_value Item) -> &'static_value Item { value }
+fn second<'_value>(value: &'_value Item) -> &'_value Item { value }
+fn main() {
+    let item = Item;
+    assert!(std::ptr::eq(first(&item), &item));
+    assert!(std::ptr::eq(second(&item), &item));
+    'static_loop: loop { break 'static_loop; }
+    '_loop: loop { break '_loop; }
+}
