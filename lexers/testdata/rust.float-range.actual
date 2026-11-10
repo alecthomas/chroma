@@ -1,0 +1,7 @@
+let exclusive = 1.0..2.0;
+let inclusive = 12.345..=67.8;
+let exponent = 1.0e2..2.0e2;
+let suffixed = 1.0f64..2.0f64;
+let integer = 1..2;
+let quoted = "1.0..2.0";
+// 1.0..2.0
