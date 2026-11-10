@@ -96,7 +96,7 @@
       <rule>
         <include state="commentsandwhitespace"/>
       </rule>
-      <rule pattern="\d+(\.\d*|[eE][+\-]?\d+)">
+      <rule pattern="\d+(\.\d*([eE][+\-]?\d+)?|[eE][+\-]?\d+)">
         <token type="LiteralNumberFloat"/>
       </rule>
       <rule pattern="0[bB][01]+">
