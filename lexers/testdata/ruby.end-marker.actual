@@ -1,0 +1,9 @@
+__END__value = 7
+  __END__ = 8
+value = __END__
+__END__ # ordinary identifier followed by a comment
+quoted = "__END__"
+# __END__
+puts __END__value + value
+__END__
+this is data, not Ruby
