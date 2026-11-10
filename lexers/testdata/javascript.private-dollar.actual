@@ -1,0 +1,12 @@
+class Counter {
+  #$ = 1;
+  #value$ = 2;
+  static #$offset = 3;
+  #bump$() { return ++this.#$; }
+  get #$total() { return this.#$ + this.#value$; }
+  set #$total(value) { this.#$ = value - this.#value$; }
+  read() { this.#$total = 5; return this.#bump$() + this.#$total + Counter.#$offset; }
+  static has(obj) { return #$ in obj; }
+}
+const counter = new Counter();
+if (counter.read() !== 13 || !Counter.has(counter) || Counter.has({})) throw new Error("wrong result");
