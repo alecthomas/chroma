@@ -1,0 +1,8 @@
+class UnicodeMarkerProbe {
+    public static void main(String[] args) {
+        char value = '\uu0061';
+        if (value != 'a') throw new AssertionError();
+        char maximum = '\uuuuFFFF';
+        if (maximum != 65535) throw new AssertionError();
+    }
+}

@@ -90,7 +90,7 @@
         <token type="LiteralString" />
         <push state="string" />
       </rule>
-      <rule pattern="&#x27;\\(?:[0-3]?[0-7]{2}|.)&#x27;|&#x27;[^\\]&#x27;|&#x27;\\u[0-9a-fA-F]{4}&#x27;">
+      <rule pattern="&#x27;\\(?:[0-3]?[0-7]{2}|.)&#x27;|&#x27;[^\\]&#x27;|&#x27;\\u+[0-9a-fA-F]{4}&#x27;">
         <token type="LiteralStringChar" />
       </rule>
       <rule pattern="(\.)((?:[^\W\d]|\$)[\w$]*)">
