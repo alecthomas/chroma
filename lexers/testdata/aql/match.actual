@@ -1,0 +1,15 @@
+MATCH (a:persons { _key: "eve" }) -[p:knows * 1..3]-> (b:persons)
+  RETURN { to: b.name, via: p.vertices[*].name }
+MATCH (p:persons WHERE p.name == "Alice" OR p.name LIKE "D%")
+  RETURN p.name
+MATCH path = (a:persons) <-[:knows|follows]- (b:persons) -[:knows]- (c)
+  RETURN path.vertices[*].name
+MATCH (a:persons { _key: "alice" } RETURN name, initial = LEFT(a.name, 1))
+      -[k:knows RETURN vertex]-> (b:persons RETURN name)
+  RETURN [a, k, b]
+MATCH (a:@@nodeColl { _key: @key }) -[:@@edgeColl1|@@edgeColl2]-> (b:@@nodeColl)
+  FILTER a.x || b.y AND arr[0]-1 < -2
+  RETURN b
+FOR x IN [1, 2]
+  FILTER x<-1 OR x <- 1 OR x<-[1][0]
+  RETURN (MATCH (a:x) -[:k|f]-> (b:y) RETURN b)

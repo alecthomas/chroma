@@ -116,7 +116,7 @@
       <rule pattern="@(?:_+[a-z0-9]+[a-z0-9_]*|[a-z0-9][a-z0-9_]*)">
         <token type="NameVariable"/>
       </rule>
-      <rule pattern="=~|!~|[=!&lt;&gt;]=?|[%?:/*+-]|\.\.|&amp;&amp;|\|\|">
+      <rule pattern="=~|!~|[=!&lt;&gt;]=?|[%?:/*+-]|\.\.|&amp;&amp;|\|\|?">
         <token type="Operator"/>
       </rule>
       <rule pattern="[.,(){}\[\]]">
@@ -134,7 +134,7 @@
           <token type="KeywordReserved"/>
         </bygroups>
       </rule>
-      <rule words="KEEP PRUNE SEARCH TO" suffix="\b">
+      <rule words="KEEP PRUNE SEARCH TO WHERE" suffix="\b">
         <token type="KeywordPseudo"/>
       </rule>
       <rule pattern="OPTIONS(?=\s*\{)">
