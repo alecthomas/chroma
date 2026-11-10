@@ -1,0 +1,10 @@
+values = [0.5, 1.25, 1_2.3_4, 1.5e-2, 1.5E+2, 1.5e1_0]
+divided = 1.5 / 2
+chosen = true ? 1.5 : 2.5
+text = 1.5.to_s
+range = 1..3
+member = 1.to_s
+exponent = 1e3
+quoted = "1.5e-3"
+pattern = /1.5e-3/
+# 1.5e-3 remains a comment
