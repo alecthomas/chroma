@@ -345,7 +345,7 @@
       <rule pattern="(&lt;&lt;-?)(&#34;|\&#39;)()(\2)(.*?\n)">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="__END__">
+      <rule pattern="^__END__$">
         <token type="CommentPreproc"/>
         <push state="end-part"/>
       </rule>
