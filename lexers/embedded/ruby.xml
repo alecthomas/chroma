@@ -365,6 +365,13 @@
         </bygroups>
         <push state="multiline-regex"/>
       </rule>
+      <rule pattern="((?:0|[1-9](?:_?[0-9])*)\.[0-9](?:_?[0-9])*(?:[eE][+\-]?[0-9](?:_?[0-9])*)?)(\s*)([/?])?">
+        <bygroups>
+          <token type="LiteralNumberFloat"/>
+          <token type="Text"/>
+          <token type="Operator"/>
+        </bygroups>
+      </rule>
       <rule pattern="(0(?:_?|[oO])[0-7]+(?:_[0-7]+)*)(\s*)([/?])?">
         <bygroups>
           <token type="LiteralNumberOct"/>
