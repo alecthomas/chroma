@@ -1,0 +1,6 @@
+void main() {
+  final value = .5;
+  final exponent = .25e+2;
+  if (!.5.isFinite) throw StateError('member');
+  if (value != 0.5 || exponent != 25) throw StateError('wrong value');
+}
