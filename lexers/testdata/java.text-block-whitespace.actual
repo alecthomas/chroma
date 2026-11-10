@@ -1,0 +1,8 @@
+class TextBlockWhitespace {
+    public static void main(String[] args) {
+        String text = """ 	
+            hello "quoted"
+            """;
+        if (!text.equals("hello \"quoted\"\n")) throw new AssertionError(text);
+    }
+}

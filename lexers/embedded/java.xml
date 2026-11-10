@@ -82,7 +82,7 @@
         </bygroups>
         <push state="import" />
       </rule>
-      <rule pattern="&quot;&quot;&quot;\n">
+      <rule pattern="&quot;&quot;&quot;[ \t\f]*(?:\r\n?|\n)">
         <token type="LiteralString" />
         <push state="multiline_string" />
       </rule>
