@@ -49,6 +49,9 @@
       </rule>
     </state>
     <state name="class">
+      <rule pattern="(?=[:{])">
+        <pop depth="1"/>
+      </rule>
       <rule pattern="\x60[^\x60]+?\x60">
         <token type="NameClass"/>
         <pop depth="1"/>
