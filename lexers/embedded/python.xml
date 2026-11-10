@@ -56,6 +56,9 @@
       </rule>
     </state>
     <state name="expr">
+      <rule pattern="\\(?:\r\n?|\n)">
+        <token type="Text"/>
+      </rule>
       <rule pattern="#.*$">
         <token type="CommentSingle"/>
       </rule>
