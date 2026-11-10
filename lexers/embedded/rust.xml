@@ -110,7 +110,7 @@
         <token type="LiteralString"/>
         <pop depth="1"/>
       </rule>
-      <rule pattern="\\[&#39;&#34;\\nrt]|\\(?=\n)|\\x[0-7][0-9a-fA-F]|\\0|\\u\{[0-9a-fA-F]{1,6}\}|\{\{|\}\}">
+      <rule pattern="\\[&#39;&#34;\\nrt]|\\(?=\n)|\\x[0-7][0-9a-fA-F]|\\0|\\u\{(?:[0-9a-fA-F]_*){1,6}\}|\{\{|\}\}">
         <token type="LiteralStringEscape"/>
       </rule>
       <rule pattern="\{[^}]*\}">
@@ -128,7 +128,7 @@
         <token type="LiteralString"/>
         <pop depth="1"/>
       </rule>
-      <rule pattern="\\[&#39;&#34;\\nrt]|\\(?=\n)|\\x[0-7][0-9a-fA-F]|\\0|\\u\{[0-9a-fA-F]{1,6}\}">
+      <rule pattern="\\[&#39;&#34;\\nrt]|\\(?=\n)|\\x[0-7][0-9a-fA-F]|\\0|\\u\{(?:[0-9a-fA-F]_*){1,6}\}">
         <token type="LiteralStringEscape"/>
       </rule>
       <rule pattern="[^\\&#34;]+">
@@ -250,7 +250,7 @@
           <token type="NameLabel"/>
         </bygroups>
       </rule>
-      <rule pattern="&#39;(\\[&#39;&#34;\\nrt]|\\x[0-7][0-9a-fA-F]|\\0|\\u\{[0-9a-fA-F]{1,6}\}|.)&#39;">
+      <rule pattern="&#39;(\\[&#39;&#34;\\nrt]|\\x[0-7][0-9a-fA-F]|\\0|\\u\{(?:[0-9a-fA-F]_*){1,6}\}|.)&#39;">
         <token type="LiteralStringChar"/>
       </rule>
       <rule pattern="(b)(&#39;(?:\\[&#39;&#34;\\nrt]|\\x[0-9a-fA-F]{2}|\\0|.)&#39;)">
