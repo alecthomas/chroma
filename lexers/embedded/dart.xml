@@ -115,16 +115,16 @@
       <rule pattern="[a-zA-Z_$]\w*">
         <token type="Name"/>
       </rule>
-      <rule pattern="\.\d+([eE][+-]?\d+)?">
+      <rule pattern="\.\d(?:_*\d)*([eE][+-]?\d(?:_*\d)*)?">
         <token type="LiteralNumber"/>
       </rule>
       <rule pattern="[(){}\[\],.;]">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="0[xX][0-9a-fA-F]+">
+      <rule pattern="0[xX][0-9a-fA-F](?:_*[0-9a-fA-F])*">
         <token type="LiteralNumberHex"/>
       </rule>
-      <rule pattern="\d+(\.\d*)?([eE][+-]?\d+)?">
+      <rule pattern="\d(?:_*\d)*(\.(?:\d(?:_*\d)*)?)?([eE][+-]?\d(?:_*\d)*)?">
         <token type="LiteralNumber"/>
       </rule>
       <rule pattern="\n">
