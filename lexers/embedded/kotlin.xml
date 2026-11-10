@@ -48,7 +48,29 @@
         <pop depth="1"/>
       </rule>
     </state>
+    <state name="declaration-comments">
+      <rule pattern="//[^\n]*\n?">
+        <token type="CommentSingle"/>
+        <push state="declaration-whitespace"/>
+      </rule>
+      <rule pattern="/[*]">
+        <token type="CommentMultiline"/>
+        <push state="declaration-whitespace" state="comment"/>
+      </rule>
+    </state>
+    <state name="declaration-whitespace">
+      <rule pattern="\s+">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule>
+        <pop depth="1"/>
+      </rule>
+    </state>
     <state name="class">
+      <rule>
+        <include state="declaration-comments"/>
+      </rule>
       <rule pattern="(?=[:{])">
         <pop depth="1"/>
       </rule>
@@ -62,6 +84,9 @@
       </rule>
     </state>
     <state name="property">
+      <rule>
+        <include state="declaration-comments"/>
+      </rule>
       <rule pattern="(\()(\s*)">
         <bygroups>
           <token type="Punctuation"/>
@@ -222,6 +247,9 @@
       </rule>
     </state>
     <state name="function">
+      <rule>
+        <include state="declaration-comments"/>
+      </rule>
       <rule pattern="&lt;">
         <token type="Punctuation"/>
         <push state="generics-specification"/>

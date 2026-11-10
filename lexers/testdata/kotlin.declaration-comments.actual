@@ -1,0 +1,17 @@
+class /* outer /* inner */ end */ Box(val n: Int)
+interface // contract
+Marker
+object /* singleton */ Single : Marker
+fun /* callable */ value(): Int {
+    val // stored
+    result = Box(7)
+    var /* mutable */ count = result.n
+    count += 1
+    return count
+}
+private val anonymous = object /* anonymous */ { val n = 3 }
+fun /* generic */ <T> /* identity */ identity(value: T) = value
+fun main() {
+    check(value() == 8)
+    check(identity(anonymous.n) == 3)
+}
