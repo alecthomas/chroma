@@ -1,0 +1,5 @@
+fixed = ?\u0041
+braced = ?\u{1F600}
+spaced = ?\u{ 0042 }
+empty = ?\u{}
+puts [fixed, braced, spaced, empty].map(&:codepoints)
