@@ -1,0 +1,11 @@
+package main
+
+type 类型 struct{}
+type 接口 interface { 方法() int }
+func (类型) 方法() int { return 2 }
+func 变量() int { return 1 }
+
+func main() {
+    var value 接口 = 类型{}
+    if 变量() + value.方法() != 3 { panic("unexpected result") }
+}
