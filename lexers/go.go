@@ -58,7 +58,7 @@ func goRules() Rules {
 			{"(`)([^`]*)(`)", ByGroups(LiteralString, UsingLexer(TypeRemappingLexer(GoTextTemplate, TypeMapping{{Other, LiteralString, nil}})), LiteralString), nil},
 			{`"(\\\\|\\"|[^"])*"`, LiteralString, nil},
 			{`(<<=|>>=|<<|>>|<=|>=|&\^=|&\^|\+=|-=|\*=|/=|%=|&=|\|=|&&|\|\||<-|\+\+|--|==|!=|:=|\.\.\.|[+\-*/%&])`, Operator, nil},
-			{`([a-zA-Z_]\w*)(\s*)(\()`, ByGroups(NameFunction, UsingSelf("root"), Punctuation), nil},
+			{`([_\p{L}]\w*)(\s*)(\()`, ByGroups(NameFunction, UsingSelf("root"), Punctuation), nil},
 			{`[|^<>=!()\[\]{}.,;:~]`, Punctuation, nil},
 			{`[^\W\d]\w*`, NameOther, nil},
 		},
