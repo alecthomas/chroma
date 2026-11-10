@@ -1,0 +1,7 @@
+values = [0XFF, 0Xab_cd, 0B1010, 0B10_01]
+divided = 0X10/2
+chosen = 0B1 ? 0X2 : 0X3
+text = 0XFF.to_s(16)
+quoted = "0XFF 0B10"
+pattern = /0XFF|0B10/
+# 0XFF 0B10 remain a comment
