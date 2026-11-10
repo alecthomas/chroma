@@ -1,0 +1,24 @@
+protocol 🐾 { var π: Int { get } }
+struct 🐶: 🐾 { let π = 3 }
+@propertyWrapper struct 包装<Value> { var wrappedValue: Value }
+struct Model { @包装 var π = 3 }
+func π🐶(_ value: Int) -> Int { value }
+func makeDog() -> some 🐾 { 🐶() }
+let class🐶 = 🐶()
+let key = \🐶.π
+let result = π🐶(class🐶[keyPath: key])
+let optional🐶: Int? = 3
+let String🐶 = optional🐶!
+#if FLAG🐶
+let conditional🐶 = 3
+#endif
+precondition(result == 3 && String🐶 == 3 && Model().π == 3)
+precondition(makeDog().π == 3)
+let á = 1
+let ¨name = á
+#if🐶
+let branch = 1
+#else
+let branch = ¨name
+#endif
+precondition(branch == 1)

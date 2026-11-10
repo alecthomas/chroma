@@ -1,0 +1,3 @@
+@freestanding(expression) macro 🐶() -> Int = #externalMacro(module: "Example", type: "Dog")
+let value = #🐶()
+import 模块🐶
