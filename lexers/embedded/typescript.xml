@@ -212,6 +212,9 @@
         <token type="Punctuation" />
         <push state="slashstartsregex" />
       </rule>
+      <rule pattern="\.[0-9](?:_?[0-9])*(?:[eE][+\-]?[0-9](?:_?[0-9])*)?">
+        <token type="LiteralNumberFloat" />
+      </rule>
       <rule pattern="[})\].]">
         <token type="Punctuation" />
       </rule>

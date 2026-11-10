@@ -1,0 +1,11 @@
+const values = [.5, .25e2, .5E-2, .1_25e1_0];
+const chosen = true?.5:.25;
+const text = .5.toString();
+const negative = -.5;
+function half() { return .5; }
+const spread = [...values];
+const object = { value: 1 };
+const member = object?.value;
+const quoted = ".5";
+const pattern = /\.5/;
+// .5 remains a comment
