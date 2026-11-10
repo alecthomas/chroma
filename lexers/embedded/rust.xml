@@ -293,7 +293,7 @@
           <token type="LiteralString"/>
         </bygroups>
       </rule>
-      <rule pattern="&#39;(static|_)">
+      <rule pattern="&#39;(static|_)\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="&#39;">
@@ -350,7 +350,7 @@
       <rule pattern="&amp;">
         <token type="KeywordPseudo"/>
       </rule>
-      <rule pattern="&#39;(static|_)">
+      <rule pattern="&#39;(static|_)\b">
         <token type="NameBuiltin"/>
       </rule>
       <rule pattern="&#39;">
