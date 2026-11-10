@@ -1,0 +1,10 @@
+annotation class My_Annotation
+@My_Annotation
+class My_Class(val my_value: Int)
+fun get_value(): Int = My_Class(7).my_value
+fun <T_Value> identity(value: T_Value): T_Value = value
+fun main() {
+    val my_value = identity(get_value())
+    check("$my_value" == "7")
+    check("""$my_value""" == "7")
+}
