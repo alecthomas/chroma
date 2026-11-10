@@ -271,7 +271,7 @@
         <token type="LiteralNumberHex"/>
         <push state="number_lit"/>
       </rule>
-      <rule pattern="[0-9][0-9_]*(\.[0-9_]+[eE][+\-]?[0-9_]+|\.[0-9_]*(?!\.)|[eE][+\-]?[0-9_]+)">
+      <rule pattern="[0-9][0-9_]*(\.[0-9_]+[eE][+\-]?[0-9_]+|\.[0-9_]+(?=\.\.)|\.[0-9_]*(?!\.)|[eE][+\-]?[0-9_]+)">
         <token type="LiteralNumberFloat"/>
         <push state="number_lit"/>
       </rule>
