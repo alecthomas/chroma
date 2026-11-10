@@ -1,0 +1,8 @@
+void main() {
+  final integer = 1_000;
+  final fraction = 1.2_5;
+  final leading = .5_0;
+  final hex = 0xFF_FF;
+  final exponent = 1__0e1_0;
+  print([integer, fraction, leading, hex, exponent]);
+}
