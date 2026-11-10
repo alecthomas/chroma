@@ -1,0 +1,3 @@
+unsigned long long values[] = {0X0, 0X1, 0Xff, 0XCAFE, 0X7fUL, 0X42ULL};
+unsigned lower = 0xbeef;
+const char *text = "0XCAFE"; // 0XCAFE stays text

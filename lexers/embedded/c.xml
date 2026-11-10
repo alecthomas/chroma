@@ -182,7 +182,7 @@
       <rule pattern="0[xX](?:(?&gt;[0-9a-fA-F]+)(?:\.(?&gt;[0-9a-fA-F]+)?)?|\.(?&gt;[0-9a-fA-F]+))[pP][+-]?(?&gt;[0-9]+)[fFlL]?">
         <token type="LiteralNumberFloat"/>
       </rule>
-      <rule pattern="0x[0-9a-fA-F]+[LlUu]*">
+      <rule pattern="0[xX][0-9a-fA-F]+[LlUu]*">
         <token type="LiteralNumberHex"/>
       </rule>
       <rule pattern="0[0-7]+[LlUu]*">
