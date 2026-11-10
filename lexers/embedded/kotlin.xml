@@ -243,7 +243,7 @@
         <token type="LiteralString"/>
         <pop depth="1"/>
       </rule>
-      <rule pattern="(?:[^$&#34;]+|\&#34;{1,2}[^&#34;])+">
+      <rule pattern="(?:[^$&#34;]+|\&#34;{1,2}(?=[^&#34;]))+">
         <token type="LiteralString"/>
       </rule>
       <rule>

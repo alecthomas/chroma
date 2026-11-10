@@ -1,0 +1,9 @@
+fun main() {
+    val value = 7
+    val one = """quote "$value"""
+    val two = """quotes ""${value}"""
+    check(one == "quote \"7")
+    check(two == "quotes \"\"7")
+    println(one)
+    println(two)
+}
