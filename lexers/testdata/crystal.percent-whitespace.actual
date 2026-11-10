@@ -1,0 +1,7 @@
+% hello 
+%	hello	
+value = % escaped\ space 
+value = %	escaped\	tab	
+value = 10 % 3
+quoted = "% hello "
+# % hello 
