@@ -133,7 +133,7 @@
   {"type":"Text","value":" "},
   {"type":"KeywordReserved","value":"IN"},
   {"type":"Text","value":" "},
-  {"type":"LiteralNumberFloat","value":"2"},
+  {"type":"LiteralNumberInteger","value":"2"},
   {"type":"Operator","value":".."},
   {"type":"LiteralNumberInteger","value":"4"},
   {"type":"Text","value":" "},
