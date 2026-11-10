@@ -372,14 +372,14 @@
           <token type="Operator"/>
         </bygroups>
       </rule>
-      <rule pattern="(0x[0-9A-Fa-f]+(?:_[0-9A-Fa-f]+)*)(\s*)([/?])?">
+      <rule pattern="(0[xX][0-9A-Fa-f]+(?:_[0-9A-Fa-f]+)*)(\s*)([/?])?">
         <bygroups>
           <token type="LiteralNumberHex"/>
           <token type="Text"/>
           <token type="Operator"/>
         </bygroups>
       </rule>
-      <rule pattern="(0b[01]+(?:_[01]+)*)(\s*)([/?])?">
+      <rule pattern="(0[bB][01]+(?:_[01]+)*)(\s*)([/?])?">
         <bygroups>
           <token type="LiteralNumberBin"/>
           <token type="Text"/>
