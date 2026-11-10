@@ -1,0 +1,6 @@
+fn main() {
+    let value = '\u{1_F600}';
+    assert_eq!(value, '😀');
+    assert_eq!("\u{41_}", "A");
+    assert_eq!(format!("\u{4__2}"), "B");
+}
