@@ -1,0 +1,14 @@
+class Counter {
+  #value = 7;
+  static #$total = 1;
+  #read() { return this.#value; }
+  get #current() { return this.#read(); }
+  set #current(value) { this.#value = value; }
+  has(other) { return #value in other; }
+  render() {
+    this.#current = 7;
+    return <span data-count={Counter.#$total}>{this.#current}</span>;
+  }
+}
+const counter = new Counter();
+if (counter.render().children[0] !== 7 || !counter.has(counter)) throw new Error("private members");
