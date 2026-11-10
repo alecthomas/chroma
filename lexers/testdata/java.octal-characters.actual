@@ -1,0 +1,10 @@
+class OctalCharProbe {
+    public static void main(String[] args) {
+        char value = '\141';
+        if (value != 'a') throw new AssertionError();
+        char zero = '\00';
+        if (zero != 0) throw new AssertionError();
+        char max = '\377';
+        if (max != 255) throw new AssertionError();
+    }
+}
