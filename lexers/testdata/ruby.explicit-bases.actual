@@ -1,0 +1,7 @@
+values = [0o17, 0O7_1, 0d12, 0D1_024]
+divided = 0o20/2
+chosen = 0D1 ? 0o2 : 0O3
+text = 0d255.to_s(16)
+quoted = "0o17 0D12"
+pattern = /0o17|0D12/
+# 0o17 0D12 remain a comment
