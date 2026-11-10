@@ -309,7 +309,7 @@
       <rule pattern="@\w+">
         <token type="KeywordDeclaration" />
       </rule>
-      <rule pattern="#[a-zA-Z_$][\w$]*">
+      <rule pattern="#(?:[$_]|[\p{L}\p{Nl}\p{Other_ID_Start}-[\p{Pattern_Syntax}]])(?:\$|[\w\p{Nl}\p{Mc}\p{Other_ID_Start}\p{Other_ID_Continue}\u30fb\uff65-[\p{Pattern_Syntax}]])*">
         <token type="Name" />
       </rule>
     </state>

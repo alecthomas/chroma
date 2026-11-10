@@ -1,0 +1,14 @@
+class Counter {
+  #π = 7;
+  #℘ = 2;
+  #aा = 3;
+  #a· = 4;
+  static #变量 = 1;
+  #𐐀() { return this.#π; }
+  get #Ⅳ() { return this.#𐐀(); }
+  set #अ́(value) { this.#π = value; }
+  has(other) { return #π in other; }
+  read() { this.#अ́ = 7; return this.#Ⅳ + Counter.#变量 + this.#℘ + this.#aा + this.#a·; }
+}
+const counter = new Counter();
+if (counter.read() !== 17 || !counter.has(counter)) throw new Error("private names");
