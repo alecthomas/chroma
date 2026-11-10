@@ -155,7 +155,7 @@
         <token type="LiteralStringBacktick"/>
         <push state="interp"/>
       </rule>
-      <rule pattern="#[a-zA-Z_]\w*">
+      <rule pattern="#[a-zA-Z_$][\w$]*">
         <token type="Name"/>
       </rule>
     </state>

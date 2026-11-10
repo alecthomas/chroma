@@ -306,7 +306,7 @@
       <rule pattern="@\w+">
         <token type="KeywordDeclaration" />
       </rule>
-      <rule pattern="#[a-zA-Z_]\w*">
+      <rule pattern="#[a-zA-Z_$][\w$]*">
         <token type="Name" />
       </rule>
     </state>
