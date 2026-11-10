@@ -136,18 +136,20 @@
       <rule pattern="(%[QWx]([\W_]))((?:\\\2|(?!\2).)*)(\2)">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="(?&lt;=[-+/*%=&lt;&gt;&amp;!^|~,(])(\s*)(%([\t ])(?:(?:\\\3|(?!\3).)*)\3)">
+      <rule pattern="(?&lt;=[-+/*%=&lt;&gt;&amp;!^|~,(])(\s*)(%)([\t ])((?:\\\3|(?!\3).)*\3)">
         <bygroups>
           <token type="Text"/>
           <token type="LiteralStringOther"/>
-          <token type="None"/>
+          <token type="LiteralStringOther"/>
+          <token type="LiteralStringOther"/>
         </bygroups>
       </rule>
-      <rule pattern="^(\s*)(%([\t ])(?:(?:\\\3|(?!\3).)*)\3)">
+      <rule pattern="^(\s*)(%)([\t ])((?:\\\3|(?!\3).)*\3)">
         <bygroups>
           <token type="Text"/>
           <token type="LiteralStringOther"/>
-          <token type="None"/>
+          <token type="LiteralStringOther"/>
+          <token type="LiteralStringOther"/>
         </bygroups>
       </rule>
       <rule pattern="(%([^a-zA-Z0-9\s]))((?:\\\2|(?!\2).)*)(\2)">
