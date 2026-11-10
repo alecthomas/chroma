@@ -1,0 +1,9 @@
+direct = f"{1 + \
+2}"
+nested = f"""{([1, \
+2][1])!r}"""
+width = f"{3:0{1 + \
+2}d}"
+quoted = f"{len('a' \
+'bc')}"
+assert (direct, nested, width, quoted) == ("3", "2", "003", "3")
