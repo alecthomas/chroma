@@ -1,0 +1,9 @@
+let closed = 1...3
+let halfOpen = 1..<3
+let bitCount = 1.nonzeroBitCount
+let partial = 1...
+let decimal = 1.25
+let exponent = 1.25e2
+let integralExponent = 1e2
+extension Int { var _e2: Int { self } }
+let underscoredMember = 1._e2
