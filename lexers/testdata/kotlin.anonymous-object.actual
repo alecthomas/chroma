@@ -1,0 +1,10 @@
+interface Marker
+open class Base(val number: Int)
+
+fun main() {
+    val empty = object {}
+    val plain = object { val count = 1 }
+    val derived = object : Base(2), Marker { fun getCount() = number }
+    check(plain.count == 1 && derived.getCount() == 2)
+    check(empty.toString().isNotEmpty())
+}
