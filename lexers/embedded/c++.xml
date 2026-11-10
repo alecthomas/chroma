@@ -169,10 +169,11 @@
           <token type="LiteralStringChar"/>
         </bygroups>
       </rule>
-      <rule pattern="(\d+\.\d*|\.\d+|\d+)[eE][+-]?\d+[LlUu]*">
+      <!-- Atomic digit sequences avoid backtracking on long integers (#290). -->
+      <rule pattern="((?&gt;\d+(?:&#39;\d+)*)\.(?:(?&gt;\d+(?:&#39;\d+)*))?|\.(?&gt;\d+(?:&#39;\d+)*)|(?&gt;\d+(?:&#39;\d+)*))[eE][+-]?(?&gt;\d+(?:&#39;\d+)*)[LlUu]*">
         <token type="LiteralNumberFloat"/>
       </rule>
-      <rule pattern="(\d+\.\d*|\.\d+|\d+[fF])[fF]?">
+      <rule pattern="((?&gt;\d+(?:&#39;\d+)*)\.(?:(?&gt;\d+(?:&#39;\d+)*))?|\.(?&gt;\d+(?:&#39;\d+)*)|(?&gt;\d+(?:&#39;\d+)*)[fF])[fF]?">
         <token type="LiteralNumberFloat"/>
       </rule>
       <rule pattern="0[xX]([0-9A-Fa-f](&#39;?[0-9A-Fa-f]+)*)[LlUu]*">

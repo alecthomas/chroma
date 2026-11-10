@@ -1,0 +1,8 @@
+int main() {
+    constexpr double a = 1'234.5'6;
+    constexpr double b = 1.2'5e1'0;
+    constexpr double c = .1'2e+0'2;
+    static_assert(a == 1234.56, "a");
+    static_assert(b == 12500000000.0, "b");
+    static_assert(c == 12.0, "c");
+}
