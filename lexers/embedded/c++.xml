@@ -176,6 +176,9 @@
       <rule pattern="((?&gt;\d+(?:&#39;\d+)*)\.(?:(?&gt;\d+(?:&#39;\d+)*))?|\.(?&gt;\d+(?:&#39;\d+)*)|(?&gt;\d+(?:&#39;\d+)*)[fF])[fF]?">
         <token type="LiteralNumberFloat"/>
       </rule>
+      <rule pattern="0[xX](?:(?&gt;[0-9a-fA-F]+(?:&#39;[0-9a-fA-F]+)*)(?:\.(?&gt;[0-9a-fA-F]+(?:&#39;[0-9a-fA-F]+)*)?)?|\.(?&gt;[0-9a-fA-F]+(?:&#39;[0-9a-fA-F]+)*))[pP][+-]?(?&gt;[0-9]+(?:&#39;[0-9]+)*)[fFlL]?">
+        <token type="LiteralNumberFloat"/>
+      </rule>
       <rule pattern="0[xX]([0-9A-Fa-f](&#39;?[0-9A-Fa-f]+)*)[LlUu]*">
         <token type="LiteralNumberHex"/>
       </rule>
