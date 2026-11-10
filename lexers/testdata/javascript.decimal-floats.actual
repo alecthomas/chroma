@@ -1,0 +1,4 @@
+const values = [1.25e3, 1.e-2, 1e3, 1E+3, 0.25E-2, 2.5E+2];
+const member = 1..toString();
+const integer = 42;
+const text = ".5e2 1e3";
