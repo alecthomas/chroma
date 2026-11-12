@@ -1,0 +1,31 @@
+enum Color { red, green }
+
+sealed class Shape {}
+
+base class Square extends Shape {}
+
+interface class Named {}
+
+mixin Walker {}
+
+extension Shout on String {
+  String shout() => toUpperCase();
+}
+
+class Box {
+  late final int size;
+  external void draw();
+  void update(covariant Shape s) {}
+}
+
+void main() {
+  try {
+    run();
+  } on FormatException catch (e) {
+    rethrow;
+  }
+  final label = switch (Color.red) {
+    Color c when c == Color.red => 'red',
+    _ => 'other',
+  };
+}
