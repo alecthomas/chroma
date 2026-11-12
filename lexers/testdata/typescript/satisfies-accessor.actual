@@ -1,0 +1,5 @@
+const config = { port: 8080 } satisfies Config;
+class Point {
+  accessor x = 0;
+  static accessor origin = new Point();
+}
