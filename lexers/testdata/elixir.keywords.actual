@@ -1,0 +1,18 @@
+defmodule Account do
+  defstruct [:balance]
+  defguard is_positive(x) when is_integer(x) and x > 0
+  defguardp is_zero(x) when x == 0
+
+  def withdraw(account, amount) when is_positive(amount) do
+    with {:ok, balance} <- Map.fetch(account, :balance),
+         true <- balance >= amount do
+      {:ok, %{account | balance: balance - amount}}
+    else
+      _ -> {:error, :insufficient_funds}
+    end
+  rescue
+    e -> reraise e, __STACKTRACE__
+  end
+
+  defoverridable withdraw: 2
+end
