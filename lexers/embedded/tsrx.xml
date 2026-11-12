@@ -332,7 +332,7 @@
         <token type="NameOther" />
       </rule>
       <rule
-        pattern="(abstract|async|boolean|class|const|debugger|enum|export|extends|from|get|global|goto|implements|import|interface|namespace|package|private|protected|public|readonly|require|set|static|super|type|using)\b"
+        pattern="(abstract|accessor|async|boolean|class|const|debugger|enum|export|extends|from|get|global|goto|implements|import|interface|namespace|package|private|protected|public|readonly|require|set|static|super|type|using)\b"
       >
         <token type="KeywordReserved" />
       </rule>
@@ -356,7 +356,7 @@
       <rule words="string bool number any never object symbol unique unknown bigint" prefix="\b" suffix="\b">
         <token type="KeywordType" />
       </rule>
-      <rule words="constructor declare interface as" prefix="\b" suffix="\b">
+      <rule words="constructor declare interface as satisfies" prefix="\b" suffix="\b">
         <token type="KeywordReserved" />
       </rule>
       <rule pattern="(super)(\s*)(\([\w,?.$\s]+\s*\))">
