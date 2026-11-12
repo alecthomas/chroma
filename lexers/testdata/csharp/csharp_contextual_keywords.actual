@@ -1,0 +1,9 @@
+public required string Name { get; init; }
+nint size = nameof(Name).Length;
+var copy = point with { X = 1 };
+if (c is >= 'a' and <= 'z' or '_') { }
+if (obj is not null) { }
+catch (IOException e) when (e.HResult == 32) { }
+void M<T>() where T : unmanaged { }
+void N<T>() where T : notnull { }
+scoped ref int r = ref x;
