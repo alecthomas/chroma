@@ -1,0 +1,9 @@
+enum Color {
+  case Red, Green
+}
+
+export scala.math.max
+
+given Ordering[Int] = Ordering.Int
+
+def sign(x: Int) = if x < 0 then -1 else 1
