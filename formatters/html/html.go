@@ -261,14 +261,31 @@ func (r lineRanges) match(rangeIndex, line int) (bool, int) {
 	return false, rangeIndex
 }
 
-func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) (err error) {
-	return f.writeHTML(w, style, slices.Collect(iterator))
+func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) error {
+	return f.writeHTML(w, style, slices.Collect(iterator), nil)
+}
+
+// FormatAnnotated renders source annotations over the supplied token stream.
+func (f *Formatter) FormatAnnotated(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token], annotations []Annotation) error {
+	tokens := slices.Collect(iterator)
+	if len(annotations) == 0 {
+		return f.writeHTML(w, style, tokens, nil)
+	}
+	renderer, err := newAnnotationRenderer(annotations, tokens)
+	if err != nil {
+		return err
+	}
+	output := &annotationWriter{writer: w}
+	if err := f.writeHTML(output, style, tokens, renderer); err != nil {
+		return err
+	}
+	return output.err
 }
 
 // We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
 //
 // OTOH we need to be super careful about correct escaping...
-func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.Token) (err error) { // nolint: gocyclo
+func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.Token, annotations *annotationRenderer) (err error) { // nolint: gocyclo
 	css := f.styleCache.get(style, true)
 	if f.standalone {
 		fmt.Fprint(w, "<html>\n")
@@ -358,6 +375,10 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		}
 
 		for _, token := range tokens {
+			if annotations != nil {
+				annotations.writeToken(f, w, css, token)
+				continue
+			}
 			html := html.EscapeString(token.String())
 			attr := f.styleAttr(css, token.Type)
 			if attr != "" {
