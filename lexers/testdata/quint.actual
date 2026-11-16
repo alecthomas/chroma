@@ -1,0 +1,43 @@
+#!/usr/bin/env quint
+// A small counter, in the style of the Quint tutorials.
+/// Documentation comment for the module.
+/* a block comment
+   spanning lines */
+module counter {
+  import basicSpells.* from "./spells/basicSpells"
+  export Foo as Bar
+
+  const MAX: int
+  var n: int
+  var log: List[str]
+
+  type Color = | Red | Green(int) | Blue
+  type Pair = { fst: int, snd: (int, bool) }
+
+  pure def double(x: int): int = x * 2
+  pure val limit = 0x1F + 1_000
+
+  def classify(c: Color): str =
+    match c {
+    | Red => "red"
+    | Green(k) => if (k > 0) "green" else "dark \"green\""
+    | Blue => ""
+    }
+
+  action init = all {
+    n' = 0,
+    log' = [],
+  }
+
+  action step = {
+    nondet k = Set(1, 2, 3).oneOf()
+    any {
+      all { n < MAX, n' = n + k, log' = log.append("up") },
+      all { n >= MAX, n' = 0, log' = log },
+    }
+  }
+
+  val inv = and { n >= 0, not(n > MAX), true implies Nat.contains(n) }
+  temporal live = eventually(n == MAX) and weakFair(step)
+  run stepTest = init.then(step).then(step).expect(n != 0)
+}

@@ -3191,6 +3191,15 @@ var embeddedLexers = []struct {
 		},
 		DotAll: true,
 	}},
+	{"embedded/quint.xml", chroma.Config{
+		Name: "Quint",
+		Aliases: []string{
+			"quint",
+		},
+		Filenames: []string{
+			"*.qnt",
+		},
+	}},
 	{"embedded/r.xml", chroma.Config{
 		Name: "R",
 		Aliases: []string{
@@ -3980,6 +3989,16 @@ var embeddedLexers = []struct {
 		},
 		MimeTypes: []string{
 			"application/x-thrift",
+		},
+	}},
+	{"embedded/tlaplus.xml", chroma.Config{
+		Name: "TLA+",
+		Aliases: []string{
+			"tlaplus",
+			"tla",
+		},
+		Filenames: []string{
+			"*.tla",
 		},
 	}},
 	{"embedded/toml.xml", chroma.Config{
