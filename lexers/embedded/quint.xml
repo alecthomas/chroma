@@ -1,0 +1,136 @@
+<lexer>
+  <config>
+    <name>Quint</name>
+    <alias>quint</alias>
+    <filename>*.qnt</filename>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\A#!.*">
+        <token type="CommentHashbang"/>
+      </rule>
+      <rule pattern="///.*">
+        <token type="CommentSpecial"/>
+      </rule>
+      <rule pattern="//.*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="/\*">
+        <token type="CommentMultiline"/>
+        <push state="comment"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <push state="string"/>
+      </rule>
+      <rule pattern="\b(module)(\s+)([A-Za-z_]\w*)">
+        <bygroups>
+          <token type="KeywordNamespace"/>
+          <token type="Text"/>
+          <token type="NameNamespace"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\b(type)(\s+)([A-Za-z_]\w*)">
+        <bygroups>
+          <token type="KeywordDeclaration"/>
+          <token type="Text"/>
+          <token type="NameClass"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\b(def|action|temporal|run)(\s+)([A-Za-z_]\w*)">
+        <bygroups>
+          <token type="KeywordDeclaration"/>
+          <token type="Text"/>
+          <token type="NameFunction"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\b(val|const|var|nondet|assume)(\s+)([A-Za-z_]\w*)">
+        <bygroups>
+          <token type="KeywordDeclaration"/>
+          <token type="Text"/>
+          <token type="NameVariable"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\b(?:import|export|from|as)\b">
+        <token type="KeywordNamespace"/>
+      </rule>
+      <rule pattern="\b(?:module|type|assume|const|var|val|nondet|def|pure|action|temporal|run)\b">
+        <token type="KeywordDeclaration"/>
+      </rule>
+      <rule pattern="\b(?:if|else|match|all|any|leadsTo|weakFair|strongFair)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(?:and|or|not|implies|iff)\b">
+        <token type="OperatorWord"/>
+      </rule>
+      <rule pattern="\b(?:true|false)\b">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="\b(?:int|str|bool|Set|List|Map|Tup|Rec)\b">
+        <token type="KeywordType"/>
+      </rule>
+      <rule pattern="\b(?:Bool|Int|Nat|assert)\b">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="(\|)(\s*)([A-Z]\w*)">
+        <bygroups>
+          <token type="Operator"/>
+          <token type="Text"/>
+          <token type="NameClass"/>
+        </bygroups>
+      </rule>
+      <rule pattern="0x[0-9a-fA-F](_?[0-9a-fA-F])*">
+        <token type="LiteralNumberHex"/>
+      </rule>
+      <rule pattern="\d(_?\d)*">
+        <token type="LiteralNumberInteger"/>
+      </rule>
+      <rule pattern="[A-Za-z_]\w*(?=\s*\()">
+        <token type="NameFunction"/>
+      </rule>
+      <rule pattern="[A-Za-z_]\w*">
+        <token type="Name"/>
+      </rule>
+      <rule pattern="\.\.\.|=&gt;|-&gt;|==|!=|&lt;=|&gt;=|[&lt;&gt;=+\-*/%^|&#39;]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="::|[{}()\[\],;:.]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="comment">
+      <rule pattern="[^*]+">
+        <token type="CommentMultiline"/>
+      </rule>
+      <rule pattern="\*/">
+        <token type="CommentMultiline"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\*">
+        <token type="CommentMultiline"/>
+      </rule>
+    </state>
+    <state name="string">
+      <rule pattern="[^\\&#34;\n]+">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="\\.">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>
