@@ -70,12 +70,8 @@
       <rule pattern="[_a-zA-Z:][a-zA-Z0-9_:]+">
         <token type="NameVariable"/>
       </rule>
-      <rule pattern="([&#34;\&#39;])(.*?)([&#34;\&#39;])">
-        <bygroups>
-          <token type="Punctuation"/>
-          <token type="LiteralString"/>
-          <token type="Punctuation"/>
-        </bygroups>
+      <rule>
+        <include state="strings"/>
       </rule>
       <rule pattern="\(">
         <token type="Operator"/>
@@ -107,12 +103,35 @@
       <rule pattern=",">
         <token type="Punctuation"/>
       </rule>
-      <rule pattern="([_a-zA-Z][a-zA-Z0-9_]*?)(\s*?)(=~|!=|=|!~)(\s*?)(&#34;|&#39;)(.*?)(&#34;|&#39;)">
+      <rule pattern="([_a-zA-Z][a-zA-Z0-9_]*?)(\s*?)(=~|!=|=|!~)(\s*?)">
         <bygroups>
           <token type="NameLabel"/>
           <token type="TextWhitespace"/>
           <token type="Operator"/>
           <token type="TextWhitespace"/>
+        </bygroups>
+      </rule>
+      <rule>
+        <include state="strings"/>
+      </rule>
+    </state>
+    <state name="strings">
+      <rule pattern="(&#34;)((?:\\.|[^&#34;\\\r\n])*)(&#34;)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="LiteralString"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(&#39;)((?:\\.|[^&#39;\\\r\n])*)(&#39;)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <token type="LiteralString"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(`)([^`]*)(`)">
+        <bygroups>
           <token type="Punctuation"/>
           <token type="LiteralString"/>
           <token type="Punctuation"/>
