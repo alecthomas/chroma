@@ -1,0 +1,6 @@
+[
+  {"type":"NameVariable","value":"instance_path:requests:rate5m"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"NameVariable","value":":requests:rate5m:"},
+  {"type":"TextWhitespace","value":"\n"}
+]

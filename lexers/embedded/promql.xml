@@ -67,7 +67,7 @@
       <rule words="and or unless">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="[_a-zA-Z][a-zA-Z0-9_]+">
+      <rule pattern="[_a-zA-Z:][a-zA-Z0-9_:]+">
         <token type="NameVariable"/>
       </rule>
       <rule pattern="([&#34;\&#39;])(.*?)([&#34;\&#39;])">
