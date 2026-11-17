@@ -1,0 +1,30 @@
+<svg:rect />
+
+<a xlink:href="#x" />
+
+<Über />
+
+<日本語 />
+
+<a{...props} />
+
+<a {...props} />
+
+{/}/.test(x)}
+
+Some text
+export const x = 1
+
+Some text
+
+export const x = 1
+
+<!-- not an MDX comment -->
+
+{/* an MDX comment */}
+
+<Foo b={'}'} />
+
+<Foo data={{key: "}"}} />
+
+<Foo icon={<Bar a={{b: 1}} />} />

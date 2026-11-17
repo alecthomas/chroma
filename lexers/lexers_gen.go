@@ -2315,6 +2315,20 @@ var embeddedLexers = []struct {
 			"text/mcfunction",
 		},
 	}},
+	{"embedded/mdx.xml", chroma.Config{
+		Name: "MDX",
+		Aliases: []string{
+			"mdx",
+			"mdxjs",
+		},
+		Filenames: []string{
+			"*.mdx",
+		},
+		MimeTypes: []string{
+			"text/x-mdx",
+		},
+		EnsureNL: true,
+	}},
 	{"embedded/meson.xml", chroma.Config{
 		Name: "Meson",
 		Aliases: []string{

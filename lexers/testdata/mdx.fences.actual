@@ -1,0 +1,23 @@
+```js title="example.js"
+const x = 1
+```
+
+~~~js
+const x = 1
+~~~
+
+- item
+
+  ```js
+  const x = 1
+  ```
+
+```js
+const x = 1
+```   
+
+```js
+const x = 1
+`````
+
+After *em*.
