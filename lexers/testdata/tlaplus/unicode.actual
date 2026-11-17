@@ -1,0 +1,23 @@
+---- MODULE UnicodeCounter ----
+EXTENDS ℕ, Sequences
+
+CONSTANT Max
+VARIABLES n, log
+
+vars ≜ ⟨n, log⟩
+Init ≜ ∧ n = 0
+       ∧ log = ⟨⟩
+Inc(k) ≜ ∧ k ∈ 1‥Max
+         ∧ n' = n + k
+         ∧ log' = Append(log, k)
+Next ≜ ∃ k ∈ ℕ : Inc(k) ∨ UNCHANGED vars
+Spec ≜ Init ∧ □[Next]_vars ∧ ◇⟨Next⟩_vars ∧ WF_vars(Next)
+
+TypeOK ≜ n ∈ ℕ ∧ ∀ i ∈ DOMAIN log : log[i] ∉ {0}
+Fn ≜ [i ∈ 1‥3 ↦ i * 2]
+Sig ≜ [a : ℕ → ℤ]
+Live ≜ ◇(n = Max) ∧ (n = 0 ↝ n ≠ 1) ∧ (n ≤ 2 ⇔ n ≥ 0)
+Sub ≜ {1, 2} ⊆ {1, 2, 3} ∖ {4}
+Sqt ≜ ⟨1⟩ ⊢ ⟨2⟩
+M ≜ INSTANCE Other
+====

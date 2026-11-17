@@ -80,7 +80,7 @@
           <token type="Name"/>
         </bygroups>
       </rule>
-      <rule pattern="(\w+)(\s*)(==)(\s*)(INSTANCE)\b">
+      <rule pattern="(\w+)(\s*)(==|≜)(\s*)(INSTANCE)\b">
         <bygroups>
           <token type="NameNamespace"/>
           <token type="Text"/>
@@ -89,7 +89,7 @@
           <token type="KeywordNamespace"/>
         </bygroups>
       </rule>
-      <rule pattern="([A-Za-z_]\w*)(\s*)(==)(?!=)">
+      <rule pattern="([A-Za-z_]\w*)(\s*)(==(?!=)|≜)">
         <bygroups>
           <token type="NameFunction"/>
           <token type="Text"/>
@@ -114,14 +114,17 @@
       <rule pattern="\\[a-zA-Z]+">
         <token type="OperatorWord"/>
       </rule>
-      <rule pattern="[∈∉⊆⊂⊇⊃∪∩⊏⊐⊑⊒⊓⊔⊎∧∨¬≡⇒≤≥≪≫≺≻⪯⪰∼≃≍≈≅≠≐∝⊨÷⋅⋆∘●◯≀⊕⊖⊗⊘⊙∀∃×]">
+      <rule pattern="[∈∉⊆⊂⊇⊃∪∩⊏⊐⊑⊒⊓⊔⊎∧∨¬≡⇒≤≥≪≫≺≻⪯⪰∼≃≍≈≅≠≐∝⊨÷⋅⋆∘●◯≀⊕⊖⊗⊘⊙∀∃×≜←→↝↦⇔⇸∷≔⊢⊣⫤‖‥…‼⁇⁺□◇⩴∖]">
         <token type="Operator"/>
       </rule>
       <rule pattern="\[\]">
         <token type="Operator"/>
       </rule>
-      <rule pattern="&lt;&lt;|&gt;&gt;">
+      <rule pattern="&lt;&lt;|&gt;&gt;|[⟨⟩]">
         <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[ℕℤℝ]">
+        <token type="NameBuiltin"/>
       </rule>
       <rule pattern="[A-Za-z_]\w*">
         <token type="Name"/>
