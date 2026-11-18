@@ -108,7 +108,7 @@
     </state>
     <state name="string_escape">
       <rule pattern="\\z\s*"><token type="LiteralStringEscape"/></rule>
-      <rule pattern="\\(?:[abfnrtvz\\&quot;\&#x27;`\{\n])|[\r\n]{1,2}|x[\da-fA-F]{2}|\d{1,3}|u\{\}[\da-fA-F]*\}"><token type="LiteralStringEscape"/></rule>
+      <rule pattern="\\(?:[abfnrtv\\&quot;&#x27;`{]|\r\n?|\n|x[0-9a-fA-F]{2}|[0-9]{1,3}|u\{[0-9a-fA-F]{1,16}\})"><token type="LiteralStringEscape"/></rule>
     </state>
     <state name="string_single">
       <rule><include state="string_escape"/></rule>
