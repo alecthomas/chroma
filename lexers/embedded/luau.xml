@@ -10,7 +10,7 @@
       <rule><push state="base"/></rule>
     </state>
     <state name="ws">
-      <rule pattern="(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](?=level)\])"><token type="CommentMultiline"/></rule>
+      <rule pattern="(?:--\[(=*)\[[\w\W]*?\]\1\])"><token type="CommentMultiline"/></rule>
       <rule pattern="(?:--.*$)"><token type="CommentSingle"/></rule>
       <rule pattern="\s+"><token type="TextWhitespace"/></rule>
     </state>
@@ -23,8 +23,8 @@
       <rule pattern="&quot;"><token type="LiteralStringDouble"/><push state="string_double"/></rule>
       <rule pattern="`"><token type="LiteralStringBacktick"/><push state="string_interpolated"/></rule>
       <rule pattern="\.\.\."><token type="Punctuation"/></rule>
-      <rule pattern="type\b(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](?=level)\])|(?:--.*$)|\s+)+[a-zA-Z_])"><token type="KeywordReserved"/><push state="type_declaration"/></rule>
-      <rule pattern="export\b(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](?=level)\])|(?:--.*$)|\s+)+[a-zA-Z_])"><token type="KeywordReserved"/></rule>
+      <rule pattern="type\b(?=(?:(?:--\[(=*)\[[\w\W]*?\]\1\])|(?:--.*$)|\s+)+[a-zA-Z_])"><token type="KeywordReserved"/><push state="type_declaration"/></rule>
+      <rule pattern="export\b(?=(?:(?:--\[(=*)\[[\w\W]*?\]\1\])|(?:--.*$)|\s+)+[a-zA-Z_])"><token type="KeywordReserved"/></rule>
       <rule pattern="(?:\.\.|//|[+\-*\/%^&lt;&gt;=])=?"><token type="Operator"/><push state="expression"/></rule>
       <rule pattern="~="><token type="Operator"/><push state="expression"/></rule>
       <rule words="and or not" suffix="\b"><token type="OperatorWord"/><push state="expression"/></rule>
@@ -40,7 +40,7 @@
       <rule pattern="(?s)\[(=*)\[.*?\]\1\]"><token type="LiteralString"/></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)(?=%s*[({&quot;\&#x27;])"><bygroups><token type="Punctuation"/><token type="NameFunction"/></bygroups></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)"><bygroups><token type="Punctuation"/><token type="NameVariable"/></bygroups></rule>
-      <rule pattern="[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](?=level)\])|(?:--.*$)|\s+)*[({&quot;\&#x27;])"><token type="NameOther"/></rule>
+      <rule pattern="[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*(?=(?:(?:--\[(=*)\[[\w\W]*?\]\1\])|(?:--.*$)|\s+)*[({&quot;\&#x27;])"><token type="NameOther"/></rule>
       <rule pattern="[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*"><token type="Name"/></rule>
       <rule pattern="[\[.,]"><token type="Punctuation"/><push state="expression"/></rule>
     </state>
@@ -67,7 +67,7 @@
       <rule pattern="(?s)\[(=*)\[.*?\]\1\]"><token type="LiteralString"/><pop depth="1"/></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)(?=%s*[({&quot;\&#x27;])"><bygroups><token type="Punctuation"/><token type="NameFunction"/></bygroups><pop depth="1"/></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)"><bygroups><token type="Punctuation"/><token type="NameVariable"/></bygroups><pop depth="1"/></rule>
-      <rule pattern="[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](?=level)\])|(?:--.*$)|\s+)*[({&quot;\&#x27;])"><token type="NameOther"/><pop depth="1"/></rule>
+      <rule pattern="[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*(?=(?:(?:--\[(=*)\[[\w\W]*?\]\1\])|(?:--.*$)|\s+)*[({&quot;\&#x27;])"><token type="NameOther"/><pop depth="1"/></rule>
       <rule pattern="[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*"><token type="Name"/><pop depth="1"/></rule>
       <rule><pop depth="1"/></rule>
     </state>
@@ -129,7 +129,7 @@
     <state name="func_name">
       <rule><include state="ws"/></rule>
       <rule pattern="[.:]"><token type="Punctuation"/></rule>
-      <rule pattern="[a-zA-Z_]\w*(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](?=level)\])|(?:--.*$)|\s+)*[.:])"><token type="NameClass"/></rule>
+      <rule pattern="[a-zA-Z_]\w*(?=(?:(?:--\[(=*)\[[\w\W]*?\]\1\])|(?:--.*$)|\s+)*[.:])"><token type="NameClass"/></rule>
       <rule pattern="[a-zA-Z_]\w*"><token type="NameFunction"/></rule>
       <rule pattern="&lt;"><token type="Punctuation"/><push state="closing_gt_type"/></rule>
       <rule pattern="\("><token type="Punctuation"/><pop depth="1"/></rule>
