@@ -1,0 +1,254 @@
+<lexer>
+  <config>
+    <name>MDX</name>
+    <alias>mdx</alias>
+    <alias>mdxjs</alias>
+    <filename>*.mdx</filename>
+    <mime_type>text/x-mdx</mime_type>
+    <ensure_nl>true</ensure_nl>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="\A---\r?\n[\w\W]*?^---\r?\n">
+        <using lexer="YAML"/>
+      </rule>
+      <!-- ESM ends at the first blank line; acorn-style continuation is not modelled. -->
+      <rule pattern="\A(?:import|export)\b[^\n]*(?:\n(?![ \t]*\n)[^\n]*)*\n?">
+        <using lexer="react"/>
+      </rule>
+      <rule pattern="(?&lt;=(?:\n[ \t]*\n|^ {0,3}#{1,6}(?:[ \t][^\n]*)?[ \t]*\n|^ {0,3}(?:`{3,}|~{3,})[ \t]*\n|^ {0,3}(?:=+|-+)[ \t]*\n|^ {0,3}(?:(?:\*[ \t]*){3,}|(?:_[ \t]*){3,}|(?:-[ \t]*){3,})\n))(?:import|export)\b[^\n]*(?:\n(?![ \t]*\n)[^\n]*)*\n?">
+        <using lexer="react"/>
+      </rule>
+      <rule pattern="^( {0,3})(`{3,})[ \t]*([\w#+.-]+)([^\n]*\n)([\w\W]*?)(^ {0,3}\2`*[ \t]*$|\z)">
+        <usingbygroup>
+          <sublexer_name_group>3</sublexer_name_group>
+          <code_group>5</code_group>
+          <emitters>
+            <token type="LiteralString"/>
+            <token type="LiteralString"/>
+            <token type="LiteralString"/>
+            <token type="LiteralString"/>
+            <token type="Text"/>
+            <token type="LiteralString"/>
+          </emitters>
+        </usingbygroup>
+      </rule>
+      <rule pattern="^( {0,3})(`{3,})([^\n]*\n)([\w\W]*?)(^ {0,3}\2`*[ \t]*$|\z)">
+        <bygroups>
+          <token type="LiteralString"/>
+          <token type="LiteralString"/>
+          <token type="LiteralString"/>
+          <token type="Text"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^( {0,3})(~{3,})[ \t]*([\w#+.-]+)([^\n]*\n)([\w\W]*?)(^ {0,3}\2~*[ \t]*$|\z)">
+        <usingbygroup>
+          <sublexer_name_group>3</sublexer_name_group>
+          <code_group>5</code_group>
+          <emitters>
+            <token type="LiteralString"/>
+            <token type="LiteralString"/>
+            <token type="LiteralString"/>
+            <token type="LiteralString"/>
+            <token type="Text"/>
+            <token type="LiteralString"/>
+          </emitters>
+        </usingbygroup>
+      </rule>
+      <rule pattern="^( {0,3})(~{3,})([^\n]*\n)([\w\W]*?)(^ {0,3}\2~*[ \t]*$|\z)">
+        <bygroups>
+          <token type="LiteralString"/>
+          <token type="LiteralString"/>
+          <token type="LiteralString"/>
+          <token type="Text"/>
+          <token type="LiteralString"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^( {0,3}#{2,6}(?:[ \t][^\n]*)?[ \t]*\n)">
+        <token type="GenericSubheading"/>
+      </rule>
+      <rule pattern="^( {0,3}#(?:[ \t][^\n]*)?[ \t]*\n)">
+        <token type="GenericHeading"/>
+      </rule>
+      <rule pattern="^( {0,3}(?![ \t]*(?:[#&gt;+]|\d+[.)][ \t]|[-*](?:[ \t]|$)|[-*_](?:[ \t]*[-*_]){2,}))[^\n]+\n) {0,3}(=+[ \t]*\n)">
+        <bygroups>
+          <token type="GenericHeading"/>
+          <token type="GenericHeading"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^( {0,3}(?![ \t]*(?:[#&gt;+]|\d+[.)][ \t]|[-*](?:[ \t]|$)|[-*_](?:[ \t]*[-*_]){2,}))[^\n]+\n) {0,3}(-+[ \t]*\n)">
+        <bygroups>
+          <token type="GenericSubheading"/>
+          <token type="GenericSubheading"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^ {0,3}(?:(?:\*[ \t]*){3,}|(?:_[ \t]*){3,}|(?:-[ \t]*){3,})\n">
+        <token type="GenericSubheading"/>
+      </rule>
+      <rule pattern="^([ \t]*)([-*+] )(\[[ xX]\])( .+\n)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Keyword"/>
+          <token type="Keyword"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^([ \t]*)([-*+])([ \t])(.+\n)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^([ \t]*)([0-9]+[.)])( .+\n)">
+        <bygroups>
+          <token type="Text"/>
+          <token type="Keyword"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule pattern="^([ \t]{0,3}(?:&gt;[ \t]?)+)([^\n]*\n)">
+        <bygroups>
+          <token type="Keyword"/>
+          <usingself state="inline"/>
+        </bygroups>
+      </rule>
+      <rule>
+        <include state="inline"/>
+      </rule>
+    </state>
+    <state name="inline">
+      <rule pattern="\{/\*[\s\S]*?\*/\}">
+        <token type="CommentMultiline"/>
+      </rule>
+      <rule pattern="\\.">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="(?&lt;![\\\w*_])(\*\*\*|___)(?=\S)((?:(?!\1)[^\n])*?)\1(?![\w*_])">
+        <token type="GenericStrong"/>
+      </rule>
+      <rule pattern="(?&lt;![\\\w*_])(\*\*|__)(?=\S)((?:(?!\1)[^\n])*?)\1(?![\w*_])">
+        <token type="GenericStrong"/>
+      </rule>
+      <rule pattern="(?&lt;![\\\w*_])(\*|_)(?=\S)((?:(?!\1)[^\n])*?)\1(?![\w*_])">
+        <token type="GenericEmph"/>
+      </rule>
+      <rule pattern="(?&lt;![\w~])(~~[^~\n]+~~)(?![\w~])">
+        <token type="GenericDeleted"/>
+      </rule>
+      <rule pattern="(`+)(?!`)((?:(?!\1(?!`))(?!\n[ \t]*\n)[\s\S])*?)\1(?!`)">
+        <token type="LiteralStringBacktick"/>
+      </rule>
+      <rule pattern="&lt;&gt;|&lt;/&gt;">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="(&lt;/?)([\p{L}\p{Nl}_$][\p{L}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}$-]*(?:[.:][\p{L}\p{Nl}_$][\p{L}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}$-]*)*(?=[\s{]|/?&gt;)(?:(?:&#34;[^&#34;]*&#34;|&#39;[^&#39;]*&#39;|`(?:[^`\\]|\\[\s\S])*`|\{(?:&#34;[^&#34;]*&#34;|&#39;[^&#39;]*&#39;|`(?:[^`\\]|\\[\s\S])*`|\{(?:&#34;[^&#34;]*&#34;|&#39;[^&#39;]*&#39;|`(?:[^`\\]|\\[\s\S])*`|\{(?:&#34;[^&#34;]*&#34;|&#39;[^&#39;]*&#39;|`(?:[^`\\]|\\[\s\S])*`|[^{}&#34;&#39;`])*\}|[^{}&#34;&#39;`])*\}|[^{}&#34;&#39;`])*\}|[^&lt;&gt;&#34;&#39;/]))*+)(/?&gt;)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <usingself state="tag"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule pattern="{">
+        <token type="Punctuation"/>
+        <push state="expression"/>
+      </rule>
+      <rule pattern="(!?\[)([^]]+)(\])(\()([^)]+)(\))">
+        <bygroups>
+          <token type="Text"/>
+          <token type="NameTag"/>
+          <token type="Text"/>
+          <token type="Text"/>
+          <token type="NameAttribute"/>
+          <token type="Text"/>
+        </bygroups>
+      </rule>
+      <rule pattern=".|\n">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="tag">
+      <rule pattern="[\p{L}\p{Nl}_$][\p{L}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}$-]*">
+        <token type="NameTag"/>
+      </rule>
+      <rule pattern="[.:]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="\s+">
+        <token type="Text"/>
+        <push state="tag-attributes"/>
+      </rule>
+      <rule pattern="{">
+        <token type="Punctuation"/>
+        <push state="expression"/>
+      </rule>
+    </state>
+    <state name="tag-attributes">
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="=">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="&#34;[^&#34;]*&#34;">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="&#39;[^&#39;]*&#39;">
+        <token type="LiteralString"/>
+      </rule>
+      <rule pattern="{">
+        <token type="Punctuation"/>
+        <push state="expression"/>
+      </rule>
+      <rule pattern="[^\s=&#34;&#39;{}]+">
+        <token type="NameAttribute"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="expression">
+      <rule pattern="\}">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="&#34;(?:[^&#34;\\]|\\[\s\S])*&#34;">
+        <using lexer="react"/>
+      </rule>
+      <rule pattern="&#39;(?:[^&#39;\\]|\\[\s\S])*&#39;">
+        <using lexer="react"/>
+      </rule>
+      <rule pattern="`(?:[^`\\]|\\[\s\S])*`">
+        <using lexer="react"/>
+      </rule>
+      <rule pattern="/\*[\s\S]*?\*/|//[^\n]*">
+        <using lexer="react"/>
+      </rule>
+      <rule pattern="(?&lt;=[{=(:,!&amp;|?;])/(?:[^/\\\[\n]|\\.|\[(?:[^\]\\\n]|\\.)*\])+/">
+        <token type="LiteralStringRegex"/>
+      </rule>
+      <rule pattern="\{">
+        <token type="Punctuation"/>
+        <push state="expression"/>
+      </rule>
+      <rule pattern="&lt;&gt;|&lt;/&gt;">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="(&lt;/?)([\p{L}\p{Nl}_$][\p{L}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}$-]*(?:[.:][\p{L}\p{Nl}_$][\p{L}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}$-]*)*(?=[\s{]|/?&gt;)(?:(?:&#34;[^&#34;]*&#34;|&#39;[^&#39;]*&#39;|`(?:[^`\\]|\\[\s\S])*`|\{(?:&#34;[^&#34;]*&#34;|&#39;[^&#39;]*&#39;|`(?:[^`\\]|\\[\s\S])*`|\{(?:&#34;[^&#34;]*&#34;|&#39;[^&#39;]*&#39;|`(?:[^`\\]|\\[\s\S])*`|\{(?:&#34;[^&#34;]*&#34;|&#39;[^&#39;]*&#39;|`(?:[^`\\]|\\[\s\S])*`|[^{}&#34;&#39;`])*\}|[^{}&#34;&#39;`])*\}|[^{}&#34;&#39;`])*\}|[^&lt;&gt;&#34;&#39;/]))*+)(/?&gt;)">
+        <bygroups>
+          <token type="Punctuation"/>
+          <usingself state="tag"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule pattern="&lt;">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[^&#34;&#39;`{}&lt;]+">
+        <using lexer="react"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

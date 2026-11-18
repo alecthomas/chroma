@@ -1,0 +1,26 @@
+#Not a heading
+
+#
+Actual text
+
+   ## Indented
+
+## Heading ##
+
+Setext
+===
+
+Setext
+---
+
+Paragraph
+
+***
+
+Paragraph
+
+---
+
+Paragraph
+
+___

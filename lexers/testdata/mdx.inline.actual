@@ -1,0 +1,31 @@
+*em at start*
+
+(*em in parens*)
+
+(**strong in parens**)
+
+``code``
+
+`code
+
+span`
+
++ plus bullet
+
+1) paren ordered
+
+> > nested quote
+
+>quote
+
+Use ``code with ` tick``.
+
+***bold italic***
+
+~~deleted~~
+
+(~~deleted~~)
+
+> <Chart year={year} />
+
+> {value}

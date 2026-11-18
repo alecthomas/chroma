@@ -1,0 +1,18 @@
+[
+  {"type":"Text","value":"#Not a heading\n\n"},
+  {"type":"GenericHeading","value":"#\n"},
+  {"type":"Text","value":"Actual text\n\n"},
+  {"type":"GenericSubheading","value":"   ## Indented\n"},
+  {"type":"Text","value":"\n"},
+  {"type":"GenericSubheading","value":"## Heading ##\n"},
+  {"type":"Text","value":"\n"},
+  {"type":"GenericHeading","value":"Setext\n===\n"},
+  {"type":"Text","value":"\n"},
+  {"type":"GenericSubheading","value":"Setext\n---\n"},
+  {"type":"Text","value":"\nParagraph\n\n"},
+  {"type":"GenericSubheading","value":"***\n"},
+  {"type":"Text","value":"\nParagraph\n\n"},
+  {"type":"GenericSubheading","value":"---\n"},
+  {"type":"Text","value":"\nParagraph\n\n"},
+  {"type":"GenericSubheading","value":"___\n"}
+]

@@ -1,0 +1,49 @@
+---
+title: MDX
+summary: Markdown with JSX
+---
+
+import {Chart} from './snowfall.js'
+export const year = 2023
+
+# Last year's snowfall
+
+In {year}, the snowfall was above average. It was followed by a warm spring which caused flood conditions in many of the nearby rivers.
+
+<Chart color="#fcb32c" year={year} />
+
+<Note title="Snowfall">
+  This is **markdown** inside {year}.
+
+  - item {year}
+  - item <Chart year={year} />
+</Note>
+
+{/* An MDX comment */}
+
+An inline expression {items.map((item) => <Chart year={item.year} />)} and object {{year, title: "Snow"}}. A tricky expression {JSON.stringify({ value: "}" })} works.
+
+<Chart
+  color="#fcb32c"
+  year={year}
+/>
+
+`{not an expression} <NotATag>`
+
+```jsx
+import {Chart} from './snowfall.js'
+
+<Chart color="#fcb32c" year={2023} />
+```
+
+export const meta = {
+  title: 'Snowfall',
+  year: 2023,
+}
+
+## After ESM
+
+A [link](https://example.com), ~~deleted~~ and <span className="x">text</span>. An autolink <https://example.com> stays text.
+
+<Chart {a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}
+{<Chart {a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}{a}}
