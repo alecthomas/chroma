@@ -37,7 +37,7 @@
       <rule pattern="0[bB][\d_]*"><token type="LiteralNumberBin"/></rule>
       <rule pattern="\.?\d[\d_]*(?:\.[\d_]*)?(?:[eE][+-]?[\d_]+)?"><token type="LiteralNumberFloat"/></rule>
       <rule words="true false nil" suffix="\b"><token type="KeywordConstant"/></rule>
-      <rule pattern="\[(=*)\[[.\n]*?\]\1\]"><token type="LiteralString"/></rule>
+      <rule pattern="(?s)\[(=*)\[.*?\]\1\]"><token type="LiteralString"/></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)(?=%s*[({&quot;\&#x27;])"><bygroups><token type="Punctuation"/><token type="NameFunction"/></bygroups></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)"><bygroups><token type="Punctuation"/><token type="NameVariable"/></bygroups></rule>
       <rule pattern="[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](?=level)\])|(?:--.*$)|\s+)*[({&quot;\&#x27;])"><token type="NameOther"/></rule>
@@ -64,7 +64,7 @@
       <rule pattern="0[bB][\d_]*"><token type="LiteralNumberBin"/><pop depth="1"/></rule>
       <rule pattern="\.?\d[\d_]*(?:\.[\d_]*)?(?:[eE][+-]?[\d_]+)?"><token type="LiteralNumberFloat"/><pop depth="1"/></rule>
       <rule words="true false nil" suffix="\b"><token type="KeywordConstant"/><pop depth="1"/></rule>
-      <rule pattern="\[(=*)\[[.\n]*?\]\1\]"><token type="LiteralString"/><pop depth="1"/></rule>
+      <rule pattern="(?s)\[(=*)\[.*?\]\1\]"><token type="LiteralString"/><pop depth="1"/></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)(?=%s*[({&quot;\&#x27;])"><bygroups><token type="Punctuation"/><token type="NameFunction"/></bygroups><pop depth="1"/></rule>
       <rule pattern="(\.)([a-zA-Z_]\w*)"><bygroups><token type="Punctuation"/><token type="NameVariable"/></bygroups><pop depth="1"/></rule>
       <rule pattern="[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*(?=(?:(?:--\[(?&lt;level&gt;=*)\[[\w\W]*?\](?=level)\])|(?:--.*$)|\s+)*[({&quot;\&#x27;])"><token type="NameOther"/><pop depth="1"/></rule>
