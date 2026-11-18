@@ -262,6 +262,15 @@ func (r lineRanges) match(rangeIndex, line int) (bool, int) {
 }
 
 func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) (err error) {
+	defer func() {
+		if perr := recover(); perr != nil {
+			if e, ok := perr.(error); ok {
+				err = e
+			} else {
+				err = fmt.Errorf("%v", perr)
+			}
+		}
+	}()
 	return f.writeHTML(w, style, slices.Collect(iterator))
 }
 

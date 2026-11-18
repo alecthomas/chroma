@@ -71,7 +71,16 @@ type Formatter struct {
 	fontFormat   FontFormat
 }
 
-func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) error {
+func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) (err error) {
+	defer func() {
+		if perr := recover(); perr != nil {
+			if e, ok := perr.(error); ok {
+				err = e
+			} else {
+				err = fmt.Errorf("%v", perr)
+			}
+		}
+	}()
 	return f.writeSVG(w, style, slices.Collect(iterator))
 }
 
