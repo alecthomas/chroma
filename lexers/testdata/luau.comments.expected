@@ -1,0 +1,22 @@
+[
+  {"type":"CommentMultiline","value":"--[=[first ]]\nsecond]=]"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"KeywordReserved","value":"export"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"KeywordReserved","value":"type"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"CommentMultiline","value":"--[[name]]"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameClass","value":"T"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"Punctuation","value":"="},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameClass","value":"number"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"NameOther","value":"print"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"CommentMultiline","value":"--[[call]]"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"LiteralStringDouble","value":"\"done\""},
+  {"type":"TextWhitespace","value":"\n"}
+]

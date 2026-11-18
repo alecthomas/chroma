@@ -1,0 +1,4 @@
+--[=[first ]]
+second]=]
+export type --[[name]] T = number
+print --[[call]] "done"
