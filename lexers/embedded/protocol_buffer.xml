@@ -16,7 +16,7 @@
       </rule>
     </state>
     <state name="message">
-      <rule pattern="[a-zA-Z_][\w.]*">
+      <rule pattern="\.?[a-zA-Z_][\w.]*">
         <token type="NameClass"/>
         <pop depth="1"/>
       </rule>
@@ -82,10 +82,10 @@
         </bygroups>
         <push state="type"/>
       </rule>
-      <rule pattern="\&#34;.*?\&#34;">
+      <rule pattern="&#34;(\\.|[^&#34;\\\n])*&#34;">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="\&#39;.*?\&#39;">
+      <rule pattern="&#39;(\\.|[^&#39;\\\n])*&#39;">
         <token type="LiteralString"/>
       </rule>
       <rule pattern="(\d+\.\d*|\.\d+|\d+)[eE][+-]?\d+[LlUu]*">
