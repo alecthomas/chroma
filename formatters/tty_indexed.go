@@ -242,44 +242,42 @@ func clearBackground(style *chroma.Style) *chroma.Style {
 	return style
 }
 
-type indexedTTYFormatter struct {
-	table *ttyTable
-}
-
-func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it iter.Seq[chroma.Token]) (err error) {
-	theme := styleToEscapeSequence(c.table, style)
-	for token := range it {
-		clr, ok := chroma.Lookup(theme, token.Type)
-		if !ok {
-			if clr, ok = theme[chroma.Text]; !ok {
-				clr = theme[chroma.Background]
+func indexedTTYFormatter(table *ttyTable) chroma.Formatter {
+	return chroma.FormatterFunc(func(w io.Writer, style *chroma.Style, it iter.Seq[chroma.Token]) error {
+		theme := styleToEscapeSequence(table, style)
+		for token := range it {
+			clr, ok := chroma.Lookup(theme, token.Type)
+			if !ok {
+				if clr, ok = theme[chroma.Text]; !ok {
+					clr = theme[chroma.Background]
+				}
+			}
+			if err := writeToken(w, clr, token.Value); err != nil {
+				return err
 			}
 		}
-		if err := writeToken(w, clr, token.Value); err != nil {
-			return err
-		}
-	}
-	return nil
+		return nil
+	})
 }
 
 // TTY is an 8-colour terminal formatter.
 //
 // The Lab colour space is used to map RGB values to the most appropriate index colour.
-var TTY = Register("terminal", &indexedTTYFormatter{ttyTables[8]})
+var TTY = Register("terminal", indexedTTYFormatter(ttyTables[8]))
 
 // TTY8 is an 8-colour terminal formatter.
 //
 // The Lab colour space is used to map RGB values to the most appropriate index colour.
-var TTY8 = Register("terminal8", &indexedTTYFormatter{ttyTables[8]})
+var TTY8 = Register("terminal8", indexedTTYFormatter(ttyTables[8]))
 
 // TTY16 is a 16-colour terminal formatter.
 //
 // It uses \033[3xm for normal colours and \033[90Xm for bright colours.
 //
 // The Lab colour space is used to map RGB values to the most appropriate index colour.
-var TTY16 = Register("terminal16", &indexedTTYFormatter{ttyTables[16]})
+var TTY16 = Register("terminal16", indexedTTYFormatter(ttyTables[16]))
 
 // TTY256 is a 256-colour terminal formatter.
 //
 // The Lab colour space is used to map RGB values to the most appropriate index colour.
-var TTY256 = Register("terminal256", &indexedTTYFormatter{ttyTables[256]})
+var TTY256 = Register("terminal256", indexedTTYFormatter(ttyTables[256]))
