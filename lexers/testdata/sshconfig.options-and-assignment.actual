@@ -6,3 +6,6 @@ Host app
     LocalForward 127.0.0.1:8080 localhost:80
     RemoteForward [::1]:2200 localhost:22
     SomeFutureOption value # unknown options still render as directives
+Host=*.example.invalid
+Match=host *.example.invalid
+Host = *.example.invalid

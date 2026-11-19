@@ -17,20 +17,24 @@
           <token type="CommentSingle"/>
         </bygroups>
       </rule>
-      <rule pattern="(^|\n)(\s*)(Host)(\s+)">
+      <rule pattern="(^|\n)(\s*)(Host)(?=[\s=])(\s*)(=)?([^\S\n]*)">
         <bygroups>
           <token type="Text"/>
           <token type="Text"/>
           <token type="Keyword"/>
+          <token type="Text"/>
+          <token type="Operator"/>
           <token type="Text"/>
         </bygroups>
         <push state="host_patterns"/>
       </rule>
-      <rule pattern="(^|\n)(\s*)(Match)(\s+)">
+      <rule pattern="(^|\n)(\s*)(Match)(?=[\s=])(\s*)(=)?([^\S\n]*)">
         <bygroups>
           <token type="Text"/>
           <token type="Text"/>
           <token type="Keyword"/>
+          <token type="Text"/>
+          <token type="Operator"/>
           <token type="Text"/>
         </bygroups>
         <push state="match_criteria"/>
