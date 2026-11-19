@@ -46,3 +46,23 @@ func TestHexIRCBackgroundColour(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "\x04960050,1E0010WORD\x0f", stringBuilder.String())
 }
+
+func TestIRCLeadingComma(t *testing.T) {
+	for _, tc := range []struct {
+		name, style, text, want string
+		formatter               chroma.Formatter
+	}{
+		{"indexed", "#ff0000", ",13,units", "\x0304\x02\x02,13,units\x0f", MIRC100},
+		{"hex multiline", "bold #ff0000", "first\r\n,aBcDeF", "\x02\x04FF0000first\x0f\r\n\x02\x04FF0000\x02\x02,aBcDeF\x0f", MIRC16m},
+		{"indexed background", "#ff0000 bg:#000000", ",13", "\x0304,01,13\x0f", MIRC100},
+		{"short hex", "#ff0000", ",12345", "\x04FF0000,12345\x0f", MIRC16m},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			style := chroma.MustNewStyle("test", chroma.StyleEntries{chroma.LiteralString: tc.style})
+			var out strings.Builder
+			err := tc.formatter.Format(&out, style, chroma.Literator(chroma.Token{Type: chroma.LiteralString, Value: tc.text}))
+			assert.NoError(t, err)
+			assert.Equal(t, tc.want, out.String())
+		})
+	}
+}
