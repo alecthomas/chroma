@@ -59,7 +59,7 @@
       <rule pattern="(?s)(?&lt;=(?&lt;!\\)(?:\\\\)*[ \t\n(])\[(=*)\[.*?\]\1\]">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="(?s)&#34;.*?&#34;">
+      <rule pattern="(?s)&#34;(?:[^&#34;\\]|\\.)*&#34;">
         <token type="LiteralStringDouble"/>
       </rule>
       <rule pattern="\\\S+">

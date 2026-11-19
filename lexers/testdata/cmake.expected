@@ -23,5 +23,15 @@
   {"type":"Text","value":" "},
   {"type":"LiteralString","value":"b]]"},
   {"type":"Punctuation","value":")"},
+  {"type":"Text","value":"\n"},
+  {"type":"NameBuiltin","value":"message"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralStringDouble","value":"\"before \\\"# still quoted\\\" after\""},
+  {"type":"Punctuation","value":")"},
+  {"type":"Text","value":"\n"},
+  {"type":"NameBuiltin","value":"message"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralStringDouble","value":"\"next\""},
+  {"type":"Punctuation","value":")"},
   {"type":"Text","value":"\n"}
 ]
