@@ -7,3 +7,8 @@ Host *
 Host *.example.com !bastion.example.com
     IdentityFile ~/.ssh/id_ed25519
     ProxyJump jump.example.com
+Host *#prod # fleet
+    IdentityFile '/keys/user #1' # primary
+    IdentityFile /keys/user\ #2
+Match originalhost app#prod
+    User build#team
