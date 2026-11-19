@@ -9,11 +9,14 @@
   </config>
   <rules>
     <state name="root">
-      <rule words="query mutation subscription fragment scalar implements interface union enum input type">
+      <rule words="query mutation subscription fragment scalar implements interface union enum input type" suffix="\b">
         <token type="KeywordDeclaration"/>
         <push state="type"/>
       </rule>
-      <rule words="on extend schema directive ...">
+      <rule words="on extend schema directive" suffix="\b">
+        <token type="KeywordDeclaration"/>
+      </rule>
+      <rule pattern="\.\.\.">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule words="QUERY MUTATION SUBSCRIPTION FIELD FRAGMENT_DEFINITION FRAGMENT_SPREAD INLINE_FRAGMENT SCHEMA SCALAR OBJECT FIELD_DEFINITION ARGUMENT_DEFINITION INTERFACE UNION ENUM ENUM_VALUE INPUT_OBJECT INPUT_FIELD_DEFINITION" suffix="\b">

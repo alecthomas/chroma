@@ -44,3 +44,5 @@ directive @deprecated(
 scalar A
 """A delimiter: \""" inside."""
 scalar B
+query { typeName online ...Details }
+fragment Details on Query { id }
