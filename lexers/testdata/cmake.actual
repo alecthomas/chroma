@@ -1,1 +1,5 @@
 project(example)
+message([=[a ) # literal ]==] "quote"
+still one argument]=])
+message("next")
+message(${v}[[a b]])
