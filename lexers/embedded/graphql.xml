@@ -22,6 +22,12 @@
       <rule words="QUERY MUTATION SUBSCRIPTION FIELD FRAGMENT_DEFINITION FRAGMENT_SPREAD INLINE_FRAGMENT SCHEMA SCALAR OBJECT FIELD_DEFINITION ARGUMENT_DEFINITION INTERFACE UNION ENUM ENUM_VALUE INPUT_OBJECT INPUT_FIELD_DEFINITION" suffix="\b">
         <token type="KeywordConstant"/>
       </rule>
+      <rule pattern="-?(?:0|[1-9][0-9]*)(?:\.[0-9]+(?:[eE][+-]?[0-9]+)?|[eE][+-]?[0-9]+)">
+        <token type="LiteralNumberFloat"/>
+      </rule>
+      <rule pattern="-?(?:0|[1-9][0-9]*)">
+        <token type="LiteralNumberInteger"/>
+      </rule>
       <rule pattern="[^\W\d]\w*">
         <token type="NameProperty"/>
       </rule>
@@ -37,27 +43,6 @@
       </rule>
       <rule pattern="\$\w+">
         <token type="NameVariable"/>
-      </rule>
-      <rule pattern="\d+i">
-        <token type="LiteralNumber"/>
-      </rule>
-      <rule pattern="\d+\.\d*([Ee][-+]\d+)?i">
-        <token type="LiteralNumber"/>
-      </rule>
-      <rule pattern="\.\d+([Ee][-+]\d+)?i">
-        <token type="LiteralNumber"/>
-      </rule>
-      <rule pattern="\d+[Ee][-+]\d+i">
-        <token type="LiteralNumber"/>
-      </rule>
-      <rule pattern="\d+(\.\d+[eE][+\-]?\d+|\.\d*|[eE][+\-]?\d+)">
-        <token type="LiteralNumberFloat"/>
-      </rule>
-      <rule pattern="\.\d+([eE][+\-]?\d+)?">
-        <token type="LiteralNumberFloat"/>
-      </rule>
-      <rule pattern="(0|[1-9][0-9]*)">
-        <token type="LiteralNumberInteger"/>
       </rule>
       <rule pattern="&#34;{3}(?s:(?>\\&#34;{3}|.)*?)&#34;{3}">
         <token type="LiteralString"/>
@@ -79,6 +64,9 @@
       </rule>
     </state>
     <state name="type">
+      <rule pattern="(?=-?[0-9])">
+        <pop depth="1"/>
+      </rule>
       <rule pattern="[\{\}\(\)\[\]]">
         <token type="Punctuation"/>
         <pop depth="1"/>
