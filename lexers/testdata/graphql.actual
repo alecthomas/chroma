@@ -16,6 +16,7 @@ fragment frag on User {
   id
   name
   profilePic(size: 50)
+  samples(values: [-2, 1.5, -4E-2])
 }
 
 # Switching to schema
