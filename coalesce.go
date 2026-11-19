@@ -7,6 +7,16 @@ func Coalesce(lexer Lexer) Lexer { return &coalescer{lexer} }
 
 type coalescer struct{ Lexer }
 
+func (d *coalescer) SetAnalyser(analyser func(text string) float32) Lexer {
+	d.Lexer.SetAnalyser(analyser)
+	return d
+}
+
+func (d *coalescer) SetRegistry(registry *LexerRegistry) Lexer {
+	d.Lexer.SetRegistry(registry)
+	return d
+}
+
 func (d *coalescer) SetTracing(enable bool) {
 	if l, ok := d.Lexer.(TracingLexer); ok {
 		l.SetTracing(enable)
