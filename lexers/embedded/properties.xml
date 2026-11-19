@@ -7,38 +7,29 @@
   </config>
   <rules>
     <state name="root">
-      <rule pattern="^([ \t\f]*)([#!].*)">
-        <bygroups>
-          <token type="Text"/>
-          <token type="CommentSingle"/>
-        </bygroups>
+      <rule pattern="[#!][^\r\n]*">
+        <token type="CommentSingle"/>
       </rule>
-      <rule pattern="^([ \t\f]*)(\S+?)([ \t\f]*)([=:])([ \t\f]*)((?:[^\\\n]+|\\[\s\S]?)*)">
+      <rule pattern="[ \t\f\r\n]+|\\(?:\r\n?|\n)">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="(?:[^\\ \t\f\r\n:=]|\\(?:(?:\r\n?|\n)[ \t\f]*|.)?)+">
+        <token type="NameAttribute"/>
+        <push state="value"/>
+      </rule>
+      <rule pattern="(?=[=:])">
+        <push state="value"/>
+      </rule>
+    </state>
+    <state name="value">
+      <rule pattern="((?:[ \t\f]|\\(?:\r\n?|\n))*)([=:]?)([ \t\f]*)((?:[^\\\r\n]+|\\(?:\r\n|[\s\S])?)*)">
         <bygroups>
-          <token type="Text"/>
-          <token type="NameAttribute"/>
           <token type="Text"/>
           <token type="Operator"/>
           <token type="Text"/>
           <token type="LiteralString"/>
         </bygroups>
-      </rule>
-      <rule pattern="^([ \t\f]*)(\S+)([ \t\f]+)((?:[^\\\n]+|\\[\s\S]?)*)">
-        <bygroups>
-          <token type="Text"/>
-          <token type="NameAttribute"/>
-          <token type="Text"/>
-          <token type="LiteralString"/>
-        </bygroups>
-      </rule>
-      <rule pattern="^([ \t\f]*)(\w+)$">
-        <bygroups>
-          <token type="Text"/>
-          <token type="NameAttribute"/>
-        </bygroups>
-      </rule>
-       <rule pattern="\n">
-        <token type="Text"/>
+        <pop depth="1"/>
       </rule>
     </state>
   </rules>
