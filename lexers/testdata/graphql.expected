@@ -167,5 +167,17 @@
   {"type":"Punctuation","value":"|"},
   {"type":"TextWhitespace","value":" "},
   {"type":"KeywordConstant","value":"ENUM_VALUE"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"LiteralString","value":"\"\"\"Café \"été\" here.\"\"\""},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"KeywordDeclaration","value":"scalar"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameClass","value":"A"},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"LiteralString","value":"\"\"\"A delimiter: \\\"\"\" inside.\"\"\""},
+  {"type":"TextWhitespace","value":"\n"},
+  {"type":"KeywordDeclaration","value":"scalar"},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"NameClass","value":"B"},
   {"type":"TextWhitespace","value":"\n"}
 ]
