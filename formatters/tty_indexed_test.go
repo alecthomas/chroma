@@ -1,6 +1,9 @@
 package formatters
 
 import (
+	"errors"
+	"io"
+	"iter"
 	"strings"
 	"testing"
 
@@ -52,4 +55,25 @@ func TestNoneColour(t *testing.T) {
 	//
 	// 178 color ref: https://jonasjacek.github.io/colors/
 	assert.Equal(t, "\033[38;5;178mWORD\033[0m", stringBuilder.String())
+}
+
+func TestFormattersRecoverIteratorPanic(t *testing.T) {
+	style, err := chroma.NewStyle("test", chroma.StyleEntries{})
+	assert.NoError(t, err)
+
+	for _, name := range Names() {
+		t.Run(name, func(t *testing.T) {
+			err := Get(name).Format(io.Discard, style, iter.Seq[chroma.Token](func(func(chroma.Token) bool) {
+				panic("lexer failed")
+			}))
+			assert.Error(t, err)
+			assert.Equal(t, "lexer failed", err.Error())
+
+			sentinel := errors.New("match timeout")
+			err = Get(name).Format(io.Discard, style, iter.Seq[chroma.Token](func(func(chroma.Token) bool) {
+				panic(sentinel)
+			}))
+			assert.Equal(t, sentinel, err)
+		})
+	}
 }

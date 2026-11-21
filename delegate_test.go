@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"errors"
 	"iter"
 	"slices"
 	"testing"
@@ -174,4 +175,25 @@ func TestDelegateSplitsRootTokens(t *testing.T) {
 		{Keyword, "embedded"},
 		{Text, " after"},
 	}, slices.Collect(it))
+}
+
+type panickingLexer struct {
+	Lexer
+	panicVal any
+}
+
+func (l *panickingLexer) Tokenise(*TokeniseOptions, string) (iter.Seq[Token], error) {
+	return func(func(Token) bool) { panic(l.panicVal) }, nil
+}
+
+func TestDelegateRecoversLanguageIteratorPanic(t *testing.T) {
+	_, root := makeDelegationTestLexers(t)
+
+	sentinel := errors.New("match timeout")
+	_, err := DelegatingLexer(root, &panickingLexer{panicVal: sentinel}).Tokenise(nil, "hello")
+	assert.Equal(t, sentinel, err)
+
+	_, err = DelegatingLexer(root, &panickingLexer{panicVal: "lexer failed"}).Tokenise(nil, "hello")
+	assert.Error(t, err)
+	assert.Equal(t, "lexer failed", err.Error())
 }

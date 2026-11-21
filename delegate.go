@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"fmt"
 	"iter"
 	"strings"
 )
@@ -53,7 +54,17 @@ func (d *delegatingLexer) Config() *Config {
 	return d.language.Config()
 }
 
-func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) { // nolint: gocognit
+func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (tokens iter.Seq[Token], err error) { // nolint: gocognit
+	// Recover panics from the eager language pass before any Formatter is on the stack.
+	defer func() {
+		if perr := recover(); perr != nil {
+			if e, ok := perr.(error); ok {
+				err = e
+			} else {
+				err = fmt.Errorf("%v", perr)
+			}
+		}
+	}()
 	languageTokens, err := Tokenise(Coalesce(d.language), options, text)
 	if err != nil {
 		return nil, err
