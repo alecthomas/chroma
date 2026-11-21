@@ -1,4 +1,4 @@
-<style name="tokyonight-storm" counterpart="tokyonight-day">
+<style name="tokyonight-storm">
   <entry type="Background" style="bg:#24283b #c0caf5"/>
   <entry type="CodeLine" style="#c0caf5"/>
   <entry type="Error" style="#db4b4b"/>
