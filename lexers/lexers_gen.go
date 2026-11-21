@@ -4157,6 +4157,19 @@ var embeddedLexers = []struct {
 		DotAll:   true,
 		EnsureNL: true,
 	}},
+	{"embedded/typespec.xml", chroma.Config{
+		Name: "TypeSpec",
+		Aliases: []string{
+			"typespec",
+			"tsp",
+		},
+		Filenames: []string{
+			"*.tsp",
+		},
+		MimeTypes: []string{
+			"text/x-typespec",
+		},
+	}},
 	{"embedded/typoscript.xml", chroma.Config{
 		Name: "TypoScript",
 		Aliases: []string{
