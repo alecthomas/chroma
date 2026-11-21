@@ -57,7 +57,7 @@ func goRules() Rules {
 			{`'(\\['"\\abfnrtv]|\\x[0-9a-fA-F]{2}|\\[0-7]{1,3}|\\u[0-9a-fA-F]{4}|\\U[0-9a-fA-F]{8}|[^\\])'`, LiteralStringChar, nil},
 			{"(`)([^`]*)(`)", ByGroups(LiteralString, UsingLexer(TypeRemappingLexer(GoTextTemplate, TypeMapping{{Other, LiteralString, nil}})), LiteralString), nil},
 			{`"(\\\\|\\"|[^"])*"`, LiteralString, nil},
-			{`(<<=|>>=|<<|>>|<=|>=|&\^=|&\^|\+=|-=|\*=|/=|%=|&=|\|=|&&|\|\||<-|\+\+|--|==|!=|:=|\.\.\.|[+\-*/%&])`, Operator, nil},
+			{`(<<=|>>=|<<|>>|<=|>=|&\^=|&\^|\+=|-=|\*=|/=|%=|&=|\|=|\^=|&&|\|\||<-|\+\+|--|==|!=|:=|\.\.\.|[+\-*/%&])`, Operator, nil},
 			{`([_\p{L}]\w*)(\s*)(\()`, ByGroups(NameFunction, UsingSelf("root"), Punctuation), nil},
 			{`[|^<>=!()\[\]{}.,;:~]`, Punctuation, nil},
 			{`[^\W\d]\w*`, NameOther, nil},
