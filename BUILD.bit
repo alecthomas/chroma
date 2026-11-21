@@ -123,4 +123,4 @@ explicit upload = exec {
   depends_on = [chromad]
 }
 
-target default = [test, lint, chromad, readme, tokentype, lexer-metadata]
+group default = [test, lint, chromad, readme, tokentype, lexer-metadata]
