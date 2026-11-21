@@ -1,0 +1,9 @@
+fn main() {
+    let ordinary = c"hello";
+    let escaped = c"\xFF\u{00E6}\"";
+    let raw = cr#""hello""#;
+    let two_hashes = cr##"a "# does not end the string; \xFF"##;
+    let multiline = cr#"first
+second"#;
+    let after = ordinary;
+}
