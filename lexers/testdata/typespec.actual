@@ -77,3 +77,8 @@ model Keywords {
   is?: boolean;
   `quoted name`: Widget;
 }
+
+model Unterminated {
+  name: "oops;
+  after: string;
+}

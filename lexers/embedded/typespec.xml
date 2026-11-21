@@ -145,7 +145,11 @@
         <token type="LiteralStringInterpol"/>
         <push state="interpolation"/>
       </rule>
-      <rule pattern="[^&#34;\\$]+|\$">
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^&#34;\\$\n]+|\$">
         <token type="LiteralStringDouble"/>
       </rule>
     </state>
