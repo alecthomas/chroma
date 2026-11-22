@@ -3,6 +3,7 @@ package formatters
 import (
 	"io"
 	"iter"
+	"maps"
 	"math"
 
 	"github.com/alecthomas/chroma/v3"
@@ -209,11 +210,15 @@ func entryToEscapeSequence(table *ttyTable, entry chroma.StyleEntry) string {
 }
 
 func findClosest(table *ttyTable, seeking chroma.Colour) chroma.Colour {
+	return findClosestColour(maps.Keys(table.foreground), seeking)
+}
+
+func findClosestColour(colours iter.Seq[chroma.Colour], seeking chroma.Colour) chroma.Colour {
 	closestColour := chroma.Colour(0)
 	closest := float64(math.MaxFloat64)
-	for colour := range table.foreground {
+	for colour := range colours {
 		distance := colour.Distance(seeking)
-		if distance < closest {
+		if distance < closest || (distance == closest && colour < closestColour) {
 			closest = distance
 			closestColour = colour
 		}

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"iter"
+	"slices"
 	"strings"
 	"testing"
 
@@ -33,6 +34,34 @@ func TestTTYTableEntriesAreDistinct(t *testing.T) {
 func TestClosestColour(t *testing.T) {
 	actual := findClosest(ttyTables[256], chroma.MustParseColour("#e06c75"))
 	assert.Equal(t, chroma.MustParseColour("#d75f87"), actual)
+}
+
+func TestClosestColourTieBreak(t *testing.T) {
+	target := chroma.MustParseColour("#2ac3de")
+	low := chroma.MustParseColour("#00afd7")
+	high := chroma.MustParseColour("#00d7d7")
+	assert.Equal(t, low.Distance(target), high.Distance(target))
+
+	tests := []struct {
+		name    string
+		colours []chroma.Colour
+	}{
+		{
+			name:    "lower first",
+			colours: []chroma.Colour{low, high},
+		},
+		{
+			name:    "higher first",
+			colours: []chroma.Colour{high, low},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual := findClosestColour(slices.Values(test.colours), target)
+			assert.Equal(t, low, actual)
+		})
+	}
+	assert.Equal(t, low, findClosest(ttyTables[256], target))
 }
 
 func TestNoneColour(t *testing.T) {
