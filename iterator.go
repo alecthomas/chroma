@@ -24,39 +24,36 @@ func Literator(tokens ...Token) iter.Seq[Token] {
 	return slices.Values(tokens)
 }
 
-// SplitTokensIntoLines splits tokens containing newlines in two.
-func SplitTokensIntoLines(tokens []Token) (out [][]Token) {
-	var line []Token // nolint: prealloc
-tokenLoop:
-	for _, token := range tokens {
-		for strings.Contains(token.Value, "\n") {
-			parts := strings.SplitAfterN(token.Value, "\n", 2)
-			// Token becomes the tail.
-			token.Value = parts[1]
+// SplitTokensIntoLines lazily splits tokens into lines, splitting tokens containing newlines in two.
+func SplitTokensIntoLines(tokens iter.Seq[Token]) iter.Seq[[]Token] {
+	return func(yield func([]Token) bool) {
+		var line []Token
+	tokenLoop:
+		for token := range tokens {
+			for strings.Contains(token.Value, "\n") {
+				parts := strings.SplitAfterN(token.Value, "\n", 2)
+				// Token becomes the tail.
+				token.Value = parts[1]
 
-			// Append the head to the line and flush the line.
-			clone := token.Clone()
-			clone.Value = parts[0]
-			line = append(line, clone)
-			out = append(out, line)
-			line = nil
+				// Append the head to the line and flush the line.
+				clone := token.Clone()
+				clone.Value = parts[0]
+				if !yield(append(line, clone)) {
+					return
+				}
+				line = nil
 
-			// If the tail token is empty, don't emit it.
-			if len(token.Value) == 0 {
-				continue tokenLoop
+				// If the tail token is empty, don't emit it.
+				if len(token.Value) == 0 {
+					continue tokenLoop
+				}
 			}
+			line = append(line, token)
 		}
-		line = append(line, token)
-	}
-	if len(line) > 0 {
-		out = append(out, line)
-	}
-	// Strip empty trailing token line.
-	if len(out) > 0 {
-		last := out[len(out)-1]
-		if len(last) == 1 && last[0].Value == "" {
-			out = out[:len(out)-1]
+		// Strip empty trailing token line.
+		if len(line) == 0 || (len(line) == 1 && line[0].Value == "") {
+			return
 		}
+		yield(line)
 	}
-	return out
 }

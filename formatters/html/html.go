@@ -271,13 +271,22 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[c
 			}
 		}
 	}()
-	return f.writeHTML(w, style, slices.Collect(iterator))
+	lines := chroma.SplitTokensIntoLines(iterator)
+	lineCount := 0
+	// Line number padding and the line number table need the line count up front.
+	if f.lineNumbers {
+		collected := slices.Collect(lines)
+		lines, lineCount = slices.Values(collected), len(collected)
+	}
+	return f.writeHTML(w, style, lines, lineCount)
 }
 
 // We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
 //
 // OTOH we need to be super careful about correct escaping...
-func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.Token) (err error) { // nolint: gocyclo
+//
+// lineCount is only valid when line numbers are enabled.
+func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, lines iter.Seq[[]chroma.Token], lineCount int) (err error) { // nolint: gocyclo
 	css := f.styleCache.get(style, true)
 	if f.standalone {
 		fmt.Fprint(w, "<html>\n")
@@ -295,8 +304,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 
 	wrapInTable := f.lineNumbers && f.lineNumbersInTable
 
-	lines := chroma.SplitTokensIntoLines(tokens)
-	lineDigits := len(strconv.Itoa(f.baseLineNumber + len(lines) - 1))
+	lineDigits := len(strconv.Itoa(f.baseLineNumber + lineCount - 1))
 	highlightIndex := 0
 
 	if wrapInTable {
@@ -305,7 +313,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprintf(w, "<table%s><tr>", f.styleAttr(css, chroma.LineTable))
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD))
 		fmt.Fprintf(w, "%s", f.preWrapper.Start(false, f.styleAttrWithMode(css, chroma.PreWrapper, style)))
-		for index := range lines {
+		for index := range lineCount {
 			line := f.baseLineNumber + index
 			highlight, nextHighlightIndex := f.highlightRanges.match(highlightIndex, line)
 			highlightIndex = nextHighlightIndex
@@ -328,9 +336,9 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 
 	highlightIndex = 0
 	linePromptIndex := 0
-	for index, tokens := range lines {
-		// 1-based line number.
-		line := f.baseLineNumber + index
+	line := f.baseLineNumber - 1
+	for tokens := range lines {
+		line++
 		highlight, nextHighlightIndex := f.highlightRanges.match(highlightIndex, line)
 		highlightIndex = nextHighlightIndex
 		linePrompt, nextLinePromptIndex := f.linePromptRanges.match(linePromptIndex, line)

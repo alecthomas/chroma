@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"regexp"
+	"slices"
 	"strings"
 	"testing"
 
@@ -47,7 +48,7 @@ func TestSplitTokensIntoLines(t *testing.T) {
 			{Type: chroma.NameKeyword, Value: "what?\n"},
 		},
 	}
-	actual := chroma.SplitTokensIntoLines(in)
+	actual := slices.Collect(chroma.SplitTokensIntoLines(slices.Values(in)))
 	assert.Equal(t, expected, actual)
 
 	in = []chroma.Token{
@@ -89,7 +90,25 @@ func TestSplitTokensIntoLines(t *testing.T) {
 			{Type: chroma.TextWhitespace, Value: "\n"},
 		},
 	}
-	actual = chroma.SplitTokensIntoLines(in)
+	actual = slices.Collect(chroma.SplitTokensIntoLines(slices.Values(in)))
+	assert.Equal(t, expected, actual)
+}
+
+func TestSplitTokensIntoLinesStopsEarly(t *testing.T) {
+	in := chroma.Literator(
+		chroma.Token{Type: chroma.NameKeyword, Value: "a\nb\nc\n"},
+	)
+	var actual [][]chroma.Token
+	for line := range chroma.SplitTokensIntoLines(in) {
+		actual = append(actual, line)
+		if len(actual) == 2 {
+			break
+		}
+	}
+	expected := [][]chroma.Token{
+		{{Type: chroma.NameKeyword, Value: "a\n"}},
+		{{Type: chroma.NameKeyword, Value: "b\n"}},
+	}
 	assert.Equal(t, expected, actual)
 }
 
