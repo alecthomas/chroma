@@ -29,6 +29,22 @@ func TestCompileAllRegexes(t *testing.T) {
 	}
 }
 
+func TestPlan9RCStopsEarly(t *testing.T) {
+	it, err := lexers.Get("plan9rc").Tokenise(nil, "x=`{cat <<EOF}\n$a\nEOF\n")
+	assert.NoError(t, err)
+	all := slices.Collect(it)
+	for n := 1; n < len(all); n++ {
+		var actual []chroma.Token
+		for token := range it {
+			actual = append(actual, token)
+			if len(actual) == n {
+				break
+			}
+		}
+		assert.Equal(t, all[:n], actual)
+	}
+}
+
 func TestGet(t *testing.T) {
 	t.Run("ByName", func(t *testing.T) {
 		assert.True(t, lexers.Get("xml") == lexers.GlobalLexerRegistry.Get("XML"))

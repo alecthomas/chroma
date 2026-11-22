@@ -35,9 +35,10 @@ func (l *plan9RCLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq
 	if l.config.EnsureNL && text != "" && !strings.HasSuffix(text, "\n") {
 		text += "\n"
 	}
-	scanner := &plan9RCScanner{text: text, commandStart: true}
-	scanner.scan(false)
-	return Literator(scanner.tokens...), nil
+	return func(yield func(Token) bool) {
+		scanner := &plan9RCScanner{text: text, commandStart: true, yield: yield}
+		scanner.scan(false)
+	}, nil
 }
 
 func (l *plan9RCLexer) SetRegistry(registry *LexerRegistry) Lexer {
@@ -71,14 +72,15 @@ type plan9RCHereDoc struct {
 type plan9RCScanner struct {
 	text         string
 	pos          int
-	tokens       []Token
+	yield        func(Token) bool
+	stopped      bool
 	hereDocs     []plan9RCHereDoc
 	commandStart bool
 	commandParen bool
 }
 
 func (s *plan9RCScanner) scan(stopAtBrace bool) {
-	for s.pos < len(s.text) {
+	for s.pos < len(s.text) && !s.stopped {
 		if stopAtBrace && s.text[s.pos] == '}' {
 			s.emit(LiteralStringBacktick, s.text[s.pos:s.pos+1])
 			s.pos++
@@ -188,7 +190,7 @@ func (s *plan9RCScanner) scanVariable() {
 
 func (s *plan9RCScanner) scanSubstitution() {
 	braceDepth := 0
-	for s.pos < len(s.text) {
+	for s.pos < len(s.text) && !s.stopped {
 		if s.text[s.pos] == '}' {
 			if braceDepth == 0 {
 				s.emit(LiteralStringBacktick, s.text[s.pos:s.pos+1])
@@ -335,7 +337,7 @@ func (s *plan9RCScanner) scanHereDocMarker() {
 }
 
 func (s *plan9RCScanner) scanPendingHereDocs() {
-	for len(s.hereDocs) > 0 && s.pos < len(s.text) {
+	for len(s.hereDocs) > 0 && s.pos < len(s.text) && !s.stopped {
 		hereDoc := s.hereDocs[0]
 		s.hereDocs = s.hereDocs[1:]
 		s.scanHereDocBody(hereDoc)
@@ -482,10 +484,10 @@ func (s *plan9RCScanner) emitLine(tokenType TokenType) {
 }
 
 func (s *plan9RCScanner) emit(tokenType TokenType, value string) {
-	if value == "" {
+	if value == "" || s.stopped {
 		return
 	}
-	s.tokens = append(s.tokens, Token{Type: tokenType, Value: value})
+	s.stopped = !s.yield(Token{Type: tokenType, Value: value})
 }
 
 func isPlan9RCWhitespace(ch byte) bool {
