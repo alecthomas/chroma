@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"regexp"
+	"slices"
 	"strings"
 	"testing"
 
@@ -564,4 +565,26 @@ func TestStyleCache(t *testing.T) {
 	}
 
 	assert.Equal(t, styleCacheLimit, len(f.styleCache.cache))
+}
+
+func TestForEachLineMatchesSplitTokensIntoLines(t *testing.T) {
+	cases := [][]chroma.Token{
+		nil,
+		{{Type: chroma.Text, Value: ""}},
+		{{Type: chroma.Text, Value: "\n"}},
+		{{Type: chroma.Keyword, Value: "a\n"}, {Type: chroma.Text, Value: ""}},
+		{{Type: chroma.Comment, Value: "x\n\n\ny"}, {Type: chroma.Text, Value: ""}, {Type: chroma.Name, Value: "z\n"}},
+		{{Type: chroma.String, Value: "héllo\nwörld"}},
+	}
+	for _, tokens := range cases {
+		var lines [][]chroma.Token
+		forEachLine(slices.Values(tokens), func(line []chroma.Token) {
+			lines = append(lines, slices.Clone(line))
+		})
+		expected := chroma.SplitTokensIntoLines(tokens)
+		assert.Equal(t, len(expected), len(lines))
+		for i := range lines {
+			assert.Equal(t, expected[i], lines[i])
+		}
+	}
 }

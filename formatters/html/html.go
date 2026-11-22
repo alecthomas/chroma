@@ -271,13 +271,48 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[c
 			}
 		}
 	}()
-	return f.writeHTML(w, style, slices.Collect(iterator))
+	if !f.lineNumbers {
+		// Without line numbers the line count is never needed, so stream the tokens.
+		return f.writeHTML(w, style, iterator, 0)
+	}
+	tokens := slices.Collect(iterator)
+	numLines := 0
+	forEachLine(slices.Values(tokens), func([]chroma.Token) { numLines++ })
+	return f.writeHTML(w, style, slices.Values(tokens), numLines)
+}
+
+// forEachLine calls fn with each line produced by chroma.SplitTokensIntoLines,
+// reusing a single line buffer instead of materialising every line.
+func forEachLine(tokens iter.Seq[chroma.Token], fn func(line []chroma.Token)) {
+	var line []chroma.Token
+tokenLoop:
+	for token := range tokens {
+		for {
+			i := strings.IndexByte(token.Value, '\n')
+			if i < 0 {
+				break
+			}
+			head := token
+			head.Value = token.Value[:i+1]
+			fn(append(line, head))
+			line = line[:0]
+			token.Value = token.Value[i+1:]
+			if len(token.Value) == 0 {
+				continue tokenLoop
+			}
+		}
+		line = append(line, token)
+	}
+	// Strip empty trailing token line.
+	if len(line) > 0 && (len(line) != 1 || line[0].Value != "") {
+		fn(line)
+	}
 }
 
 // We deliberately don't use html/template here because it is two orders of magnitude slower (benchmarked).
 //
 // OTOH we need to be super careful about correct escaping...
-func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.Token) (err error) { // nolint: gocyclo
+func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens iter.Seq[chroma.Token], numLines int) (err error) { // nolint: gocyclo
 	css := f.styleCache.get(style, true)
 	if f.standalone {
 		fmt.Fprint(w, "<html>\n")
@@ -295,8 +330,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 
 	wrapInTable := f.lineNumbers && f.lineNumbersInTable
 
-	lines := chroma.SplitTokensIntoLines(tokens)
-	lineDigits := len(strconv.Itoa(f.baseLineNumber + len(lines) - 1))
+	lineDigits := len(strconv.Itoa(f.baseLineNumber + numLines - 1))
 	highlightIndex := 0
 
 	if wrapInTable {
@@ -305,7 +339,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprintf(w, "<table%s><tr>", f.styleAttr(css, chroma.LineTable))
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD))
 		fmt.Fprintf(w, "%s", f.preWrapper.Start(false, f.styleAttrWithMode(css, chroma.PreWrapper, style)))
-		for index := range lines {
+		for index := range numLines {
 			line := f.baseLineNumber + index
 			highlight, nextHighlightIndex := f.highlightRanges.match(highlightIndex, line)
 			highlightIndex = nextHighlightIndex
@@ -328,7 +362,9 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 
 	highlightIndex = 0
 	linePromptIndex := 0
-	for index, tokens := range lines {
+	index := -1
+	forEachLine(tokens, func(tokens []chroma.Token) {
+		index++
 		// 1-based line number.
 		line := f.baseLineNumber + index
 		highlight, nextHighlightIndex := f.highlightRanges.match(highlightIndex, line)
@@ -380,7 +416,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 
 			fmt.Fprint(w, `</span>`) // End of Line
 		}
-	}
+	})
 	fmt.Fprintf(w, "%s", f.preWrapper.End(true))
 
 	if wrapInTable {
