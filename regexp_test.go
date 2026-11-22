@@ -1,9 +1,11 @@
 package chroma
 
 import (
+	"fmt"
 	"iter"
 	"slices"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -332,5 +334,158 @@ func TestLongTokensMatch(t *testing.T) {
 		it, err := l.Tokenise(nil, token.Value)
 		assert.NoError(t, err)
 		assert.Equal(t, []Token{token}, slices.Collect(it))
+	}
+}
+
+func TestTokeniseDefaultsEmptyState(t *testing.T) {
+	for _, entry := range []struct {
+		name string
+		call func(Lexer, *TokeniseOptions, string) ([]Token, error)
+	}{
+		{"method", func(l Lexer, options *TokeniseOptions, text string) ([]Token, error) {
+			it, err := l.Tokenise(options, text)
+			if err != nil {
+				return nil, err
+			}
+			return slices.Collect(it), nil
+		}},
+		{"helper", func(l Lexer, options *TokeniseOptions, text string) ([]Token, error) {
+			it, err := Tokenise(l, options, text)
+			if err != nil {
+				return nil, err
+			}
+			return slices.Collect(it), nil
+		}},
+	} {
+		t.Run(entry.name, func(t *testing.T) {
+			for _, test := range []struct {
+				name    string
+				options *TokeniseOptions
+				text    string
+				want    []Token
+			}{
+				{"nil", nil, "word\r\n", []Token{{Keyword, "word"}, {Whitespace, "\n"}}},
+				{"zero", &TokeniseOptions{}, "word\r\n", []Token{{Keyword, "word"}, {Whitespace, "\r\n"}}},
+				{"normalize", &TokeniseOptions{EnsureLF: true}, "word\rword\r\n", []Token{{Keyword, "word"}, {Whitespace, "\n"}, {Keyword, "word"}, {Whitespace, "\n"}}},
+				{"preserve", &TokeniseOptions{EnsureLF: false}, "word\rword\r\n", []Token{{Keyword, "word"}, {Whitespace, "\r"}, {Keyword, "word"}, {Whitespace, "\r\n"}}},
+				{"explicit-root", &TokeniseOptions{State: "root"}, "word", []Token{{Keyword, "word"}}},
+				{"explicit-other", &TokeniseOptions{State: "other"}, "word", []Token{{Name, "word"}}},
+				{"empty-input", &TokeniseOptions{}, "", nil},
+			} {
+				t.Run(test.name, func(t *testing.T) {
+					defer func() {
+						if p := recover(); p != nil {
+							t.Fatalf("Tokenise panicked: %v", p)
+						}
+					}()
+					l := mustNewLexer(t, &Config{Name: "default-state"}, Rules{
+						"root":  {{`[a-z]+`, Keyword, nil}, {`\r\n|\r|\n`, Whitespace, nil}},
+						"other": {{`[a-z]+`, Name, nil}},
+					})
+					var before TokeniseOptions
+					if test.options != nil {
+						before = *test.options
+					}
+					got, err := entry.call(l, test.options, test.text)
+					if err != nil {
+						t.Fatal(err)
+					}
+					if !slices.Equal(got, test.want) {
+						t.Fatalf("tokens: got %#v, want %#v", got, test.want)
+					}
+					if test.options != nil && *test.options != before {
+						t.Fatalf("caller options changed: got %+v, want %+v", *test.options, before)
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestTokeniseEmptyStatePreservesNested(t *testing.T) {
+	for _, nested := range []bool{false, true} {
+		t.Run(fmt.Sprint(nested), func(t *testing.T) {
+			defer func() {
+				if p := recover(); p != nil {
+					t.Fatalf("Tokenise panicked: %v", p)
+				}
+			}()
+			l := mustNewLexer(t, &Config{Name: "nested-default-state", EnsureNL: true}, Rules{
+				"root": {{`word\n`, Keyword, nil}, {`word`, Name, nil}},
+			})
+			options := TokeniseOptions{Nested: nested}
+			it, err := l.Tokenise(&options, "word")
+			if err != nil {
+				t.Fatal(err)
+			}
+			want := []Token{{Keyword, "word\n"}}
+			if nested {
+				want = []Token{{Name, "word"}}
+			}
+			if got := slices.Collect(it); !slices.Equal(got, want) {
+				t.Fatalf("tokens: got %#v, want %#v", got, want)
+			}
+			if options != (TokeniseOptions{Nested: nested}) {
+				t.Fatalf("caller options changed: %+v", options)
+			}
+		})
+	}
+}
+
+func TestTokeniseEmptyStateResetsAfterUnmatchedNewline(t *testing.T) {
+	defer func() {
+		if p := recover(); p != nil {
+			t.Fatalf("Tokenise panicked: %v", p)
+		}
+	}()
+	l := mustNewLexer(t, &Config{Name: "reset-default-state"}, Rules{
+		"root":   {{`"`, Punctuation, Push("string")}, {`[a-z]+`, Keyword, nil}, {`\n`, Whitespace, nil}},
+		"string": {{`[a-z]+`, LiteralString, nil}},
+	})
+	options := TokeniseOptions{}
+	it, err := l.Tokenise(&options, "\"abc\nword")
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := []Token{{Punctuation, "\""}, {LiteralString, "abc"}, {Whitespace, "\n"}, {Keyword, "word"}}
+	if got := slices.Collect(it); !slices.Equal(got, want) {
+		t.Fatalf("tokens: got %#v, want %#v", got, want)
+	}
+	if options != (TokeniseOptions{}) {
+		t.Fatalf("caller options changed: %+v", options)
+	}
+}
+
+func TestTokeniseSharedEmptyStateOptions(t *testing.T) {
+	l := mustNewLexer(t, &Config{Name: "shared-default-state"}, Rules{
+		"root": {{`[a-z]+`, Keyword, nil}},
+	})
+	options := TokeniseOptions{}
+	results := make(chan error, 16)
+	var wg sync.WaitGroup
+	for range cap(results) {
+		wg.Go(func() {
+			defer func() {
+				if p := recover(); p != nil {
+					results <- fmt.Errorf("Tokenise panicked: %v", p)
+				}
+			}()
+			it, err := l.Tokenise(&options, "word")
+			if err != nil {
+				results <- err
+				return
+			}
+			if got := slices.Collect(it); !slices.Equal(got, []Token{{Keyword, "word"}}) {
+				results <- fmt.Errorf("unexpected tokens: %#v", got)
+			}
+		})
+	}
+	wg.Wait()
+	close(results)
+	for err := range results {
+		t.Error(err)
+	}
+	if options != (TokeniseOptions{}) {
+		t.Fatalf("shared caller options changed: %+v", options)
 	}
 }
