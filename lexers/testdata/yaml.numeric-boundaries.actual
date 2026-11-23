@@ -1,0 +1,22 @@
+version: 1.0-beta
+words: 2 val
+identifier: 123abc
+complex: 1+2j
+slash: 1 // not a comment
+hash: 1#suffix
+integer: 8080
+decimal: 3.14
+trailing_dot: 1.
+negative: -17
+positive: +12
+fraction: .5
+exponent: 1.2e+3
+hex: 0x2a
+octal: 0o755
+infinity: .inf
+not_a_number: .nan
+comment: 10 # units
+tagged: !!float 2.5
+anchored: &number 10
+quoted: "1.0-beta"
+flow: [1.5, 2]
