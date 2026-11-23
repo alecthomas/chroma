@@ -1,0 +1,17 @@
+<lexer>
+  <config>
+    <name>YAML+Jinja</name>
+    <alias>yaml+jinja</alias>
+    <alias>salt</alias>
+    <alias>sls</alias>
+    <alias>ansible</alias>
+    <filename>*.sls</filename>
+    <mime_type>text/x-yaml+jinja</mime_type>
+    <mime_type>text/x-sls</mime_type>
+    <dot_all>true</dot_all>
+    <delegate>YAML</delegate>
+  </config>
+  <rules>
+    <import lexer="Django/Jinja"/>
+  </rules>
+</lexer>

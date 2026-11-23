@@ -1,0 +1,23 @@
+[
+  {"type":"Punctuation","value":"\u003c"},
+  {"type":"NameTag","value":"p"},
+  {"type":"Punctuation","value":"\u003e"},
+  {"type":"CommentPreproc","value":"\u003c?php"},
+  {"type":"Text","value":" "},
+  {"type":"Keyword","value":"echo"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralStringDouble","value":"\"Hi "},
+  {"type":"LiteralStringInterpol","value":"{"},
+  {"type":"NameVariable","value":"$user"},
+  {"type":"Operator","value":"-\u003e"},
+  {"type":"NameAttribute","value":"name"},
+  {"type":"LiteralStringInterpol","value":"}"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"Punctuation","value":";"},
+  {"type":"Text","value":" "},
+  {"type":"CommentPreproc","value":"?\u003e"},
+  {"type":"Punctuation","value":"\u003c/"},
+  {"type":"NameTag","value":"p"},
+  {"type":"Punctuation","value":"\u003e"},
+  {"type":"Text","value":"\n"}
+]

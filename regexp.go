@@ -316,6 +316,7 @@ type RegexLexer struct {
 	mu             sync.Mutex
 	compiled       bool
 	rawRules       Rules
+	rawWords       ruleWords
 	rules          map[string][]*CompiledRule
 	fetchRulesFunc func() (Rules, ruleWords, error)
 	compileOnce    sync.Once
@@ -464,20 +465,25 @@ func (r *RegexLexer) fetchRules() error {
 	}
 
 	r.rawRules = rules
+	r.rawWords = words
 	r.rules = compiledRules
 	return nil
 }
 
 func (r *RegexLexer) needRules() error {
+	if err := r.fetchRulesOnce(); err != nil {
+		return err
+	}
+	return r.maybeCompile()
+}
+
+func (r *RegexLexer) fetchRulesOnce() error {
 	if r.fetchRulesFunc != nil {
 		r.compileOnce.Do(func() {
 			r.compileError = r.fetchRules()
 		})
-		if r.compileError != nil {
-			return r.compileError
-		}
 	}
-	return r.maybeCompile()
+	return r.compileError
 }
 
 // Tokenise text using lexer, returning an iterator.

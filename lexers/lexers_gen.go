@@ -1580,10 +1580,18 @@ var embeddedLexers = []struct {
 			"text/x-gnuplot",
 		},
 	}},
+	{"embedded/go_html_template.xml", chroma.Config{
+		Name: "Go HTML Template",
+		Aliases: []string{
+			"go-html-template",
+		},
+		Delegate: "HTML",
+	}},
 	{"embedded/go_template.xml", chroma.Config{
 		Name: "Go Template",
 		Aliases: []string{
 			"go-template",
+			"go-text-template",
 		},
 		Filenames: []string{
 			"*.gotmpl",
@@ -2871,6 +2879,39 @@ var embeddedLexers = []struct {
 		DotAll:          true,
 		EnsureNL:        true,
 		Priority:        3,
+	}},
+	{"embedded/phtml.xml", chroma.Config{
+		Name: "PHTML",
+		Aliases: []string{
+			"phtml",
+		},
+		Filenames: []string{
+			"*.phtml",
+			"*.php",
+			"*.php[345]",
+			"*.inc",
+		},
+		MimeTypes: []string{
+			"application/x-php",
+			"application/x-httpd-php",
+			"application/x-httpd-php3",
+			"application/x-httpd-php4",
+			"application/x-httpd-php5",
+			"text/x-php",
+		},
+		CaseInsensitive: true,
+		DotAll:          true,
+		EnsureNL:        true,
+		Priority:        2,
+		Delegate:        "HTML",
+		Analyse: &chroma.AnalyseConfig{
+			Regexes: []chroma.RegexConfig{
+				{
+					Pattern: "<\\?php",
+					Score:   0.5,
+				},
+			},
+		},
 	}},
 	{"embedded/pig.xml", chroma.Config{
 		Name: "Pig",
@@ -4514,6 +4555,24 @@ var embeddedLexers = []struct {
 		MimeTypes: []string{
 			"text/x-yaml",
 		},
+	}},
+	{"embedded/yaml_jinja.xml", chroma.Config{
+		Name: "YAML+Jinja",
+		Aliases: []string{
+			"yaml+jinja",
+			"salt",
+			"sls",
+			"ansible",
+		},
+		Filenames: []string{
+			"*.sls",
+		},
+		MimeTypes: []string{
+			"text/x-yaml+jinja",
+			"text/x-sls",
+		},
+		DotAll:   true,
+		Delegate: "YAML",
 	}},
 	{"embedded/yang.xml", chroma.Config{
 		Name: "YANG",

@@ -47,7 +47,7 @@ func TestGoHTMLTemplateIssue126(t *testing.T) {
     <h3>{{ .Title }}</h3>
     {{ .Content }}
 {{ end }}`} {
-		it, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		it, err := chroma.Tokenise(Get("Go HTML Template"), nil, source)
 		assert.NoError(t, err)
 		tokens := slices.Collect(it)
 		assert.Equal(t, source, chroma.Stringify(tokens...))
@@ -77,7 +77,7 @@ func TestGoHTMLTemplateMultilineComments(t *testing.T) {
 */ -}}
 `,
 	} {
-		it, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		it, err := chroma.Tokenise(Get("Go HTML Template"), nil, source)
 		assert.NoError(t, err)
 		tokens := slices.Collect(it)
 		assert.Equal(t, source, chroma.Stringify(tokens...))
@@ -104,7 +104,7 @@ func TestGoHTMLTemplateNegativeNumber(t *testing.T) {
 {{ fn -3 }}
 `,
 	} {
-		it, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		it, err := chroma.Tokenise(Get("Go HTML Template"), nil, source)
 		assert.NoError(t, err)
 		tokens := slices.Collect(it)
 		assert.Equal(t, source, chroma.Stringify(tokens...))

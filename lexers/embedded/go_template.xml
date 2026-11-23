@@ -2,6 +2,7 @@
   <config>
     <name>Go Template</name>
     <alias>go-template</alias>
+    <alias>go-text-template</alias>
     <filename>*.gotmpl</filename>
     <filename>*.go.tmpl</filename>
   </config>

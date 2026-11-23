@@ -60,14 +60,14 @@
       <rule pattern="(\{\$\{)(.*?)(\}\})">
         <bygroups>
           <token type="LiteralStringInterpol"/>
-          <usingself state="root"/>
+          <usingself state="php"/>
           <token type="LiteralStringInterpol"/>
         </bygroups>
       </rule>
       <rule pattern="(\{)(\$.*?)(\})">
         <bygroups>
           <token type="LiteralStringInterpol"/>
-          <usingself state="root"/>
+          <usingself state="php"/>
           <token type="LiteralStringInterpol"/>
         </bygroups>
       </rule>
@@ -88,7 +88,7 @@
         <pop depth="1"/>
       </rule>
       <rule>
-        <include state="root"/>
+        <include state="php"/>
       </rule>
     </state>
     <state name="attribute">
@@ -104,7 +104,7 @@
         <token type="NameDecorator"/>
       </rule>
       <rule>
-        <include state="root"/>
+        <include state="php"/>
       </rule>
     </state>
     <state name="attributeparams">
@@ -113,10 +113,15 @@
         <pop depth="1"/>
       </rule>
       <rule>
-        <include state="root"/>
+        <include state="php"/>
       </rule>
     </state>
     <state name="root">
+      <rule>
+        <include state="php"/>
+      </rule>
+    </state>
+    <state name="php">
       <rule pattern="\?&gt;">
         <token type="CommentPreproc"/>
         <pop depth="1"/>

@@ -1,0 +1,10 @@
+<lexer>
+  <config>
+    <name>Go HTML Template</name>
+    <alias>go-html-template</alias>
+    <delegate>HTML</delegate>
+  </config>
+  <rules>
+    <import lexer="Go Template"/>
+  </rules>
+</lexer>
