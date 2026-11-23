@@ -68,10 +68,10 @@
       <rule pattern="\d\d\d\d-\d\d-\d\d([T ]\d\d:\d\d:\d\d(\.\d+)?(Z|\s+[-+]\d+)?)?">
         <token type="LiteralDate"/>
       </rule>
-      <rule pattern="[+\-]?(0x[\da-f]+|0o[0-7]+|(\d+\.?\d*|\.?\d+)(e[\+\-]?\d+)?|\.inf|\.nan)\b">
+      <rule pattern="[+\-]?(0x[\da-f]+|0o[0-7]+|(\d+(?:\.\d*)?|\.\d+)(e[\+\-]?\d+)?|\.inf|\.nan)(?=[ \t]*(?:$|[\r\n\],}])|[ \t]+#)">
         <token type="LiteralNumber"/>
       </rule>
-      <rule pattern="((?:[^\{\}\[\]\?,\:\!\-\*&amp;\@]|[?:\-]\S).*)( )+(#.*)">
+      <rule pattern="((?:[^\{\}\[\]\?,\:\!\-\*&amp;\@]|[?:\-]\S).*)( )(#.*)">
         <bygroups>
           <token type="Literal"/>
           <token type="TextWhitespace"/>
