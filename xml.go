@@ -113,8 +113,8 @@ func fastUnmarshalConfig(from fs.FS, path string) (*Config, error) {
 	}
 }
 
-// MustNewXMLLexer constructs a new RegexLexer from an XML file or panics.
-func MustNewXMLLexer(from fs.FS, path string) *RegexLexer {
+// MustNewXMLLexer constructs a new Lexer from an XML file or panics.
+func MustNewXMLLexer(from fs.FS, path string) Lexer {
 	lex, err := NewXMLLexer(from, path)
 	if err != nil {
 		panic(err)
@@ -122,8 +122,8 @@ func MustNewXMLLexer(from fs.FS, path string) *RegexLexer {
 	return lex
 }
 
-// NewXMLLexer creates a new RegexLexer from an XML lexer definition.
-func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
+// NewXMLLexer creates a new Lexer from an XML lexer definition.
+func NewXMLLexer(from fs.FS, path string) (Lexer, error) {
 	config, err := fastUnmarshalConfig(from, path)
 	if err != nil {
 		return nil, err
@@ -131,13 +131,27 @@ func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 	return NewXMLLexerFromConfig(config, from, path)
 }
 
-// NewXMLLexerFromConfig creates a RegexLexer whose Config is already known,
+// NewXMLLexerFromConfig creates a Lexer whose Config is already known,
 // loading its rules lazily from the XML definition at path in from.
+//
+// The lexer is a RegexLexer, wrapped in a DelegatingLexer if the Config has a
+// Delegate. The delegate is looked up in the lexer's LexerRegistry.
 //
 // The analyser regexes in config are compiled lazily on the first call to
 // AnalyseText; an invalid analyser regex results in a zero score at analyse
 // time rather than an error here.
-func NewXMLLexerFromConfig(config *Config, from fs.FS, path string) (*RegexLexer, error) {
+func NewXMLLexerFromConfig(config *Config, from fs.FS, path string) (Lexer, error) {
+	lexer, err := newXMLRegexLexer(config, from, path)
+	if err != nil {
+		return nil, err
+	}
+	if config.Delegate != "" {
+		return delegateByName(config.Delegate, lexer), nil
+	}
+	return lexer, nil
+}
+
+func newXMLRegexLexer(config *Config, from fs.FS, path string) (*RegexLexer, error) {
 	if err := config.validateGlobs(); err != nil {
 		return nil, err
 	}

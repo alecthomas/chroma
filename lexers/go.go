@@ -68,7 +68,7 @@ func goRules() Rules {
 var GoHTMLTemplate = Register(DelegatingLexer(HTML, MustNewXMLLexer(
 	embedded,
 	"embedded/go_template.xml",
-).SetConfig(
+).(*RegexLexer).SetConfig(
 	&Config{
 		Name:    "Go HTML Template",
 		Aliases: []string{"go-html-template"},
@@ -78,7 +78,7 @@ var GoHTMLTemplate = Register(DelegatingLexer(HTML, MustNewXMLLexer(
 var GoTextTemplate = Register(MustNewXMLLexer(
 	embedded,
 	"embedded/go_template.xml",
-).SetConfig(
+).(*RegexLexer).SetConfig(
 	&Config{
 		Name:    "Go Text Template",
 		Aliases: []string{"go-text-template"},

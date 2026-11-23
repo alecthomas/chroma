@@ -10,7 +10,7 @@ import (
 	assert "github.com/alecthomas/assert/v2"
 )
 
-func xmlLexerFromString(t *testing.T, config, rules string) *RegexLexer {
+func xmlLexerFromString(t *testing.T, config, rules string) Lexer {
 	t.Helper()
 	fs := fstest.MapFS{"lexer.xml": {Data: []byte("<lexer><config>" + config + "</config><rules><state name=\"root\">" + rules + "</state></rules></lexer>")}}
 	lexer, err := NewXMLLexer(fs, "lexer.xml")
@@ -38,7 +38,7 @@ func TestWordsMatchLikeRegex(t *testing.T) {
 	input := "(car x) (CAR y) cars car-like iff if-x Iff über übe ü"
 	for _, config := range []string{"", "<case_insensitive>true</case_insensitive>"} {
 		t.Run(config, func(t *testing.T) {
-			native := xmlLexerFromString(t, config, xmlRules)
+			native := xmlLexerFromString(t, config, xmlRules).(*RegexLexer)
 			assert.NoError(t, native.needRules())
 			assert.NotZero(t, native.rules["root"][0].words, "words rule should be matched natively")
 

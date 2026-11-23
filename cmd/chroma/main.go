@@ -398,7 +398,11 @@ func selexer(path, contents string) (lexer chroma.Lexer, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return chroma.NewXMLLexer(os.DirFS("."), path)
+	lexer, err = chroma.NewXMLLexer(os.DirFS("."), path)
+	if err != nil {
+		return nil, err
+	}
+	return lexer.SetRegistry(lexers.GlobalLexerRegistry), nil
 }
 
 func format(ctx *kong.Context, w io.Writer, style *chroma.Style, it iter.Seq[chroma.Token]) {

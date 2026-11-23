@@ -8,6 +8,8 @@ import (
 
 type delegatingLexer struct {
 	root     Lexer
+	rootName string
+	registry *LexerRegistry
 	language Lexer
 }
 
@@ -26,26 +28,53 @@ func DelegatingLexer(root Lexer, language Lexer) Lexer {
 	}
 }
 
+// delegateByName is DelegatingLexer with the root looked up by name in the
+// registry when first needed, as XML definitions can only refer to it by name.
+func delegateByName(rootName string, language Lexer) Lexer {
+	return &delegatingLexer{rootName: rootName, language: language}
+}
+
+func (d *delegatingLexer) rootLexer() (Lexer, error) {
+	if d.root != nil {
+		return d.root, nil
+	}
+	if d.registry == nil {
+		return nil, fmt.Errorf("no LexerRegistry available to delegate to %q", d.rootName)
+	}
+	root := d.registry.Get(d.rootName)
+	if root == nil {
+		return nil, fmt.Errorf("no such lexer %q", d.rootName)
+	}
+	return root, nil
+}
+
 func (d *delegatingLexer) SetTracing(enable bool) {
 	if l, ok := d.language.(TracingLexer); ok {
 		l.SetTracing(enable)
 	}
-	if l, ok := d.root.(TracingLexer); ok {
+	root, err := d.rootLexer()
+	if err != nil {
+		return
+	}
+	if l, ok := root.(TracingLexer); ok {
 		l.SetTracing(enable)
 	}
 }
 
 func (d *delegatingLexer) AnalyseText(text string) float32 {
-	return d.root.AnalyseText(text)
+	return d.language.AnalyseText(text)
 }
 
 func (d *delegatingLexer) SetAnalyser(analyser func(text string) float32) Lexer {
-	d.root.SetAnalyser(analyser)
+	d.language.SetAnalyser(analyser)
 	return d
 }
 
 func (d *delegatingLexer) SetRegistry(r *LexerRegistry) Lexer {
-	d.root.SetRegistry(r)
+	d.registry = r
+	if d.root != nil {
+		d.root.SetRegistry(r)
+	}
 	d.language.SetRegistry(r)
 	return d
 }
@@ -65,6 +94,10 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (token
 			}
 		}
 	}()
+	rootLexer, err := d.rootLexer()
+	if err != nil {
+		return nil, err
+	}
 	languageTokens, err := Tokenise(Coalesce(d.language), options, text)
 	if err != nil {
 		return nil, err
@@ -79,10 +112,10 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (token
 		}
 	}
 	if !hasLanguageTokens {
-		return d.root.Tokenise(options, text)
+		return rootLexer.Tokenise(options, text)
 	}
 
-	rootTokens, err := Tokenise(Coalesce(d.root), options, rootText.String())
+	rootTokens, err := Tokenise(Coalesce(rootLexer), options, rootText.String())
 	if err != nil {
 		return nil, err
 	}

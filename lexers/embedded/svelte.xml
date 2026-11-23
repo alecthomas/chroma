@@ -1,0 +1,97 @@
+<lexer>
+  <config>
+    <name>Svelte</name>
+    <alias>svelte</alias>
+    <filename>*.svelte</filename>
+    <mime_type>application/x-svelte</mime_type>
+    <dot_all>true</dot_all>
+    <delegate>HTML</delegate>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="&lt;!--">
+        <token type="Other"/>
+        <push state="comment"/>
+      </rule>
+      <rule pattern="(&lt;\s*(?:script|style).*?lang\s*=\s*[&#39;&#34;])(.+?)([&#39;&#34;].*?&gt;)(.+?)(&lt;\s*/\s*(?:script|style)\s*&gt;)">
+        <usingbygroup>
+          <sublexer_name_group>2</sublexer_name_group>
+          <code_group>4</code_group>
+          <emitters>
+            <token type="Other"/>
+            <token type="Other"/>
+            <token type="Other"/>
+            <token type="Other"/>
+            <token type="Other"/>
+          </emitters>
+        </usingbygroup>
+      </rule>
+      <rule pattern="(?&lt;!&lt;\s*(?:script|style)(?:(?!(?:script|style)\s*&gt;).)*?){(?!(?:(?!&lt;\s*(?:script|style)).)*?(?:script|style)\s*&gt;)">
+        <token type="Punctuation"/>
+        <push state="templates"/>
+      </rule>
+      <!-- Taking the = keeps HTML from reporting an attribute whose expression value is missing. -->
+      <rule pattern="(?&lt;=[\w:$-])=(?=\{)">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="(?&lt;=\s+on:\w+(?:\|\w+)*)\|(?=\w+)">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern=".+?">
+        <token type="Other"/>
+      </rule>
+    </state>
+    <state name="comment">
+      <rule pattern="--&gt;">
+        <token type="Other"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern=".+?">
+        <token type="Other"/>
+      </rule>
+    </state>
+    <state name="templates">
+      <rule pattern="}">
+        <token type="Punctuation"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="(?&lt;!(?&lt;!\\)\\)([&#39;&#34;`]).*?(?&lt;!(?&lt;!\\)\\)\1">
+        <using lexer="TypeScript"/>
+      </rule>
+      <rule pattern="{">
+        <token type="Punctuation"/>
+        <push state="templates"/>
+      </rule>
+      <rule pattern="@(debug|html)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="(#await)(\s+)(\w+)(\s+)(then|catch)(\s+)(\w+)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <using lexer="TypeScript"/>
+          <token type="Text"/>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <using lexer="TypeScript"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(#|/)(await|each|if|key)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="(:else)(\s+)(if)?\b">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Text"/>
+          <token type="Keyword"/>
+        </bygroups>
+      </rule>
+      <rule pattern=":(catch|then)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="[^{}]+">
+        <using lexer="TypeScript"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

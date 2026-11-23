@@ -257,6 +257,7 @@ var embeddedLexers = []struct {
 		},
 		CaseInsensitive: true,
 		DotAll:          true,
+		Delegate:        "HTML",
 	}},
 	{"embedded/atl.xml", chroma.Config{
 		Name: "ATL",
@@ -454,6 +455,7 @@ var embeddedLexers = []struct {
 		},
 		DotAll:   true,
 		Priority: 3,
+		Delegate: "HTML",
 	}},
 	{"embedded/blitzbasic.xml", chroma.Config{
 		Name: "BlitzBasic",
@@ -1160,8 +1162,37 @@ var embeddedLexers = []struct {
 		},
 	}},
 	{"embedded/erb.xml", chroma.Config{
-		Name:   "ERB",
-		DotAll: true,
+		Name: "ERB",
+		Aliases: []string{
+			"erb",
+			"html+erb",
+			"html+ruby",
+			"rhtml",
+		},
+		Filenames: []string{
+			"*.erb",
+			"*.html.erb",
+			"*.xml.erb",
+			"*.rhtml",
+		},
+		MimeTypes: []string{
+			"application/x-ruby-templating",
+		},
+		DotAll:   true,
+		Delegate: "HTML",
+		Analyse: &chroma.AnalyseConfig{
+			Regexes: []chroma.RegexConfig{
+				{
+					Pattern: "\\A(?=[\\s\\S]*<%=)(?=[\\s\\S]*%>)",
+					Score:   0.4,
+				},
+				{
+					Pattern: "<%",
+					Score:   0.1,
+				},
+			},
+			First: true,
+		},
 	}},
 	{"embedded/erlang.xml", chroma.Config{
 		Name: "Erlang",
@@ -3793,6 +3824,20 @@ var embeddedLexers = []struct {
 			"text/x-styl",
 		},
 		CaseInsensitive: true,
+	}},
+	{"embedded/svelte.xml", chroma.Config{
+		Name: "Svelte",
+		Aliases: []string{
+			"svelte",
+		},
+		Filenames: []string{
+			"*.svelte",
+		},
+		MimeTypes: []string{
+			"application/x-svelte",
+		},
+		DotAll:   true,
+		Delegate: "HTML",
 	}},
 	{"embedded/swift.xml", chroma.Config{
 		Name: "Swift",

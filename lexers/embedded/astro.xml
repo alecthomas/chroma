@@ -6,6 +6,7 @@
     <mime_type>text/x-astro</mime_type>
     <case_insensitive>true</case_insensitive>
     <dot_all>true</dot_all>
+    <delegate>HTML</delegate>
   </config>
   <rules>
     <state name="root">

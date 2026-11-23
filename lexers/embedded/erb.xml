@@ -1,7 +1,21 @@
 <lexer>
   <config>
     <name>ERB</name>
+    <alias>erb</alias>
+    <alias>html+erb</alias>
+    <alias>html+ruby</alias>
+    <alias>rhtml</alias>
+    <filename>*.erb</filename>
+    <filename>*.html.erb</filename>
+    <filename>*.xml.erb</filename>
+    <filename>*.rhtml</filename>
+    <mime_type>application/x-ruby-templating</mime_type>
     <dot_all>true</dot_all>
+    <delegate>HTML</delegate>
+    <analyse first="true">
+      <regex pattern="\A(?=[\s\S]*&lt;%=)(?=[\s\S]*%&gt;)" score="0.4"/>
+      <regex pattern="&lt;%" score="0.1"/>
+    </analyse>
   </config>
   <rules>
     <state name="root">

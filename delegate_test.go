@@ -177,6 +177,33 @@ func TestDelegateSplitsRootTokens(t *testing.T) {
 	}, slices.Collect(it))
 }
 
+func TestXMLDelegate(t *testing.T) {
+	root := mustNewLexer(t, &Config{Name: "Root"}, Rules{ // nolint: forbidigo
+		"root": {{`\s+`, Whitespace, nil}},
+	})
+	registry := NewLexerRegistry()
+	registry.Register(root)
+	language := xmlLexerFromString(t, `<name>Lang</name><delegate>root</delegate>`, `
+		<rule pattern="\w+"><token type="Keyword"/></rule>
+		<rule pattern="\s+"><token type="Other"/></rule>`)
+
+	_, err := language.Tokenise(nil, "a b")
+	assert.EqualError(t, err, `no LexerRegistry available to delegate to "root"`)
+
+	registry.Register(language)
+	it, err := language.Tokenise(nil, "a b")
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{Keyword, "a"}, {TextWhitespace, " "}, {Keyword, "b"}}, slices.Collect(it))
+}
+
+func TestDelegateAnalysesLanguage(t *testing.T) {
+	lang, root := makeDelegationTestLexers(t)
+	root.SetAnalyser(func(string) float32 { return 0.2 })
+	delegate := DelegatingLexer(root, lang).SetAnalyser(func(string) float32 { return 0.7 })
+	assert.Equal(t, float32(0.7), delegate.AnalyseText(""))
+	assert.Equal(t, float32(0.2), root.AnalyseText(""))
+}
+
 type panickingLexer struct {
 	Lexer
 	panicVal any

@@ -8,7 +8,7 @@ import (
 // and Salt SLS files.
 var YAMLJinja = Register(DelegatingLexer(
 	MustNewXMLLexer(embedded, "embedded/yaml.xml"),
-	MustNewXMLLexer(embedded, "embedded/django_jinja.xml").SetConfig(
+	MustNewXMLLexer(embedded, "embedded/django_jinja.xml").(*RegexLexer).SetConfig(
 		&Config{
 			Name:      "YAML+Jinja",
 			Aliases:   []string{"yaml+jinja", "salt", "sls", "ansible"},
