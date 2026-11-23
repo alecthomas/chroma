@@ -19,6 +19,11 @@ func TestXMLEmitterUnmarshal(t *testing.T) {
 		{"UsingSelf", `<usingself state="root"/>`, UsingSelf("root")},
 		{"Using", `<using lexer="Go"/>`, Using("Go")},
 		{
+			"UsingRemap",
+			`<using lexer="Go"><remap from="Other" to="LiteralString"/></using>`,
+			&usingEmitter{Lexer: "Go", Remaps: []tokenRemap{{From: Other, To: LiteralString}}},
+		},
+		{
 			"UsingByGroup",
 			`<usingbygroup><sublexer_name_group>1</sublexer_name_group><code_group>2</code_group><emitters><token type="Name"/></emitters></usingbygroup>`,
 			UsingByGroup(1, 2, Name),

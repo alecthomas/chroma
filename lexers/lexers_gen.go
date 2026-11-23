@@ -1580,6 +1580,32 @@ var embeddedLexers = []struct {
 			"text/x-gnuplot",
 		},
 	}},
+	{"embedded/go.xml", chroma.Config{
+		Name: "Go",
+		Aliases: []string{
+			"go",
+			"golang",
+		},
+		Filenames: []string{
+			"*.go",
+		},
+		MimeTypes: []string{
+			"text/x-gosrc",
+		},
+		Analyse: &chroma.AnalyseConfig{
+			Regexes: []chroma.RegexConfig{
+				{
+					Pattern: "\\A(?=[\\s\\S]*fmt\\.)(?=[\\s\\S]*package )",
+					Score:   0.5,
+				},
+				{
+					Pattern: "package ",
+					Score:   0.1,
+				},
+			},
+			First: true,
+		},
+	}},
 	{"embedded/go_html_template.xml", chroma.Config{
 		Name: "Go HTML Template",
 		Aliases: []string{
