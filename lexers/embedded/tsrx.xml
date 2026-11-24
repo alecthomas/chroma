@@ -134,7 +134,7 @@
           <token type="Punctuation" />
         </bygroups>
       </rule>
-      <rule pattern="(&lt;)([\w\.]+)">
+      <rule pattern="(?&lt;![\w$])(&lt;)([\w\.]+)">
         <bygroups>
           <token type="Punctuation" />
           <token type="NameTag" />
