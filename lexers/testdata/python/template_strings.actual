@@ -1,0 +1,29 @@
+name = "world"
+value = 12.5
+width = 8
+precision = 2
+t = 1
+tr = 2
+
+basic = t"hello {name}"
+quoted = T'quoted {value!r}'
+multiline = t"""first {name}
+second"""
+triple_single = T'''triple single {value}'''
+raw_double = rt"raw \n {name}"
+raw_single = tr'raw \t {value}'
+raw_triple_double = Rt"""raw \n {name}
+second"""
+raw_triple_single = tR'''raw \t {value}
+second'''
+escaped_braces = t"{{literal}} {value:.2f}"
+debug = t"{value=}"
+format_spec = t"{value:{width}.{precision}f}"
+normal = "{name}"
+formatted = f"{name}"
+raw_formatted = rf"{name}\n"
+raw_text = r"{name}\n"
+bytes_text = b"{name}"
+unicode_text = u"{name}"
+identifier_t = t
+identifier_tr = tr
