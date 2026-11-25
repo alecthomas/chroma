@@ -263,7 +263,7 @@ func (pr *pullRequest) approveCIRuns(ctx context.Context) error {
 	// CI runs for this push are created alongside this one, so may not be listed yet.
 	for range 12 {
 		var err error
-		runs, err = gh(ctx, "api", endpoint, "--jq", ".workflow_runs[] | [.id, .status] | @tsv")
+		runs, err = gh(ctx, "api", endpoint, "--jq", ".workflow_runs[] | [.id, .conclusion] | @tsv")
 		if err != nil {
 			return err
 		}
@@ -273,8 +273,9 @@ func (pr *pullRequest) approveCIRuns(ctx context.Context) error {
 		time.Sleep(5 * time.Second)
 	}
 	for line := range strings.Lines(runs) {
-		id, status, _ := strings.Cut(strings.TrimSpace(line), "\t")
-		if status != "action_required" {
+		// Runs awaiting approval report status "completed" with conclusion "action_required".
+		id, conclusion, _ := strings.Cut(strings.TrimSpace(line), "\t")
+		if conclusion != "action_required" {
 			continue
 		}
 		fmt.Printf("Approving CI run %s\n", id)

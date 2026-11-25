@@ -5,6 +5,7 @@ import (
 	"io"
 	"iter"
 	"math"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -18,14 +19,29 @@ var MIRC100 = Register("mirc100", chroma.FormatterFunc(mIRCExtendedColorFormatte
 // mIRC16m is a true-colour formatter.
 var MIRC16m = Register("mirc16m", chroma.FormatterFunc(mIRCHexColorFormatter))
 
+var (
+	mircIndexedBackground = regexp.MustCompile(`^,[0-9]`)
+	mircHexBackground     = regexp.MustCompile(`^,[0-9a-fA-F]{6}`)
+)
+
 // Print the text with the given formatting, resetting the formatting at the end
 // of each line and resuming it on the next line.
 //
 // This way, a pager (like https://github.com/walles/moar for example) can show
 // any line in the output by itself, and it will get the right formatting.
-func mIRCwriteToken(w io.Writer, formatting string, text string) error {
+func mIRCwriteToken(w io.Writer, formatting string, text string, backgroundPattern *regexp.Regexp) error {
 	if formatting == "" {
 		_, err := fmt.Fprint(w, text)
+		return err
+	}
+
+	writeLine := func(line, ending string) error {
+		prefix := formatting
+		if backgroundPattern != nil && strings.HasPrefix(line, ",") && backgroundPattern.MatchString(line) {
+			// Two bold toggles end the foreground code without changing the style.
+			prefix += "\x02\x02"
+		}
+		_, err := fmt.Fprint(w, prefix, line, "\x0f", ending)
 		return err
 	}
 
@@ -34,8 +50,7 @@ func mIRCwriteToken(w io.Writer, formatting string, text string) error {
 	afterLastNewline := 0
 	for _, indices := range newlineIndices {
 		newlineStart, afterNewline := indices[0], indices[1]
-		_, err := fmt.Fprint(w, formatting, text[afterLastNewline:newlineStart], "\x0f", text[newlineStart:afterNewline])
-		if err != nil {
+		if err := writeLine(text[afterLastNewline:newlineStart], text[newlineStart:afterNewline]); err != nil {
 			return err
 		}
 		afterLastNewline = afterNewline
@@ -43,8 +58,7 @@ func mIRCwriteToken(w io.Writer, formatting string, text string) error {
 
 	if afterLastNewline < len(text) {
 		// Print whatever is left after the last newline
-		_, err := fmt.Fprint(w, formatting, text[afterLastNewline:], "\x0f")
-		return err
+		return writeLine(text[afterLastNewline:], "")
 	}
 	return nil
 }
@@ -159,6 +173,7 @@ func mIRCExtendedColorFormatter(w io.Writer, style *chroma.Style, it iter.Seq[ch
 			continue
 		}
 
+		var backgroundPattern *regexp.Regexp
 		formatting := ""
 		if entry.Bold == chroma.Yes {
 			formatting += "\x02"
@@ -175,10 +190,12 @@ func mIRCExtendedColorFormatter(w io.Writer, style *chroma.Style, it iter.Seq[ch
 			if entry.Background.IsSet() {
 				bgHexColorCode := fmt.Sprintf("%02X%02X%02X", entry.Background.Red(), entry.Background.Green(), entry.Background.Blue())
 				formatting += fmt.Sprintf(",%s", findClosestIRCColor(bgHexColorCode))
+			} else {
+				backgroundPattern = mircIndexedBackground
 			}
 		}
 
-		if err := mIRCwriteToken(w, formatting, token.Value); err != nil {
+		if err := mIRCwriteToken(w, formatting, token.Value, backgroundPattern); err != nil {
 			return err
 		}
 	}
@@ -196,6 +213,7 @@ func mIRCHexColorFormatter(w io.Writer, style *chroma.Style, it iter.Seq[chroma.
 			continue
 		}
 
+		var backgroundPattern *regexp.Regexp
 		formatting := ""
 		if entry.Bold == chroma.Yes {
 			formatting += "\x02"
@@ -210,10 +228,12 @@ func mIRCHexColorFormatter(w io.Writer, style *chroma.Style, it iter.Seq[chroma.
 			formatting += fmt.Sprintf("\x04%02X%02X%02X", entry.Colour.Red(), entry.Colour.Green(), entry.Colour.Blue())
 			if entry.Background.IsSet() {
 				formatting += fmt.Sprintf(",%02X%02X%02X", entry.Background.Red(), entry.Background.Green(), entry.Background.Blue())
+			} else {
+				backgroundPattern = mircHexBackground
 			}
 		}
 
-		if err := mIRCwriteToken(w, formatting, token.Value); err != nil {
+		if err := mIRCwriteToken(w, formatting, token.Value, backgroundPattern); err != nil {
 			return err
 		}
 	}

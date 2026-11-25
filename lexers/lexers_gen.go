@@ -257,6 +257,7 @@ var embeddedLexers = []struct {
 		},
 		CaseInsensitive: true,
 		DotAll:          true,
+		Delegate:        "HTML",
 	}},
 	{"embedded/atl.xml", chroma.Config{
 		Name: "ATL",
@@ -454,6 +455,7 @@ var embeddedLexers = []struct {
 		},
 		DotAll:   true,
 		Priority: 3,
+		Delegate: "HTML",
 	}},
 	{"embedded/blitzbasic.xml", chroma.Config{
 		Name: "BlitzBasic",
@@ -1160,8 +1162,37 @@ var embeddedLexers = []struct {
 		},
 	}},
 	{"embedded/erb.xml", chroma.Config{
-		Name:   "ERB",
-		DotAll: true,
+		Name: "ERB",
+		Aliases: []string{
+			"erb",
+			"html+erb",
+			"html+ruby",
+			"rhtml",
+		},
+		Filenames: []string{
+			"*.erb",
+			"*.html.erb",
+			"*.xml.erb",
+			"*.rhtml",
+		},
+		MimeTypes: []string{
+			"application/x-ruby-templating",
+		},
+		DotAll:   true,
+		Delegate: "HTML",
+		Analyse: &chroma.AnalyseConfig{
+			Regexes: []chroma.RegexConfig{
+				{
+					Pattern: "\\A(?=[\\s\\S]*<%=)(?=[\\s\\S]*%>)",
+					Score:   0.4,
+				},
+				{
+					Pattern: "<%",
+					Score:   0.1,
+				},
+			},
+			First: true,
+		},
 	}},
 	{"embedded/erlang.xml", chroma.Config{
 		Name: "Erlang",
@@ -1549,10 +1580,44 @@ var embeddedLexers = []struct {
 			"text/x-gnuplot",
 		},
 	}},
+	{"embedded/go.xml", chroma.Config{
+		Name: "Go",
+		Aliases: []string{
+			"go",
+			"golang",
+		},
+		Filenames: []string{
+			"*.go",
+		},
+		MimeTypes: []string{
+			"text/x-gosrc",
+		},
+		Analyse: &chroma.AnalyseConfig{
+			Regexes: []chroma.RegexConfig{
+				{
+					Pattern: "\\A(?=[\\s\\S]*fmt\\.)(?=[\\s\\S]*package )",
+					Score:   0.5,
+				},
+				{
+					Pattern: "package ",
+					Score:   0.1,
+				},
+			},
+			First: true,
+		},
+	}},
+	{"embedded/go_html_template.xml", chroma.Config{
+		Name: "Go HTML Template",
+		Aliases: []string{
+			"go-html-template",
+		},
+		Delegate: "HTML",
+	}},
 	{"embedded/go_template.xml", chroma.Config{
 		Name: "Go Template",
 		Aliases: []string{
 			"go-template",
+			"go-text-template",
 		},
 		Filenames: []string{
 			"*.gotmpl",
@@ -2315,6 +2380,20 @@ var embeddedLexers = []struct {
 			"text/mcfunction",
 		},
 	}},
+	{"embedded/mdx.xml", chroma.Config{
+		Name: "MDX",
+		Aliases: []string{
+			"mdx",
+			"mdxjs",
+		},
+		Filenames: []string{
+			"*.mdx",
+		},
+		MimeTypes: []string{
+			"text/x-mdx",
+		},
+		EnsureNL: true,
+	}},
 	{"embedded/meson.xml", chroma.Config{
 		Name: "Meson",
 		Aliases: []string{
@@ -2827,6 +2906,39 @@ var embeddedLexers = []struct {
 		EnsureNL:        true,
 		Priority:        3,
 	}},
+	{"embedded/phtml.xml", chroma.Config{
+		Name: "PHTML",
+		Aliases: []string{
+			"phtml",
+		},
+		Filenames: []string{
+			"*.phtml",
+			"*.php",
+			"*.php[345]",
+			"*.inc",
+		},
+		MimeTypes: []string{
+			"application/x-php",
+			"application/x-httpd-php",
+			"application/x-httpd-php3",
+			"application/x-httpd-php4",
+			"application/x-httpd-php5",
+			"text/x-php",
+		},
+		CaseInsensitive: true,
+		DotAll:          true,
+		EnsureNL:        true,
+		Priority:        2,
+		Delegate:        "HTML",
+		Analyse: &chroma.AnalyseConfig{
+			Regexes: []chroma.RegexConfig{
+				{
+					Pattern: "<\\?php",
+					Score:   0.5,
+				},
+			},
+		},
+	}},
 	{"embedded/pig.xml", chroma.Config{
 		Name: "Pig",
 		Aliases: []string{
@@ -3190,6 +3302,15 @@ var embeddedLexers = []struct {
 			"application/x-qt.qbs+qml",
 		},
 		DotAll: true,
+	}},
+	{"embedded/quint.xml", chroma.Config{
+		Name: "Quint",
+		Aliases: []string{
+			"quint",
+		},
+		Filenames: []string{
+			"*.qnt",
+		},
 	}},
 	{"embedded/r.xml", chroma.Config{
 		Name: "R",
@@ -3771,6 +3892,20 @@ var embeddedLexers = []struct {
 		},
 		CaseInsensitive: true,
 	}},
+	{"embedded/svelte.xml", chroma.Config{
+		Name: "Svelte",
+		Aliases: []string{
+			"svelte",
+		},
+		Filenames: []string{
+			"*.svelte",
+		},
+		MimeTypes: []string{
+			"application/x-svelte",
+		},
+		DotAll:   true,
+		Delegate: "HTML",
+	}},
 	{"embedded/swift.xml", chroma.Config{
 		Name: "Swift",
 		Aliases: []string{
@@ -3982,6 +4117,16 @@ var embeddedLexers = []struct {
 			"application/x-thrift",
 		},
 	}},
+	{"embedded/tlaplus.xml", chroma.Config{
+		Name: "TLA+",
+		Aliases: []string{
+			"tlaplus",
+			"tla",
+		},
+		Filenames: []string{
+			"*.tla",
+		},
+	}},
 	{"embedded/toml.xml", chroma.Config{
 		Name: "TOML",
 		Aliases: []string{
@@ -4123,6 +4268,19 @@ var embeddedLexers = []struct {
 		},
 		DotAll:   true,
 		EnsureNL: true,
+	}},
+	{"embedded/typespec.xml", chroma.Config{
+		Name: "TypeSpec",
+		Aliases: []string{
+			"typespec",
+			"tsp",
+		},
+		Filenames: []string{
+			"*.tsp",
+		},
+		MimeTypes: []string{
+			"text/x-typespec",
+		},
 	}},
 	{"embedded/typoscript.xml", chroma.Config{
 		Name: "TypoScript",
@@ -4423,6 +4581,24 @@ var embeddedLexers = []struct {
 		MimeTypes: []string{
 			"text/x-yaml",
 		},
+	}},
+	{"embedded/yaml_jinja.xml", chroma.Config{
+		Name: "YAML+Jinja",
+		Aliases: []string{
+			"yaml+jinja",
+			"salt",
+			"sls",
+			"ansible",
+		},
+		Filenames: []string{
+			"*.sls",
+		},
+		MimeTypes: []string{
+			"text/x-yaml+jinja",
+			"text/x-sls",
+		},
+		DotAll:   true,
+		Delegate: "YAML",
 	}},
 	{"embedded/yang.xml", chroma.Config{
 		Name: "YANG",

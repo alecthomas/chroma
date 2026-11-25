@@ -71,8 +71,17 @@ type Formatter struct {
 	fontFormat   FontFormat
 }
 
-func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) error {
-	return f.writeSVG(w, style, slices.Collect(iterator))
+func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator iter.Seq[chroma.Token]) (err error) {
+	defer func() {
+		if perr := recover(); perr != nil {
+			if e, ok := perr.(error); ok {
+				err = e
+			} else {
+				err = fmt.Errorf("%v", perr)
+			}
+		}
+	}()
+	return f.writeSVG(w, style, slices.Collect(chroma.SplitTokensIntoLines(iterator)))
 }
 
 var svgEscaper = strings.NewReplacer(
@@ -92,9 +101,8 @@ func escapeString(s string) string {
 // cssStringEscaper escapes a value for a single-quoted CSS string.
 var cssStringEscaper = strings.NewReplacer(`\`, `\\`, `'`, `\'`)
 
-func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, tokens []chroma.Token) error { // nolint: gocyclo
+func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, lines [][]chroma.Token) error { // nolint: gocyclo
 	svgStyles := f.styleToSVG(style)
-	lines := chroma.SplitTokensIntoLines(tokens)
 
 	if _, err := fmt.Fprint(w, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
 		"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n"); err != nil {

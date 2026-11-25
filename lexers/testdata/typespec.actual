@@ -1,0 +1,84 @@
+import "@typespec/http";
+import "./common.tsp";
+
+using TypeSpec.Http;
+using Common;
+
+#suppress "@typespec/http/no-op" "documented elsewhere"
+@service(#{ title: "Widget Service", version: "1.0" })
+@server("https://example.com/{region}", "Region endpoint", { region: string })
+namespace Demo.Service;
+
+// A line comment.
+/**
+ * A widget.
+ * @doc "ignored in comments"
+ */
+@doc("""
+  A triple quoted
+  description with "quotes" and ${Widget.name}
+  """)
+model Widget<T extends {} = unknown> extends Base {
+  @key id: string;
+  `weird name`?: int32 = 42;
+  weight: float64 = 3.14e2;
+  mask: uint8 = 0xFF;
+  flags: uint8 = 0b1010;
+  color: "red" | "blue" | null;
+  tags: string[];
+  ...OtherProps;
+  nested: { a: Record<T>, b: Array<int64> };
+}
+
+model Created is Widget;
+
+scalar uuid extends string;
+scalar ratio extends float32;
+
+union Shape {
+  circle: Circle,
+  square: Square,
+  "named": Other,
+}
+
+enum Color {
+  Red,
+  Blue: "blue",
+  Level: 3,
+}
+
+alias Id = string | int32;
+alias Page<T> = { items: T[]; next?: url };
+
+const defaultName = "widget\nA\"";
+
+@route("/widgets")
+interface Widgets {
+  @get list(@query limit?: int32): Widget[];
+  @post create(@body widget: Widget): Created | { @statusCode _: 400; message: string };
+  @@doc(Widgets.list, "Lists widgets");
+}
+
+op ping(): void;
+extern dec tag(target: unknown, value: valueof string);
+extern fn compute(value: unknown): typeof value;
+
+@tag("a")
+internal model Hidden {
+  when: utcDateTime;
+  length: duration;
+  empty: never;
+  ok: true;
+  off?: false;
+}
+
+model Keywords {
+  model: string;
+  is?: boolean;
+  `quoted name`: Widget;
+}
+
+model Unterminated {
+  name: "oops;
+  after: string;
+}

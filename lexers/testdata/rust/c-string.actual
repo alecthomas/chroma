@@ -1,0 +1,17 @@
+fn main() {
+    let c = c"hello" + tail;
+    let c_empty = c"" + tail;
+    let c_escapes = c"\xFF\u{00E6}\"" + tail;
+    let c_unicode = c"æ中" + tail;
+    let c_multiline = c"first
+second" + tail;
+    let raw_c = cr"hello" + tail;
+    let raw_c_hash = cr#""hello""# + tail;
+    let raw_c_two_hashes = cr##"value "# is not the end; \xFF"## + tail;
+    let raw_c_multiline = cr#"first
+second"# + tail;
+    let byte_control = b"\xFF" + tail;
+    let raw_byte_control = br#"\xFF"# + tail;
+    let raw_control = r#"\xFF"# + tail;
+    let string_control = "hello" + tail;
+}

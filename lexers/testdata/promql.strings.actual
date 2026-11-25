@@ -1,0 +1,17 @@
+"double quote: \" remains in the string"
+'single quote: \' remains in the string'
+"an apostrophe ' is not a terminator"
+'a double quote " is not a terminator'
+`raw \n ' " text`
+`raw
+multiline`
+request_count{message="quote: \" and brace }",job="api"}
+request_count{message='quote: \' and brace }',job='api'}
+request_count{message=`raw ' " \n and brace }`,job="api"}
+request_count{message=`raw
+multiline`,job="api"}
+"escaped backslash: \\" + "next string"
+request_count{message="escaped backslash: \\",job="api"}
+"plain"
+'plain'
+request_count{job="api",status!~'(4|5)..'}

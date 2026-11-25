@@ -39,27 +39,28 @@ translators for Pygments lexers and styles.
 
 <!-- supported-languages:begin -->
 | Prefix | Language
-| :----: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| :----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|   1    | 1C Enterprise
 |   A    | ABAP, ABNF, ActionScript, ActionScript 3, Ada, Agda, AL, Alloy, AMPL, Angular2, ANTLR, ApacheConf, APL, AppleScript, ArangoDB AQL, Arduino, ArmAsm, Arturo, Astro, ATL, AutoHotkey, AutoIt, Awk
 |   B    | Ballerina, Bash, Bash Session, Batchfile, Beef, BibTeX, Bicep, Blade, BlitzBasic, BNF, BQN, Brainfuck
 |   C    | C, C#, C++, C3, Caddyfile, Caddyfile Directives, Cap'n Proto, Cassandra CQL, Cedar, Ceylon, CFEngine3, cfstatement, ChaiScript, Chapel, Cheetah, Clojure, CMake, COBOL, CoffeeScript, Common Lisp, Coq, Core, Crystal, CSS, CSV, CUE, Cython
 |   D    | D, Dart, Dax, DBML, Desktop file, Devicetree, Diff, Django/Jinja, dns, Docker, docopt, DTD, Dylan
 |   E    | EBNF, Elixir, Elm, EmacsLisp, ERB, Erlang
 |   F    | Factor, Fennel, Fish, Forth, Fortran, FortranFixed, FSharp
-|   G    | G-code, Garden, GAS, GDScript, GDScript3, Gemfile.lock, Gemtext, Genshi, Genshi HTML, Genshi Text, Gettext, Gherkin, Git Config, Gleam, GLSL, Gnuplot, Go, Go HTML Template, Go Template, Go Text Template, Gooo, GraphQL, Groff, Groovy
-|   H    | Handlebars, Hare, Haskell, Haxe, Hexdump, HLB, HLSL, HolyC, HTML, HTTP, Hurl, Hy, Hyprlang
+|   G    | G-code, Garden, GAS, GDScript, GDScript3, Gemfile.lock, Gemtext, Genshi, Genshi HTML, Genshi Text, Gettext, Gherkin, Git Config, Gleam, GLSL, Gnuplot, Go, Go HTML Template, Go Template, Gooo, GraphQL, Groff, Groovy
+|   H    | Handlebars, Hare, Haskell, Haxe, Hemlock, Hexdump, HLB, HLSL, HolyC, HTML, HTTP, Hurl, Hy, Hyprlang
 |   I    | Idris, Igor, InfluxDB Line Protocol, INI, Io, Isabelle, ISCdhcpd
 |   J    | J, Janet, Java, JavaScript, JQ, JSON, JSONata, Jsonnet, Julia, Jungle
 |   K    | Kakoune, KDL, Kotlin
-|   L    | Lateralus, Lean4, Lighttpd configuration file, LilyPond, LLVM, lox, Lua, Luau
-|   M    | Makefile, Mako, markdown, Markless, Mason, Materialize SQL dialect, Mathematica, Matlab, MCFunction, Meson, Metal, microcad, MiniZinc, MLIR, Modelica, Modula-2, Mojo, MonkeyC, MoonBit, MoonScript, MorrowindScript, Myghty, MySQL
+|   L    | Lateralus, Lean4, Lighttpd configuration file, LilyPond, Lispex, LLVM, lox, Lua, Luau
+|   M    | Makefile, Mako, markdown, Markless, Mason, Materialize SQL dialect, Mathematica, Matlab, MCFunction, MDX, Meson, Metal, microcad, MiniZinc, MLIR, Modelica, Modula-2, Mojo, MonkeyC, MoonBit, MoonScript, MorrowindScript, Myghty, MySQL
 |   N    | NASM, Natural, NDISASM, Newspeak, Nginx configuration file, Nim, Nix, NSIS, Nu
 |   O    | Objective-C, ObjectPascal, OCaml, Octave, Odin, OnesEnterprise, OpenEdge ABL, OpenSCAD, Org Mode
-|   P    | PacmanConf, Perl, PHP, PHTML, Pig, PkgConfig, PL/pgSQL, plaintext, Plutus Core, Pony, PostgreSQL SQL dialect, PostScript, POVRay, PowerQuery, PowerShell, Prolog, Promela, PromQL, properties, Protocol Buffer, Protocol Buffer Text Format, PRQL, PSL, Puppet, Python, Python 2
-|   Q    | QBasic, QML
+|   P    | PacmanConf, Perl, PHP, PHTML, Pig, PkgConfig, Pkl, PL/pgSQL, plaintext, Plan 9 rc, Plutus Core, Pony, PostgreSQL SQL dialect, PostScript, POVRay, PowerQuery, PowerShell, Prolog, Promela, PromQL, properties, Protocol Buffer, Protocol Buffer Text Format, PRQL, PSL, Puppet, Python, Python 2
+|   Q    | QBasic, QML, Quint
 |   R    | R, Racket, Ragel, Raku, react, ReasonML, reg, Rego, reStructuredText, Rexx, RGBDS Assembly, Ring, RPGLE, RPMSpec, Ruby, Rust
-|   S    | SAS, Sass, Scala, scdoc, Scheme, Scilab, SCSS, Sed, Sieve, Smali, Smalltalk, Smarty, SNBT, Snobol, Solidity, SourcePawn, Spade, SPARQL, SQL, SquidConf, Standard ML, stas, Stylus, Svelte, Swift, SYSTEMD, systemverilog
-|   T    | TableGen, Tal, TASM, Tcl, Tcsh, Templ, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, TSRX, Turing, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData, Typst
+|   S    | SAS, Sass, Scala, scdoc, Scheme, Scilab, SCSS, Sed, Sieve, Slim, Smali, Smalltalk, Smarty, SNBT, Snobol, Solidity, SourcePawn, Spade, SPARQL, SQL, SquidConf, SSH config, Standard ML, stas, Stylus, Svelte, Swift, SYSTEMD, systemverilog
+|   T    | TableGen, Tal, TASM, Tcl, Tcsh, Templ, Termcap, Terminfo, Terraform, TeX, Thrift, TLA+, TOML, Topaz, TradingView, Transact-SQL, TSRX, Turing, Turtle, Twig, TypeScript, TypeSpec, TypoScript, TypoScriptCssData, TypoScriptHtmlData, Typst
 |   U    | ucode
 |   V    | V, V shell, Vala, VB.net, verilog, Verse, VHDL, VHS, VimL, vue
 |   W    | WDTE, WebAssembly Text Format, WebGPU Shading Language, WebVTT, Whiley
@@ -298,7 +299,7 @@ for that setup the `chroma` executable can be just symlinked to `~/.lessfilter`.
   its input using Chroma
 * [Hugo](https://gohugo.io/) is a static site generator that [uses Chroma for syntax
   highlighting code examples](https://gohugo.io/content-management/syntax-highlighting/)
-* [f4](https://github.com/unxed/f4) is asynchronious cross platform Far Manager clone in Go
+* [f4](https://github.com/unxed/f4) is asynchronous cross platform Far Manager clone in Go
   that uses Chroma for syntax highlighting in built-in editor
 
 ## Testing lexers

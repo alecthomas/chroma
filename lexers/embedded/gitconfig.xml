@@ -17,7 +17,7 @@
           <token type="CommentSingle"/>
         </bygroups>
       </rule>
-      <rule pattern="^([ \t]*)(\[)([A-Za-z0-9.-]+)([ \t]+)(&quot;(?:\\[^\n]|[^&quot;\n])*&quot;)(\])([ \t]+)([A-Za-z][A-Za-z0-9-]*)([ \t]*)(=)([ \t]*)">
+      <rule pattern="^([ \t]*)(\[)([A-Za-z0-9.-]+)([ \t]+)(&quot;(?:\\[^\n]|[^&quot;\n])*&quot;)(\])([ \t]*)([A-Za-z][A-Za-z0-9-]*)([ \t]*)(=)([ \t]*)">
         <bygroups>
           <token type="Text"/>
           <token type="Punctuation"/>
@@ -33,7 +33,7 @@
         </bygroups>
         <push state="value"/>
       </rule>
-      <rule pattern="^([ \t]*)(\[)([A-Za-z0-9.-]+)(\])([ \t]+)([A-Za-z][A-Za-z0-9-]*)([ \t]*)(=)([ \t]*)">
+      <rule pattern="^([ \t]*)(\[)([A-Za-z0-9.-]+)(\])([ \t]*)([A-Za-z][A-Za-z0-9-]*)([ \t]*)(=)([ \t]*)">
         <bygroups>
           <token type="Text"/>
           <token type="Punctuation"/>
@@ -47,7 +47,7 @@
         </bygroups>
         <push state="value"/>
       </rule>
-      <rule pattern="^([ \t]*)(\[)([A-Za-z0-9.-]+)([ \t]+)(&quot;(?:\\[^\n]|[^&quot;\n])*&quot;)(\])([ \t]+)([A-Za-z][A-Za-z0-9-]*)([ \t]*)([;#].*)?$">
+      <rule pattern="^([ \t]*)(\[)([A-Za-z0-9.-]+)([ \t]+)(&quot;(?:\\[^\n]|[^&quot;\n])*&quot;)(\])([ \t]*)([A-Za-z][A-Za-z0-9-]*)([ \t]*)([;#].*)?$">
         <bygroups>
           <token type="Text"/>
           <token type="Punctuation"/>
@@ -61,7 +61,7 @@
           <token type="CommentSingle"/>
         </bygroups>
       </rule>
-      <rule pattern="^([ \t]*)(\[)([A-Za-z0-9.-]+)(\])([ \t]+)([A-Za-z][A-Za-z0-9-]*)([ \t]*)([;#].*)?$">
+      <rule pattern="^([ \t]*)(\[)([A-Za-z0-9.-]+)(\])([ \t]*)([A-Za-z][A-Za-z0-9-]*)([ \t]*)([;#].*)?$">
         <bygroups>
           <token type="Text"/>
           <token type="Punctuation"/>

@@ -33,3 +33,11 @@ helloInJapanese = こんにちは
   foo = I have leading whitespace
 # Comments and keys can have trailing whitespace as part of the comment   
 bar = I have trailing whitespace as part of the value  
+path=C:\\
+share root\\
+next=ok
+profile\:prod\ region = active
+path\\:root
+group.name
+long\
+    key\=id data

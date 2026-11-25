@@ -1,0 +1,48 @@
+---- MODULE Counter ----
+EXTENDS Naturals, Sequences, TLC
+
+CONSTANTS Max, Procs
+VARIABLES n, log, pc
+
+vars == <<n, log, pc>>
+Colors == {"red", "green"}
+Hex == \h1F + \b101 + \o17 + 3.14
+
+(* A block comment (* with nesting *) that
+   spans lines. *)
+\* A line comment.
+
+Init == /\ n = 0
+        /\ log = <<>>
+        /\ pc = [p \in Procs |-> "idle"]
+
+Inc(p) == /\ pc[p] = "idle"
+          /\ n < Max
+          /\ n' = n + 1
+          /\ log' = Append(log, "inc \"quoted\"")
+          /\ pc' = [pc EXCEPT ![p] = "busy"]
+
+Next == \E p \in Procs : Inc(p) \/ UNCHANGED vars
+
+Spec == Init /\ [][Next]_vars /\ WF_vars(Next)
+
+TypeOK == n \in 0..Max /\ \A i \in DOMAIN log : log[i] \notin {"x"}
+Live == <>(n = Max) /\ (n = 0 ~> n > 0)
+Big == IF n > 1 THEN CHOOSE x \in Nat : x ≥ n ELSE LET y == 1 IN y
+M == INSTANCE Other WITH Max <- 3
+Use == M!Foo(1) \cup {1, 2} \ {2}
+
+THEOREM Spec => []TypeOK
+
+(* --algorithm Incr
+variables x = 0, done = FALSE;
+process Worker \in 1..2
+begin
+Loop:
+  while x < 3 do
+    x := x + 1;
+  end while;
+  assert x >= 3;
+end process;
+end algorithm; *)
+====

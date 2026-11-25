@@ -94,10 +94,10 @@
         </bygroups>
         <push state="class"/>
       </rule>
-      <rule words="assert break case catch continue default do else finally for if in is new return super switch this throw try while" prefix="\b" suffix="\b">
+      <rule words="assert break case catch continue default do else finally for if in is new on rethrow return super switch this throw try when while" prefix="\b" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule words="abstract async await const extends factory final get implements native operator required set static sync typedef var with yield" prefix="\b" suffix="\b">
+      <rule words="abstract async await base const covariant enum extends extension external factory final get implements interface late mixin native operator required sealed set static sync typedef var with yield" prefix="\b" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule words="bool double dynamic int num Object String void" prefix="\b" suffix="\b">

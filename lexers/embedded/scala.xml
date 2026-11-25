@@ -44,7 +44,7 @@
       </rule>
     </state>
     <state name="root">
-      <rule pattern="(class|trait|object)(\s+)">
+      <rule pattern="(class|trait|object|enum)(\s+)">
         <bygroups>
           <token type="Keyword"/>
           <token type="Text"/>
@@ -64,7 +64,7 @@
       <rule pattern="@[\\$_\p{L}](?:[\\$_\p{L}]|[0-9])*(?:(?&lt;=_)[-~\^\*!%&amp;\\&lt;&gt;\|+=:/?@�-�����-����϶҂؆-؈؎-؏۩۽-۾߶৺୰௳-௸௺౿ೱ-ೲ൹༁-༃༓-༗༚-༟༴༶༸྾-࿅࿇-࿏႞-႟፠᎐-᎙᥀᧠-᧿᭡-᭪᭴-᭼⁄⁒⁺-⁼₊-₌℀-℁℃-℆℈-℉℔№-℘℞-℣℥℧℩℮℺-℻⅀-⅄⅊-⅍⅏←-⌨⌫-⑊⒜-ⓩ─-❧➔-⟄⟇-⟥⟰-⦂⦙-⧗⧜-⧻⧾-⭔⳥-⳪⺀-⿻〄〒-〓〠〶-〷〾-〿㆐-㆑㆖-㆟㇀-㇣㈀-㈞㈪-㉐㉠-㉿㊊-㊰㋀-㏿䷀-䷿꒐-꓆꠨-꠫﬩﷽﹢﹤-﹦＋＜-＞｜～￢￤￨-￮￼-�]+)?">
         <token type="NameDecorator"/>
       </rule>
-      <rule pattern="(abstract|ca(?:se|tch)|d(?:ef|o)|e(?:lse|xtends)|f(?:inal(?:ly)?|or(?:Some)?)|i(?:f|mplicit)|lazy|match|new|override|pr(?:ivate|otected)|re(?:quires|turn)|s(?:ealed|uper)|t(?:h(?:is|row)|ry)|va[lr]|w(?:hile|ith)|yield)\b|(&lt;[%:-]|=&gt;|&gt;:|[#=@_⇒←])(\b|(?=\s)|$)">
+      <rule pattern="(abstract|ca(?:se|tch)|d(?:ef|o)|e(?:lse|xport|xtends)|f(?:inal(?:ly)?|or(?:Some)?)|given|i(?:f|mplicit)|lazy|match|new|override|pr(?:ivate|otected)|re(?:quires|turn)|s(?:ealed|uper)|t(?:h(?:en|is|row)|ry)|va[lr]|w(?:hile|ith)|yield)\b|(&lt;[%:-]|=&gt;|&gt;:|[#=@_⇒←])(\b|(?=\s)|$)">
         <token type="Keyword"/>
       </rule>
       <rule pattern=":(?![-~\^\*!%&amp;\\&lt;&gt;\|+=:/?@�-�����-����϶҂؆-؈؎-؏۩۽-۾߶৺୰௳-௸௺౿ೱ-ೲ൹༁-༃༓-༗༚-༟༴༶༸྾-࿅࿇-࿏႞-႟፠᎐-᎙᥀᧠-᧿᭡-᭪᭴-᭼⁄⁒⁺-⁼₊-₌℀-℁℃-℆℈-℉℔№-℘℞-℣℥℧℩℮℺-℻⅀-⅄⅊-⅍⅏←-⌨⌫-⑊⒜-ⓩ─-❧➔-⟄⟇-⟥⟰-⦂⦙-⧗⧜-⧻⧾-⭔⳥-⳪⺀-⿻〄〒-〓〠〶-〷〾-〿㆐-㆑㆖-㆟㇀-㇣㈀-㈞㈪-㉐㉠-㉿㊊-㊰㋀-㏿䷀-䷿꒐-꓆꠨-꠫﬩﷽﹢﹤-﹦＋＜-＞｜～￢￤￨-￮￼-�]+%s)">

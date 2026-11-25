@@ -1,0 +1,204 @@
+<lexer>
+  <config>
+    <name>TLA+</name>
+    <alias>tlaplus</alias>
+    <alias>tla</alias>
+    <filename>*.tla</filename>
+  </config>
+  <rules>
+    <state name="root">
+      <rule pattern="^(-{4,})(\s*)(MODULE)(\s+)(\w+)(\s*)(-{4,})">
+        <bygroups>
+          <token type="Comment"/>
+          <token type="Text"/>
+          <token type="KeywordNamespace"/>
+          <token type="Text"/>
+          <token type="NameNamespace"/>
+          <token type="Text"/>
+          <token type="Comment"/>
+        </bygroups>
+      </rule>
+      <rule>
+        <include state="expr"/>
+      </rule>
+    </state>
+    <state name="expr">
+      <rule pattern="\s+">
+        <token type="Text"/>
+      </rule>
+      <rule pattern="\\\*.*">
+        <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="\(\*(?=\s*--(?:fair\s+)?algorithm\b)">
+        <token type="CommentMultiline"/>
+        <push state="pluscal"/>
+      </rule>
+      <rule pattern="\(\*">
+        <token type="CommentMultiline"/>
+        <push state="comment"/>
+      </rule>
+      <rule pattern="^\s*(-{4,}|={4,})\s*$">
+        <token type="Comment"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <push state="string"/>
+      </rule>
+      <rule pattern="\\[bB][01]+\b">
+        <token type="LiteralNumberBin"/>
+      </rule>
+      <rule pattern="\\[oO][0-7]+\b">
+        <token type="LiteralNumberOct"/>
+      </rule>
+      <rule pattern="\\[hH][0-9a-fA-F]+\b">
+        <token type="LiteralNumberHex"/>
+      </rule>
+      <rule pattern="\d+\.\d+\b">
+        <token type="LiteralNumberFloat"/>
+      </rule>
+      <rule pattern="\d+\b">
+        <token type="LiteralNumberInteger"/>
+      </rule>
+      <rule pattern="\b(?:EXTENDS|INSTANCE|MODULE)\b">
+        <token type="KeywordNamespace"/>
+      </rule>
+      <rule pattern="\b(?:VARIABLES|VARIABLE|CONSTANTS|CONSTANT|ASSUME|ASSUMPTION|AXIOM|THEOREM|LEMMA|PROPOSITION|COROLLARY|RECURSIVE|LOCAL)\b">
+        <token type="KeywordDeclaration"/>
+      </rule>
+      <rule pattern="\b(?:TRUE|FALSE)\b">
+        <token type="KeywordConstant"/>
+      </rule>
+      <rule pattern="\b(?:BOOLEAN|STRING)\b">
+        <token type="KeywordType"/>
+      </rule>
+      <rule pattern="\b(?:IF|THEN|ELSE|CASE|OTHER|LET|IN|EXCEPT|ENABLED|UNCHANGED|LAMBDA|DOMAIN|CHOOSE|SUBSET|UNION|WITH|USE|DEFS|BY|DEF|SUFFICES|PROVE|OBVIOUS|NEW|QED|PICK|HIDE|DEFINE|WITNESS|HAVE|TAKE|PROOF|ACTION|OMITTED|ONLY|STATE|TEMPORAL)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="\b(WF_|SF_)(\w+)">
+        <bygroups>
+          <token type="Keyword"/>
+          <token type="Name"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(\w+)(\s*)(==|≜)(\s*)(INSTANCE)\b">
+        <bygroups>
+          <token type="NameNamespace"/>
+          <token type="Text"/>
+          <token type="Operator"/>
+          <token type="Text"/>
+          <token type="KeywordNamespace"/>
+        </bygroups>
+      </rule>
+      <rule pattern="([A-Za-z_]\w*)(\s*)(==(?!=)|≜)">
+        <bygroups>
+          <token type="NameFunction"/>
+          <token type="Text"/>
+          <token type="Operator"/>
+        </bygroups>
+      </rule>
+      <rule pattern="(\w+)(!)(?=\w)">
+        <bygroups>
+          <token type="NameNamespace"/>
+          <token type="Operator"/>
+        </bygroups>
+      </rule>
+      <rule pattern="\b(?:Nat|Int|Real|Seq|Len|Head|Tail|Append|SubSeq|SelectSeq|Cardinality|IsFiniteSet|Print|PrintT|Assert|ToString)\b">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="[A-Za-z_]\w*(?=\s*\()">
+        <token type="NameFunction"/>
+      </rule>
+      <rule pattern="/\\|\\/">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="\\[a-zA-Z]+">
+        <token type="OperatorWord"/>
+      </rule>
+      <rule pattern="[∈∉⊆⊂⊇⊃∪∩⊏⊐⊑⊒⊓⊔⊎∧∨¬≡⇒≤≥≪≫≺≻⪯⪰∼≃≍≈≅≠≐∝⊨÷⋅⋆∘●◯≀⊕⊖⊗⊘⊙∀∃×≜←→↝↦⇔⇸∷≔⊢⊣⫤‖‥…‼⁇⁺□◇⩴∖]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="\[\]">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="&lt;&lt;|&gt;&gt;|[⟨⟩]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="[ℕℤℝ]">
+        <token type="NameBuiltin"/>
+      </rule>
+      <rule pattern="[A-Za-z_]\w*">
+        <token type="Name"/>
+      </rule>
+      <rule pattern="\.\.\.?">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[\-+*/%&lt;&gt;=#~@!$&amp;|^:?&#39;]+">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern="[()\[\]{},;.]">
+        <token type="Punctuation"/>
+      </rule>
+      <rule pattern="\\">
+        <token type="Operator"/>
+      </rule>
+      <rule pattern=".">
+        <token type="Text"/>
+      </rule>
+    </state>
+    <state name="comment">
+      <rule pattern="\(\*">
+        <token type="CommentMultiline"/>
+        <push/>
+      </rule>
+      <rule pattern="\*\)">
+        <token type="CommentMultiline"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="[^(*]+">
+        <token type="CommentMultiline"/>
+      </rule>
+      <rule pattern="[(*]">
+        <token type="CommentMultiline"/>
+      </rule>
+    </state>
+    <state name="string">
+      <rule pattern="[^\\&#34;\n]+">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="\\.">
+        <token type="LiteralStringEscape"/>
+      </rule>
+      <rule pattern="&#34;">
+        <token type="LiteralStringDouble"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="\n">
+        <token type="Text"/>
+        <pop depth="1"/>
+      </rule>
+    </state>
+    <state name="pluscal">
+      <rule pattern="\*\)">
+        <token type="CommentMultiline"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="--(?:fair\s+)?algorithm\b">
+        <token type="KeywordNamespace"/>
+      </rule>
+      <rule pattern="\b(?:algorithm|variables|variable|procedure|process|begin|end|if|then|else|elsif|while|do|with|await|when|skip|assert|goto|either|or|call|return|print|macro|define|fair)\b">
+        <token type="Keyword"/>
+      </rule>
+      <rule pattern="^(\s*)([A-Za-z_]\w*)(\s*)(:)(?![:=])">
+        <bygroups>
+          <token type="Text"/>
+          <token type="NameLabel"/>
+          <token type="Text"/>
+          <token type="Punctuation"/>
+        </bygroups>
+      </rule>
+      <rule>
+        <include state="expr"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

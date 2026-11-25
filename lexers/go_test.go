@@ -1,33 +1,12 @@
 package lexers
 
 import (
-	"go/parser"
 	"slices"
 	"testing"
 
 	assert "github.com/alecthomas/assert/v2"
 	"github.com/alecthomas/chroma/v3"
 )
-
-func TestGoBuiltinCallWhitespace(t *testing.T) {
-	for _, source := range []string{
-		"len(items)\n",
-		"len (items)\n",
-		"cap\t(items)\n",
-		"append \t(items, value)\n",
-		"string (runes)\n",
-	} {
-		t.Run(source, func(t *testing.T) {
-			_, err := parser.ParseExpr(source)
-			assert.NoError(t, err)
-			it, err := chroma.Tokenise(Go, nil, source)
-			assert.NoError(t, err)
-			tokens := slices.Collect(it)
-			assert.Equal(t, chroma.NameBuiltin, tokens[0].Type)
-			assert.Equal(t, source, chroma.Stringify(tokens...))
-		})
-	}
-}
 
 func TestGoHTMLTemplateIssue126(t *testing.T) {
 	for _, source := range []string{
@@ -68,7 +47,7 @@ func TestGoHTMLTemplateIssue126(t *testing.T) {
     <h3>{{ .Title }}</h3>
     {{ .Content }}
 {{ end }}`} {
-		it, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		it, err := chroma.Tokenise(Get("Go HTML Template"), nil, source)
 		assert.NoError(t, err)
 		tokens := slices.Collect(it)
 		assert.Equal(t, source, chroma.Stringify(tokens...))
@@ -98,7 +77,7 @@ func TestGoHTMLTemplateMultilineComments(t *testing.T) {
 */ -}}
 `,
 	} {
-		it, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		it, err := chroma.Tokenise(Get("Go HTML Template"), nil, source)
 		assert.NoError(t, err)
 		tokens := slices.Collect(it)
 		assert.Equal(t, source, chroma.Stringify(tokens...))
@@ -125,7 +104,7 @@ func TestGoHTMLTemplateNegativeNumber(t *testing.T) {
 {{ fn -3 }}
 `,
 	} {
-		it, err := chroma.Tokenise(GoHTMLTemplate, nil, source)
+		it, err := chroma.Tokenise(Get("Go HTML Template"), nil, source)
 		assert.NoError(t, err)
 		tokens := slices.Collect(it)
 		assert.Equal(t, source, chroma.Stringify(tokens...))

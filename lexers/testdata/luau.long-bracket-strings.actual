@@ -1,0 +1,3 @@
+local text = [=[one ]]
+two]=]
+print [[three]]

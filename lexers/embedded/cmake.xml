@@ -56,13 +56,13 @@
           <token type="Operator"/>
         </bygroups>
       </rule>
-      <rule pattern="(?s)&#34;.*?&#34;">
-        <token type="LiteralStringDouble"/>
-      </rule>
-      <rule pattern="\\\S+">
+      <rule pattern="(?s)(?&lt;=(?&lt;!\\)(?:\\\\)*[ \t\n(])\[(=*)\[.*?\]\1\]">
         <token type="LiteralString"/>
       </rule>
-      <rule pattern="[^)$&#34;# \t\n]+">
+      <rule pattern="(?s)&#34;(?:[^&#34;\\]|\\.)*&#34;">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="(?:\\[^\n]?|[^)$&#34;#\\ \t\n])+">
         <token type="LiteralString"/>
       </rule>
       <rule pattern="\n">
@@ -84,6 +84,9 @@
     <state name="ws">
       <rule pattern="[ \t]+">
         <token type="Text"/>
+      </rule>
+      <rule pattern="(?s)#\[(=*)\[.*?\]\1\]">
+        <token type="CommentMultiline"/>
       </rule>
       <rule pattern="#.*\n">
         <token type="Comment"/>

@@ -2,7 +2,9 @@ package chroma
 
 import (
 	"encoding/xml"
+	"slices"
 	"testing"
+	"testing/fstest"
 
 	assert "github.com/alecthomas/assert/v2"
 )
@@ -16,6 +18,11 @@ func TestXMLEmitterUnmarshal(t *testing.T) {
 		{"ByGroups", `<bygroups><token type="Name"/><using lexer="Go"/></bygroups>`, ByGroups(Name, Using("Go"))},
 		{"UsingSelf", `<usingself state="root"/>`, UsingSelf("root")},
 		{"Using", `<using lexer="Go"/>`, Using("Go")},
+		{
+			"UsingRemap",
+			`<using lexer="Go"><remap from="Other" to="LiteralString"/></using>`,
+			&usingEmitter{Lexer: "Go", Remaps: []tokenRemap{{From: Other, To: LiteralString}}},
+		},
 		{
 			"UsingByGroup",
 			`<usingbygroup><sublexer_name_group>1</sublexer_name_group><code_group>2</code_group><emitters><token type="Name"/></emitters></usingbygroup>`,
@@ -122,4 +129,48 @@ func TestXMLRulesUnmarshal(t *testing.T) {
 	err := xml.Unmarshal(data, &actual)
 	assert.NoError(t, err)
 	assert.Equal(t, expected, actual)
+}
+
+func TestXMLImport(t *testing.T) {
+	fs := fstest.MapFS{
+		"base.xml": {Data: []byte(`<lexer><config><name>Base</name></config><rules>
+  <state name="root"><rule pattern="."><token type="Error"/></rule></state>
+  <state name="code">
+    <rule pattern="\)"><token type="Punctuation"/><pop depth="1"/></rule>
+    <rule words="if else" suffix="\b"><token type="Keyword"/></rule>
+    <rule pattern="\s+"><token type="TextWhitespace"/></rule>
+  </state>
+</rules></lexer>`)},
+		"importer.xml": {Data: []byte(`<lexer><config><name>Importer</name></config><rules>
+  <import lexer="base"/>
+  <state name="root">
+    <rule pattern="\("><token type="Punctuation"/><push state="code"/></rule>
+    <rule pattern="[^(]+"><token type="Text"/></rule>
+  </state>
+</rules></lexer>`)},
+	}
+	base, err := NewXMLLexer(fs, "base.xml")
+	assert.NoError(t, err)
+	importer, err := NewXMLLexer(fs, "importer.xml")
+	assert.NoError(t, err)
+
+	_, err = importer.Tokenise(nil, "a")
+	assert.EqualError(t, err, `Importer: failed to compile rules: no LexerRegistry available to import "base"`)
+
+	registry := NewLexerRegistry()
+	registry.Register(base)
+	importer, err = NewXMLLexer(fs, "importer.xml")
+	assert.NoError(t, err)
+	registry.Register(importer)
+	it, err := importer.Tokenise(nil, "x (if else)")
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{
+		{Text, "x "},
+		{Punctuation, "("},
+		{Keyword, "if"},
+		{TextWhitespace, " "},
+		{Keyword, "else"},
+		{Punctuation, ")"},
+	}, slices.Collect(it))
+	assert.NotZero(t, importer.(*RegexLexer).rules["code"][1].words, "imported words rule should be matched natively")
 }

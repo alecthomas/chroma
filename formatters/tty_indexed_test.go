@@ -1,6 +1,10 @@
 package formatters
 
 import (
+	"errors"
+	"io"
+	"iter"
+	"slices"
 	"strings"
 	"testing"
 
@@ -32,6 +36,34 @@ func TestClosestColour(t *testing.T) {
 	assert.Equal(t, chroma.MustParseColour("#d75f87"), actual)
 }
 
+func TestClosestColourTieBreak(t *testing.T) {
+	target := chroma.MustParseColour("#2ac3de")
+	low := chroma.MustParseColour("#00afd7")
+	high := chroma.MustParseColour("#00d7d7")
+	assert.Equal(t, low.Distance(target), high.Distance(target))
+
+	tests := []struct {
+		name    string
+		colours []chroma.Colour
+	}{
+		{
+			name:    "lower first",
+			colours: []chroma.Colour{low, high},
+		},
+		{
+			name:    "higher first",
+			colours: []chroma.Colour{high, low},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual := findClosestColour(slices.Values(test.colours), target)
+			assert.Equal(t, low, actual)
+		})
+	}
+	assert.Equal(t, low, findClosest(ttyTables[256], target))
+}
+
 func TestNoneColour(t *testing.T) {
 	formatter := TTY256
 	tokenType := chroma.None
@@ -52,4 +84,25 @@ func TestNoneColour(t *testing.T) {
 	//
 	// 178 color ref: https://jonasjacek.github.io/colors/
 	assert.Equal(t, "\033[38;5;178mWORD\033[0m", stringBuilder.String())
+}
+
+func TestFormattersRecoverIteratorPanic(t *testing.T) {
+	style, err := chroma.NewStyle("test", chroma.StyleEntries{})
+	assert.NoError(t, err)
+
+	for _, name := range Names() {
+		t.Run(name, func(t *testing.T) {
+			err := Get(name).Format(io.Discard, style, iter.Seq[chroma.Token](func(func(chroma.Token) bool) {
+				panic("lexer failed")
+			}))
+			assert.Error(t, err)
+			assert.Equal(t, "lexer failed", err.Error())
+
+			sentinel := errors.New("match timeout")
+			err = Get(name).Format(io.Discard, style, iter.Seq[chroma.Token](func(func(chroma.Token) bool) {
+				panic(sentinel)
+			}))
+			assert.Equal(t, sentinel, err)
+		})
+	}
 }

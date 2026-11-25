@@ -1,0 +1,9 @@
+enum Suit: string {
+    case Hearts = 'H';
+}
+
+final class Point {
+    public function __construct(public readonly int $x) {}
+}
+
+$double = fn($n) => $n * 2;

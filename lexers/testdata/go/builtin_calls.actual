@@ -1,0 +1,7 @@
+len(items)
+len (items)
+cap	(items)
+append 	(items, value)
+string (runes)
+length (items)
+var text string

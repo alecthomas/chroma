@@ -1,0 +1,4 @@
+package main
+
+const greeting = `Hello, {{ .Name }}!
+{{ if .Admin }}admin{{ end }}`

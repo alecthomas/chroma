@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"errors"
 	"iter"
 	"slices"
 	"testing"
@@ -174,4 +175,52 @@ func TestDelegateSplitsRootTokens(t *testing.T) {
 		{Keyword, "embedded"},
 		{Text, " after"},
 	}, slices.Collect(it))
+}
+
+func TestXMLDelegate(t *testing.T) {
+	root := mustNewLexer(t, &Config{Name: "Root"}, Rules{ // nolint: forbidigo
+		"root": {{`\s+`, Whitespace, nil}},
+	})
+	registry := NewLexerRegistry()
+	registry.Register(root)
+	language := xmlLexerFromString(t, `<name>Lang</name><delegate>root</delegate>`, `
+		<rule pattern="\w+"><token type="Keyword"/></rule>
+		<rule pattern="\s+"><token type="Other"/></rule>`)
+
+	_, err := language.Tokenise(nil, "a b")
+	assert.EqualError(t, err, `no LexerRegistry available to delegate to "root"`)
+
+	registry.Register(language)
+	it, err := language.Tokenise(nil, "a b")
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{Keyword, "a"}, {TextWhitespace, " "}, {Keyword, "b"}}, slices.Collect(it))
+}
+
+func TestDelegateAnalysesLanguage(t *testing.T) {
+	lang, root := makeDelegationTestLexers(t)
+	root.SetAnalyser(func(string) float32 { return 0.2 })
+	delegate := DelegatingLexer(root, lang).SetAnalyser(func(string) float32 { return 0.7 })
+	assert.Equal(t, float32(0.7), delegate.AnalyseText(""))
+	assert.Equal(t, float32(0.2), root.AnalyseText(""))
+}
+
+type panickingLexer struct {
+	Lexer
+	panicVal any
+}
+
+func (l *panickingLexer) Tokenise(*TokeniseOptions, string) (iter.Seq[Token], error) {
+	return func(func(Token) bool) { panic(l.panicVal) }, nil
+}
+
+func TestDelegateRecoversLanguageIteratorPanic(t *testing.T) {
+	_, root := makeDelegationTestLexers(t)
+
+	sentinel := errors.New("match timeout")
+	_, err := DelegatingLexer(root, &panickingLexer{panicVal: sentinel}).Tokenise(nil, "hello")
+	assert.Equal(t, sentinel, err)
+
+	_, err = DelegatingLexer(root, &panickingLexer{panicVal: "lexer failed"}).Tokenise(nil, "hello")
+	assert.Error(t, err)
+	assert.Equal(t, "lexer failed", err.Error())
 }

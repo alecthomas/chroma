@@ -1,0 +1,16 @@
+locals {
+  quote     = "say \"hello\" to ${var.name}"
+  nested    = "${upper("a \"quoted\" word")}"
+  backslash = "\\"
+  path      = "C:\\Users\\"
+  control   = "line one\nline two\r\n\tindented"
+  unicode   = "\u00e9 \U0001F600"
+  anchored  = can(regex("^[a-z]+$", var.name))
+  digits    = regex("\\d+", "a1")
+  dollars   = "$5 or 5$ or $$"
+  literal   = "$${not.interpolated} ${var.interpolated}"
+  unclosed  = "$${"
+  dollar    = "$$${not.interpolated}"
+  escaped   = "\"${var.name}\""
+  after     = 1
+}

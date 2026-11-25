@@ -52,6 +52,10 @@ type Config struct {
 	// If this is 0 it will be treated as a default of 1.
 	Priority float32 `xml:"priority,omitempty"`
 
+	// Delegate names the lexer that tokenises the text this lexer emits as
+	// Other. See DelegatingLexer.
+	Delegate string `xml:"delegate,omitempty"`
+
 	// Analyse is a list of regexes to match against the input.
 	//
 	// If a match is found, the score is returned if single attribute is set to true,

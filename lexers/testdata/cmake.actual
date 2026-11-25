@@ -1,1 +1,14 @@
 project(example)
+message([=[a ) # literal ]==] "quote"
+still one argument]=])
+message("next")
+message(${v}[[a b]])
+message("before \"# still quoted\" after")
+message("next")
+#[=[ disabled
+message("hidden") ]==]
+]=]
+message("visible")
+message("left" #[[ignore )]] "right")
+message(\##[[drop]] "tail")
+message(x\#[[keep]])

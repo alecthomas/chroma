@@ -113,8 +113,8 @@ func fastUnmarshalConfig(from fs.FS, path string) (*Config, error) {
 	}
 }
 
-// MustNewXMLLexer constructs a new RegexLexer from an XML file or panics.
-func MustNewXMLLexer(from fs.FS, path string) *RegexLexer {
+// MustNewXMLLexer constructs a new Lexer from an XML file or panics.
+func MustNewXMLLexer(from fs.FS, path string) Lexer {
 	lex, err := NewXMLLexer(from, path)
 	if err != nil {
 		panic(err)
@@ -122,8 +122,8 @@ func MustNewXMLLexer(from fs.FS, path string) *RegexLexer {
 	return lex
 }
 
-// NewXMLLexer creates a new RegexLexer from an XML lexer definition.
-func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
+// NewXMLLexer creates a new Lexer from an XML lexer definition.
+func NewXMLLexer(from fs.FS, path string) (Lexer, error) {
 	config, err := fastUnmarshalConfig(from, path)
 	if err != nil {
 		return nil, err
@@ -131,13 +131,27 @@ func NewXMLLexer(from fs.FS, path string) (*RegexLexer, error) {
 	return NewXMLLexerFromConfig(config, from, path)
 }
 
-// NewXMLLexerFromConfig creates a RegexLexer whose Config is already known,
+// NewXMLLexerFromConfig creates a Lexer whose Config is already known,
 // loading its rules lazily from the XML definition at path in from.
+//
+// The lexer is a RegexLexer, wrapped in a DelegatingLexer if the Config has a
+// Delegate. The delegate is looked up in the lexer's LexerRegistry.
 //
 // The analyser regexes in config are compiled lazily on the first call to
 // AnalyseText; an invalid analyser regex results in a zero score at analyse
 // time rather than an error here.
-func NewXMLLexerFromConfig(config *Config, from fs.FS, path string) (*RegexLexer, error) {
+func NewXMLLexerFromConfig(config *Config, from fs.FS, path string) (Lexer, error) {
+	lexer, err := newXMLRegexLexer(config, from, path)
+	if err != nil {
+		return nil, err
+	}
+	if config.Delegate != "" {
+		return delegateByName(config.Delegate, lexer), nil
+	}
+	return lexer, nil
+}
+
+func newXMLRegexLexer(config *Config, from fs.FS, path string) (*RegexLexer, error) {
 	if err := config.validateGlobs(); err != nil {
 		return nil, err
 	}
@@ -190,43 +204,70 @@ func NewXMLLexerFromConfig(config *Config, from fs.FS, path string) (*RegexLexer
 		}
 	}
 
-	return &RegexLexer{
+	regexLexer := &RegexLexer{
 		config:   config,
 		analyser: analyserFn,
-		fetchRulesFunc: func() (Rules, ruleWords, error) {
-			var lexer struct {
-				Config
-				Rules xmlRules `xml:"rules"`
-			}
-			// Try to open .xml fallback to .xml.gz
-			fr, err := from.Open(path)
-			if err != nil {
-				if errors.Is(err, fs.ErrNotExist) {
-					path += ".gz"
-					fr, err = from.Open(path)
-					if err != nil {
-						return nil, nil, err
-					}
-				} else {
+	}
+	regexLexer.fetchRulesFunc = func() (Rules, ruleWords, error) {
+		var lexer struct {
+			Config
+			Rules xmlRules `xml:"rules"`
+		}
+		// Try to open .xml fallback to .xml.gz
+		fr, err := from.Open(path)
+		if err != nil {
+			if errors.Is(err, fs.ErrNotExist) {
+				path += ".gz"
+				fr, err = from.Open(path)
+				if err != nil {
 					return nil, nil, err
 				}
+			} else {
+				return nil, nil, err
 			}
-			defer fr.Close()
-			var r io.Reader = fr
-			if strings.HasSuffix(path, ".gz") {
-				r, err = gzip.NewReader(r)
-				if err != nil {
-					return nil, nil, fmt.Errorf("%s: %w", path, err)
-				}
-			}
-			err = xml.NewDecoder(r).Decode(&lexer)
+		}
+		defer fr.Close()
+		var r io.Reader = fr
+		if strings.HasSuffix(path, ".gz") {
+			r, err = gzip.NewReader(r)
 			if err != nil {
 				return nil, nil, fmt.Errorf("%s: %w", path, err)
 			}
-			rules, words := lexer.Rules.split()
-			return rules, words, nil
-		},
-	}, nil
+		}
+		err = xml.NewDecoder(r).Decode(&lexer)
+		if err != nil {
+			return nil, nil, fmt.Errorf("%s: %w", path, err)
+		}
+		rules, words := lexer.Rules.split()
+		return importRules(regexLexer.registry, lexer.Rules.Imports, rules, words)
+	}
+	return regexLexer, nil
+}
+
+// importRules returns rules and words on top of the states of each imported
+// lexer, with later imports overriding earlier ones.
+func importRules(registry *LexerRegistry, imports []xmlImport, rules Rules, words ruleWords) (Rules, ruleWords, error) {
+	if len(imports) == 0 {
+		return rules, words, nil
+	}
+	if registry == nil {
+		return nil, nil, fmt.Errorf("no LexerRegistry available to import %q", imports[0].Lexer)
+	}
+	importedRules, importedWords := Rules{}, ruleWords{}
+	for _, imp := range imports {
+		lexer, ok := registry.Get(imp.Lexer).(*RegexLexer)
+		if !ok {
+			return nil, nil, fmt.Errorf("no regex lexer %q to import", imp.Lexer)
+		}
+		if err := lexer.fetchRulesOnce(); err != nil {
+			return nil, nil, fmt.Errorf("import %q: %w", imp.Lexer, err)
+		}
+		maps.Copy(importedRules, lexer.rawRules)
+		maps.Copy(importedWords, lexer.rawWords)
+	}
+	maps.Copy(importedRules, rules)
+	maps.Copy(importedWords, words)
+	return importedRules, importedWords, nil
 }
 
 func unmarshalMutator(d *xml.Decoder, start xml.StartElement) (Mutator, error) {
@@ -344,7 +385,12 @@ type xmlRuleState struct {
 }
 
 type xmlRules struct {
-	States []xmlRuleState `xml:"state"`
+	Imports []xmlImport    `xml:"import"`
+	States  []xmlRuleState `xml:"state"`
+}
+
+type xmlImport struct {
+	Lexer string `xml:"lexer,attr"`
 }
 
 // split returns the rules and, aligned by index, each rule's word list or nil.

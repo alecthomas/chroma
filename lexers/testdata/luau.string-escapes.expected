@@ -1,0 +1,19 @@
+[
+  {"type":"NameOther","value":"print"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralStringDouble","value":"\"123"},
+  {"type":"LiteralStringEscape","value":"\\x41"},
+  {"type":"LiteralStringDouble","value":"\""},
+  {"type":"Punctuation","value":","},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"LiteralStringSingle","value":"'x42"},
+  {"type":"LiteralStringEscape","value":"\\066"},
+  {"type":"LiteralStringSingle","value":"'"},
+  {"type":"Punctuation","value":","},
+  {"type":"TextWhitespace","value":" "},
+  {"type":"LiteralStringBacktick","value":"`"},
+  {"type":"LiteralStringEscape","value":"\\u{43}"},
+  {"type":"LiteralStringBacktick","value":"`"},
+  {"type":"Punctuation","value":")"},
+  {"type":"TextWhitespace","value":"\n"}
+]

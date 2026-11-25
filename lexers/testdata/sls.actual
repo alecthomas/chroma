@@ -1,0 +1,6 @@
+{% set users = ['alice', 'bob'] %}
+{% for user in users %}
+{{ user }}:
+  user.present:
+    - shell: /bin/bash  # {{ user | upper }}
+{% endfor %}

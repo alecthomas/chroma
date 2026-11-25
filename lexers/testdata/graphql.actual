@@ -16,6 +16,7 @@ fragment frag on User {
   id
   name
   profilePic(size: 50)
+  samples(values: [-2, 1.5, -4E-2])
 }
 
 # Switching to schema
@@ -40,3 +41,9 @@ input Foo {
 directive @deprecated(
   reason: String = "No longer supported"
 ) on FIELD_DEFINITION | ENUM_VALUE
+"""Café "été" here."""
+scalar A
+"""A delimiter: \""" inside."""
+scalar B
+query { typeName online ...Details }
+fragment Details on Query { id }

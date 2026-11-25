@@ -1,0 +1,9 @@
+const users: Promise<User[]> = load();
+const index: Map<string, number[]> = new Map();
+const [items, setItems] = useState<string[]>([]);
+type Name = Partial<Person["name"]>;
+let options: Record<string, { retries: number }> = {};
+function first<T extends readonly unknown[]>(xs: T): T[0] {}
+const less = a < b[0];
+for (let i = 0; i<n; i++) {}
+const element = <Item key={id} />;

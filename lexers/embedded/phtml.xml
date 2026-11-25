@@ -1,0 +1,39 @@
+<lexer>
+  <config>
+    <name>PHTML</name>
+    <alias>phtml</alias>
+    <filename>*.phtml</filename>
+    <filename>*.php</filename>
+    <filename>*.php[345]</filename>
+    <filename>*.inc</filename>
+    <mime_type>application/x-php</mime_type>
+    <mime_type>application/x-httpd-php</mime_type>
+    <mime_type>application/x-httpd-php3</mime_type>
+    <mime_type>application/x-httpd-php4</mime_type>
+    <mime_type>application/x-httpd-php5</mime_type>
+    <mime_type>text/x-php</mime_type>
+    <case_insensitive>true</case_insensitive>
+    <dot_all>true</dot_all>
+    <ensure_nl>true</ensure_nl>
+    <priority>2</priority>
+    <delegate>HTML</delegate>
+    <analyse>
+      <regex pattern="&lt;\?php" score="0.5"/>
+    </analyse>
+  </config>
+  <rules>
+    <import lexer="PHP"/>
+    <state name="root">
+      <rule pattern="&lt;\?(php)?">
+        <token type="CommentPreproc"/>
+        <push state="php"/>
+      </rule>
+      <rule pattern="[^&lt;]+">
+        <token type="Other"/>
+      </rule>
+      <rule pattern="&lt;">
+        <token type="Other"/>
+      </rule>
+    </state>
+  </rules>
+</lexer>

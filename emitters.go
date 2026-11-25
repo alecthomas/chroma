@@ -176,7 +176,13 @@ func UsingLexer(lexer Lexer) Emitter {
 }
 
 type usingEmitter struct {
-	Lexer string `xml:"lexer,attr"`
+	Lexer  string       `xml:"lexer,attr"`
+	Remaps []tokenRemap `xml:"remap"`
+}
+
+type tokenRemap struct {
+	From TokenType `xml:"from,attr"`
+	To   TokenType `xml:"to,attr"`
 }
 
 func (u *usingEmitter) Emit(groups []string, state *LexerState) iter.Seq[Token] {
@@ -191,7 +197,22 @@ func (u *usingEmitter) Emit(groups []string, state *LexerState) iter.Seq[Token] 
 	if err != nil {
 		panic(err)
 	}
-	return it
+	if len(u.Remaps) == 0 {
+		return it
+	}
+	return func(yield func(Token) bool) {
+		for token := range it {
+			for _, remap := range u.Remaps {
+				if token.Type == remap.From {
+					token.Type = remap.To
+					break
+				}
+			}
+			if !yield(token) {
+				return
+			}
+		}
+	}
 }
 
 // Using returns an Emitter that uses a given Lexer reference for parsing and emitting.

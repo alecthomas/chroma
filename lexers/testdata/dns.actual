@@ -1,19 +1,39 @@
 ; /etc/bind/zones/example.org
+$ORIGIN example.org.
 $TTL 3h;
-@	IN	SOA	ns.example.org. example.org. (
-	1 ; serial
+@	IN	SOA	ns.example.org. hostmaster.example.org. (
+	2026112201 ; serial
 	3h; refresh timeout
-	1h; retry timeout
+	1h30m; compound TTL duration (BIND)
 	1w; expire timeout
-	1h; negative caching TTL
+	300s; negative caching TTL (seconds unit)
 )
 @	IN	NS		ns.example.org.  ; name server
 @	IN	MX	10	example.org.     ; mail exchange server
 
-ns	IN	A		1.2.3.4
-@	IN	A		1.2.3.4
+; Null MX (RFC 7505 Section 3): priority 0 with root target "."
+nomail	3600	IN	MX	0 .
 
-ns	IN	AAAA	ef::1
-@	IN	AAAA	ef::1
+ns	IN	A		192.0.2.1
+@	IN	A		192.0.2.1
+
+ns	IN	AAAA	2001:db8::1
+@	IN	AAAA	2001:db8::1
 
 www	IN	CNAME	example.org.
+
+; Quoted character-strings with embedded semicolons (RFC 1035 Section 5.1),
+; SPF (RFC 7208), DMARC (RFC 7489), and wildcard/underscore DKIM (RFC 4592, RFC 6376, RFC 8552)
+@		3600	IN	TXT	"v=spf1 -all"
+_dmarc		3600	IN	TXT	"v=DMARC1; p=reject; sp=reject; aspf=s; adkim=s;"
+*._domainkey	3600	IN	TXT	"v=DKIM1; p=;"
+txt		3600	IN	TXT	"escaped \"quote\" and ; semicolon" ; trailing comment
+
+; Underscore service labels and hex/base64 RDATA: SRV (RFC 2782), TLSA (RFC 6698),
+; SSHFP (RFC 4255), CAA (RFC 8659), HTTPS/SVCB (RFC 9460), DNSKEY (RFC 4034)
+_submission._tcp	IN	SRV	0 1 587 mail.example.org.
+_443._tcp.www	IN	TLSA	3 1 1 71d5e809abcdef0123456789abcdef0123456789abcdef0123456789abcdef01
+host		IN	SSHFP	4 2 9dc1d6742696d2f51ca1f1a78b3d16a840f7d111eb9454239e70db31363f33e1
+@		IN	CAA	0 issue "letsencrypt.org; validationmethods=dns-01"
+@		IN	HTTPS	1 . alpn="h2,h3" ipv4hint=192.0.2.1,192.0.2.2 ipv6hint=2001:db8::1 port=443
+@		IN	DNSKEY	257 3 13 mdsswUyr3DPW132mOi8V9xESWE8jTo0dxCjjnopKl+GqJxpVXckHAeF+KkxLbxILfDLUT0rAK9iUzy1L53eKGQ==

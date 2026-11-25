@@ -8,3 +8,7 @@
 [remote "feature/\"quote\""]
 [same-line] key = value
 [same-line "subsection"] bare
+[core]bare
+[user]name = Pat
+[remote "origin"]mirror
+[branch "main"]remote = origin

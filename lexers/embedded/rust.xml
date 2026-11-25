@@ -287,14 +287,14 @@
         <token type="LiteralNumberInteger"/>
         <push state="number_lit"/>
       </rule>
-      <rule pattern="(b)(&#34;)">
+      <rule pattern="([bc])(&#34;)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralString"/>
         </bygroups>
         <push state="bytestring"/>
       </rule>
-      <rule pattern="(?s)(b?r)(#*)(&#34;.*?&#34;\2)">
+      <rule pattern="(?s)([bc]?r)(#*)(&#34;.*?&#34;\2)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralString"/>

@@ -263,10 +263,10 @@
       <rule words="not and or when in" suffix="\b">
         <token type="OperatorWord"/>
       </rule>
-      <rule words="case cond for if unless try receive raise quote unquote unquote_splicing throw super while" suffix="\b">
+      <rule words="case cond for if unless try receive raise reraise quote unquote unquote_splicing throw super while with" suffix="\b">
         <token type="Keyword"/>
       </rule>
-      <rule words="def defp defmodule defprotocol defmacro defmacrop defdelegate defexception defstruct defimpl defcallback" suffix="\b">
+      <rule words="def defp defmodule defprotocol defmacro defmacrop defdelegate defexception defstruct defimpl defcallback defguard defguardp defoverridable" suffix="\b">
         <token type="KeywordDeclaration"/>
       </rule>
       <rule words="import require use alias" suffix="\b">
@@ -275,7 +275,7 @@
       <rule words="nil true false" suffix="\b">
         <token type="NameConstant"/>
       </rule>
-      <rule words="_ __MODULE__ __DIR__ __ENV__ __CALLER__" suffix="\b">
+      <rule words="_ __MODULE__ __DIR__ __ENV__ __CALLER__ __STACKTRACE__" suffix="\b">
         <token type="NamePseudo"/>
       </rule>
       <rule pattern="@(?:\.\.\.|[a-z_]\w*[!?]?)">

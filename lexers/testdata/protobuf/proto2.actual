@@ -11,3 +11,8 @@ message Proto2Message {
     required int32 ival = 1;
   }
 }
+
+extend .google.protobuf.MessageOptions {
+  optional string escaped = 50001 [default = "say \"hi\"\n"];
+  optional string single = 50002 [default = 'it\'s'];
+}

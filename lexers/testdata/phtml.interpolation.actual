@@ -1,0 +1,1 @@
+<p><?php echo "Hi {$user->name}"; ?></p>
