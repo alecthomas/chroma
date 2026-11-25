@@ -2032,10 +2032,12 @@ var embeddedLexers = []struct {
 		Aliases: []string{
 			"json",
 			"jsonl",
+			"ndjson",
 		},
 		Filenames: []string{
 			"*.json",
 			"*.jsonl",
+			"*.ndjson",
 			"*.jsonc",
 			"*.json5",
 			"*.avsc",
@@ -2044,6 +2046,7 @@ var embeddedLexers = []struct {
 		MimeTypes: []string{
 			"application/json",
 			"application/jsonl",
+			"application/x-ndjson",
 		},
 		DotAll:       true,
 		NotMultiline: true,

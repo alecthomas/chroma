@@ -79,6 +79,18 @@ func TestGet(t *testing.T) {
 	})
 }
 
+func TestNDJSON(t *testing.T) {
+	for name, lexer := range map[string]chroma.Lexer{
+		"Alias":    lexers.Get("ndjson"),
+		"Filename": lexers.Match("records.ndjson"),
+		"MIME":     lexers.MatchMimeType("application/x-ndjson"),
+	} {
+		t.Run(name, func(t *testing.T) {
+			assert.True(t, lexer == lexers.Get("json"))
+		})
+	}
+}
+
 func TestAliases(t *testing.T) {
 	t.Run("UseNameIfNoAliases", func(t *testing.T) {
 		expected := lexers.GlobalLexerRegistry.Aliases(false)
