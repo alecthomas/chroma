@@ -39,11 +39,8 @@
       <rule pattern="(true|false|iota|nil)\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="(uint|uint8|uint16|uint32|uint64|int|int8|int16|int32|int64|float|float32|float64|complex64|complex128|byte|rune|string|bool|error|uintptr|print|println|panic|recover|close|complex|real|imag|len|cap|append|copy|delete|new|make|clear|min|max)\b(\()">
-        <bygroups>
-          <token type="NameBuiltin"/>
-          <token type="Punctuation"/>
-        </bygroups>
+      <rule words="uint uint8 uint16 uint32 uint64 int int8 int16 int32 int64 float float32 float64 complex64 complex128 byte rune string bool error uintptr print println panic recover close complex real imag len cap append copy delete new make clear min max" suffix="\b(?=\s*\()">
+        <token type="NameBuiltin"/>
       </rule>
       <rule words="uint uint8 uint16 uint32 uint64 int int8 int16 int32 int64 float float32 float64 complex64 complex128 byte rune string bool error uintptr any" suffix="\b">
         <token type="KeywordType"/>
