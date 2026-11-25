@@ -1,0 +1,11 @@
+literal = '''first 'quoted' word'''
+multiline = '''
+# string content
+[not a table] λ
+final'''
+empty = ''''''
+quotes = ''''one and '' two''''
+two_quotes = '''''at each end'''''
+backslashes = '''C:\folder\end\'''
+ordinary = 'a "quote"'
+after = true # outside
