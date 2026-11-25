@@ -2,6 +2,7 @@ package lexers_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -113,6 +114,29 @@ func BenchmarkGet(b *testing.B) {
 	}
 }
 
+func TestRecordMissingFixture(t *testing.T) {
+	t.Setenv("RECORD", "true")
+	dir := t.TempDir()
+	source := filepath.Join(dir, "new.actual")
+	expected := filepath.Join(dir, "new.expected")
+	assert.NoError(t, os.WriteFile(source, []byte("value = true\n"), 0600))
+
+	FileTest(t, lexers.Get("toml"), source, expected)
+
+	actual, err := os.ReadFile(expected)
+	assert.NoError(t, err)
+	var tokens []chroma.Token
+	assert.NoError(t, json.Unmarshal(actual, &tokens))
+	assert.Equal(t, []chroma.Token{
+		{Type: chroma.NameOther, Value: "value"},
+		{Type: chroma.Text, Value: " "},
+		{Type: chroma.Punctuation, Value: "="},
+		{Type: chroma.Text, Value: " "},
+		{Type: chroma.KeywordConstant, Value: "true"},
+		{Type: chroma.Text, Value: "\n"},
+	}, tokens)
+}
+
 func FileTest(t *testing.T, lexer chroma.Lexer, sourceFile, expectedFilename string) {
 	t.Helper()
 	t.Run(lexer.Config().Name+"/"+sourceFile, func(t *testing.T) {
@@ -136,7 +160,9 @@ func FileTest(t *testing.T, lexer chroma.Lexer, sourceFile, expectedFilename str
 		assert.NoError(t, err)
 
 		expectedBytes, err := os.ReadFile(expectedFilename)
-		assert.NoError(t, err)
+		if !os.IsNotExist(err) || os.Getenv("RECORD") != "true" {
+			assert.NoError(t, err)
+		}
 
 		// Check that the expected bytes are identical
 		if !bytes.Equal(actualBytes.Bytes(), expectedBytes) {
@@ -204,11 +230,27 @@ func TestLexers(t *testing.T) {
 	}
 }
 
+func TestRecordMissingAnalysisFixture(t *testing.T) {
+	t.Setenv("RECORD", "true")
+	dir := t.TempDir()
+	source := filepath.Join(dir, "bash.actual")
+	expected := filepath.Join(dir, "bash.expected")
+	assert.NoError(t, os.WriteFile(source, []byte("#!/bin/bash\n"), 0600))
+
+	FileTestAnalysis(t, lexers.Get("bash"), source, expected)
+
+	actual, err := os.ReadFile(expected)
+	assert.NoError(t, err)
+	assert.Equal(t, "1\n", string(actual))
+}
+
 func FileTestAnalysis(t *testing.T, lexer chroma.Lexer, actualFilepath, expectedFilepath string) {
 	t.Helper()
 	t.Run(lexer.Config().Name+"/"+actualFilepath, func(t *testing.T) {
 		expectedData, err := os.ReadFile(expectedFilepath)
-		assert.NoError(t, err)
+		if !os.IsNotExist(err) || os.Getenv("RECORD") != "true" {
+			assert.NoError(t, err)
+		}
 
 		data, err := os.ReadFile(actualFilepath)
 		assert.NoError(t, err)
