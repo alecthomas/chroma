@@ -1,0 +1,3 @@
+constructs enumeration reexport signalman toolkit payload preloadable setgetter disextends Node unfunc helper()
+unfunc _ready():
+func _ready_extra():
