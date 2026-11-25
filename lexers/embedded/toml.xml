@@ -31,6 +31,12 @@
       <rule pattern="[+-]?[0-9](_?\d)*">
         <token type="LiteralNumberInteger"/>
       </rule>
+      <rule pattern="(?s)&#34;{3}(?:\\.|&#34;(?!&#34;&#34;)|[^&#34;\\])*&#34;{3,5}">
+        <token type="LiteralStringDouble"/>
+      </rule>
+      <rule pattern="(?s)&#39;{3}.*?&#39;{3,5}">
+        <token type="LiteralStringSingle"/>
+      </rule>
       <rule pattern="&#34;(\\\\|\\&#34;|[^&#34;])*&#34;">
         <token type="LiteralStringDouble"/>
       </rule>
