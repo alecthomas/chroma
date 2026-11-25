@@ -62,56 +62,56 @@
       <rule pattern="#.*$">
         <token type="CommentSingle"/>
       </rule>
-      <rule pattern="(?i)(rf|fr)(&#34;&#34;&#34;)">
+      <rule pattern="(?i)(r[ft]|[ft]r)(&#34;&#34;&#34;)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralStringDouble"/>
         </bygroups>
         <combined state="rfstringescape" state="tdqf"/>
       </rule>
-      <rule pattern="(?i)(rf|fr)(&#39;&#39;&#39;)">
+      <rule pattern="(?i)(r[ft]|[ft]r)(&#39;&#39;&#39;)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralStringSingle"/>
         </bygroups>
         <combined state="rfstringescape" state="tsqf"/>
       </rule>
-      <rule pattern="(?i)(rf|fr)(&#34;)">
+      <rule pattern="(?i)(r[ft]|[ft]r)(&#34;)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralStringDouble"/>
         </bygroups>
         <combined state="rfstringescape" state="dqf"/>
       </rule>
-      <rule pattern="(?i)(rf|fr)(&#39;)">
+      <rule pattern="(?i)(r[ft]|[ft]r)(&#39;)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralStringSingle"/>
         </bygroups>
         <combined state="rfstringescape" state="sqf"/>
       </rule>
-      <rule pattern="([fF])(&#34;&#34;&#34;)">
+      <rule pattern="([fFtT])(&#34;&#34;&#34;)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralStringDouble"/>
         </bygroups>
         <combined state="fstringescape" state="tdqf"/>
       </rule>
-      <rule pattern="([fF])(&#39;&#39;&#39;)">
+      <rule pattern="([fFtT])(&#39;&#39;&#39;)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralStringSingle"/>
         </bygroups>
         <combined state="fstringescape" state="tsqf"/>
       </rule>
-      <rule pattern="([fF])(&#34;)">
+      <rule pattern="([fFtT])(&#34;)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralStringDouble"/>
         </bygroups>
         <combined state="fstringescape" state="dqf"/>
       </rule>
-      <rule pattern="([fF])(&#39;)">
+      <rule pattern="([fFtT])(&#39;)">
         <bygroups>
           <token type="LiteralStringAffix"/>
           <token type="LiteralStringSingle"/>
