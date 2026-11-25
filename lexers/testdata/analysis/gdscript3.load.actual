@@ -1,0 +1,1 @@
+var texture = preload("res://icon.png")

@@ -1,0 +1,1 @@
+var score = 0

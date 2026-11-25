@@ -1388,7 +1388,7 @@ var embeddedLexers = []struct {
 		Analyse: &chroma.AnalyseConfig{
 			Regexes: []chroma.RegexConfig{
 				{
-					Pattern: "^export",
+					Pattern: "^export\\b",
 					Score:   0.1,
 				},
 			},
@@ -1411,15 +1411,15 @@ var embeddedLexers = []struct {
 		Analyse: &chroma.AnalyseConfig{
 			Regexes: []chroma.RegexConfig{
 				{
-					Pattern: "func (_ready|_init|_input|_process|_unhandled_input)",
+					Pattern: "\\bfunc (_ready|_init|_input|_process|_unhandled_input)\\b",
 					Score:   0.8,
 				},
 				{
-					Pattern: "(extends |class_name |onready |preload|load|setget|func [^_])",
+					Pattern: "\\b(extends |class_name |onready |(?:preload|load|setget)\\b|func [^_])",
 					Score:   0.4,
 				},
 				{
-					Pattern: "(var|const|enum|export|signal|tool)",
+					Pattern: "\\b(var|const|enum|export|signal|tool)\\b",
 					Score:   0.2,
 				},
 			},

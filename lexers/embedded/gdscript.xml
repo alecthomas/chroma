@@ -8,7 +8,7 @@
     <mime_type>application/x-gdscript</mime_type>
     <priority>0.1</priority>
     <analyse>
-      <regex pattern="^export" score="0.1"/>
+      <regex pattern="^export\b" score="0.1"/>
     </analyse>
   </config>
   <rules>
