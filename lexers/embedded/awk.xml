@@ -17,7 +17,7 @@
       <rule>
         <include state="commentsandwhitespace"/>
       </rule>
-      <rule pattern="\+\+|--|\|\||&amp;&amp;|in\b|\$|!?~|\|&amp;|(\*\*|[-&lt;&gt;+*%\^/!=|])=?">
+      <rule pattern="\+\+|--|\|\||&amp;&amp;|in\b|\$|!?~|\|&amp;|[?:]|(\*\*|[-&lt;&gt;+*%\^/!=|])=?">
         <token type="Operator"/>
         <push state="slashstartsregex"/>
       </rule>
@@ -32,17 +32,17 @@
         <token type="Keyword"/>
         <push state="slashstartsregex"/>
       </rule>
-      <rule pattern="function\b">
+      <rule pattern="func(tion)?\b">
         <token type="KeywordDeclaration"/>
         <push state="slashstartsregex"/>
       </rule>
-      <rule pattern="(atan2|cos|exp|int|log|rand|sin|sqrt|srand|gensub|gsub|index|length|match|split|patsplit|sprintf|sub|substr|tolower|toupper|close|fflush|getline|next(file)|print|printf|strftime|systime|mktime|delete|system|strtonum|and|compl|lshift|or|rshift|asorti?|isarray|bindtextdomain|dcn?gettext|@(include|load|namespace))\b">
+      <rule pattern="(atan2|cos|exp|int|log|rand|sin|sqrt|srand|gensub|gsub|index|length|match|split|patsplit|sprintf|sub|substr|tolower|toupper|close|fflush|getline|next(file)?|print|printf|strftime|systime|mktime|delete|system|strtonum|and|compl|lshift|or|rshift|asorti?|isarray|bindtextdomain|dcn?gettext|@(include|load|namespace))\b">
         <token type="KeywordReserved"/>
       </rule>
       <rule pattern="(ARGC|ARGIND|ARGV|BEGIN(FILE)?|BINMODE|CONVFMT|ENVIRON|END(FILE)?|ERRNO|FIELDWIDTHS|FILENAME|FNR|FPAT|FS|IGNORECASE|LINT|NF|NR|OFMT|OFS|ORS|PROCINFO|RLENGTH|RS|RSTART|RT|SUBSEP|TEXTDOMAIN)\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="[@$a-zA-Z_]\w*">
+      <rule pattern="[@$a-zA-Z_]\w*(::[a-zA-Z_]\w*)?">
         <token type="NameOther"/>
       </rule>
       <rule pattern="[0-9][0-9]*\.[0-9]+([eE][0-9]+)?[fd]?">
@@ -67,6 +67,9 @@
       </rule>
       <rule pattern="#.*$">
         <token type="CommentSingle"/>
+      </rule>
+      <rule pattern="\\\n">
+        <token type="Text"/>
       </rule>
     </state>
     <state name="slashstartsregex">
