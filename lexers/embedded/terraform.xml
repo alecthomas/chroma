@@ -52,7 +52,7 @@
       <rule pattern="=&gt;">
         <token type="Punctuation" />
       </rule>
-      <rule words="false true" suffix="\b">
+      <rule words="false true" suffix="(?![\w-])">
         <token type="KeywordConstant" />
       </rule>
       <rule pattern="/(?s)\*(((?!\*/).)*)\*/">
@@ -67,51 +67,51 @@
           <token type="Text" />
         </bygroups>
       </rule>
-      <rule words="provisioner variable resource provider module output data" prefix="^" suffix="(?!\.)\b">
+      <rule words="provisioner variable resource provider module output data" prefix="^" suffix="(?![.\w-])">
         <token type="KeywordReserved" />
       </rule>
-      <rule words="for in" suffix="\b">
+      <rule words="for in" suffix="(?![\w-])">
         <token type="Keyword" />
       </rule>
-      <rule words="module count data each var" suffix="\b">
+      <rule words="module count data each var" suffix="(?![\w-])">
         <token type="NameBuiltin" />
       </rule>
-      <rule words="parseint signum floor ceil log max min abs pow" suffix="\b">
+      <rule words="parseint signum floor ceil log max min abs pow" suffix="(?![\w-])">
         <token type="NameBuiltin" />
       </rule>
       <rule
-        pattern="(trimsuffix|formatlist|trimprefix|trimspace|regexall|replace|indent|strrev|format|substr|chomp|split|title|regex|lower|upper|trim|join)\b"
+        pattern="(trimsuffix|formatlist|trimprefix|trimspace|regexall|replace|indent|strrev|format|substr|chomp|split|title|regex|lower|upper|trim|join)(?![\w-])"
       >
         <token type="NameBuiltin" />
       </rule>
       <rule
-        pattern="[^.](setintersection|coalescelist|setsubtract|setproduct|matchkeys|chunklist|transpose|contains|distinct|coalesce|setunion|reverse|flatten|element|compact|lookup|length|concat|values|zipmap|range|merge|slice|index|list|sort|keys|map)\b"
+        pattern="(?&lt;!\.)(setintersection|coalescelist|setsubtract|setproduct|matchkeys|chunklist|transpose|contains|distinct|coalesce|setunion|reverse|flatten|element|compact|lookup|length|concat|values|zipmap|range|merge|slice|index|list|sort|keys|map)(?![\w-])"
       >
         <token type="NameBuiltin" />
       </rule>
       <rule
-        pattern="[^.](base64decode|base64encode|base64gzip|jsondecode|jsonencode|yamldecode|yamlencode|csvdecode|urlencode)\b"
+        pattern="(?&lt;!\.)(base64decode|base64encode|base64gzip|jsondecode|jsonencode|yamldecode|yamlencode|csvdecode|urlencode)(?![\w-])"
       >
         <token type="NameBuiltin" />
       </rule>
-      <rule words="templatefile filebase64 fileexists pathexpand basename abspath fileset dirname file" suffix="\b">
+      <rule words="templatefile filebase64 fileexists pathexpand basename abspath fileset dirname file" suffix="(?![\w-])">
         <token type="NameBuiltin" />
       </rule>
-      <rule words="formatdate timestamp timeadd" suffix="\b">
+      <rule words="formatdate timestamp timeadd" suffix="(?![\w-])">
         <token type="NameBuiltin" />
       </rule>
       <rule
-        pattern="(filebase64sha256|filebase64sha512|base64sha512|base64sha256|filesha256|rsadecrypt|filesha512|filesha1|filemd5|uuidv5|bcrypt|sha256|sha512|sha1|uuid|md5)\b"
+        pattern="(filebase64sha256|filebase64sha512|base64sha512|base64sha256|filesha256|rsadecrypt|filesha512|filesha1|filemd5|uuidv5|bcrypt|sha256|sha512|sha1|uuid|md5)(?![\w-])"
       >
         <token type="NameBuiltin" />
       </rule>
-      <rule words="cidrnetmask cidrsubnet cidrhost" suffix="\b">
+      <rule words="cidrnetmask cidrsubnet cidrhost" suffix="(?![\w-])">
         <token type="NameBuiltin" />
       </rule>
-      <rule words="tostring tonumber tobool tolist tomap toset can try" suffix="\b">
+      <rule words="tostring tonumber tobool tolist tomap toset can try" suffix="(?![\w-])">
         <token type="NameBuiltin" />
       </rule>
-      <rule pattern="(^|[^.\w])(name|x|default|type|description|value)(_[a-zA-Z]\w*)*">
+      <rule pattern="(?&lt;![.\w-])(name|x|default|type|description|value)(_[a-zA-Z]\w*)*(?![\w-])">
         <token type="NameAttribute" />
       </rule>
       <rule pattern="=(?!&gt;)|\+|-|\*|\/|:|!|%|&gt;|&lt;(?!&lt;)|&gt;=|&lt;=|==|!=|&amp;&amp;|\||\?">
@@ -120,7 +120,7 @@
       <rule pattern="\n|\s+|\\\n">
         <token type="Text" />
       </rule>
-      <rule pattern="[a-zA-Z]\w*">
+      <rule pattern="[a-zA-Z_][\w-]*">
         <token type="NameOther" />
       </rule>
       <rule pattern="(?s)(&lt;&lt;-?)(\w+)(\n\s*(?:(?!\2).)*\s*\n\s*)(\2)">
