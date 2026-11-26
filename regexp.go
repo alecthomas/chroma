@@ -159,7 +159,7 @@ type LexerState struct {
 	Groups []string
 	// Named Group matches.
 	NamedGroups map[string]string
-	// Custum context for mutators.
+	// Custom context for mutators.
 	MutatorContext map[any]any
 	options        *TokeniseOptions
 	newlineAdded   bool
