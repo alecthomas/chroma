@@ -1,0 +1,1 @@
+locals { answer = 42 } // trailing

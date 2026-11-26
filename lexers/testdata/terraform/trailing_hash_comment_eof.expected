@@ -1,0 +1,14 @@
+[
+  {"type":"NameOther","value":"locals"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"{"},
+  {"type":"Text","value":" "},
+  {"type":"NameOther","value":"answer"},
+  {"type":"Text","value":" "},
+  {"type":"Operator","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralNumber","value":"42"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"}"},
+  {"type":"CommentSingle","value":" # trailing"}
+]
