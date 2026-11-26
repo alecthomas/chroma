@@ -42,7 +42,7 @@
           <token type="Operator"/>
         </bygroups>
       </rule>
-      <rule pattern="(\$ENV\{)(.+?)(\})">
+      <rule pattern="(\$(?:ENV|CACHE)\{)(.+?)(\})">
         <bygroups>
           <token type="Operator"/>
           <token type="NameVariable"/>
