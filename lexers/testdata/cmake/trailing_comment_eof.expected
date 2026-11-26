@@ -1,0 +1,10 @@
+[
+  {"type":"NameBuiltin","value":"message"},
+  {"type":"Punctuation","value":"("},
+  {"type":"LiteralString","value":"STATUS"},
+  {"type":"Text","value":" "},
+  {"type":"LiteralStringDouble","value":"\"before\""},
+  {"type":"Punctuation","value":")"},
+  {"type":"Text","value":" "},
+  {"type":"Comment","value":"# trailing"}
+]
