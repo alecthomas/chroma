@@ -1,0 +1,35 @@
+locals {
+  _value = 42
+  _length = 42
+  _base64encode = 42
+  with-hyphen = 42
+  true-name = 42
+  for-name = 42
+  var-name = 42
+  resource-name = 42
+  length-name = 42
+  format-name = 42
+  base64encode-name = 42
+  file-name = 42
+  timestamp-name = 42
+  sha256-name = 42
+  cidrhost-name = 42
+  tostring-name = 42
+  value-name = 42
+  name2 = 42
+  value_test = 42
+  values = [for _, s in ["one", "two"] : s]
+  difference = 3 - 1
+  enabled = true
+  disabled = false
+  size = length(["one", "two"])
+  encoded = base64encode("hello")
+  upper_text = upper("hello")
+  reference = var.length
+  quoted = "with-hyphen ${var._value}"
+  heredoc = <<EOT
+with-hyphen _value
+EOT
+}
+resource-name {}
+resource "example" "test" {}
