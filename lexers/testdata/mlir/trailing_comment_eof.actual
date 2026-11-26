@@ -1,0 +1,2 @@
+// newline comment
+module attributes {test.text = "// literal"} {} // trailing comment
