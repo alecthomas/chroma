@@ -58,7 +58,7 @@
       <rule pattern="/(?s)\*(((?!\*/).)*)\*/">
         <token type="CommentMultiline" />
       </rule>
-      <rule pattern="\s*(#|//).*\n">
+      <rule pattern="\s*(#|//).*(?:\n|$)">
         <token type="CommentSingle" />
       </rule>
       <rule pattern="(?!\s*)(variable)(\s*)">
