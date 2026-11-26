@@ -46,6 +46,9 @@
       <rule pattern="\\`">
         <token type="LiteralStringBacktick"/>
       </rule>
+      <rule pattern="\\[^`\\]">
+        <token type="LiteralStringBacktick"/>
+      </rule>
       <rule pattern="\$\{">
         <token type="LiteralStringInterpol"/>
         <push state="interp-inside"/>
