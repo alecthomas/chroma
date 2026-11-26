@@ -27,7 +27,7 @@ const (
 	LineNumbers
 	// Line numbers in output when in table.
 	LineNumbersTable
-	// Line higlight style.
+	// Line highlight style.
 	LineHighlight
 	// Line numbers table wrapper style.
 	LineTable
