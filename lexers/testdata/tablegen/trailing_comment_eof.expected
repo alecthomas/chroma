@@ -1,0 +1,21 @@
+[
+  {"type":"Comment","value":"// newline comment\n"},
+  {"type":"Keyword","value":"def"},
+  {"type":"Text","value":" "},
+  {"type":"NameVariable","value":"Example"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"{"},
+  {"type":"Text","value":" "},
+  {"type":"Keyword","value":"string"},
+  {"type":"Text","value":" "},
+  {"type":"NameVariable","value":"Text"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralString","value":"\"// literal\""},
+  {"type":"Punctuation","value":";"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"}"},
+  {"type":"Text","value":" "},
+  {"type":"Comment","value":"// trailing comment"}
+]

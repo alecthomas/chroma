@@ -1,0 +1,2 @@
+// newline comment
+def Example { string Text = "// literal"; } // trailing comment

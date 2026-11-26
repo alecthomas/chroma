@@ -54,7 +54,7 @@
       <rule pattern="(\n|\s)+">
         <token type="Text"/>
       </rule>
-      <rule pattern=";.*?\n">
+      <rule pattern=";.*?(?:\n|$)">
         <token type="Comment"/>
       </rule>
     </state>

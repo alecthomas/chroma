@@ -1,0 +1,5 @@
+; newline comment
+source_filename = "semi;colon"
+define i32 @answer() {
+  ret i32 42
+} ; trailing comment

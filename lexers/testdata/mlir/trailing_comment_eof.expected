@@ -1,0 +1,13 @@
+[
+  {"type":"Comment","value":"// newline comment\n"},
+  {"type":"Text","value":"module attributes "},
+  {"type":"Punctuation","value":"{"},
+  {"type":"NameLabel","value":"test.text ="},
+  {"type":"Text","value":" "},
+  {"type":"LiteralString","value":"\"// literal\""},
+  {"type":"Punctuation","value":"}"},
+  {"type":"Text","value":" "},
+  {"type":"Punctuation","value":"{}"},
+  {"type":"Text","value":" "},
+  {"type":"Comment","value":"// trailing comment"}
+]
