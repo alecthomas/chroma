@@ -494,6 +494,10 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[T
 	}
 	if options == nil {
 		options = defaultOptions
+	} else if options.State == "" {
+		optionsCopy := *options
+		optionsCopy.State = "root"
+		options = &optionsCopy
 	}
 	if options.EnsureLF {
 		text = ensureLF(text)
