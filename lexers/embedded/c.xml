@@ -173,22 +173,26 @@
           <token type="LiteralStringChar"/>
         </bygroups>
       </rule>
-      <rule pattern="(\d+\.\d*|\.\d+|\d+)[eE][+-]?\d+[LlUu]*">
+      <!-- Atomic digit sequences avoid backtracking on long integers (#290). -->
+      <rule pattern="((?&gt;\d+(?:&#39;\d+)*)\.(?:(?&gt;\d+(?:&#39;\d+)*))?|\.(?&gt;\d+(?:&#39;\d+)*)|(?&gt;\d+(?:&#39;\d+)*))[eE][+-]?(?&gt;\d+(?:&#39;\d+)*)[LlUu]*">
         <token type="LiteralNumberFloat"/>
       </rule>
-      <rule pattern="(\d+\.\d*|\.\d+|\d+[fF])[fF]?">
+      <rule pattern="((?&gt;\d+(?:&#39;\d+)*)\.(?:(?&gt;\d+(?:&#39;\d+)*))?|\.(?&gt;\d+(?:&#39;\d+)*)|(?&gt;\d+(?:&#39;\d+)*)[fF])[fF]?">
         <token type="LiteralNumberFloat"/>
       </rule>
-      <rule pattern="0[xX](?:(?&gt;[0-9a-fA-F]+)(?:\.(?&gt;[0-9a-fA-F]+)?)?|\.(?&gt;[0-9a-fA-F]+))[pP][+-]?(?&gt;[0-9]+)[fFlL]?">
+      <rule pattern="0[xX](?:(?&gt;[0-9a-fA-F]+(?:&#39;[0-9a-fA-F]+)*)(?:\.(?&gt;[0-9a-fA-F]+(?:&#39;[0-9a-fA-F]+)*)?)?|\.(?&gt;[0-9a-fA-F]+(?:&#39;[0-9a-fA-F]+)*))[pP][+-]?(?&gt;[0-9]+(?:&#39;[0-9]+)*)[fFlL]?">
         <token type="LiteralNumberFloat"/>
       </rule>
-      <rule pattern="0[xX][0-9a-fA-F]+[LlUu]*">
+      <rule pattern="0[xX]([0-9A-Fa-f](&#39;?[0-9A-Fa-f]+)*)[LlUu]*">
         <token type="LiteralNumberHex"/>
       </rule>
-      <rule pattern="0[0-7]+[LlUu]*">
+      <rule pattern="0(&#39;?[0-7]+)+[LlUu]*">
         <token type="LiteralNumberOct"/>
       </rule>
-      <rule pattern="\d+[LlUu]*">
+      <rule pattern="0[Bb][01](&#39;?[01]+)*[LlUu]*">
+        <token type="LiteralNumberBin"/>
+      </rule>
+      <rule pattern="[0-9](&#39;?[0-9]+)*[LlUu]*">
         <token type="LiteralNumberInteger"/>
       </rule>
       <rule pattern="[~!%^&amp;*+=|?:&lt;&gt;/-]">
