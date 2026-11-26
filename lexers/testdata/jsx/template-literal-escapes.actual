@@ -1,0 +1,7 @@
+const line = `${value}\r\n`;
+const tab = `a\tb`;
+const emoji = `\u{1F600} \x41 \0`;
+const literal = `\${notInterpolated} ${real}`;
+const quote = `\` and \\`;
+const multi = `first\n
+${second}\tthird`;
