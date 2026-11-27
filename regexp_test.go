@@ -489,3 +489,49 @@ func TestTokeniseSharedEmptyStateOptions(t *testing.T) {
 		t.Fatalf("shared caller options changed: %+v", options)
 	}
 }
+
+func TestEnsureNLEmptyStack(t *testing.T) {
+	tests := []struct {
+		name    string
+		pattern string
+		input   string
+		want    []Token
+	}{
+		{
+			name:    "PopAtEndWithoutTrailingNewline",
+			pattern: `hello`,
+			input:   "hello",
+			want:    []Token{{Keyword, "hello"}},
+		},
+		{
+			name:    "PopMidInputWithoutTrailingNewline",
+			pattern: `hel`,
+			input:   "hello",
+			want:    []Token{{Keyword, "hel"}, {Error, "lo"}},
+		},
+		{
+			name:    "PopConsumingSyntheticNewline",
+			pattern: `hello\n`,
+			input:   "hello",
+			want:    []Token{{Keyword, "hello\n"}},
+		},
+		{
+			name:    "PopMidInputWithRealTrailingNewline",
+			pattern: `hel`,
+			input:   "hello\n",
+			want:    []Token{{Keyword, "hel"}, {Error, "lo\n"}},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			l := mustNewLexer(t, &Config{Name: "ensure-nl-empty-stack", EnsureNL: true}, Rules{
+				"root": {
+					{test.pattern, Keyword, Pop(1)},
+				},
+			})
+			it, err := l.Tokenise(nil, test.input)
+			assert.NoError(t, err)
+			assert.Equal(t, test.want, slices.Collect(it))
+		})
+	}
+}
