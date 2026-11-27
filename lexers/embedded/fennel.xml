@@ -4,6 +4,8 @@
     <alias>fennel</alias>
     <alias>fnl</alias>
     <filename>*.fennel</filename>
+    <filename>*.fnl</filename>
+    <filename>*.fnlm</filename>
     <mime_type>text/x-fennel</mime_type>
     <mime_type>application/x-fennel</mime_type>
   </config>

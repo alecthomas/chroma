@@ -1229,6 +1229,8 @@ var embeddedLexers = []struct {
 		},
 		Filenames: []string{
 			"*.fennel",
+			"*.fnl",
+			"*.fnlm",
 		},
 		MimeTypes: []string{
 			"text/x-fennel",
