@@ -61,21 +61,29 @@ func PreventSurroundingPre(b bool) Option {
 func InlineCode(b bool) Option {
 	return func(f *Formatter) {
 		f.inlineCode = b
-		f.preWrapper = preWrapper{
-			start: func(code bool, styleAttr string) string {
-				if code {
-					return fmt.Sprintf(`<code%s>`, styleAttr)
-				}
+		if b {
+			f.preWrapper = preWrapper{
+				start: func(code bool, styleAttr string) string {
+					if code {
+						return fmt.Sprintf(`<code%s>`, styleAttr)
+					}
 
-				return ``
-			},
-			end: func(code bool) string {
-				if code {
-					return `</code>`
-				}
+					return ``
+				},
+				end: func(code bool) string {
+					if code {
+						return `</code>`
+					}
 
-				return ``
-			},
+					return ``
+				},
+			}
+		} else {
+			if f.preventSurroundingPre {
+				f.preWrapper = nopPreWrapper
+			} else {
+				f.preWrapper = defaultPreWrapper
+			}
 		}
 	}
 }
