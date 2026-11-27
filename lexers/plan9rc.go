@@ -442,6 +442,12 @@ func (s *plan9RCScanner) scanWord() {
 	for s.pos < len(s.text) && !isPlan9RCWhitespace(s.text[s.pos]) && !isPlan9RCSpecial(s.text[s.pos]) && !strings.HasPrefix(s.text[s.pos:], "\\\n") {
 		s.pos++
 	}
+	if s.pos == start {
+		s.pos++
+		s.emit(Text, s.text[start:s.pos])
+		s.commandStart = false
+		return
+	}
 	word := s.text[start:s.pos]
 	switch {
 	case s.commandStart && word == ".":
