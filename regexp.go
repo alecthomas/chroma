@@ -298,9 +298,9 @@ func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
 		}
 
 		// If we get to here and we still have text, return it as an error.
-		if l.Pos != len(l.Text) && len(l.Stack) == 0 {
-			value := string(l.Text[l.Pos:])
-			l.Pos = len(l.Text)
+		if l.Pos < end && len(l.Stack) == 0 {
+			value := string(l.Text[l.Pos:end])
+			l.Pos = end
 			yield(Token{Type: Error, Value: value})
 		}
 	}
