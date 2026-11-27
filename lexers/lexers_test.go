@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/alecthomas/assert/v2"
 	"github.com/alecthomas/repr"
@@ -43,6 +44,75 @@ func TestPlan9RCStopsEarly(t *testing.T) {
 			}
 		}
 		assert.Equal(t, all[:n], actual)
+	}
+}
+
+func TestPlan9RCLoneBacktick(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+		want  []chroma.Token
+	}{
+		{
+			name:  "Standalone",
+			input: "`\n",
+			want: []chroma.Token{
+				{Type: chroma.Text, Value: "`"},
+				{Type: chroma.Text, Value: "\n"},
+			},
+		},
+		{
+			name:  "BeforeWord",
+			input: "echo `foo\n",
+			want: []chroma.Token{
+				{Type: chroma.Text, Value: "echo"},
+				{Type: chroma.Text, Value: " "},
+				{Type: chroma.Text, Value: "`"},
+				{Type: chroma.Text, Value: "foo"},
+				{Type: chroma.Text, Value: "\n"},
+			},
+		},
+		{
+			name:  "InsideSubstitution",
+			input: "`{echo `bar}\n",
+			want: []chroma.Token{
+				{Type: chroma.LiteralStringBacktick, Value: "`{"},
+				{Type: chroma.Text, Value: "echo"},
+				{Type: chroma.Text, Value: " "},
+				{Type: chroma.Text, Value: "`"},
+				{Type: chroma.Text, Value: "bar"},
+				{Type: chroma.LiteralStringBacktick, Value: "}"},
+				{Type: chroma.Text, Value: "\n"},
+			},
+		},
+		{
+			name:  "AfterVariableOperator",
+			input: "$`foo\n",
+			want: []chroma.Token{
+				{Type: chroma.Operator, Value: "$"},
+				{Type: chroma.Text, Value: "`"},
+				{Type: chroma.Text, Value: "foo"},
+				{Type: chroma.Text, Value: "\n"},
+			},
+		},
+	}
+
+	lexer := lexers.Get("plan9rc")
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			it, err := lexer.Tokenise(nil, test.input)
+			assert.NoError(t, err)
+			done := make(chan []chroma.Token, 1)
+			go func() {
+				done <- slices.Collect(it)
+			}()
+			select {
+			case got := <-done:
+				assert.Equal(t, test.want, got)
+			case <-time.After(500 * time.Millisecond):
+				t.Fatalf("plan9rc lexer did not terminate on %q", test.input)
+			}
+		})
 	}
 }
 
