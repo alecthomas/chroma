@@ -44,55 +44,23 @@ func WithCSSComments(b bool) Option { return func(f *Formatter) { f.writeCSSComm
 // TabWidth sets the number of characters for a tab. Defaults to 8.
 func TabWidth(width int) Option { return func(f *Formatter) { f.tabWidth = width } }
 
-// PreventSurroundingPre prevents the surrounding pre tags around the generated code.
+// PreventSurroundingPre omits the surrounding pre tags and per-line wrappers
+// around the generated code. It takes precedence over InlineCode.
 func PreventSurroundingPre(b bool) Option {
-	return func(f *Formatter) {
-		f.preventSurroundingPre = b
-
-		if b {
-			f.preWrapper = nopPreWrapper
-		} else {
-			f.preWrapper = defaultPreWrapper
-		}
-	}
+	return func(f *Formatter) { f.preventSurroundingPre = b }
 }
 
-// InlineCode creates inline code wrapped in a code tag.
+// InlineCode wraps the generated code in a code tag instead of pre tags, and
+// omits per-line wrappers.
 func InlineCode(b bool) Option {
-	return func(f *Formatter) {
-		f.inlineCode = b
-		if b {
-			f.preWrapper = preWrapper{
-				start: func(code bool, styleAttr string) string {
-					if code {
-						return fmt.Sprintf(`<code%s>`, styleAttr)
-					}
-
-					return ``
-				},
-				end: func(code bool) string {
-					if code {
-						return `</code>`
-					}
-
-					return ``
-				},
-			}
-		} else {
-			if f.preventSurroundingPre {
-				f.preWrapper = nopPreWrapper
-			} else {
-				f.preWrapper = defaultPreWrapper
-			}
-		}
-	}
+	return func(f *Formatter) { f.inlineCode = b }
 }
 
-// WithPreWrapper allows control of the surrounding pre tags.
+// WithPreWrapper allows control of the surrounding pre tags. It takes
+// precedence over PreventSurroundingPre and InlineCode, regardless of order,
+// though those still omit per-line wrappers.
 func WithPreWrapper(wrapper PreWrapper) Option {
-	return func(f *Formatter) {
-		f.preWrapper = wrapper
-	}
+	return func(f *Formatter) { f.preWrapper = wrapper }
 }
 
 // WithModeClasses adds the style's mode (eg. "light" or "dark") as a CSS
@@ -167,12 +135,21 @@ func BaseLineNumber(n int) Option {
 func New(options ...Option) *Formatter {
 	f := &Formatter{
 		baseLineNumber:   1,
-		preWrapper:       defaultPreWrapper,
 		writeCSSComments: true,
 	}
 	f.styleCache = newStyleCache(f)
 	for _, option := range options {
 		option(f)
+	}
+	if f.preWrapper == nil {
+		switch {
+		case f.preventSurroundingPre:
+			f.preWrapper = nopPreWrapper
+		case f.inlineCode:
+			f.preWrapper = inlineCodePreWrapper
+		default:
+			f.preWrapper = defaultPreWrapper
+		}
 	}
 	return f
 }
@@ -206,6 +183,20 @@ var (
 	nopPreWrapper = preWrapper{
 		start: func(code bool, styleAttr string) string { return "" },
 		end:   func(code bool) string { return "" },
+	}
+	inlineCodePreWrapper = preWrapper{
+		start: func(code bool, styleAttr string) string {
+			if code {
+				return fmt.Sprintf(`<code%s>`, styleAttr)
+			}
+			return ``
+		},
+		end: func(code bool) string {
+			if code {
+				return `</code>`
+			}
+			return ``
+		},
 	}
 	defaultPreWrapper = preWrapper{
 		start: func(code bool, styleAttr string) string {

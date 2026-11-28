@@ -455,6 +455,16 @@ func TestWithPreWrapper(t *testing.T) {
 		assert.Equal(t, s, `<span class="nb">echo</span> FOO`)
 	})
 
+	t.Run("PreventSurroundingPre and InlineCode in either order", func(t *testing.T) {
+		assert.Equal(t, `<span class="nb">echo</span> FOO`, format(New(PreventSurroundingPre(true), InlineCode(true), WithClasses(true))))
+		assert.Equal(t, `<span class="nb">echo</span> FOO`, format(New(InlineCode(true), PreventSurroundingPre(true), WithClasses(true))))
+	})
+
+	t.Run("Wrapper survives later InlineCode(false)", func(t *testing.T) {
+		s := format(New(WithPreWrapper(wrapper), InlineCode(false), PreventSurroundingPre(false), WithClasses(true)))
+		assert.Equal(t, `<foo class="chroma" id="code-true"><span class="line"><span class="cl"><span class="nb">echo</span> FOO</span></span></foo>`, s)
+	})
+
 	t.Run("InlineCode, inline styles", func(t *testing.T) {
 		s := format(New(InlineCode(true)))
 		assert.True(t, regexp.MustCompile(`<code style=".+?"><span style=".+?">echo</span> FOO</code>`).MatchString(s))
