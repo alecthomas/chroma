@@ -544,6 +544,12 @@ func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule
 		}
 		match, err := rule.Regexp.FindRunesMatchStartingAt(text, pos)
 		if err != nil {
+			// regexp2 measures MatchTimeout against wall clock time. Under heavy CPU contention or
+			// goroutine preemption, a match can time out spuriously before running on the CPU.
+			// Retrying once immediately executes on the scheduled CPU quantum.
+			match, err = rule.Regexp.FindRunesMatchStartingAt(text, pos)
+		}
+		if err != nil {
 			return 0, nil, nil, nil, fmt.Errorf("matching %q: %w", rule.Pattern, err)
 		}
 		if match != nil && match.RuneIndex == pos {

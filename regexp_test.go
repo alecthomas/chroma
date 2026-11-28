@@ -3,6 +3,7 @@ package chroma
 import (
 	"fmt"
 	"iter"
+	"runtime"
 	"slices"
 	"strings"
 	"sync"
@@ -534,4 +535,78 @@ func TestEnsureNLEmptyStack(t *testing.T) {
 			assert.Equal(t, test.want, slices.Collect(it))
 		})
 	}
+}
+
+func TestMatchContentionPreemption(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping contention test in short mode")
+	}
+	old := runtime.GOMAXPROCS(1)
+	defer runtime.GOMAXPROCS(old)
+
+	done := make(chan struct{})
+	defer close(done)
+	for range 64 {
+		go func() {
+			for {
+				select {
+				case <-done:
+					return
+				default:
+				}
+			}
+		}()
+	}
+
+	l := mustNewLexer(t, &Config{Name: "test-contention"}, Rules{
+		"root": {
+			{`\n`, Whitespace, nil},
+			{`\s+`, Whitespace, nil},
+			{`//(\\n|[\s\S])*?\n`, Comment, nil},
+			{`(?s)/\*.*?\*/`, Comment, nil},
+			{`<<=|>>=|<<|>>|<=|>=|&\^=|&\^|--|\+\+|&&|\|\||<-|->|==|!=|:=|[-+/*%&|^<>=!~]`, Punctuation, nil},
+			{`[(){}\[\],.;]`, Punctuation, nil},
+			{`(?i)\b(?:break|default|func|interface|select|case|defer|go|map|struct|else|goto|package|switch|fallthrough|if|range|type|continue|for|import|return|var)\b`, Keyword, nil},
+			{`"[^"\\]*(?:\\.[^"\\]*)*"`, LiteralString, nil},
+			{`[a-zA-Z_]\w*`, Name, nil},
+		},
+	})
+
+	defer func() {
+		if p := recover(); p != nil {
+			t.Fatalf("Tokenise panicked: %v", p)
+		}
+	}()
+
+	it, err := l.Tokenise(nil, strings.Repeat("s := \"a\" + \"b\"\n", 8000))
+	assert.NoError(t, err)
+	count := 0
+	for range it {
+		count++
+	}
+	assert.True(t, count > 0)
+}
+
+func TestMatchTimeoutCatastrophicBacktracking(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping catastrophic backtracking test in short mode")
+	}
+	l := mustNewLexer(t, &Config{Name: "catastrophic"}, Rules{
+		"root": {
+			{`(a+)+$`, Keyword, nil},
+		},
+	})
+	defer func() {
+		p := recover()
+		assert.NotZero(t, p)
+		err, ok := p.(error)
+		assert.True(t, ok)
+		assert.Contains(t, err.Error(), "match timeout")
+	}()
+
+	it, err := l.Tokenise(nil, strings.Repeat("a", 30)+"!")
+	assert.NoError(t, err)
+	for range it {
+	}
+	t.Fatal("expected match timeout panic on catastrophic backtracking, but got none")
 }
