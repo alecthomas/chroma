@@ -38,20 +38,13 @@ func EmbedFontFile(fontFamily string, fileName string) (option Option, err error
 
 	var content []byte
 	if content, err = os.ReadFile(fileName); err == nil {
-		option = EmbedFont(fontFamily, base64.StdEncoding.EncodeToString(content), format)
+		option = EmbedFont(fontFamily, content, format)
 	}
 	return
 }
 
-// EmbedFont embeds given base64 encoded font
-func EmbedFont(fontFamily string, font string, format FontFormat) Option {
-	return EmbedFontProvider(fontFamily, func() string { return font }, format)
-}
-
-// EmbedFontProvider embeds the base64 encoded font returned by font, which
-// is not called until the formatter actually writes output. Use this instead
-// of EmbedFont when producing the font data is expensive.
-func EmbedFontProvider(fontFamily string, font func() string, format FontFormat) Option {
+// EmbedFont embeds the given font file contents in the SVG.
+func EmbedFont(fontFamily string, font []byte, format FontFormat) Option {
 	return func(f *Formatter) { f.fontFamily = fontFamily; f.embeddedFont = font; f.fontFormat = format }
 }
 
@@ -67,7 +60,7 @@ func New(options ...Option) *Formatter {
 // Formatter that generates SVG.
 type Formatter struct {
 	fontFamily   string
-	embeddedFont func() string
+	embeddedFont []byte
 	fontFormat   FontFormat
 }
 
@@ -204,14 +197,24 @@ var fontFormats = [...]struct{ mime, format string }{
 }
 
 func (f *Formatter) writeFontStyle(w io.Writer) error {
-	_, err := fmt.Fprintf(w, `<style>
+	if _, err := fmt.Fprintf(w, `<style>
 @font-face {
 	font-family: '%s';
-	src: url(data:%s;charset=utf-8;base64,%s) format('%s');
+	src: url(data:%s;charset=utf-8;base64,`, html.EscapeString(cssStringEscaper.Replace(f.fontFamily)), fontFormats[f.fontFormat].mime); err != nil {
+		return err
+	}
+	enc := base64.NewEncoder(base64.StdEncoding, w)
+	if _, err := enc.Write(f.embeddedFont); err != nil {
+		return err
+	}
+	if err := enc.Close(); err != nil {
+		return err
+	}
+	_, err := fmt.Fprintf(w, `) format('%s');
 	font-weight: normal;
 	font-style: normal;
 }
-</style>`, html.EscapeString(cssStringEscaper.Replace(f.fontFamily)), fontFormats[f.fontFormat].mime, f.embeddedFont(), fontFormats[f.fontFormat].format)
+</style>`, fontFormats[f.fontFormat].format)
 	return err
 }
 

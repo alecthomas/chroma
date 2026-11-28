@@ -23,7 +23,7 @@ func TestWriteFontStyle(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			f := New(EmbedFont("Test", "AAAA", test.format))
+			f := New(EmbedFont("Test", []byte{0, 0, 0}, test.format))
 			w := &strings.Builder{}
 			assert.NoError(t, f.writeFontStyle(w))
 			assert.Contains(t, w.String(), test.expected)
@@ -40,7 +40,7 @@ func TestFontFamilyIsEscaped(t *testing.T) {
 	} {
 		t.Run(test.fontFamily, func(t *testing.T) {
 			w := &strings.Builder{}
-			f := New(EmbedFont(test.fontFamily, "AAAA", WOFF))
+			f := New(EmbedFont(test.fontFamily, []byte{0, 0, 0}, WOFF))
 			assert.NoError(t, f.Format(w, styles.Get("monokai"),
 				chroma.Literator(chroma.Token{Type: chroma.Text, Value: "hi\n"})))
 			attr, style := decodeSVG(t, w.String())
