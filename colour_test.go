@@ -15,6 +15,8 @@ func TestColourRGB(t *testing.T) {
 
 func TestColourString(t *testing.T) {
 	assert.Equal(t, "#8913af", ParseColour("#8913af").String())
+	assert.Equal(t, "", Colour(0).String())
+	assert.Equal(t, "Colour(0)", Colour(0).GoString())
 }
 
 func TestParseColourInvalid(t *testing.T) {

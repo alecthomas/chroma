@@ -111,10 +111,16 @@ func (f *Formatter) writeSVG(w io.Writer, style *chroma.Style, lines [][]chroma.
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "<rect width=\"100%%\" height=\"100%%\" fill=\"%s\"/>\n", style.Get(chroma.Background).Background.String()); err != nil {
-		return err
+	if bg := style.Get(chroma.Background).Background; bg.IsSet() {
+		if _, err := fmt.Fprintf(w, "<rect width=\"100%%\" height=\"100%%\" fill=\"%s\"/>\n", bg); err != nil {
+			return err
+		}
 	}
-	if _, err := fmt.Fprintf(w, "<g font-family=\"%s\" font-size=\"14px\" fill=\"%s\">\n", html.EscapeString(f.fontFamily), style.Get(chroma.Text).Colour.String()); err != nil {
+	fill := ""
+	if fg := style.Get(chroma.Text).Colour; fg.IsSet() {
+		fill = fmt.Sprintf(" fill=\"%s\"", fg)
+	}
+	if _, err := fmt.Fprintf(w, "<g font-family=\"%s\" font-size=\"14px\"%s>\n", html.EscapeString(f.fontFamily), fill); err != nil {
 		return err
 	}
 

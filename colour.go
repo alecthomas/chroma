@@ -158,8 +158,20 @@ func MustParseColour(colour string) Colour {
 // IsSet returns true if the colour is set.
 func (c Colour) IsSet() bool { return c != 0 }
 
-func (c Colour) String() string   { return fmt.Sprintf("#%06x", int(c-1)) }
-func (c Colour) GoString() string { return fmt.Sprintf("Colour(0x%06x)", int(c-1)) }
+// String returns the colour as #rrggbb, or "" if it is unset.
+func (c Colour) String() string {
+	if !c.IsSet() {
+		return ""
+	}
+	return fmt.Sprintf("#%06x", int(c-1))
+}
+
+func (c Colour) GoString() string {
+	if !c.IsSet() {
+		return "Colour(0)"
+	}
+	return fmt.Sprintf("Colour(0x%06x)", int(c-1))
+}
 
 // Red component of colour.
 func (c Colour) Red() uint8 { return uint8(((c - 1) >> 16) & 0xff) } //nolint:gosec

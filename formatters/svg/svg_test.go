@@ -50,6 +50,15 @@ func TestFontFamilyIsEscaped(t *testing.T) {
 	}
 }
 
+func TestUnsetColoursAreOmitted(t *testing.T) {
+	style, err := chroma.NewStyle("bare", chroma.StyleEntries{chroma.Keyword: "bold"})
+	assert.NoError(t, err)
+	w := &strings.Builder{}
+	assert.NoError(t, New().Format(w, style, chroma.Literator(chroma.Token{Type: chroma.Text, Value: "hi\n"})))
+	assert.NotContains(t, w.String(), "fill=\"")
+	assert.NotContains(t, w.String(), "<rect")
+}
+
 func decodeSVG(t *testing.T, doc string) (fontFamily, style string) {
 	t.Helper()
 	dec := xml.NewDecoder(strings.NewReader(doc))
