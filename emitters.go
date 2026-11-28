@@ -100,7 +100,7 @@ func ByGroupNames(emitters map[string]Emitter) Emitter {
 //
 // Example:
 //
-//	var Markdown = internal.Register(MustNewLexer(
+//	var Markdown = lexers.Register(MustNewLexer(
 //		&Config{
 //			Name:      "markdown",
 //			Aliases:   []string{"md", "mkd"},

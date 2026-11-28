@@ -8,9 +8,10 @@ import (
 
 // A Formatter for Chroma lexers.
 type Formatter interface {
-	// Format returns a formatting function for tokens.
+	// Format writes the tokens from iterator to w using style.
 	//
-	// If the iterator panics, the Formatter should recover.
+	// If the iterator panics, the Formatter should recover and return the
+	// panic as an error.
 	Format(w io.Writer, style *Style, iterator iter.Seq[Token]) error
 }
 

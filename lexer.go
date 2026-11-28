@@ -50,9 +50,9 @@ type Config struct {
 
 	// Analyse is a list of regexes to match against the input.
 	//
-	// If a match is found, the score is returned if single attribute is set to true,
-	// otherwise the sum of all the score of matching patterns will be
-	// used as the final score.
+	// If First is set, the score of the first matching pattern is returned,
+	// otherwise the scores of all matching patterns are summed. Either way
+	// the result is capped at 1.
 	Analyse *AnalyseConfig `xml:"analyse,omitempty"`
 }
 

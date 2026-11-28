@@ -270,17 +270,17 @@ var TTY = Register("terminal", TTY8)
 
 // TTY8 is an 8-colour terminal formatter.
 //
-// The Lab colour space is used to map RGB values to the most appropriate index colour.
+// Each RGB colour is mapped to the nearest index colour, as measured by Colour.Distance.
 var TTY8 = Register("terminal8", indexedTTYFormatter(ttyTables[8]))
 
 // TTY16 is a 16-colour terminal formatter.
 //
 // It uses \033[3xm for normal colours and \033[90Xm for bright colours.
 //
-// The Lab colour space is used to map RGB values to the most appropriate index colour.
+// Each RGB colour is mapped to the nearest index colour, as measured by Colour.Distance.
 var TTY16 = Register("terminal16", indexedTTYFormatter(ttyTables[16]))
 
 // TTY256 is a 256-colour terminal formatter.
 //
-// The Lab colour space is used to map RGB values to the most appropriate index colour.
+// Each RGB colour is mapped to the nearest index colour, as measured by Colour.Distance.
 var TTY256 = Register("terminal256", indexedTTYFormatter(ttyTables[256]))
