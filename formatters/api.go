@@ -36,11 +36,17 @@ func Names() []string {
 	return slices.Sorted(maps.Keys(registry))
 }
 
+// Lookup a named formatter, returning false if not found.
+func Lookup(name string) (chroma.Formatter, bool) {
+	f, ok := registry[name]
+	return f, ok
+}
+
 // Get formatter by name.
 //
 // If the given formatter is not found, the Fallback formatter will be returned.
 func Get(name string) chroma.Formatter {
-	if f, ok := registry[name]; ok {
+	if f, ok := Lookup(name); ok {
 		return f
 	}
 	return Fallback
