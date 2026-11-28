@@ -106,7 +106,7 @@ func WithLinkableLineNumbers(b bool, prefix string) Option {
 // follow BaseLineNumber.
 func HighlightLines(ranges [][2]int) Option {
 	return func(f *Formatter) {
-		f.highlightRanges = ranges
+		f.highlightRanges = slices.Clone(ranges)
 		sort.Sort(f.highlightRanges)
 	}
 }
@@ -119,7 +119,7 @@ func HighlightLines(ranges [][2]int) Option {
 func WithLinePrompts(prompt string, ranges [][2]int) Option {
 	return func(f *Formatter) {
 		f.linePrompt = prompt
-		f.linePromptRanges = ranges
+		f.linePromptRanges = slices.Clone(ranges)
 		sort.Sort(f.linePromptRanges)
 	}
 }

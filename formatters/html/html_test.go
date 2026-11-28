@@ -16,6 +16,12 @@ import (
 	"github.com/alecthomas/chroma/v3/styles"
 )
 
+func TestLineRangeOptionsDoNotSortCallerSlice(t *testing.T) {
+	ranges := [][2]int{{5, 6}, {1, 2}}
+	New(HighlightLines(ranges), WithLinePrompts("$", ranges))
+	assert.Equal(t, [][2]int{{5, 6}, {1, 2}}, ranges)
+}
+
 func TestFormatStyle(t *testing.T) {
 	style := "color: #888888;;background-color:  #faffff; ;"
 	assert.Equal(t, "color: #888888; background-color: #faffff", formatStyle(style, false))
