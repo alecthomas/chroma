@@ -265,10 +265,8 @@ func indexedTTYFormatter(table *ttyTable) chroma.Formatter {
 	})
 }
 
-// TTY is an 8-colour terminal formatter.
-//
-// The Lab colour space is used to map RGB values to the most appropriate index colour.
-var TTY = Register("terminal", indexedTTYFormatter(ttyTables[8]))
+// TTY is the default terminal formatter, an alias for TTY8.
+var TTY = Register("terminal", TTY8)
 
 // TTY8 is an 8-colour terminal formatter.
 //
