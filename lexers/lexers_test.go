@@ -191,8 +191,12 @@ func TestGlobs(t *testing.T) {
 }
 
 func BenchmarkGet(b *testing.B) {
-	for range b.N {
-		lexers.Get("go")
+	for _, name := range []string{"go", "rs", "Makefile", "nosuchlexer"} {
+		b.Run(name, func(b *testing.B) {
+			for b.Loop() {
+				lexers.Get(name)
+			}
+		})
 	}
 }
 

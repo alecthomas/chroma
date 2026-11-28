@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"sync"
 )
 
 var (
@@ -28,6 +29,11 @@ type LexerRegistry struct {
 	lexers  []Lexer
 	byName  map[string]Lexer
 	byAlias map[string]Lexer
+	// Indexes of each lexer's Filenames and AliasFilenames, built by the
+	// first Match after a Register, so later Config changes are not seen.
+	globsOnce      sync.Once
+	filenames      globIndex
+	aliasFilenames globIndex
 }
 
 // NewLexerRegistry creates a new LexerRegistry of Lexers.
@@ -124,56 +130,149 @@ func (l *LexerRegistry) MatchMimeType(mimeType string) Lexer {
 	return nil
 }
 
-// Match returns the first lexer matching filename.
-//
-// Note that this iterates over all file patterns in all lexers, so is not fast.
+// Match returns the highest priority lexer whose Filenames match the base name
+// of filename, falling back to its AliasFilenames. Globs also match with one
+// of the ignored backup suffixes, such as ".bak", appended.
 func (l *LexerRegistry) Match(filename string) Lexer {
+	l.globsOnce.Do(func() {
+		l.filenames = newGlobIndex(l.lexers, func(c *Config) []string { return c.Filenames })
+		l.aliasFilenames = newGlobIndex(l.lexers, func(c *Config) []string { return c.AliasFilenames })
+	})
 	filename = filepath.Base(filename)
-	// First, try primary filename matches.
-	matched := []Lexer{}
-	for _, lexer := range l.lexers {
-		if matchGlobs(lexer.Config().Filenames, filename) {
-			matched = append(matched, lexer)
-		}
+	if lexer := l.filenames.best(l.lexers, filename); lexer != nil {
+		return lexer
 	}
-	if len(matched) > 0 {
-		return slices.MinFunc(matched, compareLexersByPriority)
-	}
-	// Next, try filename aliases.
-	matched = nil
-	for _, lexer := range l.lexers {
-		if matchGlobs(lexer.Config().AliasFilenames, filename) {
-			matched = append(matched, lexer)
-		}
-	}
-	if len(matched) > 0 {
-		return slices.MinFunc(matched, compareLexersByPriority)
-	}
-	return nil
+	return l.aliasFilenames.best(l.lexers, filename)
 }
 
-// matchGlobs reports whether filename matches any of globs, either directly
-// or with one of the ignoredSuffixes appended.
-func matchGlobs(globs []string, filename string) bool {
-	for _, glob := range globs {
-		ok, err := filepath.Match(glob, filename)
-		if err != nil { // nolint
-			panic(err)
+// globIndex finds the lexers, by position in LexerRegistry.lexers, whose
+// filename globs match a base name.
+type globIndex struct {
+	// exts holds globs of the form "*.ext", keyed by ".ext" and sorted.
+	exts []globEntry
+	// names holds globs without metacharacters, sorted.
+	names    []globEntry
+	patterns []globEntry
+}
+
+type globEntry struct {
+	glob  string
+	lexer int
+}
+
+type globKind int
+
+const (
+	globName globKind = iota
+	globExt
+	globPattern
+)
+
+// classifyGlob returns how glob is indexed, and the key it is indexed by.
+func classifyGlob(glob string) (globKind, string) {
+	switch {
+	case !hasGlobMeta(glob):
+		return globName, glob
+	case strings.HasPrefix(glob, "*.") && !hasGlobMeta(glob[1:]):
+		return globExt, glob[1:]
+	default:
+		return globPattern, glob
+	}
+}
+
+func hasGlobMeta(glob string) bool {
+	return strings.ContainsAny(glob, `*?[\`)
+}
+
+func newGlobIndex(lexers []Lexer, globs func(*Config) []string) globIndex {
+	var counts [3]int
+	for _, lexer := range lexers {
+		for _, glob := range globs(lexer.Config()) {
+			kind, _ := classifyGlob(glob)
+			counts[kind]++
 		}
-		if ok {
-			return true
+	}
+	entries := [3][]globEntry{
+		make([]globEntry, 0, counts[globName]),
+		make([]globEntry, 0, counts[globExt]),
+		make([]globEntry, 0, counts[globPattern]),
+	}
+	for i, lexer := range lexers {
+		for _, glob := range globs(lexer.Config()) {
+			kind, key := classifyGlob(glob)
+			entries[kind] = append(entries[kind], globEntry{key, i})
 		}
-		for _, suf := range &ignoredSuffixes {
-			ok, err := filepath.Match(glob+suf, filename)
+	}
+	byGlob := func(a, b globEntry) int { return cmp.Compare(a.glob, b.glob) }
+	slices.SortFunc(entries[globName], byGlob)
+	slices.SortFunc(entries[globExt], byGlob)
+	return globIndex{names: entries[globName], exts: entries[globExt], patterns: entries[globPattern]}
+}
+
+// lookup returns the entries in sorted whose glob is key, without
+// slices.BinarySearchFunc as that makes key escape and allocate.
+func lookup(sorted []globEntry, key string) []globEntry {
+	start, end := 0, len(sorted)
+	for start < end {
+		if mid := int(uint(start+end) >> 1); sorted[mid].glob < key {
+			start = mid + 1
+		} else {
+			end = mid
+		}
+	}
+	end = start
+	for end < len(sorted) && sorted[end].glob == key {
+		end++
+	}
+	return sorted[start:end]
+}
+
+// best returns the highest priority lexer matching filename, preferring the
+// earliest registered on a tie.
+func (g *globIndex) best(lexers []Lexer, filename string) Lexer {
+	best := -1
+	consider := func(i int) {
+		if best < 0 {
+			best = i
+			return
+		}
+		if order := compareLexersByPriority(lexers[i], lexers[best]); order < 0 || order == 0 && i < best {
+			best = i
+		}
+	}
+	match := func(name string) {
+		for _, entry := range lookup(g.names, name) {
+			consider(entry.lexer)
+		}
+		for dot := range len(name) {
+			if name[dot] == '.' {
+				for _, entry := range lookup(g.exts, name[dot:]) {
+					consider(entry.lexer)
+				}
+			}
+		}
+		for _, pattern := range g.patterns {
+			ok, err := filepath.Match(pattern.glob, name)
 			if err != nil {
 				panic(err)
 			}
 			if ok {
-				return true
+				consider(pattern.lexer)
 			}
 		}
 	}
-	return false
+	match(filename)
+	// A glob followed by a literal suffix matches exactly the names with that
+	// suffix whose remainder matches the glob.
+	for _, suffix := range &ignoredSuffixes {
+		if name, ok := strings.CutSuffix(filename, suffix); ok {
+			match(name)
+		}
+	}
+	if best < 0 {
+		return nil
+	}
+	return lexers[best]
 }
 
 // Analyse text content and return the "best" lexer..
@@ -201,10 +300,8 @@ func (l *LexerRegistry) Register(lexer Lexer) Lexer {
 	// Consult byName before updating it so that registering a fresh lexer,
 	// the common case, does not scan the whole slice. byName is also keyed
 	// on lowercased names, so a hit only means a probable duplicate.
-	if l.byName[config.Name] == nil {
-		l.lexers = append(l.lexers, lexer)
-	} else {
-		replaced := false
+	replaced := false
+	if l.byName[config.Name] != nil {
 		for i, val := range l.lexers {
 			if val != nil && val.Config().Name == config.Name {
 				for alias, registered := range l.byAlias {
@@ -217,10 +314,13 @@ func (l *LexerRegistry) Register(lexer Lexer) Lexer {
 				break
 			}
 		}
-		if !replaced {
-			l.lexers = append(l.lexers, lexer)
-		}
 	}
+	if !replaced {
+		l.lexers = append(l.lexers, lexer)
+	}
+	// Resetting is safe only because Register must not run concurrently with
+	// Match.
+	l.globsOnce = sync.Once{}
 
 	l.byName[config.Name] = lexer
 	l.byName[strings.ToLower(config.Name)] = lexer
