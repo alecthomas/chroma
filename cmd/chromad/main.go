@@ -136,7 +136,7 @@ func newContext(r *http.Request) context {
 	if ctx.SelectedStyle == "" {
 		ctx.SelectedStyle = "monokailight"
 	}
-	for _, lexer := range lexers.GlobalLexerRegistry.Lexers {
+	for _, lexer := range lexers.All() {
 		ctx.Languages = append(ctx.Languages, lexer.Config().Name)
 	}
 	sort.Strings(ctx.Languages)

@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"cmp"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -24,7 +25,7 @@ var (
 // Registration is not synchronised: register all lexers (typically at init
 // time) before using the registry concurrently.
 type LexerRegistry struct {
-	Lexers  Lexers
+	lexers  []Lexer
 	byName  map[string]Lexer
 	byAlias map[string]Lexer
 }
@@ -37,10 +38,18 @@ func NewLexerRegistry() *LexerRegistry {
 	}
 }
 
+// All returns a copy of the registered lexers, sorted case-insensitively by
+// name.
+func (l *LexerRegistry) All() []Lexer {
+	return slices.SortedFunc(slices.Values(l.lexers), func(a, b Lexer) int {
+		return cmp.Compare(strings.ToLower(a.Config().Name), strings.ToLower(b.Config().Name))
+	})
+}
+
 // Names of all lexers, optionally including aliases.
 func (l *LexerRegistry) Names(withAliases bool) []string {
 	out := []string{}
-	for _, lexer := range l.Lexers {
+	for _, lexer := range l.lexers {
 		config := lexer.Config()
 		out = append(out, config.Name)
 		if withAliases {
@@ -55,7 +64,7 @@ func (l *LexerRegistry) Names(withAliases bool) []string {
 // or show their name instead
 func (l *LexerRegistry) Aliases(skipWithoutAliases bool) []string {
 	out := []string{}
-	for _, lexer := range l.Lexers {
+	for _, lexer := range l.lexers {
 		config := lexer.Config()
 		if len(config.Aliases) == 0 {
 			if skipWithoutAliases {
@@ -102,7 +111,7 @@ func (l *LexerRegistry) Get(name string) Lexer {
 // MatchMimeType attempts to find a lexer for the given MIME type.
 func (l *LexerRegistry) MatchMimeType(mimeType string) Lexer {
 	matched := []Lexer{}
-	for _, l := range l.Lexers {
+	for _, l := range l.lexers {
 		for _, lmt := range l.Config().MimeTypes {
 			if mimeType == lmt {
 				matched = append(matched, l)
@@ -122,7 +131,7 @@ func (l *LexerRegistry) Match(filename string) Lexer {
 	filename = filepath.Base(filename)
 	// First, try primary filename matches.
 	matched := []Lexer{}
-	for _, lexer := range l.Lexers {
+	for _, lexer := range l.lexers {
 		if matchGlobs(lexer.Config().Filenames, filename) {
 			matched = append(matched, lexer)
 		}
@@ -132,7 +141,7 @@ func (l *LexerRegistry) Match(filename string) Lexer {
 	}
 	// Next, try filename aliases.
 	matched = nil
-	for _, lexer := range l.Lexers {
+	for _, lexer := range l.lexers {
 		if matchGlobs(lexer.Config().AliasFilenames, filename) {
 			matched = append(matched, lexer)
 		}
@@ -171,7 +180,7 @@ func matchGlobs(globs []string, filename string) bool {
 func (l *LexerRegistry) Analyse(text string) Lexer {
 	var picked Lexer
 	highest := float32(0.0)
-	for _, lexer := range l.Lexers {
+	for _, lexer := range l.lexers {
 		weight := lexer.AnalyseText(text)
 		if weight > highest {
 			picked = lexer
@@ -193,23 +202,23 @@ func (l *LexerRegistry) Register(lexer Lexer) Lexer {
 	// the common case, does not scan the whole slice. byName is also keyed
 	// on lowercased names, so a hit only means a probable duplicate.
 	if l.byName[config.Name] == nil {
-		l.Lexers = append(l.Lexers, lexer)
+		l.lexers = append(l.lexers, lexer)
 	} else {
 		replaced := false
-		for i, val := range l.Lexers {
+		for i, val := range l.lexers {
 			if val != nil && val.Config().Name == config.Name {
 				for alias, registered := range l.byAlias {
 					if registered.Config().Name == config.Name {
 						delete(l.byAlias, alias)
 					}
 				}
-				l.Lexers[i] = lexer
+				l.lexers[i] = lexer
 				replaced = true
 				break
 			}
 		}
 		if !replaced {
-			l.Lexers = append(l.Lexers, lexer)
+			l.lexers = append(l.lexers, lexer)
 		}
 	}
 

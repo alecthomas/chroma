@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"iter"
 	"path/filepath"
-	"strings"
 )
 
 // Config for a lexer.
@@ -166,15 +165,6 @@ type Trace struct {
 	Pos     int     `json:"pos"`
 	Length  int     `json:"length"`
 	Elapsed float64 `json:"elapsedMs"` // Elapsed time spent matching for this rule.
-}
-
-// Lexers is a slice of lexers sortable by name.
-type Lexers []Lexer
-
-func (l Lexers) Len() int      { return len(l) }
-func (l Lexers) Swap(i, j int) { l[i], l[j] = l[j], l[i] }
-func (l Lexers) Less(i, j int) bool {
-	return strings.ToLower(l[i].Config().Name) < strings.ToLower(l[j].Config().Name)
 }
 
 // compareLexersByPriority orders lexers by descending priority, treating an

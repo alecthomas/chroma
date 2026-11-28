@@ -1,6 +1,28 @@
 package chroma
 
-import "testing"
+import (
+	"testing"
+
+	assert "github.com/alecthomas/assert/v2"
+)
+
+func TestLexerRegistryAllIsSortedCopy(t *testing.T) {
+	registry := NewLexerRegistry()
+	for _, name := range []string{"beta", "Gamma", "alpha"} {
+		registry.Register(mustNewLexer(t, &Config{Name: name}, Rules{"root": {}}))
+	}
+	names := func(lexers []Lexer) []string {
+		out := []string{}
+		for _, lexer := range lexers {
+			out = append(out, lexer.Config().Name)
+		}
+		return out
+	}
+	all := registry.All()
+	assert.Equal(t, []string{"alpha", "beta", "Gamma"}, names(all))
+	all[0] = nil
+	assert.Equal(t, []string{"alpha", "beta", "Gamma"}, names(registry.All()))
+}
 
 func TestLexerRegistryReplaceAliases(t *testing.T) {
 	registry := NewLexerRegistry()

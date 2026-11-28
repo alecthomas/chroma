@@ -13,7 +13,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"runtime/pprof"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -326,8 +325,7 @@ func configureHTMLFormatter(ctx *kong.Context) {
 
 func listAll() {
 	fmt.Println("lexers:")
-	sort.Sort(lexers.GlobalLexerRegistry.Lexers)
-	for _, l := range lexers.GlobalLexerRegistry.Lexers {
+	for _, l := range lexers.All() {
 		config := l.Config()
 		fmt.Printf("  %s\n", config.Name)
 		filenames := []string{}

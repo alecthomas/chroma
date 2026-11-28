@@ -29,6 +29,12 @@ var GlobalLexerRegistry = func() *chroma.LexerRegistry {
 	return reg
 }()
 
+// All returns a copy of the registered lexers, sorted case-insensitively by
+// name.
+func All() []chroma.Lexer {
+	return GlobalLexerRegistry.All()
+}
+
 // Names of all lexers, optionally including aliases.
 func Names(withAliases bool) []string {
 	return GlobalLexerRegistry.Names(withAliases)

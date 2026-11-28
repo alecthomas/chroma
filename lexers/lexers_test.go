@@ -23,7 +23,7 @@ import (
 )
 
 func TestCompileAllRegexes(t *testing.T) {
-	for _, lexer := range lexers.GlobalLexerRegistry.Lexers {
+	for _, lexer := range lexers.All() {
 		it, err := lexer.Tokenise("")
 		assert.NoError(t, err, "%s failed", lexer.Config().Name)
 		err = formatters.NoOp.Format(io.Discard, styles.Get("swapoff"), it)
@@ -177,7 +177,7 @@ func TestAliases(t *testing.T) {
 
 func TestGlobs(t *testing.T) {
 	filename := "main.go"
-	for _, lexer := range lexers.GlobalLexerRegistry.Lexers {
+	for _, lexer := range lexers.All() {
 		config := lexer.Config()
 		for _, glob := range config.Filenames {
 			_, err := filepath.Match(glob, filename)
