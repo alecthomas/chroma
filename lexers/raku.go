@@ -1679,7 +1679,7 @@ func podCode(groups []string, state *LexerState) iter.Seq[Token] {
 	// Tokenise code based on lang property
 	sublexer := Get(lang)
 	if sublexer != nil {
-		iterator, err := sublexer.Tokenise(state.NamedGroups[`value`])
+		iterator, err := sublexer.Tokenise(state.NamedGroups[`value`], state.Nested("root"))
 
 		if err != nil {
 			panic(err)
