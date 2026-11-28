@@ -71,6 +71,20 @@ func Names() []string {
 	return names
 }
 
+// All returns every available style, sorted case-insensitively by name.
+//
+// The first call parses every embedded style not yet looked up.
+func All() []*chroma.Style {
+	names := Names()
+	out := make([]*chroma.Style, 0, len(names))
+	for _, name := range names {
+		if style, ok := Lookup(name); ok {
+			out = append(out, style)
+		}
+	}
+	return out
+}
+
 // Lookup a named style, returning false if not found. Embedded styles are
 // parsed on first lookup.
 func Lookup(name string) (*chroma.Style, bool) {

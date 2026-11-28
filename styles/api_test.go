@@ -27,6 +27,16 @@ func TestStyleRegistryCaseInsensitivity(t *testing.T) {
 	}
 }
 
+func TestAll(t *testing.T) {
+	custom := Register(chroma.MustNewStyle("ZZ-Custom-All", chroma.StyleEntries{}))
+	names := []string{}
+	for _, style := range All() {
+		names = append(names, strings.ToLower(style.Name))
+	}
+	assert.Equal(t, Names(), names)
+	assert.Equal(t, custom, All()[len(names)-1])
+}
+
 func TestGetUnknownStyleReturnsFallback(t *testing.T) {
 	assert.Equal(t, Fallback, Get("non-existent-style"))
 }
