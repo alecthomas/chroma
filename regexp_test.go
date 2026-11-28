@@ -553,6 +553,7 @@ func TestMatchContentionPreemption(t *testing.T) {
 				case <-done:
 					return
 				default:
+					runtime.Gosched()
 				}
 			}
 		}()
