@@ -225,7 +225,7 @@ func FileTest(t *testing.T, lexer chroma.Lexer, sourceFile, expectedFilename str
 		// Read and tokenise source text.
 		sourceBytes, err := os.ReadFile(sourceFile)
 		assert.NoError(t, err)
-		it, err := chroma.Tokenise(lexer, nil, string(sourceBytes))
+		it, err := lexer.Tokenise(nil, string(sourceBytes))
 		assert.NoError(t, err)
 		actualTokens := slices.Collect(it)
 

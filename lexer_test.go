@@ -26,7 +26,7 @@ func TestSimpleLexer(t *testing.T) {
 			{`(.*?)(\s*)(=)(\s*)(.*?)$`, ByGroups(Name, Whitespace, Operator, Whitespace, String), nil},
 		},
 	})
-	actual, err := Tokenise(lexer, nil, `
+	actual, err := lexer.Tokenise(nil, `
 	; this is a comment
 	[section]
 	a = 10

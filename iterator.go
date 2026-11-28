@@ -36,9 +36,7 @@ func SplitTokensIntoLines(tokens iter.Seq[Token]) iter.Seq[[]Token] {
 				token.Value = parts[1]
 
 				// Append the head to the line and flush the line.
-				clone := token.Clone()
-				clone.Value = parts[0]
-				if !yield(append(line, clone)) {
+				if !yield(append(line, Token{token.Type, parts[0]})) {
 					return
 				}
 				line = nil

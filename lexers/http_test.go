@@ -17,7 +17,7 @@ User-Agent: foo
 
 {"hello": "world"}
 `
-	it, err := chroma.Tokenise(HTTP, nil, source)
+	it, err := HTTP.Tokenise(nil, source)
 	assert.NoError(t, err)
 	tokens := slices.Collect(it)
 	assert.Equal(t, source, chroma.Stringify(tokens...))

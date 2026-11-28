@@ -61,11 +61,6 @@ func wordAlternation(words []string) string {
 	return group
 }
 
-// Tokenise text using lexer, returning tokens as an iterator.
-func Tokenise(lexer Lexer, options *TokeniseOptions, text string) (iter.Seq[Token], error) {
-	return lexer.Tokenise(options, text)
-}
-
 // Rules maps from state to a sequence of Rules.
 type Rules map[string][]Rule
 

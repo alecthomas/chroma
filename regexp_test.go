@@ -350,7 +350,7 @@ func TestTokeniseDefaultsEmptyState(t *testing.T) {
 			return slices.Collect(it), nil
 		}},
 		{"helper", func(l Lexer, options *TokeniseOptions, text string) ([]Token, error) {
-			it, err := Tokenise(l, options, text)
+			it, err := l.Tokenise(options, text)
 			if err != nil {
 				return nil, err
 			}

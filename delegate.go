@@ -98,7 +98,7 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (token
 	if err != nil {
 		return nil, err
 	}
-	languageTokens, err := Tokenise(Coalesce(d.language), options, text)
+	languageTokens, err := Coalesce(d.language).Tokenise(options, text)
 	if err != nil {
 		return nil, err
 	}
@@ -115,11 +115,11 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (token
 		return rootLexer.Tokenise(options, text)
 	}
 
-	rootTokens, err := Tokenise(Coalesce(rootLexer), options, rootText.String())
+	rootTokens, err := Coalesce(rootLexer).Tokenise(options, rootText.String())
 	if err != nil {
 		return nil, err
 	}
-	languageTokens, err = Tokenise(Coalesce(d.language), options, text)
+	languageTokens, err = Coalesce(d.language).Tokenise(options, text)
 	if err != nil {
 		return nil, err
 	}
@@ -186,9 +186,5 @@ func splitToken(t Token, offset int) (l Token, r Token) {
 	if offset >= len(t.Value) {
 		return t, Token{}
 	}
-	l = t.Clone()
-	r = t.Clone()
-	l.Value = l.Value[:offset]
-	r.Value = r.Value[offset:]
-	return
+	return Token{t.Type, t.Value[:offset]}, Token{t.Type, t.Value[offset:]}
 }

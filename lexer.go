@@ -94,13 +94,8 @@ type Token struct {
 	Value string    `json:"value"`
 }
 
-func (t *Token) String() string   { return t.Value }
-func (t *Token) GoString() string { return fmt.Sprintf("&Token{%s, %q}", t.Type, t.Value) }
-
-// Clone returns a clone of the Token.
-func (t *Token) Clone() Token {
-	return *t
-}
+func (t Token) String() string   { return t.Value }
+func (t Token) GoString() string { return fmt.Sprintf("Token{%s, %q}", t.Type, t.Value) }
 
 // TokeniseOptions contains options for tokenisers.
 type TokeniseOptions struct {
@@ -118,7 +113,8 @@ type TokeniseOptions struct {
 type Lexer interface {
 	// Config describing the features of the Lexer.
 	Config() *Config
-	// Tokenise returns an iterator over tokens in text.
+	// Tokenise returns an iterator over tokens in text. The iterator panics if
+	// lexing fails mid-stream; Formatters recover this, direct consumers must.
 	Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error)
 	// SetRegistry sets the registry this Lexer is associated with.
 	//
