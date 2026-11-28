@@ -1,0 +1,15 @@
+BEGIN {
+	n = gsub(//, "-", s)
+	word = @/[a-z]+/
+	FS = @/:/
+	split("a:b", parts, @/:/)
+	print typeof(@/x/), n
+}
+/^[]a]+$/ { print "] first in brackets" }
+/[^]/]x/ { print "negated" }
+/^[[:alpha:]_][[:alnum:]_]*$/ { print "classes" }
+/[[(]|[[:space:]/]|[\]x]/ { print "brackets" }
+$0 ~ /a\/b/ || $0 ~ /[/]/ { print "slashes" }
+$0 ~ /one\
+two/ { print "continued" }
+{ print ($1 ~ /^#/ ? "comment" : "code"), $2 / 2 }

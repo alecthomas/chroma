@@ -42,6 +42,10 @@
       <rule pattern="(ARGC|ARGIND|ARGV|BEGIN(FILE)?|BINMODE|CONVFMT|ENVIRON|END(FILE)?|ERRNO|FIELDWIDTHS|FILENAME|FNR|FPAT|FS|IGNORECASE|LINT|NF|NR|OFMT|OFS|ORS|PROCINFO|RLENGTH|RS|RSTART|RT|SUBSEP|TEXTDOMAIN)\b">
         <token type="NameBuiltin"/>
       </rule>
+      <rule pattern="@(?=/)">
+        <token type="LiteralStringRegex"/>
+        <push state="slashstartsregex"/>
+      </rule>
       <rule pattern="[@$a-zA-Z_]\w*(::[a-zA-Z_]\w*)?">
         <token type="NameOther"/>
       </rule>
@@ -76,7 +80,7 @@
       <rule>
         <include state="commentsandwhitespace"/>
       </rule>
-      <rule pattern="/(\\.|[^[/\\\n]|\[(\\.|[^\]\\\n])*])+/\B">
+      <rule pattern="/(\\[\s\S]|[^[/\\\n]|\[(?&gt;\^?\]?)(\[:[a-z]+:\]|\[(?!:[a-z]+:\])|\\[\s\S]|[^[\]\\\n])*\])*/\B">
         <token type="LiteralStringRegex"/>
         <pop depth="1"/>
       </rule>
