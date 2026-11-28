@@ -25,34 +25,34 @@ func (e EmitterFunc) Emit(groups []string, state *LexerState) iter.Seq[Token] {
 	return e(groups, state)
 }
 
-type Emitters []Emitter
+type emitterList []Emitter
 
 type byGroupsEmitter struct {
-	Emitters
+	emitterList
 }
 
 var _ ValidatingEmitter = (*byGroupsEmitter)(nil)
 
 // ByGroups emits a token for each matching group in the rule's regex.
 func ByGroups(emitters ...Emitter) Emitter {
-	return &byGroupsEmitter{Emitters: emitters}
+	return &byGroupsEmitter{emitterList: emitters}
 }
 
 func (b *byGroupsEmitter) ValidateEmitter(rule *CompiledRule) error {
-	if len(rule.Regexp.GetGroupNumbers())-1 != len(b.Emitters) {
-		return fmt.Errorf("number of groups %d does not match number of emitters %d", len(rule.Regexp.GetGroupNumbers())-1, len(b.Emitters))
+	if len(rule.Regexp.GetGroupNumbers())-1 != len(b.emitterList) {
+		return fmt.Errorf("number of groups %d does not match number of emitters %d", len(rule.Regexp.GetGroupNumbers())-1, len(b.emitterList))
 	}
 	return nil
 }
 
 func (b *byGroupsEmitter) Emit(groups []string, state *LexerState) iter.Seq[Token] {
 	iterators := make([]iter.Seq[Token], 0, len(groups)-1)
-	if len(b.Emitters) != len(groups)-1 {
+	if len(b.emitterList) != len(groups)-1 {
 		iterators = append(iterators, Error.Emit(groups, state))
 	} else {
 		for i, group := range groups[1:] {
-			if b.Emitters[i] != nil {
-				iterators = append(iterators, b.Emitters[i].Emit([]string{group}, state))
+			if b.emitterList[i] != nil {
+				iterators = append(iterators, b.emitterList[i].Emit([]string{group}, state))
 			}
 		}
 	}
@@ -133,9 +133,9 @@ func UsingByGroup(sublexerNameGroup, codeGroup int, emitters ...Emitter) Emitter
 }
 
 type usingByGroup struct {
-	SublexerNameGroup int      `xml:"sublexer_name_group"`
-	CodeGroup         int      `xml:"code_group"`
-	Emitters          Emitters `xml:"emitters"`
+	SublexerNameGroup int         `xml:"sublexer_name_group"`
+	CodeGroup         int         `xml:"code_group"`
+	Emitters          emitterList `xml:"emitters"`
 }
 
 func (u *usingByGroup) Emit(groups []string, state *LexerState) iter.Seq[Token] {

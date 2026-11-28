@@ -440,7 +440,7 @@ func (t *TokenType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	return nil
 }
 
-func (b *Emitters) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+func (b *emitterList) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for {
 		token, err := d.Token()
 		if err != nil {
