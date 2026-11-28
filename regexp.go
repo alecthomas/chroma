@@ -129,21 +129,21 @@ type LexerState struct {
 	// Group matches.
 	Groups []string
 	// Named Group matches.
-	NamedGroups map[string]string
-	// Custom context for mutators.
-	MutatorContext map[any]any
+	NamedGroups    map[string]string
+	mutatorContext map[any]any
 	options        *TokeniseOptions
 	newlineAdded   bool
 }
 
-// Set mutator context.
+// Set a value in the context shared by Mutators and Emitters during one
+// tokenisation.
 func (l *LexerState) Set(key any, value any) {
-	l.MutatorContext[key] = value
+	l.mutatorContext[key] = value
 }
 
-// Get mutator context.
+// Get a value set by Set.
 func (l *LexerState) Get(key any) any {
-	return l.MutatorContext[key]
+	return l.mutatorContext[key]
 }
 
 // Nested returns the option for an Emitter to tokenise part of the current
@@ -480,7 +480,7 @@ func (r *RegexLexer) Tokenise(text string, opts ...TokeniseOption) (iter.Seq[Tok
 		Text:           []rune(text),
 		Stack:          []string{options.State},
 		Rules:          r.rules,
-		MutatorContext: map[any]any{},
+		mutatorContext: map[any]any{},
 	}
 	return state.Iterator(), nil
 }
