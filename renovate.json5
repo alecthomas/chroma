@@ -20,6 +20,12 @@
 			"matchPackageNames": ["github.com/gorilla/csrf"],
 			"matchManagers": ["gomod"],
 			"enabled": false
+		},
+		{
+			// The cmd modules replace chroma with the checkout, so its version is a placeholder.
+			"matchPackageNames": ["github.com/alecthomas/chroma/v3"],
+			"matchManagers": ["gomod"],
+			"enabled": false
 		}
 	]
 }

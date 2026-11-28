@@ -19,4 +19,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 )
 
+// Always built from this checkout, so the required chroma version is a
+// placeholder that never needs bumping. This module cannot be go installed.
 replace github.com/alecthomas/chroma/v3 => ../../
