@@ -19,16 +19,16 @@ func main() { }
 	// Output:
 	// <html>
 	// <style type="text/css">
-	// /* Background */ .bg { color: #f8f8f2; background-color: #272822; }
-	// /* PreWrapper */ .chroma { color: #f8f8f2; background-color: #272822; -webkit-text-size-adjust: none; }
+	// /* Background */ .bg { color: #f8f8f2; background-color: #272822 }
+	// /* PreWrapper */ .chroma { color: #f8f8f2; background-color: #272822; -webkit-text-size-adjust: none }
 	// /* Error */ .chroma .err { color: #960050; background-color: #1e0010 }
 	// /* LineLink */ .chroma .lnlinks { outline: none; text-decoration: none; color: inherit }
-	// /* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
-	// /* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
+	// /* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0 }
+	// /* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0 }
 	// /* LineHighlight */ .chroma .hl { display: flex; background-color: #3c3d38 }
-	// /* LineNumbersTable */ .chroma .lnt { display: flex; white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
-	// /* LineNumbers */ .chroma .ln { white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
-	// /* Line */ .chroma .line { display: flex; }
+	// /* LineNumbersTable */ .chroma .lnt { display: flex; white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em; color: #7f7f7f }
+	// /* LineNumbers */ .chroma .ln { white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em; color: #7f7f7f }
+	// /* Line */ .chroma .line { display: flex }
 	// /* Keyword */ .chroma .k { color: #66d9ef }
 	// /* KeywordConstant */ .chroma .kc { color: #66d9ef }
 	// /* KeywordDeclaration */ .chroma .kd { color: #66d9ef }
@@ -83,7 +83,7 @@ func main() { }
 	// /* GenericInserted */ .chroma .gi { color: #a6e22e }
 	// /* GenericStrong */ .chroma .gs { font-weight: bold }
 	// /* GenericSubheading */ .chroma .gu { color: #75715e }
-	// body { color:#f8f8f2;background-color:#272822;; }
+	// body { color: #f8f8f2; background-color: #272822 }
 	// </style><body class="bg">
 	// <pre class="chroma"><code><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w">
 	// </span></span></span><span class="line"><span class="cl"><span class="w">

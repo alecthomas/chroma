@@ -304,7 +304,9 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, lines iter.Seq[[
 			if err != nil {
 				return err
 			}
-			fmt.Fprintf(w, "body { %s; }\n", css[chroma.Background])
+			if err := f.writeCSSRule(w, "", "body", f.styleCache.get(style, false)[chroma.Background]); err != nil {
+				return err
+			}
 			fmt.Fprint(w, "</style>")
 		}
 		fmt.Fprintf(w, "<body%s>\n", f.styleAttrWithMode(css, chroma.Background, style))
@@ -364,7 +366,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, lines iter.Seq[[
 					// LineHighlight's own display:flex (needed when it wraps a
 					// line-number-table row on its own, #722) is redundant
 					// here since Line already sets it.
-					fmt.Fprintf(w, ` style="%s %s"`, css[chroma.Line], strings.TrimPrefix(css[chroma.LineHighlight], "display:flex;"))
+					fmt.Fprintf(w, ` style="%s;%s"`, css[chroma.Line], strings.TrimPrefix(css[chroma.LineHighlight], "display:flex;"))
 				}
 				fmt.Fprint(w, `>`)
 			} else {
@@ -664,22 +666,30 @@ func StyleEntryToCSS(e chroma.StyleEntry) string {
 	return strings.Join(styles, "; ")
 }
 
-// Compress CSS attributes - remove spaces, transform 6-digit colours to 3.
-func compressStyle(s string) string {
-	parts := strings.Split(s, ";")
+// formatStyle normalises CSS declarations, dropping empty ones. If compress is
+// set, it also removes optional spaces and shortens 6-digit colours to 3.
+func formatStyle(s string, compress bool) string {
 	out := []string{}
-	for _, p := range parts {
+	for p := range strings.SplitSeq(s, ";") {
 		p = strings.Join(strings.Fields(p), " ")
-		p = strings.Replace(p, ": ", ":", 1)
-		if i := strings.LastIndexByte(p, '#'); i >= 0 && len(p)-i == 7 {
-			c := p[i+1:]
-			if c[0] == c[1] && c[2] == c[3] && c[4] == c[5] {
-				p = p[:i+1] + c[0:1] + c[2:3] + c[4:5]
+		if p == "" {
+			continue
+		}
+		if compress {
+			p = strings.Replace(p, ": ", ":", 1)
+			if i := strings.LastIndexByte(p, '#'); i >= 0 && len(p)-i == 7 {
+				c := p[i+1:]
+				if c[0] == c[1] && c[2] == c[3] && c[4] == c[5] {
+					p = p[:i+1] + c[0:1] + c[2:3] + c[4:5]
+				}
 			}
 		}
 		out = append(out, p)
 	}
-	return strings.Join(out, ";")
+	if compress {
+		return strings.Join(out, ";")
+	}
+	return strings.Join(out, "; ")
 }
 
 const styleCacheLimit = 32
@@ -723,10 +733,8 @@ func (l *styleCache) get(style *chroma.Style, compress bool) map[chroma.TokenTyp
 
 	// No entry, create one.
 	cached := l.f.styleToCSS(style)
-	if !l.f.classes || compress {
-		for t, style := range cached {
-			cached[t] = compressStyle(style)
-		}
+	for t, style := range cached {
+		cached[t] = formatStyle(style, !l.f.classes || compress)
 	}
 	// Evict the oldest entry.
 	if len(l.cache) >= styleCacheLimit {

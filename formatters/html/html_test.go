@@ -16,11 +16,10 @@ import (
 	"github.com/alecthomas/chroma/v3/styles"
 )
 
-func TestCompressStyle(t *testing.T) {
-	style := "color: #888888; background-color: #faffff"
-	actual := compressStyle(style)
-	expected := "color:#888;background-color:#faffff"
-	assert.Equal(t, expected, actual)
+func TestFormatStyle(t *testing.T) {
+	style := "color: #888888;;background-color:  #faffff; ;"
+	assert.Equal(t, "color: #888888; background-color: #faffff", formatStyle(style, false))
+	assert.Equal(t, "color:#888;background-color:#faffff", formatStyle(style, true))
 }
 
 func BenchmarkHTMLFormatter(b *testing.B) {
@@ -191,7 +190,7 @@ func TestWithCustomCSS(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.True(t, regexp.MustCompile(`<span style="display:flex;display:inline;"><span><span style=".*">echo</span> FOO</span></span>`).MatchString(buf.String()))
+	assert.True(t, regexp.MustCompile(`<span style="display:flex;display:inline"><span><span style=".*">echo</span> FOO</span></span>`).MatchString(buf.String()))
 }
 
 func TestWithCustomCSSStyleInheritance(t *testing.T) {
@@ -206,7 +205,7 @@ func TestWithCustomCSSStyleInheritance(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.True(t, regexp.MustCompile(` <span style=".*;background:blue;color:tomato;">&#34;FOO&#34;</span>`).MatchString(buf.String()))
+	assert.True(t, regexp.MustCompile(` <span style=".*;background:blue;color:tomato">&#34;FOO&#34;</span>`).MatchString(buf.String()))
 }
 
 func TestWrapLongLines(t *testing.T) {
@@ -218,7 +217,7 @@ func TestWrapLongLines(t *testing.T) {
 	err = f.Format(&buf, styles.Fallback, it)
 	assert.NoError(t, err)
 
-	assert.True(t, regexp.MustCompile(`<pre.*style=".*white-space:pre-wrap;word-break:break-word;`).MatchString(buf.String()))
+	assert.True(t, regexp.MustCompile(`<pre.*style=".*white-space:pre-wrap;word-break:break-word"`).MatchString(buf.String()))
 }
 
 func TestHighlightLines(t *testing.T) {
