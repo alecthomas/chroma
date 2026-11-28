@@ -150,7 +150,7 @@ func (u *usingByGroup) Emit(groups []string, state *LexerState) iter.Seq[Token] 
 	iterators := make([]iter.Seq[Token], 0, len(groups)-1)
 	for i, group := range groups[1:] {
 		if i == u.CodeGroup-1 && sublexer != nil {
-			it, err := sublexer.Tokenise(groups[u.CodeGroup])
+			it, err := sublexer.Tokenise(groups[u.CodeGroup], WithTrace(state.options.Trace))
 			if err != nil {
 				panic(err)
 			}

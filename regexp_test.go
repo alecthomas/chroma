@@ -1,6 +1,7 @@
 package chroma
 
 import (
+	"fmt"
 	"iter"
 	"slices"
 	"strings"
@@ -137,6 +138,20 @@ func collectTokensTimeout(t *testing.T, seq iter.Seq[Token], timeout time.Durati
 		t.Fatal("Iterator never returned: zero-width push/pop cycle")
 		return nil
 	}
+}
+
+func TestTraceReachesNestedLexers(t *testing.T) {
+	inner := mustNewLexer(t, &Config{Name: "inner"}, Rules{"root": {{`\w+`, Name, nil}}})
+	outer := mustNewLexer(t, &Config{Name: "outer"}, Rules{
+		"root": {{`\[(\w+)\]`, ByGroups(UsingLexer(inner)), nil}},
+	})
+	var traced []string
+	it, err := outer.Tokenise("[a]", WithTrace(func(trace Trace) {
+		traced = append(traced, fmt.Sprintf("%s:%s:%d", trace.Lexer, trace.State, trace.Length))
+	}))
+	assert.NoError(t, err)
+	assert.Equal(t, []Token{{Name, "a"}}, slices.Collect(it))
+	assert.Equal(t, []string{"outer:root:3", "inner:root:1"}, traced)
 }
 
 func TestTokeniseOptions(t *testing.T) {

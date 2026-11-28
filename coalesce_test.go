@@ -102,19 +102,9 @@ func TestCoalesceConfiguredErrorAndEarlyStop(t *testing.T) {
 	}
 }
 
-type coalesceTracingLexer struct {
-	Lexer
-	calls []bool
-}
-
-func (l *coalesceTracingLexer) SetTracing(enable bool) {
-	l.calls = append(l.calls, enable)
-}
-
 func TestCoalesceForwarding(t *testing.T) {
 	base := mustNewLexer(t, &Config{Name: "coalesce-forwarding"}, Rules{"root": {{`.`, Text, nil}}})
-	wrapped := &coalesceTracingLexer{Lexer: base}
-	lexer := Coalesce(wrapped)
+	lexer := Coalesce(base)
 	if lexer.Config() != base.Config() {
 		t.Error("config identity not preserved")
 	}
@@ -126,11 +116,4 @@ func TestCoalesceForwarding(t *testing.T) {
 	if score := lexer.AnalyseText("forward this text"); score != 0.625 || analysed != "forward this text" {
 		t.Errorf("AnalyseText returned %v after analysing %q", score, analysed)
 	}
-	tracing := lexer.(TracingLexer)
-	tracing.SetTracing(true)
-	tracing.SetTracing(false)
-	if !slices.Equal(wrapped.calls, []bool{true, false}) {
-		t.Errorf("tracing calls = %v, want [true false]", wrapped.calls)
-	}
-	Coalesce(&coalesceSetterLexer{Lexer: base}).(TracingLexer).SetTracing(true)
 }

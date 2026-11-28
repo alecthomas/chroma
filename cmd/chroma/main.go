@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -356,11 +357,13 @@ func listAll() {
 }
 
 func lex(ctx *kong.Context, lexer chroma.Lexer, contents string) iter.Seq[chroma.Token] {
-	if rel, ok := lexer.(chroma.TracingLexer); ok {
-		rel.SetTracing(cli.Trace)
+	var options []chroma.TokeniseOption
+	if cli.Trace {
+		enc := json.NewEncoder(os.Stderr)
+		options = append(options, chroma.WithTrace(func(trace chroma.Trace) { _ = enc.Encode(trace) }))
 	}
 	lexer = chroma.Coalesce(lexer)
-	it, err := lexer.Tokenise(contents)
+	it, err := lexer.Tokenise(contents, options...)
 	ctx.FatalIfErrorf(err)
 	return it
 }

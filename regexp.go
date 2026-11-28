@@ -1,11 +1,9 @@
 package chroma
 
 import (
-	"encoding/json"
 	"fmt"
 	"iter"
 	"maps"
-	"os"
 	"regexp"
 	"slices"
 	"strings"
@@ -116,13 +114,6 @@ func NewLexer(config *Config, rulesFunc func() Rules) (*RegexLexer, error) {
 	return r, nil
 }
 
-// SetTracing enables debug tracing.
-//
-// This complies with the [TracingLexer] interface.
-func (r *RegexLexer) SetTracing(trace bool) {
-	r.trace = trace
-}
-
 // A CompiledRule is a Rule with a pre-compiled regex.
 //
 // Note that regular expressions are lazily compiled on first use of the lexer.
@@ -176,6 +167,7 @@ func (l *LexerState) Nested(state string) TokeniseOption {
 	return func(o *TokeniseOptions) {
 		o.State = state
 		o.Nested = true
+		o.Trace = l.options.Trace
 		// The text was already normalised, or not, by the outermost call.
 		o.EnsureLF = false
 	}
@@ -196,10 +188,7 @@ func yieldTokens(seq iter.Seq[Token], yield func(Token) bool) bool {
 // Iterator returns an iterator over tokens from the lexer.
 func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
 	return func(yield func(Token) bool) {
-		var trace *json.Encoder
-		if l.Lexer.trace {
-			trace = json.NewEncoder(os.Stderr)
-		}
+		trace := l.options.Trace
 		end := len(l.Text)
 		if l.newlineAdded {
 			end--
@@ -232,7 +221,7 @@ func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
 				panic("unknown state " + l.State)
 			}
 			var start time.Time
-			if l.Lexer.trace {
+			if trace != nil {
 				start = time.Now()
 			}
 			ruleIndex, rule, groups, namedGroups, err := matchRules(l.Text, l.Pos, selectedRule)
@@ -240,14 +229,12 @@ func (l *LexerState) Iterator() iter.Seq[Token] { // nolint: gocognit
 				// The iterator cannot return an error, so panic and let the Formatter recover it.
 				panic(fmt.Errorf("%s: state %s: %w", l.Lexer.config.Name, l.State, err))
 			}
-			if l.Lexer.trace {
-				var length int
+			if trace != nil {
+				length := -1
 				if groups != nil {
 					length = len(groups[0])
-				} else {
-					length = -1
 				}
-				_ = trace.Encode(Trace{ //nolint
+				trace(Trace{
 					Lexer:   l.Lexer.config.Name,
 					State:   l.State,
 					Rule:    ruleIndex,
@@ -317,7 +304,6 @@ type RegexLexer struct {
 	registry *LexerRegistry // The LexerRegistry this Lexer is associated with, if any.
 	config   *Config
 	analyser func(text string) float32
-	trace    bool
 
 	mu             sync.Mutex
 	compiled       bool

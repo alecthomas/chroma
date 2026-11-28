@@ -48,19 +48,6 @@ func (d *delegatingLexer) rootLexer() (Lexer, error) {
 	return root, nil
 }
 
-func (d *delegatingLexer) SetTracing(enable bool) {
-	if l, ok := d.language.(TracingLexer); ok {
-		l.SetTracing(enable)
-	}
-	root, err := d.rootLexer()
-	if err != nil {
-		return
-	}
-	if l, ok := root.(TracingLexer); ok {
-		l.SetTracing(enable)
-	}
-}
-
 func (d *delegatingLexer) AnalyseText(text string) float32 {
 	return d.language.AnalyseText(text)
 }

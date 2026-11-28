@@ -25,12 +25,6 @@ func (d *coalescer) SetRegistry(registry *LexerRegistry) Lexer {
 	return d
 }
 
-func (d *coalescer) SetTracing(enable bool) {
-	if l, ok := d.lexer.(TracingLexer); ok {
-		l.SetTracing(enable)
-	}
-}
-
 func (d *coalescer) Tokenise(text string, options ...TokeniseOption) (iter.Seq[Token], error) {
 	it, err := d.lexer.Tokenise(text, options...)
 	if err != nil {

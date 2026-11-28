@@ -100,6 +100,8 @@ type TokeniseOptions struct {
 	Nested bool
 	// EnsureLF converts CRLF and CR line endings to LF.
 	EnsureLF bool
+	// Trace, if set, is called after each attempt to match a rule.
+	Trace func(Trace)
 }
 
 // A TokeniseOption modifies the default TokeniseOptions.
@@ -126,6 +128,12 @@ func WithEnsureLF(ensure bool) TokeniseOption {
 	return func(o *TokeniseOptions) { o.EnsureLF = ensure }
 }
 
+// WithTrace calls trace after each attempt to match a rule, including in
+// lexers that tokenise embedded fragments.
+func WithTrace(trace func(Trace)) TokeniseOption {
+	return func(o *TokeniseOptions) { o.Trace = trace }
+}
+
 // A Lexer for tokenising source code.
 type Lexer interface {
 	// Config describing the features of the Lexer.
@@ -149,7 +157,7 @@ type Lexer interface {
 	AnalyseText(text string) float32
 }
 
-// Trace is the trace of a tokenisation process.
+// Trace records one attempt to match a rule. Length is -1 if no rule matched.
 type Trace struct {
 	Lexer   string  `json:"lexer"`
 	State   string  `json:"state"`
@@ -158,12 +166,6 @@ type Trace struct {
 	Pos     int     `json:"pos"`
 	Length  int     `json:"length"`
 	Elapsed float64 `json:"elapsedMs"` // Elapsed time spent matching for this rule.
-}
-
-// TracingLexer is a Lexer that can trace its tokenisation process.
-type TracingLexer interface {
-	Lexer
-	SetTracing(enable bool)
 }
 
 // Lexers is a slice of lexers sortable by name.

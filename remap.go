@@ -16,12 +16,6 @@ func (r *remappingLexer) AnalyseText(text string) float32 {
 	return r.lexer.AnalyseText(text)
 }
 
-func (r *remappingLexer) SetTracing(enable bool) {
-	if l, ok := r.lexer.(TracingLexer); ok {
-		l.SetTracing(enable)
-	}
-}
-
 func (r *remappingLexer) SetAnalyser(analyser func(text string) float32) Lexer {
 	r.lexer.SetAnalyser(analyser)
 	return r
