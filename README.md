@@ -1,7 +1,7 @@
 ![Chroma](chroma.jpg)
 
 > [!NOTE]
-> **v3 alpha available.** Chroma v3 replaces the custom `Iterator` type with Go's built-in `iter.Seq[Token]`, removes the `EOF` sentinel, and bumps the module path to `github.com/alecthomas/chroma/v3`. See the [v3.0.0-alpha.1](https://github.com/alecthomas/chroma/releases/tag/v3.0.0-alpha.1) release for migration details.
+> **Upgrading from v2?** Chroma v3 uses Go's `iter.Seq[Token]` instead of its own `Iterator`, and the module path is now `github.com/alecthomas/chroma/v3`. See [Migrating from v2](#migrating-from-v2).
 
 # A general purpose syntax highlighter in pure Go
 
@@ -32,6 +32,7 @@ translators for Pygments lexers and styles.
 5. [Command-line interface](#command-line-interface)
 6. [Testing lexers](#testing-lexers)
 7. [What's missing compared to Pygments?](#whats-missing-compared-to-pygments)
+8. [Migrating from v2](#migrating-from-v2)
 
 <!-- /TOC -->
 
@@ -78,7 +79,7 @@ Try out various languages and styles on the [Chroma Playground](https://swapoff.
 
 ## Using the library
 
-This is version 2 of Chroma, use the import path:
+This is version 3 of Chroma, use the import path:
 
 ```go
 import "github.com/alecthomas/chroma/v3"
@@ -93,14 +94,12 @@ Lexers convert source text into a stream of tokens, styles specify how token
 types are mapped to colours, and formatters convert tokens and styles into
 formatted output.
 
-A package exists for each of these, containing a global `Registry` variable
-with all of the registered implementations. There are also helper functions
-for using the registry in each package, such as looking up lexers by name or
-matching filenames, etc.
+A package exists for each of these, with functions for looking up the
+registered implementations, such as by name or by matching a filename.
 
-In all cases, if a lexer, formatter or style can not be determined, `nil` will
-be returned. In this situation you may want to default to the `Fallback`
-value in each respective package, which provides sane defaults.
+The lexer lookups return `nil` if no lexer matches, in which case you may want
+to default to `lexers.Fallback`. The style and formatter lookups return their
+package's `Fallback` instead.
 
 ### Quick start
 
@@ -326,3 +325,115 @@ When updating or adding a lexer, please add tests. See [lexers/README.md](lexers
 - Some more esoteric features of Pygments are omitted for simplicity.
 - Though the Chroma API supports content detection, very few languages support them.
   I have plans to implement a statistical analyser at some point, but not enough time.
+
+## Migrating from v2
+
+Change every import from `github.com/alecthomas/chroma/v2` to
+`github.com/alecthomas/chroma/v3`, including subpackages. The changes most
+programs need are to tokenising and to looking up lexers and styles; the
+remainder only affect custom lexers, formatters and lower-level APIs.
+
+### Tokenising
+
+`Lexer.Tokenise` takes the text first and options as functional options, and
+returns an `iter.Seq[chroma.Token]`. Range over it instead of calling it until
+`chroma.EOF`, which no longer exists.
+
+```go
+// v2
+it, err := lexer.Tokenise(nil, source)
+for t := it(); t != chroma.EOF; t = it() {
+	// ...
+}
+
+// v3
+it, err := lexer.Tokenise(source)
+for t := range it {
+	// ...
+}
+```
+
+| v2 | v3 |
+|---|---|
+| `&chroma.TokeniseOptions{State: "x"}` | `chroma.WithState("x")` |
+| `&chroma.TokeniseOptions{EnsureLF: false}` | `chroma.WithEnsureLF(false)` |
+| `chroma.Tokenise(lexer, nil, source)` returning `[]Token` | `lexer.Tokenise(source)`, then `slices.Collect` |
+| `it.Tokens()` | `slices.Collect(it)` |
+| `it.Stdlib()` | `it` |
+| `lexer.SetTracing(true)`, `chroma.TracingLexer` | `chroma.WithTrace(func(t chroma.Trace) { ... })` |
+
+Options now always start from the defaults. In v2, passing a non-nil
+`TokeniseOptions` without `EnsureLF: true` silently stopped line endings
+being normalised; in v3 they are normalised unless you pass
+`WithEnsureLF(false)`.
+
+`SplitTokensIntoLines`, `Literator` and `Concaterator` take and return
+iterators. Use `slices.Values` and `slices.Collect` to convert from and to
+slices.
+
+If lexing fails partway through, such as on a regular expression timeout, the
+iterator panics. The built-in formatters and `chroma.FormatterFunc` recover
+this and return it as an error. If you range over the tokens yourself, recover
+it. v2 silently treated such failures as non-matches.
+
+### Lexers, styles and formatters
+
+The exported variables for individual lexers and styles are gone; look them
+up by name instead. Formatter and style registries are no longer exported
+maps.
+
+| v2 | v3 |
+|---|---|
+| `lexers.Go`, `lexers.Markdown`, etc. | `lexers.Get("go")` |
+| `styles.Monokai`, `styles.GitHub`, etc. | `styles.Get("monokai")` |
+| `styles.Registry` | `styles.All()`, `Names()`, `Get()`, `Lookup()` and `Register()` |
+| `formatters.Registry` | `formatters.Names()`, `Get()`, `Lookup()` and `Register()` |
+| `lexers.GlobalLexerRegistry.Lexers` | `lexers.All()`, which returns a sorted copy |
+| `lexers.PlaintextRules` | `lexers.Get("plaintext")` or `lexers.Fallback` |
+| `chroma.Lexers`, `chroma.PrioritisedLexers` | `lexers.All()`, or sort a `[]chroma.Lexer` yourself |
+
+### Formatters
+
+| v2 | v3 |
+|---|---|
+| `html.Formatter.Classes` field | `html.WithClasses(true)` |
+| `chroma.RecoveringFormatter(f)` | Not needed; formatters recover iterator panics |
+| `svg.EmbedFont(family, base64String, format)` | `svg.EmbedFont(family, fontBytes, format)` |
+| `svg.FontLiberationMono` (base64 string) | `svg.FontLiberationMono` (`[]byte`) |
+| `svg.TRUETYPE` | `svg.TrueType` |
+
+The HTML formatter's generated CSS is formatted consistently, with `"; "`
+between declarations and no trailing semicolons. The meaning is unchanged,
+but golden files comparing the output need regenerating.
+
+`PreventSurroundingPre`, `InlineCode` and `WithPreWrapper` no longer depend on
+the order they are passed in: a custom wrapper wins, then
+`PreventSurroundingPre`, then `InlineCode`.
+
+### Custom lexers, emitters and formatters
+
+- `Formatter.Format` and `chroma.FormatterFunc` receive an `iter.Seq[Token]`.
+- `chroma.EmitterFunc` and `Emitter.Emit` return an `iter.Seq[Token]`.
+- `Lexer.Tokenise` has the signature
+  `Tokenise(text string, options ...TokeniseOption) (iter.Seq[Token], error)`.
+  Lexers not built on `RegexLexer` can resolve the options with
+  `chroma.NewTokeniseOptions(options...)`.
+- Emitters that tokenise part of a match with another lexer should pass
+  `state.Nested(stateName)`, which carries the caller's options such as
+  tracing.
+- `chroma.NewXMLLexer` and `MustNewXMLLexer` return a `Lexer` rather than a
+  `*RegexLexer`.
+- The `chroma.Analyser` interface is removed; `AnalyseText` is part of `Lexer`.
+
+### Other removals
+
+| v2 | v3 |
+|---|---|
+| `token.Clone()` | Copy the value; `Token` is passed by value |
+| `chroma.Marshal`, `chroma.Unmarshal`, `SerialisableEmitter`, `SerialisableMutator` | Removed; define lexers in XML |
+| `Rules.Merge`, `Rules.Rename`, `RegexLexer.SetConfig`, `RegexLexer.MustRules` | Removed |
+| `LexerState.MutatorContext` | `state.Set(key, value)` and `state.Get(key)` |
+| `chroma.ANSI2RGB`, `chroma.Colours`, `chroma.Emitters` | Removed |
+
+`Token.GoString()` now prints `Token{...}` rather than `&Token{...}`, and an
+unset `Colour` prints as `""` rather than `#-00001`.
