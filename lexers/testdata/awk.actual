@@ -1,0 +1,34 @@
+#!/usr/bin/gawk -f
+# Count words per file and report the totals.
+function max(a, b) { return a>b?a:b }
+func text::plural(n, word) { return n == 1 ? word : word "s" }
+
+BEGIN { FS = "[ \t]+"; sep = ENVIRON["SEP"] ? ENVIRON["SEP"] : ":" }
+BEGINFILE { words = 0 }
+/^#/ { next }
+NF == 0 { next }
+{
+	words += NF
+	longest = max(longest, length($0))
+	kind = $1 ~ /^[0-9]+$/ ? "number" : /^[a-z]/ ? "word" : "other"
+	seen[kind]++
+}
+ENDFILE {
+	printf "%s%s %d %s\n", FILENAME, sep, words, \
+		text::plural(words, "word")
+	total = total + \
+		words
+}
+END {
+	switch (total) {
+	case 0:
+		print "empty"
+		break
+	case /^[1-9]$/:
+		print "few"
+		break
+	default:
+		print (total > 1000 ? "many" : "some"), longest
+	}
+	print length(sep), (NR % 2) ? "odd" : "even"
+}
