@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-// ANSI2RGB maps ANSI colour names, as supported by Chroma, to hex RGB values.
-var ANSI2RGB = map[string]string{
+// ansi2RGB maps ANSI colour names, as supported by Chroma, to hex RGB values.
+var ansi2RGB = map[string]string{
 	"#ansiblack":     "000000",
 	"#ansidarkred":   "7f0000",
 	"#ansidarkgreen": "007f00",
@@ -172,7 +172,7 @@ func (c Colour) Blue() uint8 { return uint8((c - 1) & 0xff) } //nolint:gosec
 
 // Convert colours to rrggbb, returning "" if the input is not a valid colour.
 func normaliseColour(colour string) string {
-	if ansi, ok := ANSI2RGB[colour]; ok {
+	if ansi, ok := ansi2RGB[colour]; ok {
 		return ansi
 	}
 	if !strings.HasPrefix(colour, "#") {
