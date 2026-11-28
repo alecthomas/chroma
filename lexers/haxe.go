@@ -4,8 +4,7 @@ import (
 	. "github.com/alecthomas/chroma/v3" // nolint
 )
 
-// Haxe lexer.
-var Haxe = Register(MustNewLexer(
+var _ = Register(MustNewLexer(
 	&Config{
 		Name:      "Haxe",
 		Aliases:   []string{"hx", "haxe", "hxsl"},

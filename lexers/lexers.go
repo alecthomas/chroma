@@ -71,9 +71,7 @@ func Analyse(text string) chroma.Lexer {
 	return GlobalLexerRegistry.Analyse(text)
 }
 
-// PlaintextRules is used for the fallback lexer as well as the explicit
-// plaintext lexer.
-func PlaintextRules() chroma.Rules {
+func plaintextRules() chroma.Rules {
 	return chroma.Rules{
 		"root": []chroma.Rule{
 			{`.+`, chroma.Text, nil},
@@ -87,4 +85,4 @@ var Fallback chroma.Lexer = chroma.MustNewLexer(&chroma.Config{
 	Name:      "fallback",
 	Filenames: []string{"*"},
 	Priority:  -1,
-}, PlaintextRules)
+}, plaintextRules)

@@ -12,8 +12,7 @@ import (
 	. "github.com/alecthomas/chroma/v3" // nolint
 )
 
-// Raku lexer.
-var Raku Lexer = Register(MustNewLexer(
+var _ = Register(MustNewLexer(
 	&Config{
 		Name:    "Raku",
 		Aliases: []string{"perl6", "pl6", "raku"},

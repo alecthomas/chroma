@@ -7,8 +7,7 @@ import (
 	. "github.com/alecthomas/chroma/v3" // nolint
 )
 
-// HTTP lexer.
-var HTTP = Register(httpBodyContentTypeLexer(MustNewLexer(
+var _ = Register(httpBodyContentTypeLexer(MustNewLexer(
 	&Config{
 		Name:         "HTTP",
 		Aliases:      []string{"http"},

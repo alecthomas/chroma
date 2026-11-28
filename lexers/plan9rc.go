@@ -7,8 +7,7 @@ import (
 	. "github.com/alecthomas/chroma/v3" // nolint
 )
 
-// Plan9RC lexer.
-var Plan9RC = Register(&plan9RCLexer{
+var _ = Register(&plan9RCLexer{
 	config: &Config{
 		Name:      "Plan 9 rc",
 		Aliases:   []string{"plan9rc", "rc"},
