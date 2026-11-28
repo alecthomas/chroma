@@ -169,7 +169,7 @@ Then obtain an iterator over the tokens:
 
 ```go
 contents, err := io.ReadAll(r)
-iterator, err := lexer.Tokenise(nil, string(contents))
+iterator, err := lexer.Tokenise(string(contents))
 ```
 
 And finally, format the tokens from the iterator:

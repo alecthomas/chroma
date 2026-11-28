@@ -27,7 +27,7 @@ func BenchmarkHTMLFormatter(b *testing.B) {
 	formatter := New()
 	b.ResetTimer()
 	for range b.N {
-		it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
+		it, err := lexers.Get("go").Tokenise("package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
 		assert.NoError(b, err)
 		err = formatter.Format(io.Discard, styles.Fallback, it)
 		assert.NoError(b, err)
@@ -153,7 +153,7 @@ func TestClassPrefix(t *testing.T) {
 
 func TestTableLineNumberNewlines(t *testing.T) {
 	f := New(WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true))
-	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
+	it, err := lexers.Get("go").Tokenise("package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -172,7 +172,7 @@ func TestTableLineNumberNewlines(t *testing.T) {
 
 func TestTabWidthStyle(t *testing.T) {
 	f := New(TabWidth(4), WithClasses(false))
-	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	it, err := lexers.Get("bash").Tokenise("echo FOO")
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -184,7 +184,7 @@ func TestTabWidthStyle(t *testing.T) {
 
 func TestWithCustomCSS(t *testing.T) {
 	f := New(WithClasses(false), WithCustomCSS(map[chroma.TokenType]string{chroma.Line: `display: inline;`}))
-	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	it, err := lexers.Get("bash").Tokenise("echo FOO")
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -199,7 +199,7 @@ func TestWithCustomCSSStyleInheritance(t *testing.T) {
 		chroma.String:              `background: blue;`,
 		chroma.LiteralStringDouble: `color: tomato;`,
 	}))
-	it, err := lexers.Get("bash").Tokenise(nil, `echo "FOO"`)
+	it, err := lexers.Get("bash").Tokenise(`echo "FOO"`)
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -211,7 +211,7 @@ func TestWithCustomCSSStyleInheritance(t *testing.T) {
 
 func TestWrapLongLines(t *testing.T) {
 	f := New(WithClasses(false), WrapLongLines(true))
-	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
+	it, err := lexers.Get("go").Tokenise("package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -223,7 +223,7 @@ func TestWrapLongLines(t *testing.T) {
 
 func TestHighlightLines(t *testing.T) {
 	f := New(WithClasses(true), HighlightLines([][2]int{{4, 5}}))
-	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
+	it, err := lexers.Get("go").Tokenise("package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -268,7 +268,7 @@ func TestLinePrompts(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			f := New(tt.options...)
-			it, err := lexers.Get("bash").Tokenise(nil, "echo FOO\necho BAR\necho BAZ")
+			it, err := lexers.Get("bash").Tokenise("echo FOO\necho BAR\necho BAZ")
 			assert.NoError(t, err)
 
 			var buf bytes.Buffer
@@ -282,7 +282,7 @@ func TestLinePrompts(t *testing.T) {
 
 func TestLineNumbers(t *testing.T) {
 	f := New(WithClasses(true), WithLineNumbers(true))
-	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	it, err := lexers.Get("bash").Tokenise("echo FOO")
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -294,7 +294,7 @@ func TestLineNumbers(t *testing.T) {
 
 func TestPreWrapper(t *testing.T) {
 	f := New(Standalone(true), WithClasses(true))
-	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	it, err := lexers.Get("bash").Tokenise("echo FOO")
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -308,7 +308,7 @@ func TestPreWrapper(t *testing.T) {
 
 func TestLinkeableLineNumbers(t *testing.T) {
 	f := New(WithClasses(true), WithLineNumbers(true), WithLinkableLineNumbers(true, "line"), WithClasses(false))
-	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
+	it, err := lexers.Get("go").Tokenise("package main\nfunc main()\n{\nprintln(\"hello world\")\n}\n")
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -321,7 +321,7 @@ func TestLinkeableLineNumbers(t *testing.T) {
 
 func TestTableLinkeableLineNumbers(t *testing.T) {
 	f := New(Standalone(true), WithClasses(true), WithLineNumbers(true), LineNumbersInTable(true), WithLinkableLineNumbers(true, "line"))
-	it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
+	it, err := lexers.Get("go").Tokenise("package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -369,7 +369,7 @@ func TestTableLineNumberSpacing(t *testing.T) {
 			LineNumbersInTable(true),
 			BaseLineNumber(testCase.baseLineNumber),
 		)
-		it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
+		it, err := lexers.Get("go").Tokenise("package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
 		assert.NoError(t, err)
 		var buf bytes.Buffer
 		err = f.Format(&buf, styles.Fallback, it)
@@ -393,7 +393,7 @@ func TestTableLineNumberRowHeight(t *testing.T) {
 
 	t.Run("InlineStyles", func(t *testing.T) {
 		f := New(WithLineNumbers(true), LineNumbersInTable(true), HighlightLines([][2]int{{2, 2}}))
-		it, err := lexers.Get("go").Tokenise(nil, "package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
+		it, err := lexers.Get("go").Tokenise("package main\nfunc main()\n{\nprintln(`hello world`)\n}\n")
 		assert.NoError(t, err)
 		var buf bytes.Buffer
 		err = f.Format(&buf, styles.Fallback, it)
@@ -416,7 +416,7 @@ func TestWithPreWrapper(t *testing.T) {
 	}
 
 	format := func(f *Formatter) string {
-		it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+		it, err := lexers.Get("bash").Tokenise("echo FOO")
 		assert.NoError(t, err)
 
 		var buf bytes.Buffer
@@ -490,7 +490,7 @@ func TestReconfigureOptions(t *testing.T) {
 
 	f := New(options...)
 
-	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	it, err := lexers.Get("bash").Tokenise("echo FOO")
 	assert.NoError(t, err)
 
 	var buf bytes.Buffer
@@ -532,7 +532,7 @@ func TestModeClassOnWrapper(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			f := New(WithClasses(true), WithModeClasses(true))
-			it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+			it, err := lexers.Get("bash").Tokenise("echo FOO")
 			assert.NoError(t, err)
 			var buf bytes.Buffer
 			err = f.Format(&buf, styles.Get(tt.styleName), it)
@@ -544,7 +544,7 @@ func TestModeClassOnWrapper(t *testing.T) {
 
 func TestModeClassWithPrefix(t *testing.T) {
 	f := New(WithClasses(true), WithModeClasses(true), ClassPrefix("c-"))
-	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	it, err := lexers.Get("bash").Tokenise("echo FOO")
 	assert.NoError(t, err)
 	var buf bytes.Buffer
 	err = f.Format(&buf, styles.Get("github"), it)
@@ -554,7 +554,7 @@ func TestModeClassWithPrefix(t *testing.T) {
 
 func TestModeClassAbsentInInlineMode(t *testing.T) {
 	f := New()
-	it, err := lexers.Get("bash").Tokenise(nil, "echo FOO")
+	it, err := lexers.Get("bash").Tokenise("echo FOO")
 	assert.NoError(t, err)
 	var buf bytes.Buffer
 	err = f.Format(&buf, styles.Get("github"), it)

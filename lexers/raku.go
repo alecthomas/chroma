@@ -1534,11 +1534,7 @@ func colonPair(tokenClass TokenType) Emitter {
 
 			// Use token state to Tokenise key
 			if keyTokenState != "" {
-				iterator, err := state.Lexer.Tokenise(
-					&TokeniseOptions{
-						State:  keyTokenState,
-						Nested: true,
-					}, state.NamedGroups[`key`])
+				iterator, err := state.Lexer.Tokenise(state.NamedGroups[`key`], state.Nested(keyTokenState))
 
 				if err != nil {
 					panic(err)
@@ -1565,11 +1561,7 @@ func colonPair(tokenClass TokenType) Emitter {
 
 		// Use token state to Tokenise value
 		if valueTokenState != "" {
-			iterator, err := state.Lexer.Tokenise(
-				&TokeniseOptions{
-					State:  valueTokenState,
-					Nested: true,
-				}, state.NamedGroups[`value`])
+			iterator, err := state.Lexer.Tokenise(state.NamedGroups[`value`], state.Nested(valueTokenState))
 
 			if err != nil {
 				panic(err)
@@ -1634,11 +1626,7 @@ func quote(groups []string, state *LexerState) iter.Seq[Token] {
 		tokenState = "Q"
 	}
 
-	iterator, err := state.Lexer.Tokenise(
-		&TokeniseOptions{
-			State:  tokenState,
-			Nested: true,
-		}, state.NamedGroups[`value`])
+	iterator, err := state.Lexer.Tokenise(state.NamedGroups[`value`], state.Nested(tokenState))
 
 	if err != nil {
 		panic(err)
@@ -1654,11 +1642,7 @@ func quote(groups []string, state *LexerState) iter.Seq[Token] {
 
 // Emitter for pod config, tokenises the properties with "colon-pair-attribute" state
 func podConfig(groups []string, state *LexerState) iter.Seq[Token] {
-	iterator, err := state.Lexer.Tokenise(
-		&TokeniseOptions{
-			State:  "colon-pair-attribute",
-			Nested: true,
-		}, groups[0])
+	iterator, err := state.Lexer.Tokenise(groups[0], state.Nested("colon-pair-attribute"))
 	if err != nil {
 		panic(err)
 	}
@@ -1695,7 +1679,7 @@ func podCode(groups []string, state *LexerState) iter.Seq[Token] {
 	// Tokenise code based on lang property
 	sublexer := Get(lang)
 	if sublexer != nil {
-		iterator, err := sublexer.Tokenise(nil, state.NamedGroups[`value`])
+		iterator, err := sublexer.Tokenise(state.NamedGroups[`value`])
 
 		if err != nil {
 			panic(err)

@@ -209,7 +209,7 @@ public class CheckpointFile<T> {
 func Benchmark(b *testing.B) {
 	b.ReportAllocs()
 	for range b.N {
-		it, err := lexers.GlobalLexerRegistry.Get("Java").Tokenise(nil, lexerBenchSource)
+		it, err := lexers.GlobalLexerRegistry.Get("Java").Tokenise(lexerBenchSource)
 		assert.NoError(b, err)
 		for range it {
 		}

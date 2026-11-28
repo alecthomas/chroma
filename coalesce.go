@@ -31,8 +31,8 @@ func (d *coalescer) SetTracing(enable bool) {
 	}
 }
 
-func (d *coalescer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) {
-	it, err := d.lexer.Tokenise(options, text)
+func (d *coalescer) Tokenise(text string, options ...TokeniseOption) (iter.Seq[Token], error) {
+	it, err := d.lexer.Tokenise(text, options...)
 	if err != nil {
 		return nil, err
 	}

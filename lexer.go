@@ -8,13 +8,6 @@ import (
 	"strings"
 )
 
-var (
-	defaultOptions = &TokeniseOptions{
-		State:    "root",
-		EnsureLF: true,
-	}
-)
-
 // Config for a lexer.
 type Config struct {
 	// Name of the lexer.
@@ -97,16 +90,40 @@ type Token struct {
 func (t Token) String() string   { return t.Value }
 func (t Token) GoString() string { return fmt.Sprintf("Token{%s, %q}", t.Type, t.Value) }
 
-// TokeniseOptions contains options for tokenisers.
+// TokeniseOptions are the resolved options for a call to Lexer.Tokenise.
+//
+// Lexer implementations obtain them with NewTokeniseOptions.
 type TokeniseOptions struct {
-	// State to start tokenisation in. Defaults to "root".
+	// State to start tokenisation in.
 	State string
-	// Nested tokenisation.
+	// Nested is true when tokenising a fragment on behalf of another lexer.
 	Nested bool
-
-	// If true, all EOLs are converted into LF
-	// by replacing CRLF and CR
+	// EnsureLF converts CRLF and CR line endings to LF.
 	EnsureLF bool
+}
+
+// A TokeniseOption modifies the default TokeniseOptions.
+type TokeniseOption func(*TokeniseOptions)
+
+// NewTokeniseOptions applies options to the defaults, which are the "root"
+// state with EnsureLF enabled.
+func NewTokeniseOptions(options ...TokeniseOption) TokeniseOptions {
+	resolved := TokeniseOptions{State: "root", EnsureLF: true}
+	for _, option := range options {
+		option(&resolved)
+	}
+	return resolved
+}
+
+// WithState sets the state to start tokenisation in. Defaults to "root".
+func WithState(state string) TokeniseOption {
+	return func(o *TokeniseOptions) { o.State = state }
+}
+
+// WithEnsureLF sets whether CRLF and CR line endings are converted to LF.
+// Defaults to true.
+func WithEnsureLF(ensure bool) TokeniseOption {
+	return func(o *TokeniseOptions) { o.EnsureLF = ensure }
 }
 
 // A Lexer for tokenising source code.
@@ -115,7 +132,7 @@ type Lexer interface {
 	Config() *Config
 	// Tokenise returns an iterator over tokens in text. The iterator panics if
 	// lexing fails mid-stream; Formatters recover this, direct consumers must.
-	Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error)
+	Tokenise(text string, options ...TokeniseOption) (iter.Seq[Token], error)
 	// SetRegistry sets the registry this Lexer is associated with.
 	//
 	// The registry should be used by the Lexer if it needs to look up other

@@ -18,7 +18,7 @@ func TestRemappingLexer(t *testing.T) {
 		{Name, Keyword, []string{"if", "else"}},
 	})
 
-	it, err := lexer.Tokenise(nil, `if true then print else end`)
+	it, err := lexer.Tokenise(`if true then print else end`)
 	assert.NoError(t, err)
 	expected := []Token{
 		{Keyword, "if"}, {TextWhitespace, " "}, {Name, "true"}, {TextWhitespace, " "}, {Name, "then"},

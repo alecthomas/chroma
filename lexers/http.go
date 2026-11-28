@@ -64,8 +64,8 @@ func httpBodyContentTypeLexer(lexer Lexer) Lexer { return &httpBodyContentTyper{
 
 type httpBodyContentTyper struct{ Lexer }
 
-func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) { // nolint: gocognit
-	it, err := d.Lexer.Tokenise(options, text)
+func (d *httpBodyContentTyper) Tokenise(text string, options ...TokeniseOption) (iter.Seq[Token], error) { // nolint: gocognit
+	it, err := d.Lexer.Tokenise(text, options...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (d *httpBodyContentTyper) Tokenise(options *TokeniseOptions, text string) (
 				if lexer == nil {
 					token.Type = Text
 				} else {
-					subIt, err := lexer.Tokenise(nil, token.Value)
+					subIt, err := lexer.Tokenise(token.Value)
 					if err != nil {
 						panic(err)
 					}

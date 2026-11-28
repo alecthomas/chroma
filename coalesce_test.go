@@ -15,7 +15,7 @@ func TestCoalesce(t *testing.T) {
 			{`[!@#$%^&*()]`, Punctuation, nil},
 		},
 	}))
-	actual, err := lexer.Tokenise(nil, "!@#$")
+	actual, err := lexer.Tokenise("!@#$")
 	assert.NoError(t, err)
 	expected := []Token{{Punctuation, "!@#$"}}
 	assert.Equal(t, expected, slices.Collect(actual))
@@ -46,7 +46,7 @@ func TestCoalesceFluentSetters(t *testing.T) {
 			if method != "analyser" && base.registry != registry {
 				t.Error("registry not forwarded")
 			}
-			seq, err := configured.Tokenise(nil, "!@#$")
+			seq, err := configured.Tokenise("!@#$")
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -60,23 +60,23 @@ func TestCoalesceFluentSetters(t *testing.T) {
 
 type coalesceSetterLexer struct {
 	Lexer
-	tokenise func(*TokeniseOptions, string) (iter.Seq[Token], error)
+	tokenise func(string, ...TokeniseOption) (iter.Seq[Token], error)
 }
 
-func (l *coalesceSetterLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) {
-	return l.tokenise(options, text)
+func (l *coalesceSetterLexer) Tokenise(text string, options ...TokeniseOption) (iter.Seq[Token], error) {
+	return l.tokenise(text, options...)
 }
 
 func TestCoalesceConfiguredErrorAndEarlyStop(t *testing.T) {
 	base := mustNewLexer(t, &Config{Name: "setter-controls"}, Rules{"root": {{`.`, Text, nil}}})
 	failure := errors.New("tokenise failed")
-	wrapped := &coalesceSetterLexer{Lexer: base, tokenise: func(*TokeniseOptions, string) (iter.Seq[Token], error) { return nil, failure }}
+	wrapped := &coalesceSetterLexer{Lexer: base, tokenise: func(string, ...TokeniseOption) (iter.Seq[Token], error) { return nil, failure }}
 	configured := Coalesce(wrapped).SetAnalyser(func(string) float32 { return 0.5 }).SetRegistry(&LexerRegistry{})
-	if seq, err := configured.Tokenise(nil, "x"); seq != nil || err != failure {
+	if seq, err := configured.Tokenise("x"); seq != nil || err != failure {
 		t.Fatalf("Tokenise()=%v,%v; want nil, original error", seq, err)
 	}
 	calls, closed := 0, false
-	wrapped.tokenise = func(*TokeniseOptions, string) (iter.Seq[Token], error) {
+	wrapped.tokenise = func(string, ...TokeniseOption) (iter.Seq[Token], error) {
 		return func(yield func(Token) bool) {
 			defer func() { closed = true }()
 			for _, token := range []Token{{Text, "a"}, {Text, "b"}, {Punctuation, "!"}, {Text, "c"}} {
@@ -87,7 +87,7 @@ func TestCoalesceConfiguredErrorAndEarlyStop(t *testing.T) {
 			}
 		}, nil
 	}
-	seq, err := configured.Tokenise(nil, "")
+	seq, err := configured.Tokenise("")
 	if err != nil {
 		t.Fatal(err)
 	}

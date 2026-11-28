@@ -16,7 +16,7 @@ type countingLexer struct {
 	texts    []string
 }
 
-func (l *countingLexer) Tokenise(_ *TokeniseOptions, text string) (iter.Seq[Token], error) {
+func (l *countingLexer) Tokenise(text string, _ ...TokeniseOption) (iter.Seq[Token], error) {
 	l.texts = append(l.texts, text)
 	return func(yield func(Token) bool) {
 		for _, token := range l.tokens {
@@ -124,7 +124,7 @@ func TestDelegate(t *testing.T) {
 	delegate := DelegatingLexer(root, lang)
 	for _, test := range testdata {
 		t.Run(test.name, func(t *testing.T) {
-			it, err := delegate.Tokenise(nil, test.source)
+			it, err := delegate.Tokenise(test.source)
 			assert.NoError(t, err)
 			actual := slices.Collect(it)
 			assert.Equal(t, test.expected, actual)
@@ -145,7 +145,7 @@ func TestDelegateStreamsRootTokens(t *testing.T) {
 		{Keyword, "d"},
 		{Other, "e"},
 	}}
-	it, err := DelegatingLexer(root, language).Tokenise(nil, "abcde")
+	it, err := DelegatingLexer(root, language).Tokenise("abcde")
 	assert.NoError(t, err)
 	assert.Equal(t, 0, root.consumed)
 	assert.Equal(t, 5, language.consumed)
@@ -167,7 +167,7 @@ func TestDelegateSplitsRootTokens(t *testing.T) {
 		{Keyword, "embedded"},
 		{Other, " after"},
 	}}
-	it, err := DelegatingLexer(root, language).Tokenise(nil, "before embedded after")
+	it, err := DelegatingLexer(root, language).Tokenise("before embedded after")
 	assert.NoError(t, err)
 	assert.Equal(t, []string{"before  after"}, root.texts)
 	assert.Equal(t, []Token{
@@ -187,11 +187,11 @@ func TestXMLDelegate(t *testing.T) {
 		<rule pattern="\w+"><token type="Keyword"/></rule>
 		<rule pattern="\s+"><token type="Other"/></rule>`)
 
-	_, err := language.Tokenise(nil, "a b")
+	_, err := language.Tokenise("a b")
 	assert.EqualError(t, err, `no LexerRegistry available to delegate to "root"`)
 
 	registry.Register(language)
-	it, err := language.Tokenise(nil, "a b")
+	it, err := language.Tokenise("a b")
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{{Keyword, "a"}, {TextWhitespace, " "}, {Keyword, "b"}}, slices.Collect(it))
 }
@@ -209,7 +209,7 @@ type panickingLexer struct {
 	panicVal any
 }
 
-func (l *panickingLexer) Tokenise(*TokeniseOptions, string) (iter.Seq[Token], error) {
+func (l *panickingLexer) Tokenise(string, ...TokeniseOption) (iter.Seq[Token], error) {
 	return func(func(Token) bool) { panic(l.panicVal) }, nil
 }
 
@@ -217,10 +217,10 @@ func TestDelegateRecoversLanguageIteratorPanic(t *testing.T) {
 	_, root := makeDelegationTestLexers(t)
 
 	sentinel := errors.New("match timeout")
-	_, err := DelegatingLexer(root, &panickingLexer{panicVal: sentinel}).Tokenise(nil, "hello")
+	_, err := DelegatingLexer(root, &panickingLexer{panicVal: sentinel}).Tokenise("hello")
 	assert.Equal(t, sentinel, err)
 
-	_, err = DelegatingLexer(root, &panickingLexer{panicVal: "lexer failed"}).Tokenise(nil, "hello")
+	_, err = DelegatingLexer(root, &panickingLexer{panicVal: "lexer failed"}).Tokenise("hello")
 	assert.Error(t, err)
 	assert.Equal(t, "lexer failed", err.Error())
 }

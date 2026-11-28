@@ -83,7 +83,7 @@ func (d *delegatingLexer) Config() *Config {
 	return d.language.Config()
 }
 
-func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (tokens iter.Seq[Token], err error) { // nolint: gocognit
+func (d *delegatingLexer) Tokenise(text string, options ...TokeniseOption) (tokens iter.Seq[Token], err error) { // nolint: gocognit
 	// Recover panics from the eager language pass before any Formatter is on the stack.
 	defer func() {
 		if perr := recover(); perr != nil {
@@ -98,7 +98,7 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (token
 	if err != nil {
 		return nil, err
 	}
-	languageTokens, err := Coalesce(d.language).Tokenise(options, text)
+	languageTokens, err := Coalesce(d.language).Tokenise(text, options...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,14 +112,14 @@ func (d *delegatingLexer) Tokenise(options *TokeniseOptions, text string) (token
 		}
 	}
 	if !hasLanguageTokens {
-		return rootLexer.Tokenise(options, text)
+		return rootLexer.Tokenise(text, options...)
 	}
 
-	rootTokens, err := Coalesce(rootLexer).Tokenise(options, rootText.String())
+	rootTokens, err := Coalesce(rootLexer).Tokenise(rootText.String(), options...)
 	if err != nil {
 		return nil, err
 	}
-	languageTokens, err = Coalesce(d.language).Tokenise(options, text)
+	languageTokens, err = Coalesce(d.language).Tokenise(text, options...)
 	if err != nil {
 		return nil, err
 	}

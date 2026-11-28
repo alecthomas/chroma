@@ -360,7 +360,7 @@ func lex(ctx *kong.Context, lexer chroma.Lexer, contents string) iter.Seq[chroma
 		rel.SetTracing(cli.Trace)
 	}
 	lexer = chroma.Coalesce(lexer)
-	it, err := lexer.Tokenise(nil, contents)
+	it, err := lexer.Tokenise(contents)
 	ctx.FatalIfErrorf(err)
 	return it
 }

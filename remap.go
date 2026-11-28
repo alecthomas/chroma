@@ -36,8 +36,8 @@ func (r *remappingLexer) Config() *Config {
 	return r.lexer.Config()
 }
 
-func (r *remappingLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) {
-	it, err := r.lexer.Tokenise(options, text)
+func (r *remappingLexer) Tokenise(text string, options ...TokeniseOption) (iter.Seq[Token], error) {
+	it, err := r.lexer.Tokenise(text, options...)
 	if err != nil {
 		return nil, err
 	}

@@ -154,7 +154,7 @@ func TestXMLImport(t *testing.T) {
 	importer, err := NewXMLLexer(fs, "importer.xml")
 	assert.NoError(t, err)
 
-	_, err = importer.Tokenise(nil, "a")
+	_, err = importer.Tokenise("a")
 	assert.EqualError(t, err, `Importer: failed to compile rules: no LexerRegistry available to import "base"`)
 
 	registry := NewLexerRegistry()
@@ -162,7 +162,7 @@ func TestXMLImport(t *testing.T) {
 	importer, err = NewXMLLexer(fs, "importer.xml")
 	assert.NoError(t, err)
 	registry.Register(importer)
-	it, err := importer.Tokenise(nil, "x (if else)")
+	it, err := importer.Tokenise("x (if else)")
 	assert.NoError(t, err)
 	assert.Equal(t, []Token{
 		{Text, "x "},

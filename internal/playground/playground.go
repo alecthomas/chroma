@@ -30,7 +30,7 @@ func Highlight(source, lexerName, styleName string, classes bool) (*Result, erro
 		language = lexers.Fallback
 	}
 
-	tokens, err := chroma.Coalesce(language).Tokenise(nil, source)
+	tokens, err := chroma.Coalesce(language).Tokenise(source)
 	if err != nil {
 		return nil, err
 	}

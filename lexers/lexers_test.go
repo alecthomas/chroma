@@ -24,7 +24,7 @@ import (
 
 func TestCompileAllRegexes(t *testing.T) {
 	for _, lexer := range lexers.GlobalLexerRegistry.Lexers {
-		it, err := lexer.Tokenise(nil, "")
+		it, err := lexer.Tokenise("")
 		assert.NoError(t, err, "%s failed", lexer.Config().Name)
 		err = formatters.NoOp.Format(io.Discard, styles.Get("swapoff"), it)
 		assert.NoError(t, err, "%s failed", lexer.Config().Name)
@@ -32,7 +32,7 @@ func TestCompileAllRegexes(t *testing.T) {
 }
 
 func TestPlan9RCStopsEarly(t *testing.T) {
-	it, err := lexers.Get("plan9rc").Tokenise(nil, "x=`{cat <<EOF}\n$a\nEOF\n")
+	it, err := lexers.Get("plan9rc").Tokenise("x=`{cat <<EOF}\n$a\nEOF\n")
 	assert.NoError(t, err)
 	all := slices.Collect(it)
 	for n := 1; n < len(all); n++ {
@@ -100,7 +100,7 @@ func TestPlan9RCLoneBacktick(t *testing.T) {
 	lexer := lexers.Get("plan9rc")
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			it, err := lexer.Tokenise(nil, test.input)
+			it, err := lexer.Tokenise(test.input)
 			assert.NoError(t, err)
 			done := make(chan []chroma.Token, 1)
 			go func() {
@@ -225,7 +225,7 @@ func FileTest(t *testing.T, lexer chroma.Lexer, sourceFile, expectedFilename str
 		// Read and tokenise source text.
 		sourceBytes, err := os.ReadFile(sourceFile)
 		assert.NoError(t, err)
-		it, err := lexer.Tokenise(nil, string(sourceBytes))
+		it, err := lexer.Tokenise(string(sourceBytes))
 		assert.NoError(t, err)
 		actualTokens := slices.Collect(it)
 

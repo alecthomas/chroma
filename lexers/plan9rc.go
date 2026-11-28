@@ -25,11 +25,8 @@ type plan9RCLexer struct {
 
 func (l *plan9RCLexer) Config() *Config { return l.config }
 
-func (l *plan9RCLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) {
-	if options == nil {
-		options = &TokeniseOptions{EnsureLF: true}
-	}
-	if options.EnsureLF {
+func (l *plan9RCLexer) Tokenise(text string, opts ...TokeniseOption) (iter.Seq[Token], error) {
+	if NewTokeniseOptions(opts...).EnsureLF {
 		text = strings.ReplaceAll(strings.ReplaceAll(text, "\r\n", "\n"), "\r", "\n")
 	}
 	if l.config.EnsureNL && text != "" && !strings.HasSuffix(text, "\n") {

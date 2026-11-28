@@ -43,9 +43,9 @@ func TestWordsMatchLikeRegex(t *testing.T) {
 			assert.NotZero(t, native.rules["root"][0].words, "words rule should be matched natively")
 
 			regex := mustNewLexer(t, native.Config(), goRules)
-			nativeTokens, err := native.Tokenise(nil, input)
+			nativeTokens, err := native.Tokenise(input)
 			assert.NoError(t, err)
-			regexTokens, err := regex.Tokenise(nil, input)
+			regexTokens, err := regex.Tokenise(input)
 			assert.NoError(t, err)
 			assert.Equal(t, slices.Collect(regexTokens), slices.Collect(nativeTokens))
 		})
@@ -91,7 +91,7 @@ func TestWordsFollowCaseInsensitiveConfig(t *testing.T) {
 		{"<case_insensitive>true</case_insensitive>", NameBuiltin},
 	}
 	for _, test := range tests {
-		it, err := xmlLexerFromString(t, test.config, rules).Tokenise(nil, "CAR")
+		it, err := xmlLexerFromString(t, test.config, rules).Tokenise("CAR")
 		assert.NoError(t, err)
 		assert.Equal(t, []Token{{test.expected, "CAR"}}, slices.Collect(it))
 	}
@@ -109,7 +109,7 @@ func TestWordsAffixesMustBeZeroWidthAssertions(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			_, err := xmlLexerFromString(t, "", test.rules).Tokenise(nil, "a")
+			_, err := xmlLexerFromString(t, "", test.rules).Tokenise("a")
 			assert.Error(t, err)
 			assert.Contains(t, err.Error(), test.err)
 		})

@@ -150,7 +150,7 @@ func (u *usingByGroup) Emit(groups []string, state *LexerState) iter.Seq[Token] 
 	iterators := make([]iter.Seq[Token], 0, len(groups)-1)
 	for i, group := range groups[1:] {
 		if i == u.CodeGroup-1 && sublexer != nil {
-			it, err := sublexer.Tokenise(nil, groups[u.CodeGroup])
+			it, err := sublexer.Tokenise(groups[u.CodeGroup])
 			if err != nil {
 				panic(err)
 			}
@@ -166,8 +166,8 @@ func (u *usingByGroup) Emit(groups []string, state *LexerState) iter.Seq[Token] 
 //
 // This Emitter cannot be represented in an XML lexer definition.
 func UsingLexer(lexer Lexer) Emitter {
-	return EmitterFunc(func(groups []string, _ *LexerState) iter.Seq[Token] {
-		it, err := lexer.Tokenise(&TokeniseOptions{State: "root", Nested: true}, groups[0])
+	return EmitterFunc(func(groups []string, state *LexerState) iter.Seq[Token] {
+		it, err := lexer.Tokenise(groups[0], state.Nested("root"))
 		if err != nil {
 			panic(err)
 		}
@@ -193,7 +193,7 @@ func (u *usingEmitter) Emit(groups []string, state *LexerState) iter.Seq[Token] 
 	if lexer == nil {
 		panic(fmt.Sprintf("no such lexer %q", u.Lexer))
 	}
-	it, err := lexer.Tokenise(&TokeniseOptions{State: "root", Nested: true}, groups[0])
+	it, err := lexer.Tokenise(groups[0], state.Nested("root"))
 	if err != nil {
 		panic(err)
 	}
@@ -227,7 +227,7 @@ type usingSelfEmitter struct {
 }
 
 func (u *usingSelfEmitter) Emit(groups []string, state *LexerState) iter.Seq[Token] {
-	it, err := state.Lexer.Tokenise(&TokeniseOptions{State: u.State, Nested: true}, groups[0])
+	it, err := state.Lexer.Tokenise(groups[0], state.Nested(u.State))
 	if err != nil {
 		panic(err)
 	}

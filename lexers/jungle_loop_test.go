@@ -16,7 +16,7 @@ func TestJungleLexerDoesNotHangOnUnhandledPunctuation(t *testing.T) {
 	}
 	for _, in := range []string{"/", "*", ":", `"`, "!", "%", "'"} {
 		t.Run(in, func(t *testing.T) {
-			it, err := lx.Tokenise(nil, in)
+			it, err := lx.Tokenise(in)
 			if err != nil {
 				t.Fatalf("Tokenise(%q): %v", in, err)
 			}

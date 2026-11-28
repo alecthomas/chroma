@@ -170,6 +170,17 @@ func (l *LexerState) Get(key any) any {
 	return l.MutatorContext[key]
 }
 
+// Nested returns the option for an Emitter to tokenise part of the current
+// match with another Lexer, or this one, starting in state.
+func (l *LexerState) Nested(state string) TokeniseOption {
+	return func(o *TokeniseOptions) {
+		o.State = state
+		o.Nested = true
+		// The text was already normalised, or not, by the outermost call.
+		o.EnsureLF = false
+	}
+}
+
 func yieldTokens(seq iter.Seq[Token], yield func(Token) bool) bool {
 	for t := range seq {
 		if t.Type == Ignore {
@@ -482,18 +493,12 @@ func (r *RegexLexer) fetchRulesOnce() error {
 }
 
 // Tokenise text using lexer, returning an iterator.
-func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[Token], error) {
+func (r *RegexLexer) Tokenise(text string, opts ...TokeniseOption) (iter.Seq[Token], error) {
 	err := r.needRules()
 	if err != nil {
 		return nil, err
 	}
-	if options == nil {
-		options = defaultOptions
-	} else if options.State == "" {
-		optionsCopy := *options
-		optionsCopy.State = "root"
-		options = &optionsCopy
-	}
+	options := NewTokeniseOptions(opts...)
 	if options.EnsureLF {
 		text = ensureLF(text)
 	}
@@ -505,7 +510,7 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (iter.Seq[T
 	state := &LexerState{
 		Registry:       r.registry,
 		newlineAdded:   newlineAdded,
-		options:        options,
+		options:        &options,
 		Lexer:          r,
 		Text:           []rune(text),
 		Stack:          []string{options.State},
