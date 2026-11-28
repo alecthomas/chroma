@@ -62,14 +62,6 @@ func wordAlternation(words []string) string {
 // Rules maps from state to a sequence of Rules.
 type Rules map[string][]Rule
 
-// Rename clones rules then a rule.
-func (r Rules) Rename(oldRule, newRule string) Rules {
-	r = r.Clone()
-	r[newRule] = r[oldRule]
-	delete(r, oldRule)
-	return r
-}
-
 // Clone returns a clone of the Rules.
 func (r Rules) Clone() Rules {
 	out := map[string][]Rule{}
@@ -77,13 +69,6 @@ func (r Rules) Clone() Rules {
 		out[key] = make([]Rule, len(rules))
 		copy(out[key], rules)
 	}
-	return out
-}
-
-// Merge creates a clone of "r" then merges "rules" into the clone.
-func (r Rules) Merge(rules Rules) Rules {
-	out := r.Clone()
-	maps.Copy(out, rules.Clone())
 	return out
 }
 
@@ -347,12 +332,6 @@ func (r *RegexLexer) AnalyseText(text string) float32 {
 	return 0
 }
 
-// SetConfig replaces the Config for this Lexer.
-func (r *RegexLexer) SetConfig(config *Config) *RegexLexer {
-	r.config = config
-	return r
-}
-
 // Config returns the Config for this Lexer.
 func (r *RegexLexer) Config() *Config {
 	return r.config
@@ -504,15 +483,6 @@ func (r *RegexLexer) Tokenise(text string, opts ...TokeniseOption) (iter.Seq[Tok
 		MutatorContext: map[any]any{},
 	}
 	return state.Iterator(), nil
-}
-
-// MustRules is like Rules() but will panic on error.
-func (r *RegexLexer) MustRules() Rules {
-	rules, err := r.Rules()
-	if err != nil {
-		panic(err)
-	}
-	return rules
 }
 
 func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule, []string, map[string]string, error) {
