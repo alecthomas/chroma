@@ -152,17 +152,13 @@ lexer = chroma.Coalesce(lexer)
 
 ### Formatting the output
 
-Once a language is identified you will need to pick a formatter and a style (theme).
+Once a language is identified you will need to pick a formatter and a style
+(theme). Both fall back to a default if the name is unknown; use
+`styles.Lookup` or `formatters.Lookup` to detect that case.
 
 ```go
 style := styles.Get("swapoff")
-if style == nil {
-  style = styles.Fallback
-}
 formatter := formatters.Get("html")
-if formatter == nil {
-  formatter = formatters.Fallback
-}
 ```
 
 Then obtain an iterator over the tokens:

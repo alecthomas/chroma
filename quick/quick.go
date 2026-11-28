@@ -24,18 +24,8 @@ func Highlight(w io.Writer, source, lexer, formatter, style string) error {
 	}
 	l = chroma.Coalesce(l)
 
-	// Determine formatter.
 	f := formatters.Get(formatter)
-	if f == nil {
-		f = formatters.Fallback
-	}
-
-	// Determine style.
 	s := styles.Get(style)
-	if s == nil {
-		s = styles.Fallback
-	}
-
 	it, err := l.Tokenise(source)
 	if err != nil {
 		return err
