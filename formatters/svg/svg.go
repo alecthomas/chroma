@@ -31,7 +31,7 @@ func EmbedFontFile(fontFamily string, fileName string) (option Option, err error
 	case ".woff2":
 		format = WOFF2
 	case ".ttf":
-		format = TRUETYPE
+		format = TrueType
 	default:
 		return nil, errors.New("unexpected font file suffix")
 	}
@@ -186,7 +186,7 @@ type FontFormat int
 const (
 	WOFF FontFormat = iota
 	WOFF2
-	TRUETYPE
+	TrueType
 )
 
 // The CSS format() hint differs from the MIME type for TrueType.
