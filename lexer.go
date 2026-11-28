@@ -177,15 +177,6 @@ func (l Lexers) Less(i, j int) bool {
 	return strings.ToLower(l[i].Config().Name) < strings.ToLower(l[j].Config().Name)
 }
 
-// PrioritisedLexers is a slice of lexers sortable by priority.
-type PrioritisedLexers []Lexer
-
-func (l PrioritisedLexers) Len() int      { return len(l) }
-func (l PrioritisedLexers) Swap(i, j int) { l[i], l[j] = l[j], l[i] }
-func (l PrioritisedLexers) Less(i, j int) bool {
-	return compareLexersByPriority(l[i], l[j]) < 0
-}
-
 // compareLexersByPriority orders lexers by descending priority, treating an
 // unset priority as 1.
 func compareLexersByPriority(a, b Lexer) int {

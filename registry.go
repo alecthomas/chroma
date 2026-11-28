@@ -84,7 +84,7 @@ func (l *LexerRegistry) Get(name string) Lexer {
 		return lexer
 	}
 
-	candidates := PrioritisedLexers{}
+	candidates := []Lexer{}
 	// Try file extension.
 	if lexer := l.Match("filename." + name); lexer != nil {
 		candidates = append(candidates, lexer)
@@ -101,7 +101,7 @@ func (l *LexerRegistry) Get(name string) Lexer {
 
 // MatchMimeType attempts to find a lexer for the given MIME type.
 func (l *LexerRegistry) MatchMimeType(mimeType string) Lexer {
-	matched := PrioritisedLexers{}
+	matched := []Lexer{}
 	for _, l := range l.Lexers {
 		for _, lmt := range l.Config().MimeTypes {
 			if mimeType == lmt {
@@ -121,7 +121,7 @@ func (l *LexerRegistry) MatchMimeType(mimeType string) Lexer {
 func (l *LexerRegistry) Match(filename string) Lexer {
 	filename = filepath.Base(filename)
 	// First, try primary filename matches.
-	matched := PrioritisedLexers{}
+	matched := []Lexer{}
 	for _, lexer := range l.Lexers {
 		if matchGlobs(lexer.Config().Filenames, filename) {
 			matched = append(matched, lexer)
